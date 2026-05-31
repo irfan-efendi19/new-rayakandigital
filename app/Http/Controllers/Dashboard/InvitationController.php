@@ -40,12 +40,12 @@ class InvitationController extends Controller
 
         $slug = Str::slug($validated['title'] . '-' . Str::random(5));
 
-        $extraData = ['slug' => $slug];
-        if ($request->user()->currentTier() === 'free') {
-            $demoDays = \App\Models\SystemConfig::first()?->demo_duration_days ?? 3;
-            $extraData['trial_started_at'] = now();
-            $extraData['expires_at'] = now()->addDays($demoDays);
-        }
+        $demoDays = \App\Models\SystemConfig::first()?->demo_duration_days ?? 3;
+        $extraData = [
+            'slug' => $slug,
+            'trial_started_at' => now(),
+            'expires_at' => now()->addDays($demoDays),
+        ];
 
         $request->user()->invitations()->create(array_merge($validated, $extraData));
 

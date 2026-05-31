@@ -89,6 +89,8 @@ class MidtransService
             'amount' => $price,
         ]);
 
+        $email = filter_var($user->email, FILTER_VALIDATE_EMAIL) ? $user->email : 'user-'.$user->id.'@rayakandigital.com';
+
         $params = [
             'transaction_details' => [
                 'order_id' => $orderId,
@@ -96,7 +98,7 @@ class MidtransService
             ],
             'customer_details' => [
                 'first_name' => $user->name,
-                'email' => $user->email,
+                'email' => $email,
             ],
             'item_details' => [
                 [
@@ -118,7 +120,18 @@ class MidtransService
             ];
         }
 
-        $snapToken = \Midtrans\Snap::getSnapToken($params);
+        try {
+            $snapToken = \Midtrans\Snap::getSnapToken($params);
+        } catch (\Throwable $e) {
+            logger()->error('Gagal buat Snap token: ' . $e->getMessage());
+
+            return [
+                'snap_token' => 'SIMULATION_TOKEN_'.$orderId,
+                'order_id' => $orderId,
+                'gross_amount' => $price,
+                'subscription' => $subscription,
+            ];
+        }
 
         return [
             'snap_token' => $snapToken,
@@ -129,16 +142,30 @@ class MidtransService
     }
 
     /**
-     * Handle Midtrans webhook notification.
+     * Handle Midtrans webhook notification with signature validation.
      */
     public function handleNotification(array $payload): ?Subscription
     {
         $orderId = $payload['order_id'] ?? null;
         $transactionStatus = $payload['transaction_status'] ?? null;
         $transactionId = $payload['transaction_id'] ?? null;
+        $statusCode = $payload['status_code'] ?? null;
+        $grossAmount = $payload['gross_amount'] ?? null;
+        $signatureKey = $payload['signature_key'] ?? null;
+        $fraudStatus = $payload['fraud_status'] ?? null;
 
         if (! $orderId) {
             return null;
+        }
+
+        if ($signatureKey !== null) {
+            $calculated = hash('sha512', $orderId . $statusCode . $grossAmount . \Midtrans\Config::$serverKey);
+
+            if (! hash_equals($calculated, $signatureKey)) {
+                logger()->warning('Midtrans webhook signature mismatch for order: ' . $orderId);
+
+                return null;
+            }
         }
 
         $subscription = Subscription::where('midtrans_order_id', $orderId)->first();
@@ -149,21 +176,23 @@ class MidtransService
 
         $subscription->midtrans_transaction_id = $transactionId;
 
-        $statusMap = [
-            'capture' => 'settlement',
-            'settlement' => 'settlement',
-            'pending' => 'pending',
-            'deny' => 'deny',
-            'expire' => 'expire',
-            'cancel' => 'cancel',
-        ];
+        $isSettled = $transactionStatus === 'settlement'
+            || ($transactionStatus === 'capture' && $fraudStatus === 'accept');
 
-        $subscription->payment_status = $statusMap[$transactionStatus] ?? 'pending';
-
-        if ($subscription->payment_status === 'settlement') {
+        if ($isSettled) {
+            $subscription->payment_status = 'settlement';
             $subscription->starts_at = now();
             $durationDays = $this->getDurationDays($subscription->tier);
             $subscription->expires_at = $durationDays ? now()->addDays($durationDays) : null;
+        } elseif ($transactionStatus === 'pending') {
+            $subscription->payment_status = 'pending';
+        } else {
+            $statusMap = [
+                'deny' => 'deny',
+                'expire' => 'expire',
+                'cancel' => 'cancel',
+            ];
+            $subscription->payment_status = $statusMap[$transactionStatus] ?? 'pending';
         }
 
         $subscription->save();
@@ -171,30 +200,82 @@ class MidtransService
         // Sync Order status
         $order = \App\Models\Order::where('order_id', $orderId)->first();
         if ($order) {
-            $orderStatusMap = [
-                'settlement' => 'success',
-                'capture' => 'success',
-                'pending' => 'pending',
-                'deny' => 'failed',
-                'expire' => 'expired',
-                'cancel' => 'failed',
-            ];
-            $order->payment_status = $orderStatusMap[$transactionStatus] ?? 'pending';
+            $order->payment_status = match (true) {
+                $isSettled => 'success',
+                $transactionStatus === 'pending' => 'pending',
+                default => 'expired',
+            };
             $order->save();
+        }
+
+        // Update invitation tier and expiry on successful payment
+        if ($isSettled && $order && $order->invitation_id) {
+            $invitation = \App\Models\Invitation::find($order->invitation_id);
+            if ($invitation) {
+                $durationDays = $this->getDurationDays($subscription->tier);
+                $invitation->tier = $subscription->tier;
+                $invitation->expires_at = $durationDays ? now()->addDays($durationDays) : now()->addYears(1);
+                $invitation->is_active = true;
+                $invitation->save();
+            }
         }
 
         return $subscription;
     }
 
     /**
+     * Check transaction status directly with Midtrans API and update locally.
+     */
+    public function checkTransactionStatus(string $orderId): ?Subscription
+    {
+        if ($this->isSimulationMode()) {
+            return null;
+        }
+
+        try {
+            $status = \Midtrans\Transaction::status($orderId);
+
+            $payload = [
+                'order_id' => $status->order_id,
+                'transaction_status' => $status->transaction_status,
+                'transaction_id' => $status->transaction_id ?? null,
+                'status_code' => $status->status_code ?? null,
+                'gross_amount' => $status->gross_amount ?? null,
+                'signature_key' => $status->signature_key ?? null,
+                'fraud_status' => $status->fraud_status ?? null,
+            ];
+
+            return $this->handleNotification($payload);
+        } catch (\Throwable $e) {
+            logger()->warning('Gagal cek status Midtrans: ' . $e->getMessage());
+
+            return null;
+        }
+    }
+
+    /**
+     * Cancel a pending transaction at Midtrans.
+     */
+    public function cancelTransaction(string $orderId): void
+    {
+        if ($this->isSimulationMode()) {
+            return;
+        }
+
+        \Midtrans\Transaction::cancel($orderId);
+    }
+
+    /**
      * Simulate a successful payment (for development without Midtrans credentials).
      */
-    public function simulatePayment(string $orderId): ?Subscription
+    public function simulatePayment(string $orderId, int $grossAmount = 0): ?Subscription
     {
         return $this->handleNotification([
             'order_id' => $orderId,
             'transaction_status' => 'settlement',
             'transaction_id' => 'SIM-'.Str::random(12),
+            'status_code' => '200',
+            'gross_amount' => (string) $grossAmount,
         ]);
     }
 }

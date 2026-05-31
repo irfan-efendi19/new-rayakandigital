@@ -150,8 +150,13 @@
                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                                             {{ $invitation->themeLabel() }}
                                         </span>
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $invitation->is_active && !$invitation->isTrialExpired() ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                            {{ $invitation->is_active && !$invitation->isTrialExpired() ? 'Aktif' : 'Non-aktif' }}
+                                        @php
+                                            $isTrial = $invitation->expires_at !== null && !$invitation->hasPremiumFeatures();
+                                            $isExpired = $invitation->isTrialExpired();
+                                        @endphp
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                                            {{ $isExpired ? 'bg-red-100 text-red-800' : ($isTrial ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800') }}">
+                                            {{ $isExpired ? 'Kadaluarsa' : ($isTrial ? 'Masa Percobaan' : 'Aktif') }}
                                         </span>
                                     </div>
                                     <div class="flex flex-col gap-2">

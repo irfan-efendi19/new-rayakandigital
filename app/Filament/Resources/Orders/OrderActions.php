@@ -45,6 +45,17 @@ class OrderActions
             ]);
         }
 
+        // Update invitation tier on admin activation
+        if ($order->invitation_id) {
+            $invitation = $order->invitation;
+            if ($invitation) {
+                $invitation->tier = $tier;
+                $invitation->expires_at = $durationDays ? now()->addDays($durationDays) : null;
+                $invitation->is_active = true;
+                $invitation->save();
+            }
+        }
+
         $whatsapp = app(WhatsAppNotificationService::class);
         $whatsapp->sendActivationConfirmation($order);
 

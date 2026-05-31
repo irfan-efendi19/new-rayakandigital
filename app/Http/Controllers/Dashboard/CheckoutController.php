@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Package;
 use App\Models\PaymentMethodConfig;
+use App\Models\Subscription;
 use App\Services\MidtransService;
 use App\Services\PaymentRoutingService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class CheckoutController extends Controller
@@ -16,7 +18,6 @@ class CheckoutController extends Controller
     public function index(Request $request, PaymentRoutingService $routing)
     {
         $user = $request->user();
-        $currentTier = $user->currentTier();
         $activeMethod = $routing->activeMethod();
         $packages = Package::with('features')
             ->where('is_visible', true)
@@ -24,30 +25,54 @@ class CheckoutController extends Controller
             ->orderBy('sort_order')
             ->get();
 
-        return view('dashboard.checkout.index', compact('currentTier', 'packages', 'activeMethod'));
+        $invitationId = $request->query('invitation_id');
+        $invitation = null;
+        if ($invitationId) {
+            $invitation = $user->invitations()->find($invitationId);
+            abort_unless($invitation, 404);
+        }
+
+        $currentTier = $invitation ? $invitation->currentTier() : $user->currentTier();
+
+        $clientKey = config('midtrans.client_key');
+        try {
+            $methodConfig = PaymentMethodConfig::getActive();
+            if ($methodConfig && $methodConfig->isMidtrans() && !empty($methodConfig->midtrans_client_key)) {
+                $clientKey = $methodConfig->midtrans_client_key;
+            }
+        } catch (\Throwable $e) {
+            // fallback
+        }
+
+        return view('dashboard.checkout.index', compact('currentTier', 'packages', 'activeMethod', 'clientKey', 'invitation'));
     }
 
     public function process(Request $request, MidtransService $midtransService, PaymentRoutingService $routing)
     {
         $validated = $request->validate([
             'tier' => 'required|string|exists:packages,package_code',
-            'invitation_id' => 'nullable|exists:invitations,id',
+            'invitation_id' => 'nullable|integer|exists:invitations,id',
         ]);
 
         $user = $request->user();
         $tier = $validated['tier'];
 
-        $currentTier = $user->currentTier();
+        $invitationId = $validated['invitation_id'] ?? $user->invitations()->first()?->id;
+
+        abort_if($invitationId && !$user->invitations()->where('id', $invitationId)->exists(), 403);
+
+        $invitation = $invitationId ? $user->invitations()->find($invitationId) : null;
+        $currentTier = $invitation ? $invitation->currentTier() : 'free';
         $tierRank = Package::where('is_visible', true)->pluck('sort_order', 'package_code');
 
         $currentRank = $tierRank[$currentTier] ?? -1;
         $selectedRank = $tierRank[$tier] ?? -1;
 
         if ($currentRank >= $selectedRank) {
-            return back()->with('info', 'Anda sudah memiliki paket ' . ucfirst($currentTier) . ' yang setara atau lebih tinggi.');
+            return back()->with('info', 'Undangan ini sudah memiliki paket ' . ucfirst($currentTier) . ' yang setara atau lebih tinggi.');
         }
 
-        $invitationId = $validated['invitation_id'] ?? $user->invitations()->first()?->id;
+        $this->cancelPendingOrders($invitationId, $midtransService);
 
         if ($routing->isMidtrans()) {
             return $this->processMidtrans($user, $tier, $invitationId, $midtransService);
@@ -60,24 +85,23 @@ class CheckoutController extends Controller
     {
         $result = $midtransService->createSnapToken($user, $tier);
 
-        $order = Order::create([
-            'order_id' => $result['order_id'],
-            'user_id' => $user->id,
-            'invitation_id' => $invitationId,
-            'package_type' => $tier,
-            'payment_method_used' => 'midtrans',
-            'gross_amount' => $result['gross_amount'] ?? $midtransService->getPrice($tier),
-            'payment_status' => 'pending',
-            'payment_gateway_used' => $midtransService->isSimulationMode() ? null : 'midtrans',
-            'snap_token' => $result['snap_token'] ?? null,
-        ]);
+        $order = DB::transaction(function () use ($result, $user, $tier, $invitationId, $midtransService) {
+            return Order::create([
+                'order_id' => $result['order_id'],
+                'user_id' => $user->id,
+                'invitation_id' => $invitationId,
+                'package_type' => $tier,
+                'payment_method_used' => 'midtrans',
+                'gross_amount' => $result['gross_amount'] ?? $midtransService->getPrice($tier),
+                'payment_status' => 'pending',
+                'payment_gateway_used' => $midtransService->isSimulationMode() ? null : 'midtrans',
+                'snap_token' => $result['snap_token'] ?? null,
+            ]);
+        });
 
         if ($midtransService->isSimulationMode()) {
             $midtransService->simulatePayment($result['order_id']);
             $order->update(['payment_status' => 'success']);
-
-            return redirect()->route('dashboard')
-                ->with('success', 'Paket ' . ucfirst($tier) . ' berhasil diaktifkan! (Mode Simulasi)');
         }
 
         return response()->json([
@@ -91,20 +115,49 @@ class CheckoutController extends Controller
         $price = $midtransService->getPrice($tier);
         $uniqueCode = Order::generateUniqueCode();
 
-        $order = Order::create([
-            'order_id' => 'INV-' . now()->format('Ymd') . '-' . Str::upper(Str::random(6)),
-            'user_id' => $user->id,
-            'invitation_id' => $invitationId,
-            'package_type' => $tier,
-            'payment_method_used' => 'manual_bank',
-            'gross_amount' => $price,
-            'unique_code' => $uniqueCode,
-            'payment_status' => 'pending',
-            'payment_gateway_used' => 'manual_bank',
-            'is_manual_whatsapp' => true,
-        ]);
+        $order = DB::transaction(function () use ($user, $tier, $invitationId, $price, $uniqueCode) {
+            return Order::create([
+                'order_id' => 'INV-' . now()->format('Ymd') . '-' . Str::upper(Str::random(6)),
+                'user_id' => $user->id,
+                'invitation_id' => $invitationId,
+                'package_type' => $tier,
+                'payment_method_used' => 'manual_bank',
+                'gross_amount' => $price,
+                'unique_code' => $uniqueCode,
+                'payment_status' => 'pending',
+                'payment_gateway_used' => 'manual_bank',
+                'is_manual_whatsapp' => true,
+            ]);
+        });
 
         return redirect()->route('dashboard.payment.invoice', $order)
             ->with('success', 'Silakan lakukan pembayaran dan kirim bukti transfer via WhatsApp.');
+    }
+
+    protected function cancelPendingOrders(?string $invitationId, MidtransService $midtransService): void
+    {
+        if (!$invitationId) {
+            return;
+        }
+
+        $oldOrders = Order::where('invitation_id', $invitationId)
+            ->whereIn('payment_status', ['pending', 'verifying'])
+            ->get();
+
+        foreach ($oldOrders as $oldOrder) {
+            if ($oldOrder->payment_method_used === 'midtrans') {
+                try {
+                    $midtransService->cancelTransaction($oldOrder->order_id);
+                } catch (\Throwable $e) {
+                    logger()->warning('Gagal cancel order lama di Midtrans: ' . $e->getMessage());
+                }
+            }
+
+            $oldOrder->update(['payment_status' => 'expired']);
+
+            Subscription::where('midtrans_order_id', $oldOrder->order_id)
+                ->where('payment_status', 'pending')
+                ->update(['payment_status' => 'expire']);
+        }
     }
 }

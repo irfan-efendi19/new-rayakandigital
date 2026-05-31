@@ -5,14 +5,30 @@
         </h2>
     </x-slot>
 
+    @if($activeMethod === 'midtrans')
+        <script src="{{ config('midtrans.snap_url') }}" data-client-key="{{ $clientKey }}"></script>
+        <style>[x-cloak]{display:none!important}</style>
+    @endif
+
     <div class="py-12">
         <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
 
             @php
-                $invitationId = request('invitation_id');
+                $invitationId = $invitation?->id ?? request('invitation_id');
                 $currentPackage = $packages->firstWhere('package_code', $currentTier);
                 $currentRank = $currentPackage ? $currentPackage->sort_order : -1;
             @endphp
+
+            @if($invitation)
+            <div class="mb-6 bg-white border border-gray-200 rounded-xl px-6 py-4 flex items-center gap-3 shadow-sm">
+                <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                <span class="text-sm text-gray-600">
+                    Memperbarui paket untuk undangan: <strong class="text-gray-900">{{ $invitation->title }}</strong>
+                </span>
+            </div>
+            @endif
 
             @if($activeMethod === 'manual_bank')
                 <div class="mb-6 bg-indigo-50 border border-indigo-200 text-indigo-700 px-6 py-4 rounded-xl text-sm flex items-center gap-3">
@@ -93,13 +109,19 @@
                                     {{ $currentTier === $pkg->package_code ? 'Paket Aktif' : 'Sudah Lebih Tinggi' }}
                                 </button>
                             @else
-                                <form action="{{ route('dashboard.checkout.process') }}" method="POST">
+                                <form action="{{ route('dashboard.checkout.process') }}" method="POST"
+                                    @if($activeMethod === 'midtrans')
+                                        x-data="checkout"
+                                        @submit.prevent="handleSubmit"
+                                    @endif
+                                >
                                     @csrf
                                     <input type="hidden" name="tier" value="{{ $pkg->package_code }}">
                                     @if($invitationId)
                                         <input type="hidden" name="invitation_id" value="{{ $invitationId }}">
                                     @endif
                                     <button type="submit"
+                                        @if($activeMethod === 'midtrans') x-bind:disabled="processing" @endif
                                         class="w-full py-3 rounded-xl font-semibold transition-all shadow-sm
                                         @if($activeMethod === 'manual_bank')
                                             bg-green-600 text-white hover:bg-green-700
@@ -110,7 +132,8 @@
                                         @if($activeMethod === 'manual_bank')
                                             Pilih {{ $pkg->package_name }} (Transfer Manual)
                                         @else
-                                            Pilih {{ $pkg->package_name }}
+                                            <span x-show="!processing">Pilih {{ $pkg->package_name }}</span>
+                                            <span x-show="processing" x-cloak>Memproses...</span>
                                         @endif
                                     </button>
                                 </form>

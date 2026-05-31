@@ -120,7 +120,7 @@ class Invitation extends Model
 
     public function currentTier(): string
     {
-        return $this->user ? $this->user->currentTier() : ($this->attributes['tier'] ?? 'free');
+        return $this->tier ?? 'free';
     }
 
     public function package(): ?Package

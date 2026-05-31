@@ -21,7 +21,7 @@ class PaymentController extends Controller
         return response()->json(['status' => 'ok']);
     }
 
-    public function finish(Request $request)
+    public function finish(Request $request, MidtransService $midtransService)
     {
         $orderId = $request->query('order_id');
 
@@ -31,6 +31,15 @@ class PaymentController extends Controller
             if ($subscription && $subscription->payment_status === 'settlement') {
                 return redirect()->route('dashboard')
                     ->with('success', 'Pembayaran berhasil! Paket ' . ucfirst($subscription->tier) . ' Anda sudah aktif.');
+            }
+
+            if ($subscription && $subscription->payment_status === 'pending') {
+                $updated = $midtransService->checkTransactionStatus($orderId);
+
+                if ($updated && $updated->payment_status === 'settlement') {
+                    return redirect()->route('dashboard')
+                        ->with('success', 'Pembayaran berhasil! Paket ' . ucfirst($updated->tier) . ' Anda sudah aktif.');
+                }
             }
         }
 
