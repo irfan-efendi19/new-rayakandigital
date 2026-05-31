@@ -7,6 +7,7 @@ use App\Models\Invitation;
 use App\Models\Theme;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
 class InvitationController extends Controller
@@ -111,29 +112,46 @@ class InvitationController extends Controller
 
     public function update(Request $request, Invitation $invitation)
     {
+        file_put_contents(storage_path('logs/debug.txt'), 'UPDATE CALLED: '.json_encode([
+            'slug_input' => $request->input('slug'),
+            'filled' => $request->filled('slug'),
+            'method' => $request->method(),
+            'venue_maps_url' => $request->input('venue_maps_url'),
+            'event_date' => $request->input('event_date'),
+            'is_active' => $request->input('is_active'),
+        ]).PHP_EOL, FILE_APPEND);
+
         Gate::authorize('update', $invitation);
 
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'slug' => 'nullable|string|max:100|regex:/^[a-z0-9\-]+$/',
-            'bride_name' => 'required|string|max:255',
-            'groom_name' => 'required|string|max:255',
-            'bride_nickname' => 'nullable|string|max:100',
-            'groom_nickname' => 'nullable|string|max:100',
-            'bride_parents' => 'nullable|string|max:255',
-            'groom_parents' => 'nullable|string|max:255',
-            'event_date' => 'nullable|date',
-            'event_time' => 'nullable',
-            'event_time_end' => 'nullable',
-            'venue_name' => 'nullable|string|max:255',
-            'venue_address' => 'nullable|string',
-            'venue_maps_url' => 'nullable|url',
-            'love_story' => 'nullable|string',
-            'timezone' => 'nullable|string|max:50',
-            'theme' => 'required|string',
-            'is_active' => 'boolean',
-            'music_url' => 'nullable|string',
-        ]);
+        try {
+            $validated = $request->validate([
+                'title' => 'required|string|max:255',
+                'slug' => 'nullable|string|max:100|regex:/^[a-z0-9\-]+$/',
+                'bride_name' => 'required|string|max:255',
+                'groom_name' => 'required|string|max:255',
+                'bride_nickname' => 'nullable|string|max:100',
+                'groom_nickname' => 'nullable|string|max:100',
+                'bride_parents' => 'nullable|string|max:255',
+                'groom_parents' => 'nullable|string|max:255',
+                'event_date' => 'nullable|date',
+                'event_time' => 'nullable',
+                'event_time_end' => 'nullable',
+                'venue_name' => 'nullable|string|max:255',
+                'venue_address' => 'nullable|string',
+                'venue_maps_url' => 'nullable|url',
+                'love_story' => 'nullable|string',
+                'timezone' => 'nullable|string|max:50',
+                'theme' => 'required|string',
+                'is_active' => 'boolean',
+                'music_url' => 'nullable|string',
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            file_put_contents(storage_path('logs/debug.txt'), 'VALIDATION FAILED: '.json_encode([
+                'errors' => $e->errors(),
+                'input' => $request->except(['_token', '_method']),
+            ]).PHP_EOL, FILE_APPEND);
+            throw $e;
+        }
 
         // Handle bride photo upload
         if ($request->hasFile('bride_photo')) {
@@ -154,23 +172,47 @@ class InvitationController extends Controller
                 ->store('music/' . $invitation->id, 'public');
         }
 
-        if ($request->filled('slug') && $request->slug !== $invitation->slug) {
-            $exists = Invitation::where('slug', $request->slug)
+        // Handle slug update
+        $newSlug = $request->filled('slug') ? trim($request->slug) : null;
+
+        file_put_contents(storage_path('logs/debug.txt'), 'SLUG LOGIC: '.json_encode([
+            'newSlug' => $newSlug,
+            'currentSlug' => $invitation->slug,
+            'isDifferent' => $newSlug && $newSlug !== $invitation->slug,
+        ]).PHP_EOL, FILE_APPEND);
+
+        if ($newSlug && $newSlug !== $invitation->slug) {
+            // Slug is different, check if it already exists
+            $exists = Invitation::where('slug', $newSlug)
                 ->where('id', '!=', $invitation->id)
                 ->exists();
 
+            file_put_contents(storage_path('logs/debug.txt'), 'EXISTS CHECK: '.json_encode(['exists' => $exists]).PHP_EOL, FILE_APPEND);
+
             if ($exists) {
+                file_put_contents(storage_path('logs/debug.txt'), 'SLUG EXISTS - RETURNING BACK'.PHP_EOL, FILE_APPEND);
                 return back()->withErrors(['slug' => 'Tautan sudah digunakan oleh undangan lain.'])->withInput();
             }
 
-            $validated['slug_change_count'] = $invitation->slug_change_count + 1;
+            // Update slug and increment change counter
+            $validated['slug'] = $newSlug;
+            if (Schema::hasColumn('invitations', 'slug_change_count')) {
+                $validated['slug_change_count'] = ($invitation->slug_change_count ?? 0) + 1;
+            }
         } else {
+            // Slug is empty or unchanged, don't update it
             unset($validated['slug']);
+            file_put_contents(storage_path('logs/debug.txt'), 'SLUG NOT CHANGED - UNSET'.PHP_EOL, FILE_APPEND);
         }
 
         $invitation->update($validated);
 
-        return redirect()->route('dashboard.invitations.show', $invitation)
+        file_put_contents(storage_path('logs/debug.txt'), 'AFTER UPDATE: '.json_encode([
+            'validated_slug' => $validated['slug'] ?? null,
+            'db_slug' => $invitation->fresh()->slug,
+        ]).PHP_EOL, FILE_APPEND);
+
+        return redirect()->route('dashboard.invitations.edit', $invitation)
             ->with('success', 'Undangan berhasil diperbarui.');
     }
 

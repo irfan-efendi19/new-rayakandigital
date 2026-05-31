@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    saveBtn.addEventListener('click', function () {
+    if (saveBtn) saveBtn.addEventListener('click', function () {
         if (!cropper || !currentInput) return;
 
         const selection = cropper.getCropperSelection();
@@ -132,25 +132,25 @@ document.addEventListener('DOMContentLoaded', function () {
         el.addEventListener('click', closeCropModal);
     });
 
-    modal.addEventListener('click', function (e) {
+    if (modal) modal.addEventListener('click', function (e) {
         if (e.target === modal) closeCropModal();
     });
 
-    zoomInBtn.addEventListener('click', function () {
+    if (zoomInBtn) zoomInBtn.addEventListener('click', function () {
         if (cropper) {
             const imageEl = cropper.getCropperImage();
             if (imageEl) imageEl.$zoom(0.1);
         }
     });
 
-    zoomOutBtn.addEventListener('click', function () {
+    if (zoomOutBtn) zoomOutBtn.addEventListener('click', function () {
         if (cropper) {
             const imageEl = cropper.getCropperImage();
             if (imageEl) imageEl.$zoom(-0.1);
         }
     });
 
-    rotateBtn.addEventListener('click', function () {
+    if (rotateBtn) rotateBtn.addEventListener('click', function () {
         if (cropper) {
             const imageEl = cropper.getCropperImage();
             if (imageEl) imageEl.$rotate(Math.PI / 2);

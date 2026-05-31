@@ -2,6 +2,8 @@ import Swal from 'sweetalert2/dist/sweetalert2.js';
 
 class SlugEditor {
     constructor() {
+        console.log('🔧 SlugEditor constructor started');
+        
         this.input = document.getElementById('slug-input');
         this.indicator = document.getElementById('slug-indicator');
         this.form = this.input?.closest('form');
@@ -10,10 +12,23 @@ class SlugEditor {
         this.debounceTimer = null;
         this.isAvailable = true;
 
-        if (!this.input) return;
+        console.log('🔍 SlugEditor elements:', {
+            inputFound: !!this.input,
+            indicatorFound: !!this.indicator,
+            formFound: !!this.form,
+            slugOriginal: this.slugOriginal,
+            invitationId: this.invitationId
+        });
+
+        if (!this.input) {
+            console.warn('⚠️ SlugEditor: slug-input element not found!');
+            return;
+        }
 
         this.setupAutoSanitize();
         this.setupFormSubmit();
+        
+        console.log('✅ SlugEditor initialized successfully');
     }
 
     setupAutoSanitize() {
@@ -65,7 +80,8 @@ class SlugEditor {
                         this.isAvailable = false;
                     }
                 })
-                .catch(() => {
+                .catch(err => {
+                    console.error('Fetch error:', err);
                     this.setIndicator('error', 'Gagal memeriksa');
                     this.isAvailable = true;
                 });
@@ -115,23 +131,58 @@ class SlugEditor {
     }
 
     setupFormSubmit() {
-        if (!this.form) return;
+        if (!this.form) {
+            console.warn('⚠️ Form not found, skipping setupFormSubmit');
+            return;
+        }
 
-        const originalSubmit = this.form.querySelector('button[type="submit"]');
-        if (!originalSubmit) return;
+        console.log('📝 Attaching form submit listener');
 
         this.form.addEventListener('submit', (e) => {
             const slug = this.input.value.trim();
 
-            if (slug === this.slugOriginal) return;
+            console.log('📤 Form submit event fired!', {
+                slug,
+                original: this.slugOriginal,
+                available: this.isAvailable
+            });
 
-            if (!slug || !this.isAvailable) {
-                e.preventDefault();
+            // If slug unchanged - allow normal submission
+            if (slug === this.slugOriginal) {
+                console.log('➡️ Slug unchanged, allowing normal submission');
                 return;
             }
 
-            e.preventDefault();
+            // If slug is empty
+            if (!slug) {
+                e.preventDefault();
+                console.log('❌ Slug is empty');
+                Swal.fire('Peringatan', 'Tautan kustom tidak boleh kosong', 'warning');
+                return;
+            }
 
+            // If still checking availability
+            const indicatorText = this.indicator?.querySelector('.slug-text')?.textContent || '';
+            if (indicatorText === 'Memeriksa ketersediaan...') {
+                e.preventDefault();
+                console.log('⏳ Still checking slug availability');
+                Swal.fire('Tunggu', 'Sedang memeriksa ketersediaan tautan...', 'info');
+                return;
+            }
+
+            // If slug not available
+            if (!this.isAvailable) {
+                e.preventDefault();
+                console.log('❌ Slug not available');
+                Swal.fire('Peringatan', 'Tautan sudah digunakan atau tidak tersedia', 'warning');
+                return;
+            }
+
+            // Slug changed and valid - show confirmation
+            e.preventDefault();
+            console.log('✅ Slug valid, showing confirmation');
+
+            const self = this;
             Swal.fire({
                 title: 'Apakah Anda yakin?',
                 html: `
@@ -146,10 +197,11 @@ class SlugEditor {
                 confirmButtonColor: '#d33',
                 cancelButtonColor: '#3085d6',
                 confirmButtonText: 'Ya, simpan!',
-                cancelButtonText: 'Batal',
+                cancelButtonText: 'Batal'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    this.form.submit();
+                    console.log('✅ Confirmation accepted, submitting form');
+                    self.form.submit();
                 }
             });
         });
@@ -157,5 +209,6 @@ class SlugEditor {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('📄 DOMContentLoaded event triggered');
     new SlugEditor();
 });

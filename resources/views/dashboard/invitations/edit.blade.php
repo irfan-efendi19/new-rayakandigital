@@ -17,9 +17,10 @@
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <form action="{{ route('dashboard.invitations.update', $invitation) }}" method="POST" enctype="multipart/form-data">
+                    <form id="invitation-form" action="{{ route('dashboard.invitations.update', $invitation) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
+                        <input type="hidden" name="title" value="{{ old('title', $invitation->title) }}">
                         <div class="space-y-6">
                             <!-- Basic Info -->
                             <div class="border-b border-gray-200 pb-6">
@@ -269,20 +270,27 @@
                                 </div>
                             </div>
 
-                            <div class="pt-4 flex justify-end">
-                                <a href="{{ route('dashboard.invitations.show', $invitation) }}" class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 mr-3">
-                                    Batal
-                                </a>
-                                <button type="submit" class="bg-indigo-600 border border-transparent rounded-md shadow-sm py-2 px-4 inline-flex justify-center text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                    Simpan Perubahan
-                                </button>
-                            </div>
                         </div>
                     </form>
                 </div>
             </div>
+
+            <!-- Fixed bottom bar -->
+            <div class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-t border-gray-200 shadow-lg z-40">
+                <div class="max-w-4xl mx-auto px-6 py-3 flex justify-end items-center">
+                    <a href="{{ route('dashboard.invitations.show', $invitation) }}" class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 mr-3">
+                        Batal
+                    </a>
+                    <button type="submit" form="invitation-form" class="bg-indigo-600 border border-transparent rounded-md shadow-sm py-2 px-4 inline-flex justify-center text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Simpan Perubahan
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
+
+    <!-- Spacer for fixed bottom bar -->
+    <div class="h-16"></div>
 
     <!-- Crop Modal -->
     <div id="crop-modal" class="hidden fixed inset-0 z-50 bg-black/60 items-center justify-center p-4">
