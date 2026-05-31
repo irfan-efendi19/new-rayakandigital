@@ -6,8 +6,7 @@
     </x-slot>
 
     <style>
-        #crop-container cropper-canvas,
-        #crop-container cropper-image {
+        #crop-container cropper-canvas {
             width: 100% !important;
             height: 100% !important;
         }
@@ -61,7 +60,7 @@
                                                         <button type="button" data-crop-target="bride_photo_input" class="px-4 py-2 bg-indigo-50 text-indigo-700 rounded-md text-sm font-semibold hover:bg-indigo-100 transition">
                                                             Pilih & Crop Foto
                                                         </button>
-                                                        <p class="text-xs text-gray-400 mt-1">Format JPG/PNG. Foto akan dipotong persegi secara otomatis.</p>
+                                                        <p class="text-xs text-gray-400 mt-1">Format JPG/PNG. Hasil potongan akan berbentuk persegi (400×400).</p>
                                                     </div>
                                                 </div>
                                                 @error('bride_photo') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
@@ -103,7 +102,7 @@
                                                         <button type="button" data-crop-target="groom_photo_input" class="px-4 py-2 bg-indigo-50 text-indigo-700 rounded-md text-sm font-semibold hover:bg-indigo-100 transition">
                                                             Pilih & Crop Foto
                                                         </button>
-                                                        <p class="text-xs text-gray-400 mt-1">Format JPG/PNG. Foto akan dipotong persegi secara otomatis.</p>
+                                                        <p class="text-xs text-gray-400 mt-1">Format JPG/PNG. Hasil potongan akan berbentuk persegi (400×400).</p>
                                                     </div>
                                                 </div>
                                                 @error('groom_photo') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
@@ -462,7 +461,7 @@
                 </button>
             </div>
             <div class="p-4 bg-gray-900 flex items-center justify-center" style="min-height:300px">
-                <div id="crop-container" class="w-full mx-auto" style="max-width:500px;aspect-ratio:1/1;overflow:hidden"></div>
+                <div id="crop-container" class="w-full mx-auto flex items-center justify-center" style="max-width:500px;min-height:350px;overflow:hidden"></div>
             </div>
             <div class="p-4 border-t border-gray-100">
                 <div class="flex items-center justify-center gap-3 mb-4">
