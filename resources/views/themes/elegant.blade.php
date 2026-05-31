@@ -35,6 +35,11 @@
 @endsection
 
 @section('content')
+    @php
+        $sortedEvents = $invitation->events->sortBy(['event_date', 'start_time']);
+        $firstEvent = $sortedEvents->first();
+    @endphp
+
     <!-- Hero Section -->
     <section class="min-h-screen relative flex items-center justify-center overflow-hidden">
         <div class="absolute inset-0 z-0">
@@ -46,7 +51,7 @@
         <div class="z-10 text-center px-4" data-aos="zoom-in" data-aos-duration="2000">
             <p class="text-sm tracking-widest uppercase mb-6 text-gray-600">The Wedding Of</p>
             <h1 class="text-6xl text-primary italic drop-shadow-sm">{{ $invitation->bride_name }} <br>&<br> {{ $invitation->groom_name }}</h1>
-            <p class="mt-8 text-lg font-serif">{{ $invitation->event_date ? \Carbon\Carbon::parse($invitation->event_date)->translatedFormat('d F Y') : 'TBA' }}</p>
+            <p class="mt-8 text-lg font-serif">{{ $firstEvent ? \Carbon\Carbon::parse($firstEvent->event_date)->translatedFormat('l, d F Y') : ($invitation->event_date ? \Carbon\Carbon::parse($invitation->event_date)->translatedFormat('d F Y') : 'TBA') }}</p>
         </div>
     </section>
 
@@ -92,6 +97,36 @@
         </div>
     </section>
 
+    <!-- Countdown Section (references first chronological event) -->
+    @if($firstEvent)
+        <section class="py-20 px-6 bg-[#fffaf0] text-center">
+            <div data-aos="fade-up">
+                <h2 class="text-3xl font-serif text-primary mb-4">Hitungan Menuju Hari Bahagia</h2>
+                <div id="countdown-timer" class="flex justify-center gap-4 mt-8"
+                    data-year="{{ \Carbon\Carbon::parse($firstEvent->event_date)->format('Y') }}"
+                    data-month="{{ \Carbon\Carbon::parse($firstEvent->event_date)->format('m') }}"
+                    data-day="{{ \Carbon\Carbon::parse($firstEvent->event_date)->format('d') }}">
+                    <div class="bg-white rounded-xl shadow-md p-4 w-20">
+                        <div class="text-3xl font-bold text-primary" id="countdown-days">00</div>
+                        <div class="text-xs text-gray-500 mt-1">Hari</div>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-md p-4 w-20">
+                        <div class="text-3xl font-bold text-primary" id="countdown-hours">00</div>
+                        <div class="text-xs text-gray-500 mt-1">Jam</div>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-md p-4 w-20">
+                        <div class="text-3xl font-bold text-primary" id="countdown-minutes">00</div>
+                        <div class="text-xs text-gray-500 mt-1">Menit</div>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-md p-4 w-20">
+                        <div class="text-3xl font-bold text-primary" id="countdown-seconds">00</div>
+                        <div class="text-xs text-gray-500 mt-1">Detik</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    @endif
+
     <!-- Event Detail -->
     <section class="py-20 px-6 bg-white">
         <div class="text-center mb-12" data-aos="fade-up">
@@ -99,44 +134,78 @@
             <p class="text-sm text-gray-600">Rangkaian acara akan diselenggarakan pada:</p>
         </div>
 
-        <div class="bg-[#fffaf0] rounded-t-full pt-16 pb-12 px-6 shadow-sm border border-gray-100 text-center relative overflow-hidden" data-aos="flip-up">
-            <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-primary opacity-20 text-6xl">
-                ✿
-            </div>
-            
-            <h3 class="text-2xl font-serif text-gray-800 mb-6">Resepsi</h3>
-            
-            <div class="mb-6">
-                <p class="font-bold text-gray-800">{{ $invitation->event_date ? \Carbon\Carbon::parse($invitation->event_date)->translatedFormat('l, d F Y') : '-' }}</p>
-                @php
-                    $tzLabel = match($invitation->timezone ?? 'Asia/Jakarta') {
-                        'Asia/Jakarta' => 'WIB',
-                        'Asia/Makassar' => 'WITA',
-                        'Asia/Jayapura' => 'WIT',
-                        default => 'WIB'
-                    };
-                @endphp
-                <p class="text-sm text-gray-600 mt-1">
-                    Pukul {{ $invitation->event_time ? \Carbon\Carbon::parse($invitation->event_time)->format('H:i') : '-' }}
-                    @if($invitation->event_time_end)
-                        - {{ \Carbon\Carbon::parse($invitation->event_time_end)->format('H:i') }}
-                    @else
-                        - Selesai
+        <div class="space-y-6">
+            @forelse($sortedEvents as $event)
+                <div class="bg-[#fffaf0] rounded-2xl py-10 px-6 shadow-sm border border-gray-100 text-center relative overflow-hidden" data-aos="flip-up">
+                    <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-primary opacity-20 text-6xl">
+                        ✿
+                    </div>
+                    
+                    <h3 class="text-2xl font-serif text-gray-800 mb-6">{{ $event->event_title }}</h3>
+                    
+                    <div class="mb-6">
+                        <p class="font-bold text-gray-800">{{ \Carbon\Carbon::parse($event->event_date)->translatedFormat('l, d F Y') }}</p>
+                        @php
+                            $tzLabel = match($invitation->timezone ?? 'Asia/Jakarta') {
+                                'Asia/Jakarta' => 'WIB',
+                                'Asia/Makassar' => 'WITA',
+                                'Asia/Jayapura' => 'WIT',
+                                default => 'WIB'
+                            };
+                        @endphp
+                        <p class="text-sm text-gray-600 mt-1">
+                            Pukul {{ $event->start_time ? \Carbon\Carbon::parse($event->start_time)->format('H:i') : '-' }}
+                            @if($event->is_until_finished)
+                                - Selesai
+                            @elseif($event->end_time)
+                                - {{ \Carbon\Carbon::parse($event->end_time)->format('H:i') }}
+                            @else
+                                - Selesai
+                            @endif
+                            {{ $tzLabel }}
+                        </p>
+                    </div>
+                    
+                    <div class="mb-8">
+                        <p class="font-bold text-gray-800">{{ $event->place_name ?: 'Tempat Acara' }}</p>
+                        <p class="text-sm text-gray-600 mt-1 px-4">{{ $event->place_address ?: 'Alamat belum ditentukan' }}</p>
+                    </div>
+                    
+                    @if($event->google_maps_url)
+                        <a href="{{ $event->google_maps_url }}" target="_blank" class="inline-block bg-primary text-white text-sm px-6 py-3 rounded-full uppercase tracking-wider font-semibold shadow-md hover:bg-opacity-90 transition">
+                            Buka Google Maps
+                        </a>
                     @endif
-                    {{ $tzLabel }}
-                </p>
-            </div>
-            
-            <div class="mb-8">
-                <p class="font-bold text-gray-800">{{ $invitation->venue_name ?: 'Tempat Acara' }}</p>
-                <p class="text-sm text-gray-600 mt-1 px-4">{{ $invitation->venue_address ?: 'Alamat belum ditentukan' }}</p>
-            </div>
-            
-            @if($invitation->venue_maps_url)
-                <a href="{{ $invitation->venue_maps_url }}" target="_blank" class="inline-block bg-primary text-white text-sm px-6 py-3 rounded-full uppercase tracking-wider font-semibold shadow-md hover:bg-opacity-90 transition">
-                    Buka Google Maps
-                </a>
-            @endif
+                </div>
+            @empty
+                <div class="bg-[#fffaf0] rounded-2xl py-10 px-6 shadow-sm border border-gray-100 text-center" data-aos="flip-up">
+                    <h3 class="text-xl font-serif text-gray-800 mb-4">{{ $invitation->venue_name ?: 'Tempat Acara' }}</h3>
+                    <p class="font-bold text-gray-800">{{ $invitation->event_date ? \Carbon\Carbon::parse($invitation->event_date)->translatedFormat('l, d F Y') : '-' }}</p>
+                    @php
+                        $tzLabel = match($invitation->timezone ?? 'Asia/Jakarta') {
+                            'Asia/Jakarta' => 'WIB',
+                            'Asia/Makassar' => 'WITA',
+                            'Asia/Jayapura' => 'WIT',
+                            default => 'WIB'
+                        };
+                    @endphp
+                    <p class="text-sm text-gray-600 mt-1">
+                        Pukul {{ $invitation->event_time ? \Carbon\Carbon::parse($invitation->event_time)->format('H:i') : '-' }}
+                        @if($invitation->event_time_end)
+                            - {{ \Carbon\Carbon::parse($invitation->event_time_end)->format('H:i') }}
+                        @else
+                            - Selesai
+                        @endif
+                        {{ $tzLabel }}
+                    </p>
+                    <p class="text-sm text-gray-600 mt-4">{{ $invitation->venue_address ?: 'Alamat belum ditentukan' }}</p>
+                    @if($invitation->venue_maps_url)
+                        <a href="{{ $invitation->venue_maps_url }}" target="_blank" class="mt-6 inline-block bg-primary text-white text-sm px-6 py-3 rounded-full uppercase tracking-wider font-semibold shadow-md hover:bg-opacity-90 transition">
+                            Buka Google Maps
+                        </a>
+                    @endif
+                </div>
+            @endforelse
         </div>
     </section>
 

@@ -80,6 +80,11 @@ class Invitation extends Model
         return $this->hasMany(Rsvp::class);
     }
 
+    public function events(): HasMany
+    {
+        return $this->hasMany(InvitationEvent::class)->orderBy('sort_order');
+    }
+
     public function wishes(): HasMany
     {
         return $this->hasMany(Wish::class)->latest();
@@ -255,9 +260,15 @@ class Invitation extends Model
         return "Yth. {nama_tamu},\n\nKami mengundang Bapak/Ibu/Saudara/i untuk hadir dalam acara pernikahan kami:\n\n✨ {nama_mempelai_pria} & {nama_mempelai_wanita} ✨\n\nSilakan buka undangan digital Anda di:\n{tautan_undangan}\n\nMerupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir. 🙏";
     }
 
+    public function firstEvent(): ?InvitationEvent
+    {
+        return $this->events()->orderBy('event_date')->orderBy('start_time')->first();
+    }
+
     public function parseWhatsappTemplate(\App\Models\Guest $guest): string
     {
         $template = $this->getWhatsappTemplate();
+        $firstEvent = $this->firstEvent();
 
         $replacements = [
             '{nama_tamu}' => $guest->name,
@@ -265,10 +276,10 @@ class Invitation extends Model
             '{nama_mempelai_wanita}' => $this->bride_name,
             '{tautan_undangan}' => $guest->personalized_link,
             '{qrcode_link}' => $this->hasFeature('qr_checkin') ? $guest->personalized_link . '&qr=1' : '',
-            '{tanggal_acara}' => $this->event_date?->format('d F Y') ?? '',
-            '{waktu_acara}' => $this->event_time ?? '',
-            '{tempat_acara}' => $this->venue_name ?? '',
-            '{alamat_acara}' => $this->venue_address ?? '',
+            '{tanggal_acara}' => $firstEvent?->event_date?->format('d F Y') ?? $this->event_date?->format('d F Y') ?? '',
+            '{waktu_acara}' => $firstEvent?->start_time ?? $this->event_time ?? '',
+            '{tempat_acara}' => $firstEvent?->place_name ?? $this->venue_name ?? '',
+            '{alamat_acara}' => $firstEvent?->place_address ?? $this->venue_address ?? '',
         ];
 
         return str_replace(array_keys($replacements), array_values($replacements), $template);

@@ -113,58 +113,185 @@
                                 </div>
                             </div>
 
-                            <!-- Event Details -->
+                            <!-- Event Details - Multi-Event Dynamic Repeater -->
                             <div class="border-b border-gray-200 pb-6">
-                                <h3 class="text-lg font-medium leading-6 text-gray-900 mb-4">Waktu & Tempat</h3>
-                                
-                                <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-                                    <div class="sm:col-span-2">
-                                        <label for="event_date" class="block text-sm font-medium text-gray-700">Tanggal Acara</label>
-                                        <input type="date" name="event_date" id="event_date" value="{{ old('event_date', $invitation->event_date?->format('Y-m-d')) }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                                        @error('event_date') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                                    </div>
+                                <div class="flex items-center justify-between mb-4">
+                                    <h3 class="text-lg font-medium leading-6 text-gray-900">Waktu & Tempat</h3>
+                                    <button type="button" id="add-event-btn" class="inline-flex items-center px-3 py-1.5 text-sm font-medium rounded-md text-indigo-700 bg-indigo-50 hover:bg-indigo-100 transition">
+                                        + Tambah Acara Baru
+                                    </button>
+                                </div>
 
-                                    <div class="sm:col-span-2">
-                                        <label for="event_time" class="block text-sm font-medium text-gray-700">Waktu Mulai</label>
-                                        <input type="time" name="event_time" id="event_time" value="{{ old('event_time', $invitation->event_time) }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                                        @error('event_time') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                                    </div>
+                                @error('events') <span class="text-red-500 text-xs block mb-2">{{ $message }}</span> @enderror
 
-                                    <div class="sm:col-span-2">
-                                        <label for="event_time_end" class="block text-sm font-medium text-gray-700">Waktu Selesai</label>
-                                        <input type="time" name="event_time_end" id="event_time_end" value="{{ old('event_time_end', $invitation->event_time_end) }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                                        @error('event_time_end') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                                    </div>
+                                <input type="hidden" name="events_enabled" value="1">
 
-                                    <div class="sm:col-span-6">
-                                        <label for="timezone" class="block text-sm font-medium text-gray-700">Zona Waktu</label>
-                                        <select name="timezone" id="timezone" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                                            <option value="Asia/Jakarta" {{ old('timezone', $invitation->timezone) == 'Asia/Jakarta' ? 'selected' : '' }}>WIB (Waktu Indonesia Barat)</option>
-                                            <option value="Asia/Makassar" {{ old('timezone', $invitation->timezone) == 'Asia/Makassar' ? 'selected' : '' }}>WITA (Waktu Indonesia Tengah)</option>
-                                            <option value="Asia/Jayapura" {{ old('timezone', $invitation->timezone) == 'Asia/Jayapura' ? 'selected' : '' }}>WIT (Waktu Indonesia Timur)</option>
-                                        </select>
-                                        @error('timezone') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                                    </div>
+                                <div id="events-container" class="space-y-4">
+                                    @php
+                                        $eventCollection = old('events') ? array_values(old('events')) : $invitation->events;
+                                    @endphp
+                                    @foreach($eventCollection as $eventIdx => $event)
+                                        @php
+                                            if (is_array($event)) { $event = (object) $event; }
+                                        @endphp
+                                        <div class="event-card bg-gray-50 p-4 rounded-xl border border-gray-200">
+                                            <input type="hidden" name="events[{{ $eventIdx }}][id]" value="{{ $event->id ?? '' }}">
+                                            <div class="flex items-center justify-between mb-4">
+                                                <h4 class="font-semibold text-sm text-indigo-700">Acara #{{ $loop->iteration }}</h4>
+                                                <div class="flex items-center gap-1">
+                                                    <button type="button" class="move-up p-1 text-gray-400 hover:text-gray-600" title="Pindah ke atas">
+                                                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/></svg>
+                                                    </button>
+                                                    <button type="button" class="move-down p-1 text-gray-400 hover:text-gray-600" title="Pindah ke bawah">
+                                                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                                                    </button>
+                                                    <button type="button" class="remove-event ml-2 p-1 text-red-400 hover:text-red-600" title="Hapus acara">
+                                                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="grid grid-cols-1 gap-y-4 gap-x-4 sm:grid-cols-6">
+                                                <div class="sm:col-span-6">
+                                                    <label class="block text-sm font-medium text-gray-700">Nama Acara</label>
+                                                    <input type="text" name="events[{{ $eventIdx }}][event_title]" value="{{ old('events.' . $eventIdx . '.event_title', $event->event_title ?? '') }}" list="event-titles-{{ $eventIdx }}"
+                                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                                        placeholder="Pilih atau ketik nama acara" required>
+                                                    <datalist id="event-titles-{{ $eventIdx }}">
+                                                        <option value="Akad Nikah">
+                                                        <option value="Resepsi">
+                                                        <option value="Pengajian">
+                                                        <option value="Unduh Mantu">
+                                                    </datalist>
+                                                </div>
+                                                <div class="sm:col-span-2">
+                                                    <label class="block text-sm font-medium text-gray-700">Tanggal Acara</label>
+                                                    <input type="date" name="events[{{ $eventIdx }}][event_date]" value="{{ old('events.' . $eventIdx . '.event_date', $event->event_date instanceof \Carbon\Carbon ? $event->event_date->format('Y-m-d') : ($event->event_date ?? '')) }}"
+                                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
+                                                </div>
+                                                <div class="sm:col-span-2">
+                                                    <label class="block text-sm font-medium text-gray-700">Jam Mulai</label>
+                                                    <input type="time" name="events[{{ $eventIdx }}][start_time]" value="{{ old('events.' . $eventIdx . '.start_time', $event->start_time ?? '') }}"
+                                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
+                                                </div>
+                                                <div class="sm:col-span-2">
+                                                    <label class="block text-sm font-medium text-gray-700">Jam Selesai</label>
+                                                    <input type="time" name="events[{{ $eventIdx }}][end_time]" value="{{ old('events.' . $eventIdx . '.end_time', $event->end_time ?? '') }}"
+                                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                                    <div class="mt-1 flex items-center">
+                                                        <input type="hidden" name="events[{{ $eventIdx }}][is_until_finished]" value="0">
+                                                        <input type="checkbox" name="events[{{ $eventIdx }}][is_until_finished]" value="1" {{ old('events.' . $eventIdx . '.is_until_finished', $event->is_until_finished ?? false) ? 'checked' : '' }}
+                                                            class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                                                        <label class="ml-2 text-xs text-gray-500">Sampai Selesai</label>
+                                                    </div>
+                                                </div>
+                                                <div class="sm:col-span-6">
+                                                    <label class="block text-sm font-medium text-gray-700">Nama Tempat / Lokasi</label>
+                                                    <input type="text" name="events[{{ $eventIdx }}][place_name]" value="{{ old('events.' . $eventIdx . '.place_name', $event->place_name ?? '') }}"
+                                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                                        placeholder="Nama gedung atau lokasi" required>
+                                                </div>
+                                                <div class="sm:col-span-6">
+                                                    <label class="block text-sm font-medium text-gray-700">Alamat Lengkap</label>
+                                                    <textarea name="events[{{ $eventIdx }}][place_address]" rows="2"
+                                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                                        placeholder="Alamat lengkap lokasi" required>{{ old('events.' . $eventIdx . '.place_address', $event->place_address ?? '') }}</textarea>
+                                                </div>
+                                                <div class="sm:col-span-6">
+                                                    <label class="block text-sm font-medium text-gray-700">Link Google Maps</label>
+                                                    <input type="url" name="events[{{ $eventIdx }}][google_maps_url]" value="{{ old('events.' . $eventIdx . '.google_maps_url', $event->google_maps_url ?? '') }}"
+                                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                                        placeholder="https://goo.gl/maps/...">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
 
-                                    <div class="sm:col-span-6">
-                                        <label for="venue_name" class="block text-sm font-medium text-gray-700">Nama Gedung / Lokasi</label>
-                                        <input type="text" name="venue_name" id="venue_name" value="{{ old('venue_name', $invitation->venue_name) }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                                        @error('venue_name') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                                    </div>
-
-                                    <div class="sm:col-span-6">
-                                        <label for="venue_address" class="block text-sm font-medium text-gray-700">Alamat Lengkap</label>
-                                        <textarea name="venue_address" id="venue_address" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">{{ old('venue_address', $invitation->venue_address) }}</textarea>
-                                        @error('venue_address') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                                    </div>
-
-                                    <div class="sm:col-span-6">
-                                        <label for="venue_maps_url" class="block text-sm font-medium text-gray-700">Link Google Maps</label>
-                                        <input type="url" name="venue_maps_url" id="venue_maps_url" value="{{ old('venue_maps_url', $invitation->venue_maps_url) }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="https://goo.gl/maps/...">
-                                        @error('venue_maps_url') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                                    </div>
+                                <!-- Timezone (global setting, not per-event) -->
+                                <div class="mt-6">
+                                    <label for="timezone" class="block text-sm font-medium text-gray-700">Zona Waktu</label>
+                                    <select name="timezone" id="timezone" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                        <option value="Asia/Jakarta" {{ old('timezone', $invitation->timezone) == 'Asia/Jakarta' ? 'selected' : '' }}>WIB (Waktu Indonesia Barat)</option>
+                                        <option value="Asia/Makassar" {{ old('timezone', $invitation->timezone) == 'Asia/Makassar' ? 'selected' : '' }}>WITA (Waktu Indonesia Tengah)</option>
+                                        <option value="Asia/Jayapura" {{ old('timezone', $invitation->timezone) == 'Asia/Jayapura' ? 'selected' : '' }}>WIT (Waktu Indonesia Timur)</option>
+                                    </select>
+                                    @error('timezone') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                                 </div>
                             </div>
+
+                            <!-- Template for new event card (hidden, cloned by JS) -->
+                            <template id="event-card-template">
+                                <div class="event-card bg-gray-50 p-4 rounded-xl border border-gray-200">
+                                    <input type="hidden" name="events[__INDEX__][id]" value="">
+                                    <div class="flex items-center justify-between mb-4">
+                                        <h4 class="font-semibold text-sm text-indigo-700">Acara Baru</h4>
+                                        <div class="flex items-center gap-1">
+                                            <button type="button" class="move-up p-1 text-gray-400 hover:text-gray-600" title="Pindah ke atas">
+                                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/></svg>
+                                            </button>
+                                            <button type="button" class="move-down p-1 text-gray-400 hover:text-gray-600" title="Pindah ke bawah">
+                                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                                            </button>
+                                            <button type="button" class="remove-event ml-2 p-1 text-red-400 hover:text-red-600" title="Hapus acara">
+                                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="grid grid-cols-1 gap-y-4 gap-x-4 sm:grid-cols-6">
+                                        <div class="sm:col-span-6">
+                                            <label class="block text-sm font-medium text-gray-700">Nama Acara</label>
+                                            <input type="text" name="events[__INDEX__][event_title]" value="" list="event-titles-__INDEX__"
+                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                                placeholder="Pilih atau ketik nama acara" required>
+                                            <datalist id="event-titles-__INDEX__">
+                                                <option value="Akad Nikah">
+                                                <option value="Resepsi">
+                                                <option value="Pengajian">
+                                                <option value="Unduh Mantu">
+                                            </datalist>
+                                        </div>
+                                        <div class="sm:col-span-2">
+                                            <label class="block text-sm font-medium text-gray-700">Tanggal Acara</label>
+                                            <input type="date" name="events[__INDEX__][event_date]" value=""
+                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
+                                        </div>
+                                        <div class="sm:col-span-2">
+                                            <label class="block text-sm font-medium text-gray-700">Jam Mulai</label>
+                                            <input type="time" name="events[__INDEX__][start_time]" value=""
+                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
+                                        </div>
+                                        <div class="sm:col-span-2">
+                                            <label class="block text-sm font-medium text-gray-700">Jam Selesai</label>
+                                            <input type="time" name="events[__INDEX__][end_time]" value=""
+                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                            <div class="mt-1 flex items-center">
+                                                <input type="hidden" name="events[__INDEX__][is_until_finished]" value="0">
+                                                <input type="checkbox" name="events[__INDEX__][is_until_finished]" value="1"
+                                                    class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                                                <label class="ml-2 text-xs text-gray-500">Sampai Selesai</label>
+                                            </div>
+                                        </div>
+                                        <div class="sm:col-span-6">
+                                            <label class="block text-sm font-medium text-gray-700">Nama Tempat / Lokasi</label>
+                                            <input type="text" name="events[__INDEX__][place_name]" value=""
+                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                                placeholder="Nama gedung atau lokasi" required>
+                                        </div>
+                                        <div class="sm:col-span-6">
+                                            <label class="block text-sm font-medium text-gray-700">Alamat Lengkap</label>
+                                            <textarea name="events[__INDEX__][place_address]" rows="2"
+                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                                placeholder="Alamat lengkap lokasi" required></textarea>
+                                        </div>
+                                        <div class="sm:col-span-6">
+                                            <label class="block text-sm font-medium text-gray-700">Link Google Maps</label>
+                                            <input type="url" name="events[__INDEX__][google_maps_url]" value=""
+                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                                placeholder="https://goo.gl/maps/...">
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
 
                             <!-- Custom URL / Slug Editor -->
                             <div class="border-b border-gray-200 pb-6">
@@ -335,4 +462,95 @@
             </div>
         </div>
     </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const container = document.getElementById('events-container');
+        const template = document.getElementById('event-card-template');
+        const addBtn = document.getElementById('add-event-btn');
+        let eventIndex = container ? container.children.length : 0;
+
+        function reindexEvents() {
+            const cards = container.querySelectorAll('.event-card');
+            cards.forEach(function (card, idx) {
+                const inputs = card.querySelectorAll('[name]');
+                inputs.forEach(function (input) {
+                    const name = input.getAttribute('name');
+                    if (name) {
+                        input.setAttribute('name', name.replace(/events\[\d+\]/, 'events[' + idx + ']'));
+                    }
+                });
+                const datalists = card.querySelectorAll('[id^="event-titles-"]');
+                datalists.forEach(function (dl) {
+                    dl.id = 'event-titles-' + idx;
+                });
+                const inputsWithList = card.querySelectorAll('[list^="event-titles-"]');
+                inputsWithList.forEach(function (inp) {
+                    inp.setAttribute('list', 'event-titles-' + idx);
+                });
+                const title = card.querySelector('h4.font-semibold');
+                if (title) {
+                    title.textContent = 'Acara #' + (idx + 1);
+                }
+            });
+        }
+
+        function addEventCard() {
+            const clone = template.content.cloneNode(true);
+            const html = clone.querySelector('.event-card').outerHTML
+                .replace(/__INDEX__/g, eventIndex);
+            const wrapper = document.createElement('div');
+            wrapper.innerHTML = html;
+            const card = wrapper.firstElementChild;
+            container.appendChild(card);
+            eventIndex++;
+            bindCardEvents(card);
+            reindexEvents();
+        }
+
+        function removeEventCard(btn) {
+            const card = btn.closest('.event-card');
+            if (card && confirm('Hapus acara ini?')) {
+                card.remove();
+                reindexEvents();
+            }
+        }
+
+        function moveUp(btn) {
+            const card = btn.closest('.event-card');
+            const prev = card ? card.previousElementSibling : null;
+            if (prev) {
+                card.parentNode.insertBefore(card, prev);
+                reindexEvents();
+            }
+        }
+
+        function moveDown(btn) {
+            const card = btn.closest('.event-card');
+            const next = card ? card.nextElementSibling : null;
+            if (next) {
+                card.parentNode.insertBefore(next, card);
+                reindexEvents();
+            }
+        }
+
+        function bindCardEvents(card) {
+            card.querySelector('.remove-event')?.addEventListener('click', function () {
+                removeEventCard(this);
+            });
+            card.querySelector('.move-up')?.addEventListener('click', function () {
+                moveUp(this);
+            });
+            card.querySelector('.move-down')?.addEventListener('click', function () {
+                moveDown(this);
+            });
+        }
+
+        // Bind events to existing cards
+        container.querySelectorAll('.event-card').forEach(function (card) {
+            bindCardEvents(card);
+        });
+
+        addBtn.addEventListener('click', addEventCard);
+    });
+</script>
 </x-app-layout>

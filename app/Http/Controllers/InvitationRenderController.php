@@ -11,7 +11,7 @@ class InvitationRenderController extends Controller
 {
     public function show(Request $request, $slug)
     {
-        $invitation = Invitation::with(['wishes', 'rsvps'])
+        $invitation = Invitation::with(['wishes', 'rsvps', 'events'])
             ->where('slug', $slug)
             ->where('is_active', true)
             ->firstOrFail();

@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Guest;
 use App\Models\Invitation;
+use App\Models\InvitationEvent;
+use App\Models\PreviewData;
 use App\Models\Theme;
+use Illuminate\Support\Collection;
 
 class ThemePreviewController extends Controller
 {
@@ -14,38 +17,43 @@ class ThemePreviewController extends Controller
             ->where('is_active', true)
             ->firstOrFail();
 
-        // Create dummy invitation data for preview
+        $preview = PreviewData::getPreview();
+
         $invitation = new Invitation([
-            'title' => 'Pernikahan Budi & Ani',
-            'bride_name' => 'Ani Suryani',
-            'groom_name' => 'Budi Santoso',
-            'bride_nickname' => 'Ani',
-            'groom_nickname' => 'Budi',
-            'bride_parents' => 'Bapak Surya & Ibu Dewi',
-            'groom_parents' => 'Bapak Santo & Ibu Ratna',
-            'event_date' => now()->addMonths(2)->format('Y-m-d'),
-            'event_time' => '10:00',
-            'event_time_end' => '14:00',
-            'venue_name' => 'Grand Ballroom Hotel Mulia',
-            'venue_address' => 'Jl. Asia Afrika No.8, Senayan, Jakarta Selatan 10270',
-            'venue_maps_url' => 'https://maps.google.com/?q=-6.2088,106.8456',
-            'love_story' => 'Kami bertemu di bangku kuliah pada tahun 2020. Sebuah perkenalan sederhana yang tumbuh menjadi cinta yang indah.',
+            'title' => $preview->title,
+            'bride_name' => $preview->bride_name,
+            'groom_name' => $preview->groom_name,
+            'bride_nickname' => $preview->bride_nickname,
+            'groom_nickname' => $preview->groom_nickname,
+            'bride_parents' => $preview->bride_parents,
+            'groom_parents' => $preview->groom_parents,
+            'event_date' => $preview->event_date,
+            'event_time' => $preview->event_time,
+            'event_time_end' => $preview->event_time_end,
+            'venue_name' => $preview->venue_name,
+            'venue_address' => $preview->venue_address,
+            'venue_maps_url' => $preview->venue_maps_url,
+            'love_story' => $preview->love_story,
             'theme' => $themeSlug,
             'tier' => 'gold',
             'is_active' => true,
             'slug' => 'preview',
-            'gallery_photos' => [
-                'https://picsum.photos/seed/wedding1/400/400',
-                'https://picsum.photos/seed/wedding2/400/400',
-                'https://picsum.photos/seed/wedding3/400/400',
-            ],
-            'gift_bank_name' => 'Bank Central Asia (BCA)',
-            'gift_bank_account' => '1234567890',
-            'gift_bank_holder' => 'Ani Suryani',
+            'gallery_photos' => $preview->gallery_photos ?? [],
+            'gift_bank_name' => $preview->gift_bank_name,
+            'gift_bank_account' => $preview->gift_bank_account,
+            'gift_bank_holder' => $preview->gift_bank_holder,
         ]);
 
-        // Don't persist — this is a preview-only model
         $invitation->exists = false;
+
+        $dummyEvents = [];
+        foreach ($preview->parsed_events as $eventData) {
+            $event = new InvitationEvent($eventData);
+            $event->exists = false;
+            $dummyEvents[] = $event;
+        }
+
+        $invitation->setRelation('events', new Collection($dummyEvents));
 
         $guest = new Guest(['name' => 'Nama Tamu']);
 

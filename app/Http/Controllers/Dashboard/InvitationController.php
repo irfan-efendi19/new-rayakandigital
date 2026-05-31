@@ -90,6 +90,7 @@ class InvitationController extends Controller
     public function edit(Invitation $invitation)
     {
         Gate::authorize('update', $invitation);
+        $invitation->load('events');
 
         return view('dashboard.invitations.edit', compact('invitation'));
     }
@@ -211,6 +212,42 @@ class InvitationController extends Controller
             'validated_slug' => $validated['slug'] ?? null,
             'db_slug' => $invitation->fresh()->slug,
         ]).PHP_EOL, FILE_APPEND);
+
+        // Handle events upsert
+        if ($request->has('events_enabled')) {
+            $request->validate([
+                'events' => 'array',
+                'events.*.id' => 'nullable|integer|exists:invitation_events,id',
+                'events.*.event_title' => 'required|string|max:100',
+                'events.*.event_date' => 'required|date',
+                'events.*.start_time' => 'required',
+                'events.*.end_time' => 'nullable',
+                'events.*.is_until_finished' => 'nullable|boolean',
+                'events.*.place_name' => 'required|string|max:150',
+                'events.*.place_address' => 'required|string',
+                'events.*.google_maps_url' => 'nullable|url',
+            ]);
+
+            $submittedIds = [];
+            foreach (array_values($request->input('events', [])) as $index => $eventData) {
+                $eventData['sort_order'] = $index;
+                $eventData['is_until_finished'] = $eventData['is_until_finished'] ?? false;
+
+                if (!empty($eventData['id'])) {
+                    $event = \App\Models\InvitationEvent::where('invitation_id', $invitation->id)
+                        ->where('id', $eventData['id'])
+                        ->firstOrFail();
+                    $event->update($eventData);
+                    $submittedIds[] = $event->id;
+                } else {
+                    unset($eventData['id']);
+                    $event = $invitation->events()->create($eventData);
+                    $submittedIds[] = $event->id;
+                }
+            }
+
+            $invitation->events()->whereNotIn('id', $submittedIds)->delete();
+        }
 
         return redirect()->route('dashboard.invitations.edit', $invitation)
             ->with('success', 'Undangan berhasil diperbarui.');

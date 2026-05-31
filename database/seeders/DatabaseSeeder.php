@@ -94,6 +94,12 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
+        // Preview Data (default dummy for theme preview)
+        \App\Models\PreviewData::firstOrCreate(
+            ['id' => 1],
+            \App\Models\PreviewData::defaultData()
+        );
+
         $this->call(ThemeSeeder::class);
 
         $this->call(PackageSeeder::class);
