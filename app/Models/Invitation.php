@@ -50,6 +50,8 @@ class Invitation extends Model
         'gift_qris_image',
         'wa_template_enabled',
         'wa_message_template',
+        'show_qr_checkin',
+        'show_comments',
     ];
 
     protected function casts(): array
@@ -61,6 +63,8 @@ class Invitation extends Model
             'is_active' => 'boolean',
             'gallery_photos' => 'array',
             'wa_template_enabled' => 'boolean',
+            'show_qr_checkin' => 'boolean',
+            'show_comments' => 'boolean',
             'slug_change_count' => 'integer',
         ];
     }
@@ -97,12 +101,7 @@ class Invitation extends Model
 
     public function themeLabel(): string
     {
-        return match ($this->theme) {
-            'elegant' => 'Elegant Rose',
-            'modern' => 'Modern Dark',
-            'garden' => 'Garden Green',
-            default => 'Elegant Rose',
-        };
+        return \App\Models\Theme::where('view_path', 'themes.'.$this->theme)->value('name') ?? ucfirst($this->theme);
     }
 
     public function getPersonalizedUrl(Guest $guest): string

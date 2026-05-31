@@ -63,42 +63,22 @@
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Pilih Tema</label>
                                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                    <label class="relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none hover:border-indigo-500 transition-colors">
-                                        <input type="radio" name="theme" value="elegant" class="sr-only" {{ $selectedTheme === 'elegant' ? 'checked' : '' }}>
-                                        <span class="flex flex-1">
-                                            <span class="flex flex-col">
-                                                <span class="block text-sm font-medium text-gray-900">Elegant Rose</span>
-                                                <span class="mt-1 flex items-center text-sm text-gray-500">Klasik & Romantis</span>
+                                    @foreach($themes as $tema)
+                                        @php $themeKey = str_replace('themes.', '', $tema->view_path); @endphp
+                                        <label class="relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none hover:border-indigo-500 transition-colors">
+                                            <input type="radio" name="theme" value="{{ $themeKey }}" class="sr-only" {{ $selectedTheme === $themeKey ? 'checked' : '' }}>
+                                            <span class="flex flex-1">
+                                                <span class="flex flex-col">
+                                                    <span class="block text-sm font-medium text-gray-900">{{ $tema->name }}</span>
+                                                    <span class="mt-1 flex items-center text-sm text-gray-500">
+                                                        {{ $tema->is_premium ? 'Premium' : 'Gratis' }}
+                                                    </span>
+                                                </span>
                                             </span>
-                                        </span>
-                                        <svg class="h-5 w-5 text-indigo-600 {{ $selectedTheme === 'elegant' ? '' : 'hidden' }}" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" /></svg>
-                                    </label>
-
-                                    <label class="relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none hover:border-indigo-500 transition-colors">
-                                        <input type="radio" name="theme" value="modern" class="sr-only" {{ $selectedTheme === 'modern' ? 'checked' : '' }}>
-                                        <span class="flex flex-1">
-                                            <span class="flex flex-col">
-                                                <span class="block text-sm font-medium text-gray-900">Modern Dark</span>
-                                                <span class="mt-1 flex items-center text-sm text-gray-500">Gelap & Elegan</span>
-                                            </span>
-                                        </span>
-                                        <svg class="h-5 w-5 text-indigo-600 {{ $selectedTheme === 'modern' ? '' : 'hidden' }}" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" /></svg>
-                                    </label>
-
-                                    <label class="relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none hover:border-indigo-500 transition-colors">
-                                        <input type="radio" name="theme" value="garden" class="sr-only" {{ $selectedTheme === 'garden' ? 'checked' : '' }}>
-                                        <span class="flex flex-1">
-                                            <span class="flex flex-col">
-                                                <span class="block text-sm font-medium text-gray-900">Garden Green</span>
-                                                <span class="mt-1 flex items-center text-sm text-gray-500">Segar & Natural</span>
-                                            </span>
-                                        </span>
-                                        <svg class="h-5 w-5 text-indigo-600 {{ $selectedTheme === 'garden' ? '' : 'hidden' }}" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" /></svg>
-                                    </label>
+                                            <svg class="h-5 w-5 text-indigo-600 {{ $selectedTheme === $themeKey ? '' : 'hidden' }}" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" /></svg>
+                                        </label>
+                                    @endforeach
                                 </div>
-                                <style>
-                                    input[type="radio"]:checked ~ span { color: #4f46e5; }
-                                </style>
                                 @error('theme') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                             </div>
 

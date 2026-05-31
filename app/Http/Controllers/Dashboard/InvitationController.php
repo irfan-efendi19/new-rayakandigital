@@ -92,7 +92,9 @@ class InvitationController extends Controller
         Gate::authorize('update', $invitation);
         $invitation->load('events');
 
-        return view('dashboard.invitations.edit', compact('invitation'));
+        $themes = \App\Models\Theme::where('is_active', true)->get();
+
+        return view('dashboard.invitations.edit', compact('invitation', 'themes'));
     }
 
     public function checkSlug(Request $request)

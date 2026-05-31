@@ -350,9 +350,12 @@
                                     <div class="sm:col-span-6">
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Tema Undangan</label>
                                         <select name="theme" id="theme" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                                            <option value="elegant" {{ old('theme', $invitation->theme) == 'elegant' ? 'selected' : '' }}>Elegant Rose</option>
-                                            <option value="modern" {{ old('theme', $invitation->theme) == 'modern' ? 'selected' : '' }}>Modern Dark</option>
-                                            <option value="garden" {{ old('theme', $invitation->theme) == 'garden' ? 'selected' : '' }}>Garden Green</option>
+                                            @foreach($themes as $tema)
+                                                @php $themeKey = str_replace('themes.', '', $tema->view_path); @endphp
+                                                <option value="{{ $themeKey }}" {{ old('theme', $invitation->theme) == $themeKey ? 'selected' : '' }}>
+                                                    {{ $tema->name }}
+                                                </option>
+                                            @endforeach
                                         </select>
                                         @error('theme') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                                     </div>
@@ -391,6 +394,34 @@
                                             <div class="ml-3 text-sm">
                                                 <label for="is_active" class="font-medium text-gray-700">Aktifkan Undangan</label>
                                                 <p class="text-gray-500">Undangan yang tidak aktif tidak dapat diakses oleh tamu.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="sm:col-span-6 border-t border-gray-100 pt-4">
+                                        <h4 class="text-sm font-semibold text-gray-700 mb-3">Visibilitas Fitur</h4>
+                                        <div class="space-y-3">
+                                            <div class="flex items-center justify-between">
+                                                <div class="text-sm">
+                                                    <label for="show_qr_checkin" class="font-medium text-gray-700">QR Check-In</label>
+                                                    <p class="text-gray-500 text-xs">Tampilkan kode QR unik tamu di halaman undangan</p>
+                                                </div>
+                                                <label class="relative inline-flex items-center cursor-pointer">
+                                                    <input type="hidden" name="show_qr_checkin" value="0">
+                                                    <input type="checkbox" name="show_qr_checkin" id="show_qr_checkin" value="1" {{ old('show_qr_checkin', $invitation->show_qr_checkin) ? 'checked' : '' }} class="sr-only peer">
+                                                    <div class="w-9 h-5 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600"></div>
+                                                </label>
+                                            </div>
+                                            <div class="flex items-center justify-between">
+                                                <div class="text-sm">
+                                                    <label for="show_comments" class="font-medium text-gray-700">Buku Tamu / Komentar</label>
+                                                    <p class="text-gray-500 text-xs">Tampilkan kolom ucapan dan doa di halaman undangan</p>
+                                                </div>
+                                                <label class="relative inline-flex items-center cursor-pointer">
+                                                    <input type="hidden" name="show_comments" value="0">
+                                                    <input type="checkbox" name="show_comments" id="show_comments" value="1" {{ old('show_comments', $invitation->show_comments) ? 'checked' : '' }} class="sr-only peer">
+                                                    <div class="w-9 h-5 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600"></div>
+                                                </label>
                                             </div>
                                         </div>
                                     </div>

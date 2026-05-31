@@ -321,7 +321,24 @@
         </section>
     @endif
 
-    <!-- Guestbook -->
+    @if($invitation->show_qr_checkin && $guest)
+    @php $qrData = urlencode($guest->personalized_link . '&qr=1'); @endphp
+    <section class="py-16 px-6 bg-[#fffaf0]">
+        <div class="text-center mb-8" data-aos="fade-up">
+            <h2 class="text-3xl font-serif text-primary mb-4">QR Check-In</h2>
+            <p class="text-sm text-gray-600">Tunjukkan kode ini saat check-in acara.</p>
+        </div>
+        <div class="flex justify-center" data-aos="fade-up">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 inline-block">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data={{ $qrData }}"
+                     alt="QR Code {{ $guest->name }}" class="mx-auto" width="180" height="180">
+                <p class="text-xs text-gray-400 mt-2 text-center">{{ $guest->name }}</p>
+            </div>
+        </div>
+    </section>
+    @endif
+
+    @if($invitation->show_comments)
     <section class="py-20 px-6 bg-white">
         <div class="text-center mb-10" data-aos="fade-up">
             <h2 class="text-3xl font-serif text-primary mb-4">Buku Tamu</h2>
@@ -357,5 +374,6 @@
             @endforelse
         </div>
     </section>
+    @endif
 
 @endsection
