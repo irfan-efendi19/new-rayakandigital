@@ -1,87 +1,70 @@
-PRODUCT REQUIREMENT DOCUMENT (PRD) EXTENSION
-## Module: Integrated WhatsApp Sender & Centralized API Gateway (Laravel 13 System)
-**Version:** 2.1 (Optimized for Laravel 13 Core, PHP 8.4, & Redis Queue)  
+# PRODUCT REQUIREMENT DOCUMENT (PRD) EXTENSION
+## Module: Tenant Custom URL Slug Editor (Laravel 13 System)
+**Version:** 2.3 (Optimized for Laravel 13 Core, PHP 8.4, & Inertia.js/Vue 3)  
 **Date:** May 31, 2026  
 **Status:** Approved  
 
 ---
 
-## 1. Arsitektur Komponen & Arus Integrasi (System Architecture)
+## 1. Ringkasan Eksekutif & Aturan Bisnis (Executive Summary & Business Rules)
 
-Sistem ini memisahkan antara **konfigurasi mesin pengirim (Admin)** dengan **eksekusi pengiriman pesan (User/Tenant)** untuk menjaga keamanan kredensial API Key platform.
+Fitur ini memberikan fleksibilitas kepada pengguna (Tenant) untuk menentukan dan mengubah nama tautan unik undangan mereka sendiri (contoh: dari `domain.com/budi-ani` menjadi `domain.com/budiandanispesial`). 
 
-[ Dashboard Tenant (User) ] ──> Pilih Daftar Tamu ──> Klik "Kirim via WA"
+### Aturan Batasan Sistem (Sistem Constraints):
+1. **Unik Secara Global:** Tidak boleh ada dua undangan aktif dengan nama slug yang sama di dalam database.
+2. **Karakter Terbuka:** Slug hanya boleh berisi huruf kecil, angka, dan tanda hubung/minus (`-`). Tidak diperbolehkan menggunakan spasi, huruf kapital, atau karakter spesial.
+
+---
+
+## 2. Alur Pengguna & Validasi Real-Time (User Flow & Interface Architecture)
+
+Sistem menggunakan pendekatan komponen reaktif pada dasbor pengguna untuk memastikan slug yang dimasukkan tersedia sebelum form disimpan.
+
+[ Dasbor User: Menu Pengaturan Tautan ]
 │
 ▼
-[ Laravel 13 Core System ] <── Ambil API Key Terenkripsi dari DB Admin
+[ Input Nama Slug Baru (e.g., "budi-ani-wedding") ]
 │
-├──> Validasi Sisa Kuota Paket Tenant (Laravel Pennant)
-├──> Generate Pesan Kustom & Tautan Unik QR Code
+▼ (Debounce 500ms - Ajax Call via Laravel API)
+[ Sistem Cek Ketersediaan Slug di Tabel invitations ]
+│
+┌─────────┴─────────┐
+▼                   ▼
+[ Terpakai ]        [ Tersedia ]
+│                   │
+▼                   ▼
+Tampilkan Peringatan   Tombol "Simpan" Aktif
+"Link sudah digunakan"     │
+▼
+[ Klik Simpan / Update ]
 │
 ▼
-[ Laravel Horizon / Redis Queue ] ──( Asinkronus Asinkronus )──> [ API WhatsApp Gateway ]
-│
-▼
-[ Handphone Tamu ]
+[ Sistem Update Kolom slug di DB ]
 
 
 ---
 
-## 2. Kebutuhan Fungsional (Functional Requirements)
+## 3. Kebutuhan Fungsional (Functional Requirements)
 
-### 2.1 Sisi Admin: Pengaturan Pusat Server WA Sender (Admin Panel)
-* **FR-WAG-ADM-01 (Gateway Credentials Manager):** Halaman khusus Super Admin untuk mengatur penyedia layanan *WhatsApp Gateway* (misal: Fonnte, Wablas, Ruangguru WA, atau Server Node.js kustom sendiri).
-* **FR-WAG-ADM-02 (Secure API Key Storage):** Menyediakan kolom input untuk `API URL`, `API Key / Token Key`, dan `Device ID`. Seluruh data ini wajib disimpan ke database menggunakan fitur enkripsi bawaan Laravel 13 (`Crypt::encryptString`).
-* **FR-WAG-ADM-03 (Global Rate Limiting & Delay):** Admin dapat mengatur jeda waktu antar pesan (*delay interval*, contoh: 2-5 detik acak) untuk mencegah nomor WhatsApp gateway terblokir oleh sistem anti-spam WhatsApp.
-* **FR-WAG-ADM-04 (Global Analytics Monitor):** Grafik pemantauan status pengiriman pesan secara global (Total Pesan Terkirim, Gagal, dan Mengantre).
+### 3.1 Sisi Penyewa: Dasbor Pengaturan Tautan (Tenant Link Editor)
+* **FR-URL-TNT-01 (Slug Input Form):** Menyediakan kolom input khusus di dasbor dengan teks statis domain di depannya (Contoh: `wedding-invitation.com/ [ input_slug_di_sini ]`).
+* **FR-URL-TNT-02 (Real-Time Availability Check):** Menggunakan fungsi *debounce* (jeda ketik 500ms), sistem secara asinkronus memeriksa ke database apakah slug tersebut sudah dipakai akun lain atau belum, lalu menampilkan indikator visual (Centang Hijau atau Silang Merah).
+* **FR-URL-TNT-03 (Format Auto-Sanitization):** Sistem secara otomatis mengubah huruf kapital menjadi huruf kecil dan mengubah spasi menjadi tanda hubung (`-`) saat pengguna mengetik, demi menjaga validitas format URL.
+* **FR-URL-TNT-04 (Broken Link Warning Popup):** Saat pengguna mengklik tombol "Simpan Perubahan", sistem wajib memunculkan modal konfirmasi peringatan: *"Apakah Anda yakin? Tautan lama Anda tidak akan bisa diakses lagi setelah diubah. Pastikan Anda belum menyebarkan tautan lama ke tamu undangan."*
 
-### 2.2 Sisi Penyewa: Dasbor Pengiriman Undangan (User/Tenant Dashboard)
-* **FR-WAG-TNT-01 (WhatsApp Blast Control Panel):** Pengguna memiliki halaman khusus untuk mengelola pengiriman pesan. Menampilkan daftar tamu, nomor WhatsApp, status pengiriman (`Pending`, `Sent`, `Failed`), dan tombol aksi.
-* **FR-WAG-TNT-02 (Custom Text Template):** Pengguna dapat menyusun draf teks undangan sendiri menggunakan variabel dinamis yang disediakan sistem, seperti:
-  * `{nama_tamu}` -> Otomatis berubah menjadi nama tamu spesifik.
-  * `{tautan_undangan}` -> Otomatis memuat URL unik undangan beserta parameter nama.
-  * `{qrcode_link}` -> Tautan langsung menuju gambar QR Code check-in (khusus Paket Gold).
-* **FR-WAG-TNT-03 (Bulk Queue Sending):** Pengguna dapat memilih banyak tamu sekaligus (*checkbox*) dan menekan tombol "Kirim Undangan Massal". Sistem akan mendaftarkan permintaan tersebut ke dalam sistem antrean (*Queue Task*).
-* **FR-WAG-TNT-04 (Quota Enforcement per Tier):** Menggunakan `Laravel Pennant`, sistem membatasi kuota pengiriman WhatsApp blast berdasarkan paket (misal: Silver maks 100 pesan, Gold Unlimited/Sesuai Jumlah Tamu).
-
----
-
-## 3. Penanganan Antrean Pengiriman (High-Performance Queue Management)
-
-Karena pengiriman pesan massal membutuhkan waktu dan sensitif terhadap pemblokiran, proses pengiriman **wajib berjalan di latar belakang** menggunakan Laravel Horizon dan Redis.
-
-* **FR-WAG-QUE-01 (Asynchronous Job Batching):** Saat user mengirim 200 pesan, aplikasi tidak boleh memuat ulang atau *loading* lama. Sistem langsung memasukkan pesan ke antrean Redis, dan memunculkan notifikasi: *"Pesanan pengiriman sedang diproses di latar belakang"*.
-* **FR-WAG-QUE-02 (Auto Failure Retry):** Jika API Gateway mengembalikan status gagal akibat server sibuk, sistem Laravel akan menjadwalkan ulang (*auto-retry*) pekerjaan tersebut 5 menit kemudian.
+### 3.2 Sisi Backend: Pengarah Rute Dinamis (Dynamic Routing Handler)
+* **FR-URL-SYS-01 (Dynamic Route Binding):** Laravel 13 menangani pemanggilan URL undangan secara dinamis berdasarkan parameter slug terupdate (Contoh rute: `Route::get('/{slug}', [InvitationController::class, 'show'])`).
 
 ---
 
 ## 4. Struktur Tabel Database Tambahan (Database Schema Migration)
 
-```sql
--- 1. Tabel Konfigurasi API Server WA oleh Admin
-CREATE TABLE whatsapp_gateway_settings (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    provider_name VARCHAR(50) NOT NULL, -- Contoh: 'fonnte', 'wablas', 'custom'
-    api_url TEXT NOT NULL,
-    api_token TEXT NOT NULL,           -- Wajib terenkripsi di tingkat aplikasi
-    device_id VARCHAR(100) NULL,
-    delay_seconds INT DEFAULT 3,       -- Jeda anti-spam
-    is_active BOOLEAN DEFAULT false,
-    updated_at TIMESTAMP NULL
-);
+Modul ini memanfaatkan kolom `slug` yang sudah ada pada tabel `invitations` dengan menambahkan indeks pencarian unik agar proses muat halaman undangan tetap cepat.
 
--- 2. Mengaitkan log pengiriman pesan massal per tamu undangan
-CREATE TABLE whatsapp_logs (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    invitation_id BIGINT NOT NULL,
-    guest_id BIGINT NOT NULL,
-    message_content TEXT NOT NULL,
-    status ENUM('pending', 'queued', 'sent', 'failed') DEFAULT 'pending',
-    error_message TEXT NULL,          -- Menyimpan alasan jika pengiriman gagal
-    sent_at TIMESTAMP NULL,
-    created_at TIMESTAMP NULL,
-    updated_at TIMESTAMP NULL,
-    FOREIGN KEY (invitation_id) REFERENCES invitations(id) ON DELETE CASCADE,
-    FOREIGN KEY (guest_id) REFERENCES invitation_guests(id) ON DELETE CASCADE,
-    INDEX idx_wa_log_status (invitation_id, status)
-);
+```sql
+-- Memastikan kolom slug memiliki indeks unik dan mendukung pencarian cepat
+ALTER TABLE invitations MODIFY COLUMN slug VARCHAR(100) NOT NULL;
+ALTER TABLE invitations ADD UNIQUE idx_invitation_slug_unique (slug);
+
+-- (Opsional) Menambahkan kolom pelacak jumlah modifikasi link untuk membatasi penyalahgunaan
+ALTER TABLE invitations ADD COLUMN slug_change_count INT DEFAULT 0 AFTER slug;

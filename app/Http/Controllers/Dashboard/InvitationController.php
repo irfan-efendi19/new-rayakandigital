@@ -54,10 +54,36 @@ class InvitationController extends Controller
     public function show(Invitation $invitation)
     {
         Gate::authorize('view', $invitation);
-
         $invitation->load(['guests', 'rsvps', 'wishes']);
 
-        return view('dashboard.invitations.show', compact('invitation'));
+        $pageViews = $invitation->pageViews()
+            ->selectRaw('DATE(created_at) as date, COUNT(*) as total, COUNT(DISTINCT visitor_id) as unique_visitors')
+            ->where('created_at', '>=', now()->subDays(30))
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get();
+
+        $chartLabels = [];
+        $chartTotals = [];
+        $chartUniques = [];
+
+        for ($i = 29; $i >= 0; $i--) {
+            $date = now()->subDays($i)->format('Y-m-d');
+            $dayData = $pageViews->firstWhere('date', $date);
+            $chartLabels[] = now()->subDays($i)->translatedFormat('d M');
+            $chartTotals[] = $dayData?->total ?? 0;
+            $chartUniques[] = $dayData?->unique_visitors ?? 0;
+        }
+
+        $totalViews = array_sum($chartTotals);
+        $totalUniques = $invitation->pageViews()
+            ->whereNotNull('visitor_id')
+            ->selectRaw('COUNT(DISTINCT visitor_id) as count')
+            ->value('count') ?? 0;
+
+        return view('dashboard.invitations.show', compact(
+            'invitation', 'chartLabels', 'chartTotals', 'chartUniques', 'totalViews', 'totalUniques'
+        ));
     }
 
     public function edit(Invitation $invitation)
@@ -67,12 +93,29 @@ class InvitationController extends Controller
         return view('dashboard.invitations.edit', compact('invitation'));
     }
 
+    public function checkSlug(Request $request)
+    {
+        $slug = $request->query('slug');
+        $excludeId = $request->query('exclude');
+
+        $query = Invitation::where('slug', $slug);
+
+        if ($excludeId) {
+            $query->where('id', '!=', $excludeId);
+        }
+
+        $exists = $query->exists();
+
+        return response()->json(['available' => !$exists]);
+    }
+
     public function update(Request $request, Invitation $invitation)
     {
         Gate::authorize('update', $invitation);
 
         $validated = $request->validate([
             'title' => 'required|string|max:255',
+            'slug' => 'nullable|string|max:100|regex:/^[a-z0-9\-]+$/',
             'bride_name' => 'required|string|max:255',
             'groom_name' => 'required|string|max:255',
             'bride_nickname' => 'nullable|string|max:100',
@@ -109,6 +152,20 @@ class InvitationController extends Controller
             $request->validate(['music_file' => 'file|mimes:mp3,wav,ogg|max:10240']);
             $validated['music_url'] = $request->file('music_file')
                 ->store('music/' . $invitation->id, 'public');
+        }
+
+        if ($request->filled('slug') && $request->slug !== $invitation->slug) {
+            $exists = Invitation::where('slug', $request->slug)
+                ->where('id', '!=', $invitation->id)
+                ->exists();
+
+            if ($exists) {
+                return back()->withErrors(['slug' => 'Tautan sudah digunakan oleh undangan lain.'])->withInput();
+            }
+
+            $validated['slug_change_count'] = $invitation->slug_change_count + 1;
+        } else {
+            unset($validated['slug']);
         }
 
         $invitation->update($validated);

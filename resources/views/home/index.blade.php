@@ -171,8 +171,20 @@
                     </div>
                 @endforelse
             </div>
-        </div>
 
+            @if($totalThemes > 3)
+                <div class="mt-10 text-center">
+                    <a href="{{ route('themes.index') }}"
+                       class="inline-flex items-center px-8 py-3.5 border border-gray-300 text-base font-semibold rounded-xl text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-400 transition-all duration-200 shadow-sm"
+                    >
+                        Lihat Semua Tema ({{ $totalThemes }})
+                        <svg class="ml-2 w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                        </svg>
+                    </a>
+                </div>
+            @endif
+        </div>
     </div>
 
     <!-- Feature Section -->

@@ -18,13 +18,34 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             
-            @if(session('success'))
-                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
-                    {{ session('success') }}
+            <!-- Current Slug Info -->
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-lg font-medium text-gray-900">Tautan Undangan</h3>
+                            <p class="mt-1">
+                                <a href="{{ route('invitation.show', $invitation->slug) }}" target="_blank" class="text-indigo-600 hover:text-indigo-800 font-mono text-sm">
+                                    {{ parse_url(config('app.url'), PHP_URL_HOST) }}/<strong>{{ $invitation->slug }}</strong>
+                                </a>
+                            </p>
+                        </div>
+                        <div class="text-right text-xs text-gray-500">
+                            @if($invitation->slug_change_count > 0)
+                                <span class="inline-flex items-center px-2 py-1 rounded-full bg-amber-100 text-amber-700 font-medium">
+                                    Diubah {{ $invitation->slug_change_count }} kali
+                                </span>
+                            @else
+                                <span class="inline-flex items-center px-2 py-1 rounded-full bg-gray-100 text-gray-600 font-medium">
+                                    Belum pernah diubah
+                                </span>
+                            @endif
+                        </div>
+                    </div>
                 </div>
-            @endif
+            </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                 <!-- Data Tamu -->
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6">
@@ -56,6 +77,34 @@
                         </div>
                         <div class="text-3xl font-bold text-gray-900">{{ $invitation->wishes->count() }}</div>
                         <p class="text-sm text-gray-500 mt-1">Total ucapan dan doa</p>
+                    </div>
+                </div>
+
+                <!-- Pengunjung Website -->
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-medium text-gray-900">Pengunjung</h3>
+                        </div>
+                        <div class="text-3xl font-bold text-gray-900">{{ $totalUniques }}</div>
+                        <p class="text-sm text-gray-500 mt-1">Total pengunjung unik</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chart Pengunjung -->
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-medium text-gray-900">Statistik Pengunjung (30 Hari Terakhir)</h3>
+                        <span class="text-xs text-gray-500">{{ $totalViews }} total kunjungan</span>
+                    </div>
+                    <div class="relative" style="height: 260px;">
+                        <canvas id="visitorChart"
+                            data-labels='@json($chartLabels)'
+                            data-totals='@json($chartTotals)'
+                            data-uniques='@json($chartUniques)'
+                        ></canvas>
                     </div>
                 </div>
             </div>
@@ -98,7 +147,7 @@
                                             <div class="relative group aspect-square rounded-lg overflow-hidden border border-gray-100 bg-gray-50">
                                                 <img src="{{ asset('storage/' . $photo) }}" alt="Gallery photo" class="w-full h-full object-cover">
                                                 <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                                    <form action="{{ route('dashboard.invitations.gallery.destroy', $invitation) }}" method="POST" onsubmit="return confirm('Hapus foto ini?');">
+                                                    <form action="{{ route('dashboard.invitations.gallery.destroy', $invitation) }}" method="POST" onsubmit="return confirmSwal(event, 'Hapus foto ini?');">
                                                         @csrf
                                                         @method('DELETE')
                                                         <input type="hidden" name="photo_index" value="{{ $index }}">
@@ -272,7 +321,7 @@
                     <h3 class="text-lg font-medium text-red-800 mb-2">Danger Zone</h3>
                     <p class="text-sm text-red-600 mb-4">Menghapus undangan akan menghapus semua data tamu, RSVP, dan buku tamu yang terkait. Tindakan ini tidak dapat dibatalkan.</p>
                     
-                    <form action="{{ route('dashboard.invitations.destroy', $invitation) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus undangan ini secara permanen?');">
+                    <form action="{{ route('dashboard.invitations.destroy', $invitation) }}" method="POST" onsubmit="return confirmSwal(event, 'Apakah Anda yakin ingin menghapus undangan ini secara permanen?');">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-red-700">

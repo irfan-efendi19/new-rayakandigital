@@ -16,6 +16,7 @@ class Invitation extends Model
     protected $fillable = [
         'user_id',
         'slug',
+        'slug_change_count',
         'title',
         'bride_name',
         'groom_name',
@@ -47,6 +48,8 @@ class Invitation extends Model
         'gift_ewallet_name',
         'gift_ewallet_number',
         'gift_qris_image',
+        'wa_template_enabled',
+        'wa_message_template',
     ];
 
     protected function casts(): array
@@ -57,6 +60,8 @@ class Invitation extends Model
             'trial_started_at' => 'datetime',
             'is_active' => 'boolean',
             'gallery_photos' => 'array',
+            'wa_template_enabled' => 'boolean',
+            'slug_change_count' => 'integer',
         ];
     }
 
@@ -197,6 +202,16 @@ class Invitation extends Model
         return $this->hasMany(Order::class);
     }
 
+    public function whatsappLogs(): HasMany
+    {
+        return $this->hasMany(WhatsappLog::class);
+    }
+
+    public function pageViews(): HasMany
+    {
+        return $this->hasMany(PageView::class);
+    }
+
     public function trialRemainingDays(): int
     {
         if (!$this->expires_at) {
@@ -229,5 +244,33 @@ class Invitation extends Model
     public function isTrialExpired(): bool
     {
         return $this->expires_at !== null && $this->expires_at->isPast();
+    }
+
+    public function getWhatsappTemplate(): string
+    {
+        if ($this->wa_template_enabled && $this->wa_message_template) {
+            return $this->wa_message_template;
+        }
+
+        return "Yth. {nama_tamu},\n\nKami mengundang Bapak/Ibu/Saudara/i untuk hadir dalam acara pernikahan kami:\n\n✨ {nama_mempelai_pria} & {nama_mempelai_wanita} ✨\n\nSilakan buka undangan digital Anda di:\n{tautan_undangan}\n\nMerupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir. 🙏";
+    }
+
+    public function parseWhatsappTemplate(\App\Models\Guest $guest): string
+    {
+        $template = $this->getWhatsappTemplate();
+
+        $replacements = [
+            '{nama_tamu}' => $guest->name,
+            '{nama_mempelai_pria}' => $this->groom_name,
+            '{nama_mempelai_wanita}' => $this->bride_name,
+            '{tautan_undangan}' => $guest->personalized_link,
+            '{qrcode_link}' => $this->hasFeature('qr_checkin') ? $guest->personalized_link . '&qr=1' : '',
+            '{tanggal_acara}' => $this->event_date?->format('d F Y') ?? '',
+            '{waktu_acara}' => $this->event_time ?? '',
+            '{tempat_acara}' => $this->venue_name ?? '',
+            '{alamat_acara}' => $this->venue_address ?? '',
+        ];
+
+        return str_replace(array_keys($replacements), array_values($replacements), $template);
     }
 }

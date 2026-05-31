@@ -14,7 +14,10 @@ class GuestController extends Controller
     {
         Gate::authorize('view', $invitation);
 
-        $guests = $invitation->guests()->latest()->paginate(20);
+        $guests = $invitation->guests()
+            ->with(['whatsappLogs' => fn ($q) => $q->latest()])
+            ->latest()
+            ->paginate(20);
 
         return view('dashboard.guests.index', compact('invitation', 'guests'));
     }
@@ -33,6 +36,7 @@ class GuestController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'phone' => 'nullable|string|max:20',
+            'address' => 'nullable|string|max:500',
         ]);
 
         $invitation->guests()->create($validated);
@@ -55,6 +59,7 @@ class GuestController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'phone' => 'nullable|string|max:20',
+            'address' => 'nullable|string|max:500',
         ]);
 
         $guest->update($validated);

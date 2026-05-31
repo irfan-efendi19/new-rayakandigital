@@ -82,6 +82,8 @@
         </div>
     </main>
 
+    <x-sweet-alert />
+
     <!-- Scripts -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
@@ -143,13 +145,13 @@
                     .then(response => response.json())
                     .then(data => {
                         if(data.success) {
-                            alert(data.message);
+                            Swal.fire({ icon: 'success', title: 'Berhasil!', text: data.message, timer: 3000, showConfirmButton: false });
                             this.reset();
                         }
                     })
                     .catch(error => {
                         console.error('Error:', error);
-                        alert('Terjadi kesalahan. Silakan coba lagi.');
+                        Swal.fire({ icon: 'error', title: 'Gagal!', text: 'Terjadi kesalahan. Silakan coba lagi.', timer: 3000, showConfirmButton: false });
                     });
                 });
             }
@@ -171,15 +173,14 @@
                     .then(response => response.json())
                     .then(data => {
                         if(data.success) {
-                            alert(data.message);
+                            Swal.fire({ icon: 'success', title: 'Berhasil!', text: data.message, timer: 2000, showConfirmButton: false });
                             this.reset();
-                            // Append to list (simple version)
                             setTimeout(() => location.reload(), 1000);
                         }
                     })
                     .catch(error => {
                         console.error('Error:', error);
-                        alert('Terjadi kesalahan. Silakan coba lagi.');
+                        Swal.fire({ icon: 'error', title: 'Gagal!', text: 'Terjadi kesalahan. Silakan coba lagi.', timer: 3000, showConfirmButton: false });
                     });
                 });
             }

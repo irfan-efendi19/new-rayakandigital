@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Guest;
 use App\Models\Invitation;
+use App\Models\PageView;
 use Illuminate\Http\Request;
 
 class InvitationRenderController extends Controller
@@ -19,6 +20,8 @@ class InvitationRenderController extends Controller
             return response()->view('invitations.expired', compact('invitation'));
         }
 
+        $this->trackPageView($request, $invitation);
+
         $guest = null;
         if ($request->has('to')) {
             $guestName = $request->query('to');
@@ -27,7 +30,6 @@ class InvitationRenderController extends Controller
                 ->first();
 
             if (! $guest) {
-                // Temporary guest for greeting
                 $guest = new Guest(['name' => $guestName]);
             }
         }
@@ -35,9 +37,30 @@ class InvitationRenderController extends Controller
         $themeView = 'themes.'.$invitation->theme;
 
         if (! view()->exists($themeView)) {
-            $themeView = 'themes.elegant'; // fallback
+            $themeView = 'themes.elegant';
         }
 
         return view($themeView, compact('invitation', 'guest'));
+    }
+
+    protected function trackPageView(Request $request, Invitation $invitation): void
+    {
+        $ip = $request->ip();
+        $ua = $request->userAgent();
+        $visitorId = md5($ip . ($ua ?? ''));
+
+        $exists = PageView::where('invitation_id', $invitation->id)
+            ->where('visitor_id', $visitorId)
+            ->where('created_at', '>=', now()->subMinutes(30))
+            ->exists();
+
+        if (! $exists) {
+            PageView::create([
+                'invitation_id' => $invitation->id,
+                'visitor_id' => $visitorId,
+                'ip_address' => $ip,
+                'user_agent' => substr($ua ?? '', 0, 500),
+            ]);
+        }
     }
 }

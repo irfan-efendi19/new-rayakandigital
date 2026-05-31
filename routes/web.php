@@ -6,6 +6,7 @@ use App\Http\Controllers\Dashboard\InvitationController;
 use App\Http\Controllers\Dashboard\CheckoutController;
 use App\Http\Controllers\Dashboard\GalleryController;
 use App\Http\Controllers\Dashboard\GiftController;
+use App\Http\Controllers\Dashboard\WhatsAppBlastController;
 use App\Http\Controllers\Dashboard\WhatsAppPaymentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
@@ -13,12 +14,14 @@ use App\Http\Controllers\InvitationRenderController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RsvpController;
+use App\Http\Controllers\ThemeController;
 use App\Http\Controllers\ThemePreviewController;
 use App\Http\Controllers\WishController;
 use Illuminate\Support\Facades\Route;
 
 // Landing Page & Public Preview
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/semua-tema', [ThemeController::class, 'index'])->name('themes.index');
 Route::get('/preview/{themeSlug}', [ThemePreviewController::class, 'show'])->name('theme.preview');
 
 // Dashboard Routes
@@ -36,6 +39,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/payment/{order}/send-whatsapp', [WhatsAppPaymentController::class, 'sendWhatsApp'])->name('payment.send-whatsapp');
 
         // Invitations and nested resources
+        Route::get('/invitations/check-slug', [InvitationController::class, 'checkSlug'])->name('invitations.check-slug');
         Route::resource('invitations', InvitationController::class);
         Route::resource('invitations.guests', GuestController::class)->except(['show']);
 
@@ -44,6 +48,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/invitations/{invitation}/gallery', [GalleryController::class, 'update'])->name('invitations.gallery.update');
         Route::delete('/invitations/{invitation}/gallery', [GalleryController::class, 'destroy'])->name('invitations.gallery.destroy');
         Route::post('/invitations/{invitation}/gift', [GiftController::class, 'update'])->name('invitations.gift.update');
+
+        // WhatsApp Blast
+        Route::post('/invitations/{invitation}/whatsapp/send', [WhatsAppBlastController::class, 'send'])->name('invitations.whatsapp.send');
+        Route::post('/invitations/{invitation}/whatsapp/send/{guest}', [WhatsAppBlastController::class, 'sendSingle'])->name('invitations.whatsapp.send-single');
+        Route::get('/invitations/{invitation}/whatsapp/logs', [WhatsAppBlastController::class, 'logs'])->name('invitations.whatsapp.logs');
+        Route::post('/invitations/{invitation}/whatsapp/template', [WhatsAppBlastController::class, 'template'])->name('invitations.whatsapp.template');
     });
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

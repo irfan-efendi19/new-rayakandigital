@@ -20,10 +20,16 @@
                             </div>
 
                             <div>
-                                <label for="phone" class="block text-sm font-medium text-gray-700">No. WhatsApp (Opsional)</label>
+                                <label for="phone" class="block text-sm font-medium text-gray-700">No. WhatsApp <span class="text-gray-400 font-normal">(opsional)</span></label>
                                 <input type="text" name="phone" id="phone" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="Contoh: 08123456789">
                                 <p class="mt-1 text-xs text-gray-500">Digunakan untuk mengirim link undangan via WhatsApp otomatis.</p>
                                 @error('phone') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                            </div>
+
+                            <div>
+                                <label for="address" class="block text-sm font-medium text-gray-700">Alamat <span class="text-gray-400 font-normal">(opsional)</span></label>
+                                <textarea name="address" id="address" rows="2" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="Contoh: Jl. Merdeka No. 123, Jakarta"></textarea>
+                                @error('address') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                             </div>
 
                             <div class="pt-4 flex justify-end">

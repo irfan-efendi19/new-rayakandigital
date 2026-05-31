@@ -8,24 +8,6 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
-            @if(session('success'))
-                <div class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
-                    {{ session('success') }}
-                </div>
-            @endif
-
-            @if(session('info'))
-                <div class="mb-4 bg-blue-50 border border-blue-200 text-blue-800 px-4 py-3 rounded relative">
-                    {{ session('info') }}
-                </div>
-            @endif
-
-            @if(session('warning'))
-                <div class="mb-4 bg-amber-50 border border-amber-200 text-amber-800 px-4 py-3 rounded relative">
-                    {{ session('warning') }}
-                </div>
-            @endif
-
             {{-- Trial Countdown Banners --}}
             @foreach($trialInvitations as $invitation)
                 @php
