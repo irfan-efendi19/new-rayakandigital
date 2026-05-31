@@ -1,70 +1,56 @@
 # PRODUCT REQUIREMENT DOCUMENT (PRD) EXTENSION
-## Module: Tenant Custom URL Slug Editor (Laravel 13 System)
-**Version:** 2.3 (Optimized for Laravel 13 Core, PHP 8.4, & Inertia.js/Vue 3)  
-**Date:** May 31, 2026  
+## Modul: Auto-Resolving Duplicate Guest Names & Unique Link Generator
+**Versi:** 2.4 (Dioptimalkan untuk Laravel 13 Core & Pemrosesan Database Cepat)  
+**Tanggal:** 31 Mei 2026  
 **Status:** Approved  
 
 ---
 
-## 1. Ringkasan Eksekutif & Aturan Bisnis (Executive Summary & Business Rules)
+## 1. Masalah & Latar Belakang (Problem Statement)
 
-Fitur ini memberikan fleksibilitas kepada pengguna (Tenant) untuk menentukan dan mengubah nama tautan unik undangan mereka sendiri (contoh: dari `domain.com/budi-ani` menjadi `domain.com/budiandanispesial`). 
+Saat pengantin (Tenant) mengimpor daftar tamu secara massal atau menambahkannya satu per satu, sering kali terdapat nama tamu yang sama persis (Contoh: "Budi Santoso" rekan kerja dan "Budi Santoso" sepupu). 
 
-### Aturan Batasan Sistem (Sistem Constraints):
-1. **Unik Secara Global:** Tidak boleh ada dua undangan aktif dengan nama slug yang sama di dalam database.
-2. **Karakter Terbuka:** Slug hanya boleh berisi huruf kecil, angka, dan tanda hubung/minus (`-`). Tidak diperbolehkan menggunakan spasi, huruf kapital, atau karakter spesial.
+Jika sistem menghasilkan link hanya berdasarkan nama tamu secara mentah (contoh: `domain.com/budi-ani?to=budi-santoso`), maka:
+1. Data RSVP, ucapan, dan scan QR Code Check-In antara kedua tamu tersebut akan **bertabrakan** karena menggunakan identitas *link query* yang sama.
+2. Sistem tidak dapat membedakan keluarga mana yang hadir di meja penerima tamu.
 
 ---
 
-## 2. Alur Pengguna & Validasi Real-Time (User Flow & Interface Architecture)
+## 2. Mekanisme Resolusi Otomatis (Technical Solution Workflow)
 
-Sistem menggunakan pendekatan komponen reaktif pada dasbor pengguna untuk memastikan slug yang dimasukkan tersedia sebelum form disimpan.
+Sistem Laravel 13 akan menerapkan fungsi sanitasi otomatis menggunakan kombinasi **Slug Helper** dan **Increment String/Random Suffix Counter** di tingkat database sebelum tautan tamu disimpan.
 
-[ Dasbor User: Menu Pengaturan Tautan ]
-│
-▼
-[ Input Nama Slug Baru (e.g., "budi-ani-wedding") ]
-│
-▼ (Debounce 500ms - Ajax Call via Laravel API)
-[ Sistem Cek Ketersediaan Slug di Tabel invitations ]
-│
-┌─────────┴─────────┐
-▼                   ▼
-[ Terpakai ]        [ Tersedia ]
-│                   │
-▼                   ▼
-Tampilkan Peringatan   Tombol "Simpan" Aktif
-"Link sudah digunakan"     │
-▼
-[ Klik Simpan / Update ]
-│
-▼
-[ Sistem Update Kolom slug di DB ]
-
+### Alur Kerja Sistem (System Logic):
+1. User memasukkan nama tamu baru: `Budi Santoso`.
+2. Sistem mengubah nama tersebut menjadi format URL slug dasar: `budi-santoso`.
+3. Sistem memeriksa apakah di dalam undangan (`invitation_id`) yang sama sudah ada nama slug `budi-santoso`.
+4. **Kondisi A (Belum Ada):** Link disimpan sebagai `budi-santoso`.
+5. **Kondisi B (Sudah Ada / Duplikat):** Sistem secara otomatis menambahkan kode unik berupa angka counter progresif atau potongan string pendek di belakangnya.
+   * Duplikat ke-2 menjadi: `budi-santoso-2`
+   * Duplikat ke-3 menjadi: `budi-santoso-3`
+   * *Opsi Alternatif Admin:* Jika ingin terlihat lebih acak dan profesional tanpa angka berurutan, sistem bisa menambahkan 3 digit alfanumerik acak, contoh: `budi-santoso-x7b`.
 
 ---
 
 ## 3. Kebutuhan Fungsional (Functional Requirements)
 
-### 3.1 Sisi Penyewa: Dasbor Pengaturan Tautan (Tenant Link Editor)
-* **FR-URL-TNT-01 (Slug Input Form):** Menyediakan kolom input khusus di dasbor dengan teks statis domain di depannya (Contoh: `wedding-invitation.com/ [ input_slug_di_sini ]`).
-* **FR-URL-TNT-02 (Real-Time Availability Check):** Menggunakan fungsi *debounce* (jeda ketik 500ms), sistem secara asinkronus memeriksa ke database apakah slug tersebut sudah dipakai akun lain atau belum, lalu menampilkan indikator visual (Centang Hijau atau Silang Merah).
-* **FR-URL-TNT-03 (Format Auto-Sanitization):** Sistem secara otomatis mengubah huruf kapital menjadi huruf kecil dan mengubah spasi menjadi tanda hubung (`-`) saat pengguna mengetik, demi menjaga validitas format URL.
-* **FR-URL-TNT-04 (Broken Link Warning Popup):** Saat pengguna mengklik tombol "Simpan Perubahan", sistem wajib memunculkan modal konfirmasi peringatan: *"Apakah Anda yakin? Tautan lama Anda tidak akan bisa diakses lagi setelah diubah. Pastikan Anda belum menyebarkan tautan lama ke tamu undangan."*
+### 3.1 Sisi Penyewa: Dasbor Daftar Tamu (Tenant Guest Management)
+* **FR-GST-DUP-01 (Seamless Bulk Import):** Saat pengguna mengunggah file Excel berisi 500 tamu dan terdapat 5 nama "Ahmad", proses impor tidak boleh gagal/eror. Sistem harus sukses memasukkan semua data dengan otomatis membedakan tautan belakangnya di latar belakang.
+* **FR-GST-DUP-02 (Link Transparency):** Di tabel daftar tamu dasbor user, kolom "Link Undangan" harus menampilkan link yang sudah disanitasi secara akurat (Contoh: Tamu 1: `...&to=budi-santoso`, Tamu 2: `...&to=budi-santoso-2`) sehingga saat diklik tombol "Kirim WA", teks yang terkirim tidak keliru.
 
-### 3.2 Sisi Backend: Pengarah Rute Dinamis (Dynamic Routing Handler)
-* **FR-URL-SYS-01 (Dynamic Route Binding):** Laravel 13 menangani pemanggilan URL undangan secara dinamis berdasarkan parameter slug terupdate (Contoh rute: `Route::get('/{slug}', [InvitationController::class, 'show'])`).
+### 3.2 Sisi Penerima Tamu: Validasi QR Code & RSVP
+* **FR-GST-DUP-03 (Unique QR Payload):** QR Code untuk masing-masing tamu duplikat akan merujuk pada `guest_uuid` mereka yang berbeda. Saat di-scan, data yang ditarik adalah spesifik milik "Budi Santoso 2", sehingga status kehadiran tidak tertukar.
 
 ---
 
-## 4. Struktur Tabel Database Tambahan (Database Schema Migration)
+## 4. Struktur Tabel Database Tambahan (Database Schema Migration Update)
 
-Modul ini memanfaatkan kolom `slug` yang sudah ada pada tabel `invitations` dengan menambahkan indeks pencarian unik agar proses muat halaman undangan tetap cepat.
+Kita perlu memperbarui dan memastikan kolom pelacakan tautan tamu pada tabel `invitation_guests` memiliki aturan indeks yang ketat berbasis kombinasi `invitation_id` dan `guest_slug`.
 
 ```sql
--- Memastikan kolom slug memiliki indeks unik dan mendukung pencarian cepat
-ALTER TABLE invitations MODIFY COLUMN slug VARCHAR(100) NOT NULL;
-ALTER TABLE invitations ADD UNIQUE idx_invitation_slug_unique (slug);
+-- Memperbarui tabel invitation_guests untuk menambahkan kolom slug khusus tamu
+ALTER TABLE invitation_guests ADD COLUMN guest_slug VARCHAR(150) NOT NULL AFTER guest_name;
 
--- (Opsional) Menambahkan kolom pelacak jumlah modifikasi link untuk membatasi penyalahgunaan
-ALTER TABLE invitations ADD COLUMN slug_change_count INT DEFAULT 0 AFTER slug;
+-- Membuat indeks unik gabungan (Composite Unique Index)
+-- Aturan: Nama slug tamu boleh sama di seluruh website, tetapi HARUS UNIK di dalam satu undangan yang sama.
+ALTER TABLE invitation_guests ADD UNIQUE idx_unique_guest_per_invitation (invitation_id, guest_slug);

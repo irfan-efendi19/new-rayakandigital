@@ -25,9 +25,44 @@ class Guest extends Model
     {
         static::creating(function (Guest $guest) {
             if (empty($guest->slug)) {
-                $guest->slug = Str::slug($guest->name, '_');
+                $guest->slug = static::resolveDuplicateSlug(
+                    $guest->invitation_id,
+                    Str::slug($guest->name)
+                );
             }
         });
+
+        static::updating(function (Guest $guest) {
+            if ($guest->isDirty('name') && ! $guest->isDirty('slug')) {
+                $guest->slug = static::resolveDuplicateSlug(
+                    $guest->invitation_id,
+                    Str::slug($guest->name),
+                    $guest->id
+                );
+            }
+        });
+    }
+
+    protected static function resolveDuplicateSlug(int $invitationId, string $slug, ?int $excludeId = null): string
+    {
+        $baseSlug = $slug;
+        $counter = 1;
+
+        while (true) {
+            $query = static::where('invitation_id', $invitationId)
+                ->where('slug', $slug);
+
+            if ($excludeId !== null) {
+                $query->where('id', '!=', $excludeId);
+            }
+
+            if (! $query->exists()) {
+                return $slug;
+            }
+
+            $counter++;
+            $slug = $baseSlug . '-' . $counter;
+        }
     }
 
     public function invitation(): BelongsTo
@@ -42,7 +77,7 @@ class Guest extends Model
 
     public function getPersonalizedLinkAttribute(): string
     {
-        return route('invitation.show', $this->invitation->slug).'?to='.urlencode($this->name);
+        return route('invitation.show', $this->invitation->slug).'?to='.urlencode($this->slug);
     }
 
     public function getWhatsappMessageAttribute(): string

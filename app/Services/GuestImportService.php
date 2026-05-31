@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\Invitation;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Str;
 
 class GuestImportService
 {
@@ -45,7 +44,6 @@ class GuestImportService
         }
 
         $rowNumber = 1;
-        $existingNames = $invitation->guests()->pluck('name')->map(fn ($n) => strtolower(trim($n)))->toArray();
 
         while (($row = fgetcsv($handle)) !== false) {
             $rowNumber++;
@@ -57,22 +55,13 @@ class GuestImportService
                 continue;
             }
 
-            if (in_array(strtolower($name), $existingNames)) {
-                $skipped++;
-                $errors[] = "Baris {$rowNumber}: \"{$name}\" sudah ada, dilewati.";
-
-                continue;
-            }
-
             $phone = $phoneIndex !== null ? trim($row[$phoneIndex] ?? '') : null;
 
             try {
                 $invitation->guests()->create([
                     'name' => $name,
-                    'slug' => Str::slug($name, '_'),
                     'phone' => $phone ?: null,
                 ]);
-                $existingNames[] = strtolower($name);
                 $imported++;
             } catch (\Exception $e) {
                 $skipped++;

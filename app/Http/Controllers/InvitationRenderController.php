@@ -24,13 +24,13 @@ class InvitationRenderController extends Controller
 
         $guest = null;
         if ($request->has('to')) {
-            $guestName = $request->query('to');
+            $guestSlug = $request->query('to');
             $guest = Guest::where('invitation_id', $invitation->id)
-                ->where('name', $guestName)
+                ->where('slug', $guestSlug)
                 ->first();
 
             if (! $guest) {
-                $guest = new Guest(['name' => $guestName]);
+                $guest = new Guest(['name' => $guestSlug]);
             }
         }
 
