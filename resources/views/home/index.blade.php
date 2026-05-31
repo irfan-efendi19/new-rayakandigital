@@ -1,4 +1,5 @@
 <x-public-layout>
+    <div x-data="landing">
     <!-- Hero Section -->
     <div class="relative bg-gradient-to-br from-indigo-50 via-white to-rose-50 overflow-hidden">
         <div class="absolute inset-0 opacity-10">
@@ -20,14 +21,14 @@
                         </p>
                         <div class="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
                             <div class="rounded-md shadow">
-                                <a href="#themes" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 md:py-4 md:text-lg md:px-10 transition-all duration-300 shadow-lg shadow-indigo-200 hover:shadow-xl hover:shadow-indigo-300">
+                                <button @click="scrollTo('themes')" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 md:py-4 md:text-lg md:px-10 transition-all duration-300 shadow-lg shadow-indigo-200 hover:shadow-xl hover:shadow-indigo-300 cursor-pointer">
                                     Pilih Tema Sekarang
-                                </a>
+                                </button>
                             </div>
                             <div class="mt-3 sm:mt-0 sm:ml-3">
-                                <a href="#pricing" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-lg text-indigo-700 bg-indigo-100 hover:bg-indigo-200 md:py-4 md:text-lg md:px-10 transition-all duration-200">
+                                <button @click="scrollTo('pricing')" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-lg text-indigo-700 bg-indigo-100 hover:bg-indigo-200 md:py-4 md:text-lg md:px-10 transition-all duration-200 cursor-pointer">
                                     Lihat Harga
-                                </a>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -40,7 +41,7 @@
     </div>
 
     <!-- How It Works Section -->
-    <div class="py-16 bg-white">
+    <div x-data="reveal" :class="visible || 'opacity-0 translate-y-8'" class="py-16 bg-white transition-all duration-700">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
                 <h2 class="text-base text-indigo-600 font-semibold tracking-wide uppercase">Cara Kerja</h2>
@@ -89,7 +90,7 @@
     </div>
 
     <!-- Theme Catalog Section -->
-    <div id="themes" class="py-16 bg-gray-50">
+    <div id="themes" x-data="reveal" :class="visible || 'opacity-0 translate-y-8'" class="py-16 bg-gray-50 transition-all duration-700">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
                 <h2 class="text-base text-indigo-600 font-semibold tracking-wide uppercase">Katalog Tema</h2>
@@ -188,7 +189,7 @@
     </div>
 
     <!-- Feature Section -->
-    <div class="py-16 bg-white">
+    <div x-data="reveal" :class="visible || 'opacity-0 translate-y-8'" class="py-16 bg-white transition-all duration-700">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="lg:text-center">
                 <h2 class="text-base text-indigo-600 font-semibold tracking-wide uppercase">Fitur Unggulan</h2>
@@ -267,7 +268,7 @@
     </div>
 
     <!-- Pricing Section -->
-    <div id="pricing" class="bg-gradient-to-b from-gray-50 to-white py-16">
+    <div id="pricing" x-data="reveal" :class="visible || 'opacity-0 translate-y-8'" class="bg-gradient-to-b from-gray-50 to-white py-16 transition-all duration-700">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="sm:flex sm:flex-col sm:align-center">
                 <h2 class="text-3xl font-extrabold text-gray-900 sm:text-center">Paket Harga Transparan</h2>
@@ -345,4 +346,20 @@
             </div>
         </div>
     </div>
+
+    <!-- Back to Top -->
+    <button x-show="showBackToTop"
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 translate-y-4"
+            x-transition:enter-end="opacity-100 translate-y-0"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100 translate-y-0"
+            x-transition:leave-end="opacity-0 translate-y-4"
+            @click="window.scrollTo({ top: 0, behavior: 'smooth' })"
+            class="fixed bottom-6 right-6 z-50 p-3.5 rounded-full bg-indigo-600 text-white shadow-lg hover:bg-indigo-700 hover:shadow-xl transition-all duration-200 cursor-pointer">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
+        </svg>
+    </button>
+</div>
 </x-public-layout>
