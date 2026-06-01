@@ -613,6 +613,26 @@
                                         <p class="text-xs text-gray-400 mt-2">Bagikan momen-momen berharga perjalanan cinta Anda kepada para tamu.</p>
                                     </div>
 
+                                    <!-- Quote Section -->
+                                    <div class="sm:col-span-6">
+                                        <label for="quote_content" class="block text-sm font-medium text-gray-700">Kutipan / Ayat Suci</label>
+                                        <textarea name="quote_content" id="quote_content" rows="4"
+                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                            placeholder="Tulis kutipan ayat suci atau kutipan romantis...">{{ old('quote_content', $invitation->quote_content) }}</textarea>
+                                        <p class="text-xs text-gray-400 mt-1">Isi kutipan, ayat suci, atau pesan romantis.</p>
+                                        @error('quote_content') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                                    </div>
+
+                                    <div class="sm:col-span-6">
+                                        <label for="quote_source" class="block text-sm font-medium text-gray-700">Sumber Kutipan</label>
+                                        <input type="text" name="quote_source" id="quote_source"
+                                            value="{{ old('quote_source', $invitation->quote_source) }}"
+                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                            placeholder="Contoh: Ar-Rum: 21, Kahlil Gibran, QS. Al-Baqarah: 45">
+                                        <p class="text-xs text-gray-400 mt-1">Nama tokoh, buku, atau pasal ayat sebagai sumber kutipan.</p>
+                                        @error('quote_source') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                                    </div>
+
                                     <div class="sm:col-span-6">
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Tema
                                             Undangan</label>

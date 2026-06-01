@@ -8,6 +8,9 @@
                 <a href="{{ route('dashboard.invitations.guests.index', $invitation) }}" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-50">
                     Daftar Tamu
                 </a>
+                <a href="{{ route('dashboard.welcome-screen.index', $invitation) }}" target="_blank" class="bg-gradient-to-r from-amber-500 to-orange-500 text-white px-4 py-2 rounded-md text-sm font-medium hover:from-amber-600 hover:to-orange-600 shadow-sm">
+                    Layar Sapa
+                </a>
                 <a href="{{ route('dashboard.invitations.show', $invitation) }}" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-50">
                     &larr; Kembali
                 </a>

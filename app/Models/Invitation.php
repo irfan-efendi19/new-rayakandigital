@@ -54,6 +54,8 @@ class Invitation extends Model
         'wa_message_template',
         'show_qr_checkin',
         'show_comments',
+        'quote_content',
+        'quote_source',
     ];
 
     protected function casts(): array

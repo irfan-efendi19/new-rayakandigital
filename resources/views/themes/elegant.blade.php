@@ -97,6 +97,26 @@
         </div>
     </section>
 
+    <!-- Quote Section -->
+    @if($invitation->quote_content)
+    <section class="py-20 px-6 bg-white text-center">
+        <div class="max-w-sm mx-auto" data-aos="fade-up">
+            <div class="relative">
+                <span class="text-6xl text-primary/20 font-serif absolute -top-8 left-0">&ldquo;</span>
+                <p class="text-lg md:text-xl font-serif italic text-gray-700 leading-relaxed px-4">
+                    {{ $invitation->quote_content }}
+                </p>
+                <span class="text-6xl text-primary/20 font-serif absolute -bottom-12 right-0">&rdquo;</span>
+            </div>
+            @if($invitation->quote_source)
+                <p class="text-sm text-gray-500 mt-8 font-semibold tracking-wide">
+                    &mdash; {{ $invitation->quote_source }}
+                </p>
+            @endif
+        </div>
+    </section>
+    @endif
+
     <!-- Countdown Section (references first chronological event) -->
     @if($firstEvent)
         <section class="py-20 px-6 bg-[#fffaf0] text-center">

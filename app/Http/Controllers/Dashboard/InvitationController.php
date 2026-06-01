@@ -147,6 +147,8 @@ class InvitationController extends Controller
                 'theme' => 'required|string',
                 'is_active' => 'boolean',
                 'music_url' => 'nullable|string',
+                'quote_content' => 'nullable|string',
+                'quote_source' => 'nullable|string|max:150',
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
             file_put_contents(storage_path('logs/debug.txt'), 'VALIDATION FAILED: '.json_encode([

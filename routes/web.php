@@ -16,6 +16,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RsvpController;
 use App\Http\Controllers\ThemeController;
 use App\Http\Controllers\ThemePreviewController;
+use App\Http\Controllers\WelcomeScreenController;
 use App\Http\Controllers\WishController;
 use Illuminate\Support\Facades\Route;
 
@@ -58,6 +59,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/invitations/{invitation}/guestbook', [GuestbookController::class, 'index'])->name('invitations.guestbook');
         Route::post('/invitations/{invitation}/guestbook/checkin', [GuestbookController::class, 'checkin'])->name('invitations.guestbook.checkin');
         Route::get('/invitations/{invitation}/guestbook/{guest}/ticket', [GuestbookController::class, 'ticket'])->name('invitations.guestbook.ticket');
+
+        // Welcome Screen (Layar Sapa)
+        Route::get('/invitations/{invitation}/welcome-screen', [WelcomeScreenController::class, 'index'])->name('welcome-screen.index');
+        Route::get('/invitations/{invitation}/latest-checkin', [WelcomeScreenController::class, 'getLatestCheckIn'])->name('welcome-screen.latest-checkin');
     });
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -1,28 +1,29 @@
 # PRODUCT REQUIREMENT DOCUMENT (PRD) - UPDATE FITUR
-## Modul: Sistem Manajemen Tamu & Registrasi Berbasis QR Code (QR Check-In & Ticket Printing)
-**Versi:** 1.0 (Spesifikasi Fitur Registrasi - Laravel 13 & PHP 8.4 Optimized)  
+## Modul: Pengaturan Kutipan Romantis / Ayat Suci (Wedding Quotes Section)
+**Versi:** 1.0 (Spesifikasi Fitur Konten - Laravel 13 & PHP 8.4 Optimized)  
 **Tanggal:** 1 Juni 2026  
 **Status:** Approved  
-**Target Komponen:** Database Schema, QR Generator, Dashboard Buku Tamu (Scanner UI), & Web Thermal Print Engine  
+**Target Komponen:** Database Schema, Form Edit Dashboard, Controller Storage, & Theme Layout Rendering  
 
 ---
 
 ## 1. DESKRIPSI FITUR & ATURAN BISNIS (BUSINESS RULES)
 
 ### 1.1 Deskripsi Fitur
-Sistem ini memodernisasi proses penerimaan tamu pada acara pernikahan. Setiap tamu yang didaftarkan oleh pemilik undangan akan mendapatkan QR Code unik. Di lokasi acara, panitia/penerima tamu dapat membuka halaman dasbor khusus buku tamu untuk memindai QR Code tersebut menggunakan kamera HP/Laptop, memvalidasi kehadiran, dan langsung mencetak tiket fisik (biasanya menggunakan printer thermal) sebagai bukti penukaran souvenir atau nomor meja.
+Fitur *Quotes* memberikan fleksibilitas kepada pasangan untuk menyisipkan pesan sakral, kutipan ayat suci (seperti QS. Ar-Rum: 21, Alkitab, atau Weda), maupun kutipan romantis dari tokoh ternama. Kutipan ini akan dirender dengan tipografi yang elegan (font khusus/estetik) pada halaman depan undangan untuk memperkuat nuansa khidmat acara.
 
 ### 1.2 Aturan Bisnis (Business Rules)
-1. **Unik per Tamu:** Setiap baris data pada tabel tamu (`guests`) wajib memiliki string unik (`uuid` atau `hash`) yang dienkapsulasi ke dalam bentuk QR Code.
-2. **Dasbor Khusus Buku Tamu (Gatekeeper View):** Menyediakan halaman steril dari menu edit undangan yang khusus digunakan oleh panitia penjaga meja registrasi untuk melakukan *scanning*.
-3. **Idempotensi Scan (Anti-Double Scan):** Tamu yang sudah berhasil dipindai dan berstatus `Hadir` tidak dapat dipindai ulang untuk mendapatkan tiket baru (mencegah penipuan penukaran souvenir ganda). Sistem harus memunculkan peringatan *"Tamu Sudah Hadir!"*.
-4. **Cetak Tiket Standar:** Sistem mendukung perintah pencetakan (*print assignment*) langsung ke printer thermal lokal menggunakan pustaka *window.print()* dengan format CSS media print yang disesuaikan (lebar struk 58mm atau 80mm).
+1. **Struktur Komponen Quotes:** Setiap kutipan wajib terdiri dari 2 kolom input utama:
+   * **Isi Kutipan (Quote Content):** Teks panjang berisi rangkaian kalimat mutiara/ayat.
+   * **Sumber / Sumber Kutipan (Quote Source):** Kolom teks pendek untuk mencantumkan nama tokoh, buku, atau pasal ayat (Contoh: *"Ar-Rum: 21"* atau *"Kahlil Gibran"*).
+2. **Isolasi Data Per Undangan:** Data kutipan disimpan langsung pada tabel utama `invitations` atau diisolasi menggunakan kolom khusus yang terikat pada `invitation_id`.
+3. **Format Karakter Aman:** Kolom isi kutipan mendukung penyimpanan simbol, tanda petik, dan baris baru (*line break*) agar layout bait puisi/ayat tetap terjaga rapi saat dirender di halaman depan.
 
 ---
 
 ## 2. BLUEPRINT STRUKTUR DATABASE (MIGRATION)
 
-Perbarui tabel `guests` untuk menyimpan kode unik, status kehadiran, waktu check-in, dan informasi pendukung:
+Jalankan skrip migrasi berikut untuk menambahkan kolom penyimpanan kutipan pada tabel `invitations`:
 
 ```php
 use Illuminate\Database\Migrations\Migration;
@@ -33,24 +34,18 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('guests', function (Blueprint $table) {
-            // Kode unik untuk di-generate menjadi QR Code
-            $table->string('qr_code_token')->unique()->after('id');
-            
-            // Status kehadiran tamu
-            $table->enum('attendance_status', ['pending', 'hadir', 'absen'])->default('pending')->after('qr_code_token');
-            $table->timestamp('checked_in_at')->nullable()->after('attendance_status');
-            
-            // Indeks untuk mempercepat pencarian saat pemindaian QR Code
-            $table->index(['qr_code_token', 'attendance_status'], 'idx_guest_checkin');
+        Schema::table('invitations', function (Blueprint $table) {
+            // Kolom teks panjang untuk isi kutipan (nullable jika user tidak ingin mengisi)
+            $table->text('quote_content')->nullable()->after('title');
+            // Kolom untuk menuliskan sumber kutipan / ayat
+            $table->string('quote_source', 150)->nullable()->after('quote_content');
         });
     }
 
     public function down(): void
     {
-        Schema::table('guests', function (Blueprint $table) {
-            $table->dropIndex('idx_guest_checkin');
-            $table->dropColumn(['qr_code_token', 'attendance_status', 'checked_in_at']);
+        Schema::table('invitations', function (Blueprint $table) {
+            $table->dropColumn(['quote_content', 'quote_source']);
         });
     }
 };
