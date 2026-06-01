@@ -28,6 +28,7 @@ class PreviewData extends Model
         'gift_bank_name',
         'gift_bank_account',
         'gift_bank_holder',
+        'gift_banks',
         'events',
     ];
 
@@ -36,6 +37,7 @@ class PreviewData extends Model
         return [
             'event_date_offset_days' => 'integer',
             'gallery_photos' => 'array',
+            'gift_banks' => 'array',
             'events' => 'array',
         ];
     }

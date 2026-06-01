@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Guest;
 use App\Models\Invitation;
 use App\Models\InvitationEvent;
+use App\Models\InvitationStory;
 use App\Models\PreviewData;
 use App\Models\Theme;
 use Illuminate\Support\Collection;
@@ -39,13 +40,15 @@ class ThemePreviewController extends Controller
             'is_active' => true,
             'slug' => 'preview',
             'gallery_photos' => $preview->gallery_photos ?? [],
-            'gift_banks' => [
-                [
-                    'bank_name' => $preview->gift_bank_name,
-                    'account_number' => $preview->gift_bank_account,
-                    'account_holder' => $preview->gift_bank_holder,
-                ],
-            ],
+            'gift_banks' => $preview->gift_banks ?? (
+                $preview->gift_bank_name ? [
+                    [
+                        'bank_name' => $preview->gift_bank_name,
+                        'account_number' => $preview->gift_bank_account,
+                        'account_holder' => $preview->gift_bank_holder,
+                    ],
+                ] : []
+            ),
         ]);
 
         $invitation->exists = false;
@@ -58,6 +61,18 @@ class ThemePreviewController extends Controller
         }
 
         $invitation->setRelation('events', new Collection($dummyEvents));
+
+        $dummyStories = [];
+        if ($preview->love_story) {
+            $story = new InvitationStory([
+                'story_date' => '',
+                'story_description' => $preview->love_story,
+                'order_position' => 0,
+            ]);
+            $story->exists = false;
+            $dummyStories[] = $story;
+        }
+        $invitation->setRelation('stories', new Collection($dummyStories));
 
         $guest = new Guest(['name' => 'Nama Tamu']);
 

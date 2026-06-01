@@ -90,7 +90,7 @@ class InvitationController extends Controller
     public function edit(Invitation $invitation)
     {
         Gate::authorize('update', $invitation);
-        $invitation->load('events');
+        $invitation->load(['events', 'stories']);
 
         $themes = \App\Models\Theme::where('is_active', true)->get();
 
@@ -249,6 +249,35 @@ class InvitationController extends Controller
             }
 
             $invitation->events()->whereNotIn('id', $submittedIds)->delete();
+        }
+
+        // Handle stories upsert
+        if ($request->has('stories')) {
+            $request->validate([
+                'stories' => 'nullable|array',
+                'stories.*.id' => 'nullable|integer|exists:invitation_stories,id',
+                'stories.*.story_date' => 'required|string|max:255',
+                'stories.*.story_description' => 'required|string',
+            ]);
+
+            $submittedStoryIds = [];
+            foreach (array_values($request->input('stories', [])) as $index => $storyData) {
+                $storyData['order_position'] = $index;
+
+                if (!empty($storyData['id'])) {
+                    $story = \App\Models\InvitationStory::where('invitation_id', $invitation->id)
+                        ->where('id', $storyData['id'])
+                        ->firstOrFail();
+                    $story->update($storyData);
+                    $submittedStoryIds[] = $story->id;
+                } else {
+                    unset($storyData['id']);
+                    $story = $invitation->stories()->create($storyData);
+                    $submittedStoryIds[] = $story->id;
+                }
+            }
+
+            $invitation->stories()->whereNotIn('id', $submittedStoryIds)->delete();
         }
 
         return redirect()->route('dashboard.invitations.edit', $invitation)

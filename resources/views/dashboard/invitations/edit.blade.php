@@ -585,12 +585,32 @@
 
                                 <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
                                     <div class="sm:col-span-6">
-                                        <label for="love_story" class="block text-sm font-medium text-gray-700">Cerita
-                                            Cinta (Love Story)</label>
-                                        <textarea name="love_story" id="love_story" rows="4"
-                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">{{ old('love_story', $invitation->love_story) }}</textarea>
-                                        @error('love_story') <span class="text-red-500 text-xs">{{ $message }}</span>
-                                        @enderror
+                                        <div class="flex items-center justify-between mb-2">
+                                            <label class="block text-sm font-medium text-gray-700">Cerita Cinta (Love Story)</label>
+                                            <button type="button" id="add-story-btn" class="text-xs text-indigo-600 hover:text-indigo-800 font-semibold">+ Tambah Momen</button>
+                                        </div>
+                                        <div id="stories-container" class="space-y-3">
+                                            @php $storyCollection = old('stories', $invitation->stories->toArray()); @endphp
+                                            @foreach($storyCollection as $storyIdx => $story)
+                                                @php $story = (object) $story; @endphp
+                                                <div class="story-card bg-gray-50 p-3 rounded-lg border border-gray-200 space-y-2">
+                                                    <div class="flex items-center justify-between">
+                                                        <span class="text-xs font-semibold text-gray-500">Momen #{{ $loop->iteration }}</span>
+                                                        <button type="button" class="remove-story text-red-400 hover:text-red-600 text-xs font-semibold">Hapus</button>
+                                                    </div>
+                                                    @if(!empty($story->id))<input type="hidden" name="stories[{{ $storyIdx }}][id]" value="{{ $story->id }}">@endif
+                                                    <div>
+                                                        <input type="text" name="stories[{{ $storyIdx }}][story_date]" value="{{ old('stories.' . $storyIdx . '.story_date', $story->story_date ?? '') }}" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-xs" placeholder="Waktu (contoh: Tahun 2022, Maret 2024, 12 Desember 2025)">
+                                                        @error('stories.' . $storyIdx . '.story_date') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                                                    </div>
+                                                    <div>
+                                                        <textarea name="stories[{{ $storyIdx }}][story_description]" rows="2" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-xs" placeholder="Ceritakan momen indah Anda...">{{ old('stories.' . $storyIdx . '.story_description', $story->story_description ?? '') }}</textarea>
+                                                        @error('stories.' . $storyIdx . '.story_description') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                        <p class="text-xs text-gray-400 mt-2">Bagikan momen-momen berharga perjalanan cinta Anda kepada para tamu.</p>
                                     </div>
 
                                     <div class="sm:col-span-6">
@@ -926,6 +946,64 @@
             });
 
         addBtn.addEventListener('click', addEventCard);
+
+        // --- Stories Repeater ---
+        const storiesContainer = document.getElementById('stories-container');
+        const storyTemplate = document.getElementById('story-card-template');
+        const addStoryBtn = document.getElementById('add-story-btn');
+
+        function reindexStories() {
+            const cards = storiesContainer.querySelectorAll('.story-card');
+            cards.forEach(function(card, idx) {
+                const inputs = card.querySelectorAll('[name]');
+                inputs.forEach(function(input) {
+                    const name = input.getAttribute('name');
+                    if (name) {
+                        input.setAttribute('name', name.replace(/stories\[\d+\]/, 'stories[' + idx + ']'));
+                    }
+                });
+                const label = card.querySelector('span.text-xs.font-semibold');
+                if (label) {
+                    label.textContent = 'Momen #' + (idx + 1);
+                }
+            });
+        }
+
+        function addStoryCard() {
+            const clone = storyTemplate.content.cloneNode(true);
+            const html = clone.querySelector('.story-card').outerHTML.replace(/__INDEX__/g, storiesContainer.children.length);
+            const wrapper = document.createElement('div');
+            wrapper.innerHTML = html;
+            const card = wrapper.firstElementChild;
+            storiesContainer.appendChild(card);
+            reindexStories();
+        }
+
+        storiesContainer.addEventListener('click', function(e) {
+            if (e.target.closest('.remove-story')) {
+                e.target.closest('.story-card').remove();
+                reindexStories();
+            }
+        });
+
+        if (addStoryBtn) {
+            addStoryBtn.addEventListener('click', addStoryCard);
+        }
     });
     </script>
+
+    <template id="story-card-template">
+        <div class="story-card bg-gray-50 p-3 rounded-lg border border-gray-200 space-y-2">
+            <div class="flex items-center justify-between">
+                <span class="text-xs font-semibold text-gray-500">Momen Baru</span>
+                <button type="button" class="remove-story text-red-400 hover:text-red-600 text-xs font-semibold">Hapus</button>
+            </div>
+            <div>
+                <input type="text" name="stories[__INDEX__][story_date]" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-xs" placeholder="Waktu (contoh: Tahun 2022, Maret 2024, 12 Desember 2025)">
+            </div>
+            <div>
+                <textarea name="stories[__INDEX__][story_description]" rows="2" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-xs" placeholder="Ceritakan momen indah Anda..."></textarea>
+            </div>
+        </div>
+    </template>
 </x-app-layout>

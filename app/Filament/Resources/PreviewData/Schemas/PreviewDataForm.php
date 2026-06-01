@@ -93,19 +93,23 @@ class PreviewDataForm
                     ]),
                 Section::make('Kado Digital')
                     ->schema([
-                        TextInput::make('gift_bank_name')
-                            ->label('Nama Bank')
-                            ->nullable()
-                            ->maxLength(100),
-                        TextInput::make('gift_bank_account')
-                            ->label('Nomor Rekening')
-                            ->nullable()
-                            ->maxLength(50),
-                        TextInput::make('gift_bank_holder')
-                            ->label('Atas Nama Rekening')
-                            ->nullable()
-                            ->maxLength(100),
-                    ])->columns(2),
+                        Repeater::make('gift_banks')
+                            ->label('Akun Bank')
+                            ->schema([
+                                TextInput::make('bank_name')
+                                    ->label('Nama Bank')
+                                    ->required()
+                                    ->maxLength(100),
+                                TextInput::make('account_number')
+                                    ->label('Nomor Rekening')
+                                    ->required()
+                                    ->maxLength(50),
+                                TextInput::make('account_holder')
+                                    ->label('Atas Nama')
+                                    ->nullable()
+                                    ->maxLength(100),
+                            ])->columns(2)->addActionLabel('+ Tambah Bank'),
+                    ]),
                 Section::make('Daftar Acara (Multi-Event)')
                     ->schema([
                         Repeater::make('events')

@@ -93,6 +93,11 @@ class Invitation extends Model
         return $this->hasMany(InvitationEvent::class)->orderBy('sort_order');
     }
 
+    public function stories(): HasMany
+    {
+        return $this->hasMany(InvitationStory::class)->orderBy('order_position');
+    }
+
     public function wishes(): HasMany
     {
         return $this->hasMany(Wish::class)->latest();

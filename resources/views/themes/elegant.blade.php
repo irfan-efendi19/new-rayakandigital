@@ -352,6 +352,42 @@
     </section>
     @endif
 
+    <!-- Love Story Timeline -->
+    @php $stories = $invitation->stories()->orderBy('order_position')->get(); @endphp
+    @if($stories->isNotEmpty())
+    <section class="py-20 px-6 bg-[#fffaf0]">
+        <div class="max-w-2xl mx-auto">
+            <div class="text-center mb-12" data-aos="fade-up">
+                <h2 class="text-3xl font-serif text-primary mb-4">Cerita Cinta</h2>
+                <p class="text-sm text-gray-600">Perjalanan cinta kami hingga ke hari bahagia ini.</p>
+            </div>
+
+            <div class="relative">
+                <div class="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-primary/20 transform md:-translate-x-1/2"></div>
+
+                @foreach($stories as $story)
+                <div class="relative mb-10 md:odd:pr-[50%] md:even:pl-[50%] md:odd:text-right" data-aos="fade-up">
+                    <div class="absolute left-2 md:left-1/2 top-1 w-5 h-5 bg-primary rounded-full border-4 border-white shadow transform -translate-x-1/2 z-10"></div>
+                    <div class="ml-10 md:ml-0 md:mx-6 bg-white p-5 rounded-xl shadow-sm border border-gray-100">
+                        @if($story->story_date)
+                        <span class="inline-block text-xs font-bold text-primary bg-primary/10 px-3 py-1 rounded-full mb-2">{{ $story->story_date }}</span>
+                        @endif
+                        <p class="text-sm text-gray-700 leading-relaxed">{{ $story->story_description }}</p>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+    @elseif(isset($isPreview) && $isPreview && $invitation->love_story)
+    <section class="py-20 px-6 bg-[#fffaf0]">
+        <div class="max-w-2xl mx-auto text-center" data-aos="fade-up">
+            <h2 class="text-3xl font-serif text-primary mb-4">Cerita Cinta</h2>
+            <p class="text-sm text-gray-600 leading-relaxed">{{ $invitation->love_story }}</p>
+        </div>
+    </section>
+    @endif
+
     @if($invitation->show_comments)
     <section class="py-20 px-6 bg-white">
         <div class="text-center mb-10" data-aos="fade-up">
