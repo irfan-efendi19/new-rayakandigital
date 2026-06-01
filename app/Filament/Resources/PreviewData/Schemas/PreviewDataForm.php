@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\PreviewData\Schemas;
 
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -41,6 +42,34 @@ class PreviewDataForm
                             ->label('Nama Orang Tua Pria')
                             ->nullable()
                             ->maxLength(255),
+                        FileUpload::make('bride_photo')
+                            ->label('Foto Mempelai Wanita')
+                            ->image()
+                            ->imageEditor()
+                            ->imageEditorAspectRatioOptions([
+                                '1:1' => 'Square (1:1)',
+                            ])
+                            ->imageEditorMode(1)
+                            ->imageEditorViewportWidth(400)
+                            ->imageEditorViewportHeight(400)
+                            ->disk('public')
+                            ->directory('preview/photos')
+                            ->imagePreviewHeight('200')
+                            ->maxSize(2048),
+                        FileUpload::make('groom_photo')
+                            ->label('Foto Mempelai Pria')
+                            ->image()
+                            ->imageEditor()
+                            ->imageEditorAspectRatioOptions([
+                                '1:1' => 'Square (1:1)',
+                            ])
+                            ->imageEditorMode(1)
+                            ->imageEditorViewportWidth(400)
+                            ->imageEditorViewportHeight(400)
+                            ->disk('public')
+                            ->directory('preview/photos')
+                            ->imagePreviewHeight('200')
+                            ->maxSize(2048),
                         TextInput::make('title')
                             ->label('Judul Undangan')
                             ->required()

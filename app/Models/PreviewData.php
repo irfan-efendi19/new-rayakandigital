@@ -12,6 +12,8 @@ class PreviewData extends Model
     protected $fillable = [
         'bride_name',
         'groom_name',
+        'bride_photo',
+        'groom_photo',
         'bride_nickname',
         'groom_nickname',
         'bride_parents',

@@ -23,7 +23,9 @@ class ThemePreviewController extends Controller
         $invitation = new Invitation([
             'title' => $preview->title,
             'bride_name' => $preview->bride_name,
+            'bride_photo' => $preview->bride_photo,
             'groom_name' => $preview->groom_name,
+            'groom_photo' => $preview->groom_photo,
             'bride_nickname' => $preview->bride_nickname,
             'groom_nickname' => $preview->groom_nickname,
             'bride_parents' => $preview->bride_parents,
