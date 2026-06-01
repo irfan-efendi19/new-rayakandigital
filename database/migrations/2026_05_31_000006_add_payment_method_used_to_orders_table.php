@@ -9,13 +9,25 @@ return new class extends Migration
 {
     public function up(): void
     {
-        if (!Schema::hasColumn('orders', 'payment_method_used')) {
+        if (! Schema::hasColumn('orders', 'payment_method_used')) {
             Schema::table('orders', function (Blueprint $table) {
                 $table->enum('payment_method_used', ['manual_bank', 'midtrans'])->after('package_type');
             });
 
             DB::statement("UPDATE orders SET payment_method_used = 'midtrans' WHERE payment_gateway_used = 'midtrans' OR COALESCE(is_manual_whatsapp, 0) = 0");
             DB::statement("UPDATE orders SET payment_method_used = 'manual_bank' WHERE payment_gateway_used = 'manual_whatsapp' OR COALESCE(is_manual_whatsapp, 0) = 1");
+        }
+
+        if (DB::getDriverName() === 'sqlite') {
+            $indexes = Schema::getIndexes('orders');
+            $indexNames = collect($indexes)->pluck('name')->toArray();
+            if (! in_array('idx_payment_routing', $indexNames)) {
+                Schema::table('orders', function (Blueprint $table) {
+                    $table->index(['payment_method_used', 'payment_status'], 'idx_payment_routing');
+                });
+            }
+
+            return;
         }
 
         $indexes = DB::select("SHOW INDEX FROM orders WHERE Key_name = 'idx_payment_routing'");

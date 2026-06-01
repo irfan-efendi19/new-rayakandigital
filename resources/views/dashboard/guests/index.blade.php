@@ -5,6 +5,11 @@
                 Tamu Undangan: {{ $invitation->title }}
             </h2>
             <div class="flex gap-2">
+                @if($invitation->hasFeature('qr_checkin'))
+                    <a href="{{ route('dashboard.invitations.guestbook', $invitation) }}" class="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-md text-sm font-medium hover:bg-indigo-200">
+                        📋 Buku Tamu (Scanner)
+                    </a>
+                @endif
                 <a href="{{ route('dashboard.invitations.whatsapp.logs', $invitation) }}" class="bg-emerald-100 text-emerald-700 px-4 py-2 rounded-md text-sm font-medium hover:bg-emerald-200">
                     Log WA
                 </a>
@@ -143,6 +148,7 @@
                                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Tamu</th>
                                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No HP</th>
                                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status WA</th>
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kehadiran</th>
                                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Link Personal</th>
                                             <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
                                         </tr>
@@ -172,6 +178,21 @@
                                                         <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Diproses</span>
                                                     @else
                                                         <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">Belum</span>
+                                                    @endif
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                                    @if($guest->attendance_status === 'hadir')
+                                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800" title="Check-in pada {{ $guest->checked_in_at?->format('H:i, d M Y') }}">
+                                                            Hadir
+                                                        </span>
+                                                    @elseif($guest->attendance_status === 'absen')
+                                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-rose-100 text-rose-800">
+                                                            Absen
+                                                        </span>
+                                                    @else
+                                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+                                                            Pending
+                                                        </span>
                                                     @endif
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

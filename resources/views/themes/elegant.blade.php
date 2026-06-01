@@ -336,17 +336,18 @@
     @endif
 
     @if($invitation->show_qr_checkin && $guest)
-    @php $qrData = urlencode($guest->personalized_link . '&qr=1'); @endphp
     <section class="py-16 px-6 bg-[#fffaf0]">
         <div class="text-center mb-8" data-aos="fade-up">
             <h2 class="text-3xl font-serif text-primary mb-4">QR Check-In</h2>
             <p class="text-sm text-gray-600">Tunjukkan kode ini saat check-in acara.</p>
         </div>
         <div class="flex justify-center" data-aos="fade-up">
-            <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 inline-block">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data={{ $qrData }}"
-                     alt="QR Code {{ $guest->name }}" class="mx-auto" width="180" height="180">
-                <p class="text-xs text-gray-400 mt-2 text-center">{{ $guest->name }}</p>
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 inline-block text-center">
+                <div class="w-44 h-44 mx-auto flex items-center justify-center">
+                    {!! $guest->qr_code_svg !!}
+                </div>
+                <p class="text-xs text-gray-500 mt-3 font-medium">{{ $guest->name }}</p>
+                <p class="text-[10px] text-gray-400 mt-1 font-mono">{{ Str::limit($guest->qr_code_token, 8, '') }}</p>
             </div>
         </div>
     </section>

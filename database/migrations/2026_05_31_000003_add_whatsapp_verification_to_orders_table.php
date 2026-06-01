@@ -16,20 +16,42 @@ return new class extends Migration
         });
 
         Schema::table('orders', function (Blueprint $table) {
-            if (!Schema::hasColumn('orders', 'is_manual_whatsapp')) {
+            if (! Schema::hasColumn('orders', 'is_manual_whatsapp')) {
                 $table->boolean('is_manual_whatsapp')->default(false)->after('payment_gateway_used');
             }
-            if (!Schema::hasColumn('orders', 'unique_code')) {
+            if (! Schema::hasColumn('orders', 'unique_code')) {
                 $table->integer('unique_code')->default(0)->after('gross_amount');
             }
         });
 
-        if (!Schema::hasColumn('orders', 'verified_by')) {
+        if (! Schema::hasColumn('orders', 'verified_by')) {
             Schema::table('orders', function (Blueprint $table) {
                 $table->unsignedBigInteger('verified_by')->nullable();
             });
         } else {
-            DB::statement("ALTER TABLE orders MODIFY verified_by BIGINT UNSIGNED NULL");
+            if (DB::getDriverName() !== 'sqlite') {
+                DB::statement('ALTER TABLE orders MODIFY verified_by BIGINT UNSIGNED NULL');
+            }
+        }
+
+        if (DB::getDriverName() === 'sqlite') {
+            $indexes = Schema::getIndexes('orders');
+            $indexNames = collect($indexes)->pluck('name')->toArray();
+            if (! in_array('idx_admin_wa_search', $indexNames)) {
+                Schema::table('orders', function (Blueprint $table) {
+                    $table->index(['unique_code', 'order_id'], 'idx_admin_wa_search');
+                });
+            }
+
+            // SQLite doesn't need to manually check / add foreign keys this way, but we can do it safely
+            try {
+                Schema::table('orders', function (Blueprint $table) {
+                    $table->foreign('verified_by')->references('id')->on('users')->nullOnDelete();
+                });
+            } catch (Exception $e) {
+            }
+
+            return;
         }
 
         $indexes = DB::select("SHOW INDEX FROM orders WHERE Key_name = 'idx_admin_wa_search'");
@@ -41,7 +63,7 @@ return new class extends Migration
 
         $foreignKeys = DB::select("SELECT CONSTRAINT_NAME FROM information_schema.TABLE_CONSTRAINTS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'orders' AND CONSTRAINT_TYPE = 'FOREIGN KEY' AND CONSTRAINT_NAME LIKE '%verified_by%'");
         if (empty($foreignKeys)) {
-            DB::statement("ALTER TABLE orders ADD CONSTRAINT orders_verified_by_foreign FOREIGN KEY (verified_by) REFERENCES users(id) ON DELETE SET NULL");
+            DB::statement('ALTER TABLE orders ADD CONSTRAINT orders_verified_by_foreign FOREIGN KEY (verified_by) REFERENCES users(id) ON DELETE SET NULL');
         }
     }
 

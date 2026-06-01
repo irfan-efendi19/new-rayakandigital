@@ -92,6 +92,67 @@
                 </div>
             </div>
 
+            <!-- Scanner Kehadiran (QR Check-In) -->
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg border {{ $invitation->hasFeature('qr_checkin') ? 'border-emerald-100' : 'border-amber-100 bg-amber-50/20' }}">
+                <div class="p-6">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="flex-shrink-0 inline-flex items-center justify-center w-10 h-10 rounded-full {{ $invitation->hasFeature('qr_checkin') ? 'bg-emerald-100 text-emerald-600' : 'bg-amber-100 text-amber-500' }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 3.5a.5.5 0 11-1 0 .5.5 0 011 0zm-7.5 0a.5.5 0 11-1 0 .5.5 0 011 0zm7.5-7.5a.5.5 0 11-1 0 .5.5 0 011 0zm-7.5 0a.5.5 0 11-1 0 .5.5 0 011 0z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-medium text-gray-900 flex items-center gap-2">
+                                    Scanner Kehadiran (QR Check-In)
+                                    @if(!$invitation->hasFeature('qr_checkin'))
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800">✨ Platinum</span>
+                                    @endif
+                                </h3>
+                                <p class="text-sm text-gray-500 mt-0.5">
+                                    @if($invitation->hasFeature('qr_checkin'))
+                                        @php
+                                            $checkedIn = $invitation->guests()->where('attendance_status', 'hadir')->count();
+                                            $totalGuests = $invitation->guests()->count();
+                                        @endphp
+                                        <span class="font-semibold text-emerald-600">{{ $checkedIn }}</span> / {{ $totalGuests }} tamu sudah check-in
+                                    @else
+                                        Scan QR Code tamu saat hari H dan cetak tiket kehadiran
+                                    @endif
+                                </p>
+                            </div>
+                        </div>
+
+                        @if($invitation->hasFeature('qr_checkin'))
+                            <a href="{{ route('dashboard.invitations.guestbook', $invitation) }}"
+                               class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-lg text-sm font-semibold shadow-sm transition-all duration-200">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                                Buka Scanner
+                            </a>
+                        @else
+                            <a href="{{ route('dashboard.checkout') }}"
+                               class="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white px-5 py-2.5 rounded-lg text-sm font-semibold shadow-sm transition-all duration-200">
+                                ✨ Upgrade ke Platinum
+                            </a>
+                        @endif
+                    </div>
+
+                    @if($invitation->hasFeature('qr_checkin') && $totalGuests > 0)
+                        <div class="mt-4 w-full bg-gray-100 rounded-full h-2">
+                            <div class="bg-emerald-500 h-2 rounded-full transition-all duration-500"
+                                 style="width: {{ $totalGuests > 0 ? round(($checkedIn / $totalGuests) * 100) : 0 }}%">
+                            </div>
+                        </div>
+                        <p class="text-xs text-gray-400 mt-1 text-right">
+                            {{ $totalGuests > 0 ? round(($checkedIn / $totalGuests) * 100) : 0 }}% kehadiran
+                        </p>
+                    @endif
+                </div>
+            </div>
+
             <!-- Chart Pengunjung -->
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6">

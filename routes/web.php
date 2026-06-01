@@ -1,11 +1,11 @@
 <?php
 
-use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
-use App\Http\Controllers\Dashboard\GuestController;
-use App\Http\Controllers\Dashboard\InvitationController;
 use App\Http\Controllers\Dashboard\CheckoutController;
 use App\Http\Controllers\Dashboard\GalleryController;
 use App\Http\Controllers\Dashboard\GiftController;
+use App\Http\Controllers\Dashboard\GuestbookController;
+use App\Http\Controllers\Dashboard\GuestController;
+use App\Http\Controllers\Dashboard\InvitationController;
 use App\Http\Controllers\Dashboard\WhatsAppBlastController;
 use App\Http\Controllers\Dashboard\WhatsAppPaymentController;
 use App\Http\Controllers\DashboardController;
@@ -33,7 +33,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
         Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process');
 
-
         // WhatsApp Manual Payment
         Route::get('/payment/{order}', [WhatsAppPaymentController::class, 'showInvoice'])->name('payment.invoice');
         Route::post('/payment/{order}/send-whatsapp', [WhatsAppPaymentController::class, 'sendWhatsApp'])->name('payment.send-whatsapp');
@@ -54,6 +53,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/invitations/{invitation}/whatsapp/send/{guest}', [WhatsAppBlastController::class, 'sendSingle'])->name('invitations.whatsapp.send-single');
         Route::get('/invitations/{invitation}/whatsapp/logs', [WhatsAppBlastController::class, 'logs'])->name('invitations.whatsapp.logs');
         Route::post('/invitations/{invitation}/whatsapp/template', [WhatsAppBlastController::class, 'template'])->name('invitations.whatsapp.template');
+
+        // Guestbook / QR Scanner
+        Route::get('/invitations/{invitation}/guestbook', [GuestbookController::class, 'index'])->name('invitations.guestbook');
+        Route::post('/invitations/{invitation}/guestbook/checkin', [GuestbookController::class, 'checkin'])->name('invitations.guestbook.checkin');
+        Route::get('/invitations/{invitation}/guestbook/{guest}/ticket', [GuestbookController::class, 'ticket'])->name('invitations.guestbook.ticket');
     });
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

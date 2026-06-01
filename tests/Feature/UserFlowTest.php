@@ -1,22 +1,29 @@
 <?php
 
-use App\Models\User;
-use App\Models\Theme;
 use App\Models\Invitation;
+use App\Models\Order;
+use App\Models\PaymentMethodConfig;
+use App\Models\Theme;
+use App\Models\User;
+use App\Services\MidtransService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 
 uses(RefreshDatabase::class);
 
 test('user flow 4 langkah pernikahan platform', function () {
-    // Seed themes
-    Theme::create([
-        'name' => 'Elegant Rose',
-        'view_path' => 'themes.elegant',
-        'thumbnail' => '/images/themes/elegant-thumb.jpg',
-        'is_premium' => false,
-        'is_active' => true,
-    ]);
+    $this->seed();
+
+    // Seed themes (elegant theme is seeded by ThemeSeeder, but let's make sure Elegant Rose exists too)
+    if (! Theme::where('view_path', 'themes.elegant')->exists()) {
+        Theme::create([
+            'name' => 'Elegant Rose',
+            'view_path' => 'themes.elegant',
+            'thumbnail' => '/images/themes/elegant-thumb.jpg',
+            'is_premium' => false,
+            'is_active' => true,
+        ]);
+    }
 
     // LANGKAH 1: PILIH TEMA
     // Guest visits homepage and sees themes
@@ -81,7 +88,7 @@ test('user flow 4 langkah pernikahan platform', function () {
 
     $this->actingAs($user)
         ->put(route('dashboard.invitations.update', $invitation), $extendedData)
-        ->assertRedirect(route('dashboard.invitations.show', $invitation));
+        ->assertRedirect(route('dashboard.invitations.edit', $invitation));
 
     $invitation->refresh();
     expect($invitation->event_time_end)->toBe('13:00:00');
@@ -95,9 +102,22 @@ test('user flow 4 langkah pernikahan platform', function () {
         ->assertSee('Paket');
 
     // Process upgrade to Gold (Simulation mode automatically activates package)
+    // First, configure payment configuration with midtrans
+    PaymentMethodConfig::truncate();
+    PaymentMethodConfig::create([
+        'active_method' => 'midtrans',
+        'midtrans_client_key' => '',
+        'midtrans_server_key' => '',
+    ]);
+
     $this->actingAs($user)
         ->post(route('dashboard.checkout.process'), ['tier' => 'gold'])
-        ->assertRedirect(route('dashboard'));
+        ->assertSuccessful()
+        ->assertJsonStructure(['snap_token', 'order_id']);
+
+    $order = Order::latest()->first();
+    app(MidtransService::class)->simulatePayment($order->order_id);
+    $order->update(['payment_status' => 'success']);
 
     $user->refresh();
     expect($user->currentTier())->toBe('gold');
