@@ -32,22 +32,21 @@ class ThemeForm
                     ->hidden(fn (string $operation): bool => $operation === 'create')
                     ->helperText('Auto-generated from ZIP extraction.'),
 
-                FileUpload::make('thumbnail')
-                    ->label('Thumbnail')
+                FileUpload::make('thumbnail_portrait')
+                    ->label('Thumbnail Portrait (9:16)')
                     ->image()
                     ->imageEditor()
                     ->imageEditorAspectRatioOptions([
-                        '16:9' => 'Landscape (16:9)',
-                        '4:3' => 'Standard (4:3)',
-                        '1:1' => 'Square (1:1)',
+                        '9:16' => 'Portrait Mobile (9:16)',
                     ])
                     ->imageEditorMode(1)
-                    ->imageEditorViewportWidth(400)
-                    ->imageEditorViewportHeight(225)
+                    ->imageEditorViewportWidth(360)
+                    ->imageEditorViewportHeight(640)
+                    ->acceptedFileTypes(['image/webp', 'image/jpeg'])
+                    ->maxSize(500)
                     ->disk('public')
                     ->directory('themes/thumbnails')
-                    ->imagePreviewHeight('200')
-                    ->maxSize(2048)
+                    ->imagePreviewHeight('400')
                     ->columnSpanFull(),
 
                 Toggle::make('is_premium')

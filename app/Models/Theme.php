@@ -9,7 +9,7 @@ class Theme extends Model
     protected $fillable = [
         'name',
         'view_path',
-        'thumbnail',
+        'thumbnail_portrait',
         'is_premium',
         'is_active',
     ];

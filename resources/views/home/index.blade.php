@@ -106,9 +106,9 @@
                 @forelse($themes as $theme)
                     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 group">
                         <!-- Theme Thumbnail -->
-                        <div class="relative h-56 bg-gradient-to-br from-gray-100 to-gray-50 overflow-hidden">
-                            @if($theme->thumbnail)
-                                <img src="{{ $theme->thumbnail }}" alt="{{ $theme->name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="relative aspect-[9/16] bg-gradient-to-br from-gray-100 to-gray-50 overflow-hidden">
+                            @if($theme->thumbnail_portrait)
+                                <img src="{{ Storage::url($theme->thumbnail_portrait) }}" alt="{{ $theme->name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                             @else
                                 <div class="flex items-center justify-center h-full">
                                     <div class="text-center">
