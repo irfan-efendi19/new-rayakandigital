@@ -33,6 +33,9 @@ document.addEventListener('DOMContentLoaded', function () {
         reader.onload = function () {
             destroyCropper();
 
+            modal.classList.remove("hidden");
+            modal.classList.add("flex");
+
             const img = new Image();
             img.src = reader.result;
 
@@ -40,22 +43,38 @@ document.addEventListener('DOMContentLoaded', function () {
                 cropContainer.appendChild(img);
                 cropper = new Cropper(img, {
                     container: cropContainer,
+                    viewMode: 1,
+                    responsive: true,
+                    center: true,
+                    autoCrop: true,
+                    autoCropArea: 1,
+                    movable: true,
+                    scalable: true,
+                    zoomable: true,
+                    zoomOnTouch: true,
+                    zoomOnWheel: true,
+                    minContainerWidth: 500,
+                    minContainerHeight: 350,
                     template: [
-                        '<cropper-canvas background>',
-                        '<cropper-image rotatable scalable skewable translatable></cropper-image>',
-                        '<cropper-shade hidden></cropper-shade>',
+                        "<cropper-canvas background>",
+                        "<cropper-image rotatable scalable skewable translatable></cropper-image>",
+                        "<cropper-shade hidden></cropper-shade>",
                         '<cropper-selection initial-coverage="0.8" aspect-ratio="1" movable resizable>',
                         '<cropper-grid role="grid" bordered covered></cropper-grid>',
-                        '<cropper-crosshair centered></cropper-crosshair>',
+                        "<cropper-crosshair centered></cropper-crosshair>",
                         '<cropper-handle action="move" theme-color="rgba(255, 255, 255, 0.35)"></cropper-handle>',
                         '<cropper-handle action="ne-resize"></cropper-handle>',
                         '<cropper-handle action="nw-resize"></cropper-handle>',
                         '<cropper-handle action="se-resize"></cropper-handle>',
                         '<cropper-handle action="sw-resize"></cropper-handle>',
-                        '</cropper-selection>',
-                        '</cropper-canvas>',
-                    ].join(''),
+                        "</cropper-selection>",
+                        "</cropper-canvas>",
+                    ].join(""),
                 });
+
+                if (cropper && typeof cropper.resize === "function") {
+                    cropper.resize();
+                }
             };
 
             modal.classList.remove('hidden');

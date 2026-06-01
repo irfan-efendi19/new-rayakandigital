@@ -109,9 +109,13 @@ test('user flow 4 langkah pernikahan platform', function () {
     // LANGKAH 4: SEBARKAN UNDANGAN (Galeri + Kado + Tamu)
     // 1. Configure Kado Digital
     $giftData = [
-        'gift_bank_name' => 'BCA',
-        'gift_bank_account' => '987654321',
-        'gift_bank_holder' => 'Jane Doe',
+        'gift_banks' => [
+            [
+                'bank_name' => 'BCA',
+                'account_number' => '987654321',
+                'account_holder' => 'Jane Doe',
+            ],
+        ],
     ];
 
     $this->actingAs($user)
@@ -119,7 +123,8 @@ test('user flow 4 langkah pernikahan platform', function () {
         ->assertRedirect();
 
     $invitation->refresh();
-    expect($invitation->gift_bank_account)->toBe('987654321');
+    expect($invitation->gift_banks)->toBeArray();
+    expect($invitation->gift_banks[0]['account_number'])->toBe('987654321');
 
     // 2. Import guests via CSV
     $csvContent = "Nama,Phone\nBudi Santoso,08123456789\nAni Suryani,08987654321\n";

@@ -274,7 +274,17 @@
     </section>
 
     <!-- Digital Gift Section (Silver/Gold/Platinum Only) -->
-    @if($invitation->canUseGift() && ($invitation->gift_bank_name || $invitation->gift_ewallet_name || $invitation->gift_qris_image))
+    @php
+        $giftBanks = $invitation->gift_banks ?? [];
+        $giftEwallets = $invitation->gift_ewallets ?? [];
+        if (empty($giftBanks) && ($invitation->gift_bank_name || $invitation->gift_bank_account)) {
+            $giftBanks = [['bank_name' => $invitation->gift_bank_name, 'account_number' => $invitation->gift_bank_account, 'account_holder' => $invitation->gift_bank_holder]];
+        }
+        if (empty($giftEwallets) && ($invitation->gift_ewallet_name || $invitation->gift_ewallet_number)) {
+            $giftEwallets = [['wallet_name' => $invitation->gift_ewallet_name, 'wallet_number' => $invitation->gift_ewallet_number]];
+        }
+    @endphp
+    @if($invitation->canUseGift() && (count($giftBanks) > 0 || count($giftEwallets) > 0 || $invitation->gift_qris_image))
         <section class="py-20 px-6 bg-[#fffaf0] text-center" x-data="{ openGift: false }">
             <div class="text-center mb-8" data-aos="fade-up">
                 <h2 class="text-3xl font-serif text-primary mb-4">Kado Digital</h2>
@@ -287,27 +297,31 @@
                 </button>
 
                 <div x-show="openGift" x-cloak class="bg-white p-6 rounded-2xl shadow-xl border border-gray-100 text-left space-y-6" x-transition>
-                    <!-- Bank Account -->
-                    @if($invitation->gift_bank_name && $invitation->gift_bank_account)
+                    @foreach($giftBanks as $bank)
+                        @php $bank = (object) $bank; @endphp
+                        @if($bank->bank_name && $bank->account_number)
                         <div class="bg-gray-50 p-4 rounded-xl relative overflow-hidden border border-gray-100">
                             <span class="absolute top-2 right-2 text-primary font-serif italic text-sm font-semibold">Transfer Bank</span>
-                            <h4 class="font-bold text-gray-800 text-sm mb-1">{{ $invitation->gift_bank_name }}</h4>
-                            <p class="text-lg font-mono font-bold text-gray-900 tracking-wider mb-1" id="bank-acc-no">{{ $invitation->gift_bank_account }}</p>
-                            <p class="text-xs text-gray-500 mb-2">a.n. {{ $invitation->gift_bank_holder ?: 'Mempelai' }}</p>
-                            <button onclick="navigator.clipboard.writeText('{{ $invitation->gift_bank_account }}'); alert('Nomor rekening disalin!')" class="text-xs bg-indigo-50 text-indigo-700 font-semibold px-3 py-1 rounded hover:bg-indigo-100">Salin Rekening</button>
+                            <h4 class="font-bold text-gray-800 text-sm mb-1">{{ $bank->bank_name }}</h4>
+                            <p class="text-lg font-mono font-bold text-gray-900 tracking-wider mb-1">{{ $bank->account_number }}</p>
+                            <p class="text-xs text-gray-500 mb-2">a.n. {{ $bank->account_holder ?: 'Mempelai' }}</p>
+                            <button onclick="navigator.clipboard.writeText('{{ $bank->account_number }}'); alert('Nomor rekening disalin!')" class="text-xs bg-indigo-50 text-indigo-700 font-semibold px-3 py-1 rounded hover:bg-indigo-100">Salin Rekening</button>
                         </div>
-                    @endif
+                        @endif
+                    @endforeach
 
-                    <!-- E-Wallet -->
-                    @if($invitation->gift_ewallet_name && $invitation->gift_ewallet_number)
+                    @foreach($giftEwallets as $ewallet)
+                        @php $ewallet = (object) $ewallet; @endphp
+                        @if($ewallet->wallet_name && $ewallet->wallet_number)
                         <div class="bg-gray-50 p-4 rounded-xl relative overflow-hidden border border-gray-100">
                             <span class="absolute top-2 right-2 text-primary font-serif italic text-sm font-semibold">Dompet Digital</span>
-                            <h4 class="font-bold text-gray-800 text-sm mb-1">{{ $invitation->gift_ewallet_name }}</h4>
-                            <p class="text-lg font-mono font-bold text-gray-900 tracking-wider mb-1">{{ $invitation->gift_ewallet_number }}</p>
-                            <p class="text-xs text-gray-500 mb-2">a.n. {{ $invitation->gift_bank_holder ?: 'Mempelai' }}</p>
-                            <button onclick="navigator.clipboard.writeText('{{ $invitation->gift_ewallet_number }}'); alert('Nomor e-wallet disalin!')" class="text-xs bg-indigo-50 text-indigo-700 font-semibold px-3 py-1 rounded hover:bg-indigo-100">Salin Nomor</button>
+                            <h4 class="font-bold text-gray-800 text-sm mb-1">{{ $ewallet->wallet_name }}</h4>
+                            <p class="text-lg font-mono font-bold text-gray-900 tracking-wider mb-1">{{ $ewallet->wallet_number }}</p>
+                            <p class="text-xs text-gray-500 mb-2">a.n. {{ $ewallet->wallet_name }}</p>
+                            <button onclick="navigator.clipboard.writeText('{{ $ewallet->wallet_number }}'); alert('Nomor e-wallet disalin!')" class="text-xs bg-indigo-50 text-indigo-700 font-semibold px-3 py-1 rounded hover:bg-indigo-100">Salin Nomor</button>
                         </div>
-                    @endif
+                        @endif
+                    @endforeach
 
                     <!-- QRIS -->
                     @if($invitation->gift_qris_image)

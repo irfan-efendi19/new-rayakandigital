@@ -129,13 +129,33 @@
                         @if($invitation->hasPremiumFeatures())
                             <div class="space-y-6">
                                 <!-- Upload Form -->
-                                <form action="{{ route('dashboard.invitations.gallery.update', $invitation) }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+                                <form id="gallery-upload-form" action="{{ route('dashboard.invitations.gallery.update', $invitation) }}" method="POST" enctype="multipart/form-data" class="space-y-4">
                                     @csrf
-                                    <div class="flex items-center gap-3">
-                                        <input type="file" name="photos[]" multiple required accept="image/*" class="text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 flex-1">
-                                        <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-semibold shadow-sm transition-all duration-200">Unggah</button>
+                                    <div id="gallery-dropzone" class="relative border-2 border-dashed border-indigo-300 rounded-xl p-6 text-center cursor-pointer hover:border-indigo-400 hover:bg-indigo-50/50 transition-all duration-200">
+                                        <input type="file" name="photos[]" id="gallery-file-input" multiple accept="image/*" class="hidden">
+                                        <div id="dropzone-empty" class="space-y-2">
+                                            <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-indigo-100 text-indigo-600">
+                                                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                                </svg>
+                                            </div>
+                                            <p class="text-sm font-medium text-gray-700">Seret foto ke sini atau <span class="text-indigo-600 underline">klik untuk memilih</span></p>
+                                            <p class="text-xs text-gray-400">JPG, PNG, WEBP. Maks 5MB per foto. Bisa pilih banyak sekaligus.</p>
+                                        </div>
+                                        <div id="dropzone-preview" class="hidden space-y-3">
+                                            <div id="preview-thumbnails" class="flex flex-wrap gap-2 justify-center max-h-48 overflow-y-auto"></div>
+                                            <div class="flex items-center justify-center gap-2 text-sm text-gray-500">
+                                                <span id="file-count"></span>
+                                                <button type="button" id="gallery-change-files" class="text-indigo-600 hover:text-indigo-800 underline text-xs">Ganti pilihan</button>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <p class="text-xs text-gray-500">Mendukung format JPG, PNG, WEBP. Maks 5MB per foto.</p>
+                                    <div class="flex items-center justify-end gap-3">
+                                        <span id="dropzone-error" class="text-xs text-red-500 hidden"></span>
+                                        <button type="submit" id="gallery-submit-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-lg text-sm font-semibold shadow-sm transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                                            Unggah <span id="upload-count"></span>
+                                        </button>
+                                    </div>
                                 </form>
 
                                 <!-- Gallery Grid -->
@@ -189,49 +209,95 @@
                         </div>
 
                         @if($invitation->canUseGift())
-                            <form action="{{ route('dashboard.invitations.gift.update', $invitation) }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+                            @php
+                                $maxGift = $invitation->maxGiftAccounts();
+                                $oldBanks = old('gift_banks', $invitation->gift_banks ?? []);
+                                $oldEwallets = old('gift_ewallets', $invitation->gift_ewallets ?? []);
+
+                                if (empty($oldBanks) && ($invitation->gift_bank_name || $invitation->gift_bank_account)) {
+                                    $oldBanks = [['bank_name' => $invitation->gift_bank_name, 'account_number' => $invitation->gift_bank_account, 'account_holder' => $invitation->gift_bank_holder]];
+                                }
+                                if (empty($oldEwallets) && ($invitation->gift_ewallet_name || $invitation->gift_ewallet_number)) {
+                                    $oldEwallets = [['wallet_name' => $invitation->gift_ewallet_name, 'wallet_number' => $invitation->gift_ewallet_number]];
+                                }
+                            @endphp
+                            <form id="gift-form" action="{{ route('dashboard.invitations.gift.update', $invitation) }}" method="POST" enctype="multipart/form-data" class="space-y-4">
                                 @csrf
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div class="col-span-2 sm:col-span-1">
-                                        <label for="gift_bank_name" class="block text-xs font-semibold text-gray-700">Nama Bank</label>
-                                        <input type="text" name="gift_bank_name" id="gift_bank_name" value="{{ old('gift_bank_name', $invitation->gift_bank_name) }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-xs" placeholder="BCA / Mandiri / BNI">
-                                        @error('gift_bank_name') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                                    </div>
-                                    <div class="col-span-2 sm:col-span-1">
-                                        <label for="gift_bank_account" class="block text-xs font-semibold text-gray-700">Nomor Rekening</label>
-                                        <input type="text" name="gift_bank_account" id="gift_bank_account" value="{{ old('gift_bank_account', $invitation->gift_bank_account) }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-xs" placeholder="1234567890">
-                                        @error('gift_bank_account') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                                    </div>
-                                    <div class="col-span-2">
-                                        <label for="gift_bank_holder" class="block text-xs font-semibold text-gray-700">Nama Pemilik Rekening</label>
-                                        <input type="text" name="gift_bank_holder" id="gift_bank_holder" value="{{ old('gift_bank_holder', $invitation->gift_bank_holder) }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-xs" placeholder="Mempelai / Pihak Keluarga">
-                                        @error('gift_bank_holder') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                                    </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs text-gray-500 font-semibold">Maksimal {{ $maxGift }} akun</span>
+                                    <span id="gift-account-count" class="text-xs text-gray-400">0 / {{ $maxGift }}</span>
                                 </div>
 
-                                <hr class="border-gray-100 my-2">
-
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div class="col-span-2 sm:col-span-1">
-                                        <label for="gift_ewallet_name" class="block text-xs font-semibold text-gray-700">Nama E-Wallet</label>
-                                        <input type="text" name="gift_ewallet_name" id="gift_ewallet_name" value="{{ old('gift_ewallet_name', $invitation->gift_ewallet_name) }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-xs" placeholder="Gopay / OVO / Dana">
-                                        @error('gift_ewallet_name') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                                <!-- Bank Accounts Repeater -->
+                                <div id="gift-banks-container" class="space-y-3">
+                                    <div class="flex items-center justify-between">
+                                        <label class="text-xs font-semibold text-gray-700">Transfer Bank</label>
+                                        <button type="button" id="add-bank-btn" class="text-xs text-indigo-600 hover:text-indigo-800 font-semibold">+ Tambah Bank</button>
                                     </div>
-                                    <div class="col-span-2 sm:col-span-1">
-                                        <label for="gift_ewallet_number" class="block text-xs font-semibold text-gray-700">Nomor E-Wallet</label>
-                                        <input type="text" name="gift_ewallet_number" id="gift_ewallet_number" value="{{ old('gift_ewallet_number', $invitation->gift_ewallet_number) }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-xs" placeholder="08123456789">
-                                        @error('gift_ewallet_number') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                                    </div>
-                                    <div class="col-span-2">
-                                        <label class="block text-xs font-semibold text-gray-700">Barcode QRIS</label>
-                                        <div class="mt-1 flex items-center gap-4">
-                                            @if($invitation->gift_qris_image)
-                                                <img src="{{ asset('storage/' . $invitation->gift_qris_image) }}" alt="QRIS" class="w-16 h-16 object-contain border">
-                                            @endif
-                                            <input type="file" name="gift_qris_image" id="gift_qris_image" class="text-xs text-gray-500 file:mr-4 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
+                                    @foreach($oldBanks as $bankIdx => $bank)
+                                        @php $bank = (object) $bank; @endphp
+                                        <div class="gift-bank-card bg-gray-50 p-3 rounded-lg border border-gray-200 space-y-2">
+                                            <div class="flex items-center justify-between">
+                                                <span class="text-xs font-semibold text-gray-500">Bank #{{ $loop->iteration }}</span>
+                                                <button type="button" class="remove-bank text-red-400 hover:text-red-600 text-xs font-semibold">Hapus</button>
+                                            </div>
+                                            <div class="grid grid-cols-2 gap-2">
+                                                <div>
+                                                    <input type="text" name="gift_banks[{{ $bankIdx }}][bank_name]" value="{{ old('gift_banks.' . $bankIdx . '.bank_name', $bank->bank_name ?? '') }}" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-xs" placeholder="Nama Bank">
+                                                    @error('gift_banks.' . $bankIdx . '.bank_name') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                                                </div>
+                                                <div>
+                                                    <input type="text" name="gift_banks[{{ $bankIdx }}][account_number]" value="{{ old('gift_banks.' . $bankIdx . '.account_number', $bank->account_number ?? '') }}" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-xs" placeholder="No. Rekening">
+                                                    @error('gift_banks.' . $bankIdx . '.account_number') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                                                </div>
+                                                <div class="col-span-2">
+                                                    <input type="text" name="gift_banks[{{ $bankIdx }}][account_holder]" value="{{ old('gift_banks.' . $bankIdx . '.account_holder', $bank->account_holder ?? '') }}" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-xs" placeholder="Atas Nama">
+                                                    @error('gift_banks.' . $bankIdx . '.account_holder') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                                                </div>
+                                            </div>
                                         </div>
-                                        @error('gift_qris_image') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                                    @endforeach
+                                </div>
+
+                                <!-- E-Wallet Repeater -->
+                                <div id="gift-ewallets-container" class="space-y-3">
+                                    <div class="flex items-center justify-between">
+                                        <label class="text-xs font-semibold text-gray-700">Dompet Digital</label>
+                                        <button type="button" id="add-ewallet-btn" class="text-xs text-indigo-600 hover:text-indigo-800 font-semibold">+ Tambah E-Wallet</button>
                                     </div>
+                                    @foreach($oldEwallets as $ewalletIdx => $ewallet)
+                                        @php $ewallet = (object) $ewallet; @endphp
+                                        <div class="gift-ewallet-card bg-gray-50 p-3 rounded-lg border border-gray-200 space-y-2">
+                                            <div class="flex items-center justify-between">
+                                                <span class="text-xs font-semibold text-gray-500">E-Wallet #{{ $loop->iteration }}</span>
+                                                <button type="button" class="remove-ewallet text-red-400 hover:text-red-600 text-xs font-semibold">Hapus</button>
+                                            </div>
+                                            <div class="grid grid-cols-2 gap-2">
+                                                <div>
+                                                    <input type="text" name="gift_ewallets[{{ $ewalletIdx }}][wallet_name]" value="{{ old('gift_ewallets.' . $ewalletIdx . '.wallet_name', $ewallet->wallet_name ?? '') }}" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-xs" placeholder="Nama E-Wallet">
+                                                    @error('gift_ewallets.' . $ewalletIdx . '.wallet_name') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                                                </div>
+                                                <div>
+                                                    <input type="text" name="gift_ewallets[{{ $ewalletIdx }}][wallet_number]" value="{{ old('gift_ewallets.' . $ewalletIdx . '.wallet_number', $ewallet->wallet_number ?? '') }}" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-xs" placeholder="Nomor E-Wallet">
+                                                    @error('gift_ewallets.' . $ewalletIdx . '.wallet_number') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+
+                                <hr class="border-gray-100">
+
+                                <!-- QRIS -->
+                                <div>
+                                    <label class="block text-xs font-semibold text-gray-700">Barcode QRIS</label>
+                                    <div class="mt-1 flex items-center gap-4">
+                                        @if($invitation->gift_qris_image)
+                                            <img src="{{ asset('storage/' . $invitation->gift_qris_image) }}" alt="QRIS" class="w-16 h-16 object-contain border">
+                                        @endif
+                                        <input type="file" name="gift_qris_image" id="gift_qris_image" class="text-xs text-gray-500 file:mr-4 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
+                                    </div>
+                                    @error('gift_qris_image') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                                 </div>
 
                                 <div class="pt-2 flex justify-end">
@@ -240,6 +306,117 @@
                                     </button>
                                 </div>
                             </form>
+
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function () {
+                                    const maxAccounts = {{ $maxGift }};
+                                    const banksContainer = document.getElementById('gift-banks-container');
+                                    const ewalletsContainer = document.getElementById('gift-ewallets-container');
+                                    const bankTemplate = document.getElementById('gift-bank-template');
+                                    const ewalletTemplate = document.getElementById('gift-ewallet-template');
+                                    const accountCountEl = document.getElementById('gift-account-count');
+
+                                    function updateAccountCount() {
+                                        const total = banksContainer.querySelectorAll('.gift-bank-card').length + ewalletsContainer.querySelectorAll('.gift-ewallet-card').length;
+                                        accountCountEl.textContent = total + ' / ' + maxAccounts;
+                                        document.getElementById('add-bank-btn').style.display = total >= maxAccounts ? 'none' : '';
+                                        document.getElementById('add-ewallet-btn').style.display = total >= maxAccounts ? 'none' : '';
+                                    }
+
+                                    function reindexItems(container, prefix) {
+                                        const cards = container.querySelectorAll('[class*="gift-' + prefix + '-card"]');
+                                        cards.forEach(function (card, idx) {
+                                            const inputs = card.querySelectorAll('[name]');
+                                            inputs.forEach(function (input) {
+                                                const name = input.getAttribute('name');
+                                                if (name) {
+                                                    input.setAttribute('name', name.replace(new RegExp(prefix + 's\\[\\d+\\]'), prefix + 's[' + idx + ']'));
+                                                }
+                                            });
+                                            const label = card.querySelector('span.text-xs.font-semibold.text-gray-500');
+                                            if (label) {
+                                                const prefixLabel = prefix === 'bank' ? 'Bank' : 'E-Wallet';
+                                                label.textContent = prefixLabel + ' #' + (idx + 1);
+                                            }
+                                        });
+                                    }
+
+                                    function addItem(container, templateId, prefix) {
+                                        const total = banksContainer.querySelectorAll('.gift-bank-card').length + ewalletsContainer.querySelectorAll('.gift-ewallet-card').length;
+                                        if (total >= maxAccounts) return;
+
+                                        const template = document.getElementById(templateId);
+                                        const clone = template.content.cloneNode(true);
+                                        const card = clone.querySelector('[class*="gift-' + prefix + '-card"]');
+                                        container.appendChild(card);
+                                        reindexItems(container, prefix);
+                                        updateAccountCount();
+                                    }
+
+                                    banksContainer.addEventListener('click', function (e) {
+                                        if (e.target.closest('.remove-bank')) {
+                                            e.target.closest('.gift-bank-card').remove();
+                                            reindexItems(banksContainer, 'bank');
+                                            updateAccountCount();
+                                        }
+                                    });
+
+                                    ewalletsContainer.addEventListener('click', function (e) {
+                                        if (e.target.closest('.remove-ewallet')) {
+                                            e.target.closest('.gift-ewallet-card').remove();
+                                            reindexItems(ewalletsContainer, 'ewallet');
+                                            updateAccountCount();
+                                        }
+                                    });
+
+                                    document.getElementById('add-bank-btn').addEventListener('click', function () {
+                                        addItem(banksContainer, 'gift-bank-template', 'bank');
+                                    });
+
+                                    document.getElementById('add-ewallet-btn').addEventListener('click', function () {
+                                        addItem(ewalletsContainer, 'gift-ewallet-template', 'ewallet');
+                                    });
+
+                                    updateAccountCount();
+                                });
+                            </script>
+
+                            <template id="gift-bank-template">
+                                <div class="gift-bank-card bg-gray-50 p-3 rounded-lg border border-gray-200 space-y-2">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-xs font-semibold text-gray-500">Bank Baru</span>
+                                        <button type="button" class="remove-bank text-red-400 hover:text-red-600 text-xs font-semibold">Hapus</button>
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <div>
+                                            <input type="text" name="gift_banks[999][bank_name]" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-xs" placeholder="Nama Bank">
+                                        </div>
+                                        <div>
+                                            <input type="text" name="gift_banks[999][account_number]" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-xs" placeholder="No. Rekening">
+                                        </div>
+                                        <div class="col-span-2">
+                                            <input type="text" name="gift_banks[999][account_holder]" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-xs" placeholder="Atas Nama">
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+
+                            <template id="gift-ewallet-template">
+                                <div class="gift-ewallet-card bg-gray-50 p-3 rounded-lg border border-gray-200 space-y-2">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-xs font-semibold text-gray-500">E-Wallet Baru</span>
+                                        <button type="button" class="remove-ewallet text-red-400 hover:text-red-600 text-xs font-semibold">Hapus</button>
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <div>
+                                            <input type="text" name="gift_ewallets[999][wallet_name]" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-xs" placeholder="Nama E-Wallet">
+                                        </div>
+                                        <div>
+                                            <input type="text" name="gift_ewallets[999][wallet_number]" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-xs" placeholder="Nomor E-Wallet">
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
                         @else
                             <div class="text-center py-8">
                                 <span class="text-4xl">🔒</span>
@@ -314,6 +491,142 @@
                     @endif
                 </div>
             </div>
+
+            <!-- Gallery Upload Script -->
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const dropzone = document.getElementById('gallery-dropzone');
+                    const fileInput = document.getElementById('gallery-file-input');
+                    const dropzoneEmpty = document.getElementById('dropzone-empty');
+                    const dropzonePreview = document.getElementById('dropzone-preview');
+                    const previewThumbnails = document.getElementById('preview-thumbnails');
+                    const fileCount = document.getElementById('file-count');
+                    const uploadCount = document.getElementById('upload-count');
+                    const submitBtn = document.getElementById('gallery-submit-btn');
+                    const dropzoneError = document.getElementById('dropzone-error');
+                    const changeFilesBtn = document.getElementById('gallery-change-files');
+                    let selectedFiles = [];
+
+                    const maxFileSize = 5 * 1024 * 1024;
+                    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+
+                    function updatePreview() {
+                        previewThumbnails.innerHTML = '';
+                        let validFiles = [];
+                        let errorMsg = '';
+
+                        for (const file of selectedFiles) {
+                            if (!allowedTypes.includes(file.type)) {
+                                errorMsg = 'Format tidak didukung. Gunakan JPG, PNG, atau WEBP.';
+                                continue;
+                            }
+                            if (file.size > maxFileSize) {
+                                errorMsg = 'Ukuran file maksimal 5MB per foto.';
+                                continue;
+                            }
+                            validFiles.push(file);
+
+                            const reader = new FileReader();
+                            const wrapper = document.createElement('div');
+                            wrapper.className = 'relative group w-16 h-16 rounded-lg overflow-hidden border border-gray-200 flex-shrink-0';
+
+                            const img = document.createElement('img');
+                            img.className = 'w-full h-full object-cover';
+
+                            const removeBtn = document.createElement('button');
+                            removeBtn.type = 'button';
+                            removeBtn.className = 'absolute top-0.5 right-0.5 w-4 h-4 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-xs leading-none';
+                            removeBtn.innerHTML = '&times;';
+                            removeBtn.dataset.index = selectedFiles.indexOf(file).toString();
+
+                            removeBtn.addEventListener('click', function (e) {
+                                e.stopPropagation();
+                                const idx = parseInt(this.dataset.index);
+                                selectedFiles.splice(idx, 1);
+                                updatePreview();
+                            });
+
+                            wrapper.appendChild(img);
+                            wrapper.appendChild(removeBtn);
+                            previewThumbnails.appendChild(wrapper);
+
+                            reader.onload = function (e) {
+                                img.src = e.target.result;
+                            };
+                            reader.readAsDataURL(file);
+                        }
+
+                        selectedFiles = validFiles;
+
+                        if (selectedFiles.length === 0) {
+                            dropzoneEmpty.classList.remove('hidden');
+                            dropzonePreview.classList.add('hidden');
+                            submitBtn.disabled = true;
+                            submitBtn.querySelector('#upload-count').textContent = '';
+                            dropzoneError.textContent = errorMsg;
+                            dropzoneError.classList.toggle('hidden', !errorMsg);
+                            return;
+                        }
+
+                        dropzoneError.classList.add('hidden');
+                        dropzoneEmpty.classList.add('hidden');
+                        dropzonePreview.classList.remove('hidden');
+                        fileCount.textContent = selectedFiles.length + ' foto dipilih';
+                        uploadCount.textContent = '(' + selectedFiles.length + ')';
+                        submitBtn.disabled = false;
+                    }
+
+                    dropzone.addEventListener('click', function () {
+                        fileInput.click();
+                    });
+
+                    dropzone.addEventListener('dragover', function (e) {
+                        e.preventDefault();
+                        this.classList.add('border-indigo-500', 'bg-indigo-100');
+                    });
+
+                    dropzone.addEventListener('dragleave', function () {
+                        this.classList.remove('border-indigo-500', 'bg-indigo-100');
+                    });
+
+                    dropzone.addEventListener('drop', function (e) {
+                        e.preventDefault();
+                        this.classList.remove('border-indigo-500', 'bg-indigo-100');
+                        const files = Array.from(e.dataTransfer.files).filter(f => allowedTypes.includes(f.type));
+                        if (files.length > 0) {
+                            selectedFiles = selectedFiles.concat(files);
+                            updatePreview();
+                        }
+                    });
+
+                    fileInput.addEventListener('change', function () {
+                        const files = Array.from(this.files);
+                        if (files.length > 0) {
+                            selectedFiles = selectedFiles.concat(files);
+                            updatePreview();
+                        }
+                        this.value = '';
+                    });
+
+                    if (changeFilesBtn) {
+                        changeFilesBtn.addEventListener('click', function (e) {
+                            e.stopPropagation();
+                            fileInput.click();
+                        });
+                    }
+
+                    document.getElementById('gallery-upload-form').addEventListener('submit', function (e) {
+                        if (selectedFiles.length === 0) {
+                            e.preventDefault();
+                            return;
+                        }
+
+                        const dataTransfer = new DataTransfer();
+                        selectedFiles.forEach(f => dataTransfer.items.add(f));
+                        fileInput.files = dataTransfer.files;
+                    });
+                });
+            </script>
 
             <!-- Danger Zone -->
             <div class="bg-red-50 overflow-hidden shadow-sm sm:rounded-lg border border-red-200 mt-8">

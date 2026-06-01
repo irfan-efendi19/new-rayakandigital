@@ -39,9 +39,13 @@ class ThemePreviewController extends Controller
             'is_active' => true,
             'slug' => 'preview',
             'gallery_photos' => $preview->gallery_photos ?? [],
-            'gift_bank_name' => $preview->gift_bank_name,
-            'gift_bank_account' => $preview->gift_bank_account,
-            'gift_bank_holder' => $preview->gift_bank_holder,
+            'gift_banks' => [
+                [
+                    'bank_name' => $preview->gift_bank_name,
+                    'account_number' => $preview->gift_bank_account,
+                    'account_holder' => $preview->gift_bank_holder,
+                ],
+            ],
         ]);
 
         $invitation->exists = false;

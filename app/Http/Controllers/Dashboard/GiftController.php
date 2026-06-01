@@ -17,14 +17,32 @@ class GiftController extends Controller
             return back()->with('error', 'Fitur Kado Digital memerlukan minimal paket Silver.');
         }
 
+        $maxAccounts = $invitation->maxGiftAccounts();
+
         $validated = $request->validate([
-            'gift_bank_name' => 'nullable|string|max:255',
-            'gift_bank_account' => 'nullable|string|max:50',
-            'gift_bank_holder' => 'nullable|string|max:255',
-            'gift_ewallet_name' => 'nullable|string|max:255',
-            'gift_ewallet_number' => 'nullable|string|max:50',
+            'gift_banks' => 'nullable|array',
+            'gift_banks.*.bank_name' => 'required|string|max:255',
+            'gift_banks.*.account_number' => 'required|string|max:50',
+            'gift_banks.*.account_holder' => 'nullable|string|max:255',
+            'gift_ewallets' => 'nullable|array',
+            'gift_ewallets.*.wallet_name' => 'required|string|max:255',
+            'gift_ewallets.*.wallet_number' => 'required|string|max:50',
             'gift_qris_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
+
+        if (!$request->has('gift_banks')) {
+            $validated['gift_banks'] = [];
+        }
+
+        if (!$request->has('gift_ewallets')) {
+            $validated['gift_ewallets'] = [];
+        }
+
+        $totalAccounts = count($validated['gift_banks']) + count($validated['gift_ewallets']);
+
+        if ($totalAccounts > $maxAccounts) {
+            return back()->with('error', 'Maksimal ' . $maxAccounts . ' akun kado digital untuk paket Anda.');
+        }
 
         if ($request->hasFile('gift_qris_image')) {
             $validated['gift_qris_image'] = $request->file('gift_qris_image')

@@ -99,6 +99,13 @@ class PreviewData extends Model
             'gift_bank_name' => 'Bank Central Asia (BCA)',
             'gift_bank_account' => '1234567890',
             'gift_bank_holder' => 'Ani Suryani',
+            'gift_banks' => [
+                [
+                    'bank_name' => 'Bank Central Asia (BCA)',
+                    'account_number' => '1234567890',
+                    'account_holder' => 'Ani Suryani',
+                ],
+            ],
             'events' => [
                 [
                     'event_title' => 'Akad Nikah',
