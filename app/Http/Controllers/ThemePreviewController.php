@@ -49,6 +49,18 @@ class ThemePreviewController extends Controller
                     ],
                 ] : []
             ),
+            'gift_ewallets' => $preview->gift_ewallets ?? [],
+            'quote_content' => $preview->quote_content,
+            'quote_source' => $preview->quote_source,
+            'show_rsvp' => true,
+            'show_gallery' => true,
+            'show_gift' => true,
+            'show_stories' => true,
+            'show_countdown' => true,
+            'show_event_detail' => true,
+            'show_quote' => true,
+            'show_qr_checkin' => true,
+            'show_comments' => true,
         ]);
 
         $invitation->exists = false;
@@ -63,18 +75,17 @@ class ThemePreviewController extends Controller
         $invitation->setRelation('events', new Collection($dummyEvents));
 
         $dummyStories = [];
-        if ($preview->love_story) {
-            $story = new InvitationStory([
-                'story_date' => '',
-                'story_description' => $preview->love_story,
-                'order_position' => 0,
-            ]);
+        foreach ($preview->parsed_stories as $storyData) {
+            $story = new InvitationStory($storyData);
             $story->exists = false;
             $dummyStories[] = $story;
         }
         $invitation->setRelation('stories', new Collection($dummyStories));
 
-        $guest = new Guest(['name' => 'Nama Tamu']);
+        $guest = new Guest([
+            'name' => 'Nama Tamu',
+            'qr_code_token' => 'preview-demo-' . str_replace([' ', '.'], '', microtime()),
+        ]);
 
         $themeView = $theme->view_path;
 

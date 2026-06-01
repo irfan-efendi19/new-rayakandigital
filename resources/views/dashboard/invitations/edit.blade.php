@@ -722,51 +722,39 @@
                                     <div class="sm:col-span-6 border-t border-gray-100 pt-4">
                                         <h4 class="text-sm font-semibold text-gray-700 mb-3">
                                             Visibilitas Fitur</h4>
+                                        <p class="text-xs text-gray-500 mb-3">Atur tampilan setiap fitur di halaman undangan publik.</p>
                                         <div class="space-y-3">
+                                            @php
+                                                $toggles = [
+                                                    ['id' => 'show_rsvp', 'label' => 'RSVP', 'desc' => 'Tampilkan form konfirmasi kehadiran'],
+                                                    ['id' => 'show_gallery', 'label' => 'Galeri Foto', 'desc' => 'Tampilkan galeri foto momen indah'],
+                                                    ['id' => 'show_gift', 'label' => 'Kado Digital', 'desc' => 'Tampilkan informasi transfer bank & e-wallet'],
+                                                    ['id' => 'show_stories', 'label' => 'Cerita Cinta', 'desc' => 'Tampilkan timeline perjalanan cinta'],
+                                                    ['id' => 'show_countdown', 'label' => 'Hitung Mundur', 'desc' => 'Tampilkan timer hitung mundur ke acara'],
+                                                    ['id' => 'show_event_detail', 'label' => 'Detail Acara', 'desc' => 'Tampilkan informasi waktu & tempat'],
+                                                    ['id' => 'show_quote', 'label' => 'Kutipan', 'desc' => 'Tampilkan kutipan atau ayat suci'],
+                                                    ['id' => 'show_qr_checkin', 'label' => 'QR Check-In', 'desc' => 'Tampilkan kode QR unik tamu'],
+                                                    ['id' => 'show_comments', 'label' => 'Buku Tamu / Komentar', 'desc' => 'Tampilkan kolom ucapan dan doa'],
+                                                ];
+                                            @endphp
+                                            @foreach($toggles as $toggle)
                                             <div class="flex items-center justify-between">
                                                 <div class="text-sm">
-                                                    <label for="show_qr_checkin" class="font-medium text-gray-700">QR
-                                                        Check-In</label>
-                                                    <p class="text-gray-500 text-xs">
-                                                        Tampilkan kode
-                                                        QR unik tamu di
-                                                        halaman undangan
-                                                    </p>
+                                                    <label for="{{ $toggle['id'] }}" class="font-medium text-gray-700">{{ $toggle['label'] }}</label>
+                                                    <p class="text-gray-500 text-xs">{{ $toggle['desc'] }}</p>
                                                 </div>
                                                 <label class="relative inline-flex items-center cursor-pointer">
-                                                    <input type="hidden" name="show_qr_checkin" value="0">
-                                                    <input type="checkbox" name="show_qr_checkin" id="show_qr_checkin"
+                                                    <input type="hidden" name="{{ $toggle['id'] }}" value="0">
+                                                    <input type="checkbox" name="{{ $toggle['id'] }}" id="{{ $toggle['id'] }}"
                                                         value="1"
-                                                        {{ old('show_qr_checkin', $invitation->show_qr_checkin) ? 'checked' : '' }}
+                                                        {{ old($toggle['id'], $invitation->{$toggle['id']}) ? 'checked' : '' }}
                                                         class="sr-only peer">
                                                     <div
                                                         class="w-9 h-5 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600">
                                                     </div>
                                                 </label>
                                             </div>
-                                            <div class="flex items-center justify-between">
-                                                <div class="text-sm">
-                                                    <label for="show_comments" class="font-medium text-gray-700">Buku
-                                                        Tamu /
-                                                        Komentar</label>
-                                                    <p class="text-gray-500 text-xs">
-                                                        Tampilkan kolom
-                                                        ucapan dan doa
-                                                        di
-                                                        halaman undangan
-                                                    </p>
-                                                </div>
-                                                <label class="relative inline-flex items-center cursor-pointer">
-                                                    <input type="hidden" name="show_comments" value="0">
-                                                    <input type="checkbox" name="show_comments" id="show_comments"
-                                                        value="1"
-                                                        {{ old('show_comments', $invitation->show_comments) ? 'checked' : '' }}
-                                                        class="sr-only peer">
-                                                    <div
-                                                        class="w-9 h-5 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600">
-                                                    </div>
-                                                </label>
-                                            </div>
+                                            @endforeach
                                         </div>
                                     </div>
                                 </div>

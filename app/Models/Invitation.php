@@ -54,6 +54,13 @@ class Invitation extends Model
         'wa_message_template',
         'show_qr_checkin',
         'show_comments',
+        'show_rsvp',
+        'show_gallery',
+        'show_gift',
+        'show_stories',
+        'show_countdown',
+        'show_event_detail',
+        'show_quote',
         'quote_content',
         'quote_source',
     ];
@@ -71,6 +78,13 @@ class Invitation extends Model
             'wa_template_enabled' => 'boolean',
             'show_qr_checkin' => 'boolean',
             'show_comments' => 'boolean',
+            'show_rsvp' => 'boolean',
+            'show_gallery' => 'boolean',
+            'show_gift' => 'boolean',
+            'show_stories' => 'boolean',
+            'show_countdown' => 'boolean',
+            'show_event_detail' => 'boolean',
+            'show_quote' => 'boolean',
             'slug_change_count' => 'integer',
         ];
     }

@@ -24,11 +24,15 @@ class PreviewData extends Model
         'venue_address',
         'venue_maps_url',
         'love_story',
+        'stories',
         'gallery_photos',
         'gift_bank_name',
         'gift_bank_account',
         'gift_bank_holder',
         'gift_banks',
+        'gift_ewallets',
+        'quote_content',
+        'quote_source',
         'events',
     ];
 
@@ -37,7 +41,9 @@ class PreviewData extends Model
         return [
             'event_date_offset_days' => 'integer',
             'gallery_photos' => 'array',
+            'stories' => 'array',
             'gift_banks' => 'array',
+            'gift_ewallets' => 'array',
             'events' => 'array',
         ];
     }
@@ -45,6 +51,29 @@ class PreviewData extends Model
     public function getEventDateAttribute(): string
     {
         return now()->addDays($this->event_date_offset_days)->format('Y-m-d');
+    }
+
+    public function getParsedStoriesAttribute(): array
+    {
+        $stories = $this->stories ?? [];
+
+        if (empty($stories) && $this->love_story) {
+            return [
+                [
+                    'story_date' => '',
+                    'story_description' => $this->love_story,
+                    'order_position' => 0,
+                ],
+            ];
+        }
+
+        return array_map(function ($story, $index) {
+            return [
+                'story_date' => $story['story_date'] ?? '',
+                'story_description' => $story['story_description'] ?? '',
+                'order_position' => $index,
+            ];
+        }, $stories, array_keys($stories));
     }
 
     public function getParsedEventsAttribute(): array
@@ -93,6 +122,20 @@ class PreviewData extends Model
             'venue_address' => 'Jl. Asia Afrika No.8, Senayan, Jakarta Selatan 10270',
             'venue_maps_url' => 'https://maps.google.com/?q=-6.2088,106.8456',
             'love_story' => 'Kami bertemu di bangku kuliah pada tahun 2020. Sebuah perkenalan sederhana yang tumbuh menjadi cinta yang indah.',
+            'stories' => [
+                [
+                    'story_date' => 'Januari 2020',
+                    'story_description' => 'Pertama kali bertemu di acara orientasi kampus. Sebuah perkenalan singkat yang tidak pernah kami duga akan menjadi awal dari sebuah perjalanan indah.',
+                ],
+                [
+                    'story_date' => 'Desember 2022',
+                    'story_description' => 'Mulai serius menjalin hubungan dan saling mengenal lebih dalam. Banyak suka dan duka yang kami lalui bersama.',
+                ],
+                [
+                    'story_date' => 'Maret 2026',
+                    'story_description' => 'Dengan penuh kebahagiaan, kami memutuskan untuk melangkah ke jenjang yang lebih serius dan mengikat janji suci pernikahan.',
+                ],
+            ],
             'gallery_photos' => [
                 'https://picsum.photos/seed/wedding1/400/400',
                 'https://picsum.photos/seed/wedding2/400/400',
@@ -108,6 +151,18 @@ class PreviewData extends Model
                     'account_holder' => 'Ani Suryani',
                 ],
             ],
+            'gift_ewallets' => [
+                [
+                    'wallet_name' => 'GoPay',
+                    'wallet_number' => '081234567890',
+                ],
+                [
+                    'wallet_name' => 'OVO',
+                    'wallet_number' => '081234567890',
+                ],
+            ],
+            'quote_content' => 'Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu pasangan hidup dari jenismu sendiri supaya kamu cenderung dan merasa tenteram kepadanya, dan dijadikan-Nya di antaramu rasa kasih dan sayang.',
+            'quote_source' => 'QS. Ar-Rum: 21',
             'events' => [
                 [
                     'event_title' => 'Akad Nikah',

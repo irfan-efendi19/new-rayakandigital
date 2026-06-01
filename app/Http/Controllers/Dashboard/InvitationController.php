@@ -149,6 +149,15 @@ class InvitationController extends Controller
                 'music_url' => 'nullable|string',
                 'quote_content' => 'nullable|string',
                 'quote_source' => 'nullable|string|max:150',
+                'show_qr_checkin' => 'boolean',
+                'show_comments' => 'boolean',
+                'show_rsvp' => 'boolean',
+                'show_gallery' => 'boolean',
+                'show_gift' => 'boolean',
+                'show_stories' => 'boolean',
+                'show_countdown' => 'boolean',
+                'show_event_detail' => 'boolean',
+                'show_quote' => 'boolean',
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
             file_put_contents(storage_path('logs/debug.txt'), 'VALIDATION FAILED: '.json_encode([

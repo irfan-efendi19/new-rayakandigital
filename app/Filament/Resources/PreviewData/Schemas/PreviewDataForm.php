@@ -77,12 +77,38 @@ class PreviewDataForm
                             ->url()
                             ->maxLength(255),
                     ])->columns(2),
-                Section::make('Cerita & Galeri')
+                Section::make('Kutipan')
                     ->schema([
-                        Textarea::make('love_story')
-                            ->label('Cerita Cinta')
+                        Textarea::make('quote_content')
+                            ->label('Isi Kutipan / Ayat Suci')
                             ->nullable()
-                            ->rows(4),
+                            ->rows(3)
+                            ->helperText('Kutipan yang akan ditampilkan di halaman undangan.'),
+                        TextInput::make('quote_source')
+                            ->label('Sumber Kutipan')
+                            ->nullable()
+                            ->maxLength(150)
+                            ->placeholder('Contoh: QS. Ar-Rum: 21, Kahlil Gibran'),
+                    ]),
+                Section::make('Cerita Cinta (Timeline)')
+                    ->schema([
+                        Repeater::make('stories')
+                            ->label('Momen Cerita Cinta')
+                            ->schema([
+                                TextInput::make('story_date')
+                                    ->label('Waktu / Tanggal')
+                                    ->required()
+                                    ->maxLength(255)
+                                    ->placeholder('Contoh: Januari 2020, 12 Desember 2025, Tahun 2022'),
+                                Textarea::make('story_description')
+                                    ->label('Cerita')
+                                    ->required()
+                                    ->rows(3),
+                            ])->addActionLabel('+ Tambah Momen')
+                            ->helperText('Tambahkan momen-momen berharga dalam timeline perjalanan cinta Anda.'),
+                    ]),
+                Section::make('Galeri Foto')
+                    ->schema([
                         Textarea::make('gallery_photos')
                             ->label('URL Foto Galeri (satu URL per baris)')
                             ->nullable()
@@ -109,6 +135,19 @@ class PreviewDataForm
                                     ->nullable()
                                     ->maxLength(100),
                             ])->columns(2)->addActionLabel('+ Tambah Bank'),
+                        Repeater::make('gift_ewallets')
+                            ->label('Dompet Digital (E-Wallet)')
+                            ->schema([
+                                TextInput::make('wallet_name')
+                                    ->label('Nama E-Wallet')
+                                    ->required()
+                                    ->maxLength(100)
+                                    ->placeholder('GoPay, OVO, Dana, dll.'),
+                                TextInput::make('wallet_number')
+                                    ->label('Nomor E-Wallet')
+                                    ->required()
+                                    ->maxLength(50),
+                            ])->columns(2)->addActionLabel('+ Tambah E-Wallet'),
                     ]),
                 Section::make('Daftar Acara (Multi-Event)')
                     ->schema([
