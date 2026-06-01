@@ -138,13 +138,15 @@ class PreviewDataForm
                     ]),
                 Section::make('Galeri Foto')
                     ->schema([
-                        Textarea::make('gallery_photos')
-                            ->label('URL Foto Galeri (satu URL per baris)')
-                            ->nullable()
-                            ->rows(3)
-                            ->helperText('Masukkan URL gambar, satu per baris.')
-                            ->formatStateUsing(fn ($state) => is_array($state) ? implode("\n", $state) : ($state ?? ''))
-                            ->dehydrateStateUsing(fn ($state) => array_values(array_filter(array_map('trim', explode("\n", $state ?? ''))))),
+                        FileUpload::make('gallery_photos')
+                            ->label('Foto Galeri')
+                            ->image()
+                            ->multiple()
+                            ->disk('public')
+                            ->directory('preview/gallery')
+                            ->imagePreviewHeight('150')
+                            ->maxSize(2048)
+                            ->maxFiles(20),
                     ]),
                 Section::make('Kado Digital')
                     ->schema([
