@@ -2,9 +2,11 @@
 
 namespace App\Filament\Resources\Themes\Schemas;
 
+use App\Models\ThemeCategory;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-use Filament\Forms\Components\FileUpload;
 use Filament\Schemas\Schema;
 
 class ThemeForm
@@ -13,6 +15,12 @@ class ThemeForm
     {
         return $schema
             ->components([
+                Select::make('theme_category_id')
+                    ->label('Category')
+                    ->relationship('themeCategory', 'name')
+                    ->options(ThemeCategory::pluck('name', 'id'))
+                    ->nullable(),
+
                 TextInput::make('name')
                     ->required()
                     ->maxLength(255),

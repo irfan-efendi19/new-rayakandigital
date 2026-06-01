@@ -1,47 +1,45 @@
-# PRODUCT REQUIREMENT DOCUMENT (PRD) - UPDATE VISUAL TEMA (PORTRAIT ONLY)
-## Modul: Standardisasi Gambar Thumbnail Tema 9:16 (Landing Page & Admin Filament)
-**Versi:** 1.1 (Spesifikasi Eksklusif Portrait - Filament v3 & Laravel 13 Optimized)  
-**Tanggal:** 1 Juni 2026  
+# PRODUCT REQUIREMENT DOCUMENT (PRD) - UPDATE VISUAL KATALOG
+## Modul: Filter Tab Kategori Tema Dinamis (Pilihan Tema Grid Filter)
+**Versi:** 1.2 (Spesifikasi Frontend & Query - Laravel 13 & Tailwind CSS)  
+**Tanggal:** 2 Juni 2026  
 **Status:** Approved  
-**Target Komponen:** Database Schema, Filament Resource Form, Media Storage Layer, & Landing Page View  
+**Target Komponen:** Landing Page View (Katalog), AJAX Controller, & Badge Count Real-Time  
 
 ---
 
 ## 1. DESKRIPSI FITUR & ATURAN BISNIS (BUSINESS RULES)
 
 ### 1.1 Deskripsi Fitur
-Fitur ini memfokuskan standardisasi aset gambar pratinjau (*thumbnail*) tema undangan pernikahan ke dalam satu format tunggal, yaitu **Portrait Mobile (9:16)**. Rasio ini dipilih karena mayoritas tamu mengakses undangan melalui perangkat seluler (*smartphone*), sehingga thumbnail harus mencerminkan tampilan visual asli mobile secara presisi. Aset ini diunggah oleh admin melalui panel **Filament** dan ditampilkan langsung pada katalog **Landing Page**.
+Fitur ini mengimplementasikan antarmuka tombol pill/tab filter di atas grid katalog *landing page*. Pengguna dapat mengeklik kategori tertentu (misal: *Special, Luxury, 3D Motion, Art, Interaktif, Tema Adat, Tanpa Foto*) untuk menyaring daftar tema berasio 9:16 secara instan tanpa perlu memuat ulang seluruh halaman (*zero-refresh filtering*).
 
 ### 1.2 Aturan Bisnis (Business Rules)
-1. **Satu Tipe Rasio Baku (9:16):** Setiap entitas data tema (`themes`) hanya menyediakan satu kolom unggahan gambar pratinjau yang dikunci kaku pada rasio portrait 9:16 (`thumbnail_portrait`).
-2. **Standardisasi File & Kompresi:** Gambar yang diunggah wajib berupa berkas `.webp` atau `.jpg` dengan ukuran maksimal 500 KB untuk menjaga kecepatan pemuatan halaman katalog.
-3. **Kesesuaian Desain Kartu:** Pada *landing page*, tata letak kartu katalog akan mengadopsi bingkai portrait vertikal yang konsisten, baik saat diakses melalui perangkat mobile maupun desktop.
+1. **Badge Count Dinamis:** Setiap tombol kategori wajib menampilkan angka penanda (badge) yang menunjukkan jumlah total tema aktif di dalam kategori tersebut secara akurat (Contoh: `SPECIAL 13`, `LUXURY 6`).
+2. **State Aktif (Visual Cue):** Tombol kategori yang sedang dipilih wajib berubah warna menjadi solid (Warna Teal/Emerald sesuai desain) sementara tombol lainnya tetap berstatus *outline/ghost button*.
+3. **Mekanisme Penyaringan Fast-Switching:** Proses perpindahan filter direkomendasikan menggunakan JavaScript (Alpine.js / Vanilla JS dataset) untuk performa instan, atau AJAX fetching jika total aset tema sudah melebihi 100 item.
 
 ---
 
-## 2. BLUEPRINT STRUKTUR DATABASE (MIGRATION)
+## 2. OPTIMALISASI BACKEND QUERY (LARAVEL 13)
 
-Jalankan skrip migrasi berikut untuk menambahkan kolom penyimpanan berkas thumbnail portrait pada tabel `themes`:
+Gunakan *Eager Loading* disertai fungsi `withCount()` pada controller *landing page* Anda agar angka badge pada tombol kategori terhitung otomatis dan efisien tanpa membebani performa database:
 
 ```php
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+namespace App\Http\Controllers;
 
-return new class extends Migration
+use App\Models\ThemeCategory;
+use App\Models\Theme;
+use Illuminate\Http\Request;
+
+class LandingPageController extends Controller
 {
-    public function up(): void
+    public function index()
     {
-        Schema::table('themes', function (Blueprint $table) {
-            // Menampung path berkas thumbnail resolusi Portrait Mobile (9:16)
-            $table->string('thumbnail_portrait')->nullable()->after('slug');
-        });
-    }
+        // Mengambil semua kategori beserta jumlah total tema yang aktif di dalamnya
+        $categories = ThemeCategory::withCount('themes')->get();
 
-    public function down(): void
-    {
-        Schema::table('themes', function (Blueprint $table) {
-            $table->dropColumn(['thumbnail_portrait']);
-        });
+        // Mengambil seluruh master data tema berelasi untuk di-render di catalog grid
+        $themes = Theme::with('category')->where('is_active', true)->get();
+
+        return view('landing_page', compact('categories', 'themes'));
     }
-};
+}

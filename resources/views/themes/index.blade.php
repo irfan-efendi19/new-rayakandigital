@@ -11,9 +11,46 @@
                 </p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            @if($categories->isNotEmpty())
+            <div class="flex flex-wrap justify-center gap-3 mb-10" id="categoryFilters">
+                <button
+                    type="button"
+                    class="category-filter px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 border-2 active"
+                    data-category="all"
+                    style="border-color: #0d9488; background-color: #0d9488; color: white;"
+                    onmouseover="this.style.opacity='0.9'"
+                    onmouseout="this.style.opacity='1'"
+                >
+                    Semua
+                    <span class="ml-1.5 inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full text-xs font-bold"
+                        style="background-color: rgba(255,255,255,0.25); color: white;">
+                        {{ $themes->count() }}
+                    </span>
+                </button>
+
+                @foreach($categories as $category)
+                <button
+                    type="button"
+                    class="category-filter px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 border-2"
+                    data-category="{{ $category->id }}"
+                    style="border-color: #d1d5db; background-color: transparent; color: #374151;"
+                    onmouseover="this.style.borderColor='#0d9488'; this.style.color='#0d9488'"
+                    onmouseout="if(!this.classList.contains('active')){this.style.borderColor='#d1d5db'; this.style.color='#374151';}"
+                >
+                    {{ $category->name }}
+                    <span class="ml-1.5 inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full text-xs font-bold"
+                        style="background-color: #e5e7eb; color: #374151;">
+                        {{ $category->themes_count }}
+                    </span>
+                </button>
+                @endforeach
+            </div>
+            @endif
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="themeGrid">
                 @forelse($themes as $theme)
-                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 group">
+                    <div class="theme-card bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 group"
+                        data-category="{{ $theme->theme_category_id ?? '0' }}">
                         <div class="relative aspect-[9/16] bg-gradient-to-br from-gray-100 to-gray-50 overflow-hidden">
                             @if($theme->thumbnail_portrait)
                                 <img src="{{ Storage::url($theme->thumbnail_portrait) }}" alt="{{ $theme->name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
@@ -30,7 +67,7 @@
 
                             @if($theme->is_premium)
                                 <span class="absolute top-3 right-3 inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-gradient-to-r from-amber-400 to-amber-500 text-white shadow-sm">
-                                    ✨ Premium
+                                    Premium
                                 </span>
                             @else
                                 <span class="absolute top-3 right-3 inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700">
@@ -48,7 +85,7 @@
                                     target="_blank"
                                     class="flex-1 text-center px-4 py-2.5 border-2 border-indigo-200 text-indigo-600 rounded-xl text-sm font-semibold hover:bg-indigo-50 hover:border-indigo-300 transition-all duration-200"
                                 >
-                                    👁 Pratinjau
+                                    Pratinjau
                                 </a>
 
                                 @auth
@@ -78,4 +115,49 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const filters = document.querySelectorAll('.category-filter');
+            const cards = document.querySelectorAll('.theme-card');
+
+            filters.forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const category = this.dataset.category;
+
+                    filters.forEach(f => {
+                        f.classList.remove('active');
+                        f.style.backgroundColor = 'transparent';
+                        f.style.color = '#374151';
+                        f.style.borderColor = '#d1d5db';
+                        const badge = f.querySelector('span');
+                        if (badge) {
+                            badge.style.backgroundColor = '#e5e7eb';
+                            badge.style.color = '#374151';
+                        }
+                    });
+
+                    this.classList.add('active');
+                    this.style.backgroundColor = '#0d9488';
+                    this.style.color = 'white';
+                    this.style.borderColor = '#0d9488';
+                    const activeBadge = this.querySelector('span');
+                    if (activeBadge) {
+                        activeBadge.style.backgroundColor = 'rgba(255,255,255,0.25)';
+                        activeBadge.style.color = 'white';
+                    }
+
+                    cards.forEach(card => {
+                        if (category === 'all' || card.dataset.category === category) {
+                            card.style.display = '';
+                            card.style.opacity = '0';
+                            setTimeout(() => { card.style.opacity = '1'; }, 20);
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        });
+    </script>
 </x-public-layout>

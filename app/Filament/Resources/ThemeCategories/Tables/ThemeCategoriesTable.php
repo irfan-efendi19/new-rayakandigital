@@ -1,38 +1,38 @@
 <?php
 
-namespace App\Filament\Resources\Themes\Tables;
+namespace App\Filament\Resources\ThemeCategories\Tables;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
-class ThemesTable
+class ThemeCategoriesTable
 {
     public static function configure(Table $table): Table
     {
         return $table
             ->columns([
-                \Filament\Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
+                    ->label('Name')
                     ->searchable()
                     ->sortable(),
-                \Filament\Tables\Columns\TextColumn::make('themeCategory.name')
-                    ->label('Category')
+                TextColumn::make('slug')
+                    ->label('Slug')
                     ->searchable()
                     ->sortable()
                     ->badge(),
-                \Filament\Tables\Columns\TextColumn::make('view_path')
-                    ->searchable(),
-                \Filament\Tables\Columns\IconColumn::make('is_premium')
-                    ->boolean()
-                    ->sortable(),
-                \Filament\Tables\Columns\IconColumn::make('is_active')
-                    ->boolean()
+                TextColumn::make('description')
+                    ->label('Description')
+                    ->searchable()
+                    ->limit(50),
+                TextColumn::make('themes_count')
+                    ->label('Themes')
+                    ->counts('themes')
                     ->sortable(),
             ])
-            ->filters([
-                //
-            ])
+            ->filters([])
             ->recordActions([
                 EditAction::make(),
             ])

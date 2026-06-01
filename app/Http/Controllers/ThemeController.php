@@ -3,13 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Theme;
+use App\Models\ThemeCategory;
 
 class ThemeController extends Controller
 {
     public function index()
     {
-        $themes = Theme::where('is_active', true)->get();
+        $categories = ThemeCategory::withCount('themes')->get();
 
-        return view('themes.index', compact('themes'));
+        $themes = Theme::with('themeCategory')
+            ->where('is_active', true)
+            ->get();
+
+        return view('themes.index', compact('categories', 'themes'));
     }
 }
