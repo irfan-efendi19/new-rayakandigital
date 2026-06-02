@@ -1,85 +1,49 @@
-# Product Requirements Document (PRD)
-
-## 1. Ringkasan
-Pembaruan struktur implementasi untuk:
-- **Halaman Landing Page** → `resources/views/landing_page.blade.php`
-- **Halaman Semua Tema (Catalog Page)** → `resources/views/all_themes.blade.php`
-
-Tujuan: Menyatukan masing-masing halaman ke dalam satu berkas Blade tunggal dengan gaya visual tombol filter sesuai referensi, serta grid portrait 9:16 yang dikendalikan instan menggunakan Alpine.js.
+# PRODUCT REQUIREMENT DOCUMENT (PRD)
+## MODUL: INTEGRASI LARAVEL SOCIALITE PADA LARAVEL BREEZE AUTHENTICATION
+**Versi:** 1.5 (Spesifikasi Fitur OAuth - Laravel 13, Laravel Breeze, & Tailwind-Configured)  
+**Tanggal:** 3 Juni 2026  
+**Status:** Approved  
+**Author:** Mochammad Irfan Efendi  
 
 ---
 
-## 2. Tujuan Produk
-- Menyederhanakan struktur file Blade agar lebih mudah dikelola.
-- Memberikan pengalaman pengguna yang konsisten dengan filter interaktif.
-- Menampilkan grid tema portrait (9:16) dengan layout responsif.
-- Memanfaatkan Alpine.js untuk interaksi instan tanpa reload.
+## 1. DESKRIPSI FITUR & ATURAN BISNIS (BUSINESS RULES)
+
+### 1.1 Deskripsi Fitur
+Fitur ini mengintegrasikan **Laravel Socialite (OAuth Google)** ke dalam sistem autentikasi **Laravel Breeze** yang sudah ada. Tujuannya adalah mempermudah *user* (pasangan pengantin) untuk mendaftar (*Register*) atau masuk (*Login*) ke dalam dashboard pembuatan undangan digital hanya dengan satu klik menggunakan akun Google mereka.
+
+### 1.2 Aturan Bisnis (Business Rules)
+1. **Satu Akun Satu Email:** Jika email Google *user* sudah terdaftar melalui jalur pendaftaran regular (email & password), sistem akan otomatis menghubungkan (*bind*) akun tersebut ke Google OAuth saat *user* mencoba login menggunakan Google.
+2. **Password Bypass untuk Akun Sosial:** Pengguna yang mendaftar secara eksklusif via Google akan dibuatkan password acak (*random secure password*) di database. Mereka tidak wajib mengisi password kecuali jika nantinya menggunakan fitur *Forgot Password*.
+3. **Penyimpanan Profil:** Foto profil akun Google pengguna wajib ditarik saat registrasi pertama kali dan disimpan ke dalam kolom `avatar` pada tabel `users`.
 
 ---
 
-## 3. Lingkup
-### 3.1 Landing Page
-- File: `landing_page.blade.php`
-- Konten:
-  - Hero section (judul, deskripsi singkat, CTA).
-  - Tombol filter kategori (visual sesuai referensi).
-  - Grid tema portrait 9:16.
-  - Integrasi Alpine.js untuk filter instan.
+## 2. BLUEPRINT STRUKTUR DATABASE (MIGRATION)
 
-### 3.2 Catalog Page
-- File: `all_themes.blade.php`
-- Konten:
-  - Header dengan judul "Semua Tema".
-  - Tombol filter kategori (konsisten dengan Landing Page).
-  - Grid tema portrait 9:16.
-  - Alpine.js untuk filter instan.
+Jalankan skrip migrasi berikut untuk menambahkan kolom token sosial dan avatar pada tabel `users`:
 
----
+```php
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-## 4. Fitur Utama
-- **Filter Button Styling**: Tombol filter dengan gaya visual sesuai referensi gambar (rounded, hover effect, active state).
-- **Grid Layout**: 
-  - Portrait ratio 9:16.
-  - Responsive (Tailwind CSS).
-  - Minimal 3 kolom pada desktop, 2 kolom tablet, 1 kolom mobile.
-- **Alpine.js Integration**:
-  - State management untuk filter.
-  - Instan toggle kategori tanpa reload.
-  - Animasi transisi sederhana (fade/scale).
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('google_id')->nullable()->after('password')->unique();
+            $table->string('google_token')->nullable()->after('google_id');
+            $table->string('google_refresh_token')->nullable()->after('google_token');
+            $table->string('avatar')->nullable()->after('email'); // Menyimpan URL foto profil Google
+        });
+    }
 
----
-
-## 5. Implementasi Teknis
-### 5.1 Struktur File
-- `resources/views/landing_page.blade.php`
-- `resources/views/all_themes.blade.php`
-
-### 5.2 Contoh Blade (Landing Page)
-```blade
-<div x-data="{ filter: 'all' }">
-    <!-- Tombol Filter -->
-    <div class="flex gap-2 mb-4">
-        <button 
-            :class="filter === 'all' ? 'bg-blue-600 text-white' : 'bg-gray-200'" 
-            @click="filter = 'all'">
-            Semua
-        </button>
-        <button 
-            :class="filter === 'tema1' ? 'bg-blue-600 text-white' : 'bg-gray-200'" 
-            @click="filter = 'tema1'">
-            Tema 1
-        </button>
-        <!-- Tambahkan tombol lain sesuai kategori -->
-    </div>
-
-    <!-- Grid Tema -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-        <template x-for="item in items" :key="item.id">
-            <div 
-                x-show="filter === 'all' || item.category === filter"
-                class="aspect-[9/16] bg-gray-100 rounded shadow">
-                <img :src="item.image" alt="" class="w-full h-full object-cover rounded">
-            </div>
-        </template>
-    </div>
-</div>
+    public function down(): void
+    {
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn(['google_id', 'google_token', 'google_refresh_token', 'avatar']);
+        });
+    }
+};

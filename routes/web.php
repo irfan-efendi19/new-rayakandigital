@@ -11,6 +11,7 @@ use App\Http\Controllers\Dashboard\WhatsAppPaymentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvitationRenderController;
+use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RsvpController;
@@ -33,6 +34,12 @@ Route::view('/syarat-ketentuan', 'syarat-ketentuan')->name('syarat-ketentuan');
 Route::view('/kebijakan-privasi', 'kebijakan-privasi')->name('kebijakan-privasi');
 Route::view('/tentang-kami', 'tentang-kami')->name('tentang-kami');
 Route::view('/hubungi-kami', 'hubungi-kami')->name('hubungi-kami');
+
+// Google OAuth
+Route::prefix('auth/google')->name('google.')->group(function () {
+    Route::get('/', [SocialiteController::class, 'redirectToGoogle'])->name('redirect');
+    Route::get('/callback', [SocialiteController::class, 'handleGoogleCallback'])->name('callback');
+});
 
 // Dashboard Routes
 Route::middleware(['auth', 'verified'])->group(function () {
