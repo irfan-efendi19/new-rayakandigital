@@ -54,28 +54,28 @@
             <!-- CTA + Auth + Hamburger -->
             <div class="flex items-center gap-3">
                 @if (Route::has('login'))
-                <div class="hidden sm:flex items-center gap-3">
-                    @auth
-                    <a href="{{ route('dashboard') }}"
-                        class="px-4 py-2 text-gray-600 hover:text-orange-600 font-medium transition-all duration-300 hover:scale-105">
-                        Dashboard
-                    </a>
-                    @else
-                    <a href="{{ route('login') }}"
-                        class="px-4 py-2 text-gray-600 hover:text-orange-600 font-medium transition-all duration-300 hover:scale-105">
-                        Masuk
-                    </a>
-                    @if (Route::has('register'))
-                    <a href="{{ route('register') }}"
-                        class="relative overflow-hidden group bg-gradient-to-r from-orange-500 to-orange-600 text-white px-5 py-2 rounded-full font-medium transition-all duration-300 hover:shadow-lg hover:scale-105 active:scale-95">
-                        <span class="relative z-10">Daftar Gratis</span>
-                        <div
-                            class="absolute inset-0 bg-gradient-to-r from-orange-600 to-orange-700 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                        </div>
-                    </a>
-                    @endif
-                    @endauth
-                </div>
+                    <div class="hidden sm:flex items-center gap-3">
+                        @auth
+                            <a href="{{ route('dashboard') }}"
+                                class="px-4 py-2 relative overflow-hidden group bg-gradient-to-r from-orange-500 to-orange-600 text-white px-5 py-2 rounded-full font-medium transition-all duration-300 hover:shadow-lg hover:scale-105 active:scale-95">
+                                Dashboard
+                            </a>
+                        @else
+                        <a href="{{ route('login') }}"
+                            class="px-4 py-2 text-gray-600 hover:text-orange-600 font-medium transition-all duration-300 hover:scale-105">
+                            Masuk
+                        </a>
+                        @if (Route::has('register'))
+                        <a href="{{ route('register') }}"
+                            class="relative overflow-hidden group bg-gradient-to-r from-orange-500 to-orange-600 text-white px-5 py-2 rounded-full font-medium transition-all duration-300 hover:shadow-lg hover:scale-105 active:scale-95">
+                            <span class="relative z-10">Daftar Gratis</span>
+                            <div
+                                class="absolute inset-0 bg-gradient-to-r from-orange-600 to-orange-700 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                            </div>
+                        </a>
+                        @endif
+                        @endauth
+                    </div>
                 @endif
 
                 <!-- Hamburger Button with animation -->

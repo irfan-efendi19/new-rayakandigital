@@ -60,13 +60,16 @@
 
                             <hr class="border-gray-200" />
 
-                            <div>
+                            <div x-data="{ selected: '{{ $selectedTheme }}' }">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Pilih Tema</label>
                                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                     @foreach($themes as $tema)
                                         @php $themeKey = str_replace('themes.', '', $tema->view_path); @endphp
-                                        <label class="relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none hover:border-indigo-500 transition-colors">
-                                            <input type="radio" name="theme" value="{{ $themeKey }}" class="sr-only" {{ $selectedTheme === $themeKey ? 'checked' : '' }}>
+                                        <label @click="selected = '{{ $themeKey }}'"
+                                            :class="selected === '{{ $themeKey }}' ? 'border-indigo-500 ring-2 ring-indigo-500' : 'border-gray-300 hover:border-indigo-400'"
+                                            class="relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm transition-all duration-200">
+                                            <input type="radio" name="theme" value="{{ $themeKey }}" class="sr-only"
+                                                :checked="selected === '{{ $themeKey }}'">
                                             <span class="flex flex-1">
                                                 <span class="flex flex-col">
                                                     <span class="block text-sm font-medium text-gray-900">{{ $tema->name }}</span>
@@ -75,7 +78,7 @@
                                                     </span>
                                                 </span>
                                             </span>
-                                            <svg class="h-5 w-5 text-indigo-600 {{ $selectedTheme === $themeKey ? '' : 'hidden' }}" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" /></svg>
+                                            <svg x-show="selected === '{{ $themeKey }}'" class="h-5 w-5 text-indigo-600" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" /></svg>
                                         </label>
                                     @endforeach
                                 </div>
