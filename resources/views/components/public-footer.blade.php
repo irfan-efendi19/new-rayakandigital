@@ -31,30 +31,23 @@
             <p class="text-[11px] font-semibold tracking-widest uppercase text-footer-subtle mb-5">Layanan</p>
             <ul class="flex flex-col gap-3.5">
                 <li>
-                    <a href="#"
+                    <a href="{{ route('undangan-web') }}"
                         class="nav-link text-sm text-footer-link hover:text-brand transition-colors duration-150 inline-flex items-center gap-1.5">
                         Undangan Web
                         <span class="arrow text-xs">→</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#"
+                    <a href="{{ route('buku-tamu') }}"
                         class="nav-link text-sm text-footer-link hover:text-brand transition-colors duration-150 inline-flex items-center gap-1.5">
-                        Undangan Video
+                        Buku Tamu Digital
                         <span class="arrow text-xs">→</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#"
+                    <a href="{{ route('live-streaming') }}"
                         class="nav-link text-sm text-footer-link hover:text-brand transition-colors duration-150 inline-flex items-center gap-1.5">
-                        Custom Domain
-                        <span class="arrow text-xs">→</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#"
-                        class="nav-link text-sm text-footer-link hover:text-brand transition-colors duration-150 inline-flex items-center gap-1.5">
-                        WhatsApp Support
+                        Live Streaming
                         <span class="arrow text-xs">→</span>
                     </a>
                 </li>

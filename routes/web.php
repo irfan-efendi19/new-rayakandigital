@@ -25,6 +25,11 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/semua-tema', [ThemeController::class, 'index'])->name('themes.index');
 Route::get('/preview/{themeSlug}', [ThemePreviewController::class, 'show'])->name('theme.preview');
 
+// Public Pages
+Route::view('/undangan-web', 'undangan-web')->name('undangan-web');
+Route::view('/buku-tamu', 'buku-tamu')->name('buku-tamu');
+Route::view('/live-streaming', 'live-streaming')->name('live-streaming');
+
 // Dashboard Routes
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
