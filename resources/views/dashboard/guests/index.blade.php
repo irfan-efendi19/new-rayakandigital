@@ -1,35 +1,52 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Tamu Undangan: {{ $invitation->title }}
-            </h2>
-            <div class="flex gap-2">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+            <div>
+                <h2 class="font-heading text-2xl font-bold text-secondary-800">
+                    Tamu Undangan: {{ $invitation->title }}
+                </h2>
+                <p class="text-sm text-neutral-500 mt-0.5">Kelola daftar tamu dan kirim undangan WhatsApp.</p>
+            </div>
+            <div class="flex flex-wrap gap-2">
                 @if($invitation->hasFeature('qr_checkin'))
-                    <a href="{{ route('dashboard.invitations.guestbook', $invitation) }}" class="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-md text-sm font-medium hover:bg-indigo-200">
-                        📋 Buku Tamu (Scanner)
+                    <a href="{{ route('dashboard.invitations.guestbook', $invitation) }}"
+                       class="inline-flex items-center gap-1.5 bg-primary-50 text-primary-700 px-4 py-2 rounded-xl text-sm font-medium hover:bg-primary-100 transition-colors">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+                        </svg>
+                        Buku Tamu (Scanner)
                     </a>
                 @endif
-                <a href="{{ route('dashboard.invitations.whatsapp.logs', $invitation) }}" class="bg-emerald-100 text-emerald-700 px-4 py-2 rounded-md text-sm font-medium hover:bg-emerald-200">
+                <a href="{{ route('dashboard.invitations.whatsapp.logs', $invitation) }}"
+                   class="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-700 px-4 py-2 rounded-xl text-sm font-medium hover:bg-emerald-100 transition-colors">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                    </svg>
                     Log WA
                 </a>
-                <a href="{{ route('dashboard.invitations.show', $invitation) }}" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-50">
-                    &larr; Kembali
+                <a href="{{ route('dashboard.invitations.show', $invitation) }}"
+                   class="inline-flex items-center gap-1.5 bg-white border border-neutral-200 text-neutral-700 px-4 py-2 rounded-xl text-sm font-medium hover:bg-neutral-50 transition-colors">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                    Kembali
                 </a>
             </div>
         </div>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+    <div class="py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
 
             @if(session('import_errors') && count(session('import_errors')) > 0)
-                <div class="bg-amber-50 border border-amber-200 text-amber-900 px-4 py-4 rounded-xl relative shadow-sm space-y-2 mb-4">
+                <div class="bg-amber-50 border border-amber-200 text-amber-900 px-5 py-4 rounded-2xl shadow-soft space-y-2">
                     <div class="flex items-center gap-2 font-bold text-amber-800">
-                        <span>⚠️</span>
+                        <svg class="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                        </svg>
                         <span>Beberapa baris dilewati / bermasalah:</span>
                     </div>
-                    <ul class="list-disc list-inside text-xs space-y-1 text-amber-700">
+                    <ul class="list-disc list-inside text-xs space-y-1 text-amber-700 ml-2">
                         @foreach(session('import_errors') as $error)
                             <li>{{ $error }}</li>
                         @endforeach
@@ -38,13 +55,13 @@
             @endif
 
             {{-- WhatsApp Template Editor --}}
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="bg-white rounded-2xl shadow-soft border border-neutral-100">
                 <div class="p-6">
                     <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-medium text-gray-900">Template Pesan WhatsApp</h3>
-                        <label class="inline-flex items-center gap-2 cursor-pointer">
-                            <span class="text-sm text-gray-600">Aktifkan Template Custom</span>
-                            <input type="checkbox" id="wa_template_toggle" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
+                        <h3 class="font-heading text-lg font-bold text-secondary-800">Template Pesan WhatsApp</h3>
+                        <label class="inline-flex items-center gap-2 cursor-pointer select-none">
+                            <span class="text-sm text-neutral-600">Custom Template</span>
+                            <input type="checkbox" id="wa_template_toggle" class="rounded-lg border-neutral-300 text-primary focus:ring-primary-500 shadow-sm"
                                 {{ $invitation->wa_template_enabled ? 'checked' : '' }}
                                 onchange="document.getElementById('wa_template_form').submit()">
                         </label>
@@ -52,25 +69,20 @@
                     <form id="wa_template_form" action="{{ route('dashboard.invitations.whatsapp.template', $invitation) }}" method="POST">
                         @csrf
                         <input type="hidden" name="wa_template_enabled" value="{{ $invitation->wa_template_enabled ? '0' : '1' }}" id="wa_template_enabled_input">
-                        <div class="mb-3">
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Template Pesan</label>
-                            <textarea name="wa_message_template" rows="5"
-                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-neutral-700 mb-1.5">Template Pesan</label>
+                            <textarea name="wa_message_template" rows="4"
+                                class="block w-full rounded-xl border-neutral-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 text-sm"
                                 placeholder="Kosongkan untuk menggunakan template default">{{ $invitation->wa_message_template }}</textarea>
                         </div>
-                        <div class="flex items-center justify-between">
-                            <div class="flex flex-wrap gap-2">
-                                <span class="text-xs text-gray-500">Variabel tersedia:</span>
-                                <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded">{nama_tamu}</code>
-                                <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded">{nama_mempelai_pria}</code>
-                                <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded">{nama_mempelai_wanita}</code>
-                                <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded">{tautan_undangan}</code>
-                                <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded">{tanggal_acara}</code>
-                                <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded">{waktu_acara}</code>
-                                <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded">{tempat_acara}</code>
-                                <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded">{qrcode_link}</code>
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                            <div class="flex flex-wrap items-center gap-1.5">
+                                <span class="text-xs text-neutral-500 font-medium">Variabel:</span>
+                                @foreach(['{nama_tamu}','{nama_mempelai_pria}','{nama_mempelai_wanita}','{tautan_undangan}','{tanggal_acara}','{waktu_acara}','{tempat_acara}','{qrcode_link}'] as $var)
+                                    <code class="text-xs bg-neutral-100 text-neutral-600 px-1.5 py-0.5 rounded-lg">{{ $var }}</code>
+                                @endforeach
                             </div>
-                            <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-indigo-700">
+                            <button type="submit" class="bg-gradient-to-r from-primary to-primary-600 text-white px-5 py-2 rounded-xl text-sm font-semibold hover:shadow-lg transition-all">
                                 Simpan Template
                             </button>
                         </div>
@@ -85,120 +97,149 @@
             </script>
 
             {{-- Import Card --}}
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
+            <div class="bg-white rounded-2xl shadow-soft border border-neutral-100">
                 <div class="p-6">
-                    <h3 class="text-lg font-medium text-gray-900 mb-4">Import Tamu Massal (CSV)</h3>
+                    <h3 class="font-heading text-lg font-bold text-secondary-800 mb-4">Import Tamu Massal (CSV)</h3>
                     <form action="{{ route('dashboard.invitations.guests.import', $invitation) }}" method="POST" enctype="multipart/form-data" class="flex flex-col md:flex-row items-end gap-4">
                         @csrf
                         <div class="flex-1 w-full">
-                            <label for="file" class="block text-sm font-medium text-gray-700 mb-1">File CSV Tamu</label>
-                            <input type="file" name="file" id="file" required accept=".csv,text/csv,text/plain" class="block w-full border border-gray-300 rounded-lg shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
+                            <label for="file" class="block text-sm font-medium text-neutral-700 mb-1.5">File CSV Tamu</label>
+                            <input type="file" name="file" id="file" required accept=".csv,text/csv,text/plain"
+                                class="block w-full border border-neutral-300 rounded-xl shadow-sm focus:border-primary-500 focus:ring-primary-500 text-sm file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100">
                         </div>
                         <div class="flex-shrink-0 w-full md:w-auto">
-                            <button type="submit" class="w-full bg-gradient-to-r from-indigo-600 to-indigo-700 text-white px-5 py-2.5 rounded-lg text-sm font-semibold hover:from-indigo-700 hover:to-indigo-800 shadow-sm transition-all duration-200">
-                                📤 Import CSV
+                            <button type="submit" class="w-full bg-gradient-to-r from-primary to-primary-600 text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:shadow-lg transition-all">
+                                <span class="flex items-center gap-2 justify-center">
+                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                                    </svg>
+                                    Import CSV
+                                </span>
                             </button>
                         </div>
                     </form>
-                    <p class="mt-2 text-xs text-gray-500">
-                        Format file harus CSV. Baris pertama (header) wajib memiliki kolom: <strong class="text-indigo-600">nama</strong> atau <strong class="text-indigo-600">name</strong>. Kolom opsional: <strong class="text-indigo-600">phone</strong> atau <strong class="text-indigo-600">whatsapp</strong> untuk no HP.
+                    <p class="mt-2.5 text-xs text-neutral-500">
+                        Format file harus CSV. Baris pertama (header) wajib memiliki kolom: <strong class="text-primary">nama</strong> atau <strong class="text-primary">name</strong>. Kolom opsional: <strong class="text-primary">phone</strong> atau <strong class="text-primary">whatsapp</strong> untuk no HP.
                     </p>
                 </div>
             </div>
 
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+            {{-- Guest List --}}
+            <div class="bg-white rounded-2xl shadow-soft border border-neutral-100">
                 <div class="p-6">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-                        <h3 class="text-lg font-medium text-gray-900">Daftar Tamu ({{ $guests->total() }})</h3>
+                        <div class="flex items-center gap-2">
+                            <h3 class="font-heading text-lg font-bold text-secondary-800">Daftar Tamu</h3>
+                            <span class="inline-flex items-center justify-center min-w-[1.5rem] h-6 px-2 rounded-full bg-primary-50 text-primary-700 text-xs font-bold">{{ $guests->total() }}</span>
+                        </div>
                         <div class="flex gap-2">
                             <button id="bulkSendBtn" disabled
-                                class="bg-green-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                                class="inline-flex items-center gap-1.5 bg-emerald-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                                 onclick="bulkSend()">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                                </svg>
                                 Kirim WA Massal
                             </button>
-                            <a href="{{ route('dashboard.invitations.guests.create', $invitation) }}" class="bg-indigo-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-indigo-700 w-full sm:w-auto text-center">
-                                + Tambah Tamu
+                            <a href="{{ route('dashboard.invitations.guests.create', $invitation) }}"
+                               class="inline-flex items-center gap-1.5 bg-gradient-to-r from-primary to-primary-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:shadow-lg transition-all">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                </svg>
+                                Tambah Tamu
                             </a>
                         </div>
                     </div>
 
                     @if($guests->isEmpty())
-                        <div class="text-center py-12">
-                            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                            </svg>
-                            <h3 class="mt-2 text-sm font-medium text-gray-900">Belum ada tamu</h3>
-                            <p class="mt-1 text-sm text-gray-500">Mulai tambahkan tamu untuk mengenerate link unik.</p>
+                        <div class="text-center py-16">
+                            <div class="w-16 h-16 mx-auto bg-neutral-100 rounded-full flex items-center justify-center mb-4">
+                                <svg class="w-8 h-8 text-neutral-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                </svg>
+                            </div>
+                            <h3 class="text-base font-bold text-secondary-800">Belum ada tamu</h3>
+                            <p class="mt-1 text-sm text-neutral-500">Mulai tambahkan tamu untuk mengenerate link unik.</p>
                             <div class="mt-6">
-                                <a href="{{ route('dashboard.invitations.guests.create', $invitation) }}" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
-                                    + Tambah Tamu Baru
+                                <a href="{{ route('dashboard.invitations.guests.create', $invitation) }}"
+                                   class="inline-flex items-center gap-2 bg-gradient-to-r from-primary to-primary-600 text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:shadow-lg transition-all">
+                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                    </svg>
+                                    Tambah Tamu Baru
                                 </a>
                             </div>
                         </div>
                     @else
                         <form id="bulkSendForm" action="{{ route('dashboard.invitations.whatsapp.send', $invitation) }}" method="POST">
                             @csrf
-                            <div class="overflow-x-auto border border-gray-200 rounded-md">
-                                <table class="min-w-full divide-y divide-gray-200">
-                                    <thead class="bg-gray-50">
+                            <div class="overflow-x-auto border border-neutral-200 rounded-2xl">
+                                <table class="min-w-full divide-y divide-neutral-200">
+                                    <thead class="bg-neutral-50">
                                         <tr>
-                                            <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                <input type="checkbox" id="selectAll" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500">
+                                            <th scope="col" class="px-3 py-3.5 text-left">
+                                                <input type="checkbox" id="selectAll"
+                                                    class="rounded-lg border-neutral-300 text-primary focus:ring-primary-500 shadow-sm">
                                             </th>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Tamu</th>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No HP</th>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status WA</th>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kehadiran</th>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Link Personal</th>
-                                            <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                                            <th scope="col" class="px-6 py-3.5 text-left text-xs font-semibold text-neutral-500 uppercase tracking-wider">Nama Tamu</th>
+                                            <th scope="col" class="px-6 py-3.5 text-left text-xs font-semibold text-neutral-500 uppercase tracking-wider">No HP</th>
+                                            <th scope="col" class="px-6 py-3.5 text-left text-xs font-semibold text-neutral-500 uppercase tracking-wider">Status WA</th>
+                                            <th scope="col" class="px-6 py-3.5 text-left text-xs font-semibold text-neutral-500 uppercase tracking-wider">Kehadiran</th>
+                                            <th scope="col" class="px-6 py-3.5 text-left text-xs font-semibold text-neutral-500 uppercase tracking-wider">Link Personal</th>
+                                            <th scope="col" class="px-6 py-3.5 text-right text-xs font-semibold text-neutral-500 uppercase tracking-wider">Aksi</th>
                                         </tr>
                                     </thead>
-                                    <tbody class="bg-white divide-y divide-gray-200">
+                                    <tbody class="bg-white divide-y divide-neutral-100">
                                         @foreach($guests as $guest)
                                             @php $waStatus = $guest->wa_status; @endphp
-                                            <tr>
+                                            <tr class="hover:bg-neutral-50 transition-colors">
                                                 <td class="px-3 py-4 whitespace-nowrap">
                                                     @if($guest->phone)
                                                         <input type="checkbox" name="guest_ids[]" value="{{ $guest->id }}"
-                                                            class="guest-checkbox rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500">
+                                                            class="guest-checkbox rounded-lg border-neutral-300 text-primary focus:ring-primary-500 shadow-sm">
                                                     @endif
                                                 </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                                    {{ $guest->name }}
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    <span class="text-sm font-semibold text-secondary-800">{{ $guest->name }}</span>
                                                 </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    {{ $guest->phone ?? '-' }}
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">
+                                                    {{ $guest->phone ?? '—' }}
                                                 </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                                    @if($waStatus === 'sent')
-                                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Terkirim</span>
-                                                    @elseif($waStatus === 'failed')
-                                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">Gagal</span>
-                                                    @elseif($waStatus === 'queued' || $waStatus === 'pending')
-                                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Diproses</span>
-                                                    @else
-                                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">Belum</span>
-                                                    @endif
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    @php
+                                                        $waBadge = match($waStatus) {
+                                                            'sent' => ['bg-emerald-100 text-emerald-800', 'Terkirim'],
+                                                            'failed' => ['bg-red-100 text-red-800', 'Gagal'],
+                                                            'queued', 'pending' => ['bg-amber-100 text-amber-800', 'Diproses'],
+                                                            default => ['bg-neutral-100 text-neutral-600', 'Belum'],
+                                                        };
+                                                    @endphp
+                                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $waBadge[0] }}">
+                                                        {{ $waBadge[1] }}
+                                                    </span>
                                                 </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                                    @if($guest->attendance_status === 'hadir')
-                                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800" title="Check-in pada {{ $guest->checked_in_at?->format('H:i, d M Y') }}">
-                                                            Hadir
-                                                        </span>
-                                                    @elseif($guest->attendance_status === 'absen')
-                                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-rose-100 text-rose-800">
-                                                            Absen
-                                                        </span>
-                                                    @else
-                                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
-                                                            Pending
-                                                        </span>
-                                                    @endif
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    @php
+                                                        $attBadge = match($guest->attendance_status) {
+                                                            'hadir' => ['bg-emerald-100 text-emerald-800', 'Hadir'],
+                                                            'absen' => ['bg-rose-100 text-rose-800', 'Absen'],
+                                                            default => ['bg-neutral-100 text-neutral-600', 'Pending'],
+                                                        };
+                                                    @endphp
+                                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $attBadge[0] }}"
+                                                        @if($guest->attendance_status === 'hadir' && $guest->checked_in_at)
+                                                            title="Check-in {{ $guest->checked_in_at->format('H:i, d M Y') }}"
+                                                        @endif>
+                                                        {{ $attBadge[1] }}
+                                                    </span>
                                                 </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    <div class="flex items-center gap-2">
-                                                        <input type="text" readonly value="{{ $guest->personalized_link }}" class="text-xs border-gray-300 rounded-md shadow-sm w-40 bg-gray-50" id="link-{{ $guest->id }}">
-                                                        <button onclick="copyToClipboard('link-{{ $guest->id }}')" class="text-indigo-600 hover:text-indigo-900 text-xs" title="Copy Link">
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">
+                                                    <div class="flex items-center gap-1.5">
+                                                        <input type="text" readonly value="{{ $guest->personalized_link }}"
+                                                            class="text-xs border-neutral-200 rounded-lg shadow-sm w-36 bg-neutral-50 focus:ring-0 cursor-default"
+                                                            id="link-{{ $guest->id }}">
+                                                        <button onclick="copyToClipboard('link-{{ $guest->id }}')"
+                                                            class="text-primary hover:text-primary-600 text-xs font-semibold">
                                                             Copy
                                                         </button>
                                                     </div>
@@ -208,16 +249,22 @@
                                                         @if($guest->phone)
                                                             <form action="{{ route('dashboard.invitations.whatsapp.send-single', [$invitation, $guest]) }}" method="POST" class="inline-block">
                                                                 @csrf
-                                                                <button type="submit" class="text-green-600 hover:text-green-900 text-xs font-semibold" title="Kirim WhatsApp">
-                                                                    Kirim WA
+                                                                <button type="submit" class="text-emerald-600 hover:text-emerald-700 text-xs font-semibold">
+                                                                    <span class="flex items-center gap-1">
+                                                                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                                                                        </svg>
+                                                                        Kirim WA
+                                                                    </span>
                                                                 </button>
                                                             </form>
                                                         @endif
-                                                        <a href="{{ route('dashboard.invitations.guests.edit', [$invitation, $guest]) }}" class="text-indigo-600 hover:text-indigo-900 text-xs font-semibold">Edit</a>
+                                                        <a href="{{ route('dashboard.invitations.guests.edit', [$invitation, $guest]) }}"
+                                                           class="text-primary hover:text-primary-600 text-xs font-semibold">Edit</a>
                                                         <form action="{{ route('dashboard.invitations.guests.destroy', [$invitation, $guest]) }}" method="POST" class="inline-block" onsubmit="return confirmSwal(event, 'Yakin ingin menghapus tamu ini?');">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button type="submit" class="text-red-600 hover:text-red-900 text-xs font-semibold">Hapus</button>
+                                                            <button type="submit" class="text-red-500 hover:text-red-700 text-xs font-semibold">Hapus</button>
                                                         </form>
                                                     </div>
                                                 </td>
@@ -228,7 +275,7 @@
                             </div>
                         </form>
 
-                        <div class="mt-4">
+                        <div class="mt-6">
                             {{ $guests->links() }}
                         </div>
 
@@ -241,7 +288,6 @@
                                 Swal.fire({ icon: 'success', title: 'Tersalin!', text: 'Link berhasil disalin!', timer: 1500, showConfirmButton: false });
                             }
 
-                            // Select All toggle
                             document.getElementById('selectAll').addEventListener('change', function() {
                                 document.querySelectorAll('.guest-checkbox').forEach(cb => cb.checked = this.checked);
                                 updateBulkButton();
@@ -255,7 +301,9 @@
                                 const checked = document.querySelectorAll('.guest-checkbox:checked').length;
                                 const btn = document.getElementById('bulkSendBtn');
                                 btn.disabled = checked === 0;
-                                btn.textContent = checked > 0 ? `Kirim WA Massal (${checked})` : 'Kirim WA Massal';
+                                btn.innerHTML = checked > 0
+                                    ? `<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg> Kirim WA Massal (${checked})`
+                                    : `<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg> Kirim WA Massal`;
                             }
 
                             function bulkSend() {
@@ -264,8 +312,8 @@
                                     text: 'Kirim WhatsApp ke semua tamu yang dipilih? Pesan akan dikirim secara bertahap.',
                                     icon: 'question',
                                     showCancelButton: true,
-                                    confirmButtonColor: '#3085d6',
-                                    cancelButtonColor: '#d33',
+                                    confirmButtonColor: '#FF7A00',
+                                    cancelButtonColor: '#EF4444',
                                     confirmButtonText: 'Ya, kirim!',
                                     cancelButtonText: 'Batal',
                                 }).then((result) => {
