@@ -19,4 +19,5 @@
     </div>
     <x-public-footer />
 </body>
+
 </html>

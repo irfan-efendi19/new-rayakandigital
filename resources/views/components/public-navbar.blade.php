@@ -40,15 +40,16 @@
                         <span
                             class="absolute bottom-0 left-1/2 w-0 h-0.5 bg-orange-500 transition-all duration-300 group-hover:w-full group-hover:left-0"></span>
                     </button>
-                    
+
                     <!-- Dropdown Panel -->
                     <div
                         class="absolute left-0 mt-2 w-[700px] bg-white rounded-xl shadow-2xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
                         <div class="p-5">
                             <div class="grid grid-cols-3 gap-4">
-                    
+
                                 <!-- Undangan Digital -->
-                                <a href="#" class="block p-3 rounded-lg hover:bg-orange-50 transition-all duration-200 group/item">
+                                <a href="{{ route('undangan-web') }}"
+                                    class="block p-3 rounded-lg hover:bg-orange-50 transition-all duration-200 group/item">
                                     <div class="flex items-center gap-3 mb-2">
                                         <div
                                             class="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center text-orange-500 group-hover/item:bg-orange-500 group-hover/item:text-white transition-colors">
@@ -67,7 +68,8 @@
                                     </p>
                                 </a>
                                 <!-- Buku Tamu Digital -->
-                                <a href="#" class="block p-3 rounded-lg hover:bg-orange-50 transition-all duration-200 group/item">
+                                <a href="{{ route('buku-tamu') }}"
+                                    class="block p-3 rounded-lg hover:bg-orange-50 transition-all duration-200 group/item">
                                     <div class="flex items-center gap-3 mb-2">
                                         <div
                                             class="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center text-orange-500 group-hover/item:bg-orange-500 group-hover/item:text-white transition-colors">
@@ -86,7 +88,8 @@
                                     </p>
                                 </a>
                                 <!-- Live Streaming -->
-                                <a href="#" class="block p-3 rounded-lg hover:bg-orange-50 transition-all duration-200 group/item">
+                                <a href="{{ route('live-streaming') }}"
+                                    class="block p-3 rounded-lg hover:bg-orange-50 transition-all duration-200 group/item">
                                     <div class="flex items-center gap-3 mb-2">
                                         <div
                                             class="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center text-orange-500 group-hover/item:bg-orange-500 group-hover/item:text-white transition-colors">
@@ -105,19 +108,11 @@
                                     </p>
                                 </a>
                             </div>
-                            
-                            <!-- Tombol Lihat Semua Layanan -->
-                            <div class="mt-4 pt-3 border-t border-gray-100 text-center">
-                                <a href="#" class="text-sm text-orange-600 hover:text-orange-700 font-medium inline-flex items-center gap-1">
-                                    Lihat Semua Layanan
-                                    <i class="fas fa-arrow-right text-xs"></i>
-                                </a>
-                            </div>
-                            </div>
-                            </div>
-                            </div>
-                            
-                            <!-- TENTANG KAMI -->
+                        </div>
+                        </div>
+                        </div>
+                        
+                        <!-- TENTANG KAMI -->
                 <a href="{{ route('tentang-kami') }}"
                     class="relative px-4 py-2 text-gray-600 hover:text-orange-600 text-sm font-medium transition-all duration-300 group">
                     Tentang Kami
@@ -196,10 +191,10 @@
                     <span>Layanan</span>
                     <i class="fas fa-chevron-down text-xs transition-transform duration-300" :class="{'rotate-180': open}"></i>
                 </button>
-            
+
                 <!-- Sub Menu Layanan (Muncul saat diklik) -->
                 <div x-show="open" x-collapse class="pl-4 mt-2 space-y-2">
-                    <a href="#"
+                    <a href="{{ route('undangan-web') }}"
                         class="flex items-start gap-3 px-4 py-3 text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl text-sm transition-all duration-200">
                         <i class="far fa-envelope text-orange-500 mt-0.5"></i>
                         <div>
@@ -207,7 +202,7 @@
                             <p class="text-xs text-gray-400 mt-0.5">Website undangan dengan fitur lengkap</p>
                         </div>
                     </a>
-                    <a href="#"
+                    <a href="{{ route('buku-tamu') }}"
                         class="flex items-start gap-3 px-4 py-3 text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl text-sm transition-all duration-200">
                         <i class="fas fa-users text-orange-500 mt-0.5"></i>
                         <div>
@@ -215,7 +210,7 @@
                             <p class="text-xs text-gray-400 mt-0.5">RSVP & QR Code tiket masuk</p>
                         </div>
                     </a>
-                    <a href="#"
+                    <a href="{{ route('live-streaming') }}"
                         class="flex items-start gap-3 px-4 py-3 text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl text-sm transition-all duration-200">
                         <i class="fas fa-video text-orange-500 mt-0.5"></i>
                         <div>
@@ -224,7 +219,7 @@
                         </div>
                     </a>
                 </div>
-                </div>
+            </div>
 
             <a href="{{ route('tentang-kami') }}"
                 class="block px-4 py-3 text-gray-700 hover:text-orange-600 hover:bg-orange-50 rounded-xl text-base font-medium transition-all duration-300 transform hover:translate-x-2">
@@ -236,7 +231,7 @@
             </a>
         </div>
 
-        <div class="pt-4 border-t border-gray-100">
+        <div class="pt-4 border-t border-gray-100 pd-4">
             @if (Route::has('login'))
                 @auth
                     <a href="{{ route('dashboard') }}"
@@ -257,6 +252,6 @@
                 @endauth
             @endif
         </div>
-        </div>
+    </div>
     </div>
 </nav>
