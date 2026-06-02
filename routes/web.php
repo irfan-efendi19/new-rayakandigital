@@ -29,6 +29,8 @@ Route::get('/preview/{themeSlug}', [ThemePreviewController::class, 'show'])->nam
 Route::view('/undangan-web', 'undangan-web')->name('undangan-web');
 Route::view('/buku-tamu', 'buku-tamu')->name('buku-tamu');
 Route::view('/live-streaming', 'live-streaming')->name('live-streaming');
+Route::view('/syarat-ketentuan', 'syarat-ketentuan')->name('syarat-ketentuan');
+Route::view('/kebijakan-privasi', 'kebijakan-privasi')->name('kebijakan-privasi');
 
 // Dashboard Routes
 Route::middleware(['auth', 'verified'])->group(function () {

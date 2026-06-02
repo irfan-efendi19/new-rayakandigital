@@ -65,14 +65,14 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#"
+                    <a href="{{ route('syarat-ketentuan') }}"
                         class="nav-link text-sm text-footer-link hover:text-brand transition-colors duration-150 inline-flex items-center gap-1.5">
                         Syarat &amp; Ketentuan
                         <span class="arrow text-xs">→</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#"
+                    <a href="{{ route('kebijakan-privasi') }}"
                         class="nav-link text-sm text-footer-link hover:text-brand transition-colors duration-150 inline-flex items-center gap-1.5">
                         Kebijakan Privasi
                         <span class="arrow text-xs">→</span>
