@@ -15,6 +15,6 @@ class ThemeController extends Controller
             ->where('is_active', true)
             ->get();
 
-        return view('themes.index', compact('categories', 'themes'));
+        return view('all_themes', compact('categories', 'themes'));
     }
 }
