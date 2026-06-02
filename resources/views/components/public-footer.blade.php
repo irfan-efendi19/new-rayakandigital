@@ -58,7 +58,7 @@
             <p class="text-[11px] font-semibold tracking-widest uppercase text-footer-subtle mb-5">Perusahaan</p>
             <ul class="flex flex-col gap-3.5">
                 <li>
-                    <a href="#"
+                    <a href="{{ route('tentang-kami') }}"
                         class="nav-link text-sm text-footer-link hover:text-brand transition-colors duration-150 inline-flex items-center gap-1.5">
                         Tentang Kami
                         <span class="arrow text-xs">→</span>
@@ -79,7 +79,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#"
+                    <a href="{{ route('hubungi-kami') }}"
                         class="nav-link text-sm text-footer-link hover:text-brand transition-colors duration-150 inline-flex items-center gap-1.5">
                         Hubungi Kami
                         <span class="arrow text-xs">→</span>

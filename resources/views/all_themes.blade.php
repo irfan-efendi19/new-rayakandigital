@@ -9,6 +9,7 @@
     <title>{{ config('app.name', 'Rayakan Digital') }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="stylesheet" href="{{ asset('css/landingpage.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 </head>
 
 <body class="font-sans antialiased bg-tertiary text-secondary-800">
@@ -37,7 +38,8 @@
                                 :class="filter === 'all' ? 'bg-primary-600 text-white border-primary-600' : 'bg-white text-secondary-600 border-neutral-200 hover:border-primary-300 hover:text-primary-600'"
                                 class="px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 border-2 shadow-soft">
                                 Semua
-                                <span class="ml-1.5 inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full text-xs font-bold"
+                                <span
+                                    class="ml-1.5 inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full text-xs font-bold"
                                     :class="filter === 'all' ? 'bg-white/25 text-white' : 'bg-neutral-100 text-secondary-500'">
                                     {{ $themes->count() }}
                                 </span>
@@ -48,7 +50,8 @@
                                     :class="filter === '{{ $category->id }}' ? 'bg-primary-600 text-white border-primary-600' : 'bg-white text-secondary-600 border-neutral-200 hover:border-primary-300 hover:text-primary-600'"
                                     class="px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 border-2 shadow-soft">
                                     {{ $category->name }}
-                                    <span class="ml-1.5 inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full text-xs font-bold"
+                                    <span
+                                        class="ml-1.5 inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full text-xs font-bold"
                                         :class="filter === '{{ $category->id }}' ? 'bg-white/25 text-white' : 'bg-neutral-100 text-secondary-500'">
                                         {{ $category->themes_count }}
                                     </span>

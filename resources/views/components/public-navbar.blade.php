@@ -118,14 +118,14 @@
                             </div>
                             
                             <!-- TENTANG KAMI -->
-                <a href="#"
+                <a href="{{ route('tentang-kami') }}"
                     class="relative px-4 py-2 text-gray-600 hover:text-orange-600 text-sm font-medium transition-all duration-300 group">
                     Tentang Kami
                     <span
                         class="absolute bottom-0 left-1/2 w-0 h-0.5 bg-orange-500 transition-all duration-300 group-hover:w-full group-hover:left-0"></span>
                 </a>
                 <!-- HUBUNGI KAMI -->
-                <a href="#"
+                <a href="{{ route('hubungi-kami') }}"
                     class="relative px-4 py-2 text-gray-600 hover:text-orange-600 text-sm font-medium transition-all duration-300 group">
                     Hubungi Kami
                     <span
@@ -226,11 +226,11 @@
                 </div>
                 </div>
 
-            <a href="#"
+            <a href="{{ route('tentang-kami') }}"
                 class="block px-4 py-3 text-gray-700 hover:text-orange-600 hover:bg-orange-50 rounded-xl text-base font-medium transition-all duration-300 transform hover:translate-x-2">
                 Tentang Kami
             </a>
-            <a href="#"
+            <a href="{{ route('hubungi-kami') }}"
                 class="block px-4 py-3 text-gray-700 hover:text-orange-600 hover:bg-orange-50 rounded-xl text-base font-medium transition-all duration-300 transform hover:translate-x-2">
                 Hubungi Kami
             </a>

@@ -1,4 +1,4 @@
-                        <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
@@ -1098,7 +1098,7 @@
                     @forelse($packages as $package)
                         <div
                             class="group relative bg-white rounded-2xl shadow-soft transition-all duration-300 hover:shadow-xl hover:-translate-y-1
-                                                                                                                                                                                                                                                            {{ $package->is_popular ? 'ring-2 ring-primary-500 shadow-lg' : 'border border-neutral-200' }}">
+                                                                                                                                                                                                                                                                {{ $package->is_popular ? 'ring-2 ring-primary-500 shadow-lg' : 'border border-neutral-200' }}">
 
                             <!-- Popular Badge -->
                             @if($package->is_popular)
@@ -1156,7 +1156,7 @@
                                     @else
                                                     <a href="{{ route('dashboard.checkout') }}"
                                                         class="mt-6 flex items-center justify-center gap-2 w-full rounded-xl py-3 text-sm font-semibold text-center transition-all duration-200
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    {{ $package->is_popular
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            {{ $package->is_popular
                                         ? 'bg-primary-500 text-white hover:bg-primary-600 shadow-md hover:shadow-lg'
                                         : 'bg-primary-50 border border-primary-200 text-primary-700 hover:bg-primary-100' }}">
                                                         Pilih {{ $package->package_name }}
@@ -1179,7 +1179,7 @@
                                     @else
                                                     <a href="{{ route('register') }}"
                                                         class="mt-6 flex items-center justify-center gap-2 w-full rounded-xl py-3 text-sm font-semibold text-center transition-all duration-200
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    {{ $package->is_popular
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            {{ $package->is_popular
                                         ? 'bg-primary-500 text-white hover:bg-primary-600 shadow-md hover:shadow-lg'
                                         : 'bg-primary-50 border border-primary-200 text-primary-700 hover:bg-primary-100' }}">
                                                         Pilih {{ $package->package_name }}
