@@ -39,6 +39,11 @@ class User extends Authenticatable implements FilamentUser
         return $this->role === 'admin';
     }
 
+    public function getIsAdminAttribute(): bool
+    {
+        return $this->isAdmin();
+    }
+
     public function invitations(): HasMany
     {
         return $this->hasMany(Invitation::class);

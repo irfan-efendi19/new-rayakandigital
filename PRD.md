@@ -1,6 +1,6 @@
 # PRODUCT REQUIREMENT DOCUMENT (PRD)
-## MODUL: KONTROL AKSES FITUR BERBASIS TIER HARGA (SUBSCRIPTION FEATURE GATE)
-**Versi:** 1.7 (Spesifikasi Manajemen Paket & Hak Akses Fitur - Laravel 13 & Filament v3)  
+## MODUL: HAK AKSES KONTROL ADMIN TERPUSAT UNTUK SEMUA UNDANGAN USER
+**Versi:** 1.8 (Spesifikasi Administrasi Global & Modifikasi Data User - Laravel 13 & Filament v3)  
 **Tanggal:** 3 Juni 2026  
 **Status:** Approved  
 **Author:** Mochammad Irfan Efendi  
@@ -10,74 +10,53 @@
 ## 1. DESKRIPSI FITUR & ATURAN BISNIS (BUSINESS RULES)
 
 ### 1.1 Deskripsi Fitur
-Fitur ini memberikan kemampuan bagi Admin untuk membuat paket harga (Tier) yang fleksibel (misal: *Bronze, Silver, Gold*) melalui panel **Filament**, menetapkan daftar fitur apa saja yang aktif di masing-masing paket tersebut, dan secara otomatis mengunci atau membuka hak akses fitur pada akun pengguna (*User Invitation Dashboard*) serta membatasi penayangan komponen di halaman depan undangan klien.
+Fitur ini memperluas fungsionalitas panel **Admin Filament** dengan memberikan hak otorisasi penuh kepada pengguna dengan peran *Admin* atau *Super Admin* untuk melihat, mengedit, memperbarui, maupun menghapus data undangan digital milik **seluruh pengguna (user/klien)** terdaftar tanpa terkecuali. Fitur ini krusial untuk kebutuhan bantuan teknis (*customer support*), moderasi konten massal, dan perbaikan data dari sisi belakang (*backend*).
 
 ### 1.2 Aturan Bisnis (Business Rules)
-1. **Daftar Fitur Baku (Feature Registry):** Sistem memiliki daftar fitur bawaan yang didaftarkan sebagai acuan (*Cerita Cinta, Absensi QR, Layar Sapa, Video YouTube, Musik Latar, dll*).
-2. **Kontrol Granular:** Setiap Tier Harga memiliki relasi *Many-to-Many* ke tabel fitur, bertindak sebagai saklar izin akses (*Feature Flagging*).
-3. **Fallback & Graceful Restriction:** Jika pengguna mencoba mengakses menu fitur yang tidak masuk dalam cakupan tier harganya, sistem di dashboard wajib memunculkan status *locked* (tombol dinonaktifkan/redup) disertai tawaran untuk melakukan *upgrade* paket. Di sisi undangan klien, komponen yang tidak berizin tidak akan dirender oleh sistem.
+1. **Otorisasi Berbasis Peran (Role-Based Access):** Pengguna regular (klien) hanya boleh memanipulasi data undangan miliknya sendiri di dashboard user. Hanya pengguna dengan flag `is_admin = true` yang dapat mengakses dan mengubah seluruh data tersebut melalui rute admin panel Filament.
+2. **Riwayat Log Perubahan (Audit Trail Audit):** Setiap kali Admin melakukan perubahan pada data undangan milik pengguna, sistem disarankan mencatat siapa admin yang mengubahnya demi menjaga akuntabilitas manajemen data.
+3. **Data Owner Attribution Preservation:** Saat admin mengedit undangan seorang user, relasi kepemilikan data (`user_id`) tidak boleh berubah secara tidak sengaja ke akun admin. Data harus tetap merujuk secara absolut ke pemilik asli undangan tersebut.
 
 ---
 
-## 2. BLUEPRINT STRUKTUR DATABASE (MIGRATION)
+## 2. BLUEPRINT REKAYASA MODEL & POLICIES (LARAVEL 13)
 
-Buat struktur tabel master paket, tabel fitur, dan tabel pivot relasi antara paket dengan hak akses fitur:
+Untuk mengizinkan kontrol penuh dan menghindari isolasi data otomatis bawaan framework, kita perlu memastikan kebijakan keamanan (*Laravel Authorization Policies*) mengizinkan tindakan admin secara global.
+
+### 2.1 Konfigurasi Model Policy (`InvitationPolicy.php`)
+Pastikan metode otoritas di dalam file `app/Policies/InvitationPolicy.php` memeriksa apakah pengguna yang masuk memiliki peran admin:
 
 ```php
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+namespace App\Policies;
 
-return new class extends Migration
+use App\Models\Invitation;
+use App\Models\User;
+
+class InvitationPolicy
 {
-    public function up(): void
+    /**
+     * Metode Penentu Utama (Bypass): Jika user adalah admin, izinkan semua tindakan.
+     */
+    public function before(User $user, string $ability)
     {
-        // 1. Master Tabel Tier Paket Harga
-        Schema::create('pricing_tiers', function (Blueprint $table) {
-            $table->id();
-            $table->string('name')->unique(); // Misal: Bronze, Silver, Gold
-            $table->string('slug')->unique();
-            $table->decimal('price', 12, 2)->default(0.00);
-            $table->string('description')->nullable();
-            $table->boolean('is_active')->default(true);
-            $table->timestamps();
-        });
-
-        // 2. Master Tabel Registrasi Fitur Aplikasi
-        Schema::create('app_features', function (Blueprint $table) {
-            $table->id();
-            $table->string('feature_key')->unique(); // Kode unik sistem, misal: 'feature_youtube_video', 'feature_qr_checkin'
-            $table->string('feature_name'); // Nama pajangan, misal: 'Sematkan Video & Live YouTube'
-            $table->string('group_name')->default('Dasar'); // Pengelompokan visual
-            $table->timestamps();
-        });
-
-        // 3. Tabel Pivot Hubungan Banyak-ke-Banyak (Tier vs Fitur)
-        Schema::create('app_feature_pricing_tier', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('pricing_tier_id')->constrained('pricing_tiers')->onDelete('cascade');
-            $table->foreignId('app_feature_id')->constrained('app_features')->onDelete('cascade');
-        });
-
-        // 4. Menghubungkan Skema Transaksi Undangan Eksisting ke Level Tier Paket
-        Schema::table('invitations', function (Blueprint $table) {
-            $table->foreignId('pricing_tier_id')
-                ->nullable()
-                ->after('user_id')
-                ->constrained('pricing_tiers')
-                ->onDelete('set null'); // Jika paket dihapus admin, undangan tetap aman terdata
-        });
+        if ($user->is_admin) { // Mengasumsikan ada kolom boolean atau peran 'is_admin' pada tabel users
+            return true;
+        }
     }
 
-    public function down(): void
+    public function viewAny(User $user): bool
     {
-        Schema::table('invitations', function (Blueprint $table) {
-            $table->dropForeign(['pricing_tier_id']);
-            $table->dropColumn('pricing_tier_id');
-        });
-
-        Schema::dropIfExists('app_feature_pricing_tier');
-        Schema::dropIfExists('app_features');
-        Schema::dropIfExists('pricing_tiers');
+        return true; // Pengguna biasa dikendalikan di dashboard mereka tersendiri
     }
-};
+
+    public function update(User $user, Invitation $invitation): bool
+    {
+        // Klien regular hanya bisa mengubah undangan miliknya sendiri
+        return $user->id === $invitation->user_id;
+    }
+
+    public function delete(User $user, Invitation $invitation): bool
+    {
+        return $user->id === $invitation->user_id;
+    }
+}

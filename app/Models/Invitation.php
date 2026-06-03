@@ -14,6 +14,64 @@ class Invitation extends Model
     /** @use HasFactory<InvitationFactory> */
     use HasFactory;
 
+    protected static function booted(): void
+    {
+        static::saving(function (self $invitation) {
+            if ($invitation->isDirty(['bride_father_name', 'bride_mother_name']) || !$invitation->bride_parents) {
+                $parts = [];
+                if ($invitation->bride_father_name) {
+                    $parts[] = 'Bapak ' . $invitation->bride_father_name;
+                }
+                if ($invitation->bride_mother_name) {
+                    $parts[] = 'Ibu ' . $invitation->bride_mother_name;
+                }
+                if (!empty($parts)) {
+                    $invitation->bride_parents = 'Putri dari ' . implode(' & ', $parts);
+                }
+            }
+
+            if ($invitation->isDirty(['groom_father_name', 'groom_mother_name']) || !$invitation->groom_parents) {
+                $parts = [];
+                if ($invitation->groom_father_name) {
+                    $parts[] = 'Bapak ' . $invitation->groom_father_name;
+                }
+                if ($invitation->groom_mother_name) {
+                    $parts[] = 'Ibu ' . $invitation->groom_mother_name;
+                }
+                if (!empty($parts)) {
+                    $invitation->groom_parents = 'Putra dari ' . implode(' & ', $parts);
+                }
+            }
+        });
+
+        static::updating(function (self $invitation) {
+            if (auth()->check() && auth()->user()->is_admin) {
+                logger()->info(sprintf(
+                    'Admin (ID: %d, Name: %s) updated Invitation (ID: %d, Slug: %s) owned by User (ID: %d). Changes: %s',
+                    auth()->id(),
+                    auth()->user()->name,
+                    $invitation->id,
+                    $invitation->slug,
+                    $invitation->user_id,
+                    json_encode($invitation->getDirty())
+                ));
+            }
+        });
+
+        static::deleting(function (self $invitation) {
+            if (auth()->check() && auth()->user()->is_admin) {
+                logger()->info(sprintf(
+                    'Admin (ID: %d, Name: %s) deleted Invitation (ID: %d, Slug: %s) owned by User (ID: %d)',
+                    auth()->id(),
+                    auth()->user()->name,
+                    $invitation->id,
+                    $invitation->slug,
+                    $invitation->user_id
+                ));
+            }
+        });
+    }
+
     protected $fillable = [
         'user_id',
         'pricing_tier_id',
@@ -26,6 +84,10 @@ class Invitation extends Model
         'groom_nickname',
         'bride_parents',
         'groom_parents',
+        'bride_father_name',
+        'bride_mother_name',
+        'groom_father_name',
+        'groom_mother_name',
         'bride_photo',
         'groom_photo',
         'event_date',

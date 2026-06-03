@@ -95,13 +95,22 @@
                                                 @error('bride_nickname') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
                                             </div>
 
-                                            <div class="sm:col-span-6">
-                                                <label for="bride_parents" class="block text-sm font-medium text-neutral-700">Nama Orang Tua</label>
-                                                <input type="text" name="bride_parents" id="bride_parents"
-                                                    value="{{ old('bride_parents', $invitation->bride_parents) }}"
+                                            <div class="sm:col-span-3">
+                                                <label for="bride_father_name" class="block text-sm font-medium text-neutral-700">Nama Ayah</label>
+                                                <input type="text" name="bride_father_name" id="bride_father_name"
+                                                    value="{{ old('bride_father_name', $invitation->bride_father_name) }}"
                                                     class="mt-1 block w-full rounded-xl border-neutral-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
-                                                    placeholder="Putri dari Bapak ... & Ibu ...">
-                                                @error('bride_parents') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
+                                                    placeholder="Nama Ayah Mempelai Wanita">
+                                                @error('bride_father_name') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
+                                            </div>
+
+                                            <div class="sm:col-span-3">
+                                                <label for="bride_mother_name" class="block text-sm font-medium text-neutral-700">Nama Ibu</label>
+                                                <input type="text" name="bride_mother_name" id="bride_mother_name"
+                                                    value="{{ old('bride_mother_name', $invitation->bride_mother_name) }}"
+                                                    class="mt-1 block w-full rounded-xl border-neutral-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
+                                                    placeholder="Nama Ibu Mempelai Wanita">
+                                                @error('bride_mother_name') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
                                             </div>
 
                                             <div class="sm:col-span-6">
@@ -163,13 +172,22 @@
                                                 @error('groom_nickname') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
                                             </div>
 
-                                            <div class="sm:col-span-6">
-                                                <label for="groom_parents" class="block text-sm font-medium text-neutral-700">Nama Orang Tua</label>
-                                                <input type="text" name="groom_parents" id="groom_parents"
-                                                    value="{{ old('groom_parents', $invitation->groom_parents) }}"
+                                            <div class="sm:col-span-3">
+                                                <label for="groom_father_name" class="block text-sm font-medium text-neutral-700">Nama Ayah</label>
+                                                <input type="text" name="groom_father_name" id="groom_father_name"
+                                                    value="{{ old('groom_father_name', $invitation->groom_father_name) }}"
                                                     class="mt-1 block w-full rounded-xl border-neutral-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
-                                                    placeholder="Putra dari Bapak ... & Ibu ...">
-                                                @error('groom_parents') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
+                                                    placeholder="Nama Ayah Mempelai Pria">
+                                                @error('groom_father_name') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
+                                            </div>
+
+                                            <div class="sm:col-span-3">
+                                                <label for="groom_mother_name" class="block text-sm font-medium text-neutral-700">Nama Ibu</label>
+                                                <input type="text" name="groom_mother_name" id="groom_mother_name"
+                                                    value="{{ old('groom_mother_name', $invitation->groom_mother_name) }}"
+                                                    class="mt-1 block w-full rounded-xl border-neutral-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
+                                                    placeholder="Nama Ibu Mempelai Pria">
+                                                @error('groom_mother_name') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
                                             </div>
 
                                             <div class="sm:col-span-6">

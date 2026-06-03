@@ -34,12 +34,20 @@ class PreviewDataForm
                             ->label('Nama Panggilan Pria')
                             ->nullable()
                             ->maxLength(100),
-                        TextInput::make('bride_parents')
-                            ->label('Nama Orang Tua Wanita')
+                        TextInput::make('bride_father_name')
+                            ->label('Nama Ayah (Wanita)')
                             ->nullable()
                             ->maxLength(255),
-                        TextInput::make('groom_parents')
-                            ->label('Nama Orang Tua Pria')
+                        TextInput::make('bride_mother_name')
+                            ->label('Nama Ibu (Wanita)')
+                            ->nullable()
+                            ->maxLength(255),
+                        TextInput::make('groom_father_name')
+                            ->label('Nama Ayah (Pria)')
+                            ->nullable()
+                            ->maxLength(255),
+                        TextInput::make('groom_mother_name')
+                            ->label('Nama Ibu (Pria)')
                             ->nullable()
                             ->maxLength(255),
                         FileUpload::make('bride_photo')

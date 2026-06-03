@@ -9,6 +9,37 @@ class PreviewData extends Model
 {
     use HasFactory;
 
+    protected static function booted(): void
+    {
+        static::saving(function (self $preview) {
+            if ($preview->isDirty(['bride_father_name', 'bride_mother_name']) || !$preview->bride_parents) {
+                $parts = [];
+                if ($preview->bride_father_name) {
+                    $parts[] = 'Bapak ' . $preview->bride_father_name;
+                }
+                if ($preview->bride_mother_name) {
+                    $parts[] = 'Ibu ' . $preview->bride_mother_name;
+                }
+                if (!empty($parts)) {
+                    $preview->bride_parents = 'Putri dari ' . implode(' & ', $parts);
+                }
+            }
+
+            if ($preview->isDirty(['groom_father_name', 'groom_mother_name']) || !$preview->groom_parents) {
+                $parts = [];
+                if ($preview->groom_father_name) {
+                    $parts[] = 'Bapak ' . $preview->groom_father_name;
+                }
+                if ($preview->groom_mother_name) {
+                    $parts[] = 'Ibu ' . $preview->groom_mother_name;
+                }
+                if (!empty($parts)) {
+                    $preview->groom_parents = 'Putra dari ' . implode(' & ', $parts);
+                }
+            }
+        });
+    }
+
     protected $fillable = [
         'bride_name',
         'groom_name',
@@ -18,6 +49,10 @@ class PreviewData extends Model
         'groom_nickname',
         'bride_parents',
         'groom_parents',
+        'bride_father_name',
+        'bride_mother_name',
+        'groom_father_name',
+        'groom_mother_name',
         'title',
         'event_date_offset_days',
         'event_time',

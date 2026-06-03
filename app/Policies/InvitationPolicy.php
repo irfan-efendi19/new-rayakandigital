@@ -9,6 +9,16 @@ use Illuminate\Auth\Access\Response;
 class InvitationPolicy
 {
     /**
+     * Metode Penentu Utama (Bypass): Jika user adalah admin, izinkan semua tindakan.
+     */
+    public function before(User $user, string $ability)
+    {
+        if ($user->is_admin) {
+            return true;
+        }
+    }
+
+    /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
