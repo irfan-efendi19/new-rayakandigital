@@ -421,6 +421,10 @@
                                                         @error('stories.' . $storyIdx . '.story_date') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                                                     </div>
                                                     <div>
+                                                        <input type="text" name="stories[{{ $storyIdx }}][story_title]" value="{{ old('stories.' . $storyIdx . '.story_title', $story->story_title ?? '') }}" class="block w-full rounded-xl border-neutral-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 text-xs" placeholder="Judul momen (opsional)">
+                                                        @error('stories.' . $storyIdx . '.story_title') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                                                    </div>
+                                                    <div>
                                                         <textarea name="stories[{{ $storyIdx }}][story_description]" rows="2" class="block w-full rounded-xl border-neutral-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 text-xs" placeholder="Ceritakan momen indah Anda...">{{ old('stories.' . $storyIdx . '.story_description', $story->story_description ?? '') }}</textarea>
                                                         @error('stories.' . $storyIdx . '.story_description') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                                                     </div>
@@ -435,6 +439,9 @@
                                                 </div>
                                                 <div>
                                                     <input type="text" name="stories[__INDEX__][story_date]" class="block w-full rounded-xl border-neutral-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 text-xs" placeholder="Waktu (contoh: Tahun 2022, Maret 2024, 12 Desember 2025)">
+                                                </div>
+                                                <div>
+                                                    <input type="text" name="stories[__INDEX__][story_title]" class="block w-full rounded-xl border-neutral-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 text-xs" placeholder="Judul momen (opsional)">
                                                 </div>
                                                 <div>
                                                     <textarea name="stories[__INDEX__][story_description]" rows="2" class="block w-full rounded-xl border-neutral-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 text-xs" placeholder="Ceritakan momen indah Anda..."></textarea>
@@ -505,6 +512,38 @@
                                                 </div>
                                             </div>
                                         @endif
+                                    </div>
+
+                                    {{-- YouTube Video --}}
+                                    <div class="sm:col-span-6">
+                                        <div class="bg-neutral-50 p-5 rounded-2xl border border-neutral-200 space-y-4">
+                                            <div class="flex items-center gap-3">
+                                                <div class="w-8 h-8 rounded-lg bg-primary-100 flex items-center justify-center text-primary">
+                                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                                    </svg>
+                                                </div>
+                                                <h4 class="font-semibold text-sm text-primary-700">Video YouTube & Live Streaming</h4>
+                                            </div>
+                                            <div>
+                                                <label for="youtube_url" class="block text-sm font-medium text-neutral-700">Tautan Video YouTube</label>
+                                                <input type="url" name="youtube_url" id="youtube_url"
+                                                    value="{{ old('youtube_url', $invitation->youtube_url) }}"
+                                                    class="mt-1 block w-full rounded-xl border-neutral-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
+                                                    placeholder="https://youtube.com/watch?v=... atau https://youtu.be/...">
+                                                <p class="text-xs text-neutral-400 mt-1.5">Masukkan URL video YouTube atau siaran langsung (live streaming). Mendukung format <span class="font-mono">youtube.com/watch?v=</span>, <span class="font-mono">youtu.be/</span>, <span class="font-mono">youtube.com/live/</span>.</p>
+                                                @error('youtube_url') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
+                                            </div>
+                                            @if($invitation->youtube_video_id)
+                                                <div class="bg-primary-50 border border-primary-100 rounded-xl p-3 flex items-center gap-3">
+                                                    <span class="text-primary text-lg">▶</span>
+                                                    <div>
+                                                        <p class="text-xs font-semibold text-primary-700">Video Terdeteksi</p>
+                                                        <p class="text-xs text-primary-600">ID: {{ $invitation->youtube_video_id }}</p>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        </div>
                                     </div>
 
                                     {{-- Active toggle --}}
@@ -627,6 +666,7 @@
                                                         ['id' => 'show_countdown', 'label' => 'Hitung Mundur', 'desc' => 'Tampilkan timer hitung mundur ke acara'],
                                                         ['id' => 'show_event_detail', 'label' => 'Detail Acara', 'desc' => 'Tampilkan informasi waktu & tempat'],
                                                         ['id' => 'show_quote', 'label' => 'Kutipan', 'desc' => 'Tampilkan kutipan atau ayat suci'],
+                                                        ['id' => 'show_video', 'label' => 'Video YouTube', 'desc' => 'Tampilkan video YouTube & live streaming'],
                                                         ['id' => 'show_qr_checkin', 'label' => 'QR Check-In', 'desc' => 'Tampilkan kode QR unik tamu'],
                                                         ['id' => 'show_comments', 'label' => 'Buku Tamu / Komentar', 'desc' => 'Tampilkan kolom ucapan dan doa'],
                                                     ];

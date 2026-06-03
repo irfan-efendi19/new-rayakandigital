@@ -249,6 +249,27 @@
         </section>
     @endif
 
+    <!-- YouTube Video / Live Streaming Section -->
+    @if($invitation->show_video && $invitation->youtube_video_id)
+    <section class="py-20 px-6 bg-[#fffaf0]">
+        <div class="text-center mb-10" data-aos="fade-up">
+            <h2 class="text-3xl font-serif text-primary mb-4">Video & Live Streaming</h2>
+            <p class="text-sm text-gray-600">Saksikan momen spesial kami secara langsung.</p>
+        </div>
+        <div class="relative rounded-xl overflow-hidden shadow-lg" style="padding-bottom: 56.25%;" data-aos="zoom-in">
+            <iframe
+                src="https://www.youtube.com/embed/{{ $invitation->youtube_video_id }}?autoplay=0&rel=0"
+                title="YouTube video player"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+                loading="lazy"
+                class="absolute inset-0 w-full h-full rounded-xl">
+            </iframe>
+        </div>
+    </section>
+    @endif
+
     @if($invitation->show_rsvp)
     <!-- RSVP -->
     <section class="py-20 px-6 bg-[#fffaf0]">
@@ -395,6 +416,9 @@
                     <div class="ml-10 md:ml-0 md:mx-6 bg-white p-5 rounded-xl shadow-sm border border-gray-100">
                         @if($story->story_date)
                         <span class="inline-block text-xs font-bold text-primary bg-primary/10 px-3 py-1 rounded-full mb-2">{{ $story->story_date }}</span>
+                        @endif
+                        @if($story->story_title)
+                        <h4 class="text-base font-semibold text-gray-800 mb-1">{{ $story->story_title }}</h4>
                         @endif
                         <p class="text-sm text-gray-700 leading-relaxed">{{ $story->story_description }}</p>
                     </div>

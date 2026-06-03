@@ -61,6 +61,9 @@ class Invitation extends Model
         'show_countdown',
         'show_event_detail',
         'show_quote',
+        'show_video',
+        'youtube_url',
+        'youtube_video_id',
         'quote_content',
         'quote_source',
     ];
@@ -85,6 +88,7 @@ class Invitation extends Model
             'show_countdown' => 'boolean',
             'show_event_detail' => 'boolean',
             'show_quote' => 'boolean',
+            'show_video' => 'boolean',
             'slug_change_count' => 'integer',
         ];
     }
@@ -282,6 +286,33 @@ class Invitation extends Model
         }
 
         return "Yth. {nama_tamu},\n\nKami mengundang Bapak/Ibu/Saudara/i untuk hadir dalam acara pernikahan kami:\n\n✨ {nama_mempelai_pria} & {nama_mempelai_wanita} ✨\n\nSilakan buka undangan digital Anda di:\n{tautan_undangan}\n\nMerupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir. 🙏";
+    }
+
+    public static function extractYoutubeId(?string $url): ?string
+    {
+        if (blank($url)) {
+            return null;
+        }
+
+        $patterns = [
+            '/youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})/',
+            '/youtu\.be\/([a-zA-Z0-9_-]{11})/',
+            '/youtube\.com\/live\/([a-zA-Z0-9_-]{11})/',
+            '/youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/',
+            '/youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/',
+        ];
+
+        foreach ($patterns as $pattern) {
+            if (preg_match($pattern, $url, $matches)) {
+                return $matches[1];
+            }
+        }
+
+        if (preg_match('/^[a-zA-Z0-9_-]{11}$/', $url)) {
+            return $url;
+        }
+
+        return null;
     }
 
     public function firstEvent(): ?InvitationEvent

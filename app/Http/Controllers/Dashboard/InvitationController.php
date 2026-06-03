@@ -158,6 +158,8 @@ class InvitationController extends Controller
                 'show_countdown' => 'boolean',
                 'show_event_detail' => 'boolean',
                 'show_quote' => 'boolean',
+                'show_video' => 'boolean',
+                'youtube_url' => 'nullable|string|max:255',
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
             file_put_contents(storage_path('logs/debug.txt'), 'VALIDATION FAILED: '.json_encode([
@@ -219,12 +221,16 @@ class InvitationController extends Controller
             file_put_contents(storage_path('logs/debug.txt'), 'SLUG NOT CHANGED - UNSET'.PHP_EOL, FILE_APPEND);
         }
 
-        $invitation->update($validated);
+        // Handle YouTube URL & auto-extract video ID
+        if ($request->filled('youtube_url')) {
+            $validated['youtube_url'] = $request->youtube_url;
+            $validated['youtube_video_id'] = Invitation::extractYoutubeId($request->youtube_url);
+        } else {
+            $validated['youtube_url'] = null;
+            $validated['youtube_video_id'] = null;
+        }
 
-        file_put_contents(storage_path('logs/debug.txt'), 'AFTER UPDATE: '.json_encode([
-            'validated_slug' => $validated['slug'] ?? null,
-            'db_slug' => $invitation->fresh()->slug,
-        ]).PHP_EOL, FILE_APPEND);
+        $invitation->update($validated);
 
         // Handle events upsert
         if ($request->has('events_enabled')) {
@@ -268,6 +274,7 @@ class InvitationController extends Controller
                 'stories' => 'nullable|array',
                 'stories.*.id' => 'nullable|integer|exists:invitation_stories,id',
                 'stories.*.story_date' => 'required|string|max:255',
+                'stories.*.story_title' => 'nullable|string|max:255',
                 'stories.*.story_description' => 'required|string',
             ]);
 

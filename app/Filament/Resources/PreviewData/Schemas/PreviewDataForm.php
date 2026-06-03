@@ -129,6 +129,11 @@ class PreviewDataForm
                                     ->required()
                                     ->maxLength(255)
                                     ->placeholder('Contoh: Januari 2020, 12 Desember 2025, Tahun 2022'),
+                                TextInput::make('story_title')
+                                    ->label('Judul Momen')
+                                    ->nullable()
+                                    ->maxLength(255)
+                                    ->placeholder('Contoh: Pertemuan Pertama, Lamaran'),
                                 Textarea::make('story_description')
                                     ->label('Cerita')
                                     ->required()

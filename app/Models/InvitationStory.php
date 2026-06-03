@@ -10,6 +10,7 @@ class InvitationStory extends Model
     protected $fillable = [
         'invitation_id',
         'story_date',
+        'story_title',
         'story_description',
         'order_position',
     ];

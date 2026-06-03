@@ -63,6 +63,7 @@ class PreviewData extends Model
             return [
                 [
                     'story_date' => '',
+                    'story_title' => '',
                     'story_description' => $this->love_story,
                     'order_position' => 0,
                 ],
@@ -72,6 +73,7 @@ class PreviewData extends Model
         return array_map(function ($story, $index) {
             return [
                 'story_date' => $story['story_date'] ?? '',
+                'story_title' => $story['story_title'] ?? '',
                 'story_description' => $story['story_description'] ?? '',
                 'order_position' => $index,
             ];
@@ -127,14 +129,17 @@ class PreviewData extends Model
             'stories' => [
                 [
                     'story_date' => 'Januari 2020',
+                    'story_title' => 'Pertemuan Pertama',
                     'story_description' => 'Pertama kali bertemu di acara orientasi kampus. Sebuah perkenalan singkat yang tidak pernah kami duga akan menjadi awal dari sebuah perjalanan indah.',
                 ],
                 [
                     'story_date' => 'Desember 2022',
+                    'story_title' => 'Mulai Serius',
                     'story_description' => 'Mulai serius menjalin hubungan dan saling mengenal lebih dalam. Banyak suka dan duka yang kami lalui bersama.',
                 ],
                 [
                     'story_date' => 'Maret 2026',
+                    'story_title' => 'Lamaran',
                     'story_description' => 'Dengan penuh kebahagiaan, kami memutuskan untuk melangkah ke jenjang yang lebih serius dan mengikat janji suci pernikahan.',
                 ],
             ],
