@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
@@ -13,7 +13,6 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="#fa9a00">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-
     <link rel="stylesheet" href="{{ asset('css/landingpage.css') }}">
 
     <!-- Favicons -->
@@ -57,7 +56,8 @@
         <div class="absolute inset-0 overflow-hidden pointer-events-none">
             <!-- Floating circles -->
             <div class="absolute -top-20 -right-20 w-72 h-72 bg-primary-200/20 rounded-full blur-3xl"></div>
-            <div class="absolute -bottom-20 -left-20 w-96 h-96 bg-secondary-200/20 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-20 -left-20 w-96 h-96 bg-secondary-200/20 rounded-full blur-3xl">
+            </div>
             <div
                 class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary-100/10 rounded-full blur-3xl">
             </div>
@@ -98,7 +98,8 @@
                     </p>
 
                     <p class="text-base md:text-lg text-neutral-600 max-w-2xl mx-auto lg:mx-0 mb-8">
-                        Bikin undangan pernikahan online dalam 5 menit. Praktis, elegan, lengkap dengan fitur kirim
+                        Bikin undangan pernikahan online dalam 5 menit. Praktis, elegan, lengkap dengan
+                        fitur kirim
                         otomatis via WhatsApp & Check-in QR Code.
                     </p>
 
@@ -169,7 +170,8 @@
                                     class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-primary-100 mb-3">
                                     <i class="fas fa-heart text-3xl text-primary-500"></i>
                                 </div>
-                                <h3 class="font-heading text-xl font-bold text-secondary-800">Rayakan Digital</h3>
+                                <h3 class="font-heading text-xl font-bold text-secondary-800">Rayakan
+                                    Digital</h3>
                                 <p class="text-sm text-neutral-500">Pernikahan & Acara Spesial</p>
                             </div>
 
@@ -243,7 +245,8 @@
                 <div class="w-24 h-1 bg-gradient-to-r from-primary-400 to-primary-600 rounded-full mx-auto mb-6">
                 </div>
                 <p class="text-xl text-neutral-600">
-                    Solusi digital terlengkap untuk menyempurnakan setiap detail perayaan momen spesial Anda.
+                    Solusi digital terlengkap untuk menyempurnakan setiap detail perayaan momen spesial
+                    Anda.
                 </p>
             </div>
 
@@ -266,7 +269,8 @@
                         </div>
                         <h3 class="text-xl font-bold text-secondary-800 mb-3">Undangan Web & Video</h3>
                         <p class="text-neutral-500 leading-relaxed mb-5">
-                            Undangan digital eksklusif dengan desain responsif, musik latar, galeri foto, dan
+                            Undangan digital eksklusif dengan desain responsif, musik latar, galeri foto,
+                            dan
                             countdown otomatis.
                         </p>
                         <a href="#"
@@ -318,7 +322,8 @@
                         </div>
                         <h3 class="text-xl font-bold text-secondary-800 mb-3">Live Streaming</h3>
                         <p class="text-neutral-500 leading-relaxed mb-5">
-                            Hubungkan tamu yang tidak bisa hadir secara fisik melalui integrasi live streaming
+                            Hubungkan tamu yang tidak bisa hadir secara fisik melalui integrasi live
+                            streaming
                             berkualitas tinggi.
                         </p>
                         <a href="#"
@@ -373,7 +378,8 @@
                 <div class="w-24 h-1 bg-gradient-to-r from-primary-400 to-primary-600 rounded-full mx-auto mb-6">
                 </div>
                 <p class="text-xl text-neutral-600 max-w-2xl mx-auto">
-                    Dari memilih desain hingga menyebarkan undangan, semua bisa dilakukan dalam hitungan menit.
+                    Dari memilih desain hingga menyebarkan undangan, semua bisa dilakukan dalam hitungan
+                    menit.
                 </p>
             </div>
 
@@ -436,7 +442,8 @@
                             Daftar & Isi Data
                         </h3>
                         <p class="text-neutral-500 leading-relaxed">
-                            Buat akun gratis lalu isi informasi acara, detail mempelai, dan preferensi undangan.
+                            Buat akun gratis lalu isi informasi acara, detail mempelai, dan preferensi
+                            undangan.
                         </p>
 
                         <div
@@ -603,7 +610,8 @@
                 <div class="w-24 h-1 bg-gradient-to-r from-primary-400 to-primary-600 rounded-full mx-auto mb-6">
                 </div>
                 <p class="text-xl text-neutral-600">
-                    Lihat pratinjau langsung dengan data contoh. Klik "Gunakan Tema Ini" untuk langsung mulai.
+                    Lihat pratinjau langsung dengan data contoh. Klik "Gunakan Tema Ini" untuk langsung
+                    mulai.
                 </p>
             </div>
 
@@ -768,7 +776,8 @@
                                     <i class="fas fa-palette text-3xl text-neutral-400"></i>
                                 </div>
                                 <p class="text-lg font-semibold text-secondary-800">Belum ada tema tersedia</p>
-                                <p class="text-neutral-500 mt-2">Silakan hubungi admin untuk informasi lebih lanjut.
+                                <p class="text-neutral-500 mt-2">Silakan hubungi admin untuk informasi lebih
+                                    lanjut.
                                 </p>
                             </div>
                         @endforelse
@@ -807,7 +816,8 @@
                 <div class="w-24 h-1 bg-gradient-to-r from-primary-400 to-primary-600 rounded-full mx-auto mb-6">
                 </div>
                 <p class="text-xl text-neutral-500">
-                    Rayakan Digital menyediakan fitur lengkap untuk mempermudah tamu dan mempercantik undangan
+                    Rayakan Digital menyediakan fitur lengkap untuk mempermudah tamu dan mempercantik
+                    undangan
                     Anda.
                 </p>
             </div>
@@ -913,7 +923,8 @@
                             </div>
                             <h3 class="text-xl font-bold text-secondary-800 mb-3">Galeri Foto & Video</h3>
                             <p class="text-neutral-500 leading-relaxed">
-                                Unggah foto dan video kenangan manis Anda. Tamu juga bisa mengirim foto mereka
+                                Unggah foto dan video kenangan manis Anda. Tamu juga bisa mengirim foto
+                                mereka
                                 ke galeri bersama.
                             </p>
                             <div class="mt-4 flex items-center text-rose-600 text-sm font-semibold">
@@ -934,7 +945,8 @@
                             </div>
                             <h3 class="text-xl font-bold text-secondary-800 mb-3">Countdown Timer</h3>
                             <p class="text-neutral-500 leading-relaxed">
-                                Tampilkan hitung mundur menuju hari H acara Anda. Buat tamu semakin antusias dan
+                                Tampilkan hitung mundur menuju hari H acara Anda. Buat tamu semakin antusias
+                                dan
                                 tidak lupa tanggal.
                             </p>
                             <div class="mt-4 flex items-center text-blue-600 text-sm font-semibold">
@@ -953,9 +965,11 @@
                                 class="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-500 to-indigo-600 text-white flex items-center justify-center mb-5 shadow-lg shadow-indigo-200">
                                 <i class="fas fa-map-marker-alt text-2xl"></i>
                             </div>
-                            <h3 class="text-xl font-bold text-secondary-800 mb-3">Peta Lokasi Terintegrasi</h3>
+                            <h3 class="text-xl font-bold text-secondary-800 mb-3">Peta Lokasi Terintegrasi
+                            </h3>
                             <p class="text-neutral-500 leading-relaxed">
-                                Tampilkan peta Google Maps langsung di undangan. Tamu bisa buka navigasi dengan
+                                Tampilkan peta Google Maps langsung di undangan. Tamu bisa buka navigasi
+                                dengan
                                 satu klik.
                             </p>
                             <div class="mt-4 flex items-center text-indigo-600 text-sm font-semibold">
@@ -1036,7 +1050,8 @@
                 <h2 class="font-heading text-4xl md:text-5xl font-bold text-secondary-900 mb-5">
                     Semua Kebutuhan <span class="text-primary-500">Pernikahan Anda</span>
                 </h2>
-                <div class="w-24 h-1 bg-gradient-to-r from-primary-400 to-primary-600 rounded-full mx-auto mb-6"></div>
+                <div class="w-24 h-1 bg-gradient-to-r from-primary-400 to-primary-600 rounded-full mx-auto mb-6">
+                </div>
                 <p class="text-xl text-neutral-600">
                     Undangan digital, buku tamu, hingga siaran langsung — semuanya dalam satu platform.
                 </p>
@@ -1098,7 +1113,7 @@
                     @forelse($packages as $package)
                         <div
                             class="group relative bg-white rounded-2xl shadow-soft transition-all duration-300 hover:shadow-xl hover:-translate-y-1
-                                                                                                                                                                                                                                                                {{ $package->is_popular ? 'ring-2 ring-primary-500 shadow-lg' : 'border border-neutral-200' }}">
+                                                                                                                                                                                                                                                                        {{ $package->is_popular ? 'ring-2 ring-primary-500 shadow-lg' : 'border border-neutral-200' }}">
 
                             <!-- Popular Badge -->
                             @if($package->is_popular)
@@ -1124,7 +1139,8 @@
 
                                 <!-- Description -->
                                 @if($package->description)
-                                    <p class="mt-2 text-sm text-neutral-500 line-clamp-2">{{ $package->description }}</p>
+                                    <p class="mt-2 text-sm text-neutral-500 line-clamp-2">
+                                        {{ $package->description }}</p>
                                 @endif
 
                                 <!-- Price -->
@@ -1156,7 +1172,7 @@
                                     @else
                                                     <a href="{{ route('dashboard.checkout') }}"
                                                         class="mt-6 flex items-center justify-center gap-2 w-full rounded-xl py-3 text-sm font-semibold text-center transition-all duration-200
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            {{ $package->is_popular
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            {{ $package->is_popular
                                         ? 'bg-primary-500 text-white hover:bg-primary-600 shadow-md hover:shadow-lg'
                                         : 'bg-primary-50 border border-primary-200 text-primary-700 hover:bg-primary-100' }}">
                                                         Pilih {{ $package->package_name }}
@@ -1179,7 +1195,7 @@
                                     @else
                                                     <a href="{{ route('register') }}"
                                                         class="mt-6 flex items-center justify-center gap-2 w-full rounded-xl py-3 text-sm font-semibold text-center transition-all duration-200
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            {{ $package->is_popular
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            {{ $package->is_popular
                                         ? 'bg-primary-500 text-white hover:bg-primary-600 shadow-md hover:shadow-lg'
                                         : 'bg-primary-50 border border-primary-200 text-primary-700 hover:bg-primary-100' }}">
                                                         Pilih {{ $package->package_name }}
@@ -1200,7 +1216,8 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M5 13l4 4L19 7" />
                                     </svg>
-                                    <h4 class="text-xs font-semibold text-neutral-400 uppercase tracking-wider">Fitur
+                                    <h4 class="text-xs font-semibold text-neutral-400 uppercase tracking-wider">
+                                        Fitur
                                         Termasuk</h4>
                                 </div>
                                 <ul class="space-y-3">
@@ -1228,7 +1245,8 @@
                                 </svg>
                             </div>
                             <p class="text-lg font-medium text-secondary-800">Belum ada paket tersedia</p>
-                            <p class="text-neutral-500 mt-1">Silakan hubungi admin untuk informasi lebih lanjut.</p>
+                            <p class="text-neutral-500 mt-1">Silakan hubungi admin untuk informasi lebih lanjut.
+                            </p>
                         </div>
                     @endforelse
                 </div>
@@ -1246,9 +1264,11 @@
                         <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-emerald-50 mb-5">
                             <i class="fas fa-book-open text-4xl text-emerald-500"></i>
                         </div>
-                        <h3 class="font-heading text-3xl font-bold text-secondary-900 mb-3">Buku Tamu Digital</h3>
+                        <h3 class="font-heading text-3xl font-bold text-secondary-900 mb-3">Buku Tamu
+                            Digital</h3>
                         <p class="text-neutral-600 text-lg">
-                            Catat kehadiran tamu secara modern. Tamu cukup scan QR, isi nama, dan tinggalkan ucapan —
+                            Catat kehadiran tamu secara modern. Tamu cukup scan QR, isi nama, dan tinggalkan
+                            ucapan —
                             semua tersimpan otomatis.
                         </p>
                     </div>
@@ -1263,7 +1283,8 @@
                             </div>
                             <div>
                                 <p class="font-semibold text-secondary-800 text-sm">QR Code Tamu</p>
-                                <p class="text-xs text-neutral-500 mt-0.5">Tamu scan langsung dari ponsel, tanpa perlu
+                                <p class="text-xs text-neutral-500 mt-0.5">Tamu scan langsung dari ponsel,
+                                    tanpa perlu
                                     download aplikasi</p>
                             </div>
                         </div>
@@ -1275,7 +1296,8 @@
                             </div>
                             <div>
                                 <p class="font-semibold text-secondary-800 text-sm">Ucapan & Doa</p>
-                                <p class="text-xs text-neutral-500 mt-0.5">Kumpulkan pesan dan ucapan dari seluruh tamu
+                                <p class="text-xs text-neutral-500 mt-0.5">Kumpulkan pesan dan ucapan dari
+                                    seluruh tamu
                                     undangan</p>
                             </div>
                         </div>
@@ -1287,7 +1309,8 @@
                             </div>
                             <div>
                                 <p class="font-semibold text-secondary-800 text-sm">Ekspor Data</p>
-                                <p class="text-xs text-neutral-500 mt-0.5">Unduh data kehadiran tamu dalam format
+                                <p class="text-xs text-neutral-500 mt-0.5">Unduh data kehadiran tamu dalam
+                                    format
                                     Excel/CSV</p>
                             </div>
                         </div>
@@ -1299,7 +1322,8 @@
                             </div>
                             <div>
                                 <p class="font-semibold text-secondary-800 text-sm">Rekap Real-time</p>
-                                <p class="text-xs text-neutral-500 mt-0.5">Pantau jumlah kehadiran tamu secara langsung
+                                <p class="text-xs text-neutral-500 mt-0.5">Pantau jumlah kehadiran tamu
+                                    secara langsung
                                     dari dashboard</p>
                             </div>
                         </div>
@@ -1309,7 +1333,8 @@
                     <div
                         class="bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-100 rounded-2xl p-8 text-center">
                         <p class="text-secondary-700 font-medium mb-1">Tertarik dengan layanan ini?</p>
-                        <p class="text-neutral-500 text-sm mb-6">Hubungi tim kami untuk informasi harga dan demo gratis
+                        <p class="text-neutral-500 text-sm mb-6">Hubungi tim kami untuk informasi harga dan
+                            demo gratis
                         </p>
                         <div class="flex flex-col sm:flex-row gap-3 justify-center">
                             <a href="https://wa.me/{{ config('app.whatsapp_number', '62812345678') }}?text={{ urlencode('Halo, saya tertarik dengan layanan Buku Tamu Digital. Bisa tolong jelaskan lebih lanjut?') }}"
@@ -1340,10 +1365,12 @@
                         <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-primary-50 mb-5">
                             <i class="fas fa-video text-4xl text-primary-500"></i>
                         </div>
-                        <h3 class="font-heading text-3xl font-bold text-secondary-900 mb-3">Live Streaming Pernikahan
+                        <h3 class="font-heading text-3xl font-bold text-secondary-900 mb-3">Live Streaming
+                            Pernikahan
                         </h3>
                         <p class="text-neutral-600 text-lg">
-                            Siarkan momen spesial secara langsung kepada keluarga dan sahabat di seluruh penjuru dunia —
+                            Siarkan momen spesial secara langsung kepada keluarga dan sahabat di seluruh
+                            penjuru dunia —
                             tanpa harus hadir secara fisik.
                         </p>
                     </div>
@@ -1358,7 +1385,8 @@
                             </div>
                             <div>
                                 <p class="font-semibold text-secondary-800 text-sm">HD Streaming</p>
-                                <p class="text-xs text-neutral-500 mt-0.5">Kualitas video jernih hingga Full HD untuk
+                                <p class="text-xs text-neutral-500 mt-0.5">Kualitas video jernih hingga Full
+                                    HD untuk
                                     pengalaman terbaik</p>
                             </div>
                         </div>
@@ -1370,7 +1398,8 @@
                             </div>
                             <div>
                                 <p class="font-semibold text-secondary-800 text-sm">Link Privat</p>
-                                <p class="text-xs text-neutral-500 mt-0.5">Hanya tamu undangan yang bisa menonton dengan
+                                <p class="text-xs text-neutral-500 mt-0.5">Hanya tamu undangan yang bisa
+                                    menonton dengan
                                     link eksklusif</p>
                             </div>
                         </div>
@@ -1382,7 +1411,8 @@
                             </div>
                             <div>
                                 <p class="font-semibold text-secondary-800 text-sm">Rekaman Video</p>
-                                <p class="text-xs text-neutral-500 mt-0.5">Siaran otomatis direkam dan tersedia untuk
+                                <p class="text-xs text-neutral-500 mt-0.5">Siaran otomatis direkam dan
+                                    tersedia untuk
                                     diunduh setelah acara</p>
                             </div>
                         </div>
@@ -1394,7 +1424,8 @@
                             </div>
                             <div>
                                 <p class="font-semibold text-secondary-800 text-sm">Unlimited Penonton</p>
-                                <p class="text-xs text-neutral-500 mt-0.5">Tidak ada batasan jumlah penonton yang bisa
+                                <p class="text-xs text-neutral-500 mt-0.5">Tidak ada batasan jumlah penonton
+                                    yang bisa
                                     menyaksikan siaran</p>
                             </div>
                         </div>
@@ -1403,7 +1434,8 @@
                     <div
                         class="bg-gradient-to-br from-primary-50 to-secondary-50 border border-primary-100 rounded-2xl p-8 text-center">
                         <p class="text-secondary-700 font-medium mb-1">Tertarik dengan layanan ini?</p>
-                        <p class="text-neutral-500 text-sm mb-6">Hubungi tim kami untuk informasi harga dan demo gratis
+                        <p class="text-neutral-500 text-sm mb-6">Hubungi tim kami untuk informasi harga dan
+                            demo gratis
                         </p>
                         <div class="flex flex-col sm:flex-row gap-3 justify-center">
                             <a href="https://wa.me/{{ config('app.whatsapp_number', '62812345678') }}?text={{ urlencode('Halo, saya tertarik dengan layanan Live Streaming Pernikahan. Bisa tolong jelaskan lebih lanjut?') }}"
@@ -1434,7 +1466,8 @@
                 <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
                     Paling Sering Ditanyakan
                 </h2>
-                <div class="w-20 h-1 bg-gradient-to-r from-orange-400 to-orange-600 mx-auto rounded-full"></div>
+                <div class="w-20 h-1 bg-gradient-to-r from-orange-400 to-orange-600 mx-auto rounded-full">
+                </div>
             </div>
 
             <!-- FAQ Items -->
@@ -1446,7 +1479,7 @@
                         <summary class="flex items-center justify-between cursor-pointer list-none p-5">
                             <div class="flex items-center gap-3">
                                 <h3 class="font-semibold text-gray-800 group-open:text-orange-600 transition-colors">
-                                    Berapa lama proses aktivasinya?
+                                    Bagaimana cara membuat undangan digital?
                                 </h3>
                             </div>
                             <div class="text-gray-400 group-open:rotate-180 transition-transform duration-300">
@@ -1458,10 +1491,11 @@
                         </summary>
                         <div class="px-5 pb-5 pt-0 border-t border-gray-100 mt-2">
                             <p class="text-gray-600 leading-relaxed">
-                                Proses aktivasi sangat cepat! Setelah Anda menyelesaikan pembayaran, layanan Anda
-                                akan
-                                aktif dalam waktu kurang dari 15 menit.
-                                Tim kami akan mengirimkan notifikasi via email dan WhatsApp.
+                                Setelah melakukan pemesanan, Anda akan mendapatkan akses dashboard untuk
+                                mengisi data
+                                acara,
+                                foto, galeri, lokasi, dan informasi lainnya secara mandiri tanpa perlu
+                                menunggu admin.
                             </p>
                         </div>
                     </details>
@@ -1474,7 +1508,7 @@
                         <summary class="flex items-center justify-between cursor-pointer list-none p-5">
                             <div class="flex items-center gap-3">
                                 <h3 class="font-semibold text-gray-800 group-open:text-orange-600 transition-colors">
-                                    Apakah link bisa diganti?
+                                    Apakah data undangan bisa diubah setelah dibuat?
                                 </h3>
                             </div>
                             <div class="text-gray-400 group-open:rotate-180 transition-transform duration-300">
@@ -1486,10 +1520,10 @@
                         </summary>
                         <div class="px-5 pb-5 pt-0 border-t border-gray-100 mt-2">
                             <p class="text-gray-600 leading-relaxed">
-                                Tentu bisa! Anda dapat mengganti link kapan saja melalui dashboard. Tidak ada
-                                batasan
-                                jumlah penggantian link,
-                                dan perubahan akan langsung berlaku secara real-time.
+                                Ya. Anda dapat mengubah nama mempelai, jadwal acara, foto, galeri, lokasi,
+                                maupun
+                                informasi
+                                lainnya kapan saja melalui dashboard selama masa aktif undangan.
                             </p>
                         </div>
                     </details>
@@ -1502,7 +1536,7 @@
                         <summary class="flex items-center justify-between cursor-pointer list-none p-5">
                             <div class="flex items-center gap-3">
                                 <h3 class="font-semibold text-gray-800 group-open:text-orange-600 transition-colors">
-                                    Bagaimana cara mengirim via WhatsApp massal?
+                                    Apakah tersedia nama tamu otomatis?
                                 </h3>
                             </div>
                             <div class="text-gray-400 group-open:rotate-180 transition-transform duration-300">
@@ -1514,13 +1548,93 @@
                         </summary>
                         <div class="px-5 pb-5 pt-0 border-t border-gray-100 mt-2">
                             <p class="text-gray-600 leading-relaxed">
-                                Mengirim pesan massal via WhatsApp sangat mudah! Anda cukup upload file CSV/Excel
-                                berisi
-                                nomor tujuan,
-                                buat template pesan Anda, lalu klik kirim. Sistem akan mengirim pesan secara
-                                bertahap
-                                (batch) untuk
-                                menghindari spam.
+                                Tentu. Anda dapat membuat link khusus untuk setiap tamu sehingga nama tamu
+                                akan tampil
+                                otomatis
+                                saat undangan dibuka.
+                            </p>
+                        </div>
+                    </details>
+                </div>
+
+                <!-- Item 4 -->
+                <div
+                    class="group bg-white/60 backdrop-blur-sm rounded-xl border border-white/50 shadow-sm hover:shadow-md transition-all">
+                    <details class="group">
+                        <summary class="flex items-center justify-between cursor-pointer list-none p-5">
+                            <div class="flex items-center gap-3">
+                                <h3 class="font-semibold text-gray-800 group-open:text-orange-600 transition-colors">
+                                    Apakah undangan bisa dibagikan ke WhatsApp?
+                                </h3>
+                            </div>
+                            <div class="text-gray-400 group-open:rotate-180 transition-transform duration-300">
+                                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </div>
+                        </summary>
+                        <div class="px-5 pb-5 pt-0 border-t border-gray-100 mt-2">
+                            <p class="text-gray-600 leading-relaxed">
+                                Ya. Link undangan dapat dibagikan melalui WhatsApp, Instagram, Telegram,
+                                Facebook,
+                                email,
+                                maupun media sosial lainnya.
+                            </p>
+                        </div>
+                    </details>
+                </div>
+
+                <!-- Item 5 -->
+                <div
+                    class="group bg-white/60 backdrop-blur-sm rounded-xl border border-white/50 shadow-sm hover:shadow-md transition-all">
+                    <details class="group">
+                        <summary class="flex items-center justify-between cursor-pointer list-none p-5">
+                            <div class="flex items-center gap-3">
+                                <h3 class="font-semibold text-gray-800 group-open:text-orange-600 transition-colors">
+                                    Apakah tersedia RSVP dan buku tamu?
+                                </h3>
+                            </div>
+                            <div class="text-gray-400 group-open:rotate-180 transition-transform duration-300">
+                                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </div>
+                        </summary>
+                        <div class="px-5 pb-5 pt-0 border-t border-gray-100 mt-2">
+                            <p class="text-gray-600 leading-relaxed">
+                                Ya. Tamu dapat mengisi konfirmasi kehadiran (RSVP) serta memberikan ucapan
+                                dan doa
+                                langsung
+                                melalui halaman undangan.
+                            </p>
+                        </div>
+                    </details>
+                </div>
+
+                <!-- Item 6 -->
+                <div
+                    class="group bg-white/60 backdrop-blur-sm rounded-xl border border-white/50 shadow-sm hover:shadow-md transition-all">
+                    <details class="group">
+                        <summary class="flex items-center justify-between cursor-pointer list-none p-5">
+                            <div class="flex items-center gap-3">
+                                <h3 class="font-semibold text-gray-800 group-open:text-orange-600 transition-colors">
+                                    Apakah saya akan mendapatkan bantuan jika mengalami kesulitan?
+                                </h3>
+                            </div>
+                            <div class="text-gray-400 group-open:rotate-180 transition-transform duration-300">
+                                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </div>
+                        </summary>
+                        <div class="px-5 pb-5 pt-0 border-t border-gray-100 mt-2">
+                            <p class="text-gray-600 leading-relaxed">
+                                Tentu. Tim support kami siap membantu melalui WhatsApp jika Anda mengalami
+                                kendala saat
+                                membuat atau mengelola undangan.
                             </p>
                         </div>
                     </details>

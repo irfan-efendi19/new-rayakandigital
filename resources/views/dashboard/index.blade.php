@@ -225,18 +225,34 @@
                                     <h4 class="font-bold text-lg text-secondary-800 mb-1">{{ $invitation->title }}</h4>
                                     <p class="text-sm text-neutral-500 mb-3">{{ $invitation->bride_name }} & {{ $invitation->groom_name }}</p>
 
-                                    <div class="flex items-center gap-2 mb-4">
+                                    <div class="flex flex-wrap items-center gap-2 mb-4">
                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-50 text-primary-700">
                                             {{ $invitation->themeLabel() }}
                                         </span>
                                         @php
                                             $isTrial = $invitation->expires_at !== null && !$invitation->hasPremiumFeatures();
                                             $isExpired = $invitation->isTrialExpired();
+                                            $remainingDays = $invitation->trialRemainingDays();
                                         @endphp
                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
                                             {{ $isExpired ? 'bg-red-100 text-red-700' : ($isTrial ? 'bg-amber-100 text-amber-700' : 'bg-green-100 text-green-700') }}">
                                             {{ $isExpired ? 'Kadaluarsa' : ($isTrial ? 'Masa Percobaan' : 'Aktif') }}
                                         </span>
+                                        @if(!$isExpired && $invitation->expires_at)
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-neutral-100 text-neutral-600">
+                                                <svg class="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                </svg>
+                                                Sisa {{ $remainingDays }} hari
+                                            </span>
+                                        @elseif(!$isExpired && !$invitation->expires_at)
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-50 text-green-700">
+                                                <svg class="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                </svg>
+                                                Lifetime
+                                            </span>
+                                        @endif
                                     </div>
 
                                     <div class="flex flex-col gap-2 mt-auto">
@@ -244,10 +260,24 @@
                                             class="text-center w-full bg-gradient-to-r from-primary to-primary-600 text-white px-3 py-2 rounded-xl text-sm font-medium hover:shadow-md transition-all">
                                             Kelola Undangan
                                         </a>
-                                        <a href="{{ route('invitation.show', $invitation->slug) }}" target="_blank"
-                                            class="text-center text-primary-600 hover:text-primary-700 text-sm font-medium transition-colors">
-                                            Lihat Halaman &rarr;
-                                        </a>
+                                        <div class="flex items-center gap-2">
+                                            <a href="{{ route('invitation.show', $invitation->slug) }}" target="_blank"
+                                                class="flex-1 text-center text-primary-600 hover:text-primary-700 text-sm font-medium transition-colors">
+                                                Lihat Halaman &rarr;
+                                            </a>
+                                            <form action="{{ route('dashboard.invitations.destroy', $invitation) }}" method="POST"
+                                                onsubmit="return confirmSwal(event, 'Yakin ingin menghapus undangan &quot;{{ $invitation->title }}&quot;? Semua data terkait tamu, RSVP, dan wish akan ikut terhapus.');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit"
+                                                    class="text-red-400 hover:text-red-600 transition-colors p-1"
+                                                    title="Hapus Undangan">
+                                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                    </svg>
+                                                </button>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
