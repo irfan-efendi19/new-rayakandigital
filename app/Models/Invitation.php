@@ -6,6 +6,7 @@ use Database\Factories\InvitationFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Invitation extends Model
@@ -15,6 +16,7 @@ class Invitation extends Model
 
     protected $fillable = [
         'user_id',
+        'pricing_tier_id',
         'slug',
         'slug_change_count',
         'title',
@@ -98,6 +100,11 @@ class Invitation extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function pricingTier(): BelongsTo
+    {
+        return $this->belongsTo(Package::class, 'pricing_tier_id');
+    }
+
     public function guests(): HasMany
     {
         return $this->hasMany(Guest::class);
@@ -148,11 +155,23 @@ class Invitation extends Model
 
     public function currentTier(): string
     {
+        if ($this->relationLoaded('pricingTier') && $this->pricingTier) {
+            return $this->pricingTier->package_code;
+        }
+
+        if ($this->pricing_tier_id) {
+            return Package::where('id', $this->pricing_tier_id)->value('package_code') ?? $this->tier ?? 'free';
+        }
+
         return $this->tier ?? 'free';
     }
 
     public function package(): ?Package
     {
+        if ($this->pricing_tier_id) {
+            return Package::find($this->pricing_tier_id);
+        }
+
         return Package::where('package_code', $this->currentTier())->first();
     }
 
@@ -217,7 +236,7 @@ class Invitation extends Model
         return $this->hasAddon('addon_digital_gift') ? 3 : 0;
     }
 
-    public function addons(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function addons(): BelongsToMany
     {
         return $this->belongsToMany(Addon::class)->withPivot('purchased_at')->withTimestamps();
     }
@@ -230,7 +249,7 @@ class Invitation extends Model
             ->exists();
     }
 
-    public function orders(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function orders(): HasMany
     {
         return $this->hasMany(Order::class);
     }

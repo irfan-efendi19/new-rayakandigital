@@ -516,6 +516,7 @@
 
                                     {{-- YouTube Video --}}
                                     <div class="sm:col-span-6">
+                                        @if($invitation->hasFeature('youtube_video'))
                                         <div class="bg-neutral-50 p-5 rounded-2xl border border-neutral-200 space-y-4">
                                             <div class="flex items-center gap-3">
                                                 <div class="w-8 h-8 rounded-lg bg-primary-100 flex items-center justify-center text-primary">
@@ -544,6 +545,15 @@
                                                 </div>
                                             @endif
                                         </div>
+                                        @else
+                                        <div class="bg-amber-50 border border-amber-200 rounded-2xl p-5 flex items-center gap-3">
+                                            <span class="text-xl">✨</span>
+                                            <div>
+                                                <p class="text-sm font-semibold text-amber-800">Fitur Video YouTube & Live Streaming Terkunci</p>
+                                                <p class="text-xs text-amber-700">Silakan upgrade ke paket Gold atau Platinum untuk menyematkan video YouTube dan siaran langsung di halaman undangan Anda.</p>
+                                            </div>
+                                        </div>
+                                        @endif
                                     </div>
 
                                     {{-- Active toggle --}}

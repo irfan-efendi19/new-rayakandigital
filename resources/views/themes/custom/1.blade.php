@@ -160,7 +160,7 @@
     @endif
 
     <!-- Gallery Section -->
-    @if($invitation->show_gallery && $invitation->hasPremiumFeatures() && !empty($invitation->gallery_photos))
+    @if($invitation->show_gallery && $invitation->hasFeature('gallery_photos') && !empty($invitation->gallery_photos))
     <section class="section gallery-section">
         <div class="container text-center">
             <h2 class="section-title">Galeri Foto</h2>

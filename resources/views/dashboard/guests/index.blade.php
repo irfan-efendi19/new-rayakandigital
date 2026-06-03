@@ -96,6 +96,7 @@
                 });
             </script>
 
+            @if($invitation->hasFeature('guest_import'))
             {{-- Import Card --}}
             <div class="bg-white rounded-2xl shadow-soft border border-neutral-100">
                 <div class="p-6">
@@ -123,6 +124,7 @@
                     </p>
                 </div>
             </div>
+            @endif
 
             {{-- Guest List --}}
             <div class="bg-white rounded-2xl shadow-soft border border-neutral-100">

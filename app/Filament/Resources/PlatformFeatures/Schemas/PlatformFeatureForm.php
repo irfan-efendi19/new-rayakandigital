@@ -22,6 +22,11 @@ class PlatformFeatureForm
                     ->label('Nama Fasilitas')
                     ->required()
                     ->maxLength(100),
+                TextInput::make('group_name')
+                    ->label('Grup')
+                    ->default('Dasar')
+                    ->maxLength(50)
+                    ->helperText('Pengelompokan visual fitur, misal: Dasar, Multimedia, Interaktif'),
                 Textarea::make('description')
                     ->label('Deskripsi'),
             ]);

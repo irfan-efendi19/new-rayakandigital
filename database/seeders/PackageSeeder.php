@@ -11,24 +11,25 @@ class PackageSeeder extends Seeder
     public function run(): void
     {
         $features = [
-            ['feature_key' => 'basic_theme', 'feature_name' => '2 Pilihan Tema Dasar', 'description' => 'Akses ke tema dasar platform'],
-            ['feature_key' => 'all_themes', 'feature_name' => 'Semua Pilihan Tema', 'description' => 'Akses ke semua tema termasuk premium'],
-            ['feature_key' => 'gallery_photos', 'feature_name' => 'Foto Galeri', 'description' => 'Unggah foto ke galeri undangan'],
-            ['feature_key' => 'custom_music', 'feature_name' => 'Upload Musik Custom', 'description' => 'Unggah lagu favorit sebagai latar undangan'],
-            ['feature_key' => 'digital_gift', 'feature_name' => 'Digital Gift / Angpao', 'description' => 'Fitur amplop digital dan QRIS'],
-            ['feature_key' => 'multi_gift', 'feature_name' => 'Multi-Akun Gift & QRIS', 'description' => 'Banyak akun transfer dan QRIS'],
-            ['feature_key' => 'unlimited_gift', 'feature_name' => 'Gift & QRIS Unlimited', 'description' => 'Akun gift dan QRIS tanpa batas'],
-            ['feature_key' => 'guest_import', 'feature_name' => 'Import Tamu (Excel)', 'description' => 'Import daftar tamu dari file Excel'],
-            ['feature_key' => 'unlimited_guests', 'feature_name' => 'Import Tamu Unlimited', 'description' => 'Import tamu tanpa batas dari Excel'],
-            ['feature_key' => 'rsvp', 'feature_name' => 'Manajemen RSVP', 'description' => 'Konfirmasi kehadiran tamu otomatis'],
-            ['feature_key' => 'personal_link', 'feature_name' => 'Link Personal per Tamu', 'description' => 'Link undangan personal untuk setiap tamu'],
-            ['feature_key' => 'wa_template', 'feature_name' => 'Template Pesan WhatsApp', 'description' => 'Template pesan otomatis untuk undangan'],
-            ['feature_key' => 'no_watermark', 'feature_name' => 'Tanpa Watermark', 'description' => 'Hilangkan watermark dari halaman undangan'],
-            ['feature_key' => 'custom_css', 'feature_name' => 'Custom CSS / Tema Custom', 'description' => 'Kustomisasi CSS dan tema sesuai keinginan'],
-            ['feature_key' => 'eo_branding', 'feature_name' => 'Custom Branding EO', 'description' => 'Branding khusus untuk Event Organizer'],
-            ['feature_key' => 'multi_quota', 'feature_name' => 'Multi-Quota Undangan', 'description' => 'Buat banyak undangan dalam satu paket'],
-            ['feature_key' => 'real_time_guestbook', 'feature_name' => 'Buku Tamu Real-time', 'description' => 'Buku tamu interaktif real-time'],
-            ['feature_key' => 'qr_checkin', 'feature_name' => 'QR Code Check-In', 'description' => 'Scan QR code untuk check-in tamu'],
+            ['feature_key' => 'basic_theme', 'feature_name' => '2 Pilihan Tema Dasar', 'group_name' => 'Tampilan', 'description' => 'Akses ke tema dasar platform'],
+            ['feature_key' => 'all_themes', 'feature_name' => 'Semua Pilihan Tema', 'group_name' => 'Tampilan', 'description' => 'Akses ke semua tema termasuk premium'],
+            ['feature_key' => 'gallery_photos', 'feature_name' => 'Foto Galeri', 'group_name' => 'Multimedia', 'description' => 'Unggah foto ke galeri undangan'],
+            ['feature_key' => 'custom_music', 'feature_name' => 'Upload Musik Custom', 'group_name' => 'Multimedia', 'description' => 'Unggah lagu favorit sebagai latar undangan'],
+            ['feature_key' => 'digital_gift', 'feature_name' => 'Digital Gift / Angpao', 'group_name' => 'Interaktif', 'description' => 'Fitur amplop digital dan QRIS'],
+            ['feature_key' => 'multi_gift', 'feature_name' => 'Multi-Akun Gift & QRIS', 'group_name' => 'Interaktif', 'description' => 'Banyak akun transfer dan QRIS'],
+            ['feature_key' => 'unlimited_gift', 'feature_name' => 'Gift & QRIS Unlimited', 'group_name' => 'Interaktif', 'description' => 'Akun gift dan QRIS tanpa batas'],
+            ['feature_key' => 'guest_import', 'feature_name' => 'Import Tamu (Excel)', 'group_name' => 'Manajemen', 'description' => 'Import daftar tamu dari file Excel'],
+            ['feature_key' => 'unlimited_guests', 'feature_name' => 'Import Tamu Unlimited', 'group_name' => 'Manajemen', 'description' => 'Import tamu tanpa batas dari Excel'],
+            ['feature_key' => 'rsvp', 'feature_name' => 'Manajemen RSVP', 'group_name' => 'Interaktif', 'description' => 'Konfirmasi kehadiran tamu otomatis'],
+            ['feature_key' => 'personal_link', 'feature_name' => 'Link Personal per Tamu', 'group_name' => 'Manajemen', 'description' => 'Link undangan personal untuk setiap tamu'],
+            ['feature_key' => 'wa_template', 'feature_name' => 'Template Pesan WhatsApp', 'group_name' => 'Manajemen', 'description' => 'Template pesan otomatis untuk undangan'],
+            ['feature_key' => 'no_watermark', 'feature_name' => 'Tanpa Watermark', 'group_name' => 'Tampilan', 'description' => 'Hilangkan watermark dari halaman undangan'],
+            ['feature_key' => 'custom_css', 'feature_name' => 'Custom CSS / Tema Custom', 'group_name' => 'Tampilan', 'description' => 'Kustomisasi CSS dan tema sesuai keinginan'],
+            ['feature_key' => 'eo_branding', 'feature_name' => 'Custom Branding EO', 'group_name' => 'Tampilan', 'description' => 'Branding khusus untuk Event Organizer'],
+            ['feature_key' => 'multi_quota', 'feature_name' => 'Multi-Quota Undangan', 'group_name' => 'Manajemen', 'description' => 'Buat banyak undangan dalam satu paket'],
+            ['feature_key' => 'real_time_guestbook', 'feature_name' => 'Buku Tamu Real-time', 'group_name' => 'Interaktif', 'description' => 'Buku tamu interaktif real-time'],
+            ['feature_key' => 'qr_checkin', 'feature_name' => 'QR Code Check-In', 'group_name' => 'Interaktif', 'description' => 'Scan QR code untuk check-in tamu'],
+            ['feature_key' => 'youtube_video', 'feature_name' => 'Video YouTube & Live Streaming', 'group_name' => 'Multimedia', 'description' => 'Sematan video YouTube dan siaran langsung di halaman undangan'],
         ];
 
         foreach ($features as $f) {
@@ -40,7 +41,7 @@ class PackageSeeder extends Seeder
 
         $freeFeatureKeys = ['basic_theme', 'gallery_photos', 'rsvp', 'personal_link', 'wa_template', 'real_time_guestbook'];
         $silverFeatureKeys = array_merge($freeFeatureKeys, ['digital_gift', 'guest_import']);
-        $goldFeatureKeys = array_merge($silverFeatureKeys, ['all_themes', 'multi_gift', 'custom_music', 'unlimited_guests', 'no_watermark']);
+        $goldFeatureKeys = array_merge($silverFeatureKeys, ['all_themes', 'multi_gift', 'custom_music', 'youtube_video', 'unlimited_guests', 'no_watermark']);
         $platinumFeatureKeys = array_merge($goldFeatureKeys, ['unlimited_gift', 'custom_css', 'eo_branding', 'multi_quota', 'qr_checkin']);
 
         $packages = [

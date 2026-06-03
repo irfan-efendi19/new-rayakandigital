@@ -8,6 +8,7 @@
                 <p class="text-sm text-neutral-500 mt-0.5">{{ $invitation->title }}</p>
             </div>
             <div class="flex gap-2">
+                @if($invitation->hasFeature('personal_link'))
                 <a href="{{ route('dashboard.invitations.guests.index', $invitation) }}"
                     class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-neutral-300 rounded-xl text-sm font-semibold text-neutral-700 hover:bg-neutral-50 hover:border-primary-300 transition-all">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -15,6 +16,7 @@
                     </svg>
                     Daftar Tamu
                 </a>
+                @endif
                 <a href="{{ route('dashboard.welcome-screen.index', $invitation) }}" target="_blank"
                     class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary to-primary-600 text-white rounded-xl text-sm font-semibold shadow-soft hover:shadow-md transition-all">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

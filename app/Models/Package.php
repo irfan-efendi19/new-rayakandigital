@@ -30,6 +30,13 @@ class Package extends Model
         'active_period_days' => 'integer',
     ];
 
+    protected $appends = ['slug'];
+
+    public function getSlugAttribute(): string
+    {
+        return $this->package_code;
+    }
+
     public function features(): BelongsToMany
     {
         return $this->belongsToMany(PlatformFeature::class, 'package_feature_pivots', 'package_id', 'feature_id');

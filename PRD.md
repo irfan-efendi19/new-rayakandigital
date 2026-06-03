@@ -1,6 +1,6 @@
 # PRODUCT REQUIREMENT DOCUMENT (PRD)
-## MODUL: INTEGRASI VIDEO YOUTUBE & LIVE STREAMING (DASHBOARD CONTROLLED)
-**Versi:** 1.6 (Spesifikasi Fitur Konten Video & Toggle Status - Laravel 13, Filament v3, & Alpine.js)  
+## MODUL: KONTROL AKSES FITUR BERBASIS TIER HARGA (SUBSCRIPTION FEATURE GATE)
+**Versi:** 1.7 (Spesifikasi Manajemen Paket & Hak Akses Fitur - Laravel 13 & Filament v3)  
 **Tanggal:** 3 Juni 2026  
 **Status:** Approved  
 **Author:** Mochammad Irfan Efendi  
@@ -10,18 +10,18 @@
 ## 1. DESKRIPSI FITUR & ATURAN BISNIS (BUSINESS RULES)
 
 ### 1.1 Deskripsi Fitur
-Fitur ini memungkinkan pasangan pengantin (*user*) untuk menampilkan video dokumentasi pre-wedding ataupun menyematkan siaran langsung (*Live Streaming*) pernikahan dari YouTube langsung di dalam halaman undangan digital mereka. Pengaturan tautan (*link*) video serta kontrol aktif/nonaktif (*toggle switch*) dikelola secara mandiri oleh pengguna melalui dashboard klien, atau dapat dikontrol oleh admin melalui panel **Filament**.
+Fitur ini memberikan kemampuan bagi Admin untuk membuat paket harga (Tier) yang fleksibel (misal: *Bronze, Silver, Gold*) melalui panel **Filament**, menetapkan daftar fitur apa saja yang aktif di masing-masing paket tersebut, dan secara otomatis mengunci atau membuka hak akses fitur pada akun pengguna (*User Invitation Dashboard*) serta membatasi penayangan komponen di halaman depan undangan klien.
 
 ### 1.2 Aturan Bisnis (Business Rules)
-1. **Ekstraksi Otomatis ID Video:** Pengguna dapat memasukkan berbagai format URL YouTube (misal: *https://youtu.be/abc123xyz*, *https://youtube.com/watch?v=abc123xyz*, atau *https://youtube.com/live/abc123xyz*). Sistem harus mengekstrak ID video secara otomatis sebelum disimpan ke database untuk kebutuhan render `iframe` embed.
-2. **Kontrol Visibilitas Dinamis (Toggle Master):** Terdapat sebuah kolom boolean (`show_video`) yang berfungsi sebagai saklar utama. Jika diset `false`, maka *section* video tidak akan dirender dalam DOM HTML undangan klien (*auto-hide state*).
-3. **Optimasi Kecepatan (Lazy Loading):** Pemutaran berkas sematan `iframe` YouTube wajib menggunakan parameter `loading="lazy"` agar tidak menghambat pemuatan elemen esensial teks dan gambar *thumbnail* 9:16 di awal prapemuatan halaman.
+1. **Daftar Fitur Baku (Feature Registry):** Sistem memiliki daftar fitur bawaan yang didaftarkan sebagai acuan (*Cerita Cinta, Absensi QR, Layar Sapa, Video YouTube, Musik Latar, dll*).
+2. **Kontrol Granular:** Setiap Tier Harga memiliki relasi *Many-to-Many* ke tabel fitur, bertindak sebagai saklar izin akses (*Feature Flagging*).
+3. **Fallback & Graceful Restriction:** Jika pengguna mencoba mengakses menu fitur yang tidak masuk dalam cakupan tier harganya, sistem di dashboard wajib memunculkan status *locked* (tombol dinonaktifkan/redup) disertai tawaran untuk melakukan *upgrade* paket. Di sisi undangan klien, komponen yang tidak berizin tidak akan dirender oleh sistem.
 
 ---
 
 ## 2. BLUEPRINT STRUKTUR DATABASE (MIGRATION)
 
-Jalankan skrip migrasi berikut untuk menambahkan kolom konfigurasi video YouTube pada tabel `invitations`:
+Buat struktur tabel master paket, tabel fitur, dan tabel pivot relasi antara paket dengan hak akses fitur:
 
 ```php
 use Illuminate\Database\Migrations\Migration;
@@ -32,17 +32,52 @@ return new class extends Migration
 {
     public function up(): void
     {
+        // 1. Master Tabel Tier Paket Harga
+        Schema::create('pricing_tiers', function (Blueprint $table) {
+            $table->id();
+            $table->string('name')->unique(); // Misal: Bronze, Silver, Gold
+            $table->string('slug')->unique();
+            $table->decimal('price', 12, 2)->default(0.00);
+            $table->string('description')->nullable();
+            $table->boolean('is_active')->default(true);
+            $table->timestamps();
+        });
+
+        // 2. Master Tabel Registrasi Fitur Aplikasi
+        Schema::create('app_features', function (Blueprint $table) {
+            $table->id();
+            $table->string('feature_key')->unique(); // Kode unik sistem, misal: 'feature_youtube_video', 'feature_qr_checkin'
+            $table->string('feature_name'); // Nama pajangan, misal: 'Sematkan Video & Live YouTube'
+            $table->string('group_name')->default('Dasar'); // Pengelompokan visual
+            $table->timestamps();
+        });
+
+        // 3. Tabel Pivot Hubungan Banyak-ke-Banyak (Tier vs Fitur)
+        Schema::create('app_feature_pricing_tier', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('pricing_tier_id')->constrained('pricing_tiers')->onDelete('cascade');
+            $table->foreignId('app_feature_id')->constrained('app_features')->onDelete('cascade');
+        });
+
+        // 4. Menghubungkan Skema Transaksi Undangan Eksisting ke Level Tier Paket
         Schema::table('invitations', function (Blueprint $table) {
-            $table->boolean('show_video')->default(false)->after('title'); // Saklar Aktif/Nonaktif
-            $table->string('youtube_url')->nullable()->after('show_video'); // URL Mentah dari User
-            $table->string('youtube_video_id', 50)->nullable()->after('youtube_url'); // ID Hasil Ekstraksi
+            $table->foreignId('pricing_tier_id')
+                ->nullable()
+                ->after('user_id')
+                ->constrained('pricing_tiers')
+                ->onDelete('set null'); // Jika paket dihapus admin, undangan tetap aman terdata
         });
     }
 
     public function down(): void
     {
         Schema::table('invitations', function (Blueprint $table) {
-            $table->dropColumn(['show_video', 'youtube_url', 'youtube_video_id']);
+            $table->dropForeign(['pricing_tier_id']);
+            $table->dropColumn('pricing_tier_id');
         });
+
+        Schema::dropIfExists('app_feature_pricing_tier');
+        Schema::dropIfExists('app_features');
+        Schema::dropIfExists('pricing_tiers');
     }
 };

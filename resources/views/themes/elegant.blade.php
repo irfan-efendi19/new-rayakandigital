@@ -232,7 +232,7 @@
     @endif
 
     <!-- Gallery Section (Gold & Platinum Only) -->
-    @if($invitation->show_gallery && $invitation->hasPremiumFeatures() && count($invitation->gallery_photos ?? []) > 0)
+    @if($invitation->show_gallery && $invitation->hasFeature('gallery_photos') && count($invitation->gallery_photos ?? []) > 0)
         <section class="py-20 px-6 bg-white">
             <div class="text-center mb-10" data-aos="fade-up">
                 <h2 class="text-3xl font-serif text-primary mb-4">Galeri Foto</h2>
@@ -250,7 +250,7 @@
     @endif
 
     <!-- YouTube Video / Live Streaming Section -->
-    @if($invitation->show_video && $invitation->youtube_video_id)
+    @if($invitation->show_video && $invitation->youtube_video_id && $invitation->hasFeature('youtube_video'))
     <section class="py-20 px-6 bg-[#fffaf0]">
         <div class="text-center mb-10" data-aos="fade-up">
             <h2 class="text-3xl font-serif text-primary mb-4">Video & Live Streaming</h2>

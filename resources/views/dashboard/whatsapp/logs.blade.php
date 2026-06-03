@@ -8,6 +8,7 @@
                 <p class="text-sm text-neutral-500 mt-0.5">Riwayat pengiriman pesan WhatsApp ke tamu undangan.</p>
             </div>
             <div class="flex gap-2">
+                @if($invitation->hasFeature('personal_link'))
                 <a href="{{ route('dashboard.invitations.guests.index', $invitation) }}"
                    class="inline-flex items-center gap-1.5 bg-white border border-neutral-200 text-neutral-700 px-4 py-2 rounded-xl text-sm font-medium hover:bg-neutral-50 transition-colors">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -15,6 +16,7 @@
                     </svg>
                     Kembali ke Daftar Tamu
                 </a>
+                @endif
             </div>
         </div>
     </x-slot>

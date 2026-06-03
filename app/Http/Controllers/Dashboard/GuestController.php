@@ -10,9 +10,18 @@ use Illuminate\Support\Facades\Gate;
 
 class GuestController extends Controller
 {
-    public function index(Invitation $invitation)
+    private function authorizePersonalLink(Invitation $invitation): void
     {
         Gate::authorize('view', $invitation);
+
+        if (!$invitation->hasFeature('personal_link')) {
+            abort(403, 'Fitur manajemen tamu tidak tersedia pada paket Anda.');
+        }
+    }
+
+    public function index(Invitation $invitation)
+    {
+        $this->authorizePersonalLink($invitation);
 
         $guests = $invitation->guests()
             ->with(['whatsappLogs' => fn ($q) => $q->latest()])
@@ -24,6 +33,7 @@ class GuestController extends Controller
 
     public function create(Invitation $invitation)
     {
+        $this->authorizePersonalLink($invitation);
         Gate::authorize('update', $invitation);
 
         return view('dashboard.guests.create', compact('invitation'));
@@ -31,6 +41,7 @@ class GuestController extends Controller
 
     public function store(Request $request, Invitation $invitation)
     {
+        $this->authorizePersonalLink($invitation);
         Gate::authorize('update', $invitation);
 
         $validated = $request->validate([
@@ -47,6 +58,7 @@ class GuestController extends Controller
 
     public function edit(Invitation $invitation, Guest $guest)
     {
+        $this->authorizePersonalLink($invitation);
         Gate::authorize('update', $invitation);
 
         return view('dashboard.guests.edit', compact('invitation', 'guest'));
@@ -54,6 +66,7 @@ class GuestController extends Controller
 
     public function update(Request $request, Invitation $invitation, Guest $guest)
     {
+        $this->authorizePersonalLink($invitation);
         Gate::authorize('update', $invitation);
 
         $validated = $request->validate([
@@ -70,6 +83,7 @@ class GuestController extends Controller
 
     public function destroy(Invitation $invitation, Guest $guest)
     {
+        $this->authorizePersonalLink($invitation);
         Gate::authorize('update', $invitation);
         $guest->delete();
 
@@ -79,7 +93,12 @@ class GuestController extends Controller
 
     public function import(Request $request, Invitation $invitation, \App\Services\GuestImportService $importService)
     {
+        $this->authorizePersonalLink($invitation);
         Gate::authorize('update', $invitation);
+
+        if (!$invitation->hasFeature('guest_import')) {
+            abort(403, 'Fitur import tamu tidak tersedia pada paket Anda.');
+        }
 
         $request->validate([
             'file' => 'required|file|mimes:csv,txt,xlsx,xls|max:5120',

@@ -67,14 +67,21 @@
 
             {{-- Stats Cards --}}
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="bg-white rounded-2xl shadow-soft border border-neutral-100 p-5">
-                    <div class="flex items-center justify-between mb-3">
-                        <h3 class="text-sm font-semibold text-secondary-800">Data Tamu</h3>
-                        <a href="{{ route('dashboard.invitations.guests.index', $invitation) }}"
-                            class="text-primary-600 hover:text-primary-700 text-xs font-semibold">Kelola &rarr;</a>
+                <div class="bg-white rounded-2xl shadow-soft border overflow-hidden
+                    {{ $invitation->hasFeature('personal_link') ? 'border-neutral-100' : 'border-amber-100 bg-amber-50/20' }}">
+                    <div class="p-5">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="text-sm font-semibold text-secondary-800">Data Tamu</h3>
+                            @if($invitation->hasFeature('personal_link'))
+                                <a href="{{ route('dashboard.invitations.guests.index', $invitation) }}"
+                                    class="text-primary-600 hover:text-primary-700 text-xs font-semibold">Kelola &rarr;</a>
+                            @else
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800">Premium</span>
+                            @endif
+                        </div>
+                        <div class="text-3xl font-bold text-secondary-800">{{ $invitation->guests->count() }}</div>
+                        <p class="text-xs text-neutral-500 mt-1">Total tamu yang diundang</p>
                     </div>
-                    <div class="text-3xl font-bold text-secondary-800">{{ $invitation->guests->count() }}</div>
-                    <p class="text-xs text-neutral-500 mt-1">Total tamu yang diundang</p>
                 </div>
 
                 <div class="bg-white rounded-2xl shadow-soft border border-neutral-100 p-5">
@@ -186,8 +193,9 @@
             {{-- Gallery & Gift --}}
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {{-- Gallery --}}
+                @php $galleryLocked = !$invitation->hasFeature('gallery_photos'); @endphp
                 <div class="bg-white rounded-2xl shadow-soft border overflow-hidden
-                    {{ $invitation->hasPremiumFeatures() ? 'border-neutral-100' : 'border-amber-100 bg-amber-50/20' }}">
+                    {{ $galleryLocked ? 'border-amber-100 bg-amber-50/20' : 'border-neutral-100' }}">
                     <div class="p-5">
                         <div class="flex justify-between items-center mb-4">
                             <h3 class="text-sm font-semibold text-secondary-800 flex items-center gap-2">
@@ -195,16 +203,16 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                 </svg>
                                 Galeri Foto
-                                @if(!$invitation->hasPremiumFeatures())
+                                @if($galleryLocked)
                                     <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800">Premium</span>
                                 @endif
                             </h3>
-                            @if($invitation->hasPremiumFeatures())
+                            @if(!$galleryLocked)
                                 <span class="text-xs text-neutral-500 font-semibold">{{ count($invitation->gallery_photos ?? []) }} / {{ $invitation->maxGalleryPhotos() }} Foto</span>
                             @endif
                         </div>
 
-                        @if($invitation->hasPremiumFeatures())
+                        @if(!$galleryLocked)
                             <div class="space-y-6">
                                 <form id="gallery-upload-form" action="{{ route('dashboard.invitations.gallery.update', $invitation) }}" method="POST" enctype="multipart/form-data" class="space-y-4">
                                     @csrf

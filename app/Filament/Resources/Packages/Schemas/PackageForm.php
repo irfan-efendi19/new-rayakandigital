@@ -60,7 +60,7 @@ class PackageForm
                     ->columnSpanFull()
                     ->columns(2)
                     ->relationship('features', 'feature_name')
-                    ->options(PlatformFeature::pluck('feature_name', 'id')),
+                    ->options(PlatformFeature::orderBy('feature_name')->pluck('feature_name', 'id')),
             ]);
     }
 }

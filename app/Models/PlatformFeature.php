@@ -13,6 +13,7 @@ class PlatformFeature extends Model
     protected $fillable = [
         'feature_key',
         'feature_name',
+        'group_name',
         'description',
     ];
 

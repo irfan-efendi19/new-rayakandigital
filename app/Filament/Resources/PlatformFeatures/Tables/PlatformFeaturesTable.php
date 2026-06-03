@@ -23,6 +23,11 @@ class PlatformFeaturesTable
                     ->label('Nama Fasilitas')
                     ->searchable()
                     ->sortable(),
+                TextColumn::make('group_name')
+                    ->label('Grup')
+                    ->badge()
+                    ->color('gray')
+                    ->sortable(),
                 TextColumn::make('description')
                     ->label('Deskripsi')
                     ->limit(50),
