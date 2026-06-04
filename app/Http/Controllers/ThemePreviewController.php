@@ -22,6 +22,12 @@ class ThemePreviewController extends Controller
 
         $invitation = new Invitation([
             'title' => $preview->title,
+            'cover_photo' => $preview->cover_photo,
+            'music_url' => $preview->music_url,
+            'show_video' => $preview->show_video,
+            'youtube_url' => $preview->youtube_url,
+            'youtube_video_id' => $preview->youtube_video_id ?: ($preview->youtube_url ? Invitation::extractYoutubeId($preview->youtube_url) : null),
+            'timezone' => $preview->timezone ?? 'Asia/Jakarta',
             'bride_name' => $preview->bride_name,
             'bride_photo' => $preview->bride_photo,
             'groom_name' => $preview->groom_name,
@@ -61,6 +67,7 @@ class ThemePreviewController extends Controller
             'show_countdown' => true,
             'show_event_detail' => true,
             'show_quote' => true,
+            'show_video' => (bool) $preview->show_video,
             'show_qr_checkin' => true,
             'show_comments' => true,
         ]);

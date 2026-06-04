@@ -61,6 +61,49 @@
                         <input type="hidden" name="title" value="{{ old('title', $invitation->title) }}">
 
                         <div class="space-y-8">
+                            {{-- Cover Photo --}}
+                            <div class="border-b border-neutral-200 pb-8">
+                                <h3 class="font-heading text-lg font-bold text-secondary-800 mb-1">Foto Sampul</h3>
+                                <p class="text-sm text-neutral-500 mb-6">Foto sampul akan ditampilkan di kartu undangan dashboard. Rasio 16:9 (landscape).</p>
+
+                                <div class="bg-neutral-50 p-5 rounded-2xl border border-neutral-200 space-y-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-neutral-700">Foto Sampul</label>
+                                        <div class="mt-2 flex items-start gap-4">
+                                            <div class="relative flex-shrink-0 w-48">
+                                                <div class="rounded-xl overflow-hidden border-2 border-neutral-200" style="aspect-ratio:16/9">
+                                                    <img id="cover-preview"
+                                                        src="{{ $invitation->cover_photo ? asset('storage/' . $invitation->cover_photo) : '' }}"
+                                                        alt="Cover photo"
+                                                        class="w-full h-full object-cover {{ $invitation->cover_photo ? '' : 'hidden' }}">
+                                                    <div id="cover-preview-placeholder"
+                                                        class="w-full h-full bg-neutral-200 flex flex-col items-center justify-center text-neutral-500 text-xs font-semibold {{ $invitation->cover_photo ? 'hidden' : '' }}">
+                                                        <svg class="w-8 h-8 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                        </svg>
+                                                        <span>Belum ada</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <input type="file" name="cover_photo" id="cover_photo_input"
+                                                    class="crop-file-input hidden" accept="image/*"
+                                                    data-preview="cover-preview"
+                                                    data-aspect-ratio="16/9"
+                                                    data-width="640"
+                                                    data-height="360">
+                                                <button type="button" data-crop-target="cover_photo_input"
+                                                    class="px-4 py-2 bg-primary-50 text-primary-700 rounded-xl text-sm font-semibold hover:bg-primary-100 transition">
+                                                    Pilih & Crop Foto
+                                                </button>
+                                                <p class="text-xs text-neutral-400 mt-1">Format JPG/PNG. Hasil potongan rasio 16:9 landscape (640×360).</p>
+                                                @error('cover_photo') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             {{-- Bride & Groom Info --}}
                             <div class="border-b border-neutral-200 pb-8">
                                 <h3 class="font-heading text-lg font-bold text-secondary-800 mb-1">Informasi Mempelai</h3>

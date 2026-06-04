@@ -287,7 +287,9 @@
                                 copyText.select();
                                 copyText.setSelectionRange(0, 99999);
                                 navigator.clipboard.writeText(copyText.value);
-                                Swal.fire({ icon: 'success', title: 'Tersalin!', text: 'Link berhasil disalin!', timer: 1500, showConfirmButton: false });
+                                if (typeof Swal !== 'undefined') {
+                                    Swal.fire({ icon: 'success', title: 'Tersalin!', text: 'Link berhasil disalin!', timer: 1500, showConfirmButton: false });
+                                }
                             }
 
                             document.getElementById('selectAll').addEventListener('change', function() {
@@ -309,20 +311,24 @@
                             }
 
                             function bulkSend() {
-                                Swal.fire({
-                                    title: 'Konfirmasi',
-                                    text: 'Kirim WhatsApp ke semua tamu yang dipilih? Pesan akan dikirim secara bertahap.',
-                                    icon: 'question',
-                                    showCancelButton: true,
-                                    confirmButtonColor: '#FF7A00',
-                                    cancelButtonColor: '#EF4444',
-                                    confirmButtonText: 'Ya, kirim!',
-                                    cancelButtonText: 'Batal',
-                                }).then((result) => {
-                                    if (result.isConfirmed) {
-                                        document.getElementById('bulkSendForm').submit();
-                                    }
-                                });
+                                if (typeof Swal !== 'undefined') {
+                                    Swal.fire({
+                                        title: 'Konfirmasi',
+                                        text: 'Kirim WhatsApp ke semua tamu yang dipilih? Pesan akan dikirim secara bertahap.',
+                                        icon: 'question',
+                                        showCancelButton: true,
+                                        confirmButtonColor: '#FF7A00',
+                                        cancelButtonColor: '#EF4444',
+                                        confirmButtonText: 'Ya, kirim!',
+                                        cancelButtonText: 'Batal',
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            document.getElementById('bulkSendForm').submit();
+                                        }
+                                    });
+                                } else if (confirm('Kirim WhatsApp ke semua tamu yang dipilih? Pesan akan dikirim secara bertahap.')) {
+                                    document.getElementById('bulkSendForm').submit();
+                                }
                             }
                         </script>
                     @endif

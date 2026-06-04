@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
@@ -14,8 +14,6 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
     <link rel="stylesheet" href="{{ asset('css/landingpage.css') }}">
-
-    <!-- Favicons -->
 
     <!-- SEO -->
     <meta name="robots" content="index, follow" />
@@ -47,8 +45,6 @@
 
     <!-- Spacer to prevent content from hiding behind fixed navbar -->
     <div class="h-16"></div>
-
-
 
     <section
         class="relative overflow-hidden bg-gradient-to-br from-white via-primary-50/30 to-secondary-50 py-20 md:py-28 lg:py-32">
@@ -1059,48 +1055,47 @@
 
             {{-- Tab Navigation --}}
             <div class="flex justify-center mb-12">
-                <div class="inline-flex bg-white rounded-2xl p-1.5 shadow-soft border border-neutral-100 gap-1">
-
+                <div
+                    class="flex flex-col md:flex-row flex-wrap bg-white rounded-2xl p-1.5 shadow-soft border border-neutral-100 gap-2 w-full md:w-auto">
                     {{-- Tab: Undangan Digital --}}
-                    <button @click="activeTab = 'undangan'"
-                        :class="activeTab === 'undangan'
-                                                                                                                                            ? 'bg-primary-500 text-white shadow-md shadow-primary-200'
-                                                                                                                                            : 'text-secondary-600 hover:text-primary-600 hover:bg-primary-50'"
-                        class="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200">
+                    <button @click="activeTab = 'undangan'" :class="activeTab === 'undangan'
+        ? 'bg-primary-500 text-white shadow-md shadow-primary-200'
+        : 'text-secondary-600 hover:text-primary-600 hover:bg-primary-50'"
+                        class="w-full md:w-auto flex items-center gap-2 px-3 py-2 rounded-xl text-xs md:text-sm font-semibold transition-all duration-200">
                         <i class="fas fa-heart text-xs"></i>
                         <span>Undangan Digital</span>
                     </button>
 
                     {{-- Tab: Buku Tamu --}}
-                    <button @click="activeTab = 'buku-tamu'"
-                        :class="activeTab === 'buku-tamu'
-                                                                                                                                            ? 'bg-primary-500 text-white shadow-md shadow-primary-200'
-                                                                                                                                            : 'text-secondary-600 hover:text-primary-600 hover:bg-primary-50'"
-                        class="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200">
+                    <button @click="activeTab = 'buku-tamu'" :class="activeTab === 'buku-tamu'
+        ? 'bg-primary-500 text-white shadow-md shadow-primary-200'
+        : 'text-secondary-600 hover:text-primary-600 hover:bg-primary-50'"
+                        class="w-full md:w-auto flex items-center gap-2 px-3 py-2 rounded-xl text-xs md:text-sm font-semibold transition-all duration-200">
                         <i class="fas fa-book text-xs"></i>
                         <span>Buku Tamu</span>
-                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold"
-                            :class="activeTab === 'buku-tamu' ? 'bg-white/20 text-white' : 'bg-emerald-100 text-emerald-700'">
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold" :class="activeTab === 'buku-tamu'
+          ? 'bg-white/20 text-white'
+          : 'bg-emerald-100 text-emerald-700'">
                             Baru
                         </span>
                     </button>
 
                     {{-- Tab: Live Streaming --}}
-                    <button @click="activeTab = 'live-streaming'"
-                        :class="activeTab === 'live-streaming'
-                                                                                                                                            ? 'bg-primary-500 text-white shadow-md shadow-primary-200'
-                                                                                                                                            : 'text-secondary-600 hover:text-primary-600 hover:bg-primary-50'"
-                        class="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200">
+                    <button @click="activeTab = 'live-streaming'" :class="activeTab === 'live-streaming'
+        ? 'bg-primary-500 text-white shadow-md shadow-primary-200'
+        : 'text-secondary-600 hover:text-primary-600 hover:bg-primary-50'"
+                        class="w-full md:w-auto flex items-center gap-2 px-3 py-2 rounded-xl text-xs md:text-sm font-semibold transition-all duration-200">
                         <i class="fas fa-video text-xs"></i>
                         <span>Live Streaming</span>
-                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold"
-                            :class="activeTab === 'live-streaming' ? 'bg-white/20 text-white' : 'bg-emerald-100 text-emerald-700'">
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold" :class="activeTab === 'live-streaming'
+          ? 'bg-white/20 text-white'
+          : 'bg-emerald-100 text-emerald-700'">
                             Baru
                         </span>
                     </button>
-
                 </div>
             </div>
+
 
             {{-- ============================================================ --}}
             {{-- PANEL: UNDANGAN DIGITAL (kode asli dari catalog themes) --}}
@@ -1113,7 +1108,7 @@
                     @forelse($packages as $package)
                         <div
                             class="group relative bg-white rounded-2xl shadow-soft transition-all duration-300 hover:shadow-xl hover:-translate-y-1
-                                                                                                                                                                                                                                                                        {{ $package->is_popular ? 'ring-2 ring-primary-500 shadow-lg' : 'border border-neutral-200' }}">
+                                                                                                                                                                                                                                                                                    {{ $package->is_popular ? 'ring-2 ring-primary-500 shadow-lg' : 'border border-neutral-200' }}">
 
                             <!-- Popular Badge -->
                             @if($package->is_popular)
@@ -1140,7 +1135,8 @@
                                 <!-- Description -->
                                 @if($package->description)
                                     <p class="mt-2 text-sm text-neutral-500 line-clamp-2">
-                                        {{ $package->description }}</p>
+                                        {{ $package->description }}
+                                    </p>
                                 @endif
 
                                 <!-- Price -->
@@ -1172,7 +1168,7 @@
                                     @else
                                                     <a href="{{ route('dashboard.checkout') }}"
                                                         class="mt-6 flex items-center justify-center gap-2 w-full rounded-xl py-3 text-sm font-semibold text-center transition-all duration-200
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            {{ $package->is_popular
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    {{ $package->is_popular
                                         ? 'bg-primary-500 text-white hover:bg-primary-600 shadow-md hover:shadow-lg'
                                         : 'bg-primary-50 border border-primary-200 text-primary-700 hover:bg-primary-100' }}">
                                                         Pilih {{ $package->package_name }}
@@ -1195,7 +1191,7 @@
                                     @else
                                                     <a href="{{ route('register') }}"
                                                         class="mt-6 flex items-center justify-center gap-2 w-full rounded-xl py-3 text-sm font-semibold text-center transition-all duration-200
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            {{ $package->is_popular
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    {{ $package->is_popular
                                         ? 'bg-primary-500 text-white hover:bg-primary-600 shadow-md hover:shadow-lg'
                                         : 'bg-primary-50 border border-primary-200 text-primary-700 hover:bg-primary-100' }}">
                                                         Pilih {{ $package->package_name }}

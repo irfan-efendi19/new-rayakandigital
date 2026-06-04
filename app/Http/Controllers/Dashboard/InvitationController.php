@@ -185,6 +185,12 @@ class InvitationController extends Controller
                 ->store('profiles/' . $invitation->id, 'public');
         }
 
+        // Handle cover photo upload
+        if ($request->hasFile('cover_photo')) {
+            $validated['cover_photo'] = $request->file('cover_photo')
+                ->store('cover/' . $invitation->id, 'public');
+        }
+
         // Handle music upload
         if ($request->hasFile('music_file')) {
             $request->validate(['music_file' => 'file|mimes:mp3,wav,ogg|max:10240']);

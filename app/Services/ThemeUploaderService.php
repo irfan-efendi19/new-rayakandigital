@@ -139,7 +139,8 @@ class ThemeUploaderService
         // Ignore absolute URLs (http, https, //), data URIs, mailto, tel, anchor links (#)
         if (
             preg_match('/^(http|https|\/\/|data:|mailto:|tel:|#)/i', $path) || 
-            str_contains($path, '{{') // Already a blade directive
+            str_contains($path, '{{') || // Already a blade directive
+            str_contains($path, '%7B%7B') // URL-encoded blade directive (decoded after asset rewrite)
         ) {
             return "{$attribute}=\"{$path}\"";
         }

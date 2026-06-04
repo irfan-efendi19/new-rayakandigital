@@ -16,8 +16,26 @@ class PreviewDataForm
     {
         return $schema
             ->components([
-                Section::make('Data Mempelai')
+                Section::make('Cover & Data Mempelai')
                     ->schema([
+                        FileUpload::make('cover_photo')
+                            ->label('Cover Photo (Thumbnail)')
+                            ->image()
+                            ->imageEditor()
+                            ->imageEditorAspectRatioOptions([
+                                '9:16' => 'Portrait (9:16)',
+                            ])
+                            ->imageEditorMode(1)
+                            ->imageEditorViewportWidth(360)
+                            ->imageEditorViewportHeight(640)
+                            ->disk('public')
+                            ->directory('preview/photos')
+                            ->imagePreviewHeight('300')
+                            ->maxSize(2048),
+                        TextInput::make('title')
+                            ->label('Judul Undangan')
+                            ->required()
+                            ->maxLength(255),
                         TextInput::make('bride_name')
                             ->label('Nama Mempelai Wanita')
                             ->required()
@@ -78,10 +96,30 @@ class PreviewDataForm
                             ->directory('preview/photos')
                             ->imagePreviewHeight('200')
                             ->maxSize(2048),
-                        TextInput::make('title')
-                            ->label('Judul Undangan')
-                            ->required()
-                            ->maxLength(255),
+                    ])->columns(2),
+                Section::make('Musik & Video')
+                    ->schema([
+                        FileUpload::make('music_url')
+                            ->label('File Musik (MP3)')
+                            ->acceptedFileTypes(['audio/mpeg', 'audio/mp3'])
+                            ->disk('public')
+                            ->directory('preview/music')
+                            ->maxSize(5120)
+                            ->helperText('Musik latar yang diputar saat undangan dibuka.'),
+                        Toggle::make('show_video')
+                            ->label('Tampilkan Video YouTube')
+                            ->default(false),
+                        TextInput::make('youtube_url')
+                            ->label('URL Video YouTube')
+                            ->nullable()
+                            ->url()
+                            ->maxLength(255)
+                            ->helperText('Contoh: https://youtube.com/watch?v=xxxxx'),
+                        TextInput::make('youtube_video_id')
+                            ->label('YouTube Video ID')
+                            ->nullable()
+                            ->maxLength(50)
+                            ->helperText('ID video (11 karakter), otomatis terisi dari URL jika kosong.'),
                     ])->columns(2),
                 Section::make('Waktu & Tempat')
                     ->schema([
@@ -100,6 +138,11 @@ class PreviewDataForm
                             ->label('Jam Selesai')
                             ->nullable()
                             ->maxLength(10),
+                        TextInput::make('timezone')
+                            ->label('Zona Waktu')
+                            ->required()
+                            ->default('Asia/Jakarta')
+                            ->maxLength(50),
                         TextInput::make('venue_name')
                             ->label('Nama Tempat')
                             ->nullable()

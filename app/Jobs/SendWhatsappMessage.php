@@ -52,19 +52,19 @@ class SendWhatsappMessage implements ShouldQueue
             return;
         }
 
-        $sent = $service->sendViaGateway($phone, $this->message, $gateway);
+        try {
+            $sent = $service->sendViaGateway($phone, $this->message, $gateway);
 
-        if ($sent) {
             $this->log->update([
                 'status' => 'sent',
                 'sent_at' => now(),
             ]);
-        } else {
+        } catch (\Throwable $e) {
             $this->log->update([
                 'status' => 'failed',
-                'error_message' => 'API request failed.',
+                'error_message' => $e->getMessage(),
             ]);
-            $this->fail(new \RuntimeException('WhatsApp API request failed'));
+            $this->fail($e);
         }
     }
 }

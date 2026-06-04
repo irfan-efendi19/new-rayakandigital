@@ -4,6 +4,8 @@ document.addEventListener('DOMContentLoaded', function () {
     let cropper = null;
     let currentInput = null;
     let currentPreviewId = null;
+    let currentOutputWidth = 400;
+    let currentOutputHeight = 400;
 
     const modal = document.getElementById('crop-modal');
     const cropContainer = document.getElementById('crop-container');
@@ -28,6 +30,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
         currentInput = fileInput;
         currentPreviewId = previewId;
+
+        const aspectRatio = fileInput.dataset.aspectRatio || '1';
+        const outputWidth = parseInt(fileInput.dataset.width) || 400;
+        const outputHeight = parseInt(fileInput.dataset.height) || 400;
+
+        currentOutputWidth = outputWidth;
+        currentOutputHeight = outputHeight;
 
         const reader = new FileReader();
         reader.onload = function () {
@@ -59,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         "<cropper-canvas background>",
                         "<cropper-image rotatable scalable skewable translatable></cropper-image>",
                         "<cropper-shade hidden></cropper-shade>",
-                        '<cropper-selection initial-coverage="0.8" aspect-ratio="1" movable resizable>',
+                        '<cropper-selection initial-coverage="0.8" aspect-ratio="' + aspectRatio + '" movable resizable>',
                         '<cropper-grid role="grid" bordered covered></cropper-grid>',
                         "<cropper-crosshair centered></cropper-crosshair>",
                         '<cropper-handle action="move" theme-color="rgba(255, 255, 255, 0.35)"></cropper-handle>',
@@ -128,7 +137,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const selection = cropper.getCropperSelection();
         if (!selection) return;
 
-        selection.$toCanvas({ width: 400, height: 400 }).then(function (canvas) {
+        selection.$toCanvas({ width: currentOutputWidth, height: currentOutputHeight }).then(function (canvas) {
             canvas.toBlob(function (blob) {
                 const file = new File([blob], 'cropped.jpg', { type: 'image/jpeg' });
 

@@ -54,6 +54,12 @@ class PreviewData extends Model
         'groom_father_name',
         'groom_mother_name',
         'title',
+        'cover_photo',
+        'music_url',
+        'show_video',
+        'youtube_url',
+        'youtube_video_id',
+        'timezone',
         'event_date_offset_days',
         'event_time',
         'event_time_end',
@@ -82,6 +88,7 @@ class PreviewData extends Model
             'gift_banks' => 'array',
             'gift_ewallets' => 'array',
             'events' => 'array',
+            'show_video' => 'boolean',
         ];
     }
 
@@ -154,6 +161,12 @@ class PreviewData extends Model
             'bride_parents' => 'Bapak Surya & Ibu Dewi',
             'groom_parents' => 'Bapak Santo & Ibu Ratna',
             'title' => 'Pernikahan Budi & Ani',
+            'cover_photo' => null,
+            'music_url' => null,
+            'show_video' => false,
+            'youtube_url' => null,
+            'youtube_video_id' => null,
+            'timezone' => 'Asia/Jakarta',
             'event_date_offset_days' => 60,
             'event_time' => '10:00',
             'event_time_end' => '14:00',

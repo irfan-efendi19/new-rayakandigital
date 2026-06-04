@@ -7,6 +7,7 @@ use App\Http\Controllers\Dashboard\GuestbookController;
 use App\Http\Controllers\Dashboard\GuestController;
 use App\Http\Controllers\Dashboard\InvitationController;
 use App\Http\Controllers\Dashboard\WhatsAppBlastController;
+use App\Http\Controllers\Dashboard\WhatsAppDiagnosticController;
 use App\Http\Controllers\Dashboard\WhatsAppPaymentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
@@ -64,6 +65,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/invitations/{invitation}/gallery', [GalleryController::class, 'update'])->name('invitations.gallery.update');
         Route::delete('/invitations/{invitation}/gallery', [GalleryController::class, 'destroy'])->name('invitations.gallery.destroy');
         Route::post('/invitations/{invitation}/gift', [GiftController::class, 'update'])->name('invitations.gift.update');
+
+        // WhatsApp Diagnostic
+        Route::get('/whatsapp-diagnostic', [WhatsAppDiagnosticController::class, 'check'])->name('whatsapp.diagnostic');
 
         // WhatsApp Blast
         Route::post('/invitations/{invitation}/whatsapp/send', [WhatsAppBlastController::class, 'send'])->name('invitations.whatsapp.send');

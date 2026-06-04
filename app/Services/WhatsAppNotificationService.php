@@ -13,7 +13,7 @@ class WhatsAppNotificationService
         $user = $order->user;
         $phone = $user->phone ?? null;
 
-        if (!$phone) {
+        if (! $phone) {
             return false;
         }
 
@@ -46,16 +46,17 @@ class WhatsAppNotificationService
 
         try {
             $response = Http::withHeaders([
-                'Authorization' => 'Bearer ' . $apiKey,
+                'Authorization' => $apiKey,
                 'Content-Type' => 'application/json',
             ])->post($apiUrl, [
-                'phone' => $phoneNumber,
+                'target' => $this->normalizePhone($phoneNumber),
                 'message' => $message,
             ]);
 
             return $response->successful();
         } catch (\Throwable $e) {
             report($e);
+
             return false;
         }
     }
@@ -63,19 +64,99 @@ class WhatsAppNotificationService
     public function sendViaGateway(string $phoneNumber, string $message, WhatsappGatewaySetting $gateway): bool
     {
         try {
-            $response = Http::withHeaders([
-                'Authorization' => 'Bearer ' . $gateway->api_token,
-                'Content-Type' => 'application/json',
-            ])->post($gateway->api_url, array_filter([
-                'phone' => $phoneNumber,
+            $payload = [
                 'message' => $message,
-                'device_id' => $gateway->device_id,
-            ]));
+            ];
 
-            return $response->successful();
+            if ($gateway->provider_name === 'fonnte') {
+                $payload['target'] = preg_replace('/[^0-9]/', '', $phoneNumber);
+                $payload['countryCode'] = '62';
+
+                if ($gateway->delay_seconds > 0) {
+                    $payload['delay'] = $gateway->delay_seconds;
+                }
+
+                $response = Http::withHeaders([
+                    'Authorization' => $gateway->api_token,
+                ])->asForm()->post(
+                    $this->resolveApiUrl($gateway),
+                    $payload
+                );
+            } else {
+                $payload['phone'] = $this->normalizePhone($phoneNumber);
+                $headers = [
+                    'Authorization' => 'Bearer ' . $gateway->api_token,
+                    'Content-Type' => 'application/json',
+                ];
+
+                if ($gateway->device_id) {
+                    $payload['device_id'] = $gateway->device_id;
+                }
+
+                $response = Http::withHeaders($headers)->post(
+                    $this->resolveApiUrl($gateway),
+                    $payload
+                );
+            }
+
+            $body = $response->body();
+            $json = $response->json();
+
+            $success = $response->successful()
+                && (!isset($json['status']) || $json['status'] === true);
+
+            if (!$success) {
+                logger()->warning('WhatsApp API request failed', [
+                    'provider' => $gateway->provider_name,
+                    'url' => $gateway->api_url,
+                    'status' => $response->status(),
+                    'response' => $body,
+                ]);
+                throw new \RuntimeException("API returned status {$response->status()}: {$body}");
+            }
+
+            return true;
         } catch (\Throwable $e) {
             report($e);
-            return false;
+
+            throw $e;
         }
+    }
+
+    public function normalizePhone(string $phone): string
+    {
+        $phone = preg_replace('/[^0-9]/', '', $phone);
+
+        if (substr($phone, 0, 2) === '62') {
+            return $phone;
+        }
+
+        if (strlen($phone) > 0 && $phone[0] === '0') {
+            return '62' . substr($phone, 1);
+        }
+
+        return $phone;
+    }
+
+    private function resolveApiUrl(WhatsappGatewaySetting $gateway): string
+    {
+        $url = $gateway->api_url ?: $this->defaultApiUrl($gateway->provider_name);
+
+        $url = rtrim($url, '/');
+
+        if ($gateway->provider_name === 'fonnte' && !str_contains($url, '/send')) {
+            $url .= '/send';
+        }
+
+        return $url;
+    }
+
+    private function defaultApiUrl(?string $provider): string
+    {
+        return match ($provider) {
+            'fonnte' => 'https://api.fonnte.com/send',
+            'wablas' => 'https://pati.wablas.com/api/send-message',
+            default => '',
+        };
     }
 }

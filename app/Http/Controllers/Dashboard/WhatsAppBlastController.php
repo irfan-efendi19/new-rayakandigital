@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
-use App\Jobs\SendWhatsappMessage;
 use App\Models\Guest;
 use App\Models\Invitation;
+use App\Models\WhatsappGatewaySetting;
 use App\Models\WhatsappLog;
+use App\Services\WhatsAppNotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
@@ -30,7 +31,16 @@ class WhatsAppBlastController extends Controller
             return back()->with('error', 'Tidak ada tamu dengan nomor telepon yang dipilih.');
         }
 
-        $dispatched = 0;
+        $gateway = WhatsappGatewaySetting::active()->first();
+
+        if (!$gateway) {
+            return back()->with('error', 'Tidak ada gateway WhatsApp aktif. Konfigurasi di admin terlebih dahulu.');
+        }
+
+        $service = app(WhatsAppNotificationService::class);
+        $sent = 0;
+        $failed = 0;
+
         foreach ($guests as $guest) {
             $message = $invitation->parseWhatsappTemplate($guest);
 
@@ -41,13 +51,33 @@ class WhatsAppBlastController extends Controller
                 'status' => 'pending',
             ]);
 
-            SendWhatsappMessage::dispatch($log, $invitation, $guest, $message)
-                ->delay(now()->addSeconds($dispatched * 3));
+            try {
+                $service->sendViaGateway($guest->phone, $message, $gateway);
 
-            $dispatched++;
+                $log->update([
+                    'status' => 'sent',
+                    'sent_at' => now(),
+                ]);
+                $sent++;
+            } catch (\Throwable $e) {
+                $log->update([
+                    'status' => 'failed',
+                    'error_message' => $e->getMessage(),
+                ]);
+                $failed++;
+            }
+
+            if (count($guests) > 1) {
+                usleep(300000);
+            }
         }
 
-        return back()->with('success', "{$dispatched} pesan sedang diproses di latar belakang.");
+        $msg = "{$sent} pesan berhasil dikirim.";
+        if ($failed > 0) {
+            $msg .= " {$failed} pesan gagal.";
+        }
+
+        return back()->with('success', $msg);
     }
 
     public function sendSingle(Request $request, Invitation $invitation, Guest $guest)
@@ -56,6 +86,12 @@ class WhatsAppBlastController extends Controller
 
         if (!$guest->phone) {
             return back()->with('error', 'Tamu ini tidak memiliki nomor telepon.');
+        }
+
+        $gateway = WhatsappGatewaySetting::active()->first();
+
+        if (!$gateway) {
+            return back()->with('error', 'Tidak ada gateway WhatsApp aktif. Konfigurasi di admin terlebih dahulu.');
         }
 
         $message = $invitation->parseWhatsappTemplate($guest);
@@ -67,9 +103,24 @@ class WhatsAppBlastController extends Controller
             'status' => 'pending',
         ]);
 
-        SendWhatsappMessage::dispatch($log, $invitation, $guest, $message);
+        try {
+            app(WhatsAppNotificationService::class)
+                ->sendViaGateway($guest->phone, $message, $gateway);
 
-        return back()->with('success', "Pesan WA untuk {$guest->name} sedang diproses.");
+            $log->update([
+                'status' => 'sent',
+                'sent_at' => now(),
+            ]);
+
+            return back()->with('success', "Pesan WA untuk {$guest->name} berhasil dikirim.");
+        } catch (\Throwable $e) {
+            $log->update([
+                'status' => 'failed',
+                'error_message' => $e->getMessage(),
+            ]);
+
+            return back()->with('error', "Gagal: {$e->getMessage()}");
+        }
     }
 
     public function logs(Request $request, Invitation $invitation)
