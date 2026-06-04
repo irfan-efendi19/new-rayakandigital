@@ -2,10 +2,10 @@
     <x-slot name="header">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
-                <h2 class="font-heading text-2xl font-bold text-secondary-800">
+                <h2 class="font-heading text-2xl font-bold text-secondary-800 dark:text-neutral-100">
                     Dashboard
                 </h2>
-                <p class="text-sm text-neutral-500 mt-0.5">Selamat datang kembali, {{ Auth::user()->name }}!</p>
+                <p class="text-sm text-neutral-500 dark:text-neutral-400 mt-0.5">Selamat datang kembali, {{ Auth::user()->name }}!</p>
             </div>
             <a href="{{ route('dashboard.invitations.create') }}"
                 class="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-primary to-primary-600 text-white rounded-xl font-semibold text-sm shadow-soft hover:shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all duration-200">
@@ -22,52 +22,52 @@
 
             {{-- Stats Cards --}}
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-                <div class="bg-white rounded-2xl shadow-soft p-5 border border-neutral-100">
+                <div class="bg-white dark:bg-secondary-800 rounded-2xl shadow-soft p-5 border border-neutral-100 dark:border-secondary-700">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-sm text-neutral-500 font-medium">Total Undangan</p>
-                            <p class="text-2xl font-bold text-secondary-800 mt-1">{{ $invitations->count() }}</p>
+                            <p class="text-sm text-neutral-500 dark:text-neutral-400 font-medium">Total Undangan</p>
+                            <p class="text-2xl font-bold text-secondary-800 dark:text-neutral-100 mt-1">{{ $invitations->count() }}</p>
                         </div>
-                        <div class="w-11 h-11 rounded-xl bg-primary-50 flex items-center justify-center text-primary">
+                        <div class="w-11 h-11 rounded-xl bg-primary-50 dark:bg-primary-900/50 flex items-center justify-center text-primary dark:text-primary-400">
                             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                             </svg>
                         </div>
                     </div>
                 </div>
-                <div class="bg-white rounded-2xl shadow-soft p-5 border border-neutral-100">
+                <div class="bg-white dark:bg-secondary-800 rounded-2xl shadow-soft p-5 border border-neutral-100 dark:border-secondary-700">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-sm text-neutral-500 font-medium">Aktif</p>
-                            <p class="text-2xl font-bold text-green-600 mt-1">{{ $invitations->filter(fn($i) => !$i->isTrialExpired())->count() }}</p>
+                            <p class="text-sm text-neutral-500 dark:text-neutral-400 font-medium">Aktif</p>
+                            <p class="text-2xl font-bold text-green-600 dark:text-green-400 mt-1">{{ $invitations->filter(fn($i) => !$i->isTrialExpired())->count() }}</p>
                         </div>
-                        <div class="w-11 h-11 rounded-xl bg-green-50 flex items-center justify-center text-green-500">
+                        <div class="w-11 h-11 rounded-xl bg-green-50 dark:bg-green-900/50 flex items-center justify-center text-green-500 dark:text-green-400">
                             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                         </div>
                     </div>
                 </div>
-                <div class="bg-white rounded-2xl shadow-soft p-5 border border-neutral-100">
+                <div class="bg-white dark:bg-secondary-800 rounded-2xl shadow-soft p-5 border border-neutral-100 dark:border-secondary-700">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-sm text-neutral-500 font-medium">Masa Percobaan</p>
-                            <p class="text-2xl font-bold text-amber-600 mt-1">{{ $trialInvitations->count() }}</p>
+                            <p class="text-sm text-neutral-500 dark:text-neutral-400 font-medium">Masa Percobaan</p>
+                            <p class="text-2xl font-bold text-amber-600 dark:text-amber-400 mt-1">{{ $trialInvitations->count() }}</p>
                         </div>
-                        <div class="w-11 h-11 rounded-xl bg-amber-50 flex items-center justify-center text-amber-500">
+                        <div class="w-11 h-11 rounded-xl bg-amber-50 dark:bg-amber-900/50 flex items-center justify-center text-amber-500 dark:text-amber-400">
                             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                         </div>
                     </div>
                 </div>
-                <div class="bg-white rounded-2xl shadow-soft p-5 border border-neutral-100">
+                <div class="bg-white dark:bg-secondary-800 rounded-2xl shadow-soft p-5 border border-neutral-100 dark:border-secondary-700">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-sm text-neutral-500 font-medium">Pesanan Tertunda</p>
-                            <p class="text-2xl font-bold text-blue-600 mt-1">{{ $pendingOrders->count() }}</p>
+                            <p class="text-sm text-neutral-500 dark:text-neutral-400 font-medium">Pesanan Tertunda</p>
+                            <p class="text-2xl font-bold text-blue-600 dark:text-blue-400 mt-1">{{ $pendingOrders->count() }}</p>
                         </div>
-                        <div class="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center text-blue-500">
+                        <div class="w-11 h-11 rounded-xl bg-blue-50 dark:bg-blue-900/50 flex items-center justify-center text-blue-500 dark:text-blue-400">
                             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                             </svg>
@@ -86,38 +86,38 @@
                 @endphp
 
                 <div class="mb-4 rounded-2xl overflow-hidden border transition-all duration-300
-                    {{ $isExpired ? 'bg-red-50 border-red-200' : ($isUrgent ? 'bg-amber-50 border-amber-200' : 'bg-primary-50 border-primary-200') }}">
+                    {{ $isExpired ? 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800' : ($isUrgent ? 'bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800' : 'bg-primary-50 dark:bg-primary-900/20 border-primary-200 dark:border-primary-800') }}">
                     <div class="p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                         <div class="flex items-start gap-4">
                             <div class="flex-shrink-0 mt-1">
                                 @if($isExpired)
-                                    <svg class="w-6 h-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <svg class="w-6 h-6 text-red-500 dark:text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
                                     </svg>
                                 @elseif($isUrgent)
-                                    <svg class="w-6 h-6 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <svg class="w-6 h-6 text-amber-500 dark:text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
                                 @else
-                                    <svg class="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <svg class="w-6 h-6 text-primary dark:text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
                                 @endif
                             </div>
                             <div>
-                                <h4 class="font-semibold text-sm {{ $isExpired ? 'text-red-800' : ($isUrgent ? 'text-amber-800' : 'text-primary-800') }}">
+                                <h4 class="font-semibold text-sm {{ $isExpired ? 'text-red-800 dark:text-red-300' : ($isUrgent ? 'text-amber-800 dark:text-amber-300' : 'text-primary-800 dark:text-primary-300') }}">
                                     Undangan: {{ $invitation->title }}
                                 </h4>
                                 @if($isExpired)
-                                    <p class="text-sm text-red-600 mt-1">
+                                    <p class="text-sm text-red-600 dark:text-red-400 mt-1">
                                         Masa uji coba gratis Anda telah <strong>berakhir</strong>. Aktifkan kembali untuk melanjutkan penggunaan.
                                     </p>
                                 @else
-                                    <p class="text-sm mt-1 {{ $isUrgent ? 'text-amber-700' : 'text-primary-700' }}">
+                                    <p class="text-sm mt-1 {{ $isUrgent ? 'text-amber-700 dark:text-amber-400' : 'text-primary-700 dark:text-primary-400' }}">
                                         Masa uji coba gratis Anda tersisa
                                         <strong>{{ $days }} Hari {{ $hours }} Jam</strong> lagi
                                         @if($isUrgent)
-                                            <span class="inline-block ml-2 animate-pulse text-amber-600">Segera aktifkan!</span>
+                                            <span class="inline-block ml-2 animate-pulse text-amber-600 dark:text-amber-400">Segera aktifkan!</span>
                                         @endif
                                     </p>
                                 @endif
@@ -140,31 +140,31 @@
             {{-- Pending Orders --}}
             @if($pendingOrders->isNotEmpty())
                 <div class="mb-8">
-                    <h3 class="font-heading text-lg font-bold text-secondary-800 mb-4">Pesanan Menunggu Pembayaran</h3>
+                    <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100 mb-4">Pesanan Menunggu Pembayaran</h3>
                     <div class="space-y-4">
                         @foreach($pendingOrders as $order)
-                            <div class="bg-white border border-neutral-200 rounded-2xl p-5 shadow-soft hover:shadow-md transition-shadow">
+                            <div class="bg-white dark:bg-secondary-800 border border-neutral-200 dark:border-secondary-700 rounded-2xl p-5 shadow-soft hover:shadow-md transition-shadow">
                                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                                     <div class="flex-1">
                                         <div class="flex items-center gap-3 mb-2">
-                                            <span class="font-mono font-bold text-primary-700">{{ $order->invoice_id }}</span>
+                                            <span class="font-mono font-bold text-primary-700 dark:text-primary-400">{{ $order->invoice_id }}</span>
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-                                                {{ $order->payment_status === 'pending' ? 'bg-amber-100 text-amber-800' : 'bg-blue-100 text-blue-800' }}">
+                                                {{ $order->payment_status === 'pending' ? 'bg-amber-100 dark:bg-amber-900/50 text-amber-800 dark:text-amber-300' : 'bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300' }}">
                                                 {{ $order->payment_status === 'pending' ? 'Menunggu Pembayaran' : 'Verifikasi (WA)' }}
                                             </span>
                                         </div>
-                                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-sm text-neutral-600">
+                                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-sm text-neutral-600 dark:text-neutral-400">
                                             <div>
-                                                <span class="text-neutral-400">Paket:</span>
-                                                <span class="font-medium text-secondary-800 ml-1">{{ ucfirst($order->package_type) }}</span>
+                                                <span class="text-neutral-400 dark:text-neutral-500">Paket:</span>
+                                                <span class="font-medium text-secondary-800 dark:text-neutral-200 ml-1">{{ ucfirst($order->package_type) }}</span>
                                             </div>
                                             <div>
-                                                <span class="text-neutral-400">Total:</span>
-                                                <span class="font-medium text-secondary-800 ml-1">Rp{{ $order->total_with_code }}</span>
+                                                <span class="text-neutral-400 dark:text-neutral-500">Total:</span>
+                                                <span class="font-medium text-secondary-800 dark:text-neutral-200 ml-1">Rp{{ $order->total_with_code }}</span>
                                             </div>
                                             <div>
-                                                <span class="text-neutral-400">Kode Unik:</span>
-                                                <span class="font-medium text-primary-600 ml-1">{{ $order->unique_code }}</span>
+                                                <span class="text-neutral-400 dark:text-neutral-500">Kode Unik:</span>
+                                                <span class="font-medium text-primary-600 dark:text-primary-400 ml-1">{{ $order->unique_code }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -192,10 +192,10 @@
             @endif
 
             {{-- Invitation List --}}
-            <div class="bg-white rounded-2xl shadow-soft border border-neutral-100 overflow-hidden">
+            <div class="bg-white dark:bg-secondary-800 rounded-2xl shadow-soft border border-neutral-100 dark:border-secondary-700 overflow-hidden">
                 <div class="p-6">
                     <div class="flex justify-between items-center mb-6">
-                        <h3 class="font-heading text-lg font-bold text-secondary-800">Daftar Undangan Anda</h3>
+                        <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">Daftar Undangan Anda</h3>
                         <a href="{{ route('dashboard.invitations.create') }}"
                             class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary to-primary-600 text-white rounded-xl text-sm font-semibold hover:shadow-md transition-all">
                             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -207,9 +207,9 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         @forelse($invitations as $invitation)
-                            <div class="border border-neutral-200 rounded-2xl overflow-hidden shadow-sm flex flex-col hover:shadow-md transition-all duration-200 group
+                            <div class="border border-neutral-200 dark:border-secondary-700 rounded-2xl overflow-hidden shadow-sm flex flex-col hover:shadow-md transition-all duration-200 group
                                 {{ $invitation->isTrialExpired() ? 'opacity-60' : '' }}">
-                                <div class="bg-neutral-100 h-40 flex items-center justify-center overflow-hidden">
+                                <div class="bg-neutral-100 dark:bg-secondary-700 h-40 flex items-center justify-center overflow-hidden">
                                     @if($invitation->cover_photo)
                                         <img src="{{ asset('storage/' . $invitation->cover_photo) }}" alt="Cover" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                     @else
@@ -222,11 +222,11 @@
                                     @endif
                                 </div>
                                 <div class="p-5 flex-1 flex flex-col">
-                                    <h4 class="font-bold text-lg text-secondary-800 mb-1">{{ $invitation->title }}</h4>
-                                    <p class="text-sm text-neutral-500 mb-3">{{ $invitation->bride_name }} & {{ $invitation->groom_name }}</p>
+                                    <h4 class="font-bold text-lg text-secondary-800 dark:text-neutral-100 mb-1">{{ $invitation->title }}</h4>
+                                    <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-3">{{ $invitation->bride_name }} & {{ $invitation->groom_name }}</p>
 
                                     <div class="flex flex-wrap items-center gap-2 mb-4">
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-50 text-primary-700">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-50 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300">
                                             {{ $invitation->themeLabel() }}
                                         </span>
                                         @php
@@ -235,18 +235,18 @@
                                             $remainingDays = $invitation->trialRemainingDays();
                                         @endphp
                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-                                            {{ $isExpired ? 'bg-red-100 text-red-700' : ($isTrial ? 'bg-amber-100 text-amber-700' : 'bg-green-100 text-green-700') }}">
+                                            {{ $isExpired ? 'bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300' : ($isTrial ? 'bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300' : 'bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-300') }}">
                                             {{ $isExpired ? 'Kadaluarsa' : ($isTrial ? 'Masa Percobaan' : 'Aktif') }}
                                         </span>
                                         @if(!$isExpired && $invitation->expires_at)
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-neutral-100 text-neutral-600">
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300">
                                                 <svg class="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                                 </svg>
                                                 Sisa {{ $remainingDays }} hari
                                             </span>
                                         @elseif(!$isExpired && !$invitation->expires_at)
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-50 text-green-700">
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-50 dark:bg-green-900/50 text-green-700 dark:text-green-300">
                                                 <svg class="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                                 </svg>
@@ -262,7 +262,7 @@
                                         </a>
                                         <div class="flex items-center gap-2">
                                             <a href="{{ route('invitation.show', $invitation->slug) }}" target="_blank"
-                                                class="flex-1 text-center text-primary-600 hover:text-primary-700 text-sm font-medium transition-colors">
+                                                class="flex-1 text-center text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 text-sm font-medium transition-colors">
                                                 Lihat Halaman &rarr;
                                             </a>
                                             <form action="{{ route('dashboard.invitations.destroy', $invitation) }}" method="POST"
@@ -270,7 +270,7 @@
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit"
-                                                    class="text-red-400 hover:text-red-600 transition-colors p-1"
+                                                    class="text-red-400 hover:text-red-600 dark:text-red-500 dark:hover:text-red-400 transition-colors p-1"
                                                     title="Hapus Undangan">
                                                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -283,13 +283,13 @@
                             </div>
                         @empty
                             <div class="col-span-full py-16 text-center">
-                                <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-neutral-100 flex items-center justify-center">
-                                    <svg class="w-8 h-8 text-neutral-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-neutral-100 dark:bg-secondary-700 flex items-center justify-center">
+                                    <svg class="w-8 h-8 text-neutral-400 dark:text-neutral-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                                     </svg>
                                 </div>
-                                <h4 class="text-lg font-semibold text-secondary-800 mb-1">Belum Ada Undangan</h4>
-                                <p class="text-sm text-neutral-500 mb-6">Buat undangan digital pertama Anda dan mulai rayakan momen spesial.</p>
+                                <h4 class="text-lg font-semibold text-secondary-800 dark:text-neutral-100 mb-1">Belum Ada Undangan</h4>
+                                <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-6">Buat undangan digital pertama Anda dan mulai rayakan momen spesial.</p>
                                 <a href="{{ route('dashboard.invitations.create') }}"
                                     class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary to-primary-600 text-white rounded-xl font-semibold text-sm shadow-soft hover:shadow-md transition-all">
                                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

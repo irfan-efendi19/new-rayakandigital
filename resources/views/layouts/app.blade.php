@@ -19,12 +19,12 @@
             }
         </script>
     </head>
-    <body class="font-sans antialiased bg-neutral-50 text-secondary-800">
+    <body class="font-sans antialiased bg-neutral-50 dark:bg-secondary-900 text-secondary-800 dark:text-neutral-200">
         <div class="min-h-screen flex flex-col">
             @include('layouts.navigation')
 
             @isset($header)
-                <header class="bg-white border-b border-neutral-200 shadow-soft">
+                <header class="bg-white dark:bg-secondary-800 border-b border-neutral-200 dark:border-secondary-700 shadow-soft">
                     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                         {{ $header }}
                     </div>
@@ -35,9 +35,9 @@
                 {{ $slot }}
             </main>
 
-            <footer class="bg-white border-t border-neutral-200 py-6">
+            <footer class="bg-white dark:bg-secondary-800 border-t border-neutral-200 dark:border-secondary-700 py-6">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <p class="text-center text-sm text-neutral-500">
+                    <p class="text-center text-sm text-neutral-500 dark:text-neutral-400">
                         &copy; {{ date('Y') }} {{ config('app.name') }}. All rights reserved.
                     </p>
                 </div>
