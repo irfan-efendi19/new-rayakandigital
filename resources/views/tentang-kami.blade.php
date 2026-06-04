@@ -10,17 +10,17 @@
     <link rel="stylesheet" href="{{ asset('css/landingpage.css') }}">
 </head>
 
-<body class="font-sans antialiased bg-neutral-50 text-secondary-800">
+<body class="font-sans antialiased bg-neutral-50 dark:bg-secondary-900 text-secondary-800 dark:text-neutral-200">
     <x-public-navbar />
     <div class="h-16"></div>
     <div class="h-16"></div>
 
     <!-- ═══════════════════════════ HERO ═══════════════════════════ -->
-    <section class="relative overflow-hidden bg-gradient-to-br from-white via-primary-50/30 to-secondary-50 px-6 pt-20 pb-16 text-center reveal">
+    <section class="relative overflow-hidden bg-gradient-to-br from-white via-primary-50/30 to-secondary-50 dark:from-secondary-900 dark:via-secondary-900 dark:to-secondary-900 px-6 pt-20 pb-16 text-center reveal">
         <div class="absolute inset-0 overflow-hidden pointer-events-none">
-            <div class="absolute -top-20 -right-20 w-72 h-72 bg-primary-200/20 rounded-full blur-3xl"></div>
-            <div class="absolute -bottom-20 -left-20 w-96 h-96 bg-secondary-200/20 rounded-full blur-3xl"></div>
-            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary-100/10 rounded-full blur-3xl"></div>
+            <div class="absolute -top-20 -right-20 w-72 h-72 bg-primary-200/20 rounded-full blur-3xl dark:bg-primary-900/20"></div>
+            <div class="absolute -bottom-20 -left-20 w-96 h-96 bg-secondary-200/20 rounded-full blur-3xl dark:bg-secondary-800/20"></div>
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary-100/10 rounded-full blur-3xl dark:bg-primary-900/10"></div>
         </div>
         <div class="relative max-w-2xl mx-auto">
             <span class="inline-flex items-center gap-2 bg-primary-100 border border-primary-200 text-primary-700 text-xs font-semibold px-3 py-1.5 rounded-full mb-4">
@@ -28,7 +28,7 @@
                 Our Origin Story
             </span>
 
-            <h1 class="font-heading text-5xl md:text-6xl font-bold leading-tight text-secondary-800 mb-3">
+            <h1 class="font-heading text-5xl md:text-6xl font-bold leading-tight text-secondary-800 dark:text-neutral-200 mb-3">
                 Menciptakan Kenangan<br>Digital yang
             </h1>
             <h1 class="font-heading text-5xl md:text-6xl italic text-primary-500 mb-6">
@@ -45,7 +45,7 @@
                 <button class="bg-secondary-800 text-white font-semibold px-7 py-3.5 rounded-full hover:bg-secondary-900 transition text-sm">
                     Pelajari Layanan
                 </button>
-                <button class="border border-neutral-300 text-secondary-800 font-semibold px-7 py-3.5 rounded-full hover:border-primary-500 hover:text-primary-500 transition text-sm">
+                <button class="border border-neutral-300 text-secondary-800 dark:text-neutral-200 font-semibold px-7 py-3.5 rounded-full hover:border-primary-500 hover:text-primary-500 transition text-sm">
                     Hubungi Kami
                 </button>
             </div>
@@ -55,12 +55,15 @@
     <!-- ═══════════════════════════ HERO IMAGE ═══════════════════════════ -->
     <section class="px-6 pb-20 reveal">
         <div class="max-w-4xl mx-auto relative">
-            <div class="rounded-2xl overflow-hidden aspect-[16/7] relative bg-gradient-to-br from-neutral-100 to-neutral-200">
+            <div class="rounded-2xl overflow-hidden aspect-[16/7] relative bg-gradient-to-br from-neutral-100 to-neutral-200 dark:from-secondary-800 dark:to-secondary-800">
                 <div class="absolute inset-0 flex items-center justify-center">
-                    <div class="text-center text-neutral-500">
+                    <div class="text-center text-neutral-500 dark:text-neutral-400">
                         <i class="fa-solid fa-camera text-5xl mb-3"></i>
                         <p class="text-sm font-medium tracking-widest uppercase">Wedding Stage Photography</p>
                     </div>
+                </div>
+                <!-- Flower accents top -->
+            </div>
                 </div>
                 <!-- Flower accents top -->
                 <div class="absolute top-4 left-8 w-16 h-16 rounded-full bg-amber-400/40 blur-xl"></div>
@@ -72,12 +75,12 @@
             </div>
 
             <!-- Badge -->
-            <div class="absolute bottom-5 right-5 flex items-center gap-2.5 bg-white px-4 py-2.5 rounded-2xl shadow-soft">
+            <div class="absolute bottom-5 right-5 flex items-center gap-2.5 bg-white dark:bg-secondary-800 px-4 py-2.5 rounded-2xl shadow-soft">
                 <div class="w-8 h-8 bg-primary-500/10 rounded-xl flex items-center justify-center">
                     <i class="fa-solid fa-star text-primary-500 text-xs"></i>
                 </div>
                 <div>
-                    <p class="text-xs font-bold text-secondary-800">Kualitas Premium</p>
+                    <p class="text-xs font-bold text-secondary-800 dark:text-neutral-200">Kualitas Premium</p>
                     <p class="text-[10px] text-neutral-500">Desain Sinematik Modern</p>
                 </div>
             </div>
@@ -85,15 +88,15 @@
     </section>
 
     <!-- ═══════════════════════════ VISI & MISI ═══════════════════════════ -->
-    <section class="px-6 py-16 bg-white reveal">
+    <section class="px-6 py-16 bg-white dark:bg-secondary-800 reveal">
         <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-6">
 
             <!-- Visi -->
-            <div class="bg-neutral-50 rounded-2xl p-8 border border-neutral-100 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+            <div class="bg-neutral-50 rounded-2xl p-8 border border-neutral-100 dark:border-secondary-700 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                 <div class="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center mb-5 text-primary-600">
                     <i class="fa-regular fa-eye"></i>
                 </div>
-                <h3 class="font-heading text-2xl font-bold mb-3 text-secondary-800">Visi Kami</h3>
+                <h3 class="font-heading text-2xl font-bold mb-3 text-secondary-800 dark:text-neutral-200">Visi Kami</h3>
                 <p class="text-neutral-500 text-sm leading-relaxed mb-5">
                     Menjadi partner utama dalam merayakan momen berharga melalui inovasi digital yang melampaui batas
                     jarak dan waktu, menciptakan kenangan yang abadi bagi setiap pasangan di seluruh penjuru negeri.
@@ -104,11 +107,11 @@
             </div>
 
             <!-- Misi -->
-            <div class="bg-neutral-50 rounded-2xl p-8 border border-neutral-100 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+            <div class="bg-neutral-50 rounded-2xl p-8 border border-neutral-100 dark:border-secondary-700 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                 <div class="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center mb-5 text-primary-600">
                     <i class="fa-solid fa-rocket"></i>
                 </div>
-                <h3 class="font-heading text-2xl font-bold mb-5 text-secondary-800">Misi Kami</h3>
+                <h3 class="font-heading text-2xl font-bold mb-5 text-secondary-800 dark:text-neutral-200">Misi Kami</h3>
                 <ul class="space-y-4">
                     <li class="flex gap-3">
                         <div class="w-2 h-2 rounded-full bg-primary-500 mt-2 shrink-0"></div>
@@ -135,36 +138,36 @@
     <section class="px-6 py-20 reveal">
         <div class="max-w-5xl mx-auto">
             <div class="text-center mb-12">
-                <h2 class="font-heading text-4xl font-bold text-secondary-800 mb-3">Nilai-Nilai Kami</h2>
+                <h2 class="font-heading text-4xl font-bold text-secondary-800 dark:text-neutral-200 mb-3">Nilai-Nilai Kami</h2>
                 <p class="text-neutral-500 text-sm max-w-sm mx-auto">Filosofi yang mendasari setiap pixel dan baris kode
                     yang kami ciptakan untuk Anda.</p>
             </div>
 
             <div class="grid md:grid-cols-3 gap-6">
 
-                <div class="bg-white rounded-2xl p-7 border border-neutral-100 shadow-soft transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                <div class="bg-white dark:bg-secondary-800 rounded-2xl p-7 border border-neutral-100 dark:border-secondary-700 shadow-soft transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                     <div class="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center mb-4 text-primary-600">
                         <i class="fa-solid fa-wand-magic-sparkles"></i>
                     </div>
-                    <h4 class="font-heading font-bold text-lg mb-2 text-secondary-800">Inovasi</h4>
+                    <h4 class="font-heading font-bold text-lg mb-2 text-secondary-800 dark:text-neutral-200">Inovasi</h4>
                     <p class="text-neutral-500 text-sm leading-relaxed">Kami selalu mengeksplorasi teknologi terbaru
                         untuk memberikan pengalaman undangan yang interaktif dan berkesan bagi setiap tamu.</p>
                 </div>
 
-                <div class="bg-white rounded-2xl p-7 border border-neutral-100 shadow-soft transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                <div class="bg-white dark:bg-secondary-800 rounded-2xl p-7 border border-neutral-100 dark:border-secondary-700 shadow-soft transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                     <div class="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center mb-4 text-primary-600">
                         <i class="fa-solid fa-film"></i>
                     </div>
-                    <h4 class="font-heading font-bold text-lg mb-2 text-secondary-800">Kualitas Sinematik</h4>
+                    <h4 class="font-heading font-bold text-lg mb-2 text-secondary-800 dark:text-neutral-200">Kualitas Sinematik</h4>
                     <p class="text-neutral-500 text-sm leading-relaxed">Setiap visual dikurasi dengan presisi tinggi
                         untuk memberikan kesan mewah dan profesional layaknya karya film layar lebar.</p>
                 </div>
 
-                <div class="bg-white rounded-2xl p-7 border border-neutral-100 shadow-soft transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                <div class="bg-white dark:bg-secondary-800 rounded-2xl p-7 border border-neutral-100 dark:border-secondary-700 shadow-soft transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                     <div class="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center mb-4 text-primary-600">
                         <i class="fa-regular fa-heart"></i>
                     </div>
-                    <h4 class="font-heading font-bold text-lg mb-2 text-secondary-800">Kepuasan Pelanggan</h4>
+                    <h4 class="font-heading font-bold text-lg mb-2 text-secondary-800 dark:text-neutral-200">Kepuasan Pelanggan</h4>
                     <p class="text-neutral-500 text-sm leading-relaxed">Tim support kami adalah sahabat Anda dalam
                         perjalanan persiapan momen berharga, siap mendampingi hingga hari bahagia tiba.</p>
                 </div>
@@ -174,16 +177,16 @@
     </section>
 
     <!-- ═══════════════════════════ PERJALANAN ═══════════════════════════ -->
-    <section class="px-6 py-20 bg-white reveal">
+    <section class="px-6 py-20 bg-white dark:bg-secondary-800 reveal">
         <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-12 items-center">
 
             <!-- Images column -->
             <div class="relative h-80 md:h-auto">
-                <div class="absolute left-0 top-0 w-[48%] h-full rounded-2xl overflow-hidden bg-gradient-to-br from-neutral-100 to-neutral-200">
+                <div class="absolute left-0 top-0 w-[48%] h-full rounded-2xl overflow-hidden bg-gradient-to-br from-neutral-100 to-neutral-200 dark:from-secondary-800 dark:to-secondary-800">
                     <div class="w-full h-full flex items-end p-4">
                         <div class="bg-white/90 rounded-xl p-3 w-full">
                             <i class="fa-solid fa-quote-left text-primary-500 text-xs mb-1"></i>
-                            <p class="text-xs text-secondary-700 font-medium leading-snug">"Momen yang tepat diabadikan
+                            <p class="text-xs text-secondary-700 dark:text-neutral-200 font-medium leading-snug">"Momen yang tepat diabadikan
                                 dengan undangan yang sempurna."</p>
                         </div>
                     </div>
@@ -205,7 +208,7 @@
                     <i class="fa-regular fa-star text-primary-500 text-[10px]"></i>
                     Perjalanan Kami
                 </span>
-                <h2 class="font-heading text-4xl font-bold text-secondary-800 leading-tight mb-2">
+                <h2 class="font-heading text-4xl font-bold text-secondary-800 dark:text-neutral-200 leading-tight mb-2">
                     Perjalanan Kami<br>Membantu
                 </h2>
                 <h2 class="font-heading text-4xl italic text-primary-500 mb-6">Ribuan Pasangan</h2>
@@ -223,12 +226,12 @@
 
                 <div class="flex gap-10">
                     <div>
-                        <p class="text-3xl font-heading font-bold text-secondary-800">5k+</p>
+                        <p class="text-3xl font-heading font-bold text-secondary-800 dark:text-neutral-200">5k+</p>
                         <p class="text-xs text-neutral-400 font-semibold uppercase tracking-widest mt-1">Klien Puas</p>
                     </div>
                     <div class="w-px bg-neutral-200"></div>
                     <div>
-                        <p class="text-3xl font-heading font-bold text-secondary-800">200k+</p>
+                        <p class="text-3xl font-heading font-bold text-secondary-800 dark:text-neutral-200">200k+</p>
                         <p class="text-xs text-neutral-400 font-semibold uppercase tracking-widest mt-1">Tamu Terundang
                         </p>
                     </div>

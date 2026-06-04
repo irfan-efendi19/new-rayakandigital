@@ -11,17 +11,17 @@
     <link rel="stylesheet" href="{{ asset('css/landingpage.css') }}">
     </head>
     
-    <body class="font-sans antialiased bg-neutral-50 text-secondary-800">
+    <body class="font-sans antialiased bg-neutral-50 dark:bg-secondary-900 text-secondary-800 dark:text-neutral-200">
         <x-public-navbar />
         <div class="h-16"></div>
     
         <!-- =========== HERO =========== -->
-        <section class="relative overflow-hidden bg-gradient-to-br from-white via-primary-50/30 to-secondary-50 pt-28 pb-16"
+        <section class="relative overflow-hidden bg-gradient-to-br from-white via-primary-50/30 to-secondary-50 dark:from-secondary-900 dark:via-secondary-900 dark:to-secondary-900 pt-28 pb-16"
             id="layanan">
             <!-- Background Decorations -->
             <div class="absolute inset-0 overflow-hidden pointer-events-none">
-                <div class="absolute -top-20 -right-20 w-72 h-72 bg-primary-200/20 rounded-full blur-3xl"></div>
-                <div class="absolute -bottom-20 -left-20 w-96 h-96 bg-secondary-200/20 rounded-full blur-3xl"></div>
+                <div class="absolute -top-20 -right-20 w-72 h-72 bg-primary-200/20 rounded-full blur-3xl dark:bg-primary-900/20"></div>
+                <div class="absolute -bottom-20 -left-20 w-96 h-96 bg-secondary-200/20 rounded-full blur-3xl dark:bg-secondary-800/20"></div>
                 <div
                     class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary-100/10 rounded-full blur-3xl">
                 </div>
@@ -34,7 +34,7 @@
                         Undangan Digital Modern #1
                     </span>
                     <h1
-                        class="fade-up delay-1 font-heading text-[2.6rem] md:text-5xl font-bold leading-tight text-secondary-900 mb-3">
+                        class="fade-up delay-1 font-heading text-[2.6rem] md:text-5xl font-bold leading-tight text-secondary-900 dark:text-neutral-100 mb-3">
                         Rayakan Momen<br>Berharga Dengan<br>
                         <span class="text-primary-500">Sentuhan Digital.</span>
                     </h1>
@@ -48,7 +48,7 @@
                             Buat Sekarang <i class="fa-solid fa-arrow-right text-sm"></i>
                         </a>
                         <a href="#contoh"
-                            class="inline-flex items-center gap-2 border border-neutral-300 hover:border-primary-500 text-secondary-800 font-semibold px-6 py-3 rounded-full transition text-sm">
+                            class="inline-flex items-center gap-2 border border-neutral-300 hover:border-primary-500 text-secondary-800 dark:text-neutral-200 font-semibold px-6 py-3 rounded-full transition text-sm">
                             Lihat Contoh
                         </a>
                     </div>
@@ -80,13 +80,13 @@
                         </div>
                     </div>
                     <div
-                        class="absolute top-8 -right-4 md:right-0 bg-white shadow-soft rounded-2xl px-4 py-3 flex items-center gap-3 w-44">
+                        class="absolute top-8 -right-4 md:right-0 bg-white dark:bg-secondary-800 shadow-soft rounded-2xl px-4 py-3 flex items-center gap-3 w-44">
                         <div class="w-8 h-8 bg-primary-500 rounded-full flex items-center justify-center flex-shrink-0">
                             <i class="fa-solid fa-music text-white text-xs"></i>
                         </div>
                         <div>
                             <p class="text-[10px] text-neutral-400 font-medium">Background Music</p>
-                            <p class="text-xs text-secondary-800 font-semibold truncate">Romantic Jazz</p>
+                            <p class="text-xs text-secondary-800 dark:text-neutral-200 font-semibold truncate">Romantic Jazz</p>
                         </div>
                     </div>
                 </div>
@@ -94,10 +94,10 @@
         </section>
     
         <!-- =========== FITUR =========== -->
-        <section class="py-20 bg-white" id="fitur">
+        <section class="py-20 bg-white dark:bg-secondary-800" id="fitur">
             <div class="max-w-6xl mx-auto px-6">
                 <div class="text-center mb-12">
-                    <h2 class="font-heading text-3xl md:text-4xl font-bold text-secondary-900 mb-3">Fitur Interaktif Tanpa
+                    <h2 class="font-heading text-3xl md:text-4xl font-bold text-secondary-900 dark:text-neutral-100 mb-3">Fitur Interaktif Tanpa
                         Batas</h2>
                     <p class="text-neutral-500 text-[15px] max-w-md mx-auto">Pengalaman yang lebih dari sekadar teks.
                         Hadirkan
@@ -108,7 +108,7 @@
                         <div class="w-10 h-10 bg-primary-100 rounded-xl flex items-center justify-center mb-4">
                             <i class="fa-regular fa-images text-primary-500 text-lg"></i>
                         </div>
-                        <h3 class="font-semibold text-secondary-900 text-lg mb-1">Galeri Foto & Video</h3>
+                        <h3 class="font-semibold text-secondary-900 dark:text-neutral-100 text-lg mb-1">Galeri Foto & Video</h3>
                         <p class="text-neutral-500 text-sm leading-relaxed max-w-xs">Bagikan momen pre-wedding terbaik Anda
                             dalam tampilan slideshow premium yang memukau.</p>
                         <div class="mt-5 grid grid-cols-4 gap-1.5 rounded-xl overflow-hidden">
@@ -128,7 +128,7 @@
                         <div class="w-10 h-10 bg-primary-100 rounded-xl flex items-center justify-center mb-4">
                             <i class="fa-solid fa-location-dot text-primary-500 text-lg"></i>
                         </div>
-                        <h3 class="font-semibold text-secondary-900 text-lg mb-1">Navigasi Peta</h3>
+                        <h3 class="font-semibold text-secondary-900 dark:text-neutral-100 text-lg mb-1">Navigasi Peta</h3>
                         <p class="text-neutral-500 text-sm leading-relaxed max-w-xs">Terintegrasi langsung dengan Google
                             Maps &
                             Waze untuk memudahkan tamu hadir tepat waktu.</p>
@@ -174,26 +174,26 @@
                         <div class="w-10 h-10 bg-primary-100 rounded-xl flex items-center justify-center mb-4">
                             <i class="fa-solid fa-envelope-open-text text-primary-500 text-lg"></i>
                         </div>
-                        <h3 class="font-semibold text-secondary-900 text-lg mb-1">RSVP & Ucapan</h3>
+                        <h3 class="font-semibold text-secondary-900 dark:text-neutral-100 text-lg mb-1">RSVP & Ucapan</h3>
                         <p class="text-neutral-500 text-sm leading-relaxed">Manajemen tamu dan buku ucapan digital yang
                             rapi.
                         </p>
                         <div class="mt-5 space-y-2">
-                            <div class="flex items-center gap-3 bg-white rounded-xl px-3 py-2 shadow-sm">
+                            <div class="flex items-center gap-3 bg-white dark:bg-secondary-800 rounded-xl px-3 py-2 shadow-sm">
                                 <div class="w-7 h-7 rounded-full bg-green-100 flex items-center justify-center">
                                     <i class="fa-solid fa-check text-green-500 text-xs"></i>
                                 </div>
                                 <div>
-                                    <p class="text-xs font-semibold text-secondary-800">Rina & Keluarga</p>
+                                    <p class="text-xs font-semibold text-secondary-800 dark:text-neutral-200">Rina & Keluarga</p>
                                     <p class="text-[10px] text-neutral-400">Hadir · 3 orang</p>
                                 </div>
                             </div>
-                            <div class="flex items-center gap-3 bg-white rounded-xl px-3 py-2 shadow-sm">
+                            <div class="flex items-center gap-3 bg-white dark:bg-secondary-800 rounded-xl px-3 py-2 shadow-sm">
                                 <div class="w-7 h-7 rounded-full bg-primary-100 flex items-center justify-center">
                                     <i class="fa-solid fa-clock text-primary-500 text-xs"></i>
                                 </div>
                                 <div>
-                                    <p class="text-xs font-semibold text-secondary-800">Budi Santoso</p>
+                                    <p class="text-xs font-semibold text-secondary-800 dark:text-neutral-200">Budi Santoso</p>
                                     <p class="text-[10px] text-neutral-400">Menunggu konfirmasi</p>
                                 </div>
                             </div>
@@ -207,7 +207,7 @@
         <section class="py-20 bg-neutral-50" id="harga">
             <div class="max-w-6xl mx-auto px-6">
                 <div class="mb-10">
-                    <h2 class="font-heading text-3xl md:text-4xl font-bold text-secondary-900 mb-2">Pilih Paket Sesuai
+                    <h2 class="font-heading text-3xl md:text-4xl font-bold text-secondary-900 dark:text-neutral-100 mb-2">Pilih Paket Sesuai
                         Kebutuhan</h2>
                     <p class="text-neutral-500 text-sm max-w-sm">Semua paket mendapatkan domain kustom dan masa aktif
                         panjang.
@@ -218,8 +218,7 @@
                 <div class="mt-10 space-y-6 sm:space-y-0 sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:gap-6">
                         @forelse($packages as $package)
                             <div
-                                class="group relative bg-white rounded-2xl shadow-soft transition-all duration-300 hover:shadow-xl hover:-translate-y-1
-                                                                                                                                                                                                                                                                                                                {{ $package->is_popular ? 'ring-2 ring-primary-500 shadow-lg' : 'border border-neutral-200' }}">
+                                class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft transition-all duration-300 hover:shadow-xl hover:-translate-y-1 {{ $package->is_popular ? 'ring-2 ring-primary-500 shadow-lg' : 'border border-neutral-200' }}">
 
                                 <!-- Popular Badge -->
                                 @if($package->is_popular)
@@ -257,8 +256,8 @@
                                                 {{ number_format($package->slashed_price, 0, ',', '.') }}</span>
                                         @endif
                                         <div class="flex items-baseline flex-wrap gap-1 mt-1">
-                                            <span class="text-3xl font-bold text-secondary-900 shrink-0">Rp</span>
-                                            <span class="text-5xl font-extrabold text-secondary-900 break-words">
+                                            <span class="text-3xl font-bold text-secondary-900 dark:text-neutral-100 shrink-0">Rp</span>
+                                            <span class="text-5xl font-extrabold text-secondary-900 dark:text-neutral-100 break-words">
                                                 {{ number_format($package->price, 0, ',', '.') }}
                                             </span>
                                             @if($package->price > 0)
@@ -273,15 +272,12 @@
                                     @auth
                                         @if($package->package_code === 'free')
                                             <div
-                                                class="mt-6 w-full bg-neutral-100 text-neutral-500 rounded-xl py-3 text-sm font-semibold text-center cursor-default">
+                                                class="mt-6 w-full bg-neutral-100 dark:bg-secondary-800 text-neutral-500 rounded-xl py-3 text-sm font-semibold text-center cursor-default">
                                                 ✅ Paket Aktif
                                             </div>
                                         @else
                                                             <a href="{{ route('dashboard.checkout') }}"
-                                                                class="mt-6 flex items-center justify-center gap-2 w-full rounded-xl py-3 text-sm font-semibold text-center transition-all duration-200
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        {{ $package->is_popular
-                                            ? 'bg-primary-500 text-white hover:bg-primary-600 shadow-md hover:shadow-lg'
-                                            : 'bg-primary-50 border border-primary-200 text-primary-700 hover:bg-primary-100' }}">
+                                                                class="mt-6 flex items-center justify-center gap-2 w-full rounded-xl py-3 text-sm font-semibold text-center transition-all duration-200 {{ $package->is_popular ? 'bg-primary-500 text-white hover:bg-primary-600 shadow-md hover:shadow-lg' : 'bg-primary-50 border border-primary-200 text-primary-700 hover:bg-primary-100' }}">
                                                                 Pilih {{ $package->package_name }}
                                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -301,10 +297,7 @@
                                             </a>
                                         @else
                                                             <a href="{{ route('register') }}"
-                                                                class="mt-6 flex items-center justify-center gap-2 w-full rounded-xl py-3 text-sm font-semibold text-center transition-all duration-200
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        {{ $package->is_popular
-                                            ? 'bg-primary-500 text-white hover:bg-primary-600 shadow-md hover:shadow-lg'
-                                            : 'bg-primary-50 border border-primary-200 text-primary-700 hover:bg-primary-100' }}">
+                                                                class="mt-6 flex items-center justify-center gap-2 w-full rounded-xl py-3 text-sm font-semibold text-center transition-all duration-200 {{ $package->is_popular ? 'bg-primary-500 text-white hover:bg-primary-600 shadow-md hover:shadow-lg' : 'bg-primary-50 border border-primary-200 text-primary-700 hover:bg-primary-100' }}">
                                                                 Pilih {{ $package->package_name }}
                                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -316,7 +309,7 @@
                                 </div>
 
                                 <!-- Features List -->
-                                <div class="border-t border-neutral-100 pt-5 pb-6 px-6">
+                                <div class="border-t border-neutral-100 dark:border-secondary-700 pt-5 pb-6 px-6">
                                     <div class="flex items-center gap-2 mb-4">
                                         <svg class="w-4 h-4 text-primary-500" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
@@ -329,7 +322,7 @@
                                     </div>
                                     <ul class="space-y-3">
                                         @forelse($package->features as $feature)
-                                            <li class="flex items-start gap-2.5 text-sm text-neutral-600">
+                                            <li class="flex items-start gap-2.5 text-sm text-neutral-600 dark:text-neutral-300">
                                                 <svg class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" fill="none"
                                                     stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -345,13 +338,13 @@
                             </div>
                         @empty
                             <div class="col-span-full py-16 text-center">
-                                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-neutral-100 mb-4">
+                                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-neutral-100 dark:bg-secondary-800 mb-4">
                                     <svg class="w-8 h-8 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
                                     </svg>
                                 </div>
-                                <p class="text-lg font-medium text-secondary-800">Belum ada paket tersedia</p>
+                                <p class="text-lg font-medium text-secondary-800 dark:text-neutral-200">Belum ada paket tersedia</p>
                                 <p class="text-neutral-500 mt-1">Silakan hubungi admin untuk informasi lebih lanjut.
                                 </p>
                             </div>
@@ -379,7 +372,7 @@
                 </p>
                 <div class="flex flex-col sm:flex-row items-center justify-center gap-3 relative z-10">
                     <a href="#"
-                        class="bg-white text-primary-500 font-semibold px-7 py-3 rounded-full hover:bg-primary-50 transition shadow-md">
+                        class="bg-white dark:bg-secondary-800 text-primary-500 font-semibold px-7 py-3 rounded-full hover:bg-primary-50 transition shadow-md">
                     Buat Undangan Sekarang
                 </a>
                 <a href="#"

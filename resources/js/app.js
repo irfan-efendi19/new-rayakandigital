@@ -2,6 +2,22 @@ import Alpine from 'alpinejs';
 window.Alpine = Alpine;
 
 document.addEventListener('alpine:init', () => {
+    Alpine.store('darkMode', {
+        on: false,
+        toggle() {
+            this.on = !this.on;
+            localStorage.setItem('dark-mode', this.on);
+            if (this.on) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        },
+        init() {
+            this.on = localStorage.getItem('dark-mode') === 'true' || (!('dark-mode' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        }
+    });
+
     Alpine.data('landing', () => ({
         showBackToTop: false,
         mobileMenuOpen: false,

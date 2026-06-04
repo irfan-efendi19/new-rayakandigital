@@ -40,22 +40,22 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="font-sans antialiased bg-gray-50 text-gray-900">
+<body class="font-sans antialiased bg-gray-50 dark:bg-secondary-900 text-gray-900 dark:text-neutral-100">
     <x-public-navbar />
 
     <!-- Spacer to prevent content from hiding behind fixed navbar -->
     <div class="h-16"></div>
 
     <section
-        class="relative overflow-hidden bg-gradient-to-br from-white via-primary-50/30 to-secondary-50 py-20 md:py-28 lg:py-32">
+        class="relative overflow-hidden bg-gradient-to-br from-white via-primary-50/30 to-secondary-50 dark:from-secondary-900 dark:via-secondary-900 dark:to-secondary-900 py-20 md:py-28 lg:py-32">
         <!-- Background Decorative Elements -->
         <div class="absolute inset-0 overflow-hidden pointer-events-none">
             <!-- Floating circles -->
-            <div class="absolute -top-20 -right-20 w-72 h-72 bg-primary-200/20 rounded-full blur-3xl"></div>
-            <div class="absolute -bottom-20 -left-20 w-96 h-96 bg-secondary-200/20 rounded-full blur-3xl">
+            <div class="absolute -top-20 -right-20 w-72 h-72 bg-primary-200/20 rounded-full blur-3xl dark:bg-primary-900/20"></div>
+            <div class="absolute -bottom-20 -left-20 w-96 h-96 bg-secondary-200/20 rounded-full blur-3xl dark:bg-secondary-800/20">
             </div>
             <div
-                class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary-100/10 rounded-full blur-3xl">
+                class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary-100/10 rounded-full blur-3xl dark:bg-primary-900/10">
             </div>
 
             <!-- Dot pattern -->
@@ -82,7 +82,7 @@
 
                     <!-- Main Heading -->
                     <h1
-                        class="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-secondary-900 leading-tight mb-6">
+                        class="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-secondary-900 dark:text-neutral-100 leading-tight mb-6">
                         Cara Mudah Buat
                         <span class="relative inline-block">
                             Undangan Digital!
@@ -93,7 +93,7 @@
                         Rayakan Cinta dengan Sentuhan Digital
                     </p>
 
-                    <p class="text-base md:text-lg text-neutral-600 max-w-2xl mx-auto lg:mx-0 mb-8">
+                    <p class="text-base md:text-lg text-neutral-600 dark:text-neutral-300 max-w-2xl mx-auto lg:mx-0 mb-8">
                         Bikin undangan pernikahan online dalam 5 menit. Praktis, elegan, lengkap dengan
                         fitur kirim
                         otomatis via WhatsApp & Check-in QR Code.
@@ -110,7 +110,7 @@
                         </a>
 
                         <a href="#"
-                            class="group inline-flex items-center justify-center gap-2 px-8 py-4 bg-white border-2 border-primary-200 text-primary-600 text-base font-semibold rounded-xl hover:bg-primary-50 hover:border-primary-300 hover:text-primary-700 transition-all duration-300 shadow-sm">
+                            class="group inline-flex items-center justify-center gap-2 px-8 py-4 bg-white dark:bg-secondary-800 border-2 border-primary-200 text-primary-600 text-base font-semibold rounded-xl hover:bg-primary-50 hover:border-primary-300 hover:text-primary-700 transition-all duration-300 shadow-sm">
                             <i class="fas fa-play-circle text-lg"></i>
                             <span>Lihat Demo</span>
                         </a>
@@ -118,7 +118,7 @@
 
                     <!-- Trust Badges / Stats -->
                     <div
-                        class="flex flex-wrap items-center gap-6 justify-center lg:justify-start mt-8 pt-4 border-t border-neutral-200">
+                        class="flex flex-wrap items-center gap-6 justify-center lg:justify-start mt-8 pt-4 border-t border-neutral-200 dark:border-secondary-700">
                         <div class="flex items-center gap-2">
                             <i class="fas fa-check-circle text-emerald-500 text-sm"></i>
                             <span class="text-xs text-neutral-500">10.000+ Undangan Terbuat</span>
@@ -144,7 +144,7 @@
 
                     <!-- Main Mockup Card -->
                     <div
-                        class="relative bg-white rounded-3xl shadow-2xl overflow-hidden transform hover:scale-105 transition-transform duration-500 ease-out">
+                        class="relative bg-white dark:bg-secondary-800 rounded-3xl shadow-2xl overflow-hidden transform hover:scale-105 transition-transform duration-500 ease-out">
                         <!-- Mockup Header -->
                         <div class="bg-gradient-to-r from-primary-500 to-primary-600 px-6 py-4">
                             <div class="flex items-center justify-between">
@@ -159,14 +159,14 @@
                         </div>
 
                         <!-- Mockup Content -->
-                        <div class="p-6 bg-gradient-to-br from-neutral-50 to-white">
+                        <div class="p-6 bg-gradient-to-br from-neutral-50 to-white dark:from-secondary-800 dark:to-secondary-800">
                             <!-- Wedding Couple Illustration -->
                             <div class="text-center mb-4">
                                 <div
                                     class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-primary-100 mb-3">
                                     <i class="fas fa-heart text-3xl text-primary-500"></i>
                                 </div>
-                                <h3 class="font-heading text-xl font-bold text-secondary-800">Rayakan
+                                <h3 class="font-heading text-xl font-bold text-secondary-800 dark:text-neutral-200">Rayakan
                                     Digital</h3>
                                 <p class="text-sm text-neutral-500">Pernikahan & Acara Spesial</p>
                             </div>
@@ -175,15 +175,15 @@
                             <div class="space-y-3">
                                 <div class="flex items-center gap-3 p-2 rounded-lg bg-primary-50/50">
                                     <i class="fas fa-qrcode text-primary-500 w-5"></i>
-                                    <span class="text-sm text-neutral-700">Check-in via QR Code</span>
+                                    <span class="text-sm text-neutral-700 dark:text-neutral-200">Check-in via QR Code</span>
                                 </div>
                                 <div class="flex items-center gap-3 p-2 rounded-lg bg-primary-50/50">
                                     <i class="fab fa-whatsapp text-emerald-500 w-5"></i>
-                                    <span class="text-sm text-neutral-700">Kirim Otomatis WA</span>
+                                    <span class="text-sm text-neutral-700 dark:text-neutral-200">Kirim Otomatis WA</span>
                                 </div>
                                 <div class="flex items-center gap-3 p-2 rounded-lg bg-primary-50/50">
                                     <i class="fas fa-map-marker-alt text-red-500 w-5"></i>
-                                    <span class="text-sm text-neutral-700">Live GPS Location</span>
+                                    <span class="text-sm text-neutral-700 dark:text-neutral-200">Live GPS Location</span>
                                 </div>
                             </div>
 
@@ -195,7 +195,7 @@
                         </div>
 
                         <!-- Mockup Footer -->
-                        <div class="bg-neutral-100 px-6 py-3 flex justify-between items-center">
+                        <div class="bg-neutral-100 dark:bg-secondary-800 px-6 py-3 flex justify-between items-center">
                             <div class="flex gap-1">
                                 <i class="fas fa-circle text-[6px] text-neutral-400"></i>
                                 <i class="fas fa-circle text-[6px] text-neutral-400"></i>
@@ -207,16 +207,16 @@
 
                     <!-- Floating Elements -->
                     <div class="absolute -top-5 -right-5 animate-bounce-slow">
-                        <div class="bg-white rounded-xl shadow-lg px-3 py-2 flex items-center gap-2">
+                        <div class="bg-white dark:bg-secondary-800 rounded-xl shadow-lg px-3 py-2 flex items-center gap-2">
                             <i class="fas fa-check-circle text-emerald-500"></i>
-                            <span class="text-xs font-semibold text-secondary-700">+5 menit selesai!</span>
+                            <span class="text-xs font-semibold text-secondary-700 dark:text-neutral-200">+5 menit selesai!</span>
                         </div>
                     </div>
 
                     <div class="absolute -bottom-5 -left-5 animate-bounce-slow animation-delay-1000">
-                        <div class="bg-white rounded-xl shadow-lg px-3 py-2 flex items-center gap-2">
+                        <div class="bg-white dark:bg-secondary-800 rounded-xl shadow-lg px-3 py-2 flex items-center gap-2">
                             <i class="fab fa-whatsapp text-emerald-500"></i>
-                            <span class="text-xs font-semibold text-secondary-700">Kirim ke 100+ tamu</span>
+                            <span class="text-xs font-semibold text-secondary-700 dark:text-neutral-200">Kirim ke 100+ tamu</span>
                         </div>
                     </div>
                 </div>
@@ -226,7 +226,7 @@
 
     <!-- Exclusive Services Section - Alternative Layout -->
     <section id="services" x-data="reveal" :class="visible || 'opacity-0 translate-y-8'"
-        class="py-20 bg-gradient-to-br from-white via-tertiary/30 to-white transition-all duration-700">
+        class="py-20 bg-gradient-to-br from-white via-tertiary/30 to-white dark:from-secondary-900 dark:via-secondary-900 dark:to-secondary-900 transition-all duration-700">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
             <!-- Section Header (same as above) -->
@@ -235,12 +235,12 @@
                     class="inline-block px-4 py-1.5 rounded-full bg-primary-50 text-primary-600 text-sm font-semibold tracking-wide mb-4">
                     <i class="fas fa-crown mr-2 text-xs"></i>Exclusive Services
                 </span>
-                <h2 class="font-heading text-4xl md:text-5xl font-bold text-secondary-900 mb-5">
+                <h2 class="font-heading text-4xl md:text-5xl font-bold text-secondary-900 dark:text-neutral-100 mb-5">
                     Layanan <span class="text-primary-500">Premium</span>
                 </h2>
                 <div class="w-24 h-1 bg-gradient-to-r from-primary-400 to-primary-600 rounded-full mx-auto mb-6">
                 </div>
-                <p class="text-xl text-neutral-600">
+                <p class="text-xl text-neutral-600 dark:text-neutral-300">
                     Solusi digital terlengkap untuk menyempurnakan setiap detail perayaan momen spesial
                     Anda.
                 </p>
@@ -251,7 +251,7 @@
 
                 <!-- Service 1 -->
                 <div
-                    class="group relative bg-white rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-2 p-8">
+                    class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-2 p-8">
                     <div class="absolute -top-4 left-6">
                         <div
                             class="w-10 h-10 bg-gradient-to-r from-primary-500 to-primary-600 rounded-xl flex items-center justify-center shadow-lg">
@@ -263,7 +263,7 @@
                             class="w-14 h-14 rounded-xl bg-primary-100 text-primary-600 flex items-center justify-center mb-5 group-hover:bg-primary-500 group-hover:text-white transition-all duration-300">
                             <i class="fas fa-envelope-open-text text-xl"></i>
                         </div>
-                        <h3 class="text-xl font-bold text-secondary-800 mb-3">Undangan Web & Video</h3>
+                        <h3 class="text-xl font-bold text-secondary-800 dark:text-neutral-200 mb-3">Undangan Web & Video</h3>
                         <p class="text-neutral-500 leading-relaxed mb-5">
                             Undangan digital eksklusif dengan desain responsif, musik latar, galeri foto,
                             dan
@@ -278,7 +278,7 @@
 
                 <!-- Service 2 -->
                 <div
-                    class="group relative bg-white rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-2 p-8">
+                    class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-2 p-8">
                     <div class="absolute -top-4 left-6">
                         <div
                             class="w-10 h-10 bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg">
@@ -290,7 +290,7 @@
                             class="w-14 h-14 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center mb-5 group-hover:bg-emerald-500 group-hover:text-white transition-all duration-300">
                             <i class="fas fa-qrcode text-xl"></i>
                         </div>
-                        <h3 class="text-xl font-bold text-secondary-800 mb-3">Buku Tamu Digital</h3>
+                        <h3 class="text-xl font-bold text-secondary-800 dark:text-neutral-200 mb-3">Buku Tamu Digital</h3>
                         <p class="text-neutral-500 leading-relaxed mb-5">
                             Manajemen tamu modern dengan sistem QR Code. Check-in lebih cepat, terorganisir,
                             data tersimpan otomatis.
@@ -304,7 +304,7 @@
 
                 <!-- Service 3 -->
                 <div
-                    class="group relative bg-white rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-2 p-8">
+                    class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-2 p-8">
                     <div class="absolute -top-4 left-6">
                         <div
                             class="w-10 h-10 bg-gradient-to-r from-purple-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
@@ -316,7 +316,7 @@
                             class="w-14 h-14 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center mb-5 group-hover:bg-purple-500 group-hover:text-white transition-all duration-300">
                             <i class="fas fa-broadcast-tower text-xl"></i>
                         </div>
-                        <h3 class="text-xl font-bold text-secondary-800 mb-3">Live Streaming</h3>
+                        <h3 class="text-xl font-bold text-secondary-800 dark:text-neutral-200 mb-3">Live Streaming</h3>
                         <p class="text-neutral-500 leading-relaxed mb-5">
                             Hubungkan tamu yang tidak bisa hadir secara fisik melalui integrasi live
                             streaming
@@ -332,11 +332,11 @@
 
             <!-- CTA Section -->
             <div class="mt-16 text-center">
-                <div class="bg-gradient-to-r from-primary-50 to-tertiary rounded-2xl p-8 md:p-10">
-                    <h3 class="text-2xl font-bold text-secondary-800 mb-3">
+                <div class="bg-gradient-to-r from-primary-50 to-tertiary dark:from-secondary-800 dark:to-secondary-800 rounded-2xl p-8 md:p-10">
+                    <h3 class="text-2xl font-bold text-secondary-800 dark:text-neutral-200 mb-3">
                         Siap Membuat Acara Spesial Anda?
                     </h3>
-                    <p class="text-neutral-600 mb-6">
+                    <p class="text-neutral-600 dark:text-neutral-300 mb-6">
                         Konsultasikan kebutuhan Anda dengan tim kami secara gratis.
                     </p>
                     <a href="#"
@@ -350,14 +350,14 @@
     </section>
 
     <!-- How It Works Section - Modernized -->
-    <section id="how-it-works" class="relative py-24 px-4 overflow-hidden bg-tertiary">
+    <section id="how-it-works" class="relative py-24 px-4 overflow-hidden bg-tertiary dark:bg-secondary-900">
         <!-- Background Decorations -->
-        <div class="absolute inset-0 bg-gradient-to-br from-white via-tertiary to-primary-50/30"></div>
+        <div class="absolute inset-0 bg-gradient-to-br from-white via-tertiary to-primary-50/30 dark:from-secondary-900 dark:via-secondary-900 dark:to-secondary-900"></div>
         <div
-            class="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-primary-200/30 to-primary-300/20 rounded-full blur-3xl">
+            class="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-primary-200/30 to-primary-300/20 rounded-full blur-3xl dark:from-primary-800/20 dark:to-primary-900/10">
         </div>
         <div
-            class="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-secondary-100/20 to-neutral-200/20 rounded-full blur-3xl">
+            class="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-secondary-100/20 to-neutral-200/20 rounded-full blur-3xl dark:from-secondary-800/10 dark:to-neutral-800/10">
         </div>
 
         <div class="relative max-w-7xl mx-auto">
@@ -368,12 +368,12 @@
                     <i class="fas fa-bolt text-primary-500 text-sm"></i>
                     <span class="text-sm font-semibold text-primary-600">WORKFLOW</span>
                 </div>
-                <h2 class="font-heading text-4xl md:text-5xl font-bold text-secondary-900 mb-4">
+                <h2 class="font-heading text-4xl md:text-5xl font-bold text-secondary-900 dark:text-neutral-100 mb-4">
                     Cara Kerja <span class="text-primary-500">Rayakan Digital</span>
                 </h2>
                 <div class="w-24 h-1 bg-gradient-to-r from-primary-400 to-primary-600 rounded-full mx-auto mb-6">
                 </div>
-                <p class="text-xl text-neutral-600 max-w-2xl mx-auto">
+                <p class="text-xl text-neutral-600 dark:text-neutral-300 max-w-2xl mx-auto">
                     Dari memilih desain hingga menyebarkan undangan, semua bisa dilakukan dalam hitungan
                     menit.
                 </p>
@@ -385,8 +385,8 @@
                 <!-- Step 1 -->
                 <div class="group relative" x-data="{ hover: false }" @mouseenter="hover = true"
                     @mouseleave="hover = false">
-                    <div class="relative h-full bg-white rounded-2xl p-6 text-center transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 border border-neutral-200/50"
-                        :class="{ 'shadow-xl bg-white': hover }">
+                    <div class="relative h-full bg-white dark:bg-secondary-800 rounded-2xl p-6 text-center transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 border border-neutral-200/50 dark:border-secondary-700/50"
+                        :class="{ 'shadow-xl bg-white dark:bg-secondary-800': hover }">
                         <!-- Step Number Background -->
                         <div
                             class="absolute -top-3 -left-3 w-12 h-12 bg-gradient-to-br from-primary-500 to-primary-600 rounded-xl flex items-center justify-center shadow-lg z-10">
@@ -402,7 +402,7 @@
                         </div>
 
                         <h3
-                            class="text-xl font-bold text-secondary-800 mb-3 group-hover:text-primary-600 transition-colors">
+                            class="text-xl font-bold text-secondary-800 dark:text-neutral-200 mb-3 group-hover:text-primary-600 transition-colors">
                             Pilih Tema
                         </h3>
                         <p class="text-neutral-500 leading-relaxed">
@@ -419,8 +419,8 @@
                 <!-- Step 2 -->
                 <div class="group relative" x-data="{ hover: false }" @mouseenter="hover = true"
                     @mouseleave="hover = false">
-                    <div class="relative h-full bg-white rounded-2xl p-6 text-center transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 border border-neutral-200/50"
-                        :class="{ 'shadow-xl bg-white': hover }">
+                    <div class="relative h-full bg-white dark:bg-secondary-800 rounded-2xl p-6 text-center transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 border border-neutral-200/50 dark:border-secondary-700/50"
+                        :class="{ 'shadow-xl bg-white dark:bg-secondary-800': hover }">
                         <div
                             class="absolute -top-3 -left-3 w-12 h-12 bg-gradient-to-br from-secondary-600 to-secondary-700 rounded-xl flex items-center justify-center shadow-lg z-10">
                             <span class="text-xl font-bold text-white">2</span>
@@ -434,7 +434,7 @@
                         </div>
 
                         <h3
-                            class="text-xl font-bold text-secondary-800 mb-3 group-hover:text-secondary-600 transition-colors">
+                            class="text-xl font-bold text-secondary-800 dark:text-neutral-200 mb-3 group-hover:text-secondary-600 transition-colors">
                             Daftar & Isi Data
                         </h3>
                         <p class="text-neutral-500 leading-relaxed">
@@ -451,8 +451,8 @@
                 <!-- Step 3 -->
                 <div class="group relative" x-data="{ hover: false }" @mouseenter="hover = true"
                     @mouseleave="hover = false">
-                    <div class="relative h-full bg-white rounded-2xl p-6 text-center transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 border border-neutral-200/50"
-                        :class="{ 'shadow-xl bg-white': hover }">
+                    <div class="relative h-full bg-white dark:bg-secondary-800 rounded-2xl p-6 text-center transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 border border-neutral-200/50 dark:border-secondary-700/50"
+                        :class="{ 'shadow-xl bg-white dark:bg-secondary-800': hover }">
                         <div
                             class="absolute -top-3 -left-3 w-12 h-12 bg-gradient-to-br from-amber-500 to-orange-500 rounded-xl flex items-center justify-center shadow-lg z-10">
                             <span class="text-xl font-bold text-white">3</span>
@@ -466,7 +466,7 @@
                         </div>
 
                         <h3
-                            class="text-xl font-bold text-secondary-800 mb-3 group-hover:text-amber-600 transition-colors">
+                            class="text-xl font-bold text-secondary-800 dark:text-neutral-200 mb-3 group-hover:text-amber-600 transition-colors">
                             Aktivasi Paket
                         </h3>
                         <p class="text-neutral-500 leading-relaxed">
@@ -483,8 +483,8 @@
                 <!-- Step 4 -->
                 <div class="group relative" x-data="{ hover: false }" @mouseenter="hover = true"
                     @mouseleave="hover = false">
-                    <div class="relative h-full bg-white rounded-2xl p-6 text-center transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 border border-neutral-200/50"
-                        :class="{ 'shadow-xl bg-white': hover }">
+                    <div class="relative h-full bg-white dark:bg-secondary-800 rounded-2xl p-6 text-center transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 border border-neutral-200/50 dark:border-secondary-700/50"
+                        :class="{ 'shadow-xl bg-white dark:bg-secondary-800': hover }">
                         <div
                             class="absolute -top-3 -left-3 w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-xl flex items-center justify-center shadow-lg z-10">
                             <span class="text-xl font-bold text-white">4</span>
@@ -498,7 +498,7 @@
                         </div>
 
                         <h3
-                            class="text-xl font-bold text-secondary-800 mb-3 group-hover:text-emerald-600 transition-colors">
+                            class="text-xl font-bold text-secondary-800 dark:text-neutral-200 mb-3 group-hover:text-emerald-600 transition-colors">
                             Sebarkan
                         </h3>
                         <p class="text-neutral-500 leading-relaxed">
@@ -531,28 +531,28 @@
                 <div class="text-center">
                     <div class="flex items-center justify-center gap-2 mb-2">
                         <i class="fas fa-users text-primary-500 text-2xl"></i>
-                        <span class="text-3xl font-bold text-secondary-800">10K+</span>
+                        <span class="text-3xl font-bold text-secondary-800 dark:text-neutral-200">10K+</span>
                     </div>
                     <p class="text-sm text-neutral-500">Undangan Terbuat</p>
                 </div>
                 <div class="text-center">
                     <div class="flex items-center justify-center gap-2 mb-2">
                         <i class="fas fa-smile text-primary-500 text-2xl"></i>
-                        <span class="text-3xl font-bold text-secondary-800">98%</span>
+                        <span class="text-3xl font-bold text-secondary-800 dark:text-neutral-200">98%</span>
                     </div>
                     <p class="text-sm text-neutral-500">Kepuasan Pelanggan</p>
                 </div>
                 <div class="text-center">
                     <div class="flex items-center justify-center gap-2 mb-2">
                         <i class="fas fa-bolt text-primary-500 text-2xl"></i>
-                        <span class="text-3xl font-bold text-secondary-800">5 Menit</span>
+                        <span class="text-3xl font-bold text-secondary-800 dark:text-neutral-200">5 Menit</span>
                     </div>
                     <p class="text-sm text-neutral-500">Setup Cepat</p>
                 </div>
                 <div class="text-center">
                     <div class="flex items-center justify-center gap-2 mb-2">
                         <i class="fas fa-shield-alt text-primary-500 text-2xl"></i>
-                        <span class="text-3xl font-bold text-secondary-800">100%</span>
+                        <span class="text-3xl font-bold text-secondary-800 dark:text-neutral-200">100%</span>
                     </div>
                     <p class="text-sm text-neutral-500">Data Terenkripsi</p>
                 </div>
@@ -569,7 +569,7 @@
                             class="fas fa-arrow-right text-sm group-hover:translate-x-1 transition-transform duration-300"></i>
                     </a>
                     <a href="#"
-                        class="inline-flex items-center gap-2 px-8 py-4 bg-white border border-neutral-200 text-secondary-700 rounded-xl font-semibold transition-all duration-300 hover:shadow-md hover:bg-tertiary group">
+                        class="inline-flex items-center gap-2 px-8 py-4 bg-white dark:bg-secondary-800 border border-neutral-200 dark:border-secondary-700 text-secondary-700 dark:text-neutral-200 rounded-xl font-semibold transition-all duration-300 hover:shadow-md hover:bg-tertiary group">
                         <i class="fas fa-play-circle text-primary-500"></i>
                         <span>Lihat Demo</span>
                     </a>
@@ -592,7 +592,7 @@
     <!-- Theme Catalog Section -->
     <!-- Themes Catalog Section - Modernized -->
     <section id="themes" x-data="{ filter: 'all' }"
-        class="py-20 bg-tertiary transition-all duration-700 overflow-hidden">
+        class="py-20 bg-tertiary dark:bg-secondary-900 transition-all duration-700 overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Section Header -->
             <div class="text-center max-w-3xl mx-auto mb-12">
@@ -600,12 +600,12 @@
                     class="inline-block px-4 py-1.5 rounded-full bg-primary-50 text-primary-600 text-sm font-semibold tracking-wide mb-4">
                     <i class="fas fa-palette mr-2 text-xs"></i>Katalog Tema
                 </span>
-                <h2 class="font-heading text-4xl md:text-5xl font-bold text-secondary-900 mb-5">
+                <h2 class="font-heading text-4xl md:text-5xl font-bold text-secondary-900 dark:text-neutral-100 mb-5">
                     Pilih Desain <span class="text-primary-500">Undangan Anda</span>
                 </h2>
                 <div class="w-24 h-1 bg-gradient-to-r from-primary-400 to-primary-600 rounded-full mx-auto mb-6">
                 </div>
-                <p class="text-xl text-neutral-600">
+                <p class="text-xl text-neutral-600 dark:text-neutral-300">
                     Lihat pratinjau langsung dengan data contoh. Klik "Gunakan Tema Ini" untuk langsung
                     mulai.
                 </p>
@@ -616,7 +616,7 @@
                 <div class="flex flex-wrap justify-center gap-3 mb-8">
                     <!-- All Themes Button -->
                     <button @click="filter = 'all'"
-                        :class="filter === 'all' ? 'bg-primary-500 text-white border-primary-500 shadow-md shadow-primary-200' : 'bg-white text-secondary-700 border-neutral-200 hover:border-primary-300 hover:text-primary-600'"
+                        :class="filter === 'all' ? 'bg-primary-500 text-white border-primary-500 shadow-md shadow-primary-200' : 'bg-white text-secondary-700 dark:text-neutral-200 border-neutral-200 dark:border-secondary-700 hover:border-primary-300 hover:text-primary-600'"
                         class="relative px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 border-2 shadow-sm">
                         <i class="fas fa-th-large mr-2 text-xs"></i>
                         Semua
@@ -630,7 +630,7 @@
                     <!-- Category Buttons -->
                     @foreach($categories as $category)
                         <button @click="filter = '{{ $category->id }}'"
-                            :class="filter === '{{ $category->id }}' ? 'bg-primary-500 text-white border-primary-500 shadow-md shadow-primary-200' : 'bg-white text-secondary-700 border-neutral-200 hover:border-primary-300 hover:text-primary-600'"
+                            :class="filter === '{{ $category->id }}' ? 'bg-primary-500 text-white border-primary-500 shadow-md shadow-primary-200' : 'bg-white text-secondary-700 dark:text-neutral-200 border-neutral-200 dark:border-secondary-700 hover:border-primary-300 hover:text-primary-600'"
                             class="relative px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 border-2 shadow-sm">
                             <i class="fas {{ $category->icon ?? 'fa-folder' }} mr-2 text-xs"></i>
                             {{ $category->name }}
@@ -648,13 +648,13 @@
             <div class="relative">
                 <!-- Scroll Buttons -->
                 <button @click="scrollLeft()"
-                    class="absolute left-0 top-1/2 -translate-y-1/2 z-10 hidden lg:flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-lg border border-neutral-200 text-secondary-600 hover:bg-primary-500 hover:text-white hover:border-primary-500 transition-all duration-200 cursor-pointer"
+                    class="absolute left-0 top-1/2 -translate-y-1/2 z-10 hidden lg:flex items-center justify-center w-10 h-10 rounded-full bg-white dark:bg-secondary-800 shadow-lg border border-neutral-200 dark:border-secondary-700 text-secondary-600 hover:bg-primary-500 hover:text-white hover:border-primary-500 transition-all duration-200 cursor-pointer"
                     style="transform: translateY(-50%);">
                     <i class="fas fa-chevron-left text-sm"></i>
                 </button>
             
                 <button @click="scrollRight()"
-                    class="absolute right-0 top-1/2 -translate-y-1/2 z-10 hidden lg:flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-lg border border-neutral-200 text-secondary-600 hover:bg-primary-500 hover:text-white hover:border-primary-500 transition-all duration-200 cursor-pointer"
+                    class="absolute right-0 top-1/2 -translate-y-1/2 z-10 hidden lg:flex items-center justify-center w-10 h-10 rounded-full bg-white dark:bg-secondary-800 shadow-lg border border-neutral-200 dark:border-secondary-700 text-secondary-600 hover:bg-primary-500 hover:text-white hover:border-primary-500 transition-all duration-200 cursor-pointer"
                     style="transform: translateY(-50%);">
                     <i class="fas fa-chevron-right text-sm"></i>
                 </button>
@@ -668,7 +668,7 @@
                             <div x-show="filter === 'all' || filter === '{{ $theme->theme_category_id ?? '0' }}'"
                                 x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 scale-95"
                                 x-transition:enter-end="opacity-100 scale-100"
-                                class="group relative bg-white rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden"
+                                class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden"
                                 style="width: 280px; flex-shrink: 0;">
 
                                 <!-- Theme Thumbnail -->
@@ -719,7 +719,7 @@
                                 <!-- Theme Info -->
                                 <div class="p-5">
                                     <div class="flex items-start justify-between mb-2">
-                                        <h3 class="text-lg font-bold text-secondary-800 group-hover:text-primary-600 transition-colors">
+                                        <h3 class="text-lg font-bold text-secondary-800 dark:text-neutral-200 group-hover:text-primary-600 transition-colors">
                                             {{ $theme->name }}
                                         </h3>
                                         @if($theme->rating)
@@ -763,10 +763,10 @@
                             </div>
                         @empty
                             <div class="py-16 text-center" style="min-width: 100%;">
-                                <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-neutral-100 mb-4">
+                                <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-neutral-100 dark:bg-secondary-800 mb-4">
                                     <i class="fas fa-palette text-3xl text-neutral-400"></i>
                                 </div>
-                                <p class="text-lg font-semibold text-secondary-800">Belum ada tema tersedia</p>
+                                <p class="text-lg font-semibold text-secondary-800 dark:text-neutral-200">Belum ada tema tersedia</p>
                                 <p class="text-neutral-500 mt-2">Silakan hubungi admin untuk informasi lebih
                                     lanjut.
                                 </p>
@@ -780,7 +780,7 @@
             @if($totalThemes > 8)
                 <div class="mt-12 text-center">
                     <a href="{{ route('themes.index') }}"
-                        class="inline-flex items-center gap-2 px-8 py-3.5 border-2 border-primary-200 text-primary-600 font-semibold rounded-xl bg-white hover:bg-primary-50 hover:border-primary-300 hover:text-primary-700 transition-all duration-200 shadow-sm group">
+                        class="inline-flex items-center gap-2 px-8 py-3.5 border-2 border-primary-200 text-primary-600 font-semibold rounded-xl bg-white dark:bg-secondary-800 hover:bg-primary-50 hover:border-primary-300 hover:text-primary-700 transition-all duration-200 shadow-sm group">
                         <i class="fas fa-th-large text-sm"></i>
                         <span>Lihat Semua Tema ({{ $totalThemes }})</span>
                         <i class="fas fa-arrow-right text-sm group-hover:translate-x-1 transition-transform duration-200"></i>
@@ -792,7 +792,7 @@
             
             <!-- Feature Section -->
             <section x-data="reveal" :class="visible || 'opacity-0 translate-y-8'"
-                class="py-20 bg-gradient-to-br from-white via-tertiary/30 to-white transition-all duration-700">
+                class="py-20 bg-gradient-to-br from-white via-tertiary/30 to-white dark:from-secondary-900 dark:via-secondary-900 dark:to-secondary-900 transition-all duration-700">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <!-- Section Header -->
                     <div class="text-center max-w-3xl mx-auto">
@@ -800,7 +800,7 @@
                             class="inline-block px-4 py-1.5 rounded-full bg-primary-50 text-primary-600 text-sm font-semibold tracking-wide mb-4">
                             <i class="fas fa-star mr-2 text-xs"></i>Fitur Unggulan
                         </span>
-                        <h2 class="font-heading text-4xl md:text-5xl font-bold text-secondary-900 mb-5">
+                        <h2 class="font-heading text-4xl md:text-5xl font-bold text-secondary-900 dark:text-neutral-100 mb-5">
                             Semua Yang <span class="text-primary-500">Anda Butuhkan</span>
                         </h2>
                         <div class="w-24 h-1 bg-gradient-to-r from-primary-400 to-primary-600 rounded-full mx-auto mb-6">
@@ -818,7 +818,7 @@
             
                             <!-- Feature 1 - RSVP Management -->
                             <div
-                                class="group relative bg-white rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6">
+                                class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6">
                                 <div
                                     class="absolute inset-0 bg-gradient-to-br from-primary-500/5 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                 </div>
@@ -827,7 +827,7 @@
                                         class="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-500 to-primary-600 text-white flex items-center justify-center mb-5 shadow-lg shadow-primary-200">
                                         <i class="fas fa-calendar-check text-2xl"></i>
                                     </div>
-                                    <h3 class="text-xl font-bold text-secondary-800 mb-3">Manajemen RSVP</h3>
+                                    <h3 class="text-xl font-bold text-secondary-800 dark:text-neutral-200 mb-3">Manajemen RSVP</h3>
                                     <p class="text-neutral-500 leading-relaxed">
                                         Ketahui siapa saja yang akan hadir ke acara Anda. Sistem RSVP terintegrasi
                                         langsung di dashboard dengan notifikasi real-time.
@@ -842,13 +842,13 @@
             
                             <!-- Feature 2 - Personal Links -->
                             <div
-                                class="group relative bg-white rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6">
+                                class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6">
                                 <div class="relative">
                                     <div
                                         class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-600 text-white flex items-center justify-center mb-5 shadow-lg shadow-emerald-200">
                                         <i class="fas fa-link text-2xl"></i>
                                     </div>
-                                    <h3 class="text-xl font-bold text-secondary-800 mb-3">Link Personal</h3>
+                                    <h3 class="text-xl font-bold text-secondary-800 dark:text-neutral-200 mb-3">Link Personal</h3>
                                     <p class="text-neutral-500 leading-relaxed">
                                         Sapa tamu dengan nama mereka. Generate link khusus untuk setiap tamu lengkap
                                         dengan template pesan WhatsApp otomatis.
@@ -863,13 +863,13 @@
             
                             <!-- Feature 3 - Digital Gift -->
                             <div
-                                class="group relative bg-white rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6">
+                                class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6">
                                 <div class="relative">
                                     <div
                                         class="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-500 to-amber-600 text-white flex items-center justify-center mb-5 shadow-lg shadow-amber-200">
                                         <i class="fas fa-gift text-2xl"></i>
                                     </div>
-                                    <h3 class="text-xl font-bold text-secondary-800 mb-3">Digital Gift (Angpao)</h3>
+                                    <h3 class="text-xl font-bold text-secondary-800 dark:text-neutral-200 mb-3">Digital Gift (Angpao)</h3>
                                     <p class="text-neutral-500 leading-relaxed">
                                         Mudahkan tamu untuk memberikan kado atau angpao melalui transfer bank, QRIS,
                                         atau scan e-wallet favorit mereka.
@@ -884,13 +884,13 @@
             
                             <!-- Feature 4 - Guest Book -->
                             <div
-                                class="group relative bg-white rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6">
+                                class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6">
                                 <div class="relative">
                                     <div
                                         class="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500 to-purple-600 text-white flex items-center justify-center mb-5 shadow-lg shadow-purple-200">
                                         <i class="fas fa-book-open text-2xl"></i>
                                     </div>
-                                    <h3 class="text-xl font-bold text-secondary-800 mb-3">Buku Tamu Interaktif</h3>
+                                    <h3 class="text-xl font-bold text-secondary-800 dark:text-neutral-200 mb-3">Buku Tamu Interaktif</h3>
                                     <p class="text-neutral-500 leading-relaxed">
                                         Terima ucapan dan doa dari para tamu undangan secara real-time di halaman
                                         undangan Anda dengan emoji dan stiker.
@@ -905,13 +905,13 @@
             
                             <!-- Feature 5 - Gallery Photo -->
                             <div
-                                class="group relative bg-white rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6">
+                                class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6">
                                 <div class="relative">
                                     <div
                                         class="w-14 h-14 rounded-2xl bg-gradient-to-br from-rose-500 to-rose-600 text-white flex items-center justify-center mb-5 shadow-lg shadow-rose-200">
                                         <i class="fas fa-images text-2xl"></i>
                                     </div>
-                                    <h3 class="text-xl font-bold text-secondary-800 mb-3">Galeri Foto & Video</h3>
+                                    <h3 class="text-xl font-bold text-secondary-800 dark:text-neutral-200 mb-3">Galeri Foto & Video</h3>
                                     <p class="text-neutral-500 leading-relaxed">
                                         Unggah foto dan video kenangan manis Anda. Tamu juga bisa mengirim foto
                                         mereka
@@ -927,13 +927,13 @@
             
                             <!-- Feature 6 - Countdown Timer -->
                             <div
-                                class="group relative bg-white rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6">
+                                class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6">
                                 <div class="relative">
                                     <div
                                         class="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 text-white flex items-center justify-center mb-5 shadow-lg shadow-blue-200">
                                         <i class="fas fa-hourglass-half text-2xl"></i>
                                     </div>
-                                    <h3 class="text-xl font-bold text-secondary-800 mb-3">Countdown Timer</h3>
+                                    <h3 class="text-xl font-bold text-secondary-800 dark:text-neutral-200 mb-3">Countdown Timer</h3>
                                     <p class="text-neutral-500 leading-relaxed">
                                         Tampilkan hitung mundur menuju hari H acara Anda. Buat tamu semakin antusias
                                         dan
@@ -949,13 +949,13 @@
             
                             <!-- Feature 7 - Location Maps -->
                             <div
-                                class="group relative bg-white rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6">
+                                class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6">
                                 <div class="relative">
                                     <div
                                         class="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-500 to-indigo-600 text-white flex items-center justify-center mb-5 shadow-lg shadow-indigo-200">
                                         <i class="fas fa-map-marker-alt text-2xl"></i>
                                     </div>
-                                    <h3 class="text-xl font-bold text-secondary-800 mb-3">Peta Lokasi Terintegrasi
+                                    <h3 class="text-xl font-bold text-secondary-800 dark:text-neutral-200 mb-3">Peta Lokasi Terintegrasi
                                     </h3>
                                     <p class="text-neutral-500 leading-relaxed">
                                         Tampilkan peta Google Maps langsung di undangan. Tamu bisa buka navigasi
@@ -972,13 +972,13 @@
             
                             <!-- Feature 8 - WhatsApp Integration -->
                             <div
-                                class="group relative bg-white rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6">
+                                class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6">
                                 <div class="relative">
                                     <div
                                         class="w-14 h-14 rounded-2xl bg-gradient-to-br from-green-500 to-green-600 text-white flex items-center justify-center mb-5 shadow-lg shadow-green-200">
                                         <i class="fab fa-whatsapp text-2xl"></i>
                                     </div>
-                                    <h3 class="text-xl font-bold text-secondary-800 mb-3">Broadcast WhatsApp</h3>
+                                    <h3 class="text-xl font-bold text-secondary-800 dark:text-neutral-200 mb-3">Broadcast WhatsApp</h3>
                                     <p class="text-neutral-500 leading-relaxed">
                                         Kirim pengingat otomatis ke semua tamu via WhatsApp. Template pesan sudah
                                         tersedia dan bisa diedit.
@@ -993,13 +993,13 @@
             
                             <!-- Feature 9 - Analytics Dashboard -->
                             <div
-                                class="group relative bg-white rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6">
+                                class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6">
                                 <div class="relative">
                                     <div
                                         class="w-14 h-14 rounded-2xl bg-gradient-to-br from-slate-500 to-slate-600 text-white flex items-center justify-center mb-5 shadow-lg shadow-slate-200">
                                         <i class="fas fa-chart-line text-2xl"></i>
                                     </div>
-                                    <h3 class="text-xl font-bold text-secondary-800 mb-3">Analytics & Insight</h3>
+                                    <h3 class="text-xl font-bold text-secondary-800 dark:text-neutral-200 mb-3">Analytics & Insight</h3>
                                     <p class="text-neutral-500 leading-relaxed">
                                         Pantau jumlah pengunjung, RSVP, dan interaksi tamu. Lihat data real-time
                                         dashboard lengkap.
@@ -1029,7 +1029,7 @@
             <!-- Pricing Section - Modernized -->
             {{-- Pricing & Services Section with Tab Navigation --}}
             {{-- Pricing & Services Section with Tab Navigation --}}
-            <section x-data="{ activeTab: 'undangan' }" class="py-20 bg-tertiary transition-all duration-700">
+            <section x-data="{ activeTab: 'undangan' }" class="py-20 bg-tertiary dark:bg-secondary-900 transition-all duration-700">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     {{-- Section Header --}}
                     <div class="text-center max-w-3xl mx-auto mb-12">
@@ -1037,12 +1037,12 @@
                             class="inline-block px-4 py-1.5 rounded-full bg-primary-50 text-primary-600 text-sm font-semibold tracking-wide mb-4">
                             <i class="fas fa-layer-group mr-2 text-xs"></i>Layanan Kami
                         </span>
-                        <h2 class="font-heading text-4xl md:text-5xl font-bold text-secondary-900 mb-5">
+                        <h2 class="font-heading text-4xl md:text-5xl font-bold text-secondary-900 dark:text-neutral-100 mb-5">
                             Semua Kebutuhan <span class="text-primary-500">Pernikahan Anda</span>
                         </h2>
                         <div class="w-24 h-1 bg-gradient-to-r from-primary-400 to-primary-600 rounded-full mx-auto mb-6">
                         </div>
-                        <p class="text-xl text-neutral-600">
+                        <p class="text-xl text-neutral-600 dark:text-neutral-300">
                             Undangan digital, buku tamu, hingga siaran langsung — semuanya dalam satu platform.
                         </p>
                     </div>
@@ -1050,40 +1050,30 @@
                     {{-- Tab Navigation --}}
                     <div class="flex justify-center mb-12">
                         <div
-                            class="flex flex-col md:flex-row flex-wrap bg-white rounded-2xl p-1.5 shadow-soft border border-neutral-100 gap-2 w-full md:w-auto">
+                            class="flex flex-col md:flex-row flex-wrap bg-white dark:bg-secondary-800 rounded-2xl p-1.5 shadow-soft border border-neutral-100 dark:border-secondary-700 gap-2 w-full md:w-auto">
                             {{-- Tab: Undangan Digital --}}
-                            <button @click="activeTab = 'undangan'" :class="activeTab === 'undangan'
-                    ? 'bg-primary-500 text-white shadow-md shadow-primary-200'
-                    : 'text-secondary-600 hover:text-primary-600 hover:bg-primary-50'"
+                            <button @click="activeTab = 'undangan'" :class="activeTab === 'undangan' ? 'bg-primary-500 text-white shadow-md shadow-primary-200' : 'text-secondary-600 hover:text-primary-600 hover:bg-primary-50'"
                                 class="w-full md:w-auto flex items-center gap-2 px-3 py-2 rounded-xl text-xs md:text-sm font-semibold transition-all duration-200">
                                 <i class="fas fa-heart text-xs"></i>
                                 <span>Undangan Digital</span>
                             </button>
             
                             {{-- Tab: Buku Tamu --}}
-                            <button @click="activeTab = 'buku-tamu'" :class="activeTab === 'buku-tamu'
-                    ? 'bg-primary-500 text-white shadow-md shadow-primary-200'
-                    : 'text-secondary-600 hover:text-primary-600 hover:bg-primary-50'"
+                            <button @click="activeTab = 'buku-tamu'" :class="activeTab === 'buku-tamu' ? 'bg-primary-500 text-white shadow-md shadow-primary-200' : 'text-secondary-600 hover:text-primary-600 hover:bg-primary-50'"
                                 class="w-full md:w-auto flex items-center gap-2 px-3 py-2 rounded-xl text-xs md:text-sm font-semibold transition-all duration-200">
                                 <i class="fas fa-book text-xs"></i>
                                 <span>Buku Tamu</span>
-                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold" :class="activeTab === 'buku-tamu'
-                      ? 'bg-white/20 text-white'
-                      : 'bg-emerald-100 text-emerald-700'">
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold" :class="activeTab === 'buku-tamu' ? 'bg-white/20 text-white' : 'bg-emerald-100 text-emerald-700'">
                                     Baru
                                 </span>
                             </button>
             
                             {{-- Tab: Live Streaming --}}
-                            <button @click="activeTab = 'live-streaming'" :class="activeTab === 'live-streaming'
-                    ? 'bg-primary-500 text-white shadow-md shadow-primary-200'
-                    : 'text-secondary-600 hover:text-primary-600 hover:bg-primary-50'"
+                            <button @click="activeTab = 'live-streaming'" :class="activeTab === 'live-streaming' ? 'bg-primary-500 text-white shadow-md shadow-primary-200' : 'text-secondary-600 hover:text-primary-600 hover:bg-primary-50'"
                                 class="w-full md:w-auto flex items-center gap-2 px-3 py-2 rounded-xl text-xs md:text-sm font-semibold transition-all duration-200">
                                 <i class="fas fa-video text-xs"></i>
                                 <span>Live Streaming</span>
-                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold" :class="activeTab === 'live-streaming'
-                      ? 'bg-white/20 text-white'
-                      : 'bg-emerald-100 text-emerald-700'">
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold" :class="activeTab === 'live-streaming' ? 'bg-white/20 text-white' : 'bg-emerald-100 text-emerald-700'">
                                     Baru
                                 </span>
                             </button>
@@ -1101,8 +1091,7 @@
                         <div class="mt-16 space-y-6 sm:space-y-0 sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:gap-6">
                             @forelse($packages as $package)
                                 <div
-                                    class="group relative bg-white rounded-2xl shadow-soft transition-all duration-300 hover:shadow-xl hover:-translate-y-1
-                                                                                                                                                                                                                                                                                                    {{ $package->is_popular ? 'ring-2 ring-primary-500 shadow-lg' : 'border border-neutral-200' }}">
+                                    class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft transition-all duration-300 hover:shadow-xl hover:-translate-y-1 {{ $package->is_popular ? 'ring-2 ring-primary-500 shadow-lg' : 'border border-neutral-200' }}">
 
                                     <!-- Popular Badge -->
                                     @if($package->is_popular)
@@ -1140,8 +1129,8 @@
                                                     {{ number_format($package->slashed_price, 0, ',', '.') }}</span>
                                             @endif
                                             <div class="flex items-baseline flex-wrap gap-1 mt-1">
-                                                <span class="text-3xl font-bold text-secondary-900 shrink-0">Rp</span>
-                                                <span class="text-5xl font-extrabold text-secondary-900 break-words">
+                                                <span class="text-3xl font-bold text-secondary-900 dark:text-neutral-100 shrink-0">Rp</span>
+                                                <span class="text-5xl font-extrabold text-secondary-900 dark:text-neutral-100 break-words">
                                                     {{ number_format($package->price, 0, ',', '.') }}
                                                 </span>
                                                 @if($package->price > 0)
@@ -1156,15 +1145,12 @@
                                         @auth
                                             @if($package->package_code === 'free')
                                                 <div
-                                                    class="mt-6 w-full bg-neutral-100 text-neutral-500 rounded-xl py-3 text-sm font-semibold text-center cursor-default">
+                                                    class="mt-6 w-full bg-neutral-100 dark:bg-secondary-800 text-neutral-500 rounded-xl py-3 text-sm font-semibold text-center cursor-default">
                                                     ✅ Paket Aktif
                                                 </div>
                                             @else
                                                                     <a href="{{ route('dashboard.checkout') }}"
-                                                                        class="mt-6 flex items-center justify-center gap-2 w-full rounded-xl py-3 text-sm font-semibold text-center transition-all duration-200
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                {{ $package->is_popular
-                                                ? 'bg-primary-500 text-white hover:bg-primary-600 shadow-md hover:shadow-lg'
-                                                : 'bg-primary-50 border border-primary-200 text-primary-700 hover:bg-primary-100' }}">
+                                                                        class="mt-6 flex items-center justify-center gap-2 w-full rounded-xl py-3 text-sm font-semibold text-center transition-all duration-200 {{ $package->is_popular ? 'bg-primary-500 text-white hover:bg-primary-600 shadow-md hover:shadow-lg' : 'bg-primary-50 border border-primary-200 text-primary-700 hover:bg-primary-100' }}">
                                                                         Pilih {{ $package->package_name }}
                                                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -1184,10 +1170,7 @@
                                                 </a>
                                             @else
                                                                     <a href="{{ route('register') }}"
-                                                                        class="mt-6 flex items-center justify-center gap-2 w-full rounded-xl py-3 text-sm font-semibold text-center transition-all duration-200
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                {{ $package->is_popular
-                                                ? 'bg-primary-500 text-white hover:bg-primary-600 shadow-md hover:shadow-lg'
-                                                : 'bg-primary-50 border border-primary-200 text-primary-700 hover:bg-primary-100' }}">
+                                                                        class="mt-6 flex items-center justify-center gap-2 w-full rounded-xl py-3 text-sm font-semibold text-center transition-all duration-200 {{ $package->is_popular ? 'bg-primary-500 text-white hover:bg-primary-600 shadow-md hover:shadow-lg' : 'bg-primary-50 border border-primary-200 text-primary-700 hover:bg-primary-100' }}">
                                                                         Pilih {{ $package->package_name }}
                                                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -1199,7 +1182,7 @@
                                     </div>
 
                                     <!-- Features List -->
-                                    <div class="border-t border-neutral-100 pt-5 pb-6 px-6">
+                                    <div class="border-t border-neutral-100 dark:border-secondary-700 pt-5 pb-6 px-6">
                                         <div class="flex items-center gap-2 mb-4">
                                             <svg class="w-4 h-4 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -1211,7 +1194,7 @@
                                         </div>
                                         <ul class="space-y-3">
                                             @forelse($package->features as $feature)
-                                                <li class="flex items-start gap-2.5 text-sm text-neutral-600">
+                                                <li class="flex items-start gap-2.5 text-sm text-neutral-600 dark:text-neutral-300">
                                                     <svg class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" fill="none"
                                                         stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -1227,13 +1210,13 @@
                                 </div>
                             @empty
                                 <div class="col-span-full py-16 text-center">
-                                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-neutral-100 mb-4">
+                                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-neutral-100 dark:bg-secondary-800 mb-4">
                                         <svg class="w-8 h-8 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
                                         </svg>
                                     </div>
-                                    <p class="text-lg font-medium text-secondary-800">Belum ada paket tersedia</p>
+                                    <p class="text-lg font-medium text-secondary-800 dark:text-neutral-200">Belum ada paket tersedia</p>
                                     <p class="text-neutral-500 mt-1">Silakan hubungi admin untuk informasi lebih lanjut.
                                     </p>
                                 </div>
@@ -1253,9 +1236,9 @@
                                 <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-emerald-50 mb-5">
                                     <i class="fas fa-book-open text-4xl text-emerald-500"></i>
                                 </div>
-                                <h3 class="font-heading text-3xl font-bold text-secondary-900 mb-3">Buku Tamu
+                                <h3 class="font-heading text-3xl font-bold text-secondary-900 dark:text-neutral-100 mb-3">Buku Tamu
                                     Digital</h3>
-                                <p class="text-neutral-600 text-lg">
+                                <p class="text-neutral-600 dark:text-neutral-300 text-lg">
                                     Catat kehadiran tamu secara modern. Tamu cukup scan QR, isi nama, dan tinggalkan
                                     ucapan —
                                     semua tersimpan otomatis.
@@ -1264,45 +1247,45 @@
             
                             {{-- Feature List --}}
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10">
-                                <div class="flex items-start gap-3 bg-white rounded-2xl p-4 shadow-soft border border-neutral-100">
+                                <div class="flex items-start gap-3 bg-white dark:bg-secondary-800 rounded-2xl p-4 shadow-soft border border-neutral-100 dark:border-secondary-700">
                                     <div class="flex-shrink-0 w-9 h-9 rounded-xl bg-emerald-50 flex items-center justify-center">
                                         <i class="fas fa-qrcode text-emerald-500 text-base"></i>
                                     </div>
                                     <div>
-                                        <p class="font-semibold text-secondary-800 text-sm">QR Code Tamu</p>
+                                        <p class="font-semibold text-secondary-800 dark:text-neutral-200 text-sm">QR Code Tamu</p>
                                         <p class="text-xs text-neutral-500 mt-0.5">Tamu scan langsung dari ponsel,
                                             tanpa perlu
                                             download aplikasi</p>
                                     </div>
                                 </div>
-                                <div class="flex items-start gap-3 bg-white rounded-2xl p-4 shadow-soft border border-neutral-100">
+                                <div class="flex items-start gap-3 bg-white dark:bg-secondary-800 rounded-2xl p-4 shadow-soft border border-neutral-100 dark:border-secondary-700">
                                     <div class="flex-shrink-0 w-9 h-9 rounded-xl bg-emerald-50 flex items-center justify-center">
                                         <i class="fas fa-comment-dots text-emerald-500 text-base"></i>
                                     </div>
                                     <div>
-                                        <p class="font-semibold text-secondary-800 text-sm">Ucapan & Doa</p>
+                                        <p class="font-semibold text-secondary-800 dark:text-neutral-200 text-sm">Ucapan & Doa</p>
                                         <p class="text-xs text-neutral-500 mt-0.5">Kumpulkan pesan dan ucapan dari
                                             seluruh tamu
                                             undangan</p>
                                     </div>
                                 </div>
-                                <div class="flex items-start gap-3 bg-white rounded-2xl p-4 shadow-soft border border-neutral-100">
+                                <div class="flex items-start gap-3 bg-white dark:bg-secondary-800 rounded-2xl p-4 shadow-soft border border-neutral-100 dark:border-secondary-700">
                                     <div class="flex-shrink-0 w-9 h-9 rounded-xl bg-emerald-50 flex items-center justify-center">
                                         <i class="fas fa-file-excel text-emerald-500 text-base"></i>
                                     </div>
                                     <div>
-                                        <p class="font-semibold text-secondary-800 text-sm">Ekspor Data</p>
+                                        <p class="font-semibold text-secondary-800 dark:text-neutral-200 text-sm">Ekspor Data</p>
                                         <p class="text-xs text-neutral-500 mt-0.5">Unduh data kehadiran tamu dalam
                                             format
                                             Excel/CSV</p>
                                     </div>
                                 </div>
-                                <div class="flex items-start gap-3 bg-white rounded-2xl p-4 shadow-soft border border-neutral-100">
+                                <div class="flex items-start gap-3 bg-white dark:bg-secondary-800 rounded-2xl p-4 shadow-soft border border-neutral-100 dark:border-secondary-700">
                                     <div class="flex-shrink-0 w-9 h-9 rounded-xl bg-emerald-50 flex items-center justify-center">
                                         <i class="fas fa-chart-bar text-emerald-500 text-base"></i>
                                     </div>
                                     <div>
-                                        <p class="font-semibold text-secondary-800 text-sm">Rekap Real-time</p>
+                                        <p class="font-semibold text-secondary-800 dark:text-neutral-200 text-sm">Rekap Real-time</p>
                                         <p class="text-xs text-neutral-500 mt-0.5">Pantau jumlah kehadiran tamu
                                             secara langsung
                                             dari dashboard</p>
@@ -1312,8 +1295,8 @@
             
                             {{-- CTA Contact Sales --}}
                             <div
-                                class="bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-100 rounded-2xl p-8 text-center">
-                                <p class="text-secondary-700 font-medium mb-1">Tertarik dengan layanan ini?</p>
+                                class="bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-secondary-800 dark:to-secondary-800 border border-emerald-100 dark:border-emerald-900/30 rounded-2xl p-8 text-center">
+                                <p class="text-secondary-700 dark:text-neutral-200 font-medium mb-1">Tertarik dengan layanan ini?</p>
                                 <p class="text-neutral-500 text-sm mb-6">Hubungi tim kami untuk informasi harga dan
                                     demo gratis
                                 </p>
@@ -1346,10 +1329,10 @@
                                 <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-primary-50 mb-5">
                                     <i class="fas fa-video text-4xl text-primary-500"></i>
                                 </div>
-                                <h3 class="font-heading text-3xl font-bold text-secondary-900 mb-3">Live Streaming
+                                <h3 class="font-heading text-3xl font-bold text-secondary-900 dark:text-neutral-100 mb-3">Live Streaming
                                     Pernikahan
                                 </h3>
-                                <p class="text-neutral-600 text-lg">
+                                <p class="text-neutral-600 dark:text-neutral-300 text-lg">
                                     Siarkan momen spesial secara langsung kepada keluarga dan sahabat di seluruh
                                     penjuru dunia —
                                     tanpa harus hadir secara fisik.
@@ -1358,45 +1341,45 @@
             
                             {{-- Feature List --}}
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10">
-                                <div class="flex items-start gap-3 bg-white rounded-2xl p-4 shadow-soft border border-neutral-100">
+                                <div class="flex items-start gap-3 bg-white dark:bg-secondary-800 rounded-2xl p-4 shadow-soft border border-neutral-100 dark:border-secondary-700">
                                     <div class="flex-shrink-0 w-9 h-9 rounded-xl bg-primary-50 flex items-center justify-center">
                                         <i class="fas fa-film text-primary-500 text-base"></i>
                                     </div>
                                     <div>
-                                        <p class="font-semibold text-secondary-800 text-sm">HD Streaming</p>
+                                        <p class="font-semibold text-secondary-800 dark:text-neutral-200 text-sm">HD Streaming</p>
                                         <p class="text-xs text-neutral-500 mt-0.5">Kualitas video jernih hingga Full
                                             HD untuk
                                             pengalaman terbaik</p>
                                     </div>
                                 </div>
-                                <div class="flex items-start gap-3 bg-white rounded-2xl p-4 shadow-soft border border-neutral-100">
+                                <div class="flex items-start gap-3 bg-white dark:bg-secondary-800 rounded-2xl p-4 shadow-soft border border-neutral-100 dark:border-secondary-700">
                                     <div class="flex-shrink-0 w-9 h-9 rounded-xl bg-primary-50 flex items-center justify-center">
                                         <i class="fas fa-lock text-primary-500 text-base"></i>
                                     </div>
                                     <div>
-                                        <p class="font-semibold text-secondary-800 text-sm">Link Privat</p>
+                                        <p class="font-semibold text-secondary-800 dark:text-neutral-200 text-sm">Link Privat</p>
                                         <p class="text-xs text-neutral-500 mt-0.5">Hanya tamu undangan yang bisa
                                             menonton dengan
                                             link eksklusif</p>
                                     </div>
                                 </div>
-                                <div class="flex items-start gap-3 bg-white rounded-2xl p-4 shadow-soft border border-neutral-100">
+                                <div class="flex items-start gap-3 bg-white dark:bg-secondary-800 rounded-2xl p-4 shadow-soft border border-neutral-100 dark:border-secondary-700">
                                     <div class="flex-shrink-0 w-9 h-9 rounded-xl bg-primary-50 flex items-center justify-center">
                                         <i class="fas fa-cloud-download-alt text-primary-500 text-base"></i>
                                     </div>
                                     <div>
-                                        <p class="font-semibold text-secondary-800 text-sm">Rekaman Video</p>
+                                        <p class="font-semibold text-secondary-800 dark:text-neutral-200 text-sm">Rekaman Video</p>
                                         <p class="text-xs text-neutral-500 mt-0.5">Siaran otomatis direkam dan
                                             tersedia untuk
                                             diunduh setelah acara</p>
                                     </div>
                                 </div>
-                                <div class="flex items-start gap-3 bg-white rounded-2xl p-4 shadow-soft border border-neutral-100">
+                                <div class="flex items-start gap-3 bg-white dark:bg-secondary-800 rounded-2xl p-4 shadow-soft border border-neutral-100 dark:border-secondary-700">
                                     <div class="flex-shrink-0 w-9 h-9 rounded-xl bg-primary-50 flex items-center justify-center">
                                         <i class="fas fa-users text-primary-500 text-base"></i>
                                     </div>
                                     <div>
-                                        <p class="font-semibold text-secondary-800 text-sm">Unlimited Penonton</p>
+                                        <p class="font-semibold text-secondary-800 dark:text-neutral-200 text-sm">Unlimited Penonton</p>
                                         <p class="text-xs text-neutral-500 mt-0.5">Tidak ada batasan jumlah penonton
                                             yang bisa
                                             menyaksikan siaran</p>
@@ -1405,8 +1388,8 @@
                             </div>
                             {{-- CTA Contact Sales --}}
                             <div
-                                class="bg-gradient-to-br from-primary-50 to-secondary-50 border border-primary-100 rounded-2xl p-8 text-center">
-                                <p class="text-secondary-700 font-medium mb-1">Tertarik dengan layanan ini?</p>
+                                class="bg-gradient-to-br from-primary-50 to-secondary-50 dark:from-secondary-800 dark:to-secondary-800 border border-primary-100 dark:border-primary-900/30 rounded-2xl p-8 text-center">
+                                <p class="text-secondary-700 dark:text-neutral-200 font-medium mb-1">Tertarik dengan layanan ini?</p>
                                 <p class="text-neutral-500 text-sm mb-6">Hubungi tim kami untuk informasi harga dan
                                     demo gratis
                                 </p>
@@ -1429,14 +1412,14 @@
             
                 </div>
             </section>
-            <section class="relative py-16 px-4 bg-gradient-to-br from-orange-50 via-white to-orange-50/30">
+            <section class="relative py-16 px-4 bg-gradient-to-br from-orange-50 via-white to-orange-50/30 dark:from-secondary-900 dark:via-secondary-900 dark:to-secondary-900">
                 <div class="max-w-3xl mx-auto">
                     <!-- Header -->
                     <div class="text-center mb-10">
-                        <div class="inline-flex items-center gap-2 px-3 py-1 bg-orange-100 rounded-full mb-3">
-                            <span class="text-xs font-semibold text-orange-600">FAQ</span>
+                        <div class="inline-flex items-center gap-2 px-3 py-1 bg-orange-100 dark:bg-secondary-800 rounded-full mb-3">
+                            <span class="text-xs font-semibold text-orange-600 dark:text-orange-400">FAQ</span>
                         </div>
-                        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+                        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-neutral-100 mb-2">
                             Paling Sering Ditanyakan
                         </h2>
                         <div class="w-20 h-1 bg-gradient-to-r from-orange-400 to-orange-600 mx-auto rounded-full">
@@ -1447,11 +1430,11 @@
                     <div class="space-y-3">
                         <!-- Item 1 -->
                         <div
-                            class="group bg-white/60 backdrop-blur-sm rounded-xl border border-white/50 shadow-sm hover:shadow-md transition-all">
+                            class="group bg-white/60 dark:bg-secondary-800/60 backdrop-blur-sm rounded-xl border border-white/50 dark:border-secondary-700/50 shadow-sm hover:shadow-md transition-all">
                             <details class="group">
                                 <summary class="flex items-center justify-between cursor-pointer list-none p-5">
                                     <div class="flex items-center gap-3">
-                                        <h3 class="font-semibold text-gray-800 group-open:text-orange-600 transition-colors">
+                                        <h3 class="font-semibold text-gray-800 dark:text-neutral-200 group-open:text-orange-600 transition-colors">
                                             Bagaimana cara membuat undangan digital?
                                         </h3>
                                     </div>
@@ -1462,8 +1445,8 @@
                                         </svg>
                                     </div>
                                 </summary>
-                                <div class="px-5 pb-5 pt-0 border-t border-gray-100 mt-2">
-                                    <p class="text-gray-600 leading-relaxed">
+                                <div class="px-5 pb-5 pt-0 border-t border-gray-100 dark:border-secondary-700 mt-2">
+                                    <p class="text-gray-600 dark:text-neutral-300 leading-relaxed">
                                         Setelah melakukan pemesanan, Anda akan mendapatkan akses dashboard untuk
                                         mengisi data
                                         acara,
@@ -1476,11 +1459,11 @@
             
                         <!-- Item 2 -->
                         <div
-                            class="group bg-white/60 backdrop-blur-sm rounded-xl border border-white/50 shadow-sm hover:shadow-md transition-all">
+                            class="group bg-white/60 dark:bg-secondary-800/60 backdrop-blur-sm rounded-xl border border-white/50 dark:border-secondary-700/50 shadow-sm hover:shadow-md transition-all">
                             <details class="group">
                                 <summary class="flex items-center justify-between cursor-pointer list-none p-5">
                                     <div class="flex items-center gap-3">
-                                        <h3 class="font-semibold text-gray-800 group-open:text-orange-600 transition-colors">
+                                        <h3 class="font-semibold text-gray-800 dark:text-neutral-200 group-open:text-orange-600 transition-colors">
                                             Apakah data undangan bisa diubah setelah dibuat?
                                         </h3>
                                     </div>
@@ -1491,8 +1474,8 @@
                                         </svg>
                                     </div>
                                 </summary>
-                                <div class="px-5 pb-5 pt-0 border-t border-gray-100 mt-2">
-                                    <p class="text-gray-600 leading-relaxed">
+                                <div class="px-5 pb-5 pt-0 border-t border-gray-100 dark:border-secondary-700 mt-2">
+                                    <p class="text-gray-600 dark:text-neutral-300 leading-relaxed">
                                         Ya. Anda dapat mengubah nama mempelai, jadwal acara, foto, galeri, lokasi,
                                         maupun
                                         informasi
@@ -1504,11 +1487,11 @@
             
                         <!-- Item 3 -->
                         <div
-                            class="group bg-white/60 backdrop-blur-sm rounded-xl border border-white/50 shadow-sm hover:shadow-md transition-all">
+                            class="group bg-white/60 dark:bg-secondary-800/60 backdrop-blur-sm rounded-xl border border-white/50 dark:border-secondary-700/50 shadow-sm hover:shadow-md transition-all">
                             <details class="group">
                                 <summary class="flex items-center justify-between cursor-pointer list-none p-5">
                                     <div class="flex items-center gap-3">
-                                        <h3 class="font-semibold text-gray-800 group-open:text-orange-600 transition-colors">
+                                        <h3 class="font-semibold text-gray-800 dark:text-neutral-200 group-open:text-orange-600 transition-colors">
                                             Apakah tersedia nama tamu otomatis?
                                         </h3>
                                     </div>
@@ -1519,8 +1502,8 @@
                                         </svg>
                                     </div>
                                 </summary>
-                                <div class="px-5 pb-5 pt-0 border-t border-gray-100 mt-2">
-                                    <p class="text-gray-600 leading-relaxed">
+                                <div class="px-5 pb-5 pt-0 border-t border-gray-100 dark:border-secondary-700 mt-2">
+                                    <p class="text-gray-600 dark:text-neutral-300 leading-relaxed">
                                         Tentu. Anda dapat membuat link khusus untuk setiap tamu sehingga nama tamu
                                         akan tampil
                                         otomatis
@@ -1532,11 +1515,11 @@
             
                         <!-- Item 4 -->
                         <div
-                            class="group bg-white/60 backdrop-blur-sm rounded-xl border border-white/50 shadow-sm hover:shadow-md transition-all">
+                            class="group bg-white/60 dark:bg-secondary-800/60 backdrop-blur-sm rounded-xl border border-white/50 dark:border-secondary-700/50 shadow-sm hover:shadow-md transition-all">
                             <details class="group">
                                 <summary class="flex items-center justify-between cursor-pointer list-none p-5">
                                     <div class="flex items-center gap-3">
-                                        <h3 class="font-semibold text-gray-800 group-open:text-orange-600 transition-colors">
+                                        <h3 class="font-semibold text-gray-800 dark:text-neutral-200 group-open:text-orange-600 transition-colors">
                                             Apakah undangan bisa dibagikan ke WhatsApp?
                                         </h3>
                                     </div>
@@ -1547,8 +1530,8 @@
                                         </svg>
                                     </div>
                                 </summary>
-                                <div class="px-5 pb-5 pt-0 border-t border-gray-100 mt-2">
-                                    <p class="text-gray-600 leading-relaxed">
+                                <div class="px-5 pb-5 pt-0 border-t border-gray-100 dark:border-secondary-700 mt-2">
+                                    <p class="text-gray-600 dark:text-neutral-300 leading-relaxed">
                                         Ya. Link undangan dapat dibagikan melalui WhatsApp, Instagram, Telegram,
                                         Facebook,
                                         email,
@@ -1560,11 +1543,11 @@
             
                         <!-- Item 5 -->
                         <div
-                            class="group bg-white/60 backdrop-blur-sm rounded-xl border border-white/50 shadow-sm hover:shadow-md transition-all">
+                            class="group bg-white/60 dark:bg-secondary-800/60 backdrop-blur-sm rounded-xl border border-white/50 dark:border-secondary-700/50 shadow-sm hover:shadow-md transition-all">
                             <details class="group">
                                 <summary class="flex items-center justify-between cursor-pointer list-none p-5">
                                     <div class="flex items-center gap-3">
-                                        <h3 class="font-semibold text-gray-800 group-open:text-orange-600 transition-colors">
+                                        <h3 class="font-semibold text-gray-800 dark:text-neutral-200 group-open:text-orange-600 transition-colors">
                                             Apakah tersedia RSVP dan buku tamu?
                                         </h3>
                                     </div>
@@ -1575,8 +1558,8 @@
                                         </svg>
                                     </div>
                                 </summary>
-                                <div class="px-5 pb-5 pt-0 border-t border-gray-100 mt-2">
-                                    <p class="text-gray-600 leading-relaxed">
+                                <div class="px-5 pb-5 pt-0 border-t border-gray-100 dark:border-secondary-700 mt-2">
+                                    <p class="text-gray-600 dark:text-neutral-300 leading-relaxed">
                                         Ya. Tamu dapat mengisi konfirmasi kehadiran (RSVP) serta memberikan ucapan
                                         dan doa
                                         langsung
@@ -1588,11 +1571,11 @@
             
                         <!-- Item 6 -->
                         <div
-                            class="group bg-white/60 backdrop-blur-sm rounded-xl border border-white/50 shadow-sm hover:shadow-md transition-all">
+                            class="group bg-white/60 dark:bg-secondary-800/60 backdrop-blur-sm rounded-xl border border-white/50 dark:border-secondary-700/50 shadow-sm hover:shadow-md transition-all">
                             <details class="group">
                                 <summary class="flex items-center justify-between cursor-pointer list-none p-5">
                                     <div class="flex items-center gap-3">
-                                        <h3 class="font-semibold text-gray-800 group-open:text-orange-600 transition-colors">
+                                        <h3 class="font-semibold text-gray-800 dark:text-neutral-200 group-open:text-orange-600 transition-colors">
                                             Apakah saya akan mendapatkan bantuan jika mengalami kesulitan?
                                         </h3>
                                     </div>
@@ -1603,8 +1586,8 @@
                                         </svg>
                                     </div>
                                 </summary>
-                                <div class="px-5 pb-5 pt-0 border-t border-gray-100 mt-2">
-                                    <p class="text-gray-600 leading-relaxed">
+                                <div class="px-5 pb-5 pt-0 border-t border-gray-100 dark:border-secondary-700 mt-2">
+                                    <p class="text-gray-600 dark:text-neutral-300 leading-relaxed">
                                         Tentu. Tim support kami siap membantu melalui WhatsApp jika Anda mengalami
                                         kendala saat
                                         membuat atau mengelola undangan.
@@ -1616,9 +1599,9 @@
             
                     <!-- Additional Help -->
                     <div class="mt-8 text-center">
-                        <p class="text-gray-500 text-sm">
+                        <p class="text-gray-500 dark:text-neutral-400 text-sm">
                             Tidak menemukan jawaban?
-                            <a href="#" class="text-orange-500 hover:text-orange-600 font-medium">Klik di sini untuk
+                            <a href="#" class="text-orange-500 hover:text-orange-600 dark:text-orange-400 font-medium">Klik di sini untuk
                                 bantuan</a>
                         </p>
                     </div>

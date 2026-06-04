@@ -1,4 +1,4 @@
-<nav class="fixed top-0 left-0 right-0 z-50 backdrop-blur-lg bg-white/80 border-b border-white/20 shadow-sm"
+<nav class="fixed top-0 left-0 right-0 z-50 backdrop-blur-lg bg-white/80 dark:bg-secondary-900/80 border-b border-white/20 shadow-sm"
     x-data="{ mobileMenuOpen: false, scrolled: false }"
     x-init="window.addEventListener('scroll', () => { scrolled = window.scrollY > 20 })"
     :class="{ 'bg-white/95 shadow-lg': scrolled, 'bg-white/80': !scrolled }">
@@ -22,7 +22,7 @@
                         Rayakan
                     </span>
                     <span
-                        class="text-xl ml-2 font-bold text-gray-900 group-hover:text-orange-600 transition-colors duration-300">
+                        class="text-xl ml-2 font-bold text-gray-900 dark:text-neutral-100 group-hover:text-orange-600 transition-colors duration-300">
                         Digital
                     </span>
                 </div>
@@ -34,7 +34,7 @@
                 <!-- DROPDOWN MENU LAYANAN -->
                 <div class="relative group">
                     <button
-                        class="relative px-4 py-2 text-gray-600 hover:text-orange-600 text-sm font-medium transition-all duration-300 group flex items-center gap-1">
+                        class="relative px-4 py-2 text-gray-600 dark:text-neutral-300 hover:text-orange-600 text-sm font-medium transition-all duration-300 group flex items-center gap-1">
                         Layanan
                         <i class="fas fa-chevron-down text-xs transition-transform duration-300 group-hover:rotate-180"></i>
                         <span
@@ -43,7 +43,7 @@
 
                     <!-- Dropdown Panel -->
                     <div
-                        class="absolute left-0 mt-2 w-[700px] bg-white rounded-xl shadow-2xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                        class="absolute left-0 mt-2 w-[700px] bg-white dark:bg-secondary-800 rounded-xl shadow-2xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
                         <div class="p-5">
                             <div class="grid grid-cols-3 gap-4">
 
@@ -55,7 +55,7 @@
                                             class="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center text-orange-500 group-hover/item:bg-orange-500 group-hover/item:text-white transition-colors">
                                             <i class="far fa-envelope text-lg"></i>
                                         </div>
-                                        <h3 class="font-semibold text-gray-800 group-hover/item:text-orange-600">
+                                        <h3 class="font-semibold text-gray-800 dark:text-neutral-200 group-hover/item:text-orange-600">
                                             Undangan Digital</h3>
                                     </div>
                                     <p class="text-xs text-gray-500 leading-relaxed">
@@ -75,7 +75,7 @@
                                             class="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center text-orange-500 group-hover/item:bg-orange-500 group-hover/item:text-white transition-colors">
                                             <i class="fas fa-users text-lg"></i>
                                         </div>
-                                        <h3 class="font-semibold text-gray-800 group-hover/item:text-orange-600">Buku
+                                        <h3 class="font-semibold text-gray-800 dark:text-neutral-200 group-hover/item:text-orange-600">Buku
                                             Tamu Digital</h3>
                                     </div>
                                     <p class="text-xs text-gray-500 leading-relaxed">
@@ -95,7 +95,7 @@
                                             class="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center text-orange-500 group-hover/item:bg-orange-500 group-hover/item:text-white transition-colors">
                                             <i class="fas fa-video text-lg"></i>
                                         </div>
-                                        <h3 class="font-semibold text-gray-800 group-hover/item:text-orange-600">Live
+                                        <h3 class="font-semibold text-gray-800 dark:text-neutral-200 group-hover/item:text-orange-600">Live
                                             Streaming</h3>
                                     </div>
                                     <p class="text-xs text-gray-500 leading-relaxed">
@@ -114,14 +114,14 @@
                         
                         <!-- TENTANG KAMI -->
                 <a href="{{ route('tentang-kami') }}"
-                    class="relative px-4 py-2 text-gray-600 hover:text-orange-600 text-sm font-medium transition-all duration-300 group">
+                    class="relative px-4 py-2 text-gray-600 dark:text-neutral-300 hover:text-orange-600 text-sm font-medium transition-all duration-300 group">
                     Tentang Kami
                     <span
                         class="absolute bottom-0 left-1/2 w-0 h-0.5 bg-orange-500 transition-all duration-300 group-hover:w-full group-hover:left-0"></span>
                 </a>
                 <!-- HUBUNGI KAMI -->
                 <a href="{{ route('hubungi-kami') }}"
-                    class="relative px-4 py-2 text-gray-600 hover:text-orange-600 text-sm font-medium transition-all duration-300 group">
+                    class="relative px-4 py-2 text-gray-600 dark:text-neutral-300 hover:text-orange-600 text-sm font-medium transition-all duration-300 group">
                     Hubungi Kami
                     <span
                         class="absolute bottom-0 left-1/2 w-0 h-0.5 bg-orange-500 transition-all duration-300 group-hover:w-full group-hover:left-0"></span>
@@ -139,7 +139,7 @@
                             </a>
                         @else
                             <a href="{{ route('login') }}"
-                                class="px-4 py-2 text-gray-600 hover:text-orange-600 font-medium transition-all duration-300 hover:scale-105">
+                                class="px-4 py-2 text-gray-600 dark:text-neutral-300 hover:text-orange-600 font-medium transition-all duration-300 hover:scale-105">
                                 Masuk
                             </a>
                             @if (Route::has('register'))
@@ -154,6 +154,13 @@
                         @endauth
                     </div>
                 @endif
+
+                <!-- Dark Mode Toggle -->
+                <button @click="$store.darkMode.toggle()"
+                    class="relative w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 hover:bg-orange-50 group text-gray-600 dark:text-neutral-300 hover:text-orange-600 :text-orange-400 :bg-gray-800">
+                    <i class="fas fa-sun text-lg" x-show="$store.darkMode.on" style="display: none;"></i>
+                    <i class="fas fa-moon text-lg" x-show="!$store.darkMode.on"></i>
+                </button>
 
                 <!-- Hamburger Button with animation -->
                 <button @click="mobileMenuOpen = !mobileMenuOpen"
@@ -181,13 +188,13 @@
         x-transition:enter-start="opacity-0 -translate-y-4" x-transition:enter-end="opacity-100 translate-y-0"
         x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0"
         x-transition:leave-end="opacity-0 -translate-y-4"
-        class="md:hidden absolute top-16 left-0 right-0 backdrop-blur-xl bg-white/95 border-b border-white/20 shadow-xl">
+        class="md:hidden absolute top-16 left-0 right-0 backdrop-blur-xl bg-white/95 dark:bg-secondary-900/95 border-b border-white/20 shadow-xl">
 
         <div class="px-4 py-6 space-y-3 max-h-[calc(100vh-4rem)] overflow-y-auto">
             <!-- DROPDOWN LAYANAN UNTUK MOBILE -->
             <div x-data="{ open: false }" class="block">
                 <button @click="open = !open"
-                    class="w-full flex items-center justify-between px-4 py-3 text-gray-700 hover:text-orange-600 hover:bg-orange-50 rounded-xl text-base font-medium transition-all duration-300">
+                    class="w-full flex items-center justify-between px-4 py-3 text-gray-700 dark:text-neutral-200 hover:text-orange-600 hover:bg-orange-50 rounded-xl text-base font-medium transition-all duration-300">
                     <span>Layanan</span>
                     <i class="fas fa-chevron-down text-xs transition-transform duration-300" :class="{'rotate-180': open}"></i>
                 </button>
@@ -195,7 +202,7 @@
                 <!-- Sub Menu Layanan (Muncul saat diklik) -->
                 <div x-show="open" x-collapse class="pl-4 mt-2 space-y-2">
                     <a href="{{ route('undangan-web') }}"
-                        class="flex items-start gap-3 px-4 py-3 text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl text-sm transition-all duration-200">
+                        class="flex items-start gap-3 px-4 py-3 text-gray-600 dark:text-neutral-300 hover:text-orange-600 hover:bg-orange-50 rounded-xl text-sm transition-all duration-200">
                         <i class="far fa-envelope text-orange-500 mt-0.5"></i>
                         <div>
                             <div class="font-medium">Undangan Digital</div>
@@ -203,7 +210,7 @@
                         </div>
                     </a>
                     <a href="{{ route('buku-tamu') }}"
-                        class="flex items-start gap-3 px-4 py-3 text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl text-sm transition-all duration-200">
+                        class="flex items-start gap-3 px-4 py-3 text-gray-600 dark:text-neutral-300 hover:text-orange-600 hover:bg-orange-50 rounded-xl text-sm transition-all duration-200">
                         <i class="fas fa-users text-orange-500 mt-0.5"></i>
                         <div>
                             <div class="font-medium">Buku Tamu Digital</div>
@@ -211,7 +218,7 @@
                         </div>
                     </a>
                     <a href="{{ route('live-streaming') }}"
-                        class="flex items-start gap-3 px-4 py-3 text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl text-sm transition-all duration-200">
+                        class="flex items-start gap-3 px-4 py-3 text-gray-600 dark:text-neutral-300 hover:text-orange-600 hover:bg-orange-50 rounded-xl text-sm transition-all duration-200">
                         <i class="fas fa-video text-orange-500 mt-0.5"></i>
                         <div>
                             <div class="font-medium">Live Streaming</div>
@@ -222,11 +229,11 @@
             </div>
 
             <a href="{{ route('tentang-kami') }}"
-                class="block px-4 py-3 text-gray-700 hover:text-orange-600 hover:bg-orange-50 rounded-xl text-base font-medium transition-all duration-300 transform hover:translate-x-2">
+                class="block px-4 py-3 text-gray-700 dark:text-neutral-200 hover:text-orange-600 hover:bg-orange-50 rounded-xl text-base font-medium transition-all duration-300 transform hover:translate-x-2">
                 Tentang Kami
             </a>
             <a href="{{ route('hubungi-kami') }}"
-                class="block px-4 py-3 text-gray-700 hover:text-orange-600 hover:bg-orange-50 rounded-xl text-base font-medium transition-all duration-300 transform hover:translate-x-2">
+                class="block px-4 py-3 text-gray-700 dark:text-neutral-200 hover:text-orange-600 hover:bg-orange-50 rounded-xl text-base font-medium transition-all duration-300 transform hover:translate-x-2">
                 Hubungi Kami
             </a>
         </div>
@@ -235,12 +242,12 @@
             @if (Route::has('login'))
                 @auth
                     <a href="{{ route('dashboard') }}"
-                        class="block px-4 py-3 text-gray-700 hover:text-orange-600 hover:bg-orange-50 rounded-xl font-medium transition-all duration-300">
+                        class="block px-4 py-3 text-gray-700 dark:text-neutral-200 hover:text-orange-600 hover:bg-orange-50 rounded-xl font-medium transition-all duration-300">
                         Dashboard
                     </a>
                 @else
                     <a href="{{ route('login') }}"
-                        class="block px-4 py-3 text-gray-700 hover:text-orange-600 hover:bg-orange-50 rounded-xl font-medium transition-all duration-300">
+                        class="block px-4 py-3 text-gray-700 dark:text-neutral-200 hover:text-orange-600 hover:bg-orange-50 rounded-xl font-medium transition-all duration-300">
                         Masuk
                     </a>
                     @if (Route::has('register'))

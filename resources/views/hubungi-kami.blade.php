@@ -10,18 +10,18 @@
     <link rel="stylesheet" href="{{ asset('css/landingpage.css') }}">
 </head>
 
-<body class="font-sans antialiased bg-neutral-50 text-secondary-800">
+<body class="font-sans antialiased bg-neutral-50 dark:bg-secondary-900 text-secondary-800 dark:text-neutral-200">
     <x-public-navbar />
     <div class="h-16"></div>
-    <div class="py-16 md:py-24 bg-tertiary">
+    <div class="py-16 md:py-24 bg-tertiary dark:bg-secondary-900">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Header Section -->
             <div class="text-center mb-12 md:mb-16">
                 <h2 class="text-base text-primary-600 font-semibold tracking-wide uppercase">Hubungi Kami</h2>
-                <p class="mt-2 text-3xl md:text-4xl leading-8 md:leading-10 font-extrabold tracking-tight text-secondary-900 font-heading">
+                <p class="mt-2 text-3xl md:text-4xl leading-8 md:leading-10 font-extrabold tracking-tight text-secondary-900 dark:text-neutral-100 font-heading">
                     Kami Siap Membantu Anda
                 </p>
-                <p class="mt-4 max-w-2xl text-lg text-neutral-600 mx-auto">
+                <p class="mt-4 max-w-2xl text-lg text-neutral-600 dark:text-neutral-300 mx-auto">
                     Kami di sini untuk membantu Anda merayakan momen berharga. Punya pertanyaan tentang layanan kami?
                     Tim kami siap memberikan respon hangat untuk Anda.
                 </p>
@@ -30,7 +30,7 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
                 <!-- Left Column - Contact Info -->
                 <div class="space-y-6">
-                    <div class="bg-white rounded-2xl shadow-soft border border-neutral-100 p-6 hover:shadow-xl transition-all duration-300">
+                    <div class="bg-white dark:bg-secondary-800 rounded-2xl shadow-soft border border-neutral-100 dark:border-secondary-700 p-6 hover:shadow-xl transition-all duration-300">
                         <div class="flex items-start gap-4">
                             <div class="flex-shrink-0 w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center text-primary-600">
                                 <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -39,13 +39,13 @@
                                 </svg>
                             </div>
                             <div>
-                                <h3 class="font-bold text-secondary-800 mb-1">Alamat Kantor</h3>
-                                <p class="text-neutral-600 text-sm leading-relaxed">Jl. Celebration No. 123, Kawasan Digital Creative, Jakarta Selatan 12345</p>
+                                <h3 class="font-bold text-secondary-800 dark:text-neutral-200 mb-1">Alamat Kantor</h3>
+                                <p class="text-neutral-600 dark:text-neutral-300 text-sm leading-relaxed">Jl. Celebration No. 123, Kawasan Digital Creative, Jakarta Selatan 12345</p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="bg-white rounded-2xl shadow-soft border border-neutral-100 p-6 hover:shadow-xl transition-all duration-300">
+                    <div class="bg-white dark:bg-secondary-800 rounded-2xl shadow-soft border border-neutral-100 dark:border-secondary-700 p-6 hover:shadow-xl transition-all duration-300">
                         <div class="flex items-start gap-4">
                             <div class="flex-shrink-0 w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center text-primary-600">
                                 <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -53,14 +53,14 @@
                                 </svg>
                             </div>
                             <div>
-                                <h3 class="font-bold text-secondary-800 mb-1">WhatsApp Support</h3>
-                                <p class="text-neutral-600 text-sm">+62 812 3456 7890</p>
+                                <h3 class="font-bold text-secondary-800 dark:text-neutral-200 mb-1">WhatsApp Support</h3>
+                                <p class="text-neutral-600 dark:text-neutral-300 text-sm">+62 812 3456 7890</p>
                                 <p class="text-xs text-primary-600 mt-1">💬 Respon cepat biasanya kurang dari 30 menit</p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="bg-white rounded-2xl shadow-soft border border-neutral-100 p-6 hover:shadow-xl transition-all duration-300">
+                    <div class="bg-white dark:bg-secondary-800 rounded-2xl shadow-soft border border-neutral-100 dark:border-secondary-700 p-6 hover:shadow-xl transition-all duration-300">
                         <div class="flex items-start gap-4">
                             <div class="flex-shrink-0 w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center text-primary-600">
                                 <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -68,13 +68,13 @@
                                 </svg>
                             </div>
                             <div>
-                                <h3 class="font-bold text-secondary-800 mb-1">Email</h3>
-                                <p class="text-neutral-600 text-sm">halo@rayakandigital.com</p>
+                                <h3 class="font-bold text-secondary-800 dark:text-neutral-200 mb-1">Email</h3>
+                                <p class="text-neutral-600 dark:text-neutral-300 text-sm">halo@rayakandigital.com</p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="bg-white rounded-2xl shadow-soft border border-neutral-100 p-6 hover:shadow-xl transition-all duration-300">
+                    <div class="bg-white dark:bg-secondary-800 rounded-2xl shadow-soft border border-neutral-100 dark:border-secondary-700 p-6 hover:shadow-xl transition-all duration-300">
                         <div class="flex items-start gap-4">
                             <div class="flex-shrink-0 w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center text-primary-600">
                                 <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -82,45 +82,45 @@
                                 </svg>
                             </div>
                             <div>
-                                <h3 class="font-bold text-secondary-800 mb-1">Jam Operasional</h3>
-                                <p class="text-neutral-600 text-sm">Senin - Jumat: 09.00 - 18.00 WIB</p>
-                                <p class="text-neutral-600 text-sm">Sabtu: 09.00 - 14.00 WIB</p>
+                                <h3 class="font-bold text-secondary-800 dark:text-neutral-200 mb-1">Jam Operasional</h3>
+                                <p class="text-neutral-600 dark:text-neutral-300 text-sm">Senin - Jumat: 09.00 - 18.00 WIB</p>
+                                <p class="text-neutral-600 dark:text-neutral-300 text-sm">Sabtu: 09.00 - 14.00 WIB</p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="bg-gradient-to-r from-primary-50 to-primary-100 rounded-2xl p-5 border border-primary-200">
+                    <div class="bg-gradient-to-r from-primary-50 to-primary-100 dark:from-secondary-700 dark:to-secondary-800 rounded-2xl p-5 border border-primary-200 dark:border-secondary-600">
                         <div class="flex items-center gap-3">
                             <div class="flex-shrink-0 w-10 h-10 bg-primary-600 rounded-full flex items-center justify-center text-white text-lg">⚡</div>
                             <div>
-                                <p class="font-bold text-secondary-800 text-sm">Butuh Respon Cepat?</p>
-                                <p class="text-secondary-600 text-xs">Tim Customer Success kami biasanya merespon dalam waktu kurang dari 30 menit melalui WhatsApp.</p>
+                                <p class="font-bold text-secondary-800 dark:text-neutral-200 text-sm">Butuh Respon Cepat?</p>
+                                <p class="text-secondary-600 dark:text-neutral-300 text-xs">Tim Customer Success kami biasanya merespon dalam waktu kurang dari 30 menit melalui WhatsApp.</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Right Column - Contact Form -->
-                <div class="bg-white rounded-2xl shadow-soft border border-neutral-100 p-6 md:p-8">
-                    <h3 class="text-xl font-bold text-secondary-900 mb-6 font-heading">Kirim Pesan Langsung</h3>
+                <div class="bg-white dark:bg-secondary-800 rounded-2xl shadow-soft border border-neutral-100 dark:border-secondary-700 p-6 md:p-8">
+                    <h3 class="text-xl font-bold text-secondary-900 dark:text-neutral-100 mb-6 font-heading">Kirim Pesan Langsung</h3>
 
                     <form id="contactForm" class="space-y-5">
                         <div>
-                            <label for="name" class="block text-sm font-semibold text-secondary-700 mb-2">Nama Lengkap</label>
+                            <label for="name" class="block text-sm font-semibold text-secondary-700 dark:text-neutral-200 mb-2">Nama Lengkap</label>
                             <input type="text" id="name" name="name" placeholder="Masukkan nama Anda" required
-                                class="w-full px-4 py-3 border border-neutral-200 rounded-xl focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all duration-200 bg-tertiary/50">
+                                class="w-full px-4 py-3 border border-neutral-200 dark:border-secondary-700 rounded-xl focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all duration-200 bg-tertiary/50">
                         </div>
 
                         <div>
-                            <label for="email" class="block text-sm font-semibold text-secondary-700 mb-2">Alamat Email</label>
+                            <label for="email" class="block text-sm font-semibold text-secondary-700 dark:text-neutral-200 mb-2">Alamat Email</label>
                             <input type="email" id="email" name="email" placeholder="nama@email.com" required
-                                class="w-full px-4 py-3 border border-neutral-200 rounded-xl focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all duration-200 bg-tertiary/50">
+                                class="w-full px-4 py-3 border border-neutral-200 dark:border-secondary-700 rounded-xl focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all duration-200 bg-tertiary/50">
                         </div>
 
                         <div>
-                            <label for="subject" class="block text-sm font-semibold text-secondary-700 mb-2">Subjek Pesan</label>
+                            <label for="subject" class="block text-sm font-semibold text-secondary-700 dark:text-neutral-200 mb-2">Subjek Pesan</label>
                             <select id="subject" name="subject" required
-                                class="w-full px-4 py-3 border border-neutral-200 rounded-xl focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all duration-200 bg-tertiary/50 text-neutral-600">
+                                class="w-full px-4 py-3 border border-neutral-200 dark:border-secondary-700 rounded-xl focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all duration-200 bg-tertiary/50 text-neutral-600 dark:text-neutral-300">
                                 <option value="">Pilih subjek pertanyaan</option>
                                 <option value="general">Pertanyaan Umum</option>
                                 <option value="order">Pemesanan Undangan</option>
@@ -130,9 +130,9 @@
                         </div>
 
                         <div>
-                            <label for="message" class="block text-sm font-semibold text-secondary-700 mb-2">Pesan Anda</label>
+                            <label for="message" class="block text-sm font-semibold text-secondary-700 dark:text-neutral-200 mb-2">Pesan Anda</label>
                             <textarea id="message" name="message" rows="4" placeholder="Tuliskan detail pertanyaan Anda di sini..." required
-                                class="w-full px-4 py-3 border border-neutral-200 rounded-xl focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all duration-200 bg-tertiary/50 resize-none"></textarea>
+                                class="w-full px-4 py-3 border border-neutral-200 dark:border-secondary-700 rounded-xl focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all duration-200 bg-tertiary/50 resize-none"></textarea>
                         </div>
 
                         <button type="submit"

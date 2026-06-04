@@ -12,18 +12,18 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 </head>
 
-<body class="font-sans antialiased bg-tertiary text-secondary-800">
+<body class="font-sans antialiased bg-tertiary dark:bg-secondary-900 text-secondary-800 dark:text-neutral-200">
     <x-public-navbar />
 
     <!-- Spacer to prevent content from hiding behind fixed navbar -->
     <div class="h-16"></div>
 
-    <div class="min-h-screen bg-tertiary">
-        <div class="py-16 bg-tertiary min-h-screen">
+    <div class="min-h-screen bg-tertiary dark:bg-secondary-900">
+        <div class="py-16 bg-tertiary dark:bg-secondary-900 min-h-screen">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-12">
                     <h2 class="text-base text-primary-600 font-semibold tracking-wide uppercase">Katalog Tema</h2>
-                    <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-secondary-900 sm:text-4xl font-heading">
+                    <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-secondary-900 dark:text-neutral-100 sm:text-4xl font-heading">
                         Semua Desain Undangan
                     </p>
                     <p class="mt-4 max-w-2xl text-xl text-neutral-500 mx-auto">
@@ -35,7 +35,7 @@
                     @if($categories->isNotEmpty())
                         <div class="flex flex-wrap justify-center gap-3 mb-10">
                             <button @click="filter = 'all'"
-                                :class="filter === 'all' ? 'bg-primary-600 text-white border-primary-600' : 'bg-white text-secondary-600 border-neutral-200 hover:border-primary-300 hover:text-primary-600'"
+                                :class="filter === 'all' ? 'bg-primary-600 text-white border-primary-600' : 'bg-white text-secondary-600 border-neutral-200 dark:border-secondary-700 hover:border-primary-300 hover:text-primary-600'"
                                 class="px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 border-2 shadow-soft">
                                 Semua
                                 <span
@@ -47,7 +47,7 @@
 
                             @foreach($categories as $category)
                                 <button @click="filter = '{{ $category->id }}'"
-                                    :class="filter === '{{ $category->id }}' ? 'bg-primary-600 text-white border-primary-600' : 'bg-white text-secondary-600 border-neutral-200 hover:border-primary-300 hover:text-primary-600'"
+                                    :class="filter === '{{ $category->id }}' ? 'bg-primary-600 text-white border-primary-600' : 'bg-white text-secondary-600 border-neutral-200 dark:border-secondary-700 hover:border-primary-300 hover:text-primary-600'"
                                     class="px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 border-2 shadow-soft">
                                     {{ $category->name }}
                                     <span
@@ -65,7 +65,7 @@
                             <div x-show="filter === 'all' || filter === '{{ $theme->theme_category_id ?? '0' }}'"
                                 x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 scale-95"
                                 x-transition:enter-end="opacity-100 scale-100"
-                                class="bg-white rounded-2xl shadow-soft border border-neutral-100 overflow-hidden hover:shadow-xl transition-all duration-300 group">
+                                class="bg-white dark:bg-secondary-800 rounded-2xl shadow-soft border border-neutral-100 dark:border-secondary-700 overflow-hidden hover:shadow-xl transition-all duration-300 group">
                                 <div class="relative aspect-[9/16] bg-gradient-to-br from-neutral-100 to-neutral-50 overflow-hidden">
                                     @if($theme->thumbnail_portrait)
                                         <img src="{{ Storage::url($theme->thumbnail_portrait) }}" alt="{{ $theme->name }}"
@@ -97,7 +97,7 @@
                                 </div>
 
                                 <div class="p-6">
-                                    <h3 class="text-xl font-bold text-secondary-900 mb-3">{{ $theme->name }}</h3>
+                                    <h3 class="text-xl font-bold text-secondary-900 dark:text-neutral-100 mb-3">{{ $theme->name }}</h3>
 
                                     <div class="flex gap-3">
                                         <a href="{{ route('theme.preview', str_replace('themes.', '', $theme->view_path)) }}" target="_blank"
