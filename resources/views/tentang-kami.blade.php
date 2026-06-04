@@ -23,8 +23,8 @@
             <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary-100/10 rounded-full blur-3xl dark:bg-primary-900/10"></div>
         </div>
         <div class="relative max-w-2xl mx-auto">
-            <span class="inline-flex items-center gap-2 bg-primary-100 border border-primary-200 text-primary-700 text-xs font-semibold px-3 py-1.5 rounded-full mb-4">
-                <i class="fa-regular fa-star text-primary-500 text-[10px]"></i>
+            <span class="inline-flex items-center gap-2 bg-primary-100 dark:bg-primary-900/50 border border-primary-200 dark:border-primary-800 text-primary-700 dark:text-primary-300 text-xs font-semibold px-3 py-1.5 rounded-full mb-4">
+                <i class="fa-regular fa-star text-primary-500 dark:text-primary-400 text-[10px]"></i>
                 Our Origin Story
             </span>
 
@@ -45,7 +45,7 @@
                 <button class="bg-secondary-800 text-white font-semibold px-7 py-3.5 rounded-full hover:bg-secondary-900 transition text-sm">
                     Pelajari Layanan
                 </button>
-                <button class="border border-neutral-300 text-secondary-800 dark:text-neutral-200 font-semibold px-7 py-3.5 rounded-full hover:border-primary-500 hover:text-primary-500 transition text-sm">
+                <button class="border border-neutral-300 dark:border-secondary-600 text-secondary-800 dark:text-neutral-200 font-semibold px-7 py-3.5 rounded-full hover:border-primary-500 dark:hover:border-primary-400 hover:text-primary-500 dark:hover:text-primary-400 transition text-sm">
                     Hubungi Kami
                 </button>
             </div>
@@ -62,17 +62,16 @@
                         <p class="text-sm font-medium tracking-widest uppercase">Wedding Stage Photography</p>
                     </div>
                 </div>
-                <!-- Flower accents top -->
             </div>
-                </div>
-                <!-- Flower accents top -->
-                <div class="absolute top-4 left-8 w-16 h-16 rounded-full bg-amber-400/40 blur-xl"></div>
-                <div class="absolute top-4 right-8 w-16 h-16 rounded-full bg-primary-300/40 blur-xl"></div>
-                <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-32 h-32 rounded-full bg-primary-600/30 blur-2xl"></div>
-                <!-- Cursive overlay -->
-                <p class="absolute inset-0 flex items-center justify-center font-heading italic text-neutral-400 text-5xl select-none">
-                    Violet &amp; Bernas</p>
-            </div>
+
+            <!-- Flower accents -->
+            <div class="absolute top-4 left-8 w-16 h-16 rounded-full bg-amber-400/40 blur-xl"></div>
+            <div class="absolute top-4 right-8 w-16 h-16 rounded-full bg-primary-300/40 blur-xl"></div>
+            <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-32 h-32 rounded-full bg-primary-600/30 blur-2xl"></div>
+
+            <!-- Cursive overlay -->
+            <p class="absolute inset-0 flex items-center justify-center font-heading italic text-neutral-400 text-5xl select-none pointer-events-none">
+                Violet &amp; Bernas</p>
 
             <!-- Badge -->
             <div class="absolute bottom-5 right-5 flex items-center gap-2.5 bg-white dark:bg-secondary-800 px-4 py-2.5 rounded-2xl shadow-soft">
@@ -92,8 +91,8 @@
         <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-6">
 
             <!-- Visi -->
-            <div class="bg-neutral-50 rounded-2xl p-8 border border-neutral-100 dark:border-secondary-700 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-                <div class="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center mb-5 text-primary-600">
+            <div class="bg-neutral-50 dark:bg-secondary-700 rounded-2xl p-8 border border-neutral-100 dark:border-secondary-600 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                <div class="w-12 h-12 bg-primary-100 dark:bg-primary-900/50 rounded-xl flex items-center justify-center mb-5 text-primary-600 dark:text-primary-400">
                     <i class="fa-regular fa-eye"></i>
                 </div>
                 <h3 class="font-heading text-2xl font-bold mb-3 text-secondary-800 dark:text-neutral-200">Visi Kami</h3>
@@ -107,8 +106,8 @@
             </div>
 
             <!-- Misi -->
-            <div class="bg-neutral-50 rounded-2xl p-8 border border-neutral-100 dark:border-secondary-700 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-                <div class="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center mb-5 text-primary-600">
+            <div class="bg-neutral-50 dark:bg-secondary-700 rounded-2xl p-8 border border-neutral-100 dark:border-secondary-600 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                <div class="w-12 h-12 bg-primary-100 dark:bg-primary-900/50 rounded-xl flex items-center justify-center mb-5 text-primary-600 dark:text-primary-400">
                     <i class="fa-solid fa-rocket"></i>
                 </div>
                 <h3 class="font-heading text-2xl font-bold mb-5 text-secondary-800 dark:text-neutral-200">Misi Kami</h3>
@@ -204,8 +203,8 @@
 
             <!-- Text column -->
             <div>
-                <span class="inline-flex items-center gap-2 bg-primary-100 border border-primary-200 text-primary-700 text-xs font-semibold px-3 py-1.5 rounded-full mb-3">
-                    <i class="fa-regular fa-star text-primary-500 text-[10px]"></i>
+                <span class="inline-flex items-center gap-2 bg-primary-100 dark:bg-primary-900/50 border border-primary-200 dark:border-primary-800 text-primary-700 dark:text-primary-300 text-xs font-semibold px-3 py-1.5 rounded-full mb-3">
+                    <i class="fa-regular fa-star text-primary-500 dark:text-primary-400 text-[10px]"></i>
                     Perjalanan Kami
                 </span>
                 <h2 class="font-heading text-4xl font-bold text-secondary-800 dark:text-neutral-200 leading-tight mb-2">
@@ -229,7 +228,7 @@
                         <p class="text-3xl font-heading font-bold text-secondary-800 dark:text-neutral-200">5k+</p>
                         <p class="text-xs text-neutral-400 font-semibold uppercase tracking-widest mt-1">Klien Puas</p>
                     </div>
-                    <div class="w-px bg-neutral-200"></div>
+                    <div class="w-px bg-neutral-200 dark:bg-secondary-600"></div>
                     <div>
                         <p class="text-3xl font-heading font-bold text-secondary-800 dark:text-neutral-200">200k+</p>
                         <p class="text-xs text-neutral-400 font-semibold uppercase tracking-widest mt-1">Tamu Terundang
