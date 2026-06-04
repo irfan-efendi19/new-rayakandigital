@@ -222,7 +222,7 @@
     @endif
 
     <!-- Love Story Section -->
-    @php $stories = $invitation->stories()->orderBy('order_position')->get(); @endphp
+    @php $stories = $invitation->stories; @endphp
     @if($invitation->show_stories && $stories->isNotEmpty())
     <section class="section story-section">
         <div class="container">
@@ -232,7 +232,16 @@
                 <div class="story-item">
                     <div class="story-dot"></div>
                     @if($story->story_date)
-                    <span class="story-date">{{ \Carbon\Carbon::parse($story->story_date)->translatedFormat('d F Y') }}</span>
+                    <span class="story-date">
+                        @php
+                            try {
+                                $parsedDate = \Carbon\Carbon::parse($story->story_date)->translatedFormat('d F Y');
+                            } catch (\Exception $e) {
+                                $parsedDate = $story->story_date;
+                            }
+                        @endphp
+                        {{ $parsedDate }}
+                    </span>
                     @endif
                     @if($story->story_title)
                     <h3 class="story-title">{{ $story->story_title }}</h3>
@@ -243,7 +252,7 @@
             </div>
         </div>
     </section>
-    @elseif($invitation->show_stories && isset($isPreview) && $isPreview && $invitation->love_story)
+    @elseif($invitation->show_stories && $invitation->love_story)
     <section class="section story-section">
         <div class="container text-center">
             <h2 class="section-title">Cerita Cinta</h2>

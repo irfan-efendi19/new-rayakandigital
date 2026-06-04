@@ -28,7 +28,14 @@ Route::get('/semua-tema', [ThemeController::class, 'index'])->name('themes.index
 Route::get('/preview/{themeSlug}', [ThemePreviewController::class, 'show'])->name('theme.preview');
 
 // Public Pages
-Route::view('/undangan-web', 'undangan-web')->name('undangan-web');
+Route::get('/undangan-web', function () {
+    $packages = \App\Models\Package::with('features')
+        ->where('is_visible', true)
+        ->orderBy('sort_order')
+        ->get();
+
+    return view('undangan-web', compact('packages'));
+})->name('undangan-web');
 Route::view('/buku-tamu', 'buku-tamu')->name('buku-tamu');
 Route::view('/live-streaming', 'live-streaming')->name('live-streaming');
 Route::view('/syarat-ketentuan', 'syarat-ketentuan')->name('syarat-ketentuan');
