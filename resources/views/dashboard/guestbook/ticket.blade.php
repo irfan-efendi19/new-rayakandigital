@@ -213,13 +213,22 @@
                 #{{ str_pad($checkinOrder, 3, '0', STR_PAD_LEFT) }}
             </div>
 
+            @php
+                $tzLabel = match ($invitation->timezone ?? 'Asia/Jakarta') {
+                    'Asia/Jakarta' => 'WIB',
+                    'Asia/Makassar' => 'WITA',
+                    'Asia/Jayapura' => 'WIT',
+                    default => 'WIB',
+                };
+                $tz = $invitation->timezone ?? 'Asia/Jakarta';
+            @endphp
             <div class="info-row">
                 <span class="label">Check-In:</span>
-                <span>{{ $guest->checked_in_at?->format('H:i') }}</span>
+                <span>{{ $guest->checked_in_at?->timezone($tz)->format('H:i') }} {{ $tzLabel }}</span>
             </div>
             <div class="info-row">
                 <span class="label">Tanggal:</span>
-                <span>{{ $guest->checked_in_at?->format('d/m/Y') }}</span>
+                <span>{{ $guest->checked_in_at?->timezone($tz)->format('d/m/Y') }}</span>
             </div>
             @if($guest->phone)
             <div class="info-row">
