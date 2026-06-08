@@ -96,7 +96,7 @@
                                                     class="px-4 py-2 bg-primary-50 text-primary-700 rounded-xl text-sm font-semibold hover:bg-primary-100 transition">
                                                     Pilih & Crop Foto
                                                 </button>
-                                                <p class="text-xs text-neutral-400 mt-1">Format JPG/PNG. Hasil potongan rasio 16:9 landscape (640×360).</p>
+                                                <p class="text-xs text-neutral-400 mt-1">Format gambar apa pun. Hasil potongan rasio 16:9 landscape.</p>
                                                 @error('cover_photo') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
                                             </div>
                                         </div>
@@ -179,7 +179,7 @@
                                                             class="px-4 py-2 bg-primary-50 text-primary-700 rounded-xl text-sm font-semibold hover:bg-primary-100 transition">
                                                             Pilih & Crop Foto
                                                         </button>
-                                                        <p class="text-xs text-neutral-400 mt-1">Format JPG/PNG. Hasil potongan berbentuk persegi (400×400).</p>
+                                                        <p class="text-xs text-neutral-400 mt-1">Format gambar apa pun. Hasil potongan berbentuk persegi.</p>
                                                     </div>
                                                 </div>
                                                 @error('bride_photo') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
@@ -256,7 +256,7 @@
                                                             class="px-4 py-2 bg-primary-50 text-primary-700 rounded-xl text-sm font-semibold hover:bg-primary-100 transition">
                                                             Pilih & Crop Foto
                                                         </button>
-                                                        <p class="text-xs text-neutral-400 mt-1">Format JPG/PNG. Hasil potongan berbentuk persegi (400×400).</p>
+                                                        <p class="text-xs text-neutral-400 mt-1">Format gambar apa pun. Hasil potongan berbentuk persegi.</p>
                                                     </div>
                                                 </div>
                                                 @error('groom_photo') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
@@ -562,7 +562,7 @@
                                                 @endif
                                                 <input type="file" name="music_file" id="music_file"
                                                     class="text-sm text-neutral-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100">
-                                                <p class="text-xs text-neutral-500">Mendukung format MP3, WAV, OGG (Maks 10MB).</p>
+                                                <p class="text-xs text-neutral-500">Mendukung format MP3, WAV, OGG.</p>
                                             </div>
                                         @else
                                             <div class="mt-2 bg-amber-50 border border-amber-200 rounded-xl p-4 flex items-center gap-3">

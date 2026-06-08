@@ -50,8 +50,6 @@ class ThemeForm
                     ->imageEditorMode(1)
                     ->imageEditorViewportWidth(360)
                     ->imageEditorViewportHeight(640)
-                    ->acceptedFileTypes(['image/webp', 'image/jpeg'])
-                    ->maxSize(500)
                     ->disk('public')
                     ->directory('themes/thumbnails')
                     ->imagePreviewHeight('400')

@@ -139,20 +139,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
         selection.$toCanvas({ width: currentOutputWidth, height: currentOutputHeight }).then(function (canvas) {
             canvas.toBlob(function (blob) {
-                const file = new File([blob], 'cropped.jpg', { type: 'image/jpeg' });
+                const file = new File([blob], 'cropped.webp', { type: 'image/webp' });
 
                 const dataTransfer = new DataTransfer();
                 dataTransfer.items.add(file);
                 currentInput.files = dataTransfer.files;
 
-                updatePreview(currentPreviewId, canvas.toDataURL('image/jpeg'));
+                updatePreview(currentPreviewId, canvas.toDataURL('image/webp'));
 
                 destroyCropper();
                 modal.classList.add('hidden');
                 modal.classList.remove('flex');
                 currentInput = null;
                 currentPreviewId = null;
-            }, 'image/jpeg', 0.9);
+            }, 'image/webp', 0.85);
         });
     });
 

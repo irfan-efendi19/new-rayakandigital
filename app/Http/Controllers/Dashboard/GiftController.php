@@ -4,12 +4,13 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Invitation;
+use App\Services\ImageCompressionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
 class GiftController extends Controller
 {
-    public function update(Request $request, Invitation $invitation)
+    public function update(Request $request, Invitation $invitation, ImageCompressionService $compressor)
     {
         Gate::authorize('update', $invitation);
 
@@ -27,7 +28,7 @@ class GiftController extends Controller
             'gift_ewallets' => 'nullable|array',
             'gift_ewallets.*.wallet_name' => 'required|string|max:255',
             'gift_ewallets.*.wallet_number' => 'required|string|max:50',
-            'gift_qris_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'gift_qris_image' => 'nullable|image',
         ]);
 
         if (!$request->has('gift_banks')) {
@@ -45,8 +46,10 @@ class GiftController extends Controller
         }
 
         if ($request->hasFile('gift_qris_image')) {
-            $validated['gift_qris_image'] = $request->file('gift_qris_image')
-                ->store('qris/' . $invitation->id, 'public');
+            $validated['gift_qris_image'] = $compressor->compress(
+                $request->file('gift_qris_image'),
+                'qris/' . $invitation->id
+            );
         }
 
         $invitation->update($validated);

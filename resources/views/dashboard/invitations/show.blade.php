@@ -327,7 +327,7 @@
                                                 </svg>
                                             </div>
                                             <p class="text-sm font-medium text-neutral-700">Seret foto ke sini atau <span class="text-primary-600 underline">klik untuk memilih</span></p>
-                                            <p class="text-xs text-neutral-400">JPG, PNG, WEBP. Maks 5MB per foto.</p>
+                                            <p class="text-xs text-neutral-400">Format gambar apa pun. Akan dikonversi ke WebP otomatis.</p>
                                         </div>
                                         <div id="dropzone-preview" class="hidden space-y-3">
                                             <div id="preview-thumbnails" class="flex flex-wrap gap-2 justify-center max-h-48 overflow-y-auto"></div>
@@ -715,8 +715,7 @@
                     const changeFilesBtn = document.getElementById('gallery-change-files');
                     let selectedFiles = [];
 
-                    const maxFileSize = 5 * 1024 * 1024;
-                    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+                    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/avif', 'image/heic', 'image/heif'];
 
                     function updatePreview() {
                         previewThumbnails.innerHTML = '';
@@ -726,10 +725,6 @@
                         for (const file of selectedFiles) {
                             if (!allowedTypes.includes(file.type)) {
                                 errorMsg = 'Format tidak didukung. Gunakan JPG, PNG, atau WEBP.';
-                                continue;
-                            }
-                            if (file.size > maxFileSize) {
-                                errorMsg = 'Ukuran file maksimal 5MB per foto.';
                                 continue;
                             }
                             validFiles.push(file);

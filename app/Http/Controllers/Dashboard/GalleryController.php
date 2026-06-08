@@ -4,19 +4,20 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Invitation;
+use App\Services\ImageCompressionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 
 class GalleryController extends Controller
 {
-    public function update(Request $request, Invitation $invitation)
+    public function update(Request $request, Invitation $invitation, ImageCompressionService $compressor)
     {
         Gate::authorize('update', $invitation);
 
         $request->validate([
             'photos' => 'required|array',
-            'photos.*' => 'image|mimes:jpeg,png,jpg,webp|max:5120',
+            'photos.*' => 'image',
         ]);
 
         $currentPhotos = $invitation->gallery_photos ?? [];
@@ -27,7 +28,7 @@ class GalleryController extends Controller
         }
 
         foreach ($request->file('photos') as $photo) {
-            $path = $photo->store('gallery/' . $invitation->id, 'public');
+            $path = $compressor->compress($photo, 'gallery/' . $invitation->id);
             $currentPhotos[] = $path;
         }
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\Invitation;
 use App\Models\Theme;
+use App\Services\ImageCompressionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Schema;
@@ -115,7 +116,7 @@ class InvitationController extends Controller
         return response()->json(['available' => !$exists]);
     }
 
-    public function update(Request $request, Invitation $invitation)
+    public function update(Request $request, Invitation $invitation, ImageCompressionService $compressor)
     {
         file_put_contents(storage_path('logs/debug.txt'), 'UPDATE CALLED: '.json_encode([
             'slug_input' => $request->input('slug'),
@@ -175,20 +176,26 @@ class InvitationController extends Controller
 
         // Handle bride photo upload
         if ($request->hasFile('bride_photo')) {
-            $validated['bride_photo'] = $request->file('bride_photo')
-                ->store('profiles/' . $invitation->id, 'public');
+            $validated['bride_photo'] = $compressor->compress(
+                $request->file('bride_photo'),
+                'profiles/' . $invitation->id
+            );
         }
 
         // Handle groom photo upload
         if ($request->hasFile('groom_photo')) {
-            $validated['groom_photo'] = $request->file('groom_photo')
-                ->store('profiles/' . $invitation->id, 'public');
+            $validated['groom_photo'] = $compressor->compress(
+                $request->file('groom_photo'),
+                'profiles/' . $invitation->id
+            );
         }
 
         // Handle cover photo upload
         if ($request->hasFile('cover_photo')) {
-            $validated['cover_photo'] = $request->file('cover_photo')
-                ->store('cover/' . $invitation->id, 'public');
+            $validated['cover_photo'] = $compressor->compress(
+                $request->file('cover_photo'),
+                'cover/' . $invitation->id
+            );
         }
 
         // Handle music upload

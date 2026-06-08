@@ -30,44 +30,7 @@ class PreviewDataForm
                             ->imageEditorViewportHeight(640)
                             ->disk('public')
                             ->directory('preview/photos')
-                            ->imagePreviewHeight('300')
-                            ->maxSize(2048),
-                        TextInput::make('title')
-                            ->label('Judul Undangan')
-                            ->required()
-                            ->maxLength(255),
-                        TextInput::make('bride_name')
-                            ->label('Nama Mempelai Wanita')
-                            ->required()
-                            ->maxLength(255),
-                        TextInput::make('groom_name')
-                            ->label('Nama Mempelai Pria')
-                            ->required()
-                            ->maxLength(255),
-                        TextInput::make('bride_nickname')
-                            ->label('Nama Panggilan Wanita')
-                            ->nullable()
-                            ->maxLength(100),
-                        TextInput::make('groom_nickname')
-                            ->label('Nama Panggilan Pria')
-                            ->nullable()
-                            ->maxLength(100),
-                        TextInput::make('bride_father_name')
-                            ->label('Nama Ayah (Wanita)')
-                            ->nullable()
-                            ->maxLength(255),
-                        TextInput::make('bride_mother_name')
-                            ->label('Nama Ibu (Wanita)')
-                            ->nullable()
-                            ->maxLength(255),
-                        TextInput::make('groom_father_name')
-                            ->label('Nama Ayah (Pria)')
-                            ->nullable()
-                            ->maxLength(255),
-                        TextInput::make('groom_mother_name')
-                            ->label('Nama Ibu (Pria)')
-                            ->nullable()
-                            ->maxLength(255),
+                            ->imagePreviewHeight('200'),
                         FileUpload::make('bride_photo')
                             ->label('Foto Mempelai Wanita')
                             ->image()
@@ -80,8 +43,7 @@ class PreviewDataForm
                             ->imageEditorViewportHeight(400)
                             ->disk('public')
                             ->directory('preview/photos')
-                            ->imagePreviewHeight('200')
-                            ->maxSize(2048),
+                            ->imagePreviewHeight('200'),
                         FileUpload::make('groom_photo')
                             ->label('Foto Mempelai Pria')
                             ->image()
@@ -94,8 +56,7 @@ class PreviewDataForm
                             ->imageEditorViewportHeight(400)
                             ->disk('public')
                             ->directory('preview/photos')
-                            ->imagePreviewHeight('200')
-                            ->maxSize(2048),
+                            ->imagePreviewHeight('200'),
                     ])->columns(2),
                 Section::make('Musik & Video')
                     ->schema([
@@ -201,7 +162,6 @@ class PreviewDataForm
                             ->disk('public')
                             ->directory('preview/gallery')
                             ->imagePreviewHeight('150')
-                            ->maxSize(2048)
                             ->maxFiles(20),
                     ]),
                 Section::make('Kado Digital')
