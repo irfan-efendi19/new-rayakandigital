@@ -38,6 +38,13 @@
         content="Rayakan Digital adalah layanan undangan online & solusi acara digital untuk pernikahan, ulang tahun, dan lainnya." />
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script>
+        if (localStorage.getItem('dark-mode') === 'true' || (!('dark-mode' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
 </head>
 
 <body class="font-sans antialiased bg-gray-50 dark:bg-secondary-900 text-gray-900 dark:text-neutral-100">
