@@ -4,7 +4,15 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Live Streaming - Rayakan Digital</title>
+
+    <x-meta
+        title="Live Streaming - Rayakan Digital"
+        description="Siarkan momen pernikahan Anda dengan kualitas sinematik melalui berbagai platform. Hubungkan tamu yang tidak bisa hadir secara fisik dengan live streaming berkualitas tinggi."
+        keywords="live streaming pernikahan, siaran pernikahan online, streaming acara, kamera pernikahan, multi platform streaming"
+    />
+
+    @stack('meta')
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
     <link rel="stylesheet" href="{{ asset('css/landingpage.css') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])

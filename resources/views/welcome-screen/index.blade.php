@@ -4,7 +4,15 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Layar Sapa - {{ $invitation->title }}</title>
+
+    <x-meta
+        title="Layar Sapa - {{ $invitation->title }}"
+        description="Layar sapa digital untuk {{ $invitation->title }}. Scan QR code untuk check-in dan memberikan ucapan."
+        image="{{ $invitation->cover_photo ? asset('storage/' . $invitation->cover_photo) : asset('img/thumnail.jpg') }}"
+    />
+
+    @stack('meta')
+
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=playfair-display:400,600,700,800,900|inter:300,400,500,600&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css'])

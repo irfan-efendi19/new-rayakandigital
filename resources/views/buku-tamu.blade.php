@@ -4,7 +4,15 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Buku Tamu Digital - Rayakan Digital</title>
+
+    <x-meta
+        title="Buku Tamu Digital - Rayakan Digital"
+        description="Gantikan buku tamu kertas tradisional dengan sistem registrasi digital yang cepat, aman, dan terintegrasi otomatis dengan WhatsApp. Check-in QR code, manajemen RSVP real-time."
+        keywords="buku tamu digital, buku tamu online, QR code check-in, registrasi tamu digital, manajemen tamu"
+    />
+
+    @stack('meta')
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
     <link rel="stylesheet" href="{{ asset('css/landingpage.css') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])

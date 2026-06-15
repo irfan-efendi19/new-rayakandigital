@@ -6,7 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Rayakan Digital') }}</title>
+    <x-meta
+        title="Semua Tema - Rayakan Digital"
+        description="Jelajahi katalog desain undangan digital premium. Lihat pratinjau langsung dengan data contoh dan pilih tema favorit Anda."
+        keywords="tema undangan, desain undangan digital, template undangan pernikahan, katalog tema"
+        image="{{ asset('img/thumnail.jpg') }}"
+    />
+
+    @stack('meta')
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="stylesheet" href="{{ asset('css/landingpage.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />

@@ -4,7 +4,15 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Syarat & Ketentuan - Rayakan Digital</title>
+
+    <x-meta
+        title="Syarat & Ketentuan - Rayakan Digital"
+        description="Dengan menggunakan layanan Rayakan Digital, Anda menyetujui syarat dan ketentuan yang berlaku. Baca selengkapnya tentang hak dan kewajiban pengguna."
+        keywords="syarat ketentuan, terms of service, aturan penggunaan, kebijakan layanan"
+    />
+
+    @stack('meta')
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
     <link rel="stylesheet" href="{{ asset('css/landingpage.css') }}">

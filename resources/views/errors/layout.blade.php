@@ -4,7 +4,12 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>@yield('title')</title>
+        <x-meta
+            :title="View::yieldContent('title') ?: config('app.name', 'Rayakan Digital')"
+            robots="noindex, nofollow"
+        />
+
+        @stack('meta')
 
         <!-- Styles -->
         <style>

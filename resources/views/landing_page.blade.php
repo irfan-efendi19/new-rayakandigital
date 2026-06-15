@@ -6,47 +6,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Rayakan Digital') }}</title>
+    <x-meta
+        title="Rayakan Digital | Solusi Digital Acara Modern"
+        description="Rayakan Digital menyediakan undangan online, buku tamu digital, QR code, dan live streaming untuk acara modern Anda. Buat momen berkesan jadi lebih praktis!"
+        keywords="rayakan digital, undangan digital, undangan online, undangan pernikahan, QR code tamu, buku tamu digital, live streaming acara, website undangan, acara modern, undangan web"
+        image="{{ asset('img/thumnail.jpg') }}"
+    />
 
-    <meta name="theme-color" content="#fa9a00">
-    <meta name="msapplication-navbutton-color" content="#fa9a00">
-    <meta name="apple-mobile-web-app-status-bar-style" content="#fa9a00">
+    @stack('meta')
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
     <link rel="stylesheet" href="{{ asset('css/landingpage.css') }}">
-
-    <!-- SEO -->
-    <meta name="robots" content="index, follow" />
-    <meta name="description"
-        content="Rayakan Digital menyediakan undangan online, buku tamu digital, QR code, dan live streaming untuk acara modern Anda. Buat momen berkesan jadi lebih praktis!">
-    <meta name="author" content="Rayakan Digital">
-    <meta name="keywords"
-        content="rayakan digital, undangan digital, undangan online, undangan pernikahan, QR code tamu, buku tamu digital, live streaming acara, website undangan, acara modern, undangan web">
-    <meta name="author" content="Rayakan Digital">
-    <meta http-equiv="Copyright" content="Rayakan Digital">
-    <meta name="copyright" content="Rayakan Digital">
-
-    <!-- Facebook Open Graph -->
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="Rayakan Digital | Solusi Digital Acara Modern" />
-    <meta property="og:description"
-        content="Rayakan Digital menyediakan undangan online, buku tamu digital, QR code, dan live streaming untuk acara modern Anda. Buat momen berkesan jadi lebih praktis!" />
-    <meta property="og:site_name" content="Rayakan Digital" />
-    <meta property="og:image" content="{{ asset('img/thumnail.jpg') }}" />
-
-    <!-- Google Structured Data -->
-    <meta itemprop="name" content="Rayakan Digital | Solusi Digital Acara Modern" />
-    <meta itemprop="description"
-        content="Rayakan Digital menyediakan undangan online, buku tamu digital, QR code, dan live streaming untuk acara modern Anda. Buat momen berkesan jadi lebih praktis!" />
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script>
         if (localStorage.getItem('dark-mode') === 'true' || (!('dark-mode' in localStorage) && window.matchMedia(
             '(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
+        document.documentElement.classList.add('dark');
+    } else {
+        document.documentElement.classList.remove('dark');
+    }
     </script>
 </head>
 
@@ -811,7 +790,7 @@
             @endif
         </div>
     </section>
-    
+
     <!-- Feature Section -->
     <section x-data="reveal" :class="visible || 'opacity-0 translate-y-8'"
         class="py-20 bg-gradient-to-br from-white via-tertiary/30 to-white dark:from-secondary-900 dark:via-secondary-900 dark:to-secondary-900 transition-all duration-700">
@@ -833,11 +812,11 @@
                     Anda.
                 </p>
             </div>
-    
+
             <!-- Features Grid -->
             <div class="mt-16">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-    
+
                     <!-- Feature 1 - RSVP Management -->
                     <div
                         class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6">
@@ -1045,12 +1024,12 @@
                                                                                                                     <i class="fas fa-arrow-right text-sm"></i>
                                 </a> -->
             </div>
-            </div>
-            </section>
-            
-            <!-- Pricing Section - Modernized -->
-            {{-- Pricing & Services Section with Tab Navigation --}}
-            {{-- Pricing & Services Section with Tab Navigation --}}
+        </div>
+        </section>
+        
+        <!-- Pricing Section - Modernized -->
+        {{-- Pricing & Services Section with Tab Navigation --}}
+        {{-- Pricing & Services Section with Tab Navigation --}}
     <section x-data="{ activeTab: 'undangan' }" class="py-20 bg-tertiary dark:bg-secondary-900 transition-all duration-700">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             {{-- Section Header --}}
@@ -1068,7 +1047,7 @@
                     Undangan digital, buku tamu, hingga siaran langsung — semuanya dalam satu platform.
                 </p>
             </div>
-    
+
             {{-- Tab Navigation --}}
             <div class="flex justify-center mb-12">
                 <div
@@ -1092,7 +1071,7 @@
                             Baru
                         </span>
                     </button>
-                    
+
                     {{-- Tab: Live Streaming --}}
                     <button @click="activeTab = 'live-streaming'"
                         :class="activeTab === 'live-streaming' ? 'bg-primary-500 text-white shadow-md shadow-primary-200' : 'text-secondary-600 hover:text-primary-600 hover:bg-primary-50'"
@@ -1277,7 +1256,7 @@
                             semua tersimpan otomatis.
                         </p>
                     </div>
-                    
+
                     {{-- Feature List --}}
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10">
                         <div
@@ -1292,7 +1271,7 @@
                                     tanpa perlu
                                     download aplikasi</p>
                             </div>
-                            </div>
+                        </div>
                         <div
                             class="flex items-start gap-3 bg-white dark:bg-secondary-800 rounded-2xl p-4 shadow-soft border border-neutral-100 dark:border-secondary-700">
                             <div class="flex-shrink-0 w-9 h-9 rounded-xl bg-emerald-50 flex items-center justify-center">
@@ -1305,7 +1284,7 @@
                                     seluruh tamu
                                     undangan</p>
                             </div>
-                            </div>
+                        </div>
                         <div
                             class="flex items-start gap-3 bg-white dark:bg-secondary-800 rounded-2xl p-4 shadow-soft border border-neutral-100 dark:border-secondary-700">
                             <div class="flex-shrink-0 w-9 h-9 rounded-xl bg-emerald-50 flex items-center justify-center">
@@ -1318,7 +1297,7 @@
                                     format
                                     Excel/CSV</p>
                             </div>
-                            </div>
+                        </div>
                         <div
                             class="flex items-start gap-3 bg-white dark:bg-secondary-800 rounded-2xl p-4 shadow-soft border border-neutral-100 dark:border-secondary-700">
                             <div class="flex-shrink-0 w-9 h-9 rounded-xl bg-emerald-50 flex items-center justify-center">
@@ -1331,12 +1310,12 @@
                                     secara langsung
                                     dari dashboard</p>
                             </div>
-                            </div>
-                            </div>
-                            
-                            {{-- CTA Contact Sales --}}
-                            <div
-                                class="bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-secondary-800 dark:to-secondary-800 border border-emerald-100 dark:border-emerald-900/30 rounded-2xl p-8 text-center">
+                        </div>
+                        </div>
+                        
+                        {{-- CTA Contact Sales --}}
+                        <div
+                            class="bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-secondary-800 dark:to-secondary-800 border border-emerald-100 dark:border-emerald-900/30 rounded-2xl p-8 text-center">
                         <p class="text-secondary-700 dark:text-neutral-200 font-medium mb-1">Tertarik dengan layanan
                             ini?</p>
                         <p class="text-neutral-500 text-sm mb-6">Hubungi tim kami untuk informasi harga dan
@@ -1355,22 +1334,22 @@
                                 Kirim Email
                             </a>
                         </div>
-                        </div>
-                        </div>
-                        </div>{{-- end panel buku tamu --}}
-                        
-                        {{-- =============================== --}}
-                        {{-- PANEL: LIVE STREAMING --}}
-                        {{-- =============================== --}}
-                        <div x-show="activeTab === 'live-streaming'" x-transition:enter="transition ease-out duration-300"
-                            x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0">
-                        
-                            <div class="max-w-2xl mx-auto">
-                                {{-- Icon & Heading --}}
-                                <div class="text-center mb-10">
-                                    <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-primary-50 mb-5">
-                                        <i class="fas fa-video text-4xl text-primary-500"></i>
-                                    </div>
+                    </div>
+                    </div>
+                    </div>{{-- end panel buku tamu --}}
+                    
+                    {{-- =============================== --}}
+                    {{-- PANEL: LIVE STREAMING --}}
+                    {{-- =============================== --}}
+                    <div x-show="activeTab === 'live-streaming'" x-transition:enter="transition ease-out duration-300"
+                        x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0">
+                    
+                        <div class="max-w-2xl mx-auto">
+                            {{-- Icon & Heading --}}
+                            <div class="text-center mb-10">
+                                <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-primary-50 mb-5">
+                                    <i class="fas fa-video text-4xl text-primary-500"></i>
+                                </div>
                         <h3 class="font-heading text-3xl font-bold text-secondary-900 dark:text-neutral-100 mb-3">Live
                             Streaming
                             Pernikahan
@@ -1381,7 +1360,7 @@
                             tanpa harus hadir secara fisik.
                         </p>
                     </div>
-                    
+
                     {{-- Feature List --}}
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10">
                         <div
@@ -1396,7 +1375,7 @@
                                     HD untuk
                                     pengalaman terbaik</p>
                             </div>
-                            </div>
+                        </div>
                         <div
                             class="flex items-start gap-3 bg-white dark:bg-secondary-800 rounded-2xl p-4 shadow-soft border border-neutral-100 dark:border-secondary-700">
                             <div class="flex-shrink-0 w-9 h-9 rounded-xl bg-primary-50 flex items-center justify-center">
@@ -1409,7 +1388,7 @@
                                     menonton dengan
                                     link eksklusif</p>
                             </div>
-                            </div>
+                        </div>
                         <div
                             class="flex items-start gap-3 bg-white dark:bg-secondary-800 rounded-2xl p-4 shadow-soft border border-neutral-100 dark:border-secondary-700">
                             <div class="flex-shrink-0 w-9 h-9 rounded-xl bg-primary-50 flex items-center justify-center">
@@ -1422,7 +1401,7 @@
                                     tersedia untuk
                                     diunduh setelah acara</p>
                             </div>
-                            </div>
+                        </div>
                         <div
                             class="flex items-start gap-3 bg-white dark:bg-secondary-800 rounded-2xl p-4 shadow-soft border border-neutral-100 dark:border-secondary-700">
                             <div class="flex-shrink-0 w-9 h-9 rounded-xl bg-primary-50 flex items-center justify-center">
@@ -1435,11 +1414,11 @@
                                     yang bisa
                                     menyaksikan siaran</p>
                             </div>
-                            </div>
-                            </div>
-                            {{-- CTA Contact Sales --}}
-                            <div
-                                class="bg-gradient-to-br from-primary-50 to-secondary-50 dark:from-secondary-800 dark:to-secondary-800 border border-primary-100 dark:border-primary-900/30 rounded-2xl p-8 text-center">
+                        </div>
+                        </div>
+                        {{-- CTA Contact Sales --}}
+                        <div
+                            class="bg-gradient-to-br from-primary-50 to-secondary-50 dark:from-secondary-800 dark:to-secondary-800 border border-primary-100 dark:border-primary-900/30 rounded-2xl p-8 text-center">
                         <p class="text-secondary-700 dark:text-neutral-200 font-medium mb-1">Tertarik dengan layanan
                             ini?</p>
                         <p class="text-neutral-500 text-sm mb-6">Hubungi tim kami untuk informasi harga dan
@@ -1458,12 +1437,12 @@
                                 Kirim Email
                             </a>
                         </div>
-                        </div>
-                        </div>
-                        </div>{{-- end panel live streaming --}}
-                        
-                        </div>
-                        </section>
+                    </div>
+                    </div>
+                    </div>{{-- end panel live streaming --}}
+                    
+                    </div>
+                    </section>
     <section
         class="relative py-16 px-4 bg-gradient-to-br from-orange-50 via-white to-orange-50/30 dark:from-secondary-900 dark:via-secondary-900 dark:to-secondary-900">
         <div class="max-w-3xl mx-auto">
@@ -1659,10 +1638,10 @@
                         sini untuk
                         bantuan</a>
                 </p>
-                </div>
-                </div>
-                </section>
-                <!-- WA -->
+            </div>
+            </div>
+            </section>
+            <!-- WA -->
     <button x-show="showBackToTop" x-transition:enter="transition ease-out duration-300"
         x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0"
         x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0"

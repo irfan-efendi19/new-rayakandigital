@@ -4,7 +4,15 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Tentang Kami - Rayakan Digital</title>
+
+    <x-meta
+        title="Tentang Kami - Rayakan Digital"
+        description="Berawal dari sebuah visi untuk menyatukan tradisi dan teknologi, kami menghadirkan Rayakan Digital sebagai jembatan untuk merayakan setiap momen berharga Anda."
+        keywords="tentang rayakan digital, undangan digital, sejarah, visi misi, tim"
+    />
+
+    @stack('meta')
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
     <link rel="stylesheet" href="{{ asset('css/landingpage.css') }}">

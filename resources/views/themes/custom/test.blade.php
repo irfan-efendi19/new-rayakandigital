@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pernikahan {{ $invitation->groom_name }} &amp; {{ $invitation->bride_name }}</title>
-    <meta property="og:title"
-        content="The Wedding of {{ $invitation->groom_name }} &amp; {{ $invitation->bride_name }}">
-    <meta property="og:description"
-        content="Undangan Pernikahan {{ $invitation->groom_name }} &amp; {{ $invitation->bride_name }}">
-    @if($invitation->cover_photo)
-        <meta property="og:image" content="{{ asset('storage/' . $invitation->cover_photo) }}">
-        <meta name="twitter:image" content="{{ asset('storage/' . $invitation->cover_photo) }}">
-    @endif
+
+    <x-meta
+        title="Pernikahan {{ $invitation->groom_name }} &amp; {{ $invitation->bride_name }}"
+        description="Undangan Pernikahan {{ $invitation->groom_name }} &amp; {{ $invitation->bride_name }}"
+        image="{{ $invitation->cover_photo ? asset('storage/' . $invitation->cover_photo) : null }}"
+    />
+
+    @stack('meta')
+
     <link
         href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&amp;family=Inter:wght@300;400;500;600&amp;display=swap"
         rel="stylesheet">

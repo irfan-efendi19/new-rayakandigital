@@ -5,7 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ $invitation->bride_name }} & {{ $invitation->groom_name }} - Wedding Invitation</title>
+    <x-meta
+        :title="$invitation->bride_name . ' & ' . $invitation->groom_name . ' - Wedding Invitation'"
+        :description="'Undangan Pernikahan ' . $invitation->bride_name . ' & ' . $invitation->groom_name"
+        :image="$invitation->cover_photo ? asset('storage/' . $invitation->cover_photo) : null"
+        :url="url()->current()"
+        type="website"
+        robots="index, follow"
+    />
+
+    @stack('meta')
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">

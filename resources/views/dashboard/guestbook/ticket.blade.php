@@ -3,7 +3,15 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Tiket - {{ $guest->name }} | {{ config('app.name') }}</title>
+
+    <x-meta
+        title="Tiket - {{ $guest->name }} | {{ config('app.name') }}"
+        description="Tiket check-in untuk {{ $guest->name }}"
+        robots="noindex, nofollow"
+    />
+
+    @stack('meta')
+
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
