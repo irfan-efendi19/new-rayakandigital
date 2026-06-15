@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\Dashboard\CheckoutController;
 use App\Http\Controllers\Dashboard\GalleryController;
 use App\Http\Controllers\Dashboard\GiftController;
@@ -12,7 +13,6 @@ use App\Http\Controllers\Dashboard\WhatsAppPaymentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvitationRenderController;
-use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RsvpController;
@@ -20,6 +20,7 @@ use App\Http\Controllers\ThemeController;
 use App\Http\Controllers\ThemePreviewController;
 use App\Http\Controllers\WelcomeScreenController;
 use App\Http\Controllers\WishController;
+use App\Models\Package;
 use Illuminate\Support\Facades\Route;
 
 // Landing Page & Public Preview
@@ -29,7 +30,7 @@ Route::get('/preview/{themeSlug}', [ThemePreviewController::class, 'show'])->nam
 
 // Public Pages
 Route::get('/undangan-web', function () {
-    $packages = \App\Models\Package::with('features')
+    $packages = Package::with('features')
         ->where('is_visible', true)
         ->orderBy('sort_order')
         ->get();
@@ -84,12 +85,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         // Guestbook / QR Scanner
         Route::get('/invitations/{invitation}/guestbook', [GuestbookController::class, 'index'])->name('invitations.guestbook');
+        Route::get('/invitations/{invitation}/guestbook/pengaturan-layar-sapa', [WelcomeScreenController::class, 'settings'])->name('invitations.guestbook.settings');
         Route::post('/invitations/{invitation}/guestbook/checkin', [GuestbookController::class, 'checkin'])->name('invitations.guestbook.checkin');
         Route::get('/invitations/{invitation}/guestbook/{guest}/ticket', [GuestbookController::class, 'ticket'])->name('invitations.guestbook.ticket');
 
         // Welcome Screen (Layar Sapa)
         Route::get('/invitations/{invitation}/welcome-screen', [WelcomeScreenController::class, 'index'])->name('welcome-screen.index');
         Route::get('/invitations/{invitation}/latest-checkin', [WelcomeScreenController::class, 'getLatestCheckIn'])->name('welcome-screen.latest-checkin');
+        Route::post('/invitations/{invitation}/welcome-screen/settings', [WelcomeScreenController::class, 'updateSettings'])->name('welcome-screen.settings.update');
+        Route::delete('/invitations/{invitation}/welcome-screen/gallery/{screenGallery}', [WelcomeScreenController::class, 'deleteGalleryImage'])->name('welcome-screen.gallery.destroy');
     });
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

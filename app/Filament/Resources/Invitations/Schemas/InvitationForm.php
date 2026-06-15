@@ -144,6 +144,22 @@ class InvitationForm
                             ->maxLength(255)
                             ->columnSpanFull(),
                     ])->columns(3),
+
+                Section::make('Layar Sapa Settings')
+                    ->description('Kustomisasi tampilan Layar Sapa (Welcome Screen) proyektor.')
+                    ->schema([
+                        TextInput::make('screen_bride_names')
+                            ->label('Nama Pajangan Pengantin')
+                            ->placeholder('Contoh: Romeo & Juliet')
+                            ->maxLength(255),
+
+                        TextInput::make('screen_overlay_opacity')
+                            ->label('Tingkat Gelap Overlay (0-100)')
+                            ->numeric()
+                            ->default(50)
+                            ->minValue(0)
+                            ->maxValue(100),
+                    ])->columns(2),
             ]);
     }
 }

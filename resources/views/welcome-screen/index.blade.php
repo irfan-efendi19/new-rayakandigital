@@ -15,13 +15,12 @@
 
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=playfair-display:400,600,700,800,900|inter:300,400,500,600&display=swap" rel="stylesheet" />
-    @vite(['resources/css/app.css'])
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #16213e 100%);
             color: #fff;
             overflow: hidden;
             height: 100vh;
@@ -30,6 +29,7 @@
             align-items: center;
             justify-content: center;
             user-select: none;
+            background-color: #0f0f1a;
         }
 
         /* Decorative background particles */
@@ -37,7 +37,7 @@
             position: fixed;
             inset: 0;
             pointer-events: none;
-            z-index: 0;
+            z-index: 3;
         }
 
         .bg-particles span {
@@ -58,7 +58,7 @@
 
         .screen {
             position: relative;
-            z-index: 1;
+            z-index: 4;
             width: 100%;
             height: 100%;
             display: flex;
@@ -76,7 +76,7 @@
             height: 60px;
             border-color: rgba(255,255,255,0.12);
             border-style: solid;
-            z-index: 2;
+            z-index: 4;
         }
         .corner-tl { top: 30px; left: 30px; border-width: 2px 0 0 2px; }
         .corner-tr { top: 30px; right: 30px; border-width: 2px 2px 0 0; }
@@ -128,12 +128,10 @@
         }
 
         /* Active (guest) state */
-        .guest-content { display: none; flex-direction: column; align-items: center; gap: 1rem; }
+        .guest-content { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
 
         .guest-enter-icon {
             font-size: clamp(2rem, 4vw, 3.5rem);
-            opacity: 0;
-            animation: fadeInDown 0.8s ease forwards;
         }
 
         .guest-label {
@@ -142,8 +140,6 @@
             font-weight: 400;
             letter-spacing: 0.15em;
             text-transform: uppercase;
-            opacity: 0;
-            animation: fadeInDown 0.8s ease 0.2s forwards;
         }
 
         .guest-name {
@@ -155,24 +151,18 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
             line-height: 1.15;
-            opacity: 0;
-            animation: fadeInUp 1s ease 0.4s forwards;
         }
 
         .guest-message {
             font-size: clamp(1.1rem, 1.8vw, 1.6rem);
             color: rgba(255,255,255,0.6);
             font-weight: 300;
-            opacity: 0;
-            animation: fadeInUp 0.8s ease 0.8s forwards;
         }
 
         .guest-decoration {
             display: flex;
             align-items: center;
             gap: 1rem;
-            opacity: 0;
-            animation: fadeIn 0.8s ease 1s forwards;
         }
 
         .guest-decoration .line {
@@ -192,22 +182,7 @@
             font-size: clamp(0.8rem, 1vw, 1rem);
             color: rgba(255,255,255,0.3);
             font-weight: 300;
-            opacity: 0;
-            animation: fadeIn 0.8s ease 1.2s forwards;
         }
-
-        /* Transitions */
-        .fade-transition {
-            transition: opacity 0.6s ease, transform 0.6s ease;
-        }
-
-        .hidden-state { display: none !important; }
-
-        /* Animations */
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
 
         /* Pulsing dot for idle */
         .pulse-dot {
@@ -231,7 +206,7 @@
             left: 0;
             height: 3px;
             background: linear-gradient(90deg, #f6d365, #fda085);
-            z-index: 3;
+            z-index: 5;
             width: 100%;
             transform-origin: left;
             transition: none;
@@ -256,7 +231,7 @@
             transform: translateX(-50%);
             display: flex;
             gap: 8px;
-            z-index: 3;
+            z-index: 5;
         }
 
         .queue-dot {
@@ -281,7 +256,7 @@
             position: fixed;
             bottom: 20px;
             right: 30px;
-            z-index: 2;
+            z-index: 4;
             font-size: 0.75rem;
             color: rgba(255,255,255,0.15);
             font-weight: 300;
@@ -292,9 +267,52 @@
         ::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body>
+<body x-data="welcomeScreen">
     {{-- Background particles --}}
     <div class="bg-particles" id="particles"></div>
+
+    {{-- Default Background (or Custom background if uploaded) --}}
+    <div class="custom-bg" style="
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        @if($invitation->screen_background_image)
+            background-image: url('{{ asset('storage/' . $invitation->screen_background_image) }}');
+            background-size: cover;
+            background-position: center;
+        @else
+            background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #16213e 100%);
+        @endif
+    "></div>
+
+    {{-- Slideshow Background Container --}}
+    <div x-show="isSlideshowActive"
+         x-transition:enter="transition-opacity duration-1000"
+         x-transition:leave="transition-opacity duration-1000"
+         class="absolute inset-0 z-1"
+         style="display: none;">
+        <template x-for="(image, index) in galleries" :key="image.id">
+            <div x-show="currentSlide === index"
+                 x-transition:enter="transition-opacity duration-1000"
+                 x-transition:enter-start="opacity-0"
+                 x-transition:enter-end="opacity-100"
+                 x-transition:leave="transition-opacity duration-1000"
+                 x-transition:leave-start="opacity-100"
+                 x-transition:leave-end="opacity-0"
+                 class="absolute inset-0 bg-cover bg-center"
+                 :style="'background-image: url(/storage/' + image.image_path + ')'">
+            </div>
+        </template>
+    </div>
+
+    {{-- Dark Overlay --}}
+    <div class="screen-overlay" style="
+        position: fixed;
+        inset: 0;
+        background-color: black;
+        opacity: {{ ($invitation->screen_overlay_opacity ?? 50) / 100 }};
+        z-index: 2;
+    "></div>
 
     {{-- Corner decorations --}}
     <div class="corner corner-tl"></div>
@@ -303,15 +321,21 @@
     <div class="corner corner-br"></div>
 
     {{-- Countdown bar --}}
-    <div class="countdown-bar idle" id="countdownBar"></div>
+    <div class="countdown-bar"
+         :class="{ 'idle': !isDisplaying }"
+         :style="isDisplaying ? 'transform: scaleX(' + (countdownProgress / 100) + '); transition: none;' : ''"></div>
 
     {{-- Queue indicator --}}
-    <div class="queue-indicator" id="queueIndicator"></div>
+    <div class="queue-indicator">
+        <template x-for="n in Math.min(queue.length + (isDisplaying ? 1 : 0), 8)" :key="n">
+            <span class="queue-dot" :class="{ 'active': n === 1 && isDisplaying, 'queued': n > 1 || !isDisplaying }"></span>
+        </template>
+    </div>
 
     {{-- Main screen --}}
     <div class="screen">
         {{-- Idle state --}}
-        <div class="idle-content" id="idleContent">
+        <div class="idle-content" x-show="!isDisplaying" x-transition:enter="transition-opacity duration-500" x-transition:leave="transition-opacity duration-500">
             <div class="idle-icon">
                 <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/>
@@ -320,9 +344,7 @@
             <div class="idle-decoration"></div>
             <div class="idle-title">Selamat Datang</div>
             <div class="idle-subtitle">
-                {{ $invitation->bride_nickname ?? $invitation->bride_name }}
-                &amp;
-                {{ $invitation->groom_nickname ?? $invitation->groom_name }}
+                {{ $invitation->screen_bride_names ?: (($invitation->bride_nickname ?? $invitation->bride_name) . ' & ' . ($invitation->groom_nickname ?? $invitation->groom_name)) }}
             </div>
             @if($firstEvent)
                 <div class="idle-date">
@@ -340,174 +362,182 @@
         </div>
 
         {{-- Guest state --}}
-        <div class="guest-content" id="guestContent">
-            <div class="guest-enter-icon" id="guestIcon">🎉</div>
+        <div class="guest-content" x-show="isDisplaying" style="display: none;" x-transition:enter="transition-opacity duration-500" x-transition:leave="transition-opacity duration-500">
+            <div class="guest-enter-icon" x-text="['🎉', '👋', '✨', '🎊', '🌟', '💐', '🥂', '🎵'][activeGuest ? activeGuest.id % 8 : 0]">🎉</div>
             <div class="guest-label">Tamu Hadir</div>
-            <div class="guest-name" id="guestName"></div>
-            <div class="guest-message" id="guestMessage">Terima kasih telah hadir</div>
+            <div class="guest-name" x-text="activeGuest ? activeGuest.name : ''"></div>
+            <div class="guest-message">Terima kasih telah hadir</div>
             <div class="guest-decoration">
                 <span class="line"></span>
                 <span class="diamond"></span>
                 <span class="line"></span>
             </div>
-            <div class="guest-order" id="guestOrder"></div>
+            <div class="guest-order" x-text="activeGuest && activeGuest.checkin_order ? 'Tamu ke-' + activeGuest.checkin_order : ''"></div>
         </div>
     </div>
 
     <div class="screen-footer">{{ config('app.name') }}</div>
 
     <script>
-        const API_URL = @json(route('dashboard.welcome-screen.latest-checkin', $invitation));
-        const DISPLAY_DURATION = 7000;
-        const POLL_INTERVAL = 3000;
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('welcomeScreen', () => ({
+                galleries: @json($screenGalleries),
+                currentSlide: 0,
+                isSlideshowActive: false,
+                isDisplaying: false,
+                queue: [],
+                activeGuest: null,
+                knownIds: new Set(),
+                lastCheckedInAt: null,
+                countdownProgress: 100,
 
-        let queue = [];
-        let isDisplaying = false;
-        let lastCheckedInAt = null;
-        let pollTimer = null;
-        let displayTimer = null;
-        let countdownTimer = null;
-        let knownIds = new Set();
+                idleTime: 0,
+                idleTimer: null,
+                pollTimer: null,
+                slideshowTimer: null,
+                displayTimer: null,
+                progressTimer: null,
 
-        const idleContent = document.getElementById('idleContent');
-        const guestContent = document.getElementById('guestContent');
-        const guestName = document.getElementById('guestName');
-        const guestOrder = document.getElementById('guestOrder');
-        const guestMessage = document.getElementById('guestMessage');
-        const guestIcon = document.getElementById('guestIcon');
-        const countdownBar = document.getElementById('countdownBar');
-        const queueIndicator = document.getElementById('queueIndicator');
+                init() {
+                    this.startPolling();
+                    this.resetIdleTimer();
+                    this.initParticles();
+                },
 
-        function showIdle() {
-            guestContent.style.display = 'none';
-            idleContent.style.display = 'flex';
+                resetIdleTimer() {
+                    this.idleTime = 0;
+                    this.isSlideshowActive = false;
 
-            countdownBar.classList.add('idle');
-            countdownBar.style.transform = 'scaleX(1)';
-            countdownBar.style.transition = 'none';
-        }
+                    if (this.idleTimer) clearInterval(this.idleTimer);
+                    if (this.slideshowTimer) clearInterval(this.slideshowTimer);
 
-        function showGuest(guest) {
-            idleContent.style.display = 'none';
-            guestContent.style.display = 'flex';
-
-            guestName.textContent = guest.name;
-
-            const icons = ['🎉', '👋', '✨', '🎊', '🌟', '💐', '🥂', '🎵'];
-            guestIcon.textContent = icons[guest.id % icons.length];
-
-            if (guest.checkin_order) {
-                guestOrder.textContent = 'Tamu ke-' + guest.checkin_order;
-            } else {
-                guestOrder.textContent = '';
-            }
-
-            guestContent.style.opacity = '0';
-            requestAnimationFrame(() => {
-                guestContent.style.opacity = '1';
-            });
-
-            countdownBar.classList.remove('idle');
-            countdownBar.style.transition = 'none';
-            countdownBar.style.transform = 'scaleX(1)';
-            requestAnimationFrame(() => {
-                countdownBar.style.transition = 'transform ' + (DISPLAY_DURATION / 1000) + 's linear';
-                countdownBar.style.transform = 'scaleX(0)';
-            });
-        }
-
-        function processQueue() {
-            if (queue.length === 0) {
-                isDisplaying = false;
-                showIdle();
-                return;
-            }
-
-            isDisplaying = true;
-            const guest = queue.shift();
-            updateQueueIndicator();
-            showGuest(guest);
-
-            clearTimeout(displayTimer);
-            displayTimer = setTimeout(() => {
-                processQueue();
-            }, DISPLAY_DURATION);
-        }
-
-        function enqueueGuests(guests) {
-            let newGuests = guests.filter(g => !knownIds.has(g.id));
-            if (newGuests.length === 0) return;
-
-            newGuests.forEach(g => knownIds.add(g.id));
-            queue.push(...newGuests);
-
-            updateQueueIndicator();
-
-            if (!isDisplaying) {
-                processQueue();
-            }
-        }
-
-        function updateQueueIndicator() {
-            const total = queue.length + (isDisplaying ? 1 : 0);
-            queueIndicator.innerHTML = '';
-            for (let i = 0; i < Math.min(total, 8); i++) {
-                const dot = document.createElement('span');
-                dot.className = 'queue-dot';
-                if (i === 0 && isDisplaying) dot.classList.add('active');
-                else if (i > 0 || !isDisplaying) dot.classList.add('queued');
-                queueIndicator.appendChild(dot);
-            }
-        }
-
-        async function poll() {
-            try {
-                const params = new URLSearchParams();
-                if (lastCheckedInAt) {
-                    params.set('since', lastCheckedInAt);
-                }
-                const url = API_URL + (params.toString() ? '?' + params.toString() : '');
-
-                const response = await fetch(url, {
-                    headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') }
-                });
-                const data = await response.json();
-
-                if (data.success && data.guests.length > 0) {
-                    const serverTime = data.server_time;
-                    if (data.guests.length > 0) {
-                        const latest = data.guests[data.guests.length - 1];
-                        if (latest.checked_in_at > (lastCheckedInAt || '')) {
-                            lastCheckedInAt = latest.checked_in_at;
+                    this.idleTimer = setInterval(() => {
+                        if (!this.isDisplaying) {
+                            this.idleTime++;
+                            if (this.idleTime >= 30) {
+                                this.startSlideshow();
+                                clearInterval(this.idleTimer);
+                            }
+                        } else {
+                            this.idleTime = 0;
                         }
+                    }, 1000);
+                },
+
+                startSlideshow() {
+                    if (this.galleries.length === 0) return;
+                    this.isSlideshowActive = true;
+                    this.currentSlide = 0;
+
+                    if (this.slideshowTimer) clearInterval(this.slideshowTimer);
+                    this.slideshowTimer = setInterval(() => {
+                        this.currentSlide = (this.currentSlide + 1) % this.galleries.length;
+                    }, 5000);
+                },
+
+                async poll() {
+                    try {
+                        const params = new URLSearchParams();
+                        if (this.lastCheckedInAt) {
+                            params.set('since', this.lastCheckedInAt);
+                        }
+                        const url = @json(route('dashboard.welcome-screen.latest-checkin', $invitation)) + 
+                            (params.toString() ? '?' + params.toString() : '');
+
+                        const response = await fetch(url, {
+                            headers: { 
+                                'Accept': 'application/json', 
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') 
+                            }
+                        });
+                        const data = await response.json();
+
+                        if (data.success && data.guests.length > 0) {
+                            const latest = data.guests[data.guests.length - 1];
+                            if (!this.lastCheckedInAt || latest.checked_in_at > this.lastCheckedInAt) {
+                                this.lastCheckedInAt = latest.checked_in_at;
+                            }
+                            this.enqueueGuests(data.guests);
+                        }
+                    } catch (e) {
+                        console.warn('Poll failed:', e);
+                    }
+                },
+
+                startPolling() {
+                    this.poll();
+                    this.pollTimer = setInterval(() => this.poll(), 3000);
+                },
+
+                enqueueGuests(guests) {
+                    let newGuests = guests.filter(g => !this.knownIds.has(g.id));
+                    if (newGuests.length === 0) return;
+
+                    newGuests.forEach(g => this.knownIds.add(g.id));
+                    this.queue.push(...newGuests);
+
+                    if (!this.isDisplaying) {
+                        this.processQueue();
+                    }
+                },
+
+                processQueue() {
+                    if (this.queue.length === 0) {
+                        this.isDisplaying = false;
+                        this.activeGuest = null;
+                        this.resetIdleTimer();
+                        return;
                     }
 
-                    enqueueGuests(data.guests);
+                    // Stop slideshow immediately when a guest is checked in
+                    this.isSlideshowActive = false;
+                    if (this.slideshowTimer) clearInterval(this.slideshowTimer);
+                    if (this.idleTimer) clearInterval(this.idleTimer);
+
+                    this.isDisplaying = true;
+                    this.activeGuest = this.queue.shift();
+
+                    // Animate progress bar
+                    this.startProgressAnimation();
+
+                    if (this.displayTimer) clearTimeout(this.displayTimer);
+                    this.displayTimer = setTimeout(() => {
+                        this.processQueue();
+                    }, 7000);
+                },
+
+                startProgressAnimation() {
+                    this.countdownProgress = 100;
+                    if (this.progressTimer) clearInterval(this.progressTimer);
+
+                    const duration = 7000;
+                    const interval = 50;
+                    const step = (interval / duration) * 100;
+
+                    this.progressTimer = setInterval(() => {
+                        this.countdownProgress -= step;
+                        if (this.countdownProgress <= 0) {
+                            this.countdownProgress = 0;
+                            clearInterval(this.progressTimer);
+                        }
+                    }, interval);
+                },
+
+                initParticles() {
+                    const container = document.getElementById('particles');
+                    if (!container) return;
+                    for (let i = 0; i < 30; i++) {
+                        const span = document.createElement('span');
+                        span.style.left = Math.random() * 100 + '%';
+                        span.style.width = (Math.random() * 4 + 2) + 'px';
+                        span.style.height = span.style.width;
+                        span.style.animationDelay = Math.random() * 20 + 's';
+                        span.style.animationDuration = (Math.random() * 15 + 15) + 's';
+                        container.appendChild(span);
+                    }
                 }
-            } catch (e) {
-                console.warn('Poll failed:', e);
-            }
-
-            pollTimer = setTimeout(poll, POLL_INTERVAL);
-        }
-
-        function initParticles() {
-            const container = document.getElementById('particles');
-            for (let i = 0; i < 30; i++) {
-                const span = document.createElement('span');
-                span.style.left = Math.random() * 100 + '%';
-                span.style.width = (Math.random() * 4 + 2) + 'px';
-                span.style.height = span.style.width;
-                span.style.animationDelay = Math.random() * 20 + 's';
-                span.style.animationDuration = (Math.random() * 15 + 15) + 's';
-                container.appendChild(span);
-            }
-        }
-
-        initParticles();
-        showIdle();
-
-        poll();
+            }));
+        });
     </script>
 </body>
 </html>

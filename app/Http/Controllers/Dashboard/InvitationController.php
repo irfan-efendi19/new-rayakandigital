@@ -4,12 +4,17 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Invitation;
+use App\Models\InvitationEvent;
+use App\Models\InvitationStory;
+use App\Models\SystemConfig;
 use App\Models\Theme;
 use App\Services\ImageCompressionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 class InvitationController extends Controller
 {
@@ -41,9 +46,9 @@ class InvitationController extends Controller
             'theme' => 'required|string',
         ]);
 
-        $slug = Str::slug($validated['title'] . '-' . Str::random(5));
+        $slug = Str::slug($validated['title'].'-'.Str::random(5));
 
-        $demoDays = \App\Models\SystemConfig::first()?->demo_duration_days ?? 3;
+        $demoDays = SystemConfig::first()?->demo_duration_days ?? 3;
         $extraData = [
             'slug' => $slug,
             'trial_started_at' => now(),
@@ -93,9 +98,9 @@ class InvitationController extends Controller
     public function edit(Invitation $invitation)
     {
         Gate::authorize('update', $invitation);
-        $invitation->load(['events', 'stories']);
+        $invitation->load(['events', 'stories', 'screenGalleries']);
 
-        $themes = \App\Models\Theme::where('is_active', true)->get();
+        $themes = Theme::where('is_active', true)->get();
 
         return view('dashboard.invitations.edit', compact('invitation', 'themes'));
     }
@@ -113,7 +118,7 @@ class InvitationController extends Controller
 
         $exists = $query->exists();
 
-        return response()->json(['available' => !$exists]);
+        return response()->json(['available' => ! $exists]);
     }
 
     public function update(Request $request, Invitation $invitation, ImageCompressionService $compressor)
@@ -165,8 +170,10 @@ class InvitationController extends Controller
                 'show_quote' => 'boolean',
                 'show_video' => 'boolean',
                 'youtube_url' => 'nullable|string|max:255',
+                'screen_bride_names' => 'nullable|string|max:255',
+                'screen_overlay_opacity' => 'nullable|integer|min:0|max:100',
             ]);
-        } catch (\Illuminate\Validation\ValidationException $e) {
+        } catch (ValidationException $e) {
             file_put_contents(storage_path('logs/debug.txt'), 'VALIDATION FAILED: '.json_encode([
                 'errors' => $e->errors(),
                 'input' => $request->except(['_token', '_method']),
@@ -178,7 +185,7 @@ class InvitationController extends Controller
         if ($request->hasFile('bride_photo')) {
             $validated['bride_photo'] = $compressor->compress(
                 $request->file('bride_photo'),
-                'profiles/' . $invitation->id
+                'profiles/'.$invitation->id
             );
         }
 
@@ -186,7 +193,7 @@ class InvitationController extends Controller
         if ($request->hasFile('groom_photo')) {
             $validated['groom_photo'] = $compressor->compress(
                 $request->file('groom_photo'),
-                'profiles/' . $invitation->id
+                'profiles/'.$invitation->id
             );
         }
 
@@ -194,7 +201,7 @@ class InvitationController extends Controller
         if ($request->hasFile('cover_photo')) {
             $validated['cover_photo'] = $compressor->compress(
                 $request->file('cover_photo'),
-                'cover/' . $invitation->id
+                'cover/'.$invitation->id
             );
         }
 
@@ -202,7 +209,18 @@ class InvitationController extends Controller
         if ($request->hasFile('music_file')) {
             $request->validate(['music_file' => 'file|mimes:mp3,wav,ogg|max:10240']);
             $validated['music_url'] = $request->file('music_file')
-                ->store('music/' . $invitation->id, 'public');
+                ->store('music/'.$invitation->id, 'public');
+        }
+
+        // Handle screen background upload
+        if ($request->hasFile('screen_background_image')) {
+            if ($invitation->screen_background_image) {
+                Storage::disk('public')->delete($invitation->screen_background_image);
+            }
+            $validated['screen_background_image'] = $compressor->compress(
+                $request->file('screen_background_image'),
+                'screen-bg/'.$invitation->id
+            );
         }
 
         // Handle slug update
@@ -224,6 +242,7 @@ class InvitationController extends Controller
 
             if ($exists) {
                 file_put_contents(storage_path('logs/debug.txt'), 'SLUG EXISTS - RETURNING BACK'.PHP_EOL, FILE_APPEND);
+
                 return back()->withErrors(['slug' => 'Tautan sudah digunakan oleh undangan lain.'])->withInput();
             }
 
@@ -269,8 +288,8 @@ class InvitationController extends Controller
                 $eventData['sort_order'] = $index;
                 $eventData['is_until_finished'] = $eventData['is_until_finished'] ?? false;
 
-                if (!empty($eventData['id'])) {
-                    $event = \App\Models\InvitationEvent::where('invitation_id', $invitation->id)
+                if (! empty($eventData['id'])) {
+                    $event = InvitationEvent::where('invitation_id', $invitation->id)
                         ->where('id', $eventData['id'])
                         ->firstOrFail();
                     $event->update($eventData);
@@ -299,8 +318,8 @@ class InvitationController extends Controller
             foreach (array_values($request->input('stories', [])) as $index => $storyData) {
                 $storyData['order_position'] = $index;
 
-                if (!empty($storyData['id'])) {
-                    $story = \App\Models\InvitationStory::where('invitation_id', $invitation->id)
+                if (! empty($storyData['id'])) {
+                    $story = InvitationStory::where('invitation_id', $invitation->id)
                         ->where('id', $storyData['id'])
                         ->firstOrFail();
                     $story->update($storyData);

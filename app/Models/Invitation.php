@@ -17,29 +17,29 @@ class Invitation extends Model
     protected static function booted(): void
     {
         static::saving(function (self $invitation) {
-            if ($invitation->isDirty(['bride_father_name', 'bride_mother_name']) || !$invitation->bride_parents) {
+            if ($invitation->isDirty(['bride_father_name', 'bride_mother_name']) || ! $invitation->bride_parents) {
                 $parts = [];
                 if ($invitation->bride_father_name) {
-                    $parts[] = 'Bapak ' . $invitation->bride_father_name;
+                    $parts[] = 'Bapak '.$invitation->bride_father_name;
                 }
                 if ($invitation->bride_mother_name) {
-                    $parts[] = 'Ibu ' . $invitation->bride_mother_name;
+                    $parts[] = 'Ibu '.$invitation->bride_mother_name;
                 }
-                if (!empty($parts)) {
-                    $invitation->bride_parents = 'Putri dari ' . implode(' & ', $parts);
+                if (! empty($parts)) {
+                    $invitation->bride_parents = 'Putri dari '.implode(' & ', $parts);
                 }
             }
 
-            if ($invitation->isDirty(['groom_father_name', 'groom_mother_name']) || !$invitation->groom_parents) {
+            if ($invitation->isDirty(['groom_father_name', 'groom_mother_name']) || ! $invitation->groom_parents) {
                 $parts = [];
                 if ($invitation->groom_father_name) {
-                    $parts[] = 'Bapak ' . $invitation->groom_father_name;
+                    $parts[] = 'Bapak '.$invitation->groom_father_name;
                 }
                 if ($invitation->groom_mother_name) {
-                    $parts[] = 'Ibu ' . $invitation->groom_mother_name;
+                    $parts[] = 'Ibu '.$invitation->groom_mother_name;
                 }
-                if (!empty($parts)) {
-                    $invitation->groom_parents = 'Putra dari ' . implode(' & ', $parts);
+                if (! empty($parts)) {
+                    $invitation->groom_parents = 'Putra dari '.implode(' & ', $parts);
                 }
             }
         });
@@ -130,6 +130,9 @@ class Invitation extends Model
         'youtube_video_id',
         'quote_content',
         'quote_source',
+        'screen_bride_names',
+        'screen_background_image',
+        'screen_overlay_opacity',
     ];
 
     protected function casts(): array
@@ -154,6 +157,7 @@ class Invitation extends Model
             'show_quote' => 'boolean',
             'show_video' => 'boolean',
             'slug_change_count' => 'integer',
+            'screen_overlay_opacity' => 'integer',
         ];
     }
 
@@ -187,6 +191,11 @@ class Invitation extends Model
         return $this->hasMany(InvitationStory::class)->orderBy('order_position');
     }
 
+    public function screenGalleries(): HasMany
+    {
+        return $this->hasMany(ScreenGallery::class)->orderBy('sort_order');
+    }
+
     public function wishes(): HasMany
     {
         return $this->hasMany(Wish::class)->latest();
@@ -199,7 +208,7 @@ class Invitation extends Model
 
     public function themeLabel(): string
     {
-        return \App\Models\Theme::where('view_path', 'themes.'.$this->theme)->value('name') ?? ucfirst($this->theme);
+        return Theme::where('view_path', 'themes.'.$this->theme)->value('name') ?? ucfirst($this->theme);
     }
 
     public function getPersonalizedUrl(Guest $guest): string
@@ -241,7 +250,7 @@ class Invitation extends Model
     {
         $package = $this->package();
 
-        if (!$package) {
+        if (! $package) {
             return false;
         }
 
@@ -328,7 +337,7 @@ class Invitation extends Model
 
     public function trialRemainingDays(): int
     {
-        if (!$this->expires_at) {
+        if (! $this->expires_at) {
             return 0;
         }
 
@@ -337,7 +346,7 @@ class Invitation extends Model
 
     public function trialRemainingHours(): int
     {
-        if (!$this->expires_at) {
+        if (! $this->expires_at) {
             return 0;
         }
 
@@ -348,11 +357,11 @@ class Invitation extends Model
 
     public function isTrialUrgent(): bool
     {
-        if (!$this->expires_at) {
+        if (! $this->expires_at) {
             return false;
         }
 
-        return now()->diffInHours($this->expires_at, false) <= 24 && !$this->expires_at->isPast();
+        return now()->diffInHours($this->expires_at, false) <= 24 && ! $this->expires_at->isPast();
     }
 
     public function isTrialExpired(): bool
@@ -401,7 +410,7 @@ class Invitation extends Model
         return $this->events()->orderBy('event_date')->orderBy('start_time')->first();
     }
 
-    public function parseWhatsappTemplate(\App\Models\Guest $guest): string
+    public function parseWhatsappTemplate(Guest $guest): string
     {
         $template = $this->getWhatsappTemplate();
         $firstEvent = $this->firstEvent();
@@ -411,7 +420,7 @@ class Invitation extends Model
             '{nama_mempelai_pria}' => $this->groom_name,
             '{nama_mempelai_wanita}' => $this->bride_name,
             '{tautan_undangan}' => $guest->personalized_link,
-            '{qrcode_link}' => $this->hasFeature('qr_checkin') ? $guest->personalized_link . '&qr=1' : '',
+            '{qrcode_link}' => $this->hasFeature('qr_checkin') ? $guest->personalized_link.'&qr=1' : '',
             '{tanggal_acara}' => $firstEvent?->event_date?->format('d F Y') ?? $this->event_date?->format('d F Y') ?? '',
             '{waktu_acara}' => $firstEvent?->start_time ?? $this->event_time ?? '',
             '{tempat_acara}' => $firstEvent?->place_name ?? $this->venue_name ?? '',
