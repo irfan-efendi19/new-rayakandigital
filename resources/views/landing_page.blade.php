@@ -18,7 +18,8 @@
     <!-- SEO -->
     <meta name="robots" content="index, follow" />
     <meta name="description"
-        content="Rayakan Digital adalah solusi digital untuk acara modern seperti pernikahan, ulang tahun, khitanan, dan lainnya. Kami menyediakan undangan online, buku tamu digital, QR code tamu, hingga layanan live streaming acara Anda.">
+        content="Rayakan Digital menyediakan undangan online, buku tamu digital, QR code, dan live streaming untuk acara modern Anda. Buat momen berkesan jadi lebih praktis!">
+    <meta name="author" content="Rayakan Digital">
     <meta name="keywords"
         content="rayakan digital, undangan digital, undangan online, undangan pernikahan, QR code tamu, buku tamu digital, live streaming acara, website undangan, acara modern, undangan web">
     <meta name="author" content="Rayakan Digital">
@@ -29,17 +30,19 @@
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Rayakan Digital | Solusi Digital Acara Modern" />
     <meta property="og:description"
-        content="Solusi lengkap untuk acara digital Anda. Undangan online, buku tamu digital, QR code, dan live streaming dalam satu layanan dari Rayakan Digital." />
+        content="Rayakan Digital menyediakan undangan online, buku tamu digital, QR code, dan live streaming untuk acara modern Anda. Buat momen berkesan jadi lebih praktis!" />
     <meta property="og:site_name" content="Rayakan Digital" />
+    <meta property="og:image" content="{{ asset('img/thumnail.jpg') }}" />
 
     <!-- Google Structured Data -->
     <meta itemprop="name" content="Rayakan Digital | Solusi Digital Acara Modern" />
     <meta itemprop="description"
-        content="Rayakan Digital adalah layanan undangan online & solusi acara digital untuk pernikahan, ulang tahun, dan lainnya." />
+        content="Rayakan Digital menyediakan undangan online, buku tamu digital, QR code, dan live streaming untuk acara modern Anda. Buat momen berkesan jadi lebih praktis!" />
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script>
-        if (localStorage.getItem('dark-mode') === 'true' || (!('dark-mode' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        if (localStorage.getItem('dark-mode') === 'true' || (!('dark-mode' in localStorage) && window.matchMedia(
+            '(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
         } else {
             document.documentElement.classList.remove('dark');
@@ -578,7 +581,7 @@
 
             <!-- CTA -->
             <div class="mt-16 text-center">
-                <div class="inline-flex flex-col sm:flex-row gap-4 items-center justify-center">
+                <!-- <div class="inline-flex flex-col sm:flex-row gap-4 items-center justify-center">
                     <a href="#"
                         class="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-xl font-semibold transition-all duration-300 hover:shadow-xl hover:shadow-primary-200 hover:-translate-y-0.5 active:scale-95 group">
                         <i class="fas fa-gem text-sm"></i>
@@ -591,7 +594,7 @@
                         <i class="fas fa-play-circle text-primary-500"></i>
                         <span>Lihat Demo</span>
                     </a>
-                </div>
+                </div> -->
                 <div class="flex items-center justify-center gap-4 mt-6">
                     <div class="flex items-center gap-1 text-sm text-neutral-500">
                         <i class="fas fa-credit-card text-primary-400"></i>
@@ -736,7 +739,8 @@
                                 <!-- Theme Info -->
                                 <div class="p-5">
                                     <div class="flex items-start justify-between mb-2">
-                                        <h3 class="text-lg font-bold text-secondary-800 dark:text-neutral-200 group-hover:text-primary-600 transition-colors">
+                                        <h3
+                                            class="text-lg font-bold text-secondary-800 dark:text-neutral-200 group-hover:text-primary-600 transition-colors">
                                             {{ $theme->name }}
                                         </h3>
                                         @if($theme->rating)
@@ -779,7 +783,8 @@
                             </div>
                         @empty
                             <div class="py-16 text-center" style="min-width: 100%;">
-                                <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-neutral-100 dark:bg-secondary-800 mb-4">
+                                <div
+                                    class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-neutral-100 dark:bg-secondary-800 mb-4">
                                     <i class="fas fa-palette text-3xl text-neutral-400"></i>
                                 </div>
                                 <p class="text-lg font-semibold text-secondary-800 dark:text-neutral-200">Belum ada tema
@@ -805,45 +810,45 @@
                 </div>
             @endif
         </div>
-        </section>
-        
-        <!-- Feature Section -->
-        <section x-data="reveal" :class="visible || 'opacity-0 translate-y-8'"
-            class="py-20 bg-gradient-to-br from-white via-tertiary/30 to-white dark:from-secondary-900 dark:via-secondary-900 dark:to-secondary-900 transition-all duration-700">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <!-- Section Header -->
-                <div class="text-center max-w-3xl mx-auto">
-                    <span
-                        class="inline-block px-4 py-1.5 rounded-full bg-primary-50 text-primary-600 text-sm font-semibold tracking-wide mb-4">
-                        <i class="fas fa-star mr-2 text-xs"></i>Fitur Unggulan
-                    </span>
-                    <h2 class="font-heading text-4xl md:text-5xl font-bold text-secondary-900 dark:text-neutral-100 mb-5">
-                        Semua Yang <span class="text-primary-500">Anda Butuhkan</span>
-                    </h2>
-                    <div class="w-24 h-1 bg-gradient-to-r from-primary-400 to-primary-600 rounded-full mx-auto mb-6">
-                    </div>
-                    <p class="text-xl text-neutral-500">
-                        Rayakan Digital menyediakan fitur lengkap untuk mempermudah tamu dan mempercantik
-                        undangan
-                        Anda.
-                    </p>
+    </section>
+    
+    <!-- Feature Section -->
+    <section x-data="reveal" :class="visible || 'opacity-0 translate-y-8'"
+        class="py-20 bg-gradient-to-br from-white via-tertiary/30 to-white dark:from-secondary-900 dark:via-secondary-900 dark:to-secondary-900 transition-all duration-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Section Header -->
+            <div class="text-center max-w-3xl mx-auto">
+                <span
+                    class="inline-block px-4 py-1.5 rounded-full bg-primary-50 text-primary-600 text-sm font-semibold tracking-wide mb-4">
+                    <i class="fas fa-star mr-2 text-xs"></i>Fitur Unggulan
+                </span>
+                <h2 class="font-heading text-4xl md:text-5xl font-bold text-secondary-900 dark:text-neutral-100 mb-5">
+                    Semua Yang <span class="text-primary-500">Anda Butuhkan</span>
+                </h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-primary-400 to-primary-600 rounded-full mx-auto mb-6">
                 </div>
-        
-                <!-- Features Grid -->
-                <div class="mt-16">
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        
-                        <!-- Feature 1 - RSVP Management -->
+                <p class="text-xl text-neutral-500">
+                    Rayakan Digital menyediakan fitur lengkap untuk mempermudah tamu dan mempercantik
+                    undangan
+                    Anda.
+                </p>
+            </div>
+    
+            <!-- Features Grid -->
+            <div class="mt-16">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    
+                    <!-- Feature 1 - RSVP Management -->
+                    <div
+                        class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6">
                         <div
-                            class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6">
+                            class="absolute inset-0 bg-gradient-to-br from-primary-500/5 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        </div>
+                        <div class="relative">
                             <div
-                                class="absolute inset-0 bg-gradient-to-br from-primary-500/5 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                class="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-500 to-primary-600 text-white flex items-center justify-center mb-5 shadow-lg shadow-primary-200">
+                                <i class="fas fa-calendar-check text-2xl"></i>
                             </div>
-                            <div class="relative">
-                                <div
-                                    class="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-500 to-primary-600 text-white flex items-center justify-center mb-5 shadow-lg shadow-primary-200">
-                                    <i class="fas fa-calendar-check text-2xl"></i>
-                                </div>
                             <h3 class="text-xl font-bold text-secondary-800 dark:text-neutral-200 mb-3">Manajemen RSVP
                             </h3>
                             <p class="text-neutral-500 leading-relaxed">
@@ -855,16 +860,16 @@
                                 <i class="fas fa-arrow-right ml-2 text-xs group-hover:translate-x-1 transition-transform"></i>
                                 </div>
                                 </div>
-                            </div>
-                            
-                            <!-- Feature 2 - Personal Links -->
-                            <div
-                                class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6">
-                                <div class="relative">
-                                    <div
-                                        class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-600 text-white flex items-center justify-center mb-5 shadow-lg shadow-emerald-200">
-                                        <i class="fas fa-link text-2xl"></i>
-                                    </div>
+                                </div>
+                                
+                                <!-- Feature 2 - Personal Links -->
+                                <div
+                                    class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6">
+                                    <div class="relative">
+                                        <div
+                                            class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-600 text-white flex items-center justify-center mb-5 shadow-lg shadow-emerald-200">
+                                            <i class="fas fa-link text-2xl"></i>
+                                        </div>
                             <h3 class="text-xl font-bold text-secondary-800 dark:text-neutral-200 mb-3">Link Personal
                             </h3>
                             <p class="text-neutral-500 leading-relaxed">
@@ -876,16 +881,16 @@
                                 <i class="fas fa-arrow-right ml-2 text-xs group-hover:translate-x-1 transition-transform"></i>
                                 </div>
                                 </div>
-                            </div>
-                            
-                            <!-- Feature 3 - Digital Gift -->
-                            <div
-                                class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6">
-                                <div class="relative">
-                                    <div
-                                        class="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-500 to-amber-600 text-white flex items-center justify-center mb-5 shadow-lg shadow-amber-200">
-                                        <i class="fas fa-gift text-2xl"></i>
-                                    </div>
+                                </div>
+                                
+                                <!-- Feature 3 - Digital Gift -->
+                                <div
+                                    class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6">
+                                    <div class="relative">
+                                        <div
+                                            class="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-500 to-amber-600 text-white flex items-center justify-center mb-5 shadow-lg shadow-amber-200">
+                                            <i class="fas fa-gift text-2xl"></i>
+                                        </div>
                             <h3 class="text-xl font-bold text-secondary-800 dark:text-neutral-200 mb-3">Digital Gift
                                 (Angpao)</h3>
                             <p class="text-neutral-500 leading-relaxed">
@@ -897,16 +902,16 @@
                                 <i class="fas fa-arrow-right ml-2 text-xs group-hover:translate-x-1 transition-transform"></i>
                                 </div>
                                 </div>
-                            </div>
-                            
-                            <!-- Feature 4 - Guest Book -->
-                            <div
-                                class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6">
-                                <div class="relative">
-                                    <div
-                                        class="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500 to-purple-600 text-white flex items-center justify-center mb-5 shadow-lg shadow-purple-200">
-                                        <i class="fas fa-book-open text-2xl"></i>
-                                    </div>
+                                </div>
+                                
+                                <!-- Feature 4 - Guest Book -->
+                                <div
+                                    class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6">
+                                    <div class="relative">
+                                        <div
+                                            class="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500 to-purple-600 text-white flex items-center justify-center mb-5 shadow-lg shadow-purple-200">
+                                            <i class="fas fa-book-open text-2xl"></i>
+                                        </div>
                             <h3 class="text-xl font-bold text-secondary-800 dark:text-neutral-200 mb-3">Buku Tamu
                                 Interaktif</h3>
                             <p class="text-neutral-500 leading-relaxed">
@@ -918,16 +923,16 @@
                                 <i class="fas fa-arrow-right ml-2 text-xs group-hover:translate-x-1 transition-transform"></i>
                                 </div>
                                 </div>
-                            </div>
-                            
-                            <!-- Feature 5 - Gallery Photo -->
-                            <div
-                                class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6">
-                                <div class="relative">
-                                    <div
-                                        class="w-14 h-14 rounded-2xl bg-gradient-to-br from-rose-500 to-rose-600 text-white flex items-center justify-center mb-5 shadow-lg shadow-rose-200">
-                                        <i class="fas fa-images text-2xl"></i>
-                                    </div>
+                                </div>
+                                
+                                <!-- Feature 5 - Gallery Photo -->
+                                <div
+                                    class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6">
+                                    <div class="relative">
+                                        <div
+                                            class="w-14 h-14 rounded-2xl bg-gradient-to-br from-rose-500 to-rose-600 text-white flex items-center justify-center mb-5 shadow-lg shadow-rose-200">
+                                            <i class="fas fa-images text-2xl"></i>
+                                        </div>
                             <h3 class="text-xl font-bold text-secondary-800 dark:text-neutral-200 mb-3">Galeri Foto &
                                 Video</h3>
                             <p class="text-neutral-500 leading-relaxed">
@@ -940,16 +945,16 @@
                                 <i class="fas fa-arrow-right ml-2 text-xs group-hover:translate-x-1 transition-transform"></i>
                                 </div>
                                 </div>
-                            </div>
-                            
-                            <!-- Feature 6 - Countdown Timer -->
-                            <div
-                                class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6">
-                                <div class="relative">
-                                    <div
-                                        class="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 text-white flex items-center justify-center mb-5 shadow-lg shadow-blue-200">
-                                        <i class="fas fa-hourglass-half text-2xl"></i>
-                                    </div>
+                                </div>
+                                
+                                <!-- Feature 6 - Countdown Timer -->
+                                <div
+                                    class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6">
+                                    <div class="relative">
+                                        <div
+                                            class="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 text-white flex items-center justify-center mb-5 shadow-lg shadow-blue-200">
+                                            <i class="fas fa-hourglass-half text-2xl"></i>
+                                        </div>
                             <h3 class="text-xl font-bold text-secondary-800 dark:text-neutral-200 mb-3">Countdown Timer
                             </h3>
                             <p class="text-neutral-500 leading-relaxed">
@@ -962,16 +967,16 @@
                                 <i class="fas fa-arrow-right ml-2 text-xs group-hover:translate-x-1 transition-transform"></i>
                                 </div>
                                 </div>
-                            </div>
-                            
-                            <!-- Feature 7 - Location Maps -->
-                            <div
-                                class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6">
-                                <div class="relative">
-                                    <div
-                                        class="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-500 to-indigo-600 text-white flex items-center justify-center mb-5 shadow-lg shadow-indigo-200">
-                                        <i class="fas fa-map-marker-alt text-2xl"></i>
-                                    </div>
+                                </div>
+                                
+                                <!-- Feature 7 - Location Maps -->
+                                <div
+                                    class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6">
+                                    <div class="relative">
+                                        <div
+                                            class="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-500 to-indigo-600 text-white flex items-center justify-center mb-5 shadow-lg shadow-indigo-200">
+                                            <i class="fas fa-map-marker-alt text-2xl"></i>
+                                        </div>
                             <h3 class="text-xl font-bold text-secondary-800 dark:text-neutral-200 mb-3">Peta Lokasi
                                 Terintegrasi
                             </h3>
@@ -985,16 +990,16 @@
                                 <i class="fas fa-arrow-right ml-2 text-xs group-hover:translate-x-1 transition-transform"></i>
                                 </div>
                                 </div>
-                            </div>
-                            
-                            <!-- Feature 8 - WhatsApp Integration -->
-                            <div
-                                class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6">
-                                <div class="relative">
-                                    <div
-                                        class="w-14 h-14 rounded-2xl bg-gradient-to-br from-green-500 to-green-600 text-white flex items-center justify-center mb-5 shadow-lg shadow-green-200">
-                                        <i class="fab fa-whatsapp text-2xl"></i>
-                                    </div>
+                                </div>
+                                
+                                <!-- Feature 8 - WhatsApp Integration -->
+                                <div
+                                    class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6">
+                                    <div class="relative">
+                                        <div
+                                            class="w-14 h-14 rounded-2xl bg-gradient-to-br from-green-500 to-green-600 text-white flex items-center justify-center mb-5 shadow-lg shadow-green-200">
+                                            <i class="fab fa-whatsapp text-2xl"></i>
+                                        </div>
                             <h3 class="text-xl font-bold text-secondary-800 dark:text-neutral-200 mb-3">Broadcast
                                 WhatsApp</h3>
                             <p class="text-neutral-500 leading-relaxed">
@@ -1006,16 +1011,16 @@
                                 <i class="fas fa-arrow-right ml-2 text-xs group-hover:translate-x-1 transition-transform"></i>
                                 </div>
                                 </div>
-                            </div>
-                            
-                            <!-- Feature 9 - Analytics Dashboard -->
-                            <div
-                                class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6">
-                                <div class="relative">
-                                    <div
-                                        class="w-14 h-14 rounded-2xl bg-gradient-to-br from-slate-500 to-slate-600 text-white flex items-center justify-center mb-5 shadow-lg shadow-slate-200">
-                                        <i class="fas fa-chart-line text-2xl"></i>
-                                    </div>
+                                </div>
+                                
+                                <!-- Feature 9 - Analytics Dashboard -->
+                                <div
+                                    class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6">
+                                    <div class="relative">
+                                        <div
+                                            class="w-14 h-14 rounded-2xl bg-gradient-to-br from-slate-500 to-slate-600 text-white flex items-center justify-center mb-5 shadow-lg shadow-slate-200">
+                                            <i class="fas fa-chart-line text-2xl"></i>
+                                        </div>
                             <h3 class="text-xl font-bold text-secondary-800 dark:text-neutral-200 mb-3">Analytics &
                                 Insight</h3>
                             <p class="text-neutral-500 leading-relaxed">
@@ -1027,55 +1032,55 @@
                                 <i class="fas fa-arrow-right ml-2 text-xs group-hover:translate-x-1 transition-transform"></i>
                                 </div>
                                 </div>
-                            </div>
-                            </div>
-                            </div>
-                            
-                            <!-- CTA Bottom -->
-                            <div class="mt-16 text-center">
-                                <p class="text-neutral-500 mb-4">*Fitur tersedia sesuai dengan paket yang dipilih</p>
+                                </div>
+                                </div>
+                                </div>
+                                
+                                <!-- CTA Bottom -->
+                                <div class="mt-16 text-center">
+                                    <p class="text-neutral-500 mb-4">*Fitur tersedia sesuai dengan paket yang dipilih</p>
                 <!-- <a href="#pricing"
                                                                                                                     class="inline-flex items-center gap-2 px-8 py-3 bg-primary-500 text-white font-semibold rounded-xl hover:bg-primary-600 transition-all duration-200 shadow-md hover:shadow-lg">
                                                                                                                     Lihat Paket Harga
                                                                                                                     <i class="fas fa-arrow-right text-sm"></i>
                                 </a> -->
-                                </div>
-                                </div>
-                                </section>
-                                
-                                <!-- Pricing Section - Modernized -->
-                                {{-- Pricing & Services Section with Tab Navigation --}}
-                                {{-- Pricing & Services Section with Tab Navigation --}}
-                                <section x-data="{ activeTab: 'undangan' }" class="py-20 bg-tertiary dark:bg-secondary-900 transition-all duration-700">
-                                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                                        {{-- Section Header --}}
-                                        <div class="text-center max-w-3xl mx-auto mb-12">
-                                            <span
-                                                class="inline-block px-4 py-1.5 rounded-full bg-primary-50 text-primary-600 text-sm font-semibold tracking-wide mb-4">
-                                                <i class="fas fa-layer-group mr-2 text-xs"></i>Layanan Kami
-                                            </span>
-                                            <h2 class="font-heading text-4xl md:text-5xl font-bold text-secondary-900 dark:text-neutral-100 mb-5">
-                                                Semua Kebutuhan <span class="text-primary-500">Pernikahan Anda</span>
-                                            </h2>
-                                            <div class="w-24 h-1 bg-gradient-to-r from-primary-400 to-primary-600 rounded-full mx-auto mb-6">
-                                            </div>
-                                            <p class="text-xl text-neutral-600 dark:text-neutral-300">
-                                                Undangan digital, buku tamu, hingga siaran langsung — semuanya dalam satu platform.
-                                            </p>
-                                        </div>
-                                
-                                        {{-- Tab Navigation --}}
-                                        <div class="flex justify-center mb-12">
-                                            <div
-                                                class="flex flex-col md:flex-row flex-wrap bg-white dark:bg-secondary-800 rounded-2xl p-1.5 shadow-soft border border-neutral-100 dark:border-secondary-700 gap-2 w-full md:w-auto">
-                                                {{-- Tab: Undangan Digital --}}
+            </div>
+            </div>
+            </section>
+            
+            <!-- Pricing Section - Modernized -->
+            {{-- Pricing & Services Section with Tab Navigation --}}
+            {{-- Pricing & Services Section with Tab Navigation --}}
+    <section x-data="{ activeTab: 'undangan' }" class="py-20 bg-tertiary dark:bg-secondary-900 transition-all duration-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            {{-- Section Header --}}
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <span
+                    class="inline-block px-4 py-1.5 rounded-full bg-primary-50 text-primary-600 text-sm font-semibold tracking-wide mb-4">
+                    <i class="fas fa-layer-group mr-2 text-xs"></i>Layanan Kami
+                </span>
+                <h2 class="font-heading text-4xl md:text-5xl font-bold text-secondary-900 dark:text-neutral-100 mb-5">
+                    Semua Kebutuhan <span class="text-primary-500">Pernikahan Anda</span>
+                </h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-primary-400 to-primary-600 rounded-full mx-auto mb-6">
+                </div>
+                <p class="text-xl text-neutral-600 dark:text-neutral-300">
+                    Undangan digital, buku tamu, hingga siaran langsung — semuanya dalam satu platform.
+                </p>
+            </div>
+    
+            {{-- Tab Navigation --}}
+            <div class="flex justify-center mb-12">
+                <div
+                    class="flex flex-col md:flex-row flex-wrap bg-white dark:bg-secondary-800 rounded-2xl p-1.5 shadow-soft border border-neutral-100 dark:border-secondary-700 gap-2 w-full md:w-auto">
+                    {{-- Tab: Undangan Digital --}}
                     <button @click="activeTab = 'undangan'"
                         :class="activeTab === 'undangan' ? 'bg-primary-500 text-white shadow-md shadow-primary-200' : 'text-secondary-600 hover:text-primary-600 hover:bg-primary-50'"
                         class="w-full md:w-auto flex items-center gap-2 px-3 py-2 rounded-xl text-xs md:text-sm font-semibold transition-all duration-200">
                         <i class="fas fa-heart text-xs"></i>
                         <span>Undangan Digital</span>
                     </button>
-                    
+
                     {{-- Tab: Buku Tamu --}}
                     <button @click="activeTab = 'buku-tamu'"
                         :class="activeTab === 'buku-tamu' ? 'bg-primary-500 text-white shadow-md shadow-primary-200' : 'text-secondary-600 hover:text-primary-600 hover:bg-primary-50'"
@@ -1086,9 +1091,9 @@
                             :class="activeTab === 'buku-tamu' ? 'bg-white/20 text-white' : 'bg-emerald-100 text-emerald-700'">
                             Baru
                         </span>
-                        </button>
-                        
-                        {{-- Tab: Live Streaming --}}
+                    </button>
+                    
+                    {{-- Tab: Live Streaming --}}
                     <button @click="activeTab = 'live-streaming'"
                         :class="activeTab === 'live-streaming' ? 'bg-primary-500 text-white shadow-md shadow-primary-200' : 'text-secondary-600 hover:text-primary-600 hover:bg-primary-50'"
                         class="w-full md:w-auto flex items-center gap-2 px-3 py-2 rounded-xl text-xs md:text-sm font-semibold transition-all duration-200">
@@ -1271,10 +1276,10 @@
                             ucapan —
                             semua tersimpan otomatis.
                         </p>
-                        </div>
-                        
-                        {{-- Feature List --}}
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10">
+                    </div>
+                    
+                    {{-- Feature List --}}
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10">
                         <div
                             class="flex items-start gap-3 bg-white dark:bg-secondary-800 rounded-2xl p-4 shadow-soft border border-neutral-100 dark:border-secondary-700">
                             <div class="flex-shrink-0 w-9 h-9 rounded-xl bg-emerald-50 flex items-center justify-center">
@@ -1286,8 +1291,8 @@
                                 <p class="text-xs text-neutral-500 mt-0.5">Tamu scan langsung dari ponsel,
                                     tanpa perlu
                                     download aplikasi</p>
-                                </div>
-                                </div>
+                            </div>
+                            </div>
                         <div
                             class="flex items-start gap-3 bg-white dark:bg-secondary-800 rounded-2xl p-4 shadow-soft border border-neutral-100 dark:border-secondary-700">
                             <div class="flex-shrink-0 w-9 h-9 rounded-xl bg-emerald-50 flex items-center justify-center">
@@ -1299,8 +1304,8 @@
                                 <p class="text-xs text-neutral-500 mt-0.5">Kumpulkan pesan dan ucapan dari
                                     seluruh tamu
                                     undangan</p>
-                                </div>
-                                </div>
+                            </div>
+                            </div>
                         <div
                             class="flex items-start gap-3 bg-white dark:bg-secondary-800 rounded-2xl p-4 shadow-soft border border-neutral-100 dark:border-secondary-700">
                             <div class="flex-shrink-0 w-9 h-9 rounded-xl bg-emerald-50 flex items-center justify-center">
@@ -1312,8 +1317,8 @@
                                 <p class="text-xs text-neutral-500 mt-0.5">Unduh data kehadiran tamu dalam
                                     format
                                     Excel/CSV</p>
-                                </div>
-                                </div>
+                            </div>
+                            </div>
                         <div
                             class="flex items-start gap-3 bg-white dark:bg-secondary-800 rounded-2xl p-4 shadow-soft border border-neutral-100 dark:border-secondary-700">
                             <div class="flex-shrink-0 w-9 h-9 rounded-xl bg-emerald-50 flex items-center justify-center">
@@ -1325,13 +1330,13 @@
                                 <p class="text-xs text-neutral-500 mt-0.5">Pantau jumlah kehadiran tamu
                                     secara langsung
                                     dari dashboard</p>
-                                </div>
-                                </div>
-                                </div>
-                                
-                                {{-- CTA Contact Sales --}}
-                                <div
-                                    class="bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-secondary-800 dark:to-secondary-800 border border-emerald-100 dark:border-emerald-900/30 rounded-2xl p-8 text-center">
+                            </div>
+                            </div>
+                            </div>
+                            
+                            {{-- CTA Contact Sales --}}
+                            <div
+                                class="bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-secondary-800 dark:to-secondary-800 border border-emerald-100 dark:border-emerald-900/30 rounded-2xl p-8 text-center">
                         <p class="text-secondary-700 dark:text-neutral-200 font-medium mb-1">Tertarik dengan layanan
                             ini?</p>
                         <p class="text-neutral-500 text-sm mb-6">Hubungi tim kami untuk informasi harga dan
@@ -1349,23 +1354,23 @@
                                 <i class="fas fa-envelope text-base"></i>
                                 Kirim Email
                             </a>
-                            </div>
-                            </div>
-                            </div>
-                            </div>{{-- end panel buku tamu --}}
-                            
-                            {{-- =============================== --}}
-                            {{-- PANEL: LIVE STREAMING --}}
-                            {{-- =============================== --}}
-                            <div x-show="activeTab === 'live-streaming'" x-transition:enter="transition ease-out duration-300"
-                                x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0">
-                            
-                                <div class="max-w-2xl mx-auto">
-                                    {{-- Icon & Heading --}}
-                                    <div class="text-center mb-10">
-                                        <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-primary-50 mb-5">
-                                            <i class="fas fa-video text-4xl text-primary-500"></i>
-                                        </div>
+                        </div>
+                        </div>
+                        </div>
+                        </div>{{-- end panel buku tamu --}}
+                        
+                        {{-- =============================== --}}
+                        {{-- PANEL: LIVE STREAMING --}}
+                        {{-- =============================== --}}
+                        <div x-show="activeTab === 'live-streaming'" x-transition:enter="transition ease-out duration-300"
+                            x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0">
+                        
+                            <div class="max-w-2xl mx-auto">
+                                {{-- Icon & Heading --}}
+                                <div class="text-center mb-10">
+                                    <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-primary-50 mb-5">
+                                        <i class="fas fa-video text-4xl text-primary-500"></i>
+                                    </div>
                         <h3 class="font-heading text-3xl font-bold text-secondary-900 dark:text-neutral-100 mb-3">Live
                             Streaming
                             Pernikahan
@@ -1375,10 +1380,10 @@
                             penjuru dunia —
                             tanpa harus hadir secara fisik.
                         </p>
-                        </div>
-                        
-                        {{-- Feature List --}}
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10">
+                    </div>
+                    
+                    {{-- Feature List --}}
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10">
                         <div
                             class="flex items-start gap-3 bg-white dark:bg-secondary-800 rounded-2xl p-4 shadow-soft border border-neutral-100 dark:border-secondary-700">
                             <div class="flex-shrink-0 w-9 h-9 rounded-xl bg-primary-50 flex items-center justify-center">
@@ -1390,8 +1395,8 @@
                                 <p class="text-xs text-neutral-500 mt-0.5">Kualitas video jernih hingga Full
                                     HD untuk
                                     pengalaman terbaik</p>
-                                </div>
-                                </div>
+                            </div>
+                            </div>
                         <div
                             class="flex items-start gap-3 bg-white dark:bg-secondary-800 rounded-2xl p-4 shadow-soft border border-neutral-100 dark:border-secondary-700">
                             <div class="flex-shrink-0 w-9 h-9 rounded-xl bg-primary-50 flex items-center justify-center">
@@ -1403,8 +1408,8 @@
                                 <p class="text-xs text-neutral-500 mt-0.5">Hanya tamu undangan yang bisa
                                     menonton dengan
                                     link eksklusif</p>
-                                </div>
-                                </div>
+                            </div>
+                            </div>
                         <div
                             class="flex items-start gap-3 bg-white dark:bg-secondary-800 rounded-2xl p-4 shadow-soft border border-neutral-100 dark:border-secondary-700">
                             <div class="flex-shrink-0 w-9 h-9 rounded-xl bg-primary-50 flex items-center justify-center">
@@ -1416,8 +1421,8 @@
                                 <p class="text-xs text-neutral-500 mt-0.5">Siaran otomatis direkam dan
                                     tersedia untuk
                                     diunduh setelah acara</p>
-                                </div>
-                                </div>
+                            </div>
+                            </div>
                         <div
                             class="flex items-start gap-3 bg-white dark:bg-secondary-800 rounded-2xl p-4 shadow-soft border border-neutral-100 dark:border-secondary-700">
                             <div class="flex-shrink-0 w-9 h-9 rounded-xl bg-primary-50 flex items-center justify-center">
@@ -1429,12 +1434,12 @@
                                 <p class="text-xs text-neutral-500 mt-0.5">Tidak ada batasan jumlah penonton
                                     yang bisa
                                     menyaksikan siaran</p>
-                                </div>
-                                </div>
-                                </div>
-                                {{-- CTA Contact Sales --}}
-                                <div
-                                    class="bg-gradient-to-br from-primary-50 to-secondary-50 dark:from-secondary-800 dark:to-secondary-800 border border-primary-100 dark:border-primary-900/30 rounded-2xl p-8 text-center">
+                            </div>
+                            </div>
+                            </div>
+                            {{-- CTA Contact Sales --}}
+                            <div
+                                class="bg-gradient-to-br from-primary-50 to-secondary-50 dark:from-secondary-800 dark:to-secondary-800 border border-primary-100 dark:border-primary-900/30 rounded-2xl p-8 text-center">
                         <p class="text-secondary-700 dark:text-neutral-200 font-medium mb-1">Tertarik dengan layanan
                             ini?</p>
                         <p class="text-neutral-500 text-sm mb-6">Hubungi tim kami untuk informasi harga dan
@@ -1452,13 +1457,13 @@
                                 <i class="fas fa-envelope text-base"></i>
                                 Kirim Email
                             </a>
-                            </div>
-                            </div>
-                            </div>
-                            </div>{{-- end panel live streaming --}}
-                            
-                            </div>
-                            </section>
+                        </div>
+                        </div>
+                        </div>
+                        </div>{{-- end panel live streaming --}}
+                        
+                        </div>
+                        </section>
     <section
         class="relative py-16 px-4 bg-gradient-to-br from-orange-50 via-white to-orange-50/30 dark:from-secondary-900 dark:via-secondary-900 dark:to-secondary-900">
         <div class="max-w-3xl mx-auto">
@@ -1473,7 +1478,7 @@
                 <div class="w-20 h-1 bg-gradient-to-r from-orange-400 to-orange-600 mx-auto rounded-full">
                 </div>
             </div>
-    
+
             <!-- FAQ Items -->
             <div class="space-y-3">
                 <!-- Item 1 -->
@@ -1489,175 +1494,175 @@
                             </div>
                             <div class="text-gray-400 group-open:rotate-180 transition-transform duration-300">
                                 <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                                        </svg>
-                                        </div>
-                                </summary>
-                                <div class="px-5 pb-5 pt-0 border-t border-gray-100 dark:border-secondary-700 mt-2">
-                                    <p class="text-gray-600 dark:text-neutral-300 leading-relaxed">
-                                        Setelah melakukan pemesanan, Anda akan mendapatkan akses dashboard untuk
-                                        mengisi data
-                                        acara,
-                                        foto, galeri, lokasi, dan informasi lainnya secara mandiri tanpa perlu
-                                        menunggu admin.
-                                    </p>
-                                </div>
-                                </details>
-                                </div>
-                                
-                                <!-- Item 2 -->
-                                <div
-                                    class="group bg-white/60 dark:bg-secondary-800/60 backdrop-blur-sm rounded-xl border border-white/50 dark:border-secondary-700/50 shadow-sm hover:shadow-md transition-all">
-                                    <details class="group">
-                                        <summary class="flex items-center justify-between cursor-pointer list-none p-5">
-                                            <div class="flex items-center gap-3">
-                                                <h3
-                                                    class="font-semibold text-gray-800 dark:text-neutral-200 group-open:text-orange-600 transition-colors">
-                                                    Apakah data undangan bisa diubah setelah dibuat?
-                                                </h3>
-                                            </div>
-                                            <div class="text-gray-400 group-open:rotate-180 transition-transform duration-300">
-                                                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                                        </svg>
-                                        </div>
-                                </summary>
-                                <div class="px-5 pb-5 pt-0 border-t border-gray-100 dark:border-secondary-700 mt-2">
-                                    <p class="text-gray-600 dark:text-neutral-300 leading-relaxed">
-                                        Ya. Anda dapat mengubah nama mempelai, jadwal acara, foto, galeri, lokasi,
-                                        maupun
-                                        informasi
-                                        lainnya kapan saja melalui dashboard selama masa aktif undangan.
-                                    </p>
-                                </div>
-                                </details>
-                                </div>
-                                
-                                <!-- Item 3 -->
-                                <div
-                                    class="group bg-white/60 dark:bg-secondary-800/60 backdrop-blur-sm rounded-xl border border-white/50 dark:border-secondary-700/50 shadow-sm hover:shadow-md transition-all">
-                                    <details class="group">
-                                        <summary class="flex items-center justify-between cursor-pointer list-none p-5">
-                                            <div class="flex items-center gap-3">
-                                                <h3
-                                                    class="font-semibold text-gray-800 dark:text-neutral-200 group-open:text-orange-600 transition-colors">
-                                                    Apakah tersedia nama tamu otomatis?
-                                                </h3>
-                                            </div>
-                                            <div class="text-gray-400 group-open:rotate-180 transition-transform duration-300">
-                                                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                                        </svg>
-                                        </div>
-                                </summary>
-                                <div class="px-5 pb-5 pt-0 border-t border-gray-100 dark:border-secondary-700 mt-2">
-                                    <p class="text-gray-600 dark:text-neutral-300 leading-relaxed">
-                                        Tentu. Anda dapat membuat link khusus untuk setiap tamu sehingga nama tamu
-                                        akan tampil
-                                        otomatis
-                                        saat undangan dibuka.
-                                    </p>
-                                </div>
-                                </details>
-                                </div>
-                                
-                                <!-- Item 4 -->
-                                <div
-                                    class="group bg-white/60 dark:bg-secondary-800/60 backdrop-blur-sm rounded-xl border border-white/50 dark:border-secondary-700/50 shadow-sm hover:shadow-md transition-all">
-                                    <details class="group">
-                                        <summary class="flex items-center justify-between cursor-pointer list-none p-5">
-                                            <div class="flex items-center gap-3">
-                                                <h3
-                                                    class="font-semibold text-gray-800 dark:text-neutral-200 group-open:text-orange-600 transition-colors">
-                                                    Apakah undangan bisa dibagikan ke WhatsApp?
-                                                </h3>
-                                            </div>
-                                            <div class="text-gray-400 group-open:rotate-180 transition-transform duration-300">
-                                                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                                        </svg>
-                                        </div>
-                                </summary>
-                                <div class="px-5 pb-5 pt-0 border-t border-gray-100 dark:border-secondary-700 mt-2">
-                                    <p class="text-gray-600 dark:text-neutral-300 leading-relaxed">
-                                        Ya. Link undangan dapat dibagikan melalui WhatsApp, Instagram, Telegram,
-                                        Facebook,
-                                        email,
-                                        maupun media sosial lainnya.
-                                    </p>
-                                </div>
-                                </details>
-                                </div>
-                                
-                                <!-- Item 5 -->
-                                <div
-                                    class="group bg-white/60 dark:bg-secondary-800/60 backdrop-blur-sm rounded-xl border border-white/50 dark:border-secondary-700/50 shadow-sm hover:shadow-md transition-all">
-                                    <details class="group">
-                                        <summary class="flex items-center justify-between cursor-pointer list-none p-5">
-                                            <div class="flex items-center gap-3">
-                                                <h3
-                                                    class="font-semibold text-gray-800 dark:text-neutral-200 group-open:text-orange-600 transition-colors">
-                                                    Apakah tersedia RSVP dan buku tamu?
-                                                </h3>
-                                            </div>
-                                            <div class="text-gray-400 group-open:rotate-180 transition-transform duration-300">
-                                                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                                        </svg>
-                                        </div>
-                                </summary>
-                                <div class="px-5 pb-5 pt-0 border-t border-gray-100 dark:border-secondary-700 mt-2">
-                                    <p class="text-gray-600 dark:text-neutral-300 leading-relaxed">
-                                        Ya. Tamu dapat mengisi konfirmasi kehadiran (RSVP) serta memberikan ucapan
-                                        dan doa
-                                        langsung
-                                        melalui halaman undangan.
-                                    </p>
-                                </div>
-                                </details>
-                                </div>
-                                
-                                <!-- Item 6 -->
-                                <div
-                                    class="group bg-white/60 dark:bg-secondary-800/60 backdrop-blur-sm rounded-xl border border-white/50 dark:border-secondary-700/50 shadow-sm hover:shadow-md transition-all">
-                                    <details class="group">
-                                        <summary class="flex items-center justify-between cursor-pointer list-none p-5">
-                                            <div class="flex items-center gap-3">
-                                                <h3
-                                                    class="font-semibold text-gray-800 dark:text-neutral-200 group-open:text-orange-600 transition-colors">
-                                                    Apakah saya akan mendapatkan bantuan jika mengalami kesulitan?
-                                                </h3>
-                                            </div>
-                                            <div class="text-gray-400 group-open:rotate-180 transition-transform duration-300">
-                                                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                                        </svg>
-                                        </div>
-                                </summary>
-                                <div class="px-5 pb-5 pt-0 border-t border-gray-100 dark:border-secondary-700 mt-2">
-                                    <p class="text-gray-600 dark:text-neutral-300 leading-relaxed">
-                                        Tentu. Tim support kami siap membantu melalui WhatsApp jika Anda mengalami
-                                        kendala saat
-                                        membuat atau mengelola undangan.
-                                    </p>
-                                </div>
-                                </details>
-                                </div>
-                                </div>
-                                
-                                <!-- Additional Help -->
-                                <div class="mt-8 text-center">
-                                    <p class="text-gray-500 dark:text-neutral-400 text-sm">
-                                        Tidak menemukan jawaban?
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                    </div>
+                                    </summary>
+                                    <div class="px-5 pb-5 pt-0 border-t border-gray-100 dark:border-secondary-700 mt-2">
+                                        <p class="text-gray-600 dark:text-neutral-300 leading-relaxed">
+                                            Setelah melakukan pemesanan, Anda akan mendapatkan akses dashboard untuk
+                                            mengisi data
+                                            acara,
+                                            foto, galeri, lokasi, dan informasi lainnya secara mandiri tanpa perlu
+                                            menunggu admin.
+                                        </p>
+                                    </div>
+                                    </details>
+                                    </div>
+                                    
+                                    <!-- Item 2 -->
+                                    <div
+                                        class="group bg-white/60 dark:bg-secondary-800/60 backdrop-blur-sm rounded-xl border border-white/50 dark:border-secondary-700/50 shadow-sm hover:shadow-md transition-all">
+                                        <details class="group">
+                                            <summary class="flex items-center justify-between cursor-pointer list-none p-5">
+                                                <div class="flex items-center gap-3">
+                                                    <h3
+                                                        class="font-semibold text-gray-800 dark:text-neutral-200 group-open:text-orange-600 transition-colors">
+                                                        Apakah data undangan bisa diubah setelah dibuat?
+                                                    </h3>
+                                                </div>
+                                                <div class="text-gray-400 group-open:rotate-180 transition-transform duration-300">
+                                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                    </div>
+                                    </summary>
+                                    <div class="px-5 pb-5 pt-0 border-t border-gray-100 dark:border-secondary-700 mt-2">
+                                        <p class="text-gray-600 dark:text-neutral-300 leading-relaxed">
+                                            Ya. Anda dapat mengubah nama mempelai, jadwal acara, foto, galeri, lokasi,
+                                            maupun
+                                            informasi
+                                            lainnya kapan saja melalui dashboard selama masa aktif undangan.
+                                        </p>
+                                    </div>
+                                    </details>
+                                    </div>
+                                    
+                                    <!-- Item 3 -->
+                                    <div
+                                        class="group bg-white/60 dark:bg-secondary-800/60 backdrop-blur-sm rounded-xl border border-white/50 dark:border-secondary-700/50 shadow-sm hover:shadow-md transition-all">
+                                        <details class="group">
+                                            <summary class="flex items-center justify-between cursor-pointer list-none p-5">
+                                                <div class="flex items-center gap-3">
+                                                    <h3
+                                                        class="font-semibold text-gray-800 dark:text-neutral-200 group-open:text-orange-600 transition-colors">
+                                                        Apakah tersedia nama tamu otomatis?
+                                                    </h3>
+                                                </div>
+                                                <div class="text-gray-400 group-open:rotate-180 transition-transform duration-300">
+                                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                    </div>
+                                    </summary>
+                                    <div class="px-5 pb-5 pt-0 border-t border-gray-100 dark:border-secondary-700 mt-2">
+                                        <p class="text-gray-600 dark:text-neutral-300 leading-relaxed">
+                                            Tentu. Anda dapat membuat link khusus untuk setiap tamu sehingga nama tamu
+                                            akan tampil
+                                            otomatis
+                                            saat undangan dibuka.
+                                        </p>
+                                    </div>
+                                    </details>
+                                    </div>
+                                    
+                                    <!-- Item 4 -->
+                                    <div
+                                        class="group bg-white/60 dark:bg-secondary-800/60 backdrop-blur-sm rounded-xl border border-white/50 dark:border-secondary-700/50 shadow-sm hover:shadow-md transition-all">
+                                        <details class="group">
+                                            <summary class="flex items-center justify-between cursor-pointer list-none p-5">
+                                                <div class="flex items-center gap-3">
+                                                    <h3
+                                                        class="font-semibold text-gray-800 dark:text-neutral-200 group-open:text-orange-600 transition-colors">
+                                                        Apakah undangan bisa dibagikan ke WhatsApp?
+                                                    </h3>
+                                                </div>
+                                                <div class="text-gray-400 group-open:rotate-180 transition-transform duration-300">
+                                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                    </div>
+                                    </summary>
+                                    <div class="px-5 pb-5 pt-0 border-t border-gray-100 dark:border-secondary-700 mt-2">
+                                        <p class="text-gray-600 dark:text-neutral-300 leading-relaxed">
+                                            Ya. Link undangan dapat dibagikan melalui WhatsApp, Instagram, Telegram,
+                                            Facebook,
+                                            email,
+                                            maupun media sosial lainnya.
+                                        </p>
+                                    </div>
+                                    </details>
+                                    </div>
+                                    
+                                    <!-- Item 5 -->
+                                    <div
+                                        class="group bg-white/60 dark:bg-secondary-800/60 backdrop-blur-sm rounded-xl border border-white/50 dark:border-secondary-700/50 shadow-sm hover:shadow-md transition-all">
+                                        <details class="group">
+                                            <summary class="flex items-center justify-between cursor-pointer list-none p-5">
+                                                <div class="flex items-center gap-3">
+                                                    <h3
+                                                        class="font-semibold text-gray-800 dark:text-neutral-200 group-open:text-orange-600 transition-colors">
+                                                        Apakah tersedia RSVP dan buku tamu?
+                                                    </h3>
+                                                </div>
+                                                <div class="text-gray-400 group-open:rotate-180 transition-transform duration-300">
+                                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                    </div>
+                                    </summary>
+                                    <div class="px-5 pb-5 pt-0 border-t border-gray-100 dark:border-secondary-700 mt-2">
+                                        <p class="text-gray-600 dark:text-neutral-300 leading-relaxed">
+                                            Ya. Tamu dapat mengisi konfirmasi kehadiran (RSVP) serta memberikan ucapan
+                                            dan doa
+                                            langsung
+                                            melalui halaman undangan.
+                                        </p>
+                                    </div>
+                                    </details>
+                                    </div>
+                                    
+                                    <!-- Item 6 -->
+                                    <div
+                                        class="group bg-white/60 dark:bg-secondary-800/60 backdrop-blur-sm rounded-xl border border-white/50 dark:border-secondary-700/50 shadow-sm hover:shadow-md transition-all">
+                                        <details class="group">
+                                            <summary class="flex items-center justify-between cursor-pointer list-none p-5">
+                                                <div class="flex items-center gap-3">
+                                                    <h3
+                                                        class="font-semibold text-gray-800 dark:text-neutral-200 group-open:text-orange-600 transition-colors">
+                                                        Apakah saya akan mendapatkan bantuan jika mengalami kesulitan?
+                                                    </h3>
+                                                </div>
+                                                <div class="text-gray-400 group-open:rotate-180 transition-transform duration-300">
+                                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                    </div>
+                                    </summary>
+                                    <div class="px-5 pb-5 pt-0 border-t border-gray-100 dark:border-secondary-700 mt-2">
+                                        <p class="text-gray-600 dark:text-neutral-300 leading-relaxed">
+                                            Tentu. Tim support kami siap membantu melalui WhatsApp jika Anda mengalami
+                                            kendala saat
+                                            membuat atau mengelola undangan.
+                                        </p>
+                                    </div>
+                                    </details>
+                                    </div>
+                                    </div>
+                                    
+                                    <!-- Additional Help -->
+                                    <div class="mt-8 text-center">
+                                        <p class="text-gray-500 dark:text-neutral-400 text-sm">
+                                            Tidak menemukan jawaban?
                     <a href="https://wa.me/62895349823366"
                         class="text-orange-500 hover:text-orange-600 dark:text-orange-400 font-medium">Klik di
                         sini untuk
                         bantuan</a>
-                    </p>
-                    </div>
-                    </div>
-                    </section>
-                    <!-- WA -->
+                </p>
+                </div>
+                </div>
+                </section>
+                <!-- WA -->
     <button x-show="showBackToTop" x-transition:enter="transition ease-out duration-300"
         x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0"
         x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0"

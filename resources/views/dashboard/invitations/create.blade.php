@@ -80,32 +80,43 @@
 
                                 {{-- Theme Selection --}}
                                 <div class="mt-6">
-                                    <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-3">Pilih Tema Undangan</label>
-                                    <div x-data="{ selected: '{{ $selectedTheme }}' }">
-                                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                            @foreach($themes as $tema)
-                                                @php $themeKey = str_replace('themes.', '', $tema->view_path); @endphp
-                                                <label @click="selected = '{{ $themeKey }}'"
-                                                    :class="selected === '{{ $themeKey }}' ? 'border-primary-500 ring-2 ring-primary-500 ring-offset-2' : 'border-neutral-200 dark:border-secondary-600 hover:border-primary-300 hover:shadow-sm'"
-                                                    class="relative flex cursor-pointer rounded-2xl border-2 bg-white dark:bg-secondary-800 p-5 shadow-sm transition-all duration-200">
-                                                    <input type="radio" name="theme" value="{{ $themeKey }}" class="sr-only"
-                                                        :checked="selected === '{{ $themeKey }}'">
-                                                    <span class="flex flex-1">
-                                                        <span class="flex flex-col">
-                                                            <span class="block text-sm font-semibold text-secondary-800 dark:text-neutral-100">{{ $tema->name }}</span>
-                                                            <span class="mt-1 flex items-center text-sm text-neutral-500 dark:text-neutral-400">
-                                                                {{ $tema->is_premium ? 'Premium' : 'Gratis' }}
-                                                            </span>
-                                                        </span>
-                                                    </span>
-                                                    <svg x-show="selected === '{{ $themeKey }}'" class="h-5 w-5 text-primary dark:text-primary-400" viewBox="0 0 20 20" fill="currentColor">
-                                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
-                                                    </svg>
-                                                </label>
-                                            @endforeach
+                                    <label for="theme" class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Pilih Tema Undangan</label>
+                                    <div class="relative mt-1.5">
+                                        <select name="theme" id="theme"
+                                            class="block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-secondary-700 dark:text-neutral-200 appearance-none">
+                                            <option value="">-- Pilih Tema --</option>
+                                            @php
+                                                $freeThemes = $themes->filter(fn($t) => !$t->is_premium);
+                                                $premiumThemes = $themes->filter(fn($t) => $t->is_premium);
+                                            @endphp
+                                            @if($freeThemes->isNotEmpty())
+                                                <optgroup label="Gratis">
+                                                    @foreach($freeThemes as $tema)
+                                                        @php $themeKey = str_replace('themes.', '', $tema->view_path); @endphp
+                                                        <option value="{{ $themeKey }}" {{ old('theme', $selectedTheme) == $themeKey ? 'selected' : '' }}>
+                                                            {{ $tema->name }}
+                                                        </option>
+                                                    @endforeach
+                                                </optgroup>
+                                            @endif
+                                            @if($premiumThemes->isNotEmpty())
+                                                <optgroup label="Premium">
+                                                    @foreach($premiumThemes as $tema)
+                                                        @php $themeKey = str_replace('themes.', '', $tema->view_path); @endphp
+                                                        <option value="{{ $themeKey }}" {{ old('theme', $selectedTheme) == $themeKey ? 'selected' : '' }}>
+                                                            {{ $tema->name }} ⭐
+                                                        </option>
+                                                    @endforeach
+                                                </optgroup>
+                                            @endif
+                                        </select>
+                                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                                            <svg class="h-4 w-4 text-neutral-400 dark:text-neutral-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                            </svg>
                                         </div>
-                                        @error('theme') <span class="text-red-500 dark:text-red-400 text-xs mt-1">{{ $message }}</span> @enderror
                                     </div>
+                                    @error('theme') <span class="text-red-500 dark:text-red-400 text-xs mt-1">{{ $message }}</span> @enderror
                                 </div>
                             </div>
 
