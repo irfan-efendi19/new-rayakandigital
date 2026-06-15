@@ -34,12 +34,9 @@
     <section
         class="relative overflow-hidden bg-gradient-to-br from-white via-primary-50/30 to-secondary-50 dark:from-secondary-900 dark:via-secondary-900 dark:to-secondary-900 px-6 pt-20 pb-16 text-center reveal">
         <div class="absolute inset-0 overflow-hidden pointer-events-none">
-            <div class="absolute -top-20 -right-20 w-72 h-72 bg-primary-200/20 rounded-full blur-3xl dark:bg-primary-900/20">
-            </div>
-            <div class="absolute -bottom-20 -left-20 w-96 h-96 bg-secondary-200/20 rounded-full blur-3xl dark:bg-secondary-800/20">
-            </div>
-            <div
-                class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary-100/10 rounded-full blur-3xl dark:bg-primary-900/10">
+            <div class="absolute inset-0 bg-gradient-to-tr from-primary-500/[0.03] to-transparent"></div>
+            <div class="absolute inset-0"
+                style="background-image: radial-gradient(circle, #94a3b8 1px, transparent 1px); background-size: 32px 32px; opacity: 0.12;">
             </div>
         </div>
         <div class="relative max-w-2xl mx-auto">

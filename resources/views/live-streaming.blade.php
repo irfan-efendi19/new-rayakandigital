@@ -33,11 +33,9 @@
     <section
         class="relative overflow-hidden bg-gradient-to-br from-white via-primary-50/30 to-secondary-50 dark:from-secondary-900 dark:via-secondary-900 dark:to-secondary-900 pt-16 pb-24">
         <div class="absolute inset-0 overflow-hidden pointer-events-none">
-            <div
-                class="absolute -top-32 -right-32 w-96 h-96 rounded-full bg-primary-100/50 blur-3xl pointer-events-none dark:bg-primary-900/30">
-            </div>
-            <div
-                class="absolute bottom-0 -left-24 w-64 h-64 rounded-full bg-primary-200/30 blur-2xl pointer-events-none dark:bg-primary-900/20">
+            <div class="absolute inset-0 bg-gradient-to-tr from-primary-500/[0.03] to-transparent"></div>
+            <div class="absolute inset-0"
+                style="background-image: radial-gradient(circle, #94a3b8 1px, transparent 1px); background-size: 32px 32px; opacity: 0.12;">
             </div>
         </div>
 
@@ -397,9 +395,8 @@
 
     <!-- ─── CTA ───────────────────────────────────────────── -->
     <section class="py-24 bg-gradient-to-br from-secondary-800 to-secondary-900 relative overflow-hidden">
-        <div class="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-primary-800/30 blur-3xl pointer-events-none">
-        </div>
-        <div class="absolute -bottom-16 -right-16 w-72 h-72 rounded-full bg-primary-700/20 blur-3xl pointer-events-none">
+        <div class="absolute inset-0 pointer-events-none"
+            style="background-image: radial-gradient(circle, rgba(255,255,255,0.08) 1px, transparent 1px); background-size: 32px 32px;">
         </div>
         <div class="relative max-w-3xl mx-auto px-6 text-center reveal">
             <h2 class="font-heading font-bold text-4xl md:text-5xl text-white mb-4">

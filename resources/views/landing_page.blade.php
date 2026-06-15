@@ -37,20 +37,10 @@
 
     <section
         class="relative overflow-hidden bg-gradient-to-br from-white via-primary-50/30 to-secondary-50 dark:from-secondary-900 dark:via-secondary-900 dark:to-secondary-900 py-20 md:py-28 lg:py-32">
-        <!-- Background Decorative Elements -->
         <div class="absolute inset-0 overflow-hidden pointer-events-none">
-            <!-- Floating circles -->
-            <div class="absolute -top-20 -right-20 w-72 h-72 bg-primary-200/20 rounded-full blur-3xl dark:bg-primary-900/20">
-            </div>
-            <div class="absolute -bottom-20 -left-20 w-96 h-96 bg-secondary-200/20 rounded-full blur-3xl dark:bg-secondary-800/20">
-            </div>
-            <div
-                class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary-100/10 rounded-full blur-3xl dark:bg-primary-900/10">
-            </div>
-
-            <!-- Dot pattern -->
+            <div class="absolute inset-0 bg-gradient-to-tr from-primary-500/[0.03] to-transparent"></div>
             <div class="absolute inset-0"
-                style="background-image: radial-gradient(circle, #cbd5e1 1px, transparent 1px); background-size: 24px 24px; opacity: 0.4;">
+                style="background-image: radial-gradient(circle, #94a3b8 1px, transparent 1px); background-size: 32px 32px; opacity: 0.15;">
             </div>
         </div>
 
@@ -349,15 +339,10 @@
 
     <!-- How It Works Section - Modernized -->
     <section id="how-it-works" class="relative py-24 px-4 overflow-hidden bg-tertiary dark:bg-secondary-900">
-        <!-- Background Decorations -->
-        <div
-            class="absolute inset-0 bg-gradient-to-br from-white via-tertiary to-primary-50/30 dark:from-secondary-900 dark:via-secondary-900 dark:to-secondary-900">
+        <div class="absolute inset-0 bg-gradient-to-br from-white via-tertiary to-primary-50/30 dark:from-secondary-900 dark:via-secondary-900 dark:to-secondary-900">
         </div>
-        <div
-            class="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-primary-200/30 to-primary-300/20 rounded-full blur-3xl dark:from-primary-800/20 dark:to-primary-900/10">
-        </div>
-        <div
-            class="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-secondary-100/20 to-neutral-200/20 rounded-full blur-3xl dark:from-secondary-800/10 dark:to-neutral-800/10">
+        <div class="absolute inset-0 pointer-events-none"
+            style="background-image: radial-gradient(circle, #94a3b8 1px, transparent 1px); background-size: 32px 32px; opacity: 0.12;">
         </div>
 
         <div class="relative max-w-7xl mx-auto">

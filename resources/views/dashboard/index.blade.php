@@ -205,28 +205,28 @@
                         </a>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                         @forelse($invitations as $invitation)
-                            <div class="border border-neutral-200 dark:border-secondary-700 rounded-2xl overflow-hidden shadow-sm flex flex-col hover:shadow-md transition-all duration-200 group
+                            <div class="border border-neutral-200 dark:border-secondary-700 rounded-xl overflow-hidden shadow-sm flex flex-col hover:shadow-md transition-all duration-200 group
                                 {{ $invitation->isTrialExpired() ? 'opacity-60' : '' }}">
                                 <div class="bg-neutral-100 dark:bg-secondary-700 aspect-[9/16] flex items-center justify-center overflow-hidden">
                                     @if($invitation->cover_photo)
                                         <img src="{{ asset('storage/' . $invitation->cover_photo) }}" alt="Cover" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                     @else
                                         <div class="flex flex-col items-center text-neutral-400 dark:text-neutral-500">
-                                            <svg class="w-10 h-10 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <svg class="w-8 h-8 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                             </svg>
-                                            <span class="text-sm">Belum ada cover</span>
+                                            <span class="text-xs">Belum ada cover</span>
                                         </div>
                                     @endif
                                 </div>
-                                <div class="p-5 flex-1 flex flex-col">
-                                    <h4 class="font-bold text-lg text-secondary-800 dark:text-neutral-100 mb-1">{{ $invitation->title }}</h4>
-                                    <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-3">{{ $invitation->bride_name }} & {{ $invitation->groom_name }}</p>
+                                <div class="p-4 flex-1 flex flex-col">
+                                    <h4 class="font-bold text-base text-secondary-800 dark:text-neutral-100 truncate">{{ $invitation->title }}</h4>
+                                    <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-2 truncate">{{ $invitation->bride_name }} & {{ $invitation->groom_name }}</p>
 
-                                    <div class="flex flex-wrap items-center gap-2 mb-4">
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-50 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300">
+                                    <div class="flex flex-wrap items-center gap-1.5 mb-3">
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-primary-50 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300">
                                             {{ $invitation->themeLabel() }}
                                         </span>
                                         @php
@@ -234,19 +234,19 @@
                                             $isExpired = $invitation->isTrialExpired();
                                             $remainingDays = $invitation->trialRemainingDays();
                                         @endphp
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium
                                             {{ $isExpired ? 'bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300' : ($isTrial ? 'bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300' : 'bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-300') }}">
-                                            {{ $isExpired ? 'Kadaluarsa' : ($isTrial ? 'Masa Percobaan' : 'Aktif') }}
+                                            {{ $isExpired ? 'Kadaluarsa' : ($isTrial ? 'Trial' : 'Aktif') }}
                                         </span>
                                         @if(!$isExpired && $invitation->expires_at)
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300">
                                                 <svg class="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                                 </svg>
-                                                Sisa {{ $remainingDays }} hari
+                                                {{ $remainingDays }} hr
                                             </span>
                                         @elseif(!$isExpired && !$invitation->expires_at)
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-50 dark:bg-green-900/50 text-green-700 dark:text-green-300">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-50 dark:bg-green-900/50 text-green-700 dark:text-green-300">
                                                 <svg class="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                                 </svg>
@@ -255,29 +255,27 @@
                                         @endif
                                     </div>
 
-                                    <div class="flex flex-col gap-2 mt-auto">
+                                    <div class="flex items-center gap-2 mt-auto">
                                         <a href="{{ route('dashboard.invitations.show', $invitation) }}"
-                                            class="text-center w-full bg-gradient-to-r from-primary to-primary-600 text-white px-3 py-2 rounded-xl text-sm font-medium hover:shadow-md transition-all">
-                                            Kelola Undangan
+                                            class="flex-1 text-center bg-gradient-to-r from-primary to-primary-600 text-white px-3 py-1.5 rounded-lg text-sm font-medium hover:shadow-md transition-all">
+                                            Kelola
                                         </a>
-                                        <div class="flex items-center gap-2">
-                                            <a href="{{ route('invitation.show', $invitation->slug) }}" target="_blank"
-                                                class="flex-1 text-center text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 text-sm font-medium transition-colors">
-                                                Lihat Halaman &rarr;
-                                            </a>
-                                            <form action="{{ route('dashboard.invitations.destroy', $invitation) }}" method="POST"
-                                                onsubmit="return confirmSwal(event, 'Yakin ingin menghapus undangan &quot;{{ $invitation->title }}&quot;? Semua data terkait tamu, RSVP, dan wish akan ikut terhapus.');">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit"
-                                                    class="text-red-400 hover:text-red-600 dark:text-red-500 dark:hover:text-red-400 transition-colors p-1"
-                                                    title="Hapus Undangan">
-                                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                                    </svg>
-                                                </button>
-                                            </form>
-                                        </div>
+                                        <a href="{{ route('invitation.show', $invitation->slug) }}" target="_blank"
+                                            class="px-3 py-1.5 rounded-lg text-sm font-medium text-primary-600 dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/30 transition-colors border border-primary-200 dark:border-primary-800">
+                                            Lihat
+                                        </a>
+                                        <form action="{{ route('dashboard.invitations.destroy', $invitation) }}" method="POST"
+                                            onsubmit="return confirmSwal(event, 'Yakin ingin menghapus undangan &quot;{{ $invitation->title }}&quot;? Semua data terkait tamu, RSVP, dan wish akan ikut terhapus.');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"
+                                                class="text-red-400 hover:text-red-600 dark:text-red-500 dark:hover:text-red-400 transition-colors p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20"
+                                                title="Hapus Undangan">
+                                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                </svg>
+                                            </button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>

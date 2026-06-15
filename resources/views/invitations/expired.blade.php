@@ -35,9 +35,9 @@
 
         <!-- Card -->
         <div class="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl relative overflow-hidden">
-            <!-- Decorative gradient -->
-            <div class="absolute -top-24 -left-24 w-48 h-48 bg-primary-500/20 rounded-full blur-3xl"></div>
-            <div class="absolute -bottom-24 -right-24 w-48 h-48 bg-primary-400/20 rounded-full blur-3xl"></div>
+            <div class="absolute inset-0 pointer-events-none opacity-20"
+                style="background-image: radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 1px); background-size: 24px 24px;">
+            </div>
 
             <h1
                 class="text-2xl font-extrabold tracking-tight bg-gradient-to-r from-primary-200 via-white to-primary-200 bg-clip-text text-transparent mb-3 font-heading">
