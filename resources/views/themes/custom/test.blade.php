@@ -4,11 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <x-meta
-        title="Pernikahan {{ $invitation->groom_name }} &amp; {{ $invitation->bride_name }}"
+    <x-meta title="Pernikahan {{ $invitation->groom_name }} &amp; {{ $invitation->bride_name }}"
         description="Undangan Pernikahan {{ $invitation->groom_name }} &amp; {{ $invitation->bride_name }}"
-        image="{{ $invitation->cover_photo ? asset('storage/' . $invitation->cover_photo) : null }}"
-    />
+        image="{{ $invitation->cover_photo ? asset('storage/' . $invitation->cover_photo) : null }}" />
 
     @stack('meta')
 

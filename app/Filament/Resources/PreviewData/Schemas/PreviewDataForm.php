@@ -16,7 +16,7 @@ class PreviewDataForm
     {
         return $schema
             ->components([
-                Section::make('Cover & Data Mempelai')
+                Section::make('Cover & Judul Undangan')
                     ->schema([
                         FileUpload::make('cover_photo')
                             ->label('Cover Photo (Thumbnail)')
@@ -30,7 +30,16 @@ class PreviewDataForm
                             ->imageEditorViewportHeight(640)
                             ->disk('public')
                             ->directory('preview/photos')
-                            ->imagePreviewHeight('200'),
+                            ->imagePreviewHeight('200')
+                            ->columnSpanFull(),
+                        TextInput::make('title')
+                            ->label('Judul Undangan')
+                            ->required()
+                            ->maxLength(255)
+                            ->placeholder('Contoh: Pernikahan Budi & Ani'),
+                    ])->columns(2),
+                Section::make('Data Mempelai Wanita')
+                    ->schema([
                         FileUpload::make('bride_photo')
                             ->label('Foto Mempelai Wanita')
                             ->image()
@@ -44,6 +53,25 @@ class PreviewDataForm
                             ->disk('public')
                             ->directory('preview/photos')
                             ->imagePreviewHeight('200'),
+                        TextInput::make('bride_name')
+                            ->label('Nama Lengkap')
+                            ->required()
+                            ->maxLength(255),
+                        TextInput::make('bride_nickname')
+                            ->label('Nama Panggilan')
+                            ->nullable()
+                            ->maxLength(255),
+                        TextInput::make('bride_father_name')
+                            ->label('Nama Ayah')
+                            ->nullable()
+                            ->maxLength(255),
+                        TextInput::make('bride_mother_name')
+                            ->label('Nama Ibu')
+                            ->nullable()
+                            ->maxLength(255),
+                    ])->columns(2),
+                Section::make('Data Mempelai Pria')
+                    ->schema([
                         FileUpload::make('groom_photo')
                             ->label('Foto Mempelai Pria')
                             ->image()
@@ -57,6 +85,22 @@ class PreviewDataForm
                             ->disk('public')
                             ->directory('preview/photos')
                             ->imagePreviewHeight('200'),
+                        TextInput::make('groom_name')
+                            ->label('Nama Lengkap')
+                            ->required()
+                            ->maxLength(255),
+                        TextInput::make('groom_nickname')
+                            ->label('Nama Panggilan')
+                            ->nullable()
+                            ->maxLength(255),
+                        TextInput::make('groom_father_name')
+                            ->label('Nama Ayah')
+                            ->nullable()
+                            ->maxLength(255),
+                        TextInput::make('groom_mother_name')
+                            ->label('Nama Ibu')
+                            ->nullable()
+                            ->maxLength(255),
                     ])->columns(2),
                 Section::make('Musik & Video')
                     ->schema([
