@@ -20,6 +20,14 @@ class InvitationResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedEnvelope;
 
+    protected static ?string $navigationLabel = 'Undangan';
+
+    protected static ?string $pluralLabel = 'Undangan';
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Konten Pengguna';
+
+    protected static ?int $navigationSort = 1;
+
     public static function form(Schema $schema): Schema
     {
         return InvitationForm::configure($schema);

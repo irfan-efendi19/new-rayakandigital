@@ -24,9 +24,11 @@ class ThemeCategoryResource extends Resource
 
     protected static ?string $pluralLabel = 'Kategori Tema';
 
-    protected static ?string $slug = 'theme-categories';
+    protected static string|\UnitEnum|null $navigationGroup = 'Manajemen Tema';
 
-    protected static string|\UnitEnum|null $navigationGroup = 'Master Data';
+    protected static ?int $navigationSort = 2;
+
+    protected static ?string $slug = 'theme-categories';
 
     public static function form(Schema $schema): Schema
     {

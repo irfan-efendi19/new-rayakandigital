@@ -35,8 +35,25 @@ class SubscriptionsTable
                     ->sortable(),
             ])
             ->filters([
-                //
+                \Filament\Tables\Filters\SelectFilter::make('payment_status')
+                    ->label('Status Pembayaran')
+                    ->options([
+                        'pending' => 'Pending',
+                        'settlement' => 'Settlement',
+                        'expire' => 'Expire',
+                        'cancel' => 'Cancel',
+                    ]),
+                \Filament\Tables\Filters\SelectFilter::make('tier')
+                    ->label('Tier')
+                    ->options([
+                        'free' => 'Free',
+                        'bronze' => 'Bronze',
+                        'silver' => 'Silver',
+                        'gold' => 'Gold',
+                        'platinum' => 'Platinum',
+                    ]),
             ])
+            ->defaultSort('created_at', 'desc')
             ->recordActions([
                 EditAction::make(),
             ])

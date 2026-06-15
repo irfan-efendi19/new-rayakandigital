@@ -2,9 +2,11 @@
 
 namespace App\Filament\Widgets;
 
+use App\Models\Order;
 use App\Models\User;
 use App\Models\Invitation;
 use App\Models\Subscription;
+use App\Models\Wish;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 
@@ -17,22 +19,43 @@ class StatsOverview extends BaseWidget
     protected function getStats(): array
     {
         $revenue = Subscription::where('payment_status', 'settlement')->sum('amount');
-        
+        $pendingOrders = Order::where('payment_status', 'pending')->count();
+        $verifyingOrders = Order::where('payment_status', 'verifying')->count();
+        $activeInvitations = Invitation::where('is_active', true)->count();
+        $totalWishes = Wish::count();
+        $totalUsers = User::count();
+        $totalInvitations = Invitation::count();
+
         return [
-            Stat::make('Total Revenue', 'Rp ' . number_format($revenue, 0, ',', '.'))
-                ->description('Total completed payments')
+            Stat::make('Total Pendapatan', 'Rp ' . number_format($revenue, 0, ',', '.'))
+                ->description('Pembayaran sukses')
                 ->descriptionIcon('heroicon-m-arrow-trending-up')
                 ->color('success'),
-                
-            Stat::make('Total Users', User::count())
-                ->description('Registered accounts')
-                ->descriptionIcon('heroicon-m-users')
+
+            Stat::make('Pesanan Pending', $pendingOrders)
+                ->description($verifyingOrders . ' menunggu verifikasi')
+                ->descriptionIcon('heroicon-m-clock')
+                ->color($pendingOrders > 0 ? 'warning' : 'gray'),
+
+            Stat::make('Undangan Aktif', $activeInvitations)
+                ->description('Dari total ' . $totalInvitations . ' undangan')
+                ->descriptionIcon('heroicon-m-check-circle')
                 ->color('primary'),
-                
-            Stat::make('Total Invitations', Invitation::count())
-                ->description('Active invitations')
-                ->descriptionIcon('heroicon-m-envelope-open')
+
+            Stat::make('Total Pengguna', $totalUsers)
+                ->description('Akun terdaftar')
+                ->descriptionIcon('heroicon-m-users')
+                ->color('info'),
+
+            Stat::make('Total Undangan', $totalInvitations)
+                ->description('Semua undangan')
+                ->descriptionIcon('heroicon-m-envelope')
                 ->color('warning'),
+
+            Stat::make('Total Ucapan', $totalWishes)
+                ->description('Pesan dari tamu')
+                ->descriptionIcon('heroicon-m-chat-bubble-bottom-center')
+                ->color('gray'),
         ];
     }
 }

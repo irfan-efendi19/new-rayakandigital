@@ -20,11 +20,13 @@ class PlatformFeatureResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedListBullet;
 
-    protected static ?string $navigationLabel = 'Fasilitas Platform';
+    protected static ?string $navigationLabel = 'Fitur Paket';
 
-    protected static ?string $pluralLabel = 'Fasilitas Platform';
+    protected static ?string $pluralLabel = 'Fitur Paket';
 
-    protected static string|\UnitEnum|null $navigationGroup = 'Master Data';
+    protected static string|\UnitEnum|null $navigationGroup = 'Paket & Fitur';
+
+    protected static ?int $navigationSort = 3;
 
     public static function form(Schema $schema): Schema
     {

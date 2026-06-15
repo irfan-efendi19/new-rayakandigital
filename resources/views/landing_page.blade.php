@@ -6,12 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <x-meta
-        title="Rayakan Digital | Solusi Digital Acara Modern"
+    <x-meta title="Rayakan Digital | Solusi Digital Acara Modern"
         description="Rayakan Digital menyediakan undangan online, buku tamu digital, QR code, dan live streaming untuk acara modern Anda. Buat momen berkesan jadi lebih praktis!"
         keywords="rayakan digital, undangan digital, undangan online, undangan pernikahan, QR code tamu, buku tamu digital, live streaming acara, website undangan, acara modern, undangan web"
-        image="{{ asset('img/thumnail.jpg') }}"
-    />
+        image="{{ asset('img/thumnail.jpg') }}" />
 
     @stack('meta')
 
@@ -339,7 +337,8 @@
 
     <!-- How It Works Section - Modernized -->
     <section id="how-it-works" class="relative py-24 px-4 overflow-hidden bg-tertiary dark:bg-secondary-900">
-        <div class="absolute inset-0 bg-gradient-to-br from-white via-tertiary to-primary-50/30 dark:from-secondary-900 dark:via-secondary-900 dark:to-secondary-900">
+        <div
+            class="absolute inset-0 bg-gradient-to-br from-white via-tertiary to-primary-50/30 dark:from-secondary-900 dark:via-secondary-900 dark:to-secondary-900">
         </div>
         <div class="absolute inset-0 pointer-events-none"
             style="background-image: radial-gradient(circle, #94a3b8 1px, transparent 1px); background-size: 32px 32px; opacity: 0.12;">
@@ -1010,11 +1009,11 @@
                                 </a> -->
             </div>
         </div>
-        </section>
-        
-        <!-- Pricing Section - Modernized -->
-        {{-- Pricing & Services Section with Tab Navigation --}}
-        {{-- Pricing & Services Section with Tab Navigation --}}
+    </section>
+    
+    <!-- Pricing Section - Modernized -->
+    {{-- Pricing & Services Section with Tab Navigation --}}
+    {{-- Pricing & Services Section with Tab Navigation --}}
     <section x-data="{ activeTab: 'undangan' }" class="py-20 bg-tertiary dark:bg-secondary-900 transition-all duration-700">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             {{-- Section Header --}}
@@ -1081,127 +1080,127 @@
                 <!-- Themes Catalog Section - Modernized -->
                 <div class="mt-16 space-y-6 sm:space-y-0 sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:gap-6">
                     @forelse($packages as $package)
-                    <div
-                        class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft transition-all duration-300 hover:shadow-xl hover:-translate-y-1 {{ $package->is_popular ? 'ring-2 ring-primary-500 shadow-lg' : 'border border-neutral-200' }}">
+                        <div
+                            class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft transition-all duration-300 hover:shadow-xl hover:-translate-y-1 {{ $package->is_popular ? 'ring-2 ring-primary-500 shadow-lg' : 'border border-neutral-200' }}">
 
-                        <!-- Popular Badge -->
-                        @if($package->is_popular)
-                        <div class="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
-                            <span
-                                class="inline-flex items-center gap-1.5 bg-gradient-to-r from-primary-500 to-primary-600 px-4 py-1.5 rounded-full text-xs font-bold text-white shadow-md">
-                                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
-                                    <path
-                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                </svg>
-                                Best Seller
-                            </span>
-                        </div>
-                        @endif
-
-                        <!-- Card Content -->
-                        <div class="p-6">
-                            <!-- Package Name -->
-                            <h3
-                                class="font-heading text-xl font-bold {{ $package->is_popular ? 'text-primary-600 dark:text-primary-400' : 'text-secondary-800 dark:text-neutral-100' }}">
-                                {{ $package->package_name }}
-                            </h3>
-
-                            <!-- Description -->
-                            @if($package->description)
-                            <p class="mt-2 text-sm text-neutral-500 line-clamp-2">
-                                {{ $package->description }}
-                            </p>
+                            <!-- Popular Badge -->
+                            @if($package->is_popular)
+                            <div class="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
+                                <span
+                                    class="inline-flex items-center gap-1.5 bg-gradient-to-r from-primary-500 to-primary-600 px-4 py-1.5 rounded-full text-xs font-bold text-white shadow-md">
+                                    <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                                        <path
+                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                    </svg>
+                                    Best Seller
+                                </span>
+                            </div>
                             @endif
 
-                            <!-- Price -->
-                            <div class="mt-6">
-                                @if($package->slashed_price && $package->slashed_price > $package->price)
-                                <span class="text-neutral-400 line-through text-sm">Rp
-                                    {{ number_format($package->slashed_price, 0, ',', '.') }}</span>
+                            <!-- Card Content -->
+                            <div class="p-6">
+                                <!-- Package Name -->
+                                <h3
+                                    class="font-heading text-xl font-bold {{ $package->is_popular ? 'text-primary-600 dark:text-primary-400' : 'text-secondary-800 dark:text-neutral-100' }}">
+                                    {{ $package->package_name }}
+                                </h3>
+
+                                <!-- Description -->
+                                @if($package->description)
+                                    <p class="mt-2 text-sm text-neutral-500">
+                                        {{ $package->description }}
+                                    </p>
                                 @endif
-                                <div class="flex items-baseline flex-wrap gap-1 mt-1">
-                                    <span
-                                        class="text-3xl font-bold text-secondary-900 dark:text-neutral-100 shrink-0">Rp</span>
-                                    <span
-                                        class="text-5xl font-extrabold text-secondary-900 dark:text-neutral-100 break-words">
-                                        {{ number_format($package->price, 0, ',', '.') }}
-                                    </span>
-                                    @if($package->price > 0)
-                                    <span class="text-neutral-400 text-sm ml-1 whitespace-nowrap">
-                                        /
-                                        {{ $package->active_period_days === 0 ? 'Lifetime' : $package->active_period_days . ' Hari' }}
-                                    </span>
-                                    @endif
-                                </div>
-                            </div>
-                            <!-- CTA Button -->
-                            @auth
-                            @if($package->package_code === 'free')
-                            <div
-                                class="mt-6 w-full bg-neutral-100 dark:bg-secondary-800 text-neutral-500 rounded-xl py-3 text-sm font-semibold text-center cursor-default">
-                                ✅ Paket Aktif
-                            </div>
-                            @else
-                            <a href="{{ route('dashboard.checkout') }}"
-                                class="mt-6 flex items-center justify-center gap-2 w-full rounded-xl py-3 text-sm font-semibold text-center transition-all duration-200 {{ $package->is_popular ? 'bg-primary-500 text-white hover:bg-primary-600 shadow-md hover:shadow-lg' : 'bg-primary-50 border border-primary-200 text-primary-700 hover:bg-primary-100' }}">
-                                Pilih {{ $package->package_name }}
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M9 5l7 7-7 7" />
-                                </svg>
-                            </a>
-                            @endif
-                            @else
-                            @if($package->package_code === 'free')
-                            <a href="{{ route('register') }}"
-                                class="mt-6 flex items-center justify-center gap-2 w-full bg-secondary-800 text-white rounded-xl py-3 text-sm font-semibold text-center hover:bg-secondary-900 transition-colors">
-                                Daftar Gratis
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M9 5l7 7-7 7" />
-                                </svg>
-                            </a>
-                            @else
-                            <a href="{{ route('register') }}"
-                                class="mt-6 flex items-center justify-center gap-2 w-full rounded-xl py-3 text-sm font-semibold text-center transition-all duration-200 {{ $package->is_popular ? 'bg-primary-500 text-white hover:bg-primary-600 shadow-md hover:shadow-lg' : 'bg-primary-50 border border-primary-200 text-primary-700 hover:bg-primary-100' }}">
-                                Pilih {{ $package->package_name }}
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M9 5l7 7-7 7" />
-                                </svg>
-                            </a>
-                            @endif
-                            @endauth
-                        </div>
 
-                        <!-- Features List -->
-                        <div class="border-t border-neutral-100 dark:border-secondary-700 pt-5 pb-6 px-6">
-                            <div class="flex items-center gap-2 mb-4">
-                                <svg class="w-4 h-4 text-primary-500" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M5 13l4 4L19 7" />
-                                </svg>
-                                <h4 class="text-xs font-semibold text-neutral-400 uppercase tracking-wider">
-                                    Fitur
-                                    Termasuk</h4>
+                                <!-- Price -->
+                                <div class="mt-6">
+                                    @if($package->slashed_price && $package->slashed_price > $package->price)
+                                    <span class="text-neutral-400 line-through text-sm">Rp
+                                        {{ number_format($package->slashed_price, 0, ',', '.') }}</span>
+                                    @endif
+                                    <div class="flex items-baseline flex-wrap gap-1 mt-1">
+                                        <span
+                                            class="text-3xl font-bold text-secondary-900 dark:text-neutral-100 shrink-0">Rp</span>
+                                        <span
+                                            class="text-5xl font-extrabold text-secondary-900 dark:text-neutral-100 break-words">
+                                            {{ number_format($package->price, 0, ',', '.') }}
+                                        </span>
+                                        @if($package->price > 0)
+                                        <span class="text-neutral-400 text-sm ml-1 whitespace-nowrap">
+                                            /
+                                            {{ $package->active_period_days === 0 ? 'Lifetime' : $package->active_period_days . ' Hari' }}
+                                        </span>
+                                        @endif
+                                    </div>
+                                </div>
+                                <!-- CTA Button -->
+                                @auth
+                                @if($package->package_code === 'free')
+                                <div
+                                    class="mt-6 w-full bg-neutral-100 dark:bg-secondary-800 text-neutral-500 rounded-xl py-3 text-sm font-semibold text-center cursor-default">
+                                    ✅ Paket Aktif
+                                </div>
+                                @else
+                                <a href="{{ route('dashboard.checkout') }}"
+                                    class="mt-6 flex items-center justify-center gap-2 w-full rounded-xl py-3 text-sm font-semibold text-center transition-all duration-200 {{ $package->is_popular ? 'bg-primary-500 text-white hover:bg-primary-600 shadow-md hover:shadow-lg' : 'bg-primary-50 border border-primary-200 text-primary-700 hover:bg-primary-100' }}">
+                                    Pilih {{ $package->package_name }}
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </a>
+                                @endif
+                                @else
+                                @if($package->package_code === 'free')
+                                <a href="{{ route('register') }}"
+                                    class="mt-6 flex items-center justify-center gap-2 w-full bg-secondary-800 text-white rounded-xl py-3 text-sm font-semibold text-center hover:bg-secondary-900 transition-colors">
+                                    Daftar Gratis
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </a>
+                                @else
+                                <a href="{{ route('register') }}"
+                                    class="mt-6 flex items-center justify-center gap-2 w-full rounded-xl py-3 text-sm font-semibold text-center transition-all duration-200 {{ $package->is_popular ? 'bg-primary-500 text-white hover:bg-primary-600 shadow-md hover:shadow-lg' : 'bg-primary-50 border border-primary-200 text-primary-700 hover:bg-primary-100' }}">
+                                    Pilih {{ $package->package_name }}
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </a>
+                                @endif
+                                @endauth
                             </div>
-                            <ul class="space-y-3">
-                                @forelse($package->features as $feature)
-                                <li class="flex items-start gap-2.5 text-sm text-neutral-600 dark:text-neutral-300">
-                                    <svg class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" fill="none"
-                                        stroke="currentColor" viewBox="0 0 24 24">
+
+                            <!-- Features List -->
+                            <div class="border-t border-neutral-100 dark:border-secondary-700 pt-5 pb-6 px-6">
+                                <div class="flex items-center gap-2 mb-4">
+                                    <svg class="w-4 h-4 text-primary-500" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M5 13l4 4L19 7" />
                                     </svg>
-                                    <span>{{ $feature->feature_name }}</span>
-                                </li>
-                                @empty
-                                <li class="text-sm text-neutral-400 italic">Fitur dasar</li>
-                                @endforelse
-                            </ul>
+                                    <h4 class="text-xs font-semibold text-neutral-400 uppercase tracking-wider">
+                                        Fitur
+                                        Termasuk</h4>
+                                </div>
+                                <ul class="space-y-3">
+                                    @forelse($package->features as $feature)
+                                    <li class="flex items-start gap-2.5 text-sm text-neutral-600 dark:text-neutral-300">
+                                        <svg class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" fill="none"
+                                            stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M5 13l4 4L19 7" />
+                                        </svg>
+                                        <span>{{ $feature->feature_name }}</span>
+                                    </li>
+                                    @empty
+                                    <li class="text-sm text-neutral-400 italic">Fitur dasar</li>
+                                    @endforelse
+                                </ul>
+                            </div>
                         </div>
-                    </div>
                     @empty
                     <div class="col-span-full py-16 text-center">
                         <div
@@ -1296,11 +1295,11 @@
                                     dari dashboard</p>
                             </div>
                         </div>
-                        </div>
-                        
-                        {{-- CTA Contact Sales --}}
-                        <div
-                            class="bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-secondary-800 dark:to-secondary-800 border border-emerald-100 dark:border-emerald-900/30 rounded-2xl p-8 text-center">
+                    </div>
+                    
+                    {{-- CTA Contact Sales --}}
+                    <div
+                        class="bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-secondary-800 dark:to-secondary-800 border border-emerald-100 dark:border-emerald-900/30 rounded-2xl p-8 text-center">
                         <p class="text-secondary-700 dark:text-neutral-200 font-medium mb-1">Tertarik dengan layanan
                             ini?</p>
                         <p class="text-neutral-500 text-sm mb-6">Hubungi tim kami untuk informasi harga dan
@@ -1313,28 +1312,23 @@
                                 <i class="fab fa-whatsapp text-base"></i>
                                 Hubungi via WhatsApp
                             </a>
-                            <a href="mailto:{{ config('app.contact_email', 'hello@example.com') }}?subject={{ urlencode('Informasi Layanan Buku Tamu Digital') }}"
-                                class="inline-flex items-center justify-center gap-2 px-6 py-3 border-2 border-emerald-200 text-emerald-700 rounded-xl text-sm font-semibold hover:bg-emerald-50 hover:border-emerald-300 transition-all duration-200">
-                                <i class="fas fa-envelope text-base"></i>
-                                Kirim Email
-                            </a>
                         </div>
                     </div>
-                    </div>
-                    </div>{{-- end panel buku tamu --}}
-                    
-                    {{-- =============================== --}}
-                    {{-- PANEL: LIVE STREAMING --}}
-                    {{-- =============================== --}}
-                    <div x-show="activeTab === 'live-streaming'" x-transition:enter="transition ease-out duration-300"
-                        x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0">
-                    
-                        <div class="max-w-2xl mx-auto">
-                            {{-- Icon & Heading --}}
-                            <div class="text-center mb-10">
-                                <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-primary-50 mb-5">
-                                    <i class="fas fa-video text-4xl text-primary-500"></i>
-                                </div>
+                </div>
+                </div>{{-- end panel buku tamu --}}
+                
+                {{-- =============================== --}}
+                {{-- PANEL: LIVE STREAMING --}}
+                {{-- =============================== --}}
+                <div x-show="activeTab === 'live-streaming'" x-transition:enter="transition ease-out duration-300"
+                    x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0">
+                
+                    <div class="max-w-2xl mx-auto">
+                        {{-- Icon & Heading --}}
+                        <div class="text-center mb-10">
+                            <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-primary-50 mb-5">
+                                <i class="fas fa-video text-4xl text-primary-500"></i>
+                            </div>
                         <h3 class="font-heading text-3xl font-bold text-secondary-900 dark:text-neutral-100 mb-3">Live
                             Streaming
                             Pernikahan
@@ -1400,10 +1394,10 @@
                                     menyaksikan siaran</p>
                             </div>
                         </div>
-                        </div>
-                        {{-- CTA Contact Sales --}}
-                        <div
-                            class="bg-gradient-to-br from-primary-50 to-secondary-50 dark:from-secondary-800 dark:to-secondary-800 border border-primary-100 dark:border-primary-900/30 rounded-2xl p-8 text-center">
+                    </div>
+                    {{-- CTA Contact Sales --}}
+                    <div
+                        class="bg-gradient-to-br from-primary-50 to-secondary-50 dark:from-secondary-800 dark:to-secondary-800 border border-primary-100 dark:border-primary-900/30 rounded-2xl p-8 text-center">
                         <p class="text-secondary-700 dark:text-neutral-200 font-medium mb-1">Tertarik dengan layanan
                             ini?</p>
                         <p class="text-neutral-500 text-sm mb-6">Hubungi tim kami untuk informasi harga dan
@@ -1416,18 +1410,13 @@
                                 <i class="fab fa-whatsapp text-base"></i>
                                 Hubungi via WhatsApp
                             </a>
-                            <a href="mailto:{{ config('app.contact_email', 'hello@example.com') }}?subject={{ urlencode('Informasi Layanan Live Streaming Pernikahan') }}"
-                                class="inline-flex items-center justify-center gap-2 px-6 py-3 border-2 border-primary-200 text-primary-700 rounded-xl text-sm font-semibold hover:bg-primary-50 hover:border-primary-300 transition-all duration-200">
-                                <i class="fas fa-envelope text-base"></i>
-                                Kirim Email
-                            </a>
                         </div>
                     </div>
-                    </div>
-                    </div>{{-- end panel live streaming --}}
-                    
-                    </div>
-                    </section>
+                </div>
+                </div>{{-- end panel live streaming --}}
+                
+                </div>
+                </section>
     <section
         class="relative py-16 px-4 bg-gradient-to-br from-orange-50 via-white to-orange-50/30 dark:from-secondary-900 dark:via-secondary-900 dark:to-secondary-900">
         <div class="max-w-3xl mx-auto">
@@ -1624,9 +1613,9 @@
                         bantuan</a>
                 </p>
             </div>
-            </div>
-            </section>
-            <!-- WA -->
+        </div>
+        </section>
+        <!-- WA -->
     <button x-show="showBackToTop" x-transition:enter="transition ease-out duration-300"
         x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0"
         x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0"

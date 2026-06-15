@@ -30,8 +30,14 @@ class WishesTable
                     ->sortable(),
             ])
             ->filters([
-                //
+                \Filament\Tables\Filters\SelectFilter::make('is_hidden')
+                    ->label('Visibilitas')
+                    ->options([
+                        true => 'Tersembunyi',
+                        false => 'Tampil',
+                    ]),
             ])
+            ->defaultSort('created_at', 'desc')
             ->recordActions([
                 EditAction::make(),
             ])

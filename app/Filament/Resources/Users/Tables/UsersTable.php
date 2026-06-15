@@ -35,8 +35,20 @@ class UsersTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                \Filament\Tables\Filters\SelectFilter::make('role')
+                    ->label('Role')
+                    ->options([
+                        'user' => 'Standard User',
+                        'admin' => 'Administrator',
+                    ]),
+                \Filament\Tables\Filters\SelectFilter::make('is_banned')
+                    ->label('Status Banned')
+                    ->options([
+                        true => 'Banned',
+                        false => 'Active',
+                    ]),
             ])
+            ->defaultSort('created_at', 'desc')
             ->recordActions([
                 EditAction::make(),
             ])

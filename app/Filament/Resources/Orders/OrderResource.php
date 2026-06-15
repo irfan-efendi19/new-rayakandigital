@@ -20,11 +20,11 @@ class OrderResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCreditCard;
 
-    protected static ?string $navigationLabel = 'Orders (WA)';
+    protected static ?string $navigationLabel = 'Pesanan (WA)';
 
-    protected static ?string $pluralLabel = 'Orders (Verifikasi WA)';
+    protected static ?string $pluralLabel = 'Pesanan (Verifikasi WA)';
 
-    protected static string|\UnitEnum|null $navigationGroup = 'Payments';
+    protected static string|\UnitEnum|null $navigationGroup = 'Transaksi & Pembayaran';
 
     protected static ?int $navigationSort = 1;
 

@@ -12,6 +12,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 
 class PaymentMethodConfigResource extends Resource
 {
@@ -23,16 +24,16 @@ class PaymentMethodConfigResource extends Resource
 
     protected static ?string $pluralLabel = 'Payment Routing';
 
-    protected static string|\UnitEnum|null $navigationGroup = 'Payments';
+    protected static string|\UnitEnum|null $navigationGroup = 'Pengaturan Sistem';
 
-    protected static ?int $navigationSort = 0;
+    protected static ?int $navigationSort = 4;
 
     public static function canCreate(): bool
     {
         return false;
     }
 
-    public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool
+    public static function canDelete(Model $record): bool
     {
         return false;
     }

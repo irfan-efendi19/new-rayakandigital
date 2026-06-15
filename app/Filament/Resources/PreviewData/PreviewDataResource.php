@@ -11,12 +11,17 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 
 class PreviewDataResource extends Resource
 {
     protected static ?string $model = PreviewData::class;
 
     protected static string|\BackedEnum|null $navigationIcon = Heroicon::OutlinedEye;
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Pengaturan Sistem';
+
+    protected static ?int $navigationSort = 5;
 
     protected static ?string $navigationLabel = 'Preview Data';
 
@@ -25,7 +30,7 @@ class PreviewDataResource extends Resource
         return false;
     }
 
-    public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool
+    public static function canDelete(Model $record): bool
     {
         return false;
     }

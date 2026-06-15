@@ -31,8 +31,20 @@ class ThemesTable
                     ->sortable(),
             ])
             ->filters([
-                //
+                \Filament\Tables\Filters\SelectFilter::make('is_premium')
+                    ->label('Tipe')
+                    ->options([
+                        true => 'Premium',
+                        false => 'Reguler',
+                    ]),
+                \Filament\Tables\Filters\SelectFilter::make('is_active')
+                    ->label('Status')
+                    ->options([
+                        true => 'Aktif',
+                        false => 'Nonaktif',
+                    ]),
             ])
+            ->defaultSort('name')
             ->recordActions([
                 EditAction::make(),
             ])

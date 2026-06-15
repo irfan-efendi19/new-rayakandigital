@@ -43,15 +43,15 @@
             <!-- Left -->
             <div class="anim-fade-up">
                 <span
-                    class="inline-flex items-center gap-2 bg-primary-100 text-primary-700 text-xs font-semibold px-3 py-1.5 rounded-full mb-6">
+                    class="inline-flex items-center gap-2 bg-primary-100 dark:bg-secondary-800 text-primary-700 dark:text-primary-400 text-xs font-semibold px-3 py-1.5 rounded-full mb-6">
                     <span class="w-2 h-2 rounded-full bg-primary-600 inline-block animate-pulse"></span>
                     PENGALAMAN LIVE SINEMATIK
                 </span>
                 <h1 class="font-heading font-black text-5xl md:text-6xl leading-tight text-secondary-900 dark:text-neutral-100 mb-4">
                     Hidupkan Setiap<br>Momen
-                    <em class="text-primary-600 not-italic block">Berharga.</em>
+                    <em class="text-primary-600 dark:text-primary-400 not-italic block">Berharga.</em>
                 </h1>
-                <p class="text-secondary-800/60 leading-relaxed mb-8 max-w-md">
+                <p class="text-secondary-800/60 dark:text-neutral-200/60 leading-relaxed mb-8 max-w-md">
                     Siarkan momen pernikahan Anda dengan kualitas sinematik melalui berbagai platform. Pastikan tidak
                     ada satu pun orang terkasih yang melewatkan hari spesial Anda.
                 </p>
@@ -106,27 +106,27 @@
 
                 <!-- Chat panel -->
                 <div
-                    class="absolute -right-4 top-4 w-48 bg-white dark:bg-secondary-800 rounded-xl shadow-soft border border-primary-100 overflow-hidden text-xs">
-                    <div class="flex items-center justify-between px-3 py-2 border-b border-primary-100">
+                    class="absolute -right-4 top-4 w-48 bg-white dark:bg-secondary-800 rounded-xl shadow-soft border border-primary-100 dark:border-secondary-700 overflow-hidden text-xs">
+                    <div class="flex items-center justify-between px-3 py-2 border-b border-primary-100 dark:border-secondary-700">
                         <span class="font-semibold text-secondary-800 dark:text-neutral-200">Live Chat</span>
                         <i class="fa-solid fa-xmark text-secondary-800/40 cursor-pointer"></i>
                     </div>
                     <div class="p-3 space-y-2">
                         <div class="anim-d1">
-                            <span class="font-semibold text-primary-600">Maya:</span>
-                            <span class="text-secondary-800/70"> Selamat! Sangat cantik 🌸</span>
+                            <span class="font-semibold text-primary-600 dark:text-primary-400">Maya:</span>
+                            <span class="text-secondary-800/70 dark:text-neutral-200/70"> Selamat! Sangat cantik 🌸</span>
                         </div>
                         <div class="anim-d2">
-                            <span class="font-semibold text-primary-600">Budi:</span>
-                            <span class="text-secondary-800/70"> Terlihat luar biasa</span>
+                            <span class="font-semibold text-primary-600 dark:text-primary-400">Budi:</span>
+                            <span class="text-secondary-800/70 dark:text-neutral-200/70"> Terlihat luar biasa</span>
                         </div>
                         <div class="anim-d3">
-                            <span class="font-semibold text-primary-600">Indah:</span>
-                            <span class="text-secondary-800/70"> Terharu menontonnya 😭</span>
+                            <span class="font-semibold text-primary-600 dark:text-primary-400">Indah:</span>
+                            <span class="text-secondary-800/70 dark:text-neutral-200/70"> Terharu menontonnya 😭</span>
                         </div>
-                        <div class="mt-2 border-t border-primary-50 pt-2">
+                        <div class="mt-2 border-t border-primary-50 dark:border-secondary-700 pt-2">
                             <input type="text" placeholder="Katakan sesuatu…"
-                                class="w-full text-xs px-2 py-1.5 rounded border border-primary-100 focus:outline-none focus:border-primary-400 bg-neutral-50" />
+                                class="w-full text-xs px-2 py-1.5 rounded border border-primary-100 focus:outline-none focus:border-primary-400 bg-neutral-50 dark:bg-secondary-800 dark:text-neutral-200" />
                         </div>
                     </div>
                 </div>
@@ -137,18 +137,18 @@
                         class="flex items-center gap-2 bg-white dark:bg-secondary-800 rounded-xl px-4 py-2.5 shadow-soft border border-primary-100 text-sm">
                         <i class="fa-solid fa-users text-primary-500"></i>
                         <span class="font-semibold">1.2K+</span>
-                        <span class="text-neutral-500">Penonton</span>
+                        <span class="text-neutral-500 dark:text-neutral-400">Penonton</span>
                     </div>
                     <div
                         class="flex items-center gap-2 bg-white dark:bg-secondary-800 rounded-xl px-4 py-2.5 shadow-soft border border-primary-100 text-sm">
                         <i class="fa-solid fa-star text-amber-400"></i>
                         <span class="font-semibold">4.9</span>
-                        <span class="text-neutral-500">Rating</span>
+                        <span class="text-neutral-500 dark:text-neutral-400">Rating</span>
                     </div>
                     <div
                         class="flex items-center gap-2 bg-white dark:bg-secondary-800 rounded-xl px-4 py-2.5 shadow-soft border border-primary-100 text-sm">
                         <i class="fa-solid fa-shield-halved text-green-500"></i>
-                        <span class="font-semibold text-neutral-600 dark:text-neutral-300">HD Quality</span>
+                        <span class="font-semibold text-neutral-600 dark:text-neutral-300">HD</span>
                     </div>
                 </div>
             </div>
@@ -156,12 +156,12 @@
     </section>
 
     <!-- ─── FITUR ──────────────────────────────────────────── -->
-    <section id="fitur" class="py-24 bg-white dark:bg-secondary-800">
+    <section id="fitur" class="py-24 bg-white dark:bg-secondary-900">
         <div class="max-w-6xl mx-auto px-6">
             <div class="text-center mb-16 reveal">
                 <h2 class="font-heading font-bold text-4xl text-secondary-900 dark:text-neutral-100 mb-3">Semua yang
                     Anda Butuhkan Ada di Sini</h2>
-                <p class="text-neutral-500 max-w-xl mx-auto leading-relaxed">
+                <p class="text-neutral-500 dark:text-neutral-400 max-w-xl mx-auto leading-relaxed">
                     Kami menyediakan berbagai fitur untuk membuat pernikahan Anda lebih mudah dan nyaman, sehingga Anda
                     tidak perlu khawatir tentang apa pun.
                 </p>
@@ -169,9 +169,9 @@
             <div class="grid md:grid-cols-3 gap-6">
 
                 <div
-                    class="reveal bg-tertiary dark:bg-secondary-900 rounded-2xl p-7 border border-primary-100 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-                    <div class="w-12 h-12 rounded-xl bg-primary-100 flex items-center justify-center mb-5">
-                        <i class="fa-solid fa-video text-primary-600 text-lg"></i>
+                    class="reveal bg-tertiary dark:bg-secondary-900 rounded-2xl p-7 border border-primary-100 dark:border-secondary-700 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                    <div class="w-12 h-12 rounded-xl bg-primary-100 dark:bg-secondary-800 flex items-center justify-center mb-5">
+                        <i class="fa-solid fa-video text-primary-600 dark:text-primary-400 text-lg"></i>
                     </div>
                     <h3 class="font-heading font-bold text-lg mb-2 text-secondary-900 dark:text-neutral-100">Pernikahan
                         Live Sinematik</h3>
@@ -180,9 +180,9 @@
                 </div>
 
                 <div
-                    class="reveal bg-tertiary dark:bg-secondary-900 rounded-2xl p-7 border border-primary-100 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-                    <div class="w-12 h-12 rounded-xl bg-primary-100 flex items-center justify-center mb-5">
-                        <i class="fa-solid fa-camera-rotate text-primary-600 text-lg"></i>
+                    class="reveal bg-tertiary dark:bg-secondary-900 rounded-2xl p-7 border border-primary-100 dark:border-secondary-700 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                    <div class="w-12 h-12 rounded-xl bg-primary-100 dark:bg-secondary-800 flex items-center justify-center mb-5">
+                        <i class="fa-solid fa-camera-rotate text-primary-600 dark:text-primary-400 text-lg"></i>
                     </div>
                     <h3 class="font-heading font-bold text-lg mb-2 text-secondary-900 dark:text-neutral-100">Kamera
                         Bergerak</h3>
@@ -191,9 +191,9 @@
                 </div>
 
                 <div
-                    class="reveal bg-tertiary dark:bg-secondary-900 rounded-2xl p-7 border border-primary-100 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-                    <div class="w-12 h-12 rounded-xl bg-primary-100 flex items-center justify-center mb-5">
-                        <i class="fa-solid fa-sliders text-primary-600 text-lg"></i>
+                    class="reveal bg-tertiary dark:bg-secondary-900 rounded-2xl p-7 border border-primary-100 dark:border-secondary-700 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                    <div class="w-12 h-12 rounded-xl bg-primary-100 dark:bg-secondary-800 flex items-center justify-center mb-5">
+                        <i class="fa-solid fa-sliders text-primary-600 dark:text-primary-400 text-lg"></i>
                     </div>
                     <h3 class="font-heading font-bold text-lg mb-2 text-secondary-900 dark:text-neutral-100">Bingkai
                         Kustom</h3>
@@ -202,9 +202,9 @@
                 </div>
 
                 <div
-                    class="reveal bg-tertiary dark:bg-secondary-900 rounded-2xl p-7 border border-primary-100 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-                    <div class="w-12 h-12 rounded-xl bg-primary-100 flex items-center justify-center mb-5">
-                        <i class="fa-solid fa-circle-dot text-primary-600 text-lg"></i>
+                    class="reveal bg-tertiary dark:bg-secondary-900 rounded-2xl p-7 border border-primary-100 dark:border-secondary-700 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                    <div class="w-12 h-12 rounded-xl bg-primary-100 dark:bg-secondary-800 flex items-center justify-center mb-5">
+                        <i class="fa-solid fa-circle-dot text-primary-600 dark:text-primary-400 text-lg"></i>
                     </div>
                     <h3 class="font-heading font-bold text-lg mb-2 text-secondary-900 dark:text-neutral-100">Rekaman
                         Lengkap</h3>
@@ -213,9 +213,9 @@
                 </div>
 
                 <div
-                    class="reveal bg-tertiary dark:bg-secondary-900 rounded-2xl p-7 border border-primary-100 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-                    <div class="w-12 h-12 rounded-xl bg-primary-100 flex items-center justify-center mb-5">
-                        <i class="fa-solid fa-shuffle text-primary-600 text-lg"></i>
+                    class="reveal bg-tertiary dark:bg-secondary-900 rounded-2xl p-7 border border-primary-100 dark:border-secondary-700 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                    <div class="w-12 h-12 rounded-xl bg-primary-100 dark:bg-secondary-800 flex items-center justify-center mb-5">
+                        <i class="fa-solid fa-shuffle text-primary-600 dark:text-primary-400 text-lg"></i>
                     </div>
                     <h3 class="font-heading font-bold text-lg mb-2 text-secondary-900 dark:text-neutral-100">Multi
                         Platform</h3>
@@ -225,9 +225,9 @@
                 </div>
 
                 <div
-                    class="reveal bg-tertiary dark:bg-secondary-900 rounded-2xl p-7 border border-primary-100 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-                    <div class="w-12 h-12 rounded-xl bg-primary-100 flex items-center justify-center mb-5">
-                        <i class="fa-solid fa-desktop text-primary-600 text-lg"></i>
+                    class="reveal bg-tertiary dark:bg-secondary-900 rounded-2xl p-7 border border-primary-100 dark:border-secondary-700 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                    <div class="w-12 h-12 rounded-xl bg-primary-100 dark:bg-secondary-800 flex items-center justify-center mb-5">
+                        <i class="fa-solid fa-desktop text-primary-600 dark:text-primary-400 text-lg"></i>
                     </div>
                     <h3 class="font-heading font-bold text-lg mb-2 text-secondary-900 dark:text-neutral-100">Kamera
                         Langsung (Live Cam)</h3>
@@ -240,20 +240,20 @@
     </section>
 
     <!-- ─── TESTIMONIALS ───────────────────────────────────── -->
-    <section id="testimoni" class="py-24 bg-tertiary dark:bg-secondary-900">
+    <section id="testimoni" class="py-24 bg-tertiary dark:bg-secondary-800">
         <div class="max-w-6xl mx-auto px-6">
             <div class="text-center mb-16 reveal">
                 <h2 class="font-heading font-bold text-4xl text-secondary-900 dark:text-neutral-100 mb-3">Apa Kata
                     Mereka?</h2>
-                <p class="text-neutral-500">Kebahagiaan klien adalah prioritas kami dalam mengabadikan momen spesial.
+                <p class="text-neutral-500 dark:text-neutral-400">Kebahagiaan klien adalah prioritas kami dalam mengabadikan momen spesial.
                 </p>
             </div>
             <div class="grid md:grid-cols-3 gap-6">
 
                 <div
-                    class="reveal bg-white dark:bg-secondary-800 rounded-2xl p-8 shadow-soft border border-primary-100 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-                    <div class="text-primary-400 text-3xl font-heading leading-none mb-4">"</div>
-                    <p class="text-secondary-800/70 text-sm leading-relaxed mb-6">"Layanan streaming yang sangat
+                    class="reveal bg-white dark:bg-secondary-800 rounded-2xl p-8 shadow-soft border border-primary-100 dark:border-secondary-700 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                    <div class="text-primary-400 dark:text-primary-300 text-3xl font-heading leading-none mb-4">"</div>
+                    <p class="text-secondary-800/70 dark:text-neutral-200/70 text-sm leading-relaxed mb-6">"Layanan streaming yang sangat
                         profesional!
                         Kualitas videonya jernih dan keluarga yang tidak bisa hadir merasa seperti berada di lokasi."
                     </p>
@@ -261,18 +261,18 @@
                 </div>
 
                 <div
-                    class="reveal bg-white dark:bg-secondary-800 rounded-2xl p-8 shadow-soft border border-primary-100 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-                    <div class="text-primary-400 text-3xl font-heading leading-none mb-4">"</div>
-                    <p class="text-secondary-800/70 text-sm leading-relaxed mb-6">"Sangat puas dengan fitur Live
+                    class="reveal bg-white dark:bg-secondary-800 rounded-2xl p-8 shadow-soft border border-primary-100 dark:border-secondary-700 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                    <div class="text-primary-400 dark:text-primary-300 text-3xl font-heading leading-none mb-4">"</div>
+                    <p class="text-secondary-800/70 dark:text-neutral-200/70 text-sm leading-relaxed mb-6">"Sangat puas dengan fitur Live
                         Cam-nya.
                         Tamu di area belakang tetap bisa melihat prosesi akad dengan jelas melalui layar besar."</p>
                     <p class="font-heading font-bold text-primary-600 dark:text-primary-400">Aditya &amp; Kartika</p>
                 </div>
 
                 <div
-                    class="reveal bg-white dark:bg-secondary-800 rounded-2xl p-8 shadow-soft border border-primary-100 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-                    <div class="text-primary-400 text-3xl font-heading leading-none mb-4">"</div>
-                    <p class="text-secondary-800/70 text-sm leading-relaxed mb-6">"Fitur multi-platform sangat membantu.
+                    class="reveal bg-white dark:bg-secondary-800 rounded-2xl p-8 shadow-soft border border-primary-100 dark:border-secondary-700 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                    <div class="text-primary-400 dark:text-primary-300 text-3xl font-heading leading-none mb-4">"</div>
+                    <p class="text-secondary-800/70 dark:text-neutral-200/70 text-sm leading-relaxed mb-6">"Fitur multi-platform sangat membantu.
                         Teman-teman di luar negeri bisa menonton via YouTube dengan lancar tanpa kendala."</p>
                     <p class="font-heading font-bold text-primary-600 dark:text-primary-400">Dimas &amp; Clarissa</p>
                 </div>
@@ -282,34 +282,34 @@
     </section>
 
     <!-- ─── PRICING ────────────────────────────────────────── -->
-    <section id="paket" class="py-24 bg-white dark:bg-secondary-800">
+    <section id="paket" class="py-24 bg-white dark:bg-secondary-900">
         <div class="max-w-6xl mx-auto px-6">
             <div class="text-center mb-16 reveal">
                 <h2 class="font-heading font-bold text-4xl text-secondary-900 dark:text-neutral-100 mb-3">Pilihan Paket
                     Layanan</h2>
-                <p class="text-neutral-500">Pilih paket yang sesuai dengan kebutuhan momen spesial Anda.</p>
+                <p class="text-neutral-500 dark:text-neutral-400">Pilih paket yang sesuai dengan kebutuhan momen spesial Anda.</p>
             </div>
 
             <div class="grid md:grid-cols-3 gap-6 items-stretch">
 
                 <!-- Silver -->
                 <div
-                    class="reveal flex flex-col bg-tertiary dark:bg-secondary-900 rounded-2xl border border-primary-100 p-8 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                    class="reveal flex flex-col bg-tertiary dark:bg-secondary-900 rounded-2xl border border-primary-100 dark:border-secondary-700 p-8 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                     <div class="mb-6">
                         <h3 class="font-heading font-bold text-2xl text-secondary-900 dark:text-neutral-100">Silver</h3>
-                        <p class="text-neutral-500 text-sm mt-1">Paket Dasar Terjangkau</p>
-                        <p class="text-primary-600 font-semibold text-sm mt-3">Hubungi Sales</p>
+                        <p class="text-neutral-500 dark:text-neutral-400 text-sm mt-1">Paket Dasar Terjangkau</p>
+                        <p class="text-primary-600 dark:text-primary-400 font-semibold text-sm mt-3">Hubungi Sales</p>
                     </div>
                     <ul class="space-y-3 flex-1 mb-8">
-                        <li class="flex items-center gap-3 text-sm text-secondary-800/70">
+                        <li class="flex items-center gap-3 text-sm text-secondary-800/70 dark:text-neutral-200/70">
                             <i class="fa-solid fa-circle-check text-primary-500 text-base"></i>
                             1 Kamera Statis
                         </li>
-                        <li class="flex items-center gap-3 text-sm text-secondary-800/70">
+                        <li class="flex items-center gap-3 text-sm text-secondary-800/70 dark:text-neutral-200/70">
                             <i class="fa-solid fa-circle-check text-primary-500 text-base"></i>
                             Durasi 2 Jam
                         </li>
-                        <li class="flex items-center gap-3 text-sm text-secondary-800/70">
+                        <li class="flex items-center gap-3 text-sm text-secondary-800/70 dark:text-neutral-200/70">
                             <i class="fa-solid fa-circle-check text-primary-500 text-base"></i>
                             1 Platform (YouTube)
                         </li>
@@ -362,23 +362,23 @@
                     <div class="mb-6">
                         <h3 class="font-heading font-bold text-2xl text-secondary-900 dark:text-neutral-100">Platinum
                         </h3>
-                        <p class="text-neutral-500 text-sm mt-1">Pengalaman Premium</p>
-                        <p class="text-primary-600 font-semibold text-sm mt-3">Hubungi Sales</p>
+                        <p class="text-neutral-500 dark:text-neutral-400 text-sm mt-1">Pengalaman Premium</p>
+                        <p class="text-primary-600 dark:text-primary-400 font-semibold text-sm mt-3">Hubungi Sales</p>
                     </div>
                     <ul class="space-y-3 flex-1 mb-8">
-                        <li class="flex items-center gap-3 text-sm text-secondary-800/70">
+                        <li class="flex items-center gap-3 text-sm text-secondary-800/70 dark:text-neutral-200/70">
                             <i class="fa-solid fa-circle-check text-primary-500 text-base"></i>
                             3 Kamera Profesional
                         </li>
-                        <li class="flex items-center gap-3 text-sm text-secondary-800/70">
+                        <li class="flex items-center gap-3 text-sm text-secondary-800/70 dark:text-neutral-200/70">
                             <i class="fa-solid fa-circle-check text-primary-500 text-base"></i>
                             Durasi Tanpa Batas
                         </li>
-                        <li class="flex items-center gap-3 text-sm text-secondary-800/70">
+                        <li class="flex items-center gap-3 text-sm text-secondary-800/70 dark:text-neutral-200/70">
                             <i class="fa-solid fa-circle-check text-primary-500 text-base"></i>
                             Semua Platform
                         </li>
-                        <li class="flex items-center gap-3 text-sm text-secondary-800/70">
+                        <li class="flex items-center gap-3 text-sm text-secondary-800/70 dark:text-neutral-200/70">
                             <i class="fa-solid fa-circle-check text-primary-500 text-base"></i>
                             Fitur Live Cam Lokasi
                         </li>

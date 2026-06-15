@@ -12,12 +12,17 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 
 class SystemConfigResource extends Resource
 {
     protected static ?string $model = SystemConfig::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCog6Tooth;
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Pengaturan Sistem';
+
+    protected static ?int $navigationSort = 1;
 
     protected static ?string $navigationLabel = 'System Settings';
 
@@ -28,7 +33,7 @@ class SystemConfigResource extends Resource
         return false;
     }
 
-    public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool
+    public static function canDelete(Model $record): bool
     {
         return false;
     }

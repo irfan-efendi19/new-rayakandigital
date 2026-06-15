@@ -33,6 +33,7 @@ class ThemeCategoriesTable
                     ->sortable(),
             ])
             ->filters([])
+            ->defaultSort('name')
             ->recordActions([
                 EditAction::make(),
             ])

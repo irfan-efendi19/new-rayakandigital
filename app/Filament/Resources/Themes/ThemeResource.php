@@ -18,7 +18,15 @@ class ThemeResource extends Resource
 {
     protected static ?string $model = Theme::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedPaintBrush;
+
+    protected static ?string $navigationLabel = 'Tema';
+
+    protected static ?string $pluralLabel = 'Tema';
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Manajemen Tema';
+
+    protected static ?int $navigationSort = 1;
 
     public static function form(Schema $schema): Schema
     {

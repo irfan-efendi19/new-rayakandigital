@@ -24,7 +24,9 @@ class PackageResource extends Resource
 
     protected static ?string $pluralLabel = 'Paket';
 
-    protected static string|\UnitEnum|null $navigationGroup = 'Master Data';
+    protected static string|\UnitEnum|null $navigationGroup = 'Paket & Fitur';
+
+    protected static ?int $navigationSort = 1;
 
     public static function form(Schema $schema): Schema
     {

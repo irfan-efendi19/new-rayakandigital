@@ -24,6 +24,10 @@ class AddonResource extends Resource
 
     protected static ?string $pluralLabel = 'Add-Ons';
 
+    protected static string|\UnitEnum|null $navigationGroup = 'Paket & Fitur';
+
+    protected static ?int $navigationSort = 2;
+
     public static function form(Schema $schema): Schema
     {
         return AddonForm::configure($schema);

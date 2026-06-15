@@ -57,8 +57,22 @@ class InvitationsTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                \Filament\Tables\Filters\SelectFilter::make('tier')
+                    ->label('Tier')
+                    ->options([
+                        'free' => 'Free',
+                        'silver' => 'Silver',
+                        'gold' => 'Gold',
+                        'platinum' => 'Platinum',
+                    ]),
+                \Filament\Tables\Filters\SelectFilter::make('is_active')
+                    ->label('Status')
+                    ->options([
+                        true => 'Aktif',
+                        false => 'Nonaktif',
+                    ]),
             ])
+            ->defaultSort('created_at', 'desc')
             ->recordActions([
                 EditAction::make(),
             ])
