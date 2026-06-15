@@ -1,374 +1,99 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="h-full">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <x-meta
-        :title="__('Error') . ' ' . View::yieldContent('code') . ' — ' . View::yieldContent('message')"
-        :description="__('Terjadi kesalahan. Silakan coba lagi atau hubungi tim dukungan.')"
+        :title="__('Error') . ' ' . View::yieldContent('code') . ' — ' . config('app.name', 'Rayakan Digital')"
+        description="Terjadi kesalahan. Silakan coba lagi atau hubungi tim dukungan."
         robots="noindex, nofollow"
     />
 
     @stack('meta')
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600&family=Space+Mono:wght@400;700&display=swap"
-        rel="stylesheet">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    <style>
-    *,
-    *::before,
-    *::after {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-    }
-
-    :root {
-        --bg: #ffffff;
-        --bg-secondary: #f7f7f5;
-        --text-primary: #1a1a18;
-        --text-secondary: #6b6b66;
-        --text-tertiary: #a8a8a2;
-        --border: rgba(0, 0, 0, 0.1);
-        --border-muted: rgba(0, 0, 0, 0.06);
-        --danger-bg: #fff1f0;
-        --danger-text: #c0392b;
-    }
-
-    @media (prefers-color-scheme: dark) {
-        :root {
-            --bg: #111110;
-            --bg-secondary: #1c1c1a;
-            --text-primary: #f0efe8;
-            --text-secondary: #9a9a94;
-            --text-tertiary: #5a5a55;
-            --border: rgba(255, 255, 255, 0.1);
-            --border-muted: rgba(255, 255, 255, 0.05);
-            --danger-bg: #2a1210;
-            --danger-text: #f08070;
+    <script>
+        if (localStorage.getItem('dark-mode') === 'true' || (!('dark-mode' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
         }
-    }
+    </script>
+</head>
 
-    html,
-    body {
-        height: 100%;
-    }
+<body class="font-sans antialiased bg-neutral-50 dark:bg-secondary-900 text-secondary-800 dark:text-neutral-200 h-full">
+    <div class="min-h-full flex items-center justify-center p-6 relative overflow-hidden">
+        <!-- Dot grid background -->
+        <div class="absolute inset-0 pointer-events-none">
+            <div class="absolute inset-0 bg-gradient-to-tr from-primary-500/[0.03] to-transparent"></div>
+            <div class="absolute inset-0"
+                style="background-image: radial-gradient(circle, #94a3b8 1px, transparent 1px); background-size: 32px 32px; opacity: 0.12;">
+            </div>
+        </div>
+        <div class="absolute -bottom-20 -left-20 w-96 h-96 bg-secondary-200/20 rounded-full blur-3xl dark:bg-secondary-800/20"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary-100/10 rounded-full blur-3xl"></div>
 
-    body {
-        font-family: 'Sora', ui-sans-serif, system-ui, sans-serif;
-        background-color: var(--bg);
-        color: var(--text-primary);
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-    }
+        <div class="relative z-10 max-w-lg w-full text-center animate-[fadeIn_0.5s_ease_both]">
+            <!-- Error code (large background) -->
+            <div class="font-mono font-bold text-[clamp(160px,30vw,340px)] leading-none text-secondary-900/5 dark:text-neutral-100/5 select-none pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                @yield('code')
+            </div>
 
-    .page {
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 2rem;
-        position: relative;
-        overflow: hidden;
-    }
-
-    /* Decorative corner marks */
-    .corner {
-        position: fixed;
-        width: 22px;
-        height: 22px;
-    }
-
-    .corner--tl {
-        top: 24px;
-        left: 24px;
-        border-top: 1px solid var(--border);
-        border-left: 1px solid var(--border);
-    }
-
-    .corner--tr {
-        top: 24px;
-        right: 24px;
-        border-top: 1px solid var(--border);
-        border-right: 1px solid var(--border);
-    }
-
-    .corner--bl {
-        bottom: 24px;
-        left: 24px;
-        border-bottom: 1px solid var(--border);
-        border-left: 1px solid var(--border);
-    }
-
-    .corner--br {
-        bottom: 24px;
-        right: 24px;
-        border-bottom: 1px solid var(--border);
-        border-right: 1px solid var(--border);
-    }
-
-    /* Large background glyph */
-    .bg-glyph {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-family: 'Space Mono', monospace;
-        font-size: clamp(160px, 30vw, 340px);
-        font-weight: 700;
-        color: var(--text-primary);
-        opacity: 0.04;
-        user-select: none;
-        pointer-events: none;
-        letter-spacing: -0.04em;
-        white-space: nowrap;
-        line-height: 1;
-    }
-
-    /* Main card */
-    .card {
-        position: relative;
-        z-index: 1;
-        max-width: 520px;
-        width: 100%;
-        animation: reveal 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
-    }
-
-    @keyframes reveal {
-        from {
-            opacity: 0;
-            transform: translateY(18px);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    /* Status badge */
-    .badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 7px;
-        font-family: 'Space Mono', monospace;
-        font-size: 10px;
-        font-weight: 700;
-        letter-spacing: 0.14em;
-        text-transform: uppercase;
-        color: var(--danger-text);
-        background: var(--danger-bg);
-        border: 1px solid rgba(192, 57, 43, 0.15);
-        border-radius: 100px;
-        padding: 5px 14px 5px 10px;
-        margin-bottom: 2rem;
-        animation: reveal 0.5s 0.05s cubic-bezier(0.22, 1, 0.36, 1) both;
-    }
-
-    .badge__dot {
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background: var(--danger-text);
-        animation: pulse 2.2s ease-in-out infinite;
-        flex-shrink: 0;
-    }
-
-    @keyframes pulse {
-
-        0%,
-        100% {
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        50% {
-            opacity: 0.3;
-            transform: scale(0.65);
-        }
-    }
-
-    /* Error code */
-    .code {
-        font-family: 'Space Mono', monospace;
-        font-size: clamp(56px, 10vw, 80px);
-        font-weight: 700;
-        line-height: 1;
-        color: var(--text-primary);
-        letter-spacing: -0.03em;
-        animation: reveal 0.5s 0.1s cubic-bezier(0.22, 1, 0.36, 1) both;
-    }
-
-    .divider {
-        width: 36px;
-        height: 2px;
-        background: var(--text-primary);
-        border-radius: 2px;
-        margin: 1.4rem 0;
-        animation: reveal 0.5s 0.15s cubic-bezier(0.22, 1, 0.36, 1) both;
-    }
-
-    .message {
-        font-size: 17px;
-        font-weight: 300;
-        color: var(--text-secondary);
-        line-height: 1.65;
-        margin-bottom: 2.5rem;
-        animation: reveal 0.5s 0.2s cubic-bezier(0.22, 1, 0.36, 1) both;
-    }
-
-    /* Actions */
-    .actions {
-        display: flex;
-        gap: 12px;
-        flex-wrap: wrap;
-        animation: reveal 0.5s 0.25s cubic-bezier(0.22, 1, 0.36, 1) both;
-    }
-
-    .btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 7px;
-        font-family: 'Sora', sans-serif;
-        font-size: 13px;
-        font-weight: 600;
-        padding: 10px 20px;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: transform 0.15s ease, opacity 0.15s ease, background 0.15s ease;
-        text-decoration: none;
-        white-space: nowrap;
-    }
-
-    .btn--primary {
-        background: var(--text-primary);
-        color: var(--bg);
-        border: none;
-    }
-
-    .btn--primary:hover {
-        opacity: 0.82;
-        transform: translateY(-1px);
-    }
-
-    .btn--primary:active {
-        transform: translateY(0);
-        opacity: 1;
-    }
-
-    .btn--ghost {
-        background: transparent;
-        color: var(--text-secondary);
-        border: 1px solid var(--border);
-    }
-
-    .btn--ghost:hover {
-        background: var(--bg-secondary);
-        color: var(--text-primary);
-        transform: translateY(-1px);
-    }
-
-    .btn--ghost:active {
-        transform: translateY(0);
-    }
-
-    /* SVG icons inline */
-    .icon {
-        width: 15px;
-        height: 15px;
-        display: inline-block;
-        vertical-align: middle;
-        flex-shrink: 0;
-    }
-
-    /* Meta footer */
-    .meta {
-        margin-top: 3rem;
-        padding-top: 1.5rem;
-        border-top: 1px solid var(--border-muted);
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        flex-wrap: wrap;
-        animation: reveal 0.5s 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
-    }
-
-    .meta__item {
-        font-family: 'Space Mono', monospace;
-        font-size: 10px;
-        letter-spacing: 0.08em;
-        color: var(--text-tertiary);
-        text-transform: uppercase;
-    }
-
-    .meta__sep {
-        width: 3px;
-        height: 3px;
-        border-radius: 50%;
-        background: var(--border);
-        flex-shrink: 0;
-    }
-    </style>
-    </head>
-<body>
-
-    <div class="page" role="main">
-
-        <!-- Corner decorations -->
-        <div class="corner corner--tl" aria-hidden="true"></div>
-        <div class="corner corner--tr" aria-hidden="true"></div>
-        <div class="corner corner--bl" aria-hidden="true"></div>
-        <div class="corner corner--br" aria-hidden="true"></div>
-
-        <!-- Background glyph -->
-        <div class="bg-glyph" aria-hidden="true">@yield('code')</div>
-
-        <!-- Main content -->
-        <div class="card">
-
-            <div class="badge">
-                <span class="badge__dot" aria-hidden="true"></span>
+            <!-- Dot indicator -->
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold font-mono tracking-widest uppercase mb-8 bg-red-50 text-red-600 border border-red-200 dark:bg-red-900/20 dark:text-red-400 dark:border-red-800/30">
+                <span class="w-1.5 h-1.5 rounded-full bg-red-600 dark:bg-red-400 animate-pulse"></span>
                 HTTP Error
             </div>
 
-            <div class="code" aria-label="Error code @yield('code')">@yield('code')</div>
+            <!-- Error code -->
+            <div class="font-mono font-bold text-7xl md:text-8xl text-secondary-900 dark:text-neutral-100 leading-none mb-6">
+                @yield('code')
+            </div>
 
-            <div class="divider" aria-hidden="true"></div>
+            <!-- Divider -->
+            <div class="w-9 h-0.5 bg-secondary-900 dark:bg-neutral-100 rounded-full mx-auto mb-6"></div>
 
-            <p class="message">@yield('message')</p>
+            <!-- Message -->
+            <p class="text-neutral-500 dark:text-neutral-400 text-lg font-light leading-relaxed mb-10">
+                @yield('message')
+            </p>
 
-            <div class="actions">
-                <a href="javascript:history.back()" class="btn btn--primary">
-                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
-                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <!-- Actions -->
+            <div class="flex items-center justify-center gap-3 flex-wrap">
+                <a href="javascript:history.back()"
+                    class="inline-flex items-center gap-2 bg-secondary-900 dark:bg-neutral-100 text-white dark:text-secondary-900 font-semibold px-5 py-2.5 rounded-xl text-sm hover:opacity-80 transition-all active:scale-[0.97]">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M19 12H5M12 5l-7 7 7 7" />
                     </svg>
                     Kembali
                 </a>
-                <a href="/" class="btn btn--ghost">
-                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
-                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <a href="/"
+                    class="inline-flex items-center gap-2 bg-transparent text-secondary-600 dark:text-neutral-400 font-semibold px-5 py-2.5 rounded-xl text-sm border border-secondary-200 dark:border-secondary-700 hover:bg-secondary-50 dark:hover:bg-secondary-800 transition-all active:scale-[0.97]">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
                         <polyline points="9 22 9 12 15 12 15 22" />
                     </svg>
                     Beranda
                 </a>
             </div>
-<div class="meta" aria-label="Informasi tambahan">
-    <span class="meta__item">{{ config('app.name', 'Laravel') }}</span>
-    <span class="meta__sep" aria-hidden="true"></span>
-    <span class="meta__item">@yield('message')</span>
-    <span class="meta__sep" aria-hidden="true"></span>
-    <span class="meta__item">HTTP/@yield('code')</span>
+
+            <!-- Meta -->
+            <div class="mt-10 pt-5 border-t border-secondary-100 dark:border-secondary-800 flex items-center justify-center gap-2 flex-wrap">
+                <span class="font-mono text-[10px] tracking-widest uppercase text-neutral-400 dark:text-neutral-500">{{ config('app.name', 'Rayakan Digital') }}</span>
+                <span class="w-1 h-1 rounded-full bg-secondary-300 dark:bg-secondary-600"></span>
+                <span class="font-mono text-[10px] tracking-widest uppercase text-neutral-400 dark:text-neutral-500">HTTP/@yield('code')</span>
             </div>
-
         </div>
-        </div>
+    </div>
 
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </body>
-
 </html>

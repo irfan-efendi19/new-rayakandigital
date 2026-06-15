@@ -1,5 +1,5 @@
 @extends('errors::minimal')
 
-@section('title', __('Too Many Requests'))
+@section('title', 'Terlalu Banyak Permintaan')
 @section('code', '429')
-@section('message', __('Too Many Requests'))
+@section('message', 'Terlalu banyak permintaan. Silakan tunggu beberapa saat sebelum mencoba lagi.')

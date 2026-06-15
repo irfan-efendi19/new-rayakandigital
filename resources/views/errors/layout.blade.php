@@ -1,58 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="id" class="h-full">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <x-meta
-            :title="View::yieldContent('title') ?: config('app.name', 'Rayakan Digital')"
-            robots="noindex, nofollow"
-        />
+    <x-meta
+        :title="View::yieldContent('title') ?: config('app.name', 'Rayakan Digital')"
+        robots="noindex, nofollow"
+    />
 
-        @stack('meta')
+    @stack('meta')
 
-        <!-- Styles -->
-        <style>
-            html, body {
-                background-color: #fff;
-                color: #636b6f;
-                font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-                font-weight: 100;
-                height: 100vh;
-                margin: 0;
-            }
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-            .full-height {
-                height: 100vh;
-            }
-
-            .flex-center {
-                align-items: center;
-                display: flex;
-                justify-content: center;
-            }
-
-            .position-ref {
-                position: relative;
-            }
-
-            .content {
-                text-align: center;
-            }
-
-            .title {
-                font-size: 36px;
-                padding: 20px;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="flex-center position-ref full-height">
-            <div class="content">
-                <div class="title">
-                    @yield('message')
-                </div>
+    <script>
+        if (localStorage.getItem('dark-mode') === 'true' || (!('dark-mode' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+</head>
+<body class="font-sans antialiased bg-neutral-50 dark:bg-secondary-900 text-secondary-800 dark:text-neutral-200 h-full">
+    <div class="min-h-full flex items-center justify-center p-6">
+        <div class="text-center max-w-md">
+            <div class="font-mono font-bold text-[clamp(36px,8vw,56px)] text-secondary-900 dark:text-neutral-100 mb-4">
+                @yield('message')
             </div>
+            <div class="w-9 h-0.5 bg-secondary-900 dark:bg-neutral-100 rounded-full mx-auto mb-4"></div>
+            <p class="text-neutral-500 dark:text-neutral-400 text-sm">
+                Silakan coba lagi atau hubungi tim dukungan jika masalah berlanjut.
+            </p>
         </div>
-    </body>
+    </div>
+</body>
 </html>
