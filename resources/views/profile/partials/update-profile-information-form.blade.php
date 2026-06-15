@@ -1,9 +1,9 @@
 <section>
     <header class="mb-6">
-        <h2 class="font-heading text-xl font-bold text-secondary-800">
+        <h2 class="font-heading text-xl font-bold text-secondary-800 dark:text-neutral-100">
             {{ __('Informasi Profil') }}
         </h2>
-        <p class="mt-1 text-sm text-neutral-500">
+        <p class="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
             {{ __("Perbarui informasi profil akun Anda dan alamat email.") }}
         </p>
     </header>
@@ -30,18 +30,18 @@
             <x-input-error class="mt-2" :messages="$errors->get('email')" />
 
             @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && !$user->hasVerifiedEmail())
-                <div class="mt-3 p-3 bg-amber-50 border border-amber-200 rounded-xl">
-                    <p class="text-sm text-amber-800">
+                <div class="mt-3 p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl">
+                    <p class="text-sm text-amber-800 dark:text-amber-300">
                         {{ __('Alamat email Anda belum diverifikasi.') }}
 
-                        <button form="send-verification"
-                            class="underline font-medium text-amber-700 hover:text-amber-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                            <button form="send-verification"
+                                class="underline font-medium text-amber-700 dark:text-amber-400 hover:text-amber-900 dark:hover:text-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
                             {{ __('Klik di sini untuk mengirim ulang email verifikasi.') }}
                         </button>
                     </p>
 
                     @if (session('status') === 'verification-link-sent')
-                        <p class="mt-2 font-medium text-sm text-emerald-600">
+                        <p class="mt-2 font-medium text-sm text-emerald-600 dark:text-emerald-400">
                             {{ __('Tautan verifikasi baru telah dikirim ke alamat email Anda.') }}
                         </p>
                     @endif
@@ -54,7 +54,7 @@
 
             @if (session('status') === 'profile-updated')
                 <p x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)"
-                    class="text-sm text-emerald-600 font-medium">{{ __('Tersimpan.') }}</p>
+                    class="text-sm text-emerald-600 dark:text-emerald-400 font-medium">{{ __('Tersimpan.') }}</p>
             @endif
         </div>
     </form>

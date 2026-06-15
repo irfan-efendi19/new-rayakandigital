@@ -3,7 +3,7 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 pb-12">
 
         <div>
-            <p class="font-heading text-primary text-2xl font-semibold tracking-tight mb-3">Rayakan Digital</p>
+            <p class="font-heading text-primary dark:text-primary-400 text-2xl font-semibold tracking-tight mb-3">Rayakan Digital</p>
             <p class="text-footer-muted dark:text-neutral-400 text-sm leading-relaxed mb-7 max-w-[210px]">
                 Platform pembuatan undangan digital terdepan di Indonesia. Mudah, elegan, dan penuh fitur modern.
             </p>

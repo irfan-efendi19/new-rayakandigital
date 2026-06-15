@@ -245,7 +245,7 @@
                                 <div class="p-6">
                                     <!-- Package Name -->
                                     <h3
-                                        class="font-heading text-xl font-bold {{ $package->is_popular ? 'text-primary-600' : 'text-secondary-800' }}">
+                                        class="font-heading text-xl font-bold {{ $package->is_popular ? 'text-primary-600 dark:text-primary-400' : 'text-secondary-800 dark:text-neutral-100' }}">
                                         {{ $package->package_name }}
                                     </h3>
 

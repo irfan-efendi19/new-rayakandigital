@@ -209,11 +209,11 @@
                         @forelse($invitations as $invitation)
                             <div class="border border-neutral-200 dark:border-secondary-700 rounded-2xl overflow-hidden shadow-sm flex flex-col hover:shadow-md transition-all duration-200 group
                                 {{ $invitation->isTrialExpired() ? 'opacity-60' : '' }}">
-                                <div class="bg-neutral-100 dark:bg-secondary-700 h-40 flex items-center justify-center overflow-hidden">
+                                <div class="bg-neutral-100 dark:bg-secondary-700 aspect-[9/16] flex items-center justify-center overflow-hidden">
                                     @if($invitation->cover_photo)
                                         <img src="{{ asset('storage/' . $invitation->cover_photo) }}" alt="Cover" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                     @else
-                                        <div class="flex flex-col items-center text-neutral-400">
+                                        <div class="flex flex-col items-center text-neutral-400 dark:text-neutral-500">
                                             <svg class="w-10 h-10 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                             </svg>

@@ -35,7 +35,7 @@
         </div>
 
         <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+            <a class="underline text-sm text-gray-600 dark:text-neutral-400 hover:text-gray-900 dark:hover:text-neutral-200 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
                 href="{{ route('login') }}">
                 {{ __('Sudah terdaftar?') }}
             </a>
@@ -47,15 +47,15 @@
 
     <div class="relative my-6">
         <div class="absolute inset-0 flex items-center">
-            <div class="w-full border-t border-gray-200"></div>
+            <div class="w-full border-t border-gray-200 dark:border-neutral-700"></div>
         </div>
         <div class="relative flex justify-center text-sm">
-            <span class="bg-white px-4 text-gray-500">Atau daftar dengan</span>
+            <span class="bg-white dark:bg-[#2a2a4a] px-4 text-gray-500 dark:text-neutral-400">Atau daftar dengan</span>
         </div>
     </div>
 
     <a href="{{ route('google.redirect') }}"
-        class="w-full inline-flex items-center justify-center gap-3 px-4 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-all duration-200">
+        class="w-full inline-flex items-center justify-center gap-3 px-4 py-2.5 border border-gray-300 dark:border-neutral-600 rounded-lg text-sm font-medium text-gray-700 dark:text-neutral-300 bg-white dark:bg-secondary-700 hover:bg-gray-50 dark:hover:bg-secondary-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-all duration-200">
         <svg class="w-5 h-5" viewBox="0 0 24 24">
             <path
                 d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"

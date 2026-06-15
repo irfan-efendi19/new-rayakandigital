@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
             <div>
-                <h2 class="font-heading text-2xl font-bold text-secondary-800">
+                <h2 class="font-heading text-2xl font-bold text-secondary-800 dark:text-neutral-100">
                     Tamu Undangan: {{ $invitation->title }}
                 </h2>
                 <p class="text-sm text-neutral-500 mt-0.5">Kelola daftar tamu dan kirim undangan WhatsApp.</p>
@@ -58,7 +58,7 @@
             <div class="bg-white rounded-2xl shadow-soft border border-neutral-100">
                 <div class="p-6">
                     <div class="flex justify-between items-center mb-4">
-                        <h3 class="font-heading text-lg font-bold text-secondary-800">Template Pesan WhatsApp</h3>
+                        <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">Template Pesan WhatsApp</h3>
                         <label class="inline-flex items-center gap-2 cursor-pointer select-none">
                             <span class="text-sm text-neutral-600">Custom Template</span>
                             <input type="checkbox" id="wa_template_toggle" class="rounded-lg border-neutral-300 text-primary focus:ring-primary-500 shadow-sm"
@@ -100,7 +100,7 @@
             {{-- Import Card --}}
             <div class="bg-white rounded-2xl shadow-soft border border-neutral-100">
                 <div class="p-6">
-                    <h3 class="font-heading text-lg font-bold text-secondary-800 mb-4">Import Tamu Massal (CSV)</h3>
+                    <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100 mb-4">Import Tamu Massal (CSV)</h3>
                     <form action="{{ route('dashboard.invitations.guests.import', $invitation) }}" method="POST" enctype="multipart/form-data" class="flex flex-col md:flex-row items-end gap-4">
                         @csrf
                         <div class="flex-1 w-full">
@@ -131,7 +131,7 @@
                 <div class="p-6">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
                         <div class="flex items-center gap-2">
-                            <h3 class="font-heading text-lg font-bold text-secondary-800">Daftar Tamu</h3>
+                            <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">Daftar Tamu</h3>
                             <span class="inline-flex items-center justify-center min-w-[1.5rem] h-6 px-2 rounded-full bg-primary-50 text-primary-700 text-xs font-bold">{{ $guests->total() }}</span>
                         </div>
                         <div class="flex gap-2">

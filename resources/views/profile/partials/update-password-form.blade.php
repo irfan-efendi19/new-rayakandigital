@@ -1,9 +1,9 @@
 <section>
     <header class="mb-6">
-        <h2 class="font-heading text-xl font-bold text-secondary-800">
+        <h2 class="font-heading text-xl font-bold text-secondary-800 dark:text-neutral-100">
             {{ __('Perbarui Kata Sandi') }}
         </h2>
-        <p class="mt-1 text-sm text-neutral-500">
+        <p class="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
             {{ __('Pastikan akun Anda menggunakan kata sandi yang panjang dan acak untuk tetap aman.') }}
         </p>
     </header>
@@ -38,7 +38,7 @@
 
             @if (session('status') === 'password-updated')
                 <p x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)"
-                    class="text-sm text-emerald-600 font-medium">{{ __('Tersimpan.') }}</p>
+                    class="text-sm text-emerald-600 dark:text-emerald-400 font-medium">{{ __('Tersimpan.') }}</p>
             @endif
         </div>
     </form>

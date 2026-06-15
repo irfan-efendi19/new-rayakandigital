@@ -44,7 +44,7 @@
             <h1 class="font-heading text-5xl md:text-6xl font-bold leading-tight text-secondary-800 dark:text-neutral-200 mb-3">
                 Menciptakan Kenangan<br>Digital yang
             </h1>
-            <h1 class="font-heading text-5xl md:text-6xl italic text-primary-500 mb-6">
+            <h1 class="font-heading text-5xl md:text-6xl italic text-primary-500 dark:text-primary-400 mb-6">
                 Abadi &amp; Bermakna
             </h1>
 
@@ -242,7 +242,7 @@
                 <h2 class="font-heading text-4xl font-bold text-secondary-800 dark:text-neutral-200 leading-tight mb-2">
                     Perjalanan Kami<br>Membantu
                 </h2>
-                <h2 class="font-heading text-4xl italic text-primary-500 mb-6">Ribuan Pasangan</h2>
+                <h2 class="font-heading text-4xl italic text-primary-500 dark:text-primary-400 mb-6">Ribuan Pasangan</h2>
 
                 <p class="text-neutral-500 text-sm leading-relaxed mb-4">
                     Sejak 2021, Rayakan Digital telah bertumbuh dari sebuah proyek kecil menjadi salah satu platform

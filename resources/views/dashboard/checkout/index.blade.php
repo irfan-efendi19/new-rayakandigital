@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <div>
-            <h2 class="font-heading text-2xl font-bold text-secondary-800">
+            <h2 class="font-heading text-2xl font-bold text-secondary-800 dark:text-neutral-100">
                 Pilih Paket
             </h2>
             <p class="text-sm text-neutral-500 mt-0.5">Upgrade undangan Anda untuk fitur yang lebih lengkap.</p>
@@ -27,13 +27,13 @@
             @endphp
     
             @if($invitation)
-                <div class="mb-6 bg-white border border-neutral-200 rounded-2xl px-5 py-4 flex items-center gap-3 shadow-soft">
-                    <svg class="w-5 h-5 text-neutral-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div class="mb-6 bg-white dark:bg-secondary-800 border border-neutral-200 dark:border-secondary-700 rounded-2xl px-5 py-4 flex items-center gap-3 shadow-soft">
+                    <svg class="w-5 h-5 text-neutral-400 dark:text-neutral-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                     </svg>
-                    <span class="text-sm text-neutral-600">
-                        Memperbarui paket untuk undangan: <strong class="text-secondary-800">{{ $invitation->title }}</strong>
+                    <span class="text-sm text-neutral-600 dark:text-neutral-400">
+                        Memperbarui paket untuk undangan: <strong class="text-secondary-800 dark:text-neutral-100">{{ $invitation->title }}</strong>
                     </span>
                 </div>
             @endif
@@ -41,7 +41,7 @@
             {{-- Payment Method Info --}}
             @if($activeMethod === 'manual_bank')
                 <div
-                    class="mb-6 bg-blue-50 border border-blue-200 text-blue-700 px-5 py-4 rounded-2xl text-sm flex items-center gap-3">
+                    class="mb-6 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 px-5 py-4 rounded-2xl text-sm flex items-center gap-3">
                     <svg class="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -51,7 +51,7 @@
                 </div>
             @else
                 <div
-                    class="mb-6 bg-emerald-50 border border-emerald-200 text-emerald-700 px-5 py-4 rounded-2xl text-sm flex items-center gap-3">
+                    class="mb-6 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 px-5 py-4 rounded-2xl text-sm flex items-center gap-3">
                     <svg class="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -63,16 +63,16 @@
     
             {{-- Current Tier --}}
             <div
-                class="mb-8 bg-white rounded-2xl shadow-soft border border-neutral-100 p-5 flex items-center justify-between">
+                class="mb-8 bg-white dark:bg-secondary-800 rounded-2xl shadow-soft border border-neutral-100 dark:border-secondary-700 p-5 flex items-center justify-between">
                 <div>
-                    <h3 class="font-heading text-lg font-bold text-secondary-800">Paket Anda Saat Ini</h3>
-                    <p class="text-sm text-neutral-500 mt-0.5">Upgrade untuk membuka fitur premium.</p>
+                    <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">Paket Anda Saat Ini</h3>
+                    <p class="text-sm text-neutral-500 dark:text-neutral-400 mt-0.5">Upgrade untuk membuka fitur premium.</p>
                 </div>
                 <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold
-                        {{ $currentTier === 'free' ? 'bg-neutral-100 text-neutral-700' : '' }}
-                        {{ $currentTier === 'silver' ? 'bg-blue-100 text-blue-700' : '' }}
-                        {{ $currentTier === 'gold' ? 'bg-amber-100 text-amber-700' : '' }}
-                        {{ $currentTier === 'platinum' ? 'bg-primary-100 text-primary-700' : '' }}
+                        {{ $currentTier === 'free' ? 'bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300' : '' }}
+                        {{ $currentTier === 'silver' ? 'bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300' : '' }}
+                        {{ $currentTier === 'gold' ? 'bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300' : '' }}
+                        {{ $currentTier === 'platinum' ? 'bg-primary-100 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300' : '' }}
                     ">
                     {{ $currentPackage ? $currentPackage->package_name : ucfirst($currentTier) }}
                 </span>
@@ -82,8 +82,8 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
     
                 @forelse($packages as $pkg)
-                    <div class="bg-white rounded-3xl shadow-soft border overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col relative
-                                {{ $pkg->is_popular ? 'border-2 border-primary-500 shadow-lg scale-[1.02] md:scale-105' : 'border-neutral-200' }}
+                    <div class="bg-white dark:bg-secondary-800 rounded-3xl shadow-soft border overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col relative
+                                {{ $pkg->is_popular ? 'border-2 border-primary-500 shadow-lg scale-[1.02] md:scale-105' : 'border-neutral-200 dark:border-secondary-700' }}
                                 {{ $currentTier === $pkg->package_code ? 'ring-2 ring-primary-400' : '' }}
                             ">
                         @if($pkg->is_popular)
@@ -104,12 +104,12 @@
                         <div class="p-8 {{ $pkg->is_popular ? 'pt-14' : '' }} flex-1">
                             <div class="flex items-center justify-between mb-4">
                                 <h3
-                                    class="font-heading text-xl font-bold {{ $pkg->is_popular ? 'text-primary' : 'text-secondary-800' }}">
+                                    class="font-heading text-xl font-bold {{ $pkg->is_popular ? 'text-primary dark:text-primary-400' : 'text-secondary-800 dark:text-neutral-100' }}">
                                     {{ $pkg->package_name }}
                                 </h3>
                                 @if($currentTier === $pkg->package_code)
                                     <span
-                                        class="text-xs font-bold px-3 py-1 rounded-full text-primary-700 bg-primary-50">AKTIF</span>
+                                        class="text-xs font-bold px-3 py-1 rounded-full text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/50">AKTIF</span>
                                 @endif
                             </div>
                             @if($pkg->description)
@@ -118,18 +118,18 @@
 
                             <div class="mb-8">
                                 @if($pkg->slashed_price && $pkg->slashed_price > $pkg->price)
-                                    <span class="text-lg text-neutral-300 line-through">Rp
+                                    <span class="text-lg text-neutral-300 dark:text-neutral-600 line-through">Rp
                                         {{ number_format($pkg->slashed_price, 0, ',', '.') }}</span>
                                 @endif
                                 <div class="flex items-baseline gap-1">
-                                    <span class="text-4xl font-extrabold text-secondary-800">Rp
+                                    <span class="text-4xl font-extrabold text-secondary-800 dark:text-neutral-100">Rp
                                         {{ number_format($pkg->price, 0, ',', '.') }}</span>
-                                    <span class="text-sm text-neutral-500">/
+                                    <span class="text-sm text-neutral-500 dark:text-neutral-400">/
                                         {{ $pkg->active_period_days === 0 ? 'Lifetime' : $pkg->active_period_days . ' Hari' }}</span>
                                 </div>
                             </div>
 
-                            <ul class="space-y-3 text-sm text-neutral-600">
+                            <ul class="space-y-3 text-sm text-neutral-600 dark:text-neutral-400">
                                 @forelse($pkg->features as $feature)
                                     <li class="flex items-start gap-3">
                                         <svg class="w-4 h-4 text-emerald-500 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24"
@@ -140,14 +140,14 @@
                                         <span>{{ $feature->feature_name }}</span>
                                     </li>
                                 @empty
-                                    <li class="text-sm text-neutral-400 italic">Fitur dasar</li>
+                                    <li class="text-sm text-neutral-400 dark:text-neutral-500 italic">Fitur dasar</li>
                                 @endforelse
                             </ul>
                         </div>
                         <div class="px-8 pb-8">
                             @if($currentTier === $pkg->package_code || $currentRank >= $pkg->sort_order)
                                 <button disabled
-                                    class="w-full py-3 bg-neutral-100 text-neutral-400 rounded-2xl font-semibold cursor-not-allowed">
+                                    class="w-full py-3 bg-neutral-100 dark:bg-secondary-700 text-neutral-400 dark:text-neutral-500 rounded-2xl font-semibold cursor-not-allowed">
                                     {{ $currentTier === $pkg->package_code ? 'Paket Aktif' : 'Sudah Lebih Tinggi' }}
                                 </button>
                             @else
@@ -164,8 +164,8 @@
                                                         bg-emerald-600 text-white hover:bg-emerald-700
                                                     @else
                                                                                         {{ $pkg->is_popular
-                                                        ? 'bg-gradient-to-r from-primary to-primary-600 text-white hover:shadow-lg shadow-primary-200'
-                                                        : 'bg-secondary-800 text-white hover:bg-secondary-700' }}
+                                                        ? 'bg-gradient-to-r from-primary to-primary-600 text-white hover:shadow-lg shadow-primary-200 dark:shadow-primary-900/50'
+                                                        : 'bg-secondary-800 dark:bg-primary-600 text-white hover:bg-secondary-700 dark:hover:bg-primary-700' }}
                                                     @endif
                                                 ">
                                         @if($activeMethod === 'manual_bank')
@@ -180,7 +180,7 @@
                         </div>
                     </div>
                 @empty
-                    <div class="col-span-full py-12 text-center text-neutral-500">
+                    <div class="col-span-full py-12 text-center text-neutral-500 dark:text-neutral-400">
                         <p class="text-lg">Belum ada paket tersedia. Silakan hubungi admin.</p>
                     </div>
                 @endforelse
@@ -189,11 +189,11 @@
     
             {{-- Footer Note --}}
             <div class="mt-12 text-center">
-                <div class="bg-neutral-50 border border-neutral-200 rounded-2xl p-6 inline-block max-w-2xl mx-auto">
-                    <p class="text-sm text-neutral-500">
+                <div class="bg-neutral-50 dark:bg-secondary-800 border border-neutral-200 dark:border-secondary-700 rounded-2xl p-6 inline-block max-w-2xl mx-auto">
+                    <p class="text-sm text-neutral-500 dark:text-neutral-400">
                         Semua paket termasuk fitur RSVP, Buku Tamu, Link Personal per Tamu, dan Template Pesan WhatsApp.
                     </p>
-                    <p class="text-sm text-neutral-500 mt-1">
+                    <p class="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
                         Pembayaran hanya satu kali, bukan langganan bulanan.
                     </p>
                 </div>

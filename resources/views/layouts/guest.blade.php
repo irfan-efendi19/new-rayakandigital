@@ -142,6 +142,10 @@
             padding: 2.5rem 1.5rem;
         }
     
+        .dark .auth-right {
+            background: #1a1a2e;
+        }
+
         @media (min-width: 1024px) {
             .auth-right {
                 width: 480px;
@@ -174,10 +178,18 @@
             0 20px 40px -10px rgba(0, 0, 0, 0.10);
         padding: 2.5rem;
     }
+
+    .dark .auth-right-card {
+        background: #2a2a4a;
+        box-shadow:
+            0 0 0 1px rgba(255, 255, 255, 0.05),
+            0 4px 6px -1px rgba(0, 0, 0, 0.3),
+            0 20px 40px -10px rgba(0, 0, 0, 0.4);
+    }
     </style>
     </head>
 
-<body class="font-sans text-gray-900 antialiased">
+<body class="font-sans text-gray-900 dark:text-neutral-200 antialiased">
     <!-- ═══════════════ LEFT PANEL ═══════════════ -->
     <div class="auth-left">
         <div class="auth-left-bg"></div>
@@ -202,7 +214,7 @@
         <!-- Logo mobile -->
         <div class="auth-right-logo">
             <a href="/">
-                <x-application-logo class="w-16 h-16 fill-current text-gray-500" />
+                <x-application-logo class="w-16 h-16 fill-current text-gray-500 dark:text-neutral-400" />
                 </a>
                 </div>
 

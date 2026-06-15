@@ -31,7 +31,10 @@ document.addEventListener('DOMContentLoaded', function () {
         currentInput = fileInput;
         currentPreviewId = previewId;
 
-        const aspectRatio = fileInput.dataset.aspectRatio || '1';
+        const aspectRatioRaw = fileInput.dataset.aspectRatio || '1';
+        const aspectRatio = aspectRatioRaw.includes('/')
+            ? aspectRatioRaw.split('/').reduce((a, b) => parseFloat(a) / parseFloat(b))
+            : parseFloat(aspectRatioRaw);
         const outputWidth = parseInt(fileInput.dataset.width) || 400;
         const outputHeight = parseInt(fileInput.dataset.height) || 400;
 

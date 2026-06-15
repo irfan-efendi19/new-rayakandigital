@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <div>
-            <h2 class="font-heading text-2xl font-bold text-secondary-800">
+            <h2 class="font-heading text-2xl font-bold text-secondary-800 dark:text-neutral-100">
                 Tambah Tamu
             </h2>
             <p class="text-sm text-neutral-500 mt-0.5">{{ $invitation->title }}</p>

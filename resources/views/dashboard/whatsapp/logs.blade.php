@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
             <div>
-                <h2 class="font-heading text-2xl font-bold text-secondary-800">
+                <h2 class="font-heading text-2xl font-bold text-secondary-800 dark:text-neutral-100">
                     Log WhatsApp: {{ $invitation->title }}
                 </h2>
                 <p class="text-sm text-neutral-500 mt-0.5">Riwayat pengiriman pesan WhatsApp ke tamu undangan.</p>

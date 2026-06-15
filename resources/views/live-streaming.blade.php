@@ -251,7 +251,7 @@
                         profesional!
                         Kualitas videonya jernih dan keluarga yang tidak bisa hadir merasa seperti berada di lokasi."
                     </p>
-                    <p class="font-heading font-bold text-primary-600">Rian &amp; Shinta</p>
+                    <p class="font-heading font-bold text-primary-600 dark:text-primary-400">Rian &amp; Shinta</p>
                 </div>
 
                 <div
@@ -260,7 +260,7 @@
                     <p class="text-secondary-800/70 text-sm leading-relaxed mb-6">"Sangat puas dengan fitur Live
                         Cam-nya.
                         Tamu di area belakang tetap bisa melihat prosesi akad dengan jelas melalui layar besar."</p>
-                    <p class="font-heading font-bold text-primary-600">Aditya &amp; Kartika</p>
+                    <p class="font-heading font-bold text-primary-600 dark:text-primary-400">Aditya &amp; Kartika</p>
                 </div>
 
                 <div
@@ -268,7 +268,7 @@
                     <div class="text-primary-400 text-3xl font-heading leading-none mb-4">"</div>
                     <p class="text-secondary-800/70 text-sm leading-relaxed mb-6">"Fitur multi-platform sangat membantu.
                         Teman-teman di luar negeri bisa menonton via YouTube dengan lancar tanpa kendala."</p>
-                    <p class="font-heading font-bold text-primary-600">Dimas &amp; Clarissa</p>
+                    <p class="font-heading font-bold text-primary-600 dark:text-primary-400">Dimas &amp; Clarissa</p>
                 </div>
 
             </div>
