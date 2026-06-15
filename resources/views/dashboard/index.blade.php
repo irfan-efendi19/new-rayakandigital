@@ -260,6 +260,7 @@
                                                 @php
                                                     $isExpired = $invitation->isTrialExpired();
                                                     $isTrial = $invitation->expires_at !== null && !$invitation->hasPremiumFeatures();
+                                                    $daysLeft = $invitation->expires_at ? (int) max(0, now()->diffInDays($invitation->expires_at, false)) : null;
                                                 @endphp
                                                 @if($isExpired)
                                                     <span class="inline-flex items-center px-1 py-0.5 rounded text-[9px] sm:text-[10px] font-medium bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300">Kedaluwarsa</span>
@@ -268,6 +269,9 @@
                                                 @endif
                                                 @if($invitation->expires_at)
                                                     <span class="text-[9px] sm:text-[10px] text-neutral-400 dark:text-neutral-500">{{ $invitation->expires_at->format('d/m/Y') }}</span>
+                                                    @if($daysLeft !== null)
+                                                        <span class="text-[9px] sm:text-[10px] font-medium {{ $daysLeft <= 7 ? 'text-red-500' : 'text-neutral-400 dark:text-neutral-500' }}">{{ $daysLeft }} Hari</span>
+                                                    @endif
                                                 @endif
                                             </div>
                                         </div>
