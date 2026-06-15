@@ -32,6 +32,11 @@ class InvitationsTable
                     ->searchable()
                     ->sortable(),
 
+                TextColumn::make('pricingTier.package_name')
+                    ->label('Package')
+                    ->searchable()
+                    ->sortable(),
+
                 TextColumn::make('tier')
                     ->badge()
                     ->colors([
@@ -40,7 +45,8 @@ class InvitationsTable
                         'warning' => 'gold',
                         'danger' => 'platinum',
                     ])
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
 
                 IconColumn::make('is_active')
                     ->boolean()

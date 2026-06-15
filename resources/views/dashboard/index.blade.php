@@ -242,15 +242,34 @@
                                             <div class="flex items-start justify-between gap-1">
                                                 <h4 class="font-semibold text-xs sm:text-sm text-secondary-800 dark:text-neutral-100 truncate flex-1">{{ $invitation->title }}</h4>
                                                 @php
-                                                    $isTrial = $invitation->expires_at !== null && !$invitation->hasPremiumFeatures();
-                                                    $isExpired = $invitation->isTrialExpired();
+                                                    $tierCode = $invitation->currentTier();
+                                                    $tierBadgeColor = match($tierCode) {
+                                                        'bronze' => 'bg-orange-100 dark:bg-orange-900/50 text-orange-700 dark:text-orange-300',
+                                                        'silver' => 'bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300',
+                                                        'gold' => 'bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300',
+                                                        'platinum' => 'bg-primary-100 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300',
+                                                        default => 'bg-neutral-100 dark:bg-neutral-700 text-neutral-500 dark:text-neutral-400'
+                                                    };
                                                 @endphp
-                                                <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] sm:text-xs font-medium whitespace-nowrap
-                                                    {{ $isExpired ? 'bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300' : ($isTrial ? 'bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300' : 'bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-300') }}">
-                                                    {{ $isExpired ? 'Exp' : ($isTrial ? 'Trial' : 'Aktif') }}
+                                                <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] sm:text-xs font-semibold whitespace-nowrap uppercase tracking-wider {{ $tierBadgeColor }}">
+                                                    {{ $tierCode === 'free' ? 'Gratis' : $tierCode }}
                                                 </span>
                                             </div>
                                             <p class="text-[10px] sm:text-xs text-neutral-500 dark:text-neutral-400 mt-0.5 truncate">{{ $invitation->bride_name }} & {{ $invitation->groom_name }}</p>
+                                            <div class="flex items-center gap-1.5 mt-1">
+                                                @php
+                                                    $isExpired = $invitation->isTrialExpired();
+                                                    $isTrial = $invitation->expires_at !== null && !$invitation->hasPremiumFeatures();
+                                                @endphp
+                                                @if($isExpired)
+                                                    <span class="inline-flex items-center px-1 py-0.5 rounded text-[9px] sm:text-[10px] font-medium bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300">Kedaluwarsa</span>
+                                                @elseif($isTrial)
+                                                    <span class="inline-flex items-center px-1 py-0.5 rounded text-[9px] sm:text-[10px] font-medium bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300">Masa Percobaan</span>
+                                                @endif
+                                                @if($invitation->expires_at)
+                                                    <span class="text-[9px] sm:text-[10px] text-neutral-400 dark:text-neutral-500">{{ $invitation->expires_at->format('d/m/Y') }}</span>
+                                                @endif
+                                            </div>
                                         </div>
                                     </a>
                                     <div class="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 opacity-0 group-hover:opacity-100 transition-opacity">

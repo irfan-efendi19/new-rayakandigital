@@ -153,7 +153,7 @@
                                 Buka Scanner
                             </a>
                         @else
-                            <a href="{{ route('dashboard.checkout') }}"
+                            <a href="{{ route('dashboard.checkout', ['invitation_id' => $invitation->id]) }}"
                                class="inline-flex items-center gap-2 px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-sm font-semibold shadow-sm transition-all">
                                 Upgrade ke Platinum
                             </a>
@@ -283,7 +283,7 @@
                             </div>
                             <h4 class="mt-3 font-semibold text-secondary-800 dark:text-neutral-100">Fitur Video & Live Streaming Terkunci</h4>
                             <p class="mt-1 text-xs text-neutral-500 dark:text-neutral-400 max-w-sm mx-auto">Upgrade ke paket Gold atau Platinum untuk menyematkan video YouTube dan siaran langsung di halaman undangan Anda.</p>
-                            <a href="{{ route('dashboard.checkout') }}"
+                            <a href="{{ route('dashboard.checkout', ['invitation_id' => $invitation->id]) }}"
                                 class="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary to-primary-600 text-white rounded-xl text-xs font-semibold shadow-sm hover:shadow-md transition-all">
                                 Upgrade Sekarang
                             </a>
@@ -379,7 +379,7 @@
                                 </div>
                                 <h4 class="mt-3 font-semibold text-secondary-800 dark:text-neutral-100">Fitur Galeri Foto Terkunci</h4>
                                 <p class="mt-1 text-xs text-neutral-500 dark:text-neutral-400 max-w-sm mx-auto">Upgrade paket Anda untuk menampilkan galeri foto.</p>
-                                <a href="{{ route('dashboard.checkout') }}"
+                                <a href="{{ route('dashboard.checkout', ['invitation_id' => $invitation->id]) }}"
                                     class="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary to-primary-600 text-white rounded-xl text-xs font-semibold shadow-sm hover:shadow-md transition-all">
                                     Upgrade Sekarang
                                 </a>
@@ -624,7 +624,7 @@
                                 </div>
                                 <h4 class="mt-3 font-semibold text-secondary-800 dark:text-neutral-100">Fitur Kado Digital Terkunci</h4>
                                 <p class="mt-1 text-xs text-neutral-500 dark:text-neutral-400 max-w-sm mx-auto">Upgrade paket Anda untuk menerima kado digital.</p>
-                                <a href="{{ route('dashboard.checkout') }}"
+                                <a href="{{ route('dashboard.checkout', ['invitation_id' => $invitation->id]) }}"
                                     class="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary to-primary-600 text-white rounded-xl text-xs font-semibold shadow-sm hover:shadow-md transition-all">
                                     Upgrade Sekarang
                                 </a>

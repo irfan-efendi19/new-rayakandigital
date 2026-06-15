@@ -55,20 +55,6 @@
                             </div>
                             <div class="hidden lg:block text-start">
                                 <div class="text-sm font-medium text-secondary-800 dark:text-neutral-200 leading-tight">{{ Auth::user()->name }}</div>
-                                @php
-                                    $tier = Auth::user()->currentTier();
-                                    $badgeColor = match($tier) {
-                                        'silver' => 'bg-neutral-100 text-neutral-600',
-                                        'gold' => 'bg-amber-50 text-amber-700',
-                                        'platinum' => 'bg-primary-50 text-primary-700',
-                                        default => 'bg-neutral-100 text-neutral-500'
-                                    };
-                                @endphp
-                                <div class="flex items-center gap-1 mt-0.5">
-                                    <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider {{ $badgeColor }}">
-                                        {{ $tier === 'free' ? 'Gratis' : $tier }}
-                                    </span>
-                                </div>
                             </div>
                             <svg class="w-4 h-4 text-neutral-400 dark:text-neutral-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />

@@ -119,8 +119,8 @@ test('user flow 4 langkah pernikahan platform', function () {
     app(MidtransService::class)->simulatePayment($order->order_id);
     $order->update(['payment_status' => 'success']);
 
-    $user->refresh();
-    expect($user->currentTier())->toBe('gold');
+    $invitation->refresh();
+    expect($invitation->currentTier())->toBe('gold');
 
     $invitation->refresh();
     expect($invitation->canUseCustomMusic())->toBeTrue();

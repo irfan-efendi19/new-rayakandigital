@@ -49,7 +49,9 @@ class OrderActions
         if ($order->invitation_id) {
             $invitation = $order->invitation;
             if ($invitation) {
+                $package = \App\Models\Package::where('package_code', $tier)->first();
                 $invitation->tier = $tier;
+                $invitation->pricing_tier_id = $package?->id;
                 $invitation->expires_at = $durationDays ? now()->addDays($durationDays) : null;
                 $invitation->is_active = true;
                 $invitation->save();

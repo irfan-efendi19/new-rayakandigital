@@ -12,7 +12,7 @@ class DashboardController extends Controller
     public function index(Request $request, PaymentRoutingService $routing)
     {
         $user = $request->user();
-        $invitations = $user->invitations;
+        $invitations = $user->invitations()->with('pricingTier')->get();
 
         $trialInvitations = $invitations->filter(fn (Invitation $i) =>
             $i->expires_at !== null && !$i->hasPremiumFeatures()

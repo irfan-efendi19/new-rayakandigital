@@ -150,14 +150,12 @@
                                     class="w-full py-3 bg-neutral-100 dark:bg-secondary-700 text-neutral-400 dark:text-neutral-500 rounded-2xl font-semibold cursor-not-allowed">
                                     {{ $currentTier === $pkg->package_code ? 'Paket Aktif' : 'Sudah Lebih Tinggi' }}
                                 </button>
-                            @else
+                            @elseif($invitationId)
                                 <form action="{{ route('dashboard.checkout.process') }}" method="POST"
                                     @if($activeMethod === 'midtrans') x-data="checkout" @submit.prevent="handleSubmit" @endif>
                                     @csrf
                                     <input type="hidden" name="tier" value="{{ $pkg->package_code }}">
-                                    @if($invitationId)
-                                        <input type="hidden" name="invitation_id" value="{{ $invitationId }}">
-                                    @endif
+                                    <input type="hidden" name="invitation_id" value="{{ $invitationId }}">
                                     <button type="submit" @if($activeMethod === 'midtrans') x-bind:disabled="processing" @endif
                                         class="w-full py-3 rounded-2xl font-semibold transition-all shadow-sm hover:scale-[1.02] active:scale-[0.98]
                                                     @if($activeMethod === 'manual_bank')

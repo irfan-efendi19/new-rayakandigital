@@ -212,8 +212,10 @@ class MidtransService
         if ($isSettled && $order && $order->invitation_id) {
             $invitation = \App\Models\Invitation::find($order->invitation_id);
             if ($invitation) {
+                $package = \App\Models\Package::where('package_code', $subscription->tier)->first();
                 $durationDays = $this->getDurationDays($subscription->tier);
                 $invitation->tier = $subscription->tier;
+                $invitation->pricing_tier_id = $package?->id;
                 $invitation->expires_at = $durationDays ? now()->addDays($durationDays) : now()->addYears(1);
                 $invitation->is_active = true;
                 $invitation->save();

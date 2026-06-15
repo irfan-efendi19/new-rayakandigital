@@ -32,7 +32,7 @@ class CheckoutController extends Controller
             abort_unless($invitation, 404);
         }
 
-        $currentTier = $invitation ? $invitation->currentTier() : $user->currentTier();
+        $currentTier = $invitation ? $invitation->currentTier() : 'free';
 
         $clientKey = config('midtrans.client_key');
         try {

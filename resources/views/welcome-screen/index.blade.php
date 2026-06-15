@@ -14,14 +14,55 @@
     @stack('meta')
 
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=playfair-display:400,600,700,800,900|inter:300,400,500,600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.bunny.net/css?family=cormorant-garamond:400,400i,600,700|playfair-display:400,600,700,800,900|inter:300,400,500,600&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    @php
+        $themeName = str_replace('themes.', '', $invitation->theme ?? 'modern');
+    @endphp
+
     <style>
+        /* Theme Variables */
+        @if($themeName === 'elegant')
+        :root {
+            --font-heading: 'Cormorant Garamond', serif;
+            --font-body: 'Inter', sans-serif;
+            --bg-gradient: linear-gradient(135deg, #2a151b 0%, #1c0c11 50%, #100407 100%);
+            --accent-color: #e5c1a7;
+            --accent-gradient: linear-gradient(135deg, #e5c1a7 0%, #d8a280 50%, #e5c1a7 100%);
+            --text-primary: #fff;
+            --text-secondary: rgba(229, 193, 167, 0.7);
+            --border-color: rgba(229, 193, 167, 0.25);
+        }
+        @elseif($themeName === 'garden')
+        :root {
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Inter', sans-serif;
+            --bg-gradient: linear-gradient(135deg, #0d1b15 0%, #07100c 50%, #030504 100%);
+            --accent-color: #a8c3a0;
+            --accent-gradient: linear-gradient(135deg, #c2dcc0 0%, #a8c3a0 50%, #8ca684 100%);
+            --text-primary: #fff;
+            --text-secondary: rgba(168, 195, 160, 0.7);
+            --border-color: rgba(168, 195, 160, 0.25);
+        }
+        @else {{-- modern / default --}}
+        :root {
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Inter', sans-serif;
+            --bg-gradient: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #16213e 100%);
+            --accent-color: #fda085;
+            --accent-gradient: linear-gradient(135deg, #f6d365 0%, #fda085 50%, #f6d365 100%);
+            --text-primary: #fff;
+            --text-secondary: rgba(255, 255, 255, 0.5);
+            --border-color: rgba(255, 255, 255, 0.15);
+        }
+        @endif
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Inter', sans-serif;
-            color: #fff;
+            font-family: var(--font-body), sans-serif;
+            color: var(--text-primary);
             overflow: hidden;
             height: 100vh;
             width: 100vw;
@@ -42,18 +83,51 @@
 
         .bg-particles span {
             position: absolute;
-            width: 4px;
-            height: 4px;
-            background: rgba(255,255,255,0.08);
-            border-radius: 50%;
-            animation: float 20s infinite linear;
         }
 
-        @keyframes float {
-            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
+        /* Particle Styles by Theme */
+        .particle-elegant {
+            background: radial-gradient(circle, #ffc2d1 0%, #ff85a2 100%);
+            border-radius: 50% 0 50% 50%; /* Petal shape */
+            opacity: 0.5;
+            animation: float-petal 25s infinite linear;
+        }
+
+        @keyframes float-petal {
+            0% { transform: translateY(100vh) rotate(0deg) translateX(0); opacity: 0; }
+            10% { opacity: 0.7; }
+            90% { opacity: 0.7; }
+            100% { transform: translateY(-100vh) rotate(360deg) translateX(50px); opacity: 0; }
+        }
+
+        .particle-garden {
+            background: linear-gradient(135deg, #c2dcc0 0%, #6e9465 100%);
+            border-radius: 100% 0; /* Leaf shape */
+            opacity: 0.4;
+            animation: float-leaf 22s infinite ease-in-out;
+        }
+
+        @keyframes float-leaf {
+            0% { transform: translateY(100vh) rotate(0deg) translateX(0); opacity: 0; }
+            10% { opacity: 0.6; }
+            50% { transform: translateY(50vh) rotate(180deg) translateX(40px); }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-100vh) rotate(720deg) translateX(-40px); opacity: 0; }
+        }
+
+        .particle-modern {
+            background: radial-gradient(circle, #fff 0%, #f6d365 70%, transparent 100%);
+            box-shadow: 0 0 10px #f6d365, 0 0 20px #fda085;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float-sparkle 18s infinite linear;
+        }
+
+        @keyframes float-sparkle {
+            0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(-100vh) scale(1.2); opacity: 0; }
         }
 
         .screen {
@@ -74,14 +148,72 @@
             position: fixed;
             width: 60px;
             height: 60px;
-            border-color: rgba(255,255,255,0.12);
             border-style: solid;
             z-index: 4;
+            transition: all 0.3s ease;
         }
         .corner-tl { top: 30px; left: 30px; border-width: 2px 0 0 2px; }
         .corner-tr { top: 30px; right: 30px; border-width: 2px 2px 0 0; }
         .corner-bl { bottom: 30px; left: 30px; border-width: 0 0 2px 2px; }
         .corner-br { bottom: 30px; right: 30px; border-width: 0 2px 2px 0; }
+
+        /* Ornate ornaments based on themes */
+        .corner-elegant {
+            border-color: rgba(229, 193, 167, 0.4);
+            border-width: 1px 0 0 1px;
+        }
+        .corner-tr.corner-elegant { border-width: 1px 1px 0 0; }
+        .corner-bl.corner-elegant { border-width: 0 0 1px 1px; }
+        .corner-br.corner-elegant { border-width: 0 1px 1px 0; }
+
+        .corner-elegant::after {
+            content: '✿';
+            position: absolute;
+            font-size: 1.25rem;
+            color: #e5c1a7;
+            opacity: 0.6;
+            transition: transform 0.3s ease;
+        }
+        .corner-tl.corner-elegant::after { top: -15px; left: -15px; }
+        .corner-tr.corner-elegant::after { top: -15px; right: -15px; }
+        .corner-bl.corner-elegant::after { bottom: -15px; left: -15px; }
+        .corner-br.corner-elegant::after { bottom: -15px; right: -15px; }
+
+        .corner-garden {
+            border-color: rgba(168, 195, 160, 0.4);
+            border-width: 1px 0 0 1px;
+        }
+        .corner-tr.corner-garden { border-width: 1px 1px 0 0; }
+        .corner-bl.corner-garden { border-width: 0 0 1px 1px; }
+        .corner-br.corner-garden { border-width: 0 1px 1px 0; }
+
+        .corner-garden::after {
+            content: '🌿';
+            position: absolute;
+            font-size: 1.25rem;
+            opacity: 0.6;
+        }
+        .corner-tl.corner-garden::after { top: -15px; left: -15px; }
+        .corner-tr.corner-garden::after { top: -15px; right: -15px; }
+        .corner-bl.corner-garden::after { bottom: -15px; left: -15px; }
+        .corner-br.corner-garden::after { bottom: -15px; right: -15px; }
+
+        .corner-modern {
+            border-color: rgba(254, 160, 133, 0.4);
+        }
+        .corner-modern::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background-color: #fda085;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #fda085;
+        }
+        .corner-tl.corner-modern::after { top: -3px; left: -3px; }
+        .corner-tr.corner-modern::after { top: -3px; right: -3px; }
+        .corner-bl.corner-modern::after { bottom: -3px; left: -3px; }
+        .corner-br.corner-modern::after { bottom: -3px; right: -3px; }
 
         /* Idle state */
         .idle-content { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
@@ -89,42 +221,48 @@
         .idle-icon {
             width: 80px;
             height: 80px;
-            border: 2px solid rgba(255,255,255,0.15);
+            border: 2px solid var(--border-color);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 2rem;
             margin-bottom: 0.5rem;
+            color: var(--accent-color);
         }
 
         .idle-title {
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-heading), serif;
             font-size: clamp(2.5rem, 5vw, 5rem);
             font-weight: 700;
             color: rgba(255,255,255,0.9);
             line-height: 1.2;
+            letter-spacing: 0.02em;
         }
 
         .idle-subtitle {
-            font-size: clamp(1rem, 2vw, 1.5rem);
-            color: rgba(255,255,255,0.5);
-            font-weight: 300;
+            font-family: var(--font-heading), serif;
+            font-size: clamp(2rem, 4.5vw, 4rem);
+            color: var(--accent-color);
+            font-weight: 600;
             letter-spacing: 0.05em;
+            margin-top: 0.5rem;
         }
 
         .idle-decoration {
             width: 60px;
             height: 2px;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
             margin: 0.5rem auto;
+            opacity: 0.5;
         }
 
         .idle-date {
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-body), sans-serif;
             font-size: clamp(1.1rem, 1.5vw, 1.3rem);
-            color: rgba(255,255,255,0.4);
-            font-weight: 400;
+            color: var(--text-secondary);
+            font-weight: 300;
+            margin-top: 0.5rem;
         }
 
         /* Active (guest) state */
@@ -136,17 +274,17 @@
 
         .guest-label {
             font-size: clamp(0.9rem, 1.2vw, 1.1rem);
-            color: rgba(255,255,255,0.5);
+            color: var(--text-secondary);
             font-weight: 400;
             letter-spacing: 0.15em;
             text-transform: uppercase;
         }
 
         .guest-name {
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-heading), serif;
             font-size: clamp(3rem, 8vw, 7rem);
             font-weight: 800;
-            background: linear-gradient(135deg, #f6d365 0%, #fda085 50%, #f6d365 100%);
+            background: var(--accent-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -155,7 +293,7 @@
 
         .guest-message {
             font-size: clamp(1.1rem, 1.8vw, 1.6rem);
-            color: rgba(255,255,255,0.6);
+            color: rgba(255,255,255,0.7);
             font-weight: 300;
         }
 
@@ -168,19 +306,19 @@
         .guest-decoration .line {
             width: 40px;
             height: 1px;
-            background: rgba(255,255,255,0.2);
+            background: var(--border-color);
         }
 
         .guest-decoration .diamond {
             width: 8px;
             height: 8px;
-            background: rgba(255,255,255,0.2);
+            background: var(--border-color);
             transform: rotate(45deg);
         }
 
         .guest-order {
             font-size: clamp(0.8rem, 1vw, 1rem);
-            color: rgba(255,255,255,0.3);
+            color: var(--text-secondary);
             font-weight: 300;
         }
 
@@ -189,9 +327,10 @@
             display: inline-block;
             width: 8px;
             height: 8px;
-            background: rgba(255,255,255,0.3);
+            background: var(--accent-color);
             border-radius: 50%;
             animation: pulse 2s ease-in-out infinite;
+            opacity: 0.6;
         }
 
         @keyframes pulse {
@@ -205,7 +344,7 @@
             bottom: 0;
             left: 0;
             height: 3px;
-            background: linear-gradient(90deg, #f6d365, #fda085);
+            background: var(--accent-gradient);
             z-index: 5;
             width: 100%;
             transform-origin: left;
@@ -213,7 +352,7 @@
         }
 
         .countdown-bar.idle {
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            background: linear-gradient(90deg, transparent, var(--border-color), transparent);
             animation: idleBar 3s ease-in-out infinite;
         }
 
@@ -238,17 +377,17 @@
             width: 6px;
             height: 6px;
             border-radius: 50%;
-            background: rgba(255,255,255,0.15);
+            background: var(--border-color);
             transition: all 0.3s ease;
         }
 
         .queue-dot.active {
-            background: #f6d365;
+            background: var(--accent-color);
             transform: scale(1.5);
         }
 
         .queue-dot.queued {
-            background: rgba(255,255,255,0.4);
+            background: rgba(255, 255, 255, 0.4);
         }
 
         /* Footer */
@@ -258,7 +397,8 @@
             right: 30px;
             z-index: 4;
             font-size: 0.75rem;
-            color: rgba(255,255,255,0.15);
+            color: var(--text-secondary);
+            opacity: 0.4;
             font-weight: 300;
             letter-spacing: 0.05em;
         }
@@ -281,7 +421,7 @@
             background-size: cover;
             background-position: center;
         @else
-            background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #16213e 100%);
+            background: var(--bg-gradient);
         @endif
     "></div>
 
@@ -315,10 +455,10 @@
     "></div>
 
     {{-- Corner decorations --}}
-    <div class="corner corner-tl"></div>
-    <div class="corner corner-tr"></div>
-    <div class="corner corner-bl"></div>
-    <div class="corner corner-br"></div>
+    <div class="corner corner-tl corner-{{ $themeName }}"></div>
+    <div class="corner corner-tr corner-{{ $themeName }}"></div>
+    <div class="corner corner-bl corner-{{ $themeName }}"></div>
+    <div class="corner corner-br corner-{{ $themeName }}"></div>
 
     {{-- Countdown bar --}}
     <div class="countdown-bar"
@@ -337,7 +477,7 @@
         {{-- Idle state --}}
         <div class="idle-content" x-show="!isDisplaying" x-transition:enter="transition-opacity duration-500" x-transition:leave="transition-opacity duration-500">
             <div class="idle-icon">
-                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/>
                 </svg>
             </div>
@@ -526,10 +666,13 @@
                 initParticles() {
                     const container = document.getElementById('particles');
                     if (!container) return;
+                    const theme = @json($themeName);
                     for (let i = 0; i < 30; i++) {
                         const span = document.createElement('span');
+                        span.className = 'particle-' + theme;
                         span.style.left = Math.random() * 100 + '%';
-                        span.style.width = (Math.random() * 4 + 2) + 'px';
+                        // Petals and leaves can be larger than single pixel spark particles
+                        span.style.width = (Math.random() * (theme === 'elegant' || theme === 'garden' ? 8 : 4) + 4) + 'px';
                         span.style.height = span.style.width;
                         span.style.animationDelay = Math.random() * 20 + 's';
                         span.style.animationDuration = (Math.random() * 15 + 15) + 's';
