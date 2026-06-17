@@ -100,7 +100,7 @@ class InvitationController extends Controller
         Gate::authorize('update', $invitation);
         $invitation->load(['events', 'stories', 'screenGalleries']);
 
-        $themes = Theme::where('is_active', true)->get();
+        $themes = Theme::where('is_active', true)->with('themeCategory')->get();
 
         return view('dashboard.invitations.edit', compact('invitation', 'themes'));
     }
