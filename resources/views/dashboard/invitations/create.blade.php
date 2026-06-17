@@ -31,6 +31,20 @@
     }
 
     [x-cloak] { display: none !important; }
+
+    .scrollbar-thin::-webkit-scrollbar {
+        height: 6px;
+    }
+    .scrollbar-thin::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    .scrollbar-thin::-webkit-scrollbar-thumb {
+        background-color: rgb(226, 232, 240);
+        border-radius: 10px;
+    }
+    .dark .scrollbar-thin::-webkit-scrollbar-thumb {
+        background-color: rgb(51, 65, 85);
+    }
     </style>
 
     <div class="py-8">
@@ -79,45 +93,66 @@
                                 </div>
 
                                 {{-- Theme Selection --}}
-                                <div class="mt-6">
-                                    <label for="theme" class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Pilih Tema Undangan</label>
-                                    <div class="relative mt-1.5">
-                                        <select name="theme" id="theme"
-                                            class="block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-secondary-700 dark:text-neutral-200 appearance-none">
-                                            <option value="">-- Pilih Tema --</option>
-                                            @php
-                                                $freeThemes = $themes->filter(fn($t) => !$t->is_premium);
-                                                $premiumThemes = $themes->filter(fn($t) => $t->is_premium);
-                                            @endphp
-                                            @if($freeThemes->isNotEmpty())
-                                                <optgroup label="Gratis">
-                                                    @foreach($freeThemes as $tema)
-                                                        @php $themeKey = str_replace('themes.', '', $tema->view_path); @endphp
-                                                        <option value="{{ $themeKey }}" {{ old('theme', $selectedTheme) == $themeKey ? 'selected' : '' }}>
-                                                            {{ $tema->name }}
-                                                        </option>
-                                                    @endforeach
-                                                </optgroup>
-                                            @endif
-                                            @if($premiumThemes->isNotEmpty())
-                                                <optgroup label="Premium">
-                                                    @foreach($premiumThemes as $tema)
-                                                        @php $themeKey = str_replace('themes.', '', $tema->view_path); @endphp
-                                                        <option value="{{ $themeKey }}" {{ old('theme', $selectedTheme) == $themeKey ? 'selected' : '' }}>
-                                                            {{ $tema->name }} ⭐
-                                                        </option>
-                                                    @endforeach
-                                                </optgroup>
-                                            @endif
-                                        </select>
-                                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                                            <svg class="h-4 w-4 text-neutral-400 dark:text-neutral-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                                            </svg>
-                                        </div>
+                                @php $currentTheme = old('theme', $selectedTheme); @endphp
+                                <input type="hidden" name="theme" :value="selectedTheme" required>
+
+                                @if(!$hasPredefinedTheme)
+                                <div x-data="{ selectedTheme: '{{ $currentTheme }}' }" class="space-y-3">
+
+                                    <div class="flex flex-col">
+                                        <label class="text-xs font-bold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">
+                                            Pilih Tema Undangan
+                                        </label>
+                                        <span class="text-[11px] text-neutral-400 mt-0.5">
+                                            Geser horizontal untuk melihat koleksi desain premium. Klik pada kartu gambar untuk memilih tema.
+                                        </span>
                                     </div>
-                                    @error('theme') <span class="text-red-500 dark:text-red-400 text-xs mt-1">{{ $message }}</span> @enderror
+
+                                    <div class="flex gap-4 overflow-x-auto py-3 px-1 scrollbar-thin scrollbar-thumb-neutral-200 dark:scrollbar-thumb-neutral-700 snap-x items-stretch">
+
+                                        @foreach($themes as $tema)
+                                            @php $themeKey = str_replace('themes.', '', $tema->view_path); @endphp
+                                            <div
+                                                @click="selectedTheme = '{{ $themeKey }}'"
+                                                :class="{
+                                                    'border-primary ring-2 ring-primary/20 shadow-md bg-primary-50 dark:bg-primary-900/20': selectedTheme === '{{ $themeKey }}',
+                                                    'border-neutral-200 dark:border-neutral-600 hover:border-neutral-300 dark:hover:border-neutral-500 bg-white dark:bg-secondary-800': selectedTheme !== '{{ $themeKey }}'
+                                                }"
+                                                class="w-40 sm:w-48 flex-shrink-0 border rounded-2xl p-2.5 transition-all duration-200 cursor-pointer snap-start relative flex flex-col justify-between select-none"
+                                            >
+                                                <div x-show="selectedTheme === '{{ $themeKey }}'" class="absolute top-4 right-4 bg-primary text-white rounded-full p-1 z-10 shadow-sm" x-cloak>
+                                                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                </div>
+
+                                                <div class="w-full aspect-[9/16] rounded-xl overflow-hidden bg-neutral-100 dark:bg-secondary-900 relative">
+                                                    @if($tema->thumbnail_portrait)
+                                                        <img src="{{ asset('storage/' . $tema->thumbnail_portrait) }}" class="w-full h-full object-cover" alt="Pratinjau {{ $tema->name }}">
+                                                    @else
+                                                        <div class="w-full h-full flex items-center justify-center text-neutral-400 text-xs">No Preview</div>
+                                                    @endif
+                                                </div>
+
+                                                <div class="mt-3 space-y-1">
+                                                    <span class="inline-block text-[9px] font-bold uppercase tracking-wider bg-neutral-100 dark:bg-neutral-700 text-neutral-500 dark:text-neutral-400 px-1.5 py-0.5 rounded-md">
+                                                        {{ $tema->themeCategory?->name ?? 'Umum' }}
+                                                    </span>
+
+                                                    <h4 class="text-xs font-bold text-neutral-800 dark:text-neutral-100 truncate block">
+                                                        {{ $tema->name }}
+                                                    </h4>
+                                                </div>
+                                            </div>
+                                        @endforeach
+
+                                    </div>
+
+                                    @error('theme') <span
+                                        class="text-red-500 dark:text-red-400 text-xs mt-1">{{ $message }}</span>
+                                    @enderror
                                 </div>
+                                @endif
                             </div>
 
                             {{-- ======================================== --}}

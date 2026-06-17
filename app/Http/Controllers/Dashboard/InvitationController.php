@@ -25,10 +25,11 @@ class InvitationController extends Controller
 
     public function create(Request $request)
     {
+        $hasPredefinedTheme = $request->has('theme');
         $selectedTheme = $request->query('theme', 'elegant');
-        $themes = Theme::where('is_active', true)->get();
+        $themes = Theme::where('is_active', true)->with('themeCategory')->get();
 
-        return view('dashboard.invitations.create', compact('selectedTheme', 'themes'));
+        return view('dashboard.invitations.create', compact('selectedTheme', 'themes', 'hasPredefinedTheme'));
     }
 
     public function store(Request $request)
