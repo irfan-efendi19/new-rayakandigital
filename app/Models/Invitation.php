@@ -375,7 +375,7 @@ class Invitation extends Model
             return $this->wa_message_template;
         }
 
-        return "Yth. {nama_tamu},\n\nKami mengundang Bapak/Ibu/Saudara/i untuk hadir dalam acara pernikahan kami:\n\n✨ {nama_mempelai_pria} & {nama_mempelai_wanita} ✨\n\nSilakan buka undangan digital Anda di:\n{tautan_undangan}\n\nMerupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir. 🙏";
+        return "Yth. {{nama_tamu}},\n\nTanpa mengurangi rasa hormat, kami mengundang Anda untuk menghadiri acara pernikahan kami:\n\n{{nama_pengantin}}\n\nDetail Undangan dapat dilihat pada tautan berikut:\n{{link_undangan}}\n\nMerupakan suatu kehormatan bagi kami apabila Anda berkenan hadir. Terima kasih.";
     }
 
     public static function extractYoutubeId(?string $url): ?string
@@ -415,7 +415,19 @@ class Invitation extends Model
         $template = $this->getWhatsappTemplate();
         $firstEvent = $this->firstEvent();
 
+        $namaPengantin = trim($this->groom_name.' & '.$this->bride_name, ' &');
+
         $replacements = [
+            // New {{...}} format
+            '{{nama_tamu}}' => $guest->name,
+            '{{nama_pengantin}}' => $namaPengantin,
+            '{{link_undangan}}' => $guest->personalized_link,
+            '{{qrcode_link}}' => $this->hasFeature('qr_checkin') ? $guest->personalized_link.'&qr=1' : '',
+            '{{tanggal_acara}}' => $firstEvent?->event_date?->format('d F Y') ?? $this->event_date?->format('d F Y') ?? '',
+            '{{waktu_acara}}' => $firstEvent?->start_time ?? $this->event_time ?? '',
+            '{{tempat_acara}}' => $firstEvent?->place_name ?? $this->venue_name ?? '',
+            '{{alamat_acara}}' => $firstEvent?->place_address ?? $this->venue_address ?? '',
+            // Legacy {..} format (backward compatibility)
             '{nama_tamu}' => $guest->name,
             '{nama_mempelai_pria}' => $this->groom_name,
             '{nama_mempelai_wanita}' => $this->bride_name,

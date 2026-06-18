@@ -55,33 +55,171 @@
             @endif
 
             {{-- WhatsApp Template Editor --}}
-            <div class="bg-white dark:bg-secondary-800 rounded-2xl shadow-soft border border-neutral-100 dark:border-secondary-700">
+            @php
+                $waTemplateEnabled = $invitation->wa_template_enabled ? 'true' : 'false';
+                $waMessageTemplate = $invitation->wa_message_template ?? '';
+            @endphp
+            <script>
+                window.__WA_TEMPLATE_DATA = {
+                    presets: @json($presets ?? []),
+                    templateText: @js($waMessageTemplate),
+                };
+            </script>
+            <div
+                x-data="{
+                    templateText: window.__WA_TEMPLATE_DATA.templateText || '',
+                    templateEnabled: {{ $waTemplateEnabled }},
+                    openPresetModal: false,
+                    presets: window.__WA_TEMPLATE_DATA.presets || [],
+                    insertVariable(varText) {
+                        const el = this.$refs.messageField;
+                        const start = el.selectionStart;
+                        const end = el.selectionEnd;
+                        this.templateText = this.templateText.substring(0, start) + varText + this.templateText.substring(end);
+                        this.$nextTick(() => {
+                            el.focus();
+                            el.setSelectionRange(start + varText.length, start + varText.length);
+                        });
+                    },
+                    selectPreset(presetText) {
+                        if (this.templateText.trim().length > 0) {
+                            Swal.fire({
+                                title: 'Ganti Template?',
+                                text: 'Memilih template ini akan menghapus teks draf yang sudah Anda tulis. Apakah Anda yakin?',
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#d33',
+                                cancelButtonColor: '#3085d6',
+                                confirmButtonText: 'Ya, ganti!',
+                                cancelButtonText: 'Batal',
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    this.templateText = presetText;
+                                    this.openPresetModal = false;
+                                }
+                            });
+                        } else {
+                            this.templateText = presetText;
+                            this.openPresetModal = false;
+                        }
+                    }
+                }"
+                class="bg-white dark:bg-secondary-800 rounded-2xl shadow-soft border border-neutral-100 dark:border-secondary-700"
+            >
                 <div class="p-6">
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">Template Pesan WhatsApp</h3>
                         <label class="inline-flex items-center gap-2 cursor-pointer select-none">
                             <span class="text-sm text-neutral-600 dark:text-neutral-400">Custom Template</span>
-                            <input type="checkbox" id="wa_template_toggle" class="rounded-lg border-neutral-300 dark:border-secondary-600 dark:bg-secondary-900 text-primary focus:ring-primary-500 shadow-sm"
-                                {{ $invitation->wa_template_enabled ? 'checked' : '' }}
-                                onchange="document.getElementById('wa_template_form').submit()">
+                            <input type="checkbox" x-model="templateEnabled"
+                                class="rounded-lg border-neutral-300 dark:border-secondary-600 dark:bg-secondary-900 text-primary focus:ring-primary-500 shadow-sm">
                         </label>
                     </div>
                     <form id="wa_template_form" action="{{ route('dashboard.invitations.whatsapp.template', $invitation) }}" method="POST">
                         @csrf
-                        <input type="hidden" name="wa_template_enabled" value="{{ $invitation->wa_template_enabled ? '0' : '1' }}" id="wa_template_enabled_input">
-                        <div class="mb-4">
-                            <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">Template Pesan</label>
-                            <textarea name="wa_message_template" rows="4"
-                                class="block w-full rounded-xl border-neutral-300 dark:border-secondary-600 dark:bg-secondary-900 dark:text-neutral-200 shadow-sm focus:border-primary-500 focus:ring-primary-500 text-sm"
-                                placeholder="Kosongkan untuk menggunakan template default">{{ $invitation->wa_message_template }}</textarea>
-                        </div>
-                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                            <div class="flex flex-wrap items-center gap-1.5">
-                                <span class="text-xs text-neutral-500 dark:text-neutral-400 font-medium">Variabel:</span>
-                                @foreach(['{nama_tamu}','{nama_mempelai_pria}','{nama_mempelai_wanita}','{tautan_undangan}','{tanggal_acara}','{waktu_acara}','{tempat_acara}','{qrcode_link}'] as $var)
-                                    <code class="text-xs bg-neutral-100 dark:bg-secondary-900 text-neutral-600 dark:text-neutral-400 px-1.5 py-0.5 rounded-lg">{{ $var }}</code>
-                                @endforeach
+                        <input type="hidden" name="wa_template_enabled" :value="templateEnabled ? '1' : '0'">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
+                            <div class="flex flex-col">
+                                <label for="whatsapp_template" class="text-xs font-bold text-secondary-700 dark:text-neutral-300 uppercase tracking-wider">
+                                    Template Teks Pesan WhatsApp Undangan
+                                </label>
+                                <span class="text-[11px] text-neutral-400 mt-0.5">
+                                    Tuliskan format pesan pembuka atau gunakan koleksi template bawaan siap pakai di bawah ini.
+                                </span>
                             </div>
+                            <button
+                                type="button"
+                                @click="openPresetModal = true"
+                                class="inline-flex items-center justify-center px-3 py-1.5 bg-primary/10 hover:bg-primary/20 text-primary text-xs font-bold rounded-xl border border-primary/20 transition-all cursor-pointer shadow-sm whitespace-nowrap"
+                            >
+                                Pilih dari Template Contoh
+                            </button>
+                        </div>
+                        <div class="relative mb-4">
+                            <textarea
+                                id="whatsapp_template"
+                                name="wa_message_template"
+                                rows="8"
+                                x-ref="messageField"
+                                x-model="templateText"
+                                class="w-full text-sm p-4 rounded-2xl border border-neutral-200 dark:border-gray-700 bg-white dark:bg-secondary-900 text-secondary-800 dark:text-neutral-100 focus:outline-none focus:ring-2 focus:ring-primary font-sans leading-relaxed shadow-sm resize-y"
+                                placeholder="Tulis draf pesan WhatsApp Anda di sini..."
+                            ></textarea>
+                        </div>
+                        <div class="flex flex-wrap gap-2 items-center bg-neutral-50 dark:bg-secondary-900/50 p-3 rounded-xl border border-neutral-100 dark:border-secondary-700">
+                            <span class="text-[10px] font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider block mr-1">
+                                Klik untuk Menyisipkan:
+                            </span>
+                            <button type="button" @click="insertVariable('@{{nama_tamu}}')"
+                                class="text-[11px] font-semibold bg-white dark:bg-secondary-800 border border-neutral-200 dark:border-secondary-600 hover:border-primary text-neutral-700 dark:text-neutral-300 px-2.5 py-1 rounded-lg shadow-sm transition-all cursor-pointer hover:text-primary">
+                                Nama Tamu
+                            </button>
+                            <button type="button" @click="insertVariable('@{{nama_pengantin}}')"
+                                class="text-[11px] font-semibold bg-white dark:bg-secondary-800 border border-neutral-200 dark:border-secondary-600 hover:border-primary text-neutral-700 dark:text-neutral-300 px-2.5 py-1 rounded-lg shadow-sm transition-all cursor-pointer hover:text-primary">
+                                Nama Pengantin
+                            </button>
+                            <button type="button" @click="insertVariable('@{{link_undangan}}')"
+                                class="text-[11px] font-semibold bg-white dark:bg-secondary-800 border border-neutral-200 dark:border-secondary-600 hover:border-primary text-neutral-700 dark:text-neutral-300 px-2.5 py-1 rounded-lg shadow-sm transition-all cursor-pointer hover:text-primary">
+                                Link Undangan
+                            </button>
+                            <button type="button" @click="insertVariable('@{{tanggal_acara}}')"
+                                class="text-[11px] font-semibold bg-white dark:bg-secondary-800 border border-neutral-200 dark:border-secondary-600 hover:border-primary text-neutral-700 dark:text-neutral-300 px-2.5 py-1 rounded-lg shadow-sm transition-all cursor-pointer hover:text-primary">
+                                Tanggal Acara
+                            </button>
+                            <button type="button" @click="insertVariable('@{{waktu_acara}}')"
+                                class="text-[11px] font-semibold bg-white dark:bg-secondary-800 border border-neutral-200 dark:border-secondary-600 hover:border-primary text-neutral-700 dark:text-neutral-300 px-2.5 py-1 rounded-lg shadow-sm transition-all cursor-pointer hover:text-primary">
+                                Waktu Acara
+                            </button>
+                            <button type="button" @click="insertVariable('@{{tempat_acara}}')"
+                                class="text-[11px] font-semibold bg-white dark:bg-secondary-800 border border-neutral-200 dark:border-secondary-600 hover:border-primary text-neutral-700 dark:text-neutral-300 px-2.5 py-1 rounded-lg shadow-sm transition-all cursor-pointer hover:text-primary">
+                                Tempat Acara
+                            </button>
+                            <button type="button" @click="insertVariable('@{{qrcode_link}}')"
+                                class="text-[11px] font-semibold bg-white dark:bg-secondary-800 border border-neutral-200 dark:border-secondary-600 hover:border-primary text-neutral-700 dark:text-neutral-300 px-2.5 py-1 rounded-lg shadow-sm transition-all cursor-pointer hover:text-primary">
+                                QR Code Link
+                            </button>
+                        </div>
+                        {{-- Preset Template Gallery Modal --}}
+                        <div x-show="openPresetModal" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4" x-transition x-cloak>
+                            <div class="bg-white dark:bg-secondary-800 rounded-3xl p-6 max-w-2xl w-full max-h-[80vh] flex flex-col justify-between shadow-2xl space-y-4" @click.away="openPresetModal = false">
+
+                                <div>
+                                    <h3 class="text-sm font-bold text-secondary-900 dark:text-white uppercase tracking-wider">Koleksi Template Contoh Pesan WA</h3>
+                                    <p class="text-[11px] text-neutral-400 mt-0.5">Pilih salah satu template siap pakai di bawah ini. Kode penanda variabel otomatis menyesuaikan data undangan.</p>
+                                </div>
+
+                                <div class="flex-1 overflow-y-auto pr-1 space-y-3 max-h-[50vh]">
+                                    <template x-for="preset in presets" :key="preset.name">
+                                        <div class="border border-neutral-100 dark:border-secondary-700 bg-neutral-50 dark:bg-secondary-900 p-4 rounded-2xl flex flex-col justify-between hover:border-primary/50 transition-all">
+                                            <div class="flex items-center justify-between">
+                                                <span class="text-xs font-extrabold text-secondary-700 dark:text-neutral-300" x-text="preset.name"></span>
+                                                <button
+                                                    type="button"
+                                                    @click="selectPreset(preset.text)"
+                                                    class="text-[10px] font-bold bg-primary text-white px-3 py-1 rounded-lg hover:bg-primary-600 transition-all cursor-pointer shadow-sm"
+                                                >
+                                                    Use Template
+                                                </button>
+                                            </div>
+                                            <pre class="mt-2 text-[11px] text-neutral-500 dark:text-neutral-400 font-sans leading-relaxed whitespace-pre-line bg-white dark:bg-secondary-800 p-3 rounded-xl border border-neutral-100 dark:border-secondary-700 select-all" x-text="preset.text"></pre>
+                                        </div>
+                                    </template>
+                                </div>
+
+                                <div class="pt-2 border-t border-neutral-100 dark:border-secondary-700 flex justify-end">
+                                    <button
+                                        type="button"
+                                        @click="openPresetModal = false"
+                                        class="px-4 py-2 bg-neutral-100 dark:bg-secondary-700 text-neutral-600 dark:text-neutral-300 text-xs font-bold rounded-xl hover:bg-neutral-200 transition-all cursor-pointer"
+                                    >
+                                        Tutup Pustaka
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="mt-4 flex justify-end">
                             <button type="submit" class="bg-gradient-to-r from-primary to-primary-600 text-white px-5 py-2 rounded-xl text-sm font-semibold hover:shadow-lg transition-all">
                                 Simpan Template
                             </button>
@@ -89,12 +227,6 @@
                     </form>
                 </div>
             </div>
-
-            <script>
-                document.getElementById('wa_template_toggle')?.addEventListener('change', function() {
-                    document.getElementById('wa_template_enabled_input').value = this.checked ? '1' : '0';
-                });
-            </script>
 
             @if($invitation->hasFeature('guest_import'))
             {{-- Import Card --}}
@@ -173,9 +305,7 @@
                             </div>
                         </div>
                     @else
-                        <form id="bulkSendForm" action="{{ route('dashboard.invitations.whatsapp.send', $invitation) }}" method="POST">
-                            @csrf
-                            <div class="overflow-x-auto border border-neutral-200 dark:border-secondary-700 rounded-2xl">
+                        <div class="overflow-x-auto border border-neutral-200 dark:border-secondary-700 rounded-2xl">
                                 <table class="min-w-full divide-y divide-neutral-200 dark:divide-secondary-700">
                                     <thead class="bg-neutral-50 dark:bg-secondary-900">
                                         <tr>
@@ -275,11 +405,17 @@
                                     </tbody>
                                 </table>
                             </div>
-                        </form>
-
                         <div class="mt-6">
                             {{ $guests->links() }}
                         </div>
+
+                        <form id="bulkSendForm" action="{{ route('dashboard.invitations.whatsapp.send', $invitation) }}" method="POST" class="hidden">
+                            @csrf
+                        </form>
+
+                        <style>
+                            [x-cloak] { display: none !important; }
+                        </style>
 
                         <script>
                             function copyToClipboard(id) {
@@ -311,10 +447,13 @@
                             }
 
                             function bulkSend() {
+                                const checked = document.querySelectorAll('.guest-checkbox:checked');
+                                if (checked.length === 0) return;
+
                                 if (typeof Swal !== 'undefined') {
                                     Swal.fire({
                                         title: 'Konfirmasi',
-                                        text: 'Kirim WhatsApp ke semua tamu yang dipilih? Pesan akan dikirim secara bertahap.',
+                                        text: 'Kirim WhatsApp ke ' + checked.length + ' tamu yang dipilih? Pesan akan dikirim secara bertahap.',
                                         icon: 'question',
                                         showCancelButton: true,
                                         confirmButtonColor: '#FF7A00',
@@ -323,12 +462,26 @@
                                         cancelButtonText: 'Batal',
                                     }).then((result) => {
                                         if (result.isConfirmed) {
-                                            document.getElementById('bulkSendForm').submit();
+                                            submitBulkForm(checked);
                                         }
                                     });
-                                } else if (confirm('Kirim WhatsApp ke semua tamu yang dipilih? Pesan akan dikirim secara bertahap.')) {
-                                    document.getElementById('bulkSendForm').submit();
+                                } else {
+                                    submitBulkForm(checked);
                                 }
+                            }
+
+                            function submitBulkForm(checked) {
+                                const form = document.getElementById('bulkSendForm');
+                                form.querySelectorAll('.dynamic-guest-id').forEach(el => el.remove());
+                                checked.forEach(cb => {
+                                    const input = document.createElement('input');
+                                    input.type = 'hidden';
+                                    input.name = 'guest_ids[]';
+                                    input.value = cb.value;
+                                    input.className = 'dynamic-guest-id';
+                                    form.appendChild(input);
+                                });
+                                form.submit();
                             }
                         </script>
                     @endif

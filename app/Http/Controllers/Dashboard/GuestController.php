@@ -28,7 +28,26 @@ class GuestController extends Controller
             ->latest()
             ->paginate(20);
 
-        return view('dashboard.guests.index', compact('invitation', 'guests'));
+        $presets = [
+            [
+                'name' => 'Gaya Formal / Umum',
+                'text' => "Kepada Yth.\nBapak/Ibu/Saudara/i {{nama_tamu}}\n\nSalam hormat,\nDengan memohon rahmat dan ridho Allah SWT, kami bermaksud mengundang Bapak/Ibu/Saudara/i untuk menghadiri acara resepsi pernikahan kami, yang detail undangannya dapat diakses via tautan di bawah ini:\n\n{{link_undangan}}\n\nMerupakan suatu kebahagiaan dan kehormatan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir untuk memberikan doa restu kepada kedua mempelai.\n\nTerima kasih.\nKami yang berbahagia,\n{{nama_pengantin}}",
+            ],
+            [
+                'name' => 'Gaya Islami / Religius',
+                'text' => "Assalamualaikum Warahmatullahi Wabarakatuh\n\nTanpa mengurangi rasa hormat, izinkan kami mengundang Bapak/Ibu/Saudara/i {{nama_tamu}} untuk menghadiri acara pernikahan kami.\n\nDan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya (QS. Ar-Rum: 21).\n\nInformasi lengkap mengenai waktu dan lokasi acara dapat dilihat melalui link undangan digital berikut:\n{{link_undangan}}\n\nUngkapan terima kasih yang tulus kami haturkan atas kehadiran dan doa restu Anda.\n\nWassalamualaikum Warahmatullahi Wabarakatuh\n\nKami yang berbahagia,\n{{nama_pengantin}}",
+            ],
+            [
+                'name' => 'Gaya Kasual / Teman',
+                'text' => "Halo {{nama_tamu}}!\n\nKabar bahagia nih, kami mau melangsungkan pernikahan! Tanpa mengurangi rasa hormat, lewat pesan ini kami ingin mengundang kamu untuk hadir di hari bahagia kami.\n\nYuk, intip detail acara, lokasi map, dan isi buku tamu lewat link undangan digital di bawah ini:\n{{link_undangan}}\n\nDatang ya! Kehadiran dan doa restu dari kamu berharga banget buat kami berdua.\n\nSampai jumpa di lokasi!\nWarm regards,\n{{nama_pengantin}}",
+            ],
+            [
+                'name' => 'Gaya Singkat / Minimalis',
+                'text' => "Halo {{nama_tamu}},\n\nKami mengundang Anda untuk menghadiri acara pernikahan {{nama_pengantin}}.\n\nDetail informasi acara (Waktu, Tempat, & Protokol) dapat diakses langsung melalui tautan undangan digital resmi berikut:\n{{link_undangan}}\n\nTerima kasih atas perhatian dan doa restu terbaik Anda.",
+            ],
+        ];
+
+        return view('dashboard.guests.index', compact('invitation', 'guests', 'presets'));
     }
 
     public function create(Invitation $invitation)
