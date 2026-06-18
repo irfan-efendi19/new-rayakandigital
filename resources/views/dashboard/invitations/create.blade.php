@@ -99,16 +99,17 @@
                                 @if(!$hasPredefinedTheme)
                                 <div x-data="{ selectedTheme: '{{ $currentTheme }}' }" class="space-y-3">
 
-                                    <div class="flex flex-col">
-                                        <label class="text-xs font-bold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">
-                                            Pilih Tema Undangan
-                                        </label>
-                                        <span class="text-[11px] text-neutral-400 mt-0.5">
-                                            Geser horizontal untuk melihat koleksi desain premium. Klik pada kartu gambar untuk memilih tema.
-                                        </span>
-                                    </div>
+                                    <div class="bg-neutral-50 dark:bg-secondary-700 p-5 rounded-2xl border border-neutral-200 dark:border-secondary-700 space-y-4">
+                                        <div class="flex flex-col">
+                                            <label class="text-xs font-bold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">
+                                                Pilih Tema Undangan
+                                            </label>
+                                            <span class="text-[11px] text-neutral-400 mt-0.5">
+                                                Geser horizontal untuk melihat koleksi desain premium. Klik pada kartu gambar untuk memilih tema.
+                                            </span>
+                                        </div>
 
-                                    <div class="flex gap-4 overflow-x-auto py-3 px-1 scrollbar-thin scrollbar-thumb-neutral-200 dark:scrollbar-thumb-neutral-700 snap-x items-stretch">
+                                        <div class="flex gap-4 overflow-x-auto py-3 px-1 scrollbar-thin scrollbar-thumb-neutral-200 dark:scrollbar-thumb-neutral-700 snap-x items-stretch">
 
                                         @foreach($themes as $tema)
                                             @php $themeKey = str_replace('themes.', '', $tema->view_path); @endphp
@@ -151,6 +152,7 @@
                                     @error('theme') <span
                                         class="text-red-500 dark:text-red-400 text-xs mt-1">{{ $message }}</span>
                                     @enderror
+                                </div>
                                 </div>
                                 @endif
                             </div>
