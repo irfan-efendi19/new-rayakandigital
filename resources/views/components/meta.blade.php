@@ -1,18 +1,22 @@
 @props([
-    'title' => config('app.name', 'Rayakan Digital'),
-    'description' => 'Rayakan Digital menyediakan undangan online, buku tamu digital, QR code, dan live streaming untuk acara modern Anda. Buat momen berkesan jadi lebih praktis!',
-    'keywords' => 'rayakan digital, undangan digital, undangan online, undangan pernikahan, QR code tamu, buku tamu digital, live streaming acara, website undangan, acara modern, undangan web',
-    'author' => 'Rayakan Digital',
-    'themeColor' => '#fa9a00',
-    'image' => null,
-    'url' => url()->current(),
-    'type' => 'website',
-    'siteName' => config('app.name', 'Rayakan Digital'),
-    'robots' => 'index, follow',
-    'twitterCard' => 'summary_large_image',
+        'title' => config('app.name', 'Rayakan Digital'),
+        'description' => 'Rayakan Digital menyediakan undangan online, buku tamu digital, QR code, dan live streaming untuk
+    acara modern Anda. Buat momen berkesan jadi lebih praktis!',
+        'keywords' => 'rayakan digital, undangan digital, undangan online, undangan pernikahan, QR code tamu, buku tamu digital,
+    live streaming acara, website undangan, acara modern, undangan web',
+        'author' => 'Rayakan Digital',
+        'themeColor' => '#fa9a00',
+        'image' => null,
+        'url' => url()->current(),
+        'type' => 'website',
+        'siteName' => config('app.name', 'Rayakan Digital'),
+        'robots' => 'index, follow',
+        'twitterCard' => 'summary_large_image',
 ])
 
 <title>{{ $title }}</title>
+
+<link rel="canonical" href="{{ $url }}" />
 
 <meta name="theme-color" content="{{ $themeColor }}">
 <meta name="msapplication-navbutton-color" content="{{ $themeColor }}">
@@ -31,18 +35,18 @@
 <meta property="og:site_name" content="{{ $siteName }}" />
 <meta property="og:url" content="{{ $url }}" />
 @if($image)
-<meta property="og:image" content="{{ $image }}" />
+    <meta property="og:image" content="{{ $image }}" />
 @endif
 
 <meta name="twitter:card" content="{{ $twitterCard }}" />
 <meta name="twitter:title" content="{{ $title }}" />
 <meta name="twitter:description" content="{{ $description }}" />
 @if($image)
-<meta name="twitter:image" content="{{ $image }}" />
+    <meta name="twitter:image" content="{{ $image }}" />
 @endif
 
 <meta itemprop="name" content="{{ $title }}" />
 <meta itemprop="description" content="{{ $description }}" />
 @if($image)
-<meta itemprop="image" content="{{ $image }}" />
+    <meta itemprop="image" content="{{ $image }}" />
 @endif
