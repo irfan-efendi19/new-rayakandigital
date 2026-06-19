@@ -634,7 +634,7 @@
                                     </svg>
                                     Batal
                                 </a>
-                                <button type="submit"
+                                <button type="button" id="submit-btn"
                                     class="inline-flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-primary to-primary-600 rounded-xl shadow-sm text-sm font-semibold text-white hover:shadow-md hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-all">
                                     Simpan & Lanjutkan
                                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -752,10 +752,22 @@
 
         function removeEventCard(btn) {
             const card = btn.closest('.event-card');
-            if (card && confirm('Hapus acara ini?')) {
-                card.remove();
-                reindexEvents();
-            }
+            if (!card) return;
+            Swal.fire({
+                title: 'Hapus Acara?',
+                text: 'Acara ini akan dihapus dari undangan.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    card.remove();
+                    reindexEvents();
+                }
+            });
         }
 
         function moveUp(btn) {
@@ -794,6 +806,28 @@
 
         if (addBtn) {
             addBtn.addEventListener('click', addEventCard);
+        }
+
+        const submitBtn = document.getElementById('submit-btn');
+        const form = submitBtn?.closest('form');
+        if (submitBtn && form) {
+            submitBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                Swal.fire({
+                    title: 'Buat Undangan?',
+                    text: 'Pastikan semua data sudah benar. Undangan akan dibuat dalam mode trial.',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#6b7280',
+                    confirmButtonText: 'Ya, buat!',
+                    cancelButtonText: 'Cek Lagi',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.requestSubmit();
+                    }
+                });
+            });
         }
     });
     </script>

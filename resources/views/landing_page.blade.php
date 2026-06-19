@@ -511,14 +511,14 @@
             </div>
 
             <!-- Stats / Trust Indicators -->
-            <div class="mt-20 grid grid-cols-2 md:grid-cols-4 gap-6">
-                <div class="text-center">
+            <div class="mt-20 grid grid-cols-3 md:grid-cols-3 gap-6">
+                <!-- <div class="text-center">
                     <div class="flex items-center justify-center gap-2 mb-2">
                         <i class="fas fa-users text-primary-500 text-2xl"></i>
                         <span class="text-3xl font-bold text-secondary-800 dark:text-neutral-200">10K+</span>
                     </div>
                     <p class="text-sm text-neutral-500">Undangan Terbuat</p>
-                </div>
+                </div> -->
                 <div class="text-center">
                     <div class="flex items-center justify-center gap-2 mb-2">
                         <i class="fas fa-smile text-primary-500 text-2xl"></i>
@@ -1010,7 +1010,7 @@
             </div>
         </div>
     </section>
-    
+
     <!-- Pricing Section - Modernized -->
     {{-- Pricing & Services Section with Tab Navigation --}}
     {{-- Pricing & Services Section with Tab Navigation --}}
@@ -1085,16 +1085,16 @@
 
                             <!-- Popular Badge -->
                             @if($package->is_popular)
-                            <div class="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
-                                <span
-                                    class="inline-flex items-center gap-1.5 bg-gradient-to-r from-primary-500 to-primary-600 px-4 py-1.5 rounded-full text-xs font-bold text-white shadow-md">
-                                    <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
-                                        <path
-                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                    </svg>
-                                    Best Seller
-                                </span>
-                            </div>
+                                <div class="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
+                                    <span
+                                        class="inline-flex items-center gap-1.5 bg-gradient-to-r from-primary-500 to-primary-600 px-4 py-1.5 rounded-full text-xs font-bold text-white shadow-md">
+                                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                        </svg>
+                                        Best Seller
+                                    </span>
+                                </div>
                             @endif
 
                             <!-- Card Content -->
@@ -1115,71 +1115,64 @@
                                 <!-- Price -->
                                 <div class="mt-6">
                                     @if($package->slashed_price && $package->slashed_price > $package->price)
-                                    <span class="text-neutral-400 line-through text-sm">Rp
-                                        {{ number_format($package->slashed_price, 0, ',', '.') }}</span>
+                                        <span class="text-neutral-400 line-through text-sm">Rp
+                                            {{ number_format($package->slashed_price, 0, ',', '.') }}</span>
                                     @endif
                                     <div class="flex items-baseline flex-wrap gap-1 mt-1">
-                                        <span
-                                            class="text-3xl font-bold text-secondary-900 dark:text-neutral-100 shrink-0">Rp</span>
-                                        <span
-                                            class="text-5xl font-extrabold text-secondary-900 dark:text-neutral-100 break-words">
+                                        <span class="text-3xl font-bold text-secondary-900 dark:text-neutral-100 shrink-0">Rp</span>
+                                        <span class="text-5xl font-extrabold text-secondary-900 dark:text-neutral-100 break-words">
                                             {{ number_format($package->price, 0, ',', '.') }}
                                         </span>
                                         @if($package->price > 0)
-                                        <span class="text-neutral-400 text-sm ml-1 whitespace-nowrap">
-                                            /
-                                            {{ $package->active_period_days === 0 ? 'Lifetime' : $package->active_period_days . ' Hari' }}
-                                        </span>
+                                            <span class="text-neutral-400 text-sm ml-1 whitespace-nowrap">
+                                                /
+                                                {{ $package->active_period_days === 0 ? 'Lifetime' : $package->active_period_days . ' Hari' }}
+                                            </span>
                                         @endif
                                     </div>
                                 </div>
                                 <!-- CTA Button -->
                                 @auth
-                                @if($package->package_code === 'free')
-                                <div
-                                    class="mt-6 w-full bg-neutral-100 dark:bg-secondary-800 text-neutral-500 rounded-xl py-3 text-sm font-semibold text-center cursor-default">
-                                    ✅ Paket Aktif
-                                </div>
+                                    @if($package->package_code === 'free')
+                                        <div
+                                            class="mt-6 w-full bg-neutral-100 dark:bg-secondary-800 text-neutral-500 rounded-xl py-3 text-sm font-semibold text-center cursor-default">
+                                            ✅ Paket Aktif
+                                        </div>
+                                    @else
+                                        <a href="{{ route('dashboard.checkout') }}"
+                                            class="mt-6 flex items-center justify-center gap-2 w-full rounded-xl py-3 text-sm font-semibold text-center transition-all duration-200 {{ $package->is_popular ? 'bg-primary-500 text-white hover:bg-primary-600 shadow-md hover:shadow-lg' : 'bg-primary-50 border border-primary-200 text-primary-700 hover:bg-primary-100' }}">
+                                            Pilih {{ $package->package_name }}
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                            </svg>
+                                        </a>
+                                    @endif
                                 @else
-                                <a href="{{ route('dashboard.checkout') }}"
-                                    class="mt-6 flex items-center justify-center gap-2 w-full rounded-xl py-3 text-sm font-semibold text-center transition-all duration-200 {{ $package->is_popular ? 'bg-primary-500 text-white hover:bg-primary-600 shadow-md hover:shadow-lg' : 'bg-primary-50 border border-primary-200 text-primary-700 hover:bg-primary-100' }}">
-                                    Pilih {{ $package->package_name }}
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M9 5l7 7-7 7" />
-                                    </svg>
-                                </a>
-                                @endif
-                                @else
-                                @if($package->package_code === 'free')
-                                <a href="{{ route('register') }}"
-                                    class="mt-6 flex items-center justify-center gap-2 w-full bg-secondary-800 text-white rounded-xl py-3 text-sm font-semibold text-center hover:bg-secondary-900 transition-colors">
-                                    Daftar Gratis
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M9 5l7 7-7 7" />
-                                    </svg>
-                                </a>
-                                @else
-                                <a href="{{ route('register') }}"
-                                    class="mt-6 flex items-center justify-center gap-2 w-full rounded-xl py-3 text-sm font-semibold text-center transition-all duration-200 {{ $package->is_popular ? 'bg-primary-500 text-white hover:bg-primary-600 shadow-md hover:shadow-lg' : 'bg-primary-50 border border-primary-200 text-primary-700 hover:bg-primary-100' }}">
-                                    Pilih {{ $package->package_name }}
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M9 5l7 7-7 7" />
-                                    </svg>
-                                </a>
-                                @endif
+                                    @if($package->package_code === 'free')
+                                        <a href="{{ route('register') }}"
+                                            class="mt-6 flex items-center justify-center gap-2 w-full bg-secondary-800 text-white rounded-xl py-3 text-sm font-semibold text-center hover:bg-secondary-900 transition-colors">
+                                            Daftar Gratis
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                            </svg>
+                                        </a>
+                                    @else
+                                        <a href="{{ route('register') }}"
+                                            class="mt-6 flex items-center justify-center gap-2 w-full rounded-xl py-3 text-sm font-semibold text-center transition-all duration-200 {{ $package->is_popular ? 'bg-primary-500 text-white hover:bg-primary-600 shadow-md hover:shadow-lg' : 'bg-primary-50 border border-primary-200 text-primary-700 hover:bg-primary-100' }}">
+                                            Pilih {{ $package->package_name }}
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                            </svg>
+                                        </a>
+                                    @endif
                                 @endauth
                             </div>
 
                             <!-- Features List -->
                             <div class="border-t border-neutral-100 dark:border-secondary-700 pt-5 pb-6 px-6">
                                 <div class="flex items-center gap-2 mb-4">
-                                    <svg class="w-4 h-4 text-primary-500" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M5 13l4 4L19 7" />
+                                    <svg class="w-4 h-4 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                     </svg>
                                     <h4 class="text-xs font-semibold text-neutral-400 uppercase tracking-wider">
                                         Fitur
@@ -1187,16 +1180,15 @@
                                 </div>
                                 <ul class="space-y-3">
                                     @forelse($package->features as $feature)
-                                    <li class="flex items-start gap-2.5 text-sm text-neutral-600 dark:text-neutral-300">
-                                        <svg class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" fill="none"
-                                            stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M5 13l4 4L19 7" />
-                                        </svg>
-                                        <span>{{ $feature->feature_name }}</span>
-                                    </li>
+                                        <li class="flex items-start gap-2.5 text-sm text-neutral-600 dark:text-neutral-300">
+                                            <svg class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                            </svg>
+                                            <span>{{ $feature->feature_name }}</span>
+                                        </li>
                                     @empty
-                                    <li class="text-sm text-neutral-400 italic">Fitur dasar</li>
+                                        <li class="text-sm text-neutral-400 italic">Fitur dasar</li>
                                     @endforelse
                                 </ul>
                             </div>
@@ -1296,7 +1288,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     {{-- CTA Contact Sales --}}
                     <div
                         class="bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-secondary-800 dark:to-secondary-800 border border-emerald-100 dark:border-emerald-900/30 rounded-2xl p-8 text-center">
@@ -1315,20 +1307,20 @@
                         </div>
                     </div>
                 </div>
-                </div>{{-- end panel buku tamu --}}
-                
-                {{-- =============================== --}}
-                {{-- PANEL: LIVE STREAMING --}}
-                {{-- =============================== --}}
-                <div x-show="activeTab === 'live-streaming'" x-transition:enter="transition ease-out duration-300"
-                    x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0">
-                
-                    <div class="max-w-2xl mx-auto">
-                        {{-- Icon & Heading --}}
-                        <div class="text-center mb-10">
-                            <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-primary-50 mb-5">
-                                <i class="fas fa-video text-4xl text-primary-500"></i>
-                            </div>
+            </div>{{-- end panel buku tamu --}}
+            
+            {{-- =============================== --}}
+            {{-- PANEL: LIVE STREAMING --}}
+            {{-- =============================== --}}
+            <div x-show="activeTab === 'live-streaming'" x-transition:enter="transition ease-out duration-300"
+                x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0">
+            
+                <div class="max-w-2xl mx-auto">
+                    {{-- Icon & Heading --}}
+                    <div class="text-center mb-10">
+                        <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-primary-50 mb-5">
+                            <i class="fas fa-video text-4xl text-primary-500"></i>
+                        </div>
                         <h3 class="font-heading text-3xl font-bold text-secondary-900 dark:text-neutral-100 mb-3">Live
                             Streaming
                             Pernikahan
@@ -1413,10 +1405,10 @@
                         </div>
                     </div>
                 </div>
-                </div>{{-- end panel live streaming --}}
-                
-                </div>
-                </section>
+            </div>{{-- end panel live streaming --}}
+            
+            </div>
+            </section>
     <section
         class="relative py-16 px-4 bg-gradient-to-br from-orange-50 via-white to-orange-50/30 dark:from-secondary-900 dark:via-secondary-900 dark:to-secondary-900">
         <div class="max-w-3xl mx-auto">
@@ -1614,8 +1606,8 @@
                 </p>
             </div>
         </div>
-        </section>
-        <!-- WA -->
+    </section>
+    <!-- WA -->
     <button x-show="showBackToTop" x-transition:enter="transition ease-out duration-300"
         x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0"
         x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0"
