@@ -269,7 +269,7 @@ class Invitation extends Model
             $code = $package?->package_code;
 
             return match ($code) {
-                'free' => 1,
+                'free' => 20,
                 'silver' => 5,
                 'gold' => 20,
                 'platinum' => 999,

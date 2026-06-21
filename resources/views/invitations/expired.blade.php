@@ -58,7 +58,7 @@
             <!-- Action buttons -->
             <div class="space-y-3">
                 @if(auth()->check() && auth()->id() === $invitation->user_id)
-                    <a href="{{ route('dashboard.checkout') }}"
+                    <a href="{{ route('dashboard.checkout', ['invitation_id' => $invitation->id]) }}"
                         class="block w-full py-3 px-4 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white rounded-xl font-bold transition-all duration-300 transform hover:scale-[1.02] shadow-lg shadow-primary-500/25">
                         Aktivasi Paket Sekarang
                     </a>
