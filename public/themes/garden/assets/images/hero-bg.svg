@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 900">
+  <defs>
+    <linearGradient id="gardenGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6b7f5e;stop-opacity:1"/>
+      <stop offset="50%" style="stop-color:#8b9d83;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#5d6f50;stop-opacity:1"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" style="stop-color:#c9a84c;stop-opacity:0.15"/>
+      <stop offset="100%" style="stop-color:#c9a84c;stop-opacity:0"/>
+    </radialGradient>
+  </defs>
+  <rect width="600" height="900" fill="url(#gardenGrad)"/>
+  <rect width="600" height="900" fill="url(#glow)"/>
+  <g opacity="0.06">
+    <circle cx="300" cy="300" r="200" fill="none" stroke="#fff8f0" stroke-width="0.5"/>
+    <circle cx="300" cy="300" r="160" fill="none" stroke="#fff8f0" stroke-width="0.3"/>
+  </g>
+  <g opacity="0.08">
+    <path d="M150 200 Q200 150 250 200" fill="none" stroke="#fff8f0" stroke-width="1"/>
+    <path d="M350 200 Q400 150 450 200" fill="none" stroke="#fff8f0" stroke-width="1"/>
+    <path d="M150 250 Q200 200 250 250" fill="none" stroke="#fff8f0" stroke-width="0.5"/>
+    <path d="M350 250 Q400 200 450 250" fill="none" stroke="#fff8f0" stroke-width="0.5"/>
+  </g>
+  <g opacity="0.05">
+    <ellipse cx="300" cy="500" rx="180" ry="40" fill="none" stroke="#c9a84c" stroke-width="0.5"/>
+    <ellipse cx="300" cy="520" rx="140" ry="30" fill="none" stroke="#c9a84c" stroke-width="0.3"/>
+    <ellipse cx="300" cy="540" rx="100" ry="20" fill="none" stroke="#c9a84c" stroke-width="0.2"/>
+  </g>
+  <g opacity="0.04">
+    <circle cx="120" cy="650" r="2" fill="#fff8f0"/>
+    <circle cx="480" cy="700" r="1.5" fill="#fff8f0"/>
+    <circle cx="200" cy="800" r="2.5" fill="#fff8f0"/>
+    <circle cx="400" cy="750" r="1.8" fill="#fff8f0"/>
+    <circle cx="300" cy="850" r="2" fill="#fff8f0"/>
+    <circle cx="100" cy="400" r="1.5" fill="#fff8f0"/>
+    <circle cx="500" cy="350" r="2" fill="#fff8f0"/>
+  </g>
+  <rect x="24" y="24" width="552" height="852" rx="24" fill="none" stroke="#c9a84c" stroke-width="0.5" opacity="0.15"/>
+</svg>
