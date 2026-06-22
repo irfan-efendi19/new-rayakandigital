@@ -1,4 +1,4 @@
-                <x-app-layout>
+<x-app-layout>
     <x-slot name="header">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
@@ -6,7 +6,8 @@
                     Edit Undangan
                 </h2>
                 <p class="text-sm text-neutral-500 dark:text-neutral-400 mt-0.5">
-                    {{ $invitation->title }}</p>
+                    {{ $invitation->title }}
+                </p>
             </div>
             <div class="flex gap-2">
                 <a href="{{ route('dashboard.checkout', ['invitation_id' => $invitation->id]) }}"
@@ -30,38 +31,38 @@
     </x-slot>
 
     <style>
-    #crop-container {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-    }
+        #crop-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
 
-    #crop-container cropper-canvas {
-        flex: 1;
-        min-height: 0;
-    }
+        #crop-container cropper-canvas {
+            flex: 1;
+            min-height: 0;
+        }
 
-    .scrollbar-thin::-webkit-scrollbar {
-        height: 6px;
-    }
+        .scrollbar-thin::-webkit-scrollbar {
+            height: 6px;
+        }
 
-    .scrollbar-thin::-webkit-scrollbar-track {
-        background: transparent;
-    }
+        .scrollbar-thin::-webkit-scrollbar-track {
+            background: transparent;
+        }
 
-    .scrollbar-thin::-webkit-scrollbar-thumb {
-        background-color: rgb(226, 232, 240);
-        border-radius: 10px;
-    }
+        .scrollbar-thin::-webkit-scrollbar-thumb {
+            background-color: rgb(226, 232, 240);
+            border-radius: 10px;
+        }
 
-    .dark .scrollbar-thin::-webkit-scrollbar-thumb {
-        background-color: rgb(51, 65, 85);
-    }
+        .dark .scrollbar-thin::-webkit-scrollbar-thumb {
+            background-color: rgb(51, 65, 85);
+        }
 
-    [x-cloak] {
-        display: none !important;
-    }
+        [x-cloak] {
+            display: none !important;
+        }
     </style>
 
     <div class="py-8">
@@ -569,8 +570,7 @@
                                                         <input type="hidden"
                                                             name="events[{{ $eventIdx }}][is_until_finished]" value="0">
                                                         <input type="checkbox"
-                                                            name="events[{{ $eventIdx }}][is_until_finished]" value="1"
-                                                            {{ old('events.' . $eventIdx . '.is_until_finished', $event->is_until_finished ?? false) ? 'checked' : '' }}
+                                                            name="events[{{ $eventIdx }}][is_until_finished]" value="1" {{ old('events.' . $eventIdx . '.is_until_finished', $event->is_until_finished ?? false) ? 'checked' : '' }}
                                                             class="h-4 w-4 rounded border-neutral-300 dark:border-neutral-600 text-primary-600 dark:text-primary-400 focus:ring-primary-500">
                                                         <label
                                                             class="ml-2 text-xs text-neutral-500 dark:text-neutral-400">Sampai
@@ -745,17 +745,14 @@
                                         Waktu</label>
                                     <select name="timezone" id="timezone"
                                         class="mt-1 block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-secondary-700 dark:text-neutral-200">
-                                        <option value="Asia/Jakarta"
-                                            {{ old('timezone', $invitation->timezone) == 'Asia/Jakarta' ? 'selected' : '' }}>
+                                        <option value="Asia/Jakarta" {{ old('timezone', $invitation->timezone) == 'Asia/Jakarta' ? 'selected' : '' }}>
                                             WIB (Waktu Indonesia Barat)
                                         </option>
-                                        <option value="Asia/Makassar"
-                                            {{ old('timezone', $invitation->timezone) == 'Asia/Makassar' ? 'selected' : '' }}>
+                                        <option value="Asia/Makassar" {{ old('timezone', $invitation->timezone) == 'Asia/Makassar' ? 'selected' : '' }}>
                                             WITA (Waktu Indonesia
                                             Tengah)
                                         </option>
-                                        <option value="Asia/Jayapura"
-                                            {{ old('timezone', $invitation->timezone) == 'Asia/Jayapura' ? 'selected' : '' }}>
+                                        <option value="Asia/Jayapura" {{ old('timezone', $invitation->timezone) == 'Asia/Jayapura' ? 'selected' : '' }}>
                                             WIT (Waktu Indonesia Timur)
                                         </option>
                                     </select>
@@ -837,7 +834,8 @@
                                                             telah
                                                             diubah
                                                             {{ $invitation->slug_change_count }}
-                                                            kali.</p>
+                                                            kali.
+                                                        </p>
                                                     @endif
                                                 </div>
                                             </div>
@@ -1020,10 +1018,7 @@
 
                                     @if(!$galleryLocked)
                                         <div class="space-y-6">
-                                            <form id="gallery-upload-form"
-                                                action="{{ route('dashboard.invitations.gallery.update', $invitation) }}"
-                                                method="POST" enctype="multipart/form-data" class="space-y-4">
-                                                @csrf
+                                            <div id="gallery-upload-form" class="space-y-4">
                                                 <div id="gallery-dropzone"
                                                     class="relative border-2 border-dashed border-primary-300 dark:border-primary-700 rounded-2xl p-6 text-center cursor-pointer hover:border-primary-400 dark:hover:border-primary-500 hover:bg-primary-50/50 dark:hover:bg-primary-900/20 transition-all duration-200">
                                                     <input type="file" name="photos[]" id="gallery-file-input" multiple
@@ -1069,13 +1064,12 @@
                                                 <div class="flex items-center justify-end gap-3">
                                                     <span id="dropzone-error"
                                                         class="text-xs text-red-500 dark:text-red-400 hidden"></span>
-                                                    <button type="submit" id="gallery-submit-btn"
-                                                        class="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-primary to-primary-600 text-white rounded-xl text-sm font-semibold shadow-sm hover:shadow-md transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                                                        disabled>
+                                                    <button type="button" id="gallery-submit-btn"
+                                                        class="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-primary to-primary-600 text-white rounded-xl text-sm font-semibold shadow-sm hover:shadow-md transition-all disabled:opacity-50 disabled:cursor-not-allowed">
                                                         Unggah <span id="upload-count"></span>
                                                     </button>
                                                 </div>
-                                            </form>
+                                            </div>
 
                                             @if(empty($invitation->gallery_photos))
                                                 <p class="text-neutral-500 dark:text-neutral-400 text-center py-4 text-sm">
@@ -1090,15 +1084,9 @@
                                                                 class="w-full h-full object-cover">
                                                             <div
                                                                 class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                                                <form
-                                                                    action="{{ route('dashboard.invitations.gallery.destroy', $invitation) }}"
-                                                                    method="POST"
-                                                                    onsubmit="return confirmSwal(event, 'Hapus foto ini?');">
-                                                                    @csrf
-                                                                    @method('DELETE')
-                                                                    <input type="hidden" name="photo_index" value="{{ $index }}">
-                                                                    <button type="submit"
-                                                                        class="bg-red-600 hover:bg-red-700 text-white rounded-full p-1.5 shadow-md transition-all">
+                                                                    <button type="button"
+                                                                        class="delete-photo-btn bg-red-600 hover:bg-red-700 text-white rounded-full p-1.5 shadow-md transition-all"
+                                                                        data-index="{{ $index }}">
                                                                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24"
                                                                             stroke="currentColor">
                                                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -1106,7 +1094,6 @@
                                                                                 d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                                                         </svg>
                                                                     </button>
-                                                                </form>
                                                             </div>
                                                         </div>
                                                     @endforeach
@@ -1209,9 +1196,9 @@
                                                 $tema->view_path
                                             ); @endphp
                                             <div @click="selectedTheme = '{{ $themeKey }}'" :class="{
-                                                                                                                     'border-primary ring-2 ring-primary/20 shadow-md bg-primary-50 dark:bg-primary-900/20': selectedTheme === '{{ $themeKey }}',
-                                                                                                                     'border-neutral-200 dark:border-neutral-600 hover:border-neutral-300 dark:hover:border-neutral-500 bg-white dark:bg-secondary-800': selectedTheme !== '{{ $themeKey }}'
-                                                                                                                 }"
+                                                                                                                         'border-primary ring-2 ring-primary/20 shadow-md bg-primary-50 dark:bg-primary-900/20': selectedTheme === '{{ $themeKey }}',
+                                                                                                                         'border-neutral-200 dark:border-neutral-600 hover:border-neutral-300 dark:hover:border-neutral-500 bg-white dark:bg-secondary-800': selectedTheme !== '{{ $themeKey }}'
+                                                                                                                     }"
                                                 class="w-40 sm:w-48 flex-shrink-0 border rounded-2xl p-2.5 transition-all duration-200 cursor-pointer snap-start relative flex flex-col justify-between select-none">
                                                 <div x-show="selectedTheme === '{{ $themeKey }}'"
                                                     class="absolute top-4 right-4 bg-primary text-white rounded-full p-1 z-10 shadow-sm"
@@ -1487,10 +1474,7 @@
                                                 ];
                                             }
                                         @endphp
-                                        <form id="gift-form"
-                                            action="{{ route('dashboard.invitations.gift.update', $invitation) }}"
-                                            method="POST" enctype="multipart/form-data" class="space-y-4">
-                                            @csrf
+                                        <div id="gift-form" class="space-y-4">
                                             <div class="flex items-center justify-between">
                                                 <span
                                                     class="text-xs text-neutral-500 dark:text-neutral-400 font-semibold">Maksimal
@@ -1642,7 +1626,7 @@
                                             </div>
 
                                             <div class="pt-2 flex justify-end">
-                                                <button type="submit"
+                                                <button type="button" id="gift-save-btn"
                                                     class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary to-primary-600 text-white rounded-xl text-xs font-semibold shadow-sm hover:shadow-md transition-all">
                                                     <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24"
                                                         stroke="currentColor">
@@ -1652,7 +1636,7 @@
                                                     Simpan Kado Digital
                                                 </button>
                                             </div>
-                                        </form>
+                                        </div>
 
                                         <script>
                                         document.addEventListener(
@@ -2411,6 +2395,117 @@
 
         if (addStoryBtn) {
             addStoryBtn.addEventListener('click', addStoryCard);
+        }
+    });
+    </script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+
+        // Gallery upload
+        const galleryBtn = document.getElementById('gallery-submit-btn');
+        const galleryFileInput = document.getElementById('gallery-file-input');
+        const uploadCount = document.getElementById('upload-count');
+
+        if (galleryFileInput) {
+            galleryFileInput.addEventListener('change', function() {
+                const count = this.files.length;
+                if (uploadCount) uploadCount.textContent = count ? '(' + count + ')' : '';
+                if (galleryBtn) galleryBtn.disabled = !count;
+            });
+        }
+
+        if (galleryBtn && galleryFileInput) {
+            galleryBtn.addEventListener('click', function() {
+                const files = galleryFileInput.files;
+                if (!files.length) return;
+
+                galleryBtn.disabled = true;
+                galleryBtn.textContent = 'Mengunggah...';
+
+                const formData = new FormData();
+                for (const file of files) {
+                    formData.append('photos[]', file);
+                }
+                if (csrfToken) formData.append('_token', csrfToken);
+
+                fetch('{{ route("dashboard.invitations.gallery.update", $invitation) }}', {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'Accept': 'application/json' },
+                }).then(() => { window.location.reload(); }).catch(() => {
+                    galleryBtn.disabled = false;
+                    galleryBtn.textContent = 'Unggah';
+                });
+            });
+        }
+
+        // Click on dropzone to open file picker
+        const dropzone = document.getElementById('gallery-dropzone');
+        if (dropzone && galleryFileInput) {
+            dropzone.addEventListener('click', function(e) {
+                if (e.target === dropzone || e.target.closest('#dropzone-empty')) {
+                    galleryFileInput.click();
+                }
+            });
+        }
+
+        // Gallery photo delete
+        document.querySelectorAll('.delete-photo-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                const index = this.dataset.index;
+                Swal.fire({
+                    title: 'Konfirmasi',
+                    text: 'Hapus foto ini?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Ya, hapus!',
+                    cancelButtonText: 'Batal',
+                }).then((result) => {
+                    if (!result.isConfirmed) return;
+
+                    const formData = new FormData();
+                    formData.append('_token', csrfToken);
+                    formData.append('_method', 'DELETE');
+                    formData.append('photo_index', index);
+
+                    fetch('{{ route("dashboard.invitations.gallery.destroy", $invitation) }}', {
+                        method: 'POST',
+                        body: formData,
+                        headers: { 'Accept': 'application/json' },
+                    }).then(() => { window.location.reload(); });
+                });
+            });
+        });
+
+        // Gift save
+        const giftBtn = document.getElementById('gift-save-btn');
+        if (giftBtn) {
+            giftBtn.addEventListener('click', function() {
+                const form = document.getElementById('gift-form');
+                const formData = new FormData();
+                formData.append('_token', csrfToken);
+
+                const inputs = form.querySelectorAll('input, select, textarea');
+                inputs.forEach(function(input) {
+                    if (input.type === 'file') {
+                        if (input.files.length) {
+                            formData.append(input.name, input.files[0]);
+                        }
+                    } else if (input.name) {
+                        formData.append(input.name, input.value);
+                    }
+                });
+
+                fetch('{{ route("dashboard.invitations.gift.update", $invitation) }}', {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'Accept': 'application/json' },
+                }).then(() => { window.location.reload(); });
+            });
         }
     });
     </script>
