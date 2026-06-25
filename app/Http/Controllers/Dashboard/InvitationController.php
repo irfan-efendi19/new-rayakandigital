@@ -91,8 +91,18 @@ class InvitationController extends Controller
             ->selectRaw('COUNT(DISTINCT visitor_id) as count')
             ->value('count') ?? 0;
 
+        $rsvpData = $invitation->rsvps->map(fn($rsvp) => [
+            'id' => $rsvp->id,
+            'guest_name' => $rsvp->guest_name,
+            'attendance' => $rsvp->attendance,
+            'attendance_label' => $rsvp->attendanceLabel(),
+            'pax' => (string) $rsvp->pax,
+            'created_at' => $rsvp->created_at->format('d/m/Y H:i'),
+            'updated_at' => $rsvp->updated_at->format('d/m/Y H:i'),
+        ])->values();
+
         return view('dashboard.invitations.show', compact(
-            'invitation', 'chartLabels', 'chartTotals', 'chartUniques', 'totalViews', 'totalUniques'
+            'invitation', 'chartLabels', 'chartTotals', 'chartUniques', 'totalViews', 'totalUniques', 'rsvpData'
         ));
     }
 
