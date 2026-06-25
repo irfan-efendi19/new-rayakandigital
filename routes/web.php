@@ -71,7 +71,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('invitations.guest-categories', GuestCategoryController::class)->except(['show', 'create', 'edit']);
 
         // Extended & Premium Actions
+        Route::get('/invitations/{invitation}/guests/template', [GuestController::class, 'downloadTemplate'])->name('invitations.guests.template');
         Route::post('/invitations/{invitation}/guests/import', [GuestController::class, 'import'])->name('invitations.guests.import');
+        Route::post('/invitations/{invitation}/guests/delete-selected', [GuestController::class, 'destroySelected'])->name('invitations.guests.destroy-selected');
+        Route::delete('/invitations/{invitation}/guests', [GuestController::class, 'destroyAll'])->name('invitations.guests.destroy-all');
         Route::post('/invitations/{invitation}/gallery', [GalleryController::class, 'update'])->name('invitations.gallery.update');
         Route::delete('/invitations/{invitation}/gallery', [GalleryController::class, 'destroy'])->name('invitations.gallery.destroy');
         Route::post('/invitations/{invitation}/gift', [GiftController::class, 'update'])->name('invitations.gift.update');

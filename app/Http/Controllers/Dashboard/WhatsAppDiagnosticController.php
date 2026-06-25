@@ -34,10 +34,17 @@ class WhatsAppDiagnosticController extends Controller
         $lines[] = '';
         $lines[] = '=== SAMPLE GUEST PHONE NUMBERS ===';
 
-        $samples = Guest::whereNotNull('phone')
+        $samples = Guest::whereNotNull('whatsapp_number')
             ->limit(10)
-            ->pluck('phone')
+            ->pluck('whatsapp_number')
             ->toArray();
+
+        if (empty($samples)) {
+            $samples = Guest::whereNotNull('phone')
+                ->limit(10)
+                ->pluck('phone')
+                ->toArray();
+        }
 
         if (empty($samples)) {
             $lines[] = '(no guests with phone numbers found)';

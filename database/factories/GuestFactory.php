@@ -23,6 +23,7 @@ class GuestFactory extends Factory
             'invitation_id' => Invitation::factory(),
             'name' => $this->faker->name(),
             'phone' => $this->faker->phoneNumber(),
+            'whatsapp_number' => '628' . $this->faker->numerify('##########'),
             'address' => $this->faker->address(),
             'qr_code_token' => (string) Str::uuid(),
             'attendance_status' => 'pending',

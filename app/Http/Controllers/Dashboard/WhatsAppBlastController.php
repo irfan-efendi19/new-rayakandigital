@@ -24,7 +24,9 @@ class WhatsAppBlastController extends Controller
 
         $guests = Guest::whereIn('id', $validated['guest_ids'])
             ->where('invitation_id', $invitation->id)
-            ->whereNotNull('phone')
+            ->where(function ($q) {
+                $q->whereNotNull('whatsapp_number')->orWhereNotNull('phone');
+            })
             ->get();
 
         if ($guests->isEmpty()) {
@@ -52,7 +54,7 @@ class WhatsAppBlastController extends Controller
             ]);
 
             try {
-                $service->sendViaGateway($guest->phone, $message, $gateway);
+                $service->sendViaGateway($guest->whatsapp_number ?? $guest->phone, $message, $gateway);
 
                 $log->update([
                     'status' => 'sent',
@@ -84,7 +86,7 @@ class WhatsAppBlastController extends Controller
     {
         Gate::authorize('update', $invitation);
 
-        if (!$guest->phone) {
+        if (!$guest->whatsapp_number && !$guest->phone) {
             return back()->with('error', 'Tamu ini tidak memiliki nomor telepon.');
         }
 
@@ -105,7 +107,7 @@ class WhatsAppBlastController extends Controller
 
         try {
             app(WhatsAppNotificationService::class)
-                ->sendViaGateway($guest->phone, $message, $gateway);
+                ->sendViaGateway($guest->whatsapp_number ?? $guest->phone, $message, $gateway);
 
             $log->update([
                 'status' => 'sent',

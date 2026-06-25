@@ -86,7 +86,7 @@ class GuestbookController extends Controller
             'guest' => [
                 'id' => $guest->id,
                 'name' => $guest->name,
-                'phone' => $guest->phone,
+                'phone' => $guest->whatsapp_number ?? $guest->phone,
                 'checked_in_at' => $guest->checked_in_at->format('H:i, d M Y'),
                 'checkin_order' => $checkinOrder,
             ],

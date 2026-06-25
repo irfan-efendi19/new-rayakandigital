@@ -42,7 +42,7 @@ class SendWhatsappMessage implements ShouldQueue
             return;
         }
 
-        $phone = $this->guest->phone;
+        $phone = $this->guest->whatsapp_number ?? $this->guest->phone;
 
         if (!$phone) {
             $this->log->update([

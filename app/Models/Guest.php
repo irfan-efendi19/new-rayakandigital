@@ -23,6 +23,7 @@ class Guest extends Model
         'name',
         'slug',
         'phone',
+        'whatsapp_number',
         'address',
         'qr_code_token',
         'attendance_status',

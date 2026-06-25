@@ -2,95 +2,50 @@
 
 namespace App\Services;
 
+use App\Imports\GuestsImport;
 use App\Models\Invitation;
 use Illuminate\Http\UploadedFile;
+use Maatwebsite\Excel\Facades\Excel;
 
 class GuestImportService
 {
-    /**
-     * Import guests from a CSV/Excel file.
-     *
-     * @return array{imported: int, skipped: int, errors: array<string>}
-     */
     public function import(Invitation $invitation, UploadedFile $file): array
     {
-        $imported = 0;
-        $skipped = 0;
+        $import = new GuestsImport($invitation->id);
+
+        try {
+            Excel::import($import, $file);
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            $errors = [];
+            foreach ($e->failures() as $failure) {
+                $errors[] = "Baris {$failure->row()}: " . implode(', ', $failure->errors());
+            }
+
+            return [
+                'imported' => $import->getImportedCount(),
+                'skipped' => $import->getSkippedCount(),
+                'errors' => $errors,
+            ];
+        } catch (\Exception $e) {
+            return [
+                'imported' => 0,
+                'skipped' => 0,
+                'errors' => [$e->getMessage()],
+            ];
+        }
+
         $errors = [];
-
-        $handle = fopen($file->getRealPath(), 'r');
-
-        if ($handle === false) {
-            return ['imported' => 0, 'skipped' => 0, 'errors' => ['Gagal membaca file.']];
+        foreach ($import->failures() as $failure) {
+            $errors[] = "Baris {$failure->row()}, kolom {$failure->attribute()}: " . implode(', ', $failure->errors());
         }
 
-        $header = fgetcsv($handle);
-
-        if ($header === false) {
-            fclose($handle);
-
-            return ['imported' => 0, 'skipped' => 0, 'errors' => ['File kosong atau format tidak valid.']];
-        }
-
-        // Normalize headers
-        $header = array_map(fn ($h) => strtolower(trim($h)), $header);
-        $nameIndex = $this->findColumnIndex($header, ['nama', 'name', 'nama tamu', 'guest name']);
-        $phoneIndex = $this->findColumnIndex($header, ['phone', 'telepon', 'no hp', 'no telp', 'nomor hp', 'whatsapp', 'wa']);
-
-        if ($nameIndex === null) {
-            fclose($handle);
-
-            return ['imported' => 0, 'skipped' => 0, 'errors' => ['Kolom "Nama" tidak ditemukan di header file. Pastikan ada kolom dengan header: Nama, Name, atau Nama Tamu.']];
-        }
-
-        $rowNumber = 1;
-
-        while (($row = fgetcsv($handle)) !== false) {
-            $rowNumber++;
-            $name = trim($row[$nameIndex] ?? '');
-
-            if (empty($name)) {
-                $skipped++;
-
-                continue;
-            }
-
-            $phone = $phoneIndex !== null ? trim($row[$phoneIndex] ?? '') : null;
-
-            try {
-                $invitation->guests()->create([
-                    'name' => $name,
-                    'phone' => $phone ?: null,
-                ]);
-                $imported++;
-            } catch (\Exception $e) {
-                $skipped++;
-                $errors[] = "Baris {$rowNumber}: Gagal import \"{$name}\".";
-            }
-        }
-
-        fclose($handle);
+        $imported = $import->getImportedCount();
+        $skipped = $import->getSkippedCount();
 
         return [
             'imported' => $imported,
-            'skipped' => $skipped,
+            'skipped' => $skipped + count($errors),
             'errors' => $errors,
         ];
-    }
-
-    /**
-     * @param  array<string>  $headers
-     * @param  array<string>  $possibleNames
-     */
-    private function findColumnIndex(array $headers, array $possibleNames): ?int
-    {
-        foreach ($possibleNames as $possibleName) {
-            $index = array_search(strtolower($possibleName), $headers);
-            if ($index !== false) {
-                return $index;
-            }
-        }
-
-        return null;
     }
 }

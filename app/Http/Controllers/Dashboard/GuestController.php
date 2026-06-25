@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Exports\GuestTemplateExport;
 use App\Http\Controllers\Controller;
 use App\Models\Guest;
 use App\Models\Invitation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Maatwebsite\Excel\Facades\Excel;
 
 class GuestController extends Controller
 {
@@ -19,14 +21,30 @@ class GuestController extends Controller
         }
     }
 
-    public function index(Invitation $invitation)
+    public function index(Request $request, Invitation $invitation)
     {
         $this->authorizePersonalLink($invitation);
 
-        $guests = $invitation->guests()
-            ->with(['whatsappLogs' => fn ($q) => $q->latest(), 'guestCategory'])
-            ->latest()
-            ->paginate(20);
+        $search = $request->input('search');
+        $perPage = $request->input('per_page', 20);
+
+        $perPage = in_array($perPage, [10, 20, 50, 100, 'all']) ? $perPage : 20;
+
+        $query = $invitation->guests()
+            ->with(['whatsappLogs' => fn ($q) => $q->latest(), 'guestCategory']);
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('phone', 'like', "%{$search}%")
+                  ->orWhere('whatsapp_number', 'like', "%{$search}%")
+                  ->orWhereHas('guestCategory', fn ($cq) => $cq->where('name', 'like', "%{$search}%"));
+            });
+        }
+
+        $guests = $perPage === 'all'
+            ? $query->latest()->get()
+            : $query->latest()->paginate((int) $perPage);
 
         $categories = $invitation->guestCategories()->get();
 
@@ -70,6 +88,7 @@ class GuestController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'phone' => 'nullable|string|max:20',
+            'whatsapp_number' => 'nullable|string|max:20',
             'address' => 'nullable|string|max:500',
             'guest_category_id' => 'nullable|exists:guest_categories,id',
         ]);
@@ -98,6 +117,7 @@ class GuestController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'phone' => 'nullable|string|max:20',
+            'whatsapp_number' => 'nullable|string|max:20',
             'address' => 'nullable|string|max:500',
             'guest_category_id' => 'nullable|exists:guest_categories,id',
         ]);
@@ -116,6 +136,42 @@ class GuestController extends Controller
 
         return redirect()->route('dashboard.invitations.guests.index', $invitation)
             ->with('success', 'Tamu berhasil dihapus.');
+    }
+
+    public function destroySelected(Request $request, Invitation $invitation)
+    {
+        $this->authorizePersonalLink($invitation);
+        Gate::authorize('update', $invitation);
+
+        $validated = $request->validate([
+            'guest_ids' => 'required|array',
+            'guest_ids.*' => 'exists:guests,id',
+        ]);
+
+        $deleted = $invitation->guests()
+            ->whereIn('id', $validated['guest_ids'])
+            ->delete();
+
+        return redirect()->route('dashboard.invitations.guests.index', $invitation)
+            ->with('success', "{$deleted} tamu berhasil dihapus.");
+    }
+
+    public function destroyAll(Invitation $invitation)
+    {
+        $this->authorizePersonalLink($invitation);
+        Gate::authorize('update', $invitation);
+
+        $deleted = $invitation->guests()->delete();
+
+        return redirect()->route('dashboard.invitations.guests.index', $invitation)
+            ->with('success', "Semua {$deleted} tamu berhasil dihapus.");
+    }
+
+    public function downloadTemplate(Invitation $invitation)
+    {
+        $this->authorizePersonalLink($invitation);
+
+        return Excel::download(new GuestTemplateExport, 'template-import-tamu.xlsx');
     }
 
     public function import(Request $request, Invitation $invitation, \App\Services\GuestImportService $importService)

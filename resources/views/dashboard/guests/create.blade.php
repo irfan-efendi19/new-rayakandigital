@@ -25,11 +25,19 @@
                             </div>
 
                             <div>
-                                <label for="phone" class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">No. WhatsApp <span class="text-neutral-400 dark:text-neutral-500 font-normal">(opsional)</span></label>
-                                <input type="text" name="phone" id="phone"
+                                <label for="whatsapp_number" class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">No. WhatsApp <span class="text-neutral-400 dark:text-neutral-500 font-normal">(opsional)</span></label>
+                                <input type="text" name="whatsapp_number" id="whatsapp_number"
                                     class="block w-full rounded-xl border-neutral-300 dark:border-secondary-600 dark:bg-secondary-700 dark:text-neutral-200 shadow-sm focus:border-primary-500 focus:ring-primary-500 text-sm"
                                     placeholder="Contoh: 08123456789">
                                 <p class="mt-1.5 text-xs text-neutral-500 dark:text-neutral-400">Digunakan untuk mengirim link undangan via WhatsApp otomatis.</p>
+                                @error('whatsapp_number') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+                            </div>
+
+                            <div>
+                                <label for="phone" class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">No. Telepon <span class="text-neutral-400 dark:text-neutral-500 font-normal">(opsional)</span></label>
+                                <input type="text" name="phone" id="phone"
+                                    class="block w-full rounded-xl border-neutral-300 dark:border-secondary-600 dark:bg-secondary-700 dark:text-neutral-200 shadow-sm focus:border-primary-500 focus:ring-primary-500 text-sm"
+                                    placeholder="Contoh: 0211234567">
                                 @error('phone') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
                             </div>
 

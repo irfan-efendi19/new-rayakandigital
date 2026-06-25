@@ -1,6 +1,6 @@
 # PRODUCT REQUIREMENT DOCUMENT (PRD)
-## MODUL: MANAJEMEN KATEGORI TAMU (GUEST CATEGORIZATION SYSTEM)
-**Versi:** 6.0 (Spesifikasi Pengelompokan Tamu Dinamis - Laravel 13 & Tailwind CSS)  
+## MODUL: IMPORT DATA TAMU VIA EXCEL (MASS GUEST IMPORTER ENGINE)
+**Versi:** 7.0 (Spesifikasi Integrasi Maatwebsite/Excel - Laravel 13 & Tailwind CSS)  
 **Tanggal:** 25 Juni 2026  
 **Status:** Approved  
 **Author:** Mochammad Irfan Efendi  
@@ -10,49 +10,82 @@
 ## 1. DESKRIPSI FITUR & ATURAN BISNIS (BUSINESS RULES)
 
 ### 1.1 Deskripsi Fitur
-Untuk memudahkan penyelenggara acara (pengantin) dalam mengelola ratusan data tamu, sistem menyediakan fitur **Kategori Tamu (*Guest Category Tags*)**. Pengguna dapat membuat, mengubah, dan menghapus label kategori kustom mereka sendiri (misal: *VIP, Keluarga Besar, Teman Kuliah, Rekan Kerja*) langsung melalui halaman `/edit` undangan. Kategori ini akan mengikat setiap baris data tamu dan menjadi parameter filter utama pada sistem pembagian pesan WhatsApp massal.
+Untuk mempercepat proses manajemen data, sistem menyediakan fitur **Import Tamu via Excel**. Fitur ini memungkinkan pengguna mengunduh berkas template spreadsheet standar yang sudah disediakan, mengisinya dengan ratusan nama tamu, nomor WhatsApp, serta kategori terkait, lalu mengunggahnya kembali ke halaman `/edit` dashboard user. Proses pemrosesan data dilakukan di latar belakang menggunakan library `maatwebsite/excel`.
 
-### 1.2 Aturan Bisnis (Categorization Business Rules)
-1. **Dinamis & Kustomizable:** Pengguna bebas mendefinisikan nama kategori baru tanpa batasan jumlah kata, yang akan dikelola menggunakan input berbasis *badge* atau *tags input element*.
-2. **Relasi Many-to-One / Many-to-Many:** Satu orang tamu wajib dikaitkan dengan minimal satu kategori (atau bisa jamak jika diizinkan sistem) untuk mempermudah pemetaan segmentasi gaya bahasa template pesan WhatsApp.
-3. **Pemberian Warna Visual (Color Coding - Opsional):** Setiap kategori dapat diberikan warna pembeda (*color-coded badge*) untuk memudahkan penandatanganan visual saat membaca daftar manifestasi tamu di dashboard utama.
+### 1.2 Aturan Bisnis (Excel Import Business Rules)
+1. **Validasi Struktur Kolom (Strict Header Matching):** Berkas Excel yang diunggah wajib mengikuti struktur kolom template resmi: `Nama Tamu`, `Nomor WhatsApp`, dan `Kategori`. Jika struktur kolom diubah atau tidak sesuai, sistem akan membatalkan proses import dan memunculkan pesan kesalahan (*error message*).
+2. **Normalisasi Nomor WhatsApp:** Sistem wajib melakukan sanitasi otomatis terhadap nomor WhatsApp yang diimpor (misalnya mengubah awalan `08xxx` atau `+628xxx` secara otomatis menjadi format internasional murni `628xxx`).
+3. **Penyelarasan Kategori Otomatis (Auto Category Mapping):** * Jika teks kategori pada baris Excel cocok dengan kategori yang sudah dibuat pengguna di database, tamu akan otomatis dikaitkan ke kategori tersebut.
+   * Jika teks kategori belum ada, sistem akan membuatkan kategori baru tersebut secara otomatis (*on-the-fly creation*).
+4. **Perlindungan Data Duplikat:** Jika ditemukan kombinasi nama tamu dan nomor WhatsApp yang sama persis dalam satu undangan, sistem akan melakukan *skip* (mengabaikan) atau melakukan *update* data terbaru (*Upsert mechanism*) guna mencegah penumpukan data ganda.
 
 ---
 
-## 2. BLUEPRINT ARSITEKTUR DATABASE (MIGRATION & RELATIONSHIP)
+## 2. REKAYASA BACKEND: IMPLEMENTASI LARAVEL EXCEL (`maatwebsite/excel`)
 
-Buat tabel baru `guest_categories` yang berelasi dengan tabel `invitations`, serta tambahkan kolom kunci asing pada tabel `guests`:
+### 2.1 Berkas Import Class (`App\Imports\GuestsImport.php`)
+Buat berkas importer menggunakan fitur `ToModel`, `WithHeadingRow`, dan `WithValidation` bawaan Laravel Excel untuk memastikan validitas privasi dan keamanan data:
 
 ```php
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+namespace App\Imports;
 
-return new class extends Migration
+use App\Models\Guest;
+use App\Models\GuestCategory;
+use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithValidation;
+use Illuminate\Support\Str;
+
+class GuestsImport implements ToModel, WithHeadingRow, WithValidation
 {
-    public function up(): void
-    {
-        // 1. Tabel Master Kategori Tamu per Undangan
-        Schema::create('guest_categories', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('invitation_id')->constrained('invitations')->onDelete('cascade');
-            $table->string('name'); // Misal: "Keluarga", "Teman Kantor", "VIP"
-            $table->string('color_code')->default('#6b7280'); // Kode warna hex untuk badge UI
-            $table->timestamps();
-        });
+    protected $invitationId;
 
-        // 2. Modifikasi tabel guests yang sudah ada untuk menghubungkannya ke kategori
-        Schema::table('guests', function (Blueprint $table) {
-            $table->foreignId('guest_category_id')->nullable()->after('invitation_id')->constrained('guest_categories')->onDelete('set null');
-        });
+    public function __construct($invitationId)
+    {
+        $this->invitationId = $invitationId;
     }
 
-    public function down(): void
+    public function model(array $row)
     {
-        Schema::table('guests', function (Blueprint $table) {
-            $table->dropForeign(['guest_category_id']);
-            $table->dropColumn('guest_category_id');
-        });
-        Schema::dropIfExists('guest_categories');
+        // 1. Sanitasi & Normalisasi Nomor WhatsApp ke format 628xxx
+        $whatsapp = $row['nomor_whatsapp'] ?? null;
+        if ($whatsapp) {
+            $whatsapp = preg_replace('/[^0-9]/', '', $whatsapp);
+            if (str_starts_with($whatsapp, '08')) {
+                $whatsapp = '628' . substr($whatsapp, 2);
+            } elseif (str_starts_with($whatsapp, '8')) {
+                $whatsapp = '628' . substr($whatsapp, 1);
+            }
+        }
+
+        // 2. Resolve Kategori Tamu secara dinamis
+        $categoryId = null;
+        $categoryName = trim($row['kategori'] ?? '');
+        
+        if (!empty($categoryName)) {
+            $category = GuestCategory::firstOrCreate([
+                'invitation_id' => $this->invitationId,
+                'name' => $categoryName
+            ]);
+            $categoryId = $category->id;
+        }
+
+        // 3. Simpan data tamu ke database (Gunakan mekanisme Upsert berbasis slug/kombinasi)
+        return new Guest([
+            'invitation_id'     => $this->invitationId,
+            'guest_category_id' => $categoryId,
+            'name'              => trim($row['nama_tamu']),
+            'whatsapp_number'   => $whatsapp,
+            'slug'              => Str::slug(trim($row['nama_tamu'])) . '-' . Str::random(5),
+        ]);
     }
-};
+
+    public function rules(): array
+    {
+        return [
+            'nama_tamu' => 'required|string|max:255',
+            'nomor_whatsapp' => 'nullable|string|max:20',
+            'kategori' => 'nullable|string|max:50',
+        ];
+    }
+}

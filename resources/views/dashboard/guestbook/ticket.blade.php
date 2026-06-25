@@ -238,10 +238,10 @@
                 <span class="label">Tanggal:</span>
                 <span>{{ $guest->checked_in_at?->timezone($tz)->format('d/m/Y') }}</span>
             </div>
-            @if($guest->phone)
+            @if($guest->whatsapp_number ?? $guest->phone)
             <div class="info-row">
                 <span class="label">Telp:</span>
-                <span>{{ $guest->phone }}</span>
+                <span>{{ $guest->whatsapp_number ?? $guest->phone }}</span>
             </div>
             @endif
         </div>
