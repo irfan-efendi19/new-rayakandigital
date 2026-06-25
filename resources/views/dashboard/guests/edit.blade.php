@@ -38,6 +38,20 @@
                                 @error('address') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
                             </div>
 
+                            <div>
+                                <label for="guest_category_id" class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">Kategori Tamu <span class="text-neutral-400 dark:text-neutral-500 font-normal">(opsional)</span></label>
+                                <select name="guest_category_id" id="guest_category_id"
+                                    class="block w-full rounded-xl border-neutral-300 dark:border-secondary-600 dark:bg-secondary-700 dark:text-neutral-200 shadow-sm focus:border-primary-500 focus:ring-primary-500 text-sm">
+                                    <option value="">— Pilih Kategori —</option>
+                                    @foreach($categories as $category)
+                                        <option value="{{ $category->id }}" {{ old('guest_category_id', $guest->guest_category_id) == $category->id ? 'selected' : '' }} style="color: {{ $category->color_code }};">
+                                            {{ $category->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('guest_category_id') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+                            </div>
+
                             <div class="pt-6 border-t border-neutral-100 dark:border-secondary-700 flex justify-end gap-3">
                                 <a href="{{ route('dashboard.invitations.guests.index', $invitation) }}"
                                    class="inline-flex items-center px-5 py-2.5 border border-neutral-200 dark:border-secondary-600 rounded-xl text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-secondary-700 transition-colors">

@@ -1,6 +1,6 @@
 # PRODUCT REQUIREMENT DOCUMENT (PRD)
-## MODUL: PEMBATASAN KUOTA PAX RSVP PER UNDANGAN
-**Versi:** 5.0 (Spesifikasi Alokasi Kursi & Manajemen Limitasi Tamu - Laravel 13 & Tailwind CSS)  
+## MODUL: MANAJEMEN KATEGORI TAMU (GUEST CATEGORIZATION SYSTEM)
+**Versi:** 6.0 (Spesifikasi Pengelompokan Tamu Dinamis - Laravel 13 & Tailwind CSS)  
 **Tanggal:** 25 Juni 2026  
 **Status:** Approved  
 **Author:** Mochammad Irfan Efendi  
@@ -10,20 +10,18 @@
 ## 1. DESKRIPSI FITUR & ATURAN BISNIS (BUSINESS RULES)
 
 ### 1.1 Deskripsi Fitur
-Untuk menghindari membeludaknya jumlah kehadiran tamu yang melebihi kapasitas gedung (*overcapacity*) atau kuota katering yang telah dipesan, sistem menyediakan pengaturan **Membatasi Pax RSVP** langsung pada halaman `/edit` undangan milik pengguna. Pemilik undangan dapat menetapkan batas maksimal kuota kehadiran global serta menentukan jumlah maksimal rombongan (pax) yang boleh dibawa oleh setiap satu entitas nama tamu.
+Untuk memudahkan penyelenggara acara (pengantin) dalam mengelola ratusan data tamu, sistem menyediakan fitur **Kategori Tamu (*Guest Category Tags*)**. Pengguna dapat membuat, mengubah, dan menghapus label kategori kustom mereka sendiri (misal: *VIP, Keluarga Besar, Teman Kuliah, Rekan Kerja*) langsung melalui halaman `/edit` undangan. Kategori ini akan mengikat setiap baris data tamu dan menjadi parameter filter utama pada sistem pembagian pesan WhatsApp massal.
 
-### 1.2 Aturan Bisnis (RSVP Gating Business Rules)
-1. **Limitasi Dua Lapis (Two-Tier Allocation Limit):**
-   * **Maksimal Pax per Tamu (Per-Guest Limit):** Membatasi jumlah maksimal Pax yang bisa dipilih tamu saat mengisi form konfirmasi kehadiran (misal: maksimal hanya bisa memilih membawa 2 orang/pax).
-   * **Total Kuota Global Undangan (Global Cap Limit):** Batas total keseluruhan pax yang terkumpul dari semua tamu yang menyatakan hadir. Jika total pax RSVP yang disetujui telah mencapai batas ini, sistem otomatis mengunci form RSVP untuk tamu berikutnya dan mengubah status menjadi *"Kuota Hadir Penuh"*.
-2. **Reaktivitas Angka Sisa Kursi:** Sisi *front-end* halaman konfirmasi kehadiran tamu wajib menampilkan kalkulasi dinamis sisa slot kuota yang tersedia (jika diaktifkan oleh pemilik undangan).
-3. **Pemberitahuan Penolakan Otomatis:** Tamu yang mencoba memasukkan angka pax melampaui sisa kuota yang tersedia akan langsung ditolak oleh sistem dengan pesan validasi yang informatif.
+### 1.2 Aturan Bisnis (Categorization Business Rules)
+1. **Dinamis & Kustomizable:** Pengguna bebas mendefinisikan nama kategori baru tanpa batasan jumlah kata, yang akan dikelola menggunakan input berbasis *badge* atau *tags input element*.
+2. **Relasi Many-to-One / Many-to-Many:** Satu orang tamu wajib dikaitkan dengan minimal satu kategori (atau bisa jamak jika diizinkan sistem) untuk mempermudah pemetaan segmentasi gaya bahasa template pesan WhatsApp.
+3. **Pemberian Warna Visual (Color Coding - Opsional):** Setiap kategori dapat diberikan warna pembeda (*color-coded badge*) untuk memudahkan penandatanganan visual saat membaca daftar manifestasi tamu di dashboard utama.
 
 ---
 
-## 2. BLUEPRINT STRUKTUR DATABASE (MIGRATION PATCH)
+## 2. BLUEPRINT ARSITEKTUR DATABASE (MIGRATION & RELATIONSHIP)
 
-Tambahkan kolom limitasi kuota pada tabel `invitations` utama untuk mengontrol jalannya validasi RSVP:
+Buat tabel baru `guest_categories` yang berelasi dengan tabel `invitations`, serta tambahkan kolom kunci asing pada tabel `guests`:
 
 ```php
 use Illuminate\Database\Migrations\Migration;
@@ -34,17 +32,27 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('invitations', function (Blueprint $table) {
-            $table->boolean('is_rsvp_pax_limited')->default(false)->after('flower_animation_type'); // Status aktivasi batasan pax
-            $table->integer('max_global_pax_quota')->nullable()->after('is_rsvp_pax_limited'); // Total kuota maksimal gedung (misal: 500 pax)
-            $table->integer('max_pax_per_guest')->default(2)->after('max_global_pax_quota'); // Batas rombongan per nama tamu (misal: max 2 atau 3 pax)
+        // 1. Tabel Master Kategori Tamu per Undangan
+        Schema::create('guest_categories', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('invitation_id')->constrained('invitations')->onDelete('cascade');
+            $table->string('name'); // Misal: "Keluarga", "Teman Kantor", "VIP"
+            $table->string('color_code')->default('#6b7280'); // Kode warna hex untuk badge UI
+            $table->timestamps();
+        });
+
+        // 2. Modifikasi tabel guests yang sudah ada untuk menghubungkannya ke kategori
+        Schema::table('guests', function (Blueprint $table) {
+            $table->foreignId('guest_category_id')->nullable()->after('invitation_id')->constrained('guest_categories')->onDelete('set null');
         });
     }
 
     public function down(): void
     {
-        Schema::table('invitations', function (Blueprint $table) {
-            $table->dropColumn(['is_rsvp_pax_limited', 'max_global_pax_quota', 'max_pax_per_guest']);
+        Schema::table('guests', function (Blueprint $table) {
+            $table->dropForeign(['guest_category_id']);
+            $table->dropColumn('guest_category_id');
         });
+        Schema::dropIfExists('guest_categories');
     }
 };

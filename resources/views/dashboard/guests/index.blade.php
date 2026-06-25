@@ -314,6 +314,7 @@
                                                     class="rounded-lg border-neutral-300 dark:border-secondary-600 dark:bg-secondary-900 text-primary focus:ring-primary-500 shadow-sm">
                                             </th>
                                             <th scope="col" class="px-6 py-3.5 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Nama Tamu</th>
+                                            <th scope="col" class="px-6 py-3.5 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Kategori</th>
                                             <th scope="col" class="px-6 py-3.5 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">No HP</th>
                                             <th scope="col" class="px-6 py-3.5 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Status WA</th>
                                             <th scope="col" class="px-6 py-3.5 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Kehadiran</th>
@@ -333,6 +334,16 @@
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap">
                                                     <span class="text-sm font-semibold text-secondary-800 dark:text-neutral-200">{{ $guest->name }}</span>
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    @if($guest->guestCategory)
+                                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+                                                              style="background-color: {{ $guest->guestCategory->color_code }}20; color: {{ $guest->guestCategory->color_code }}; border: 1px solid {{ $guest->guestCategory->color_code }}40;">
+                                                            {{ $guest->guestCategory->name }}
+                                                        </span>
+                                                    @else
+                                                        <span class="text-xs text-neutral-400 dark:text-neutral-500">—</span>
+                                                    @endif
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400">
                                                     {{ $guest->phone ?? '—' }}

@@ -182,6 +182,11 @@ class Invitation extends Model
         return $this->hasMany(Guest::class);
     }
 
+    public function guestCategories(): HasMany
+    {
+        return $this->hasMany(GuestCategory::class);
+    }
+
     public function rsvps(): HasMany
     {
         return $this->hasMany(Rsvp::class);

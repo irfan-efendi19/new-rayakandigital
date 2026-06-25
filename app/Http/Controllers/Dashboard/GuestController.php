@@ -24,9 +24,11 @@ class GuestController extends Controller
         $this->authorizePersonalLink($invitation);
 
         $guests = $invitation->guests()
-            ->with(['whatsappLogs' => fn ($q) => $q->latest()])
+            ->with(['whatsappLogs' => fn ($q) => $q->latest(), 'guestCategory'])
             ->latest()
             ->paginate(20);
+
+        $categories = $invitation->guestCategories()->get();
 
         $presets = [
             [
@@ -47,7 +49,7 @@ class GuestController extends Controller
             ],
         ];
 
-        return view('dashboard.guests.index', compact('invitation', 'guests', 'presets'));
+        return view('dashboard.guests.index', compact('invitation', 'guests', 'presets', 'categories'));
     }
 
     public function create(Invitation $invitation)
@@ -55,7 +57,9 @@ class GuestController extends Controller
         $this->authorizePersonalLink($invitation);
         Gate::authorize('update', $invitation);
 
-        return view('dashboard.guests.create', compact('invitation'));
+        $categories = $invitation->guestCategories()->get();
+
+        return view('dashboard.guests.create', compact('invitation', 'categories'));
     }
 
     public function store(Request $request, Invitation $invitation)
@@ -67,6 +71,7 @@ class GuestController extends Controller
             'name' => 'required|string|max:255',
             'phone' => 'nullable|string|max:20',
             'address' => 'nullable|string|max:500',
+            'guest_category_id' => 'nullable|exists:guest_categories,id',
         ]);
 
         $invitation->guests()->create($validated);
@@ -80,7 +85,9 @@ class GuestController extends Controller
         $this->authorizePersonalLink($invitation);
         Gate::authorize('update', $invitation);
 
-        return view('dashboard.guests.edit', compact('invitation', 'guest'));
+        $categories = $invitation->guestCategories()->get();
+
+        return view('dashboard.guests.edit', compact('invitation', 'guest', 'categories'));
     }
 
     public function update(Request $request, Invitation $invitation, Guest $guest)
@@ -92,6 +99,7 @@ class GuestController extends Controller
             'name' => 'required|string|max:255',
             'phone' => 'nullable|string|max:20',
             'address' => 'nullable|string|max:500',
+            'guest_category_id' => 'nullable|exists:guest_categories,id',
         ]);
 
         $guest->update($validated);

@@ -5,6 +5,7 @@ use App\Http\Controllers\Dashboard\CheckoutController;
 use App\Http\Controllers\Dashboard\GalleryController;
 use App\Http\Controllers\Dashboard\GiftController;
 use App\Http\Controllers\Dashboard\GuestbookController;
+use App\Http\Controllers\Dashboard\GuestCategoryController;
 use App\Http\Controllers\Dashboard\GuestController;
 use App\Http\Controllers\Dashboard\InvitationController;
 use App\Http\Controllers\Dashboard\WhatsAppBlastController;
@@ -67,6 +68,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/invitations/check-slug', [InvitationController::class, 'checkSlug'])->name('invitations.check-slug');
         Route::resource('invitations', InvitationController::class);
         Route::resource('invitations.guests', GuestController::class)->except(['show']);
+        Route::resource('invitations.guest-categories', GuestCategoryController::class)->except(['show', 'create', 'edit']);
 
         // Extended & Premium Actions
         Route::post('/invitations/{invitation}/guests/import', [GuestController::class, 'import'])->name('invitations.guests.import');

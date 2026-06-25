@@ -19,6 +19,7 @@ class Guest extends Model
 
     protected $fillable = [
         'invitation_id',
+        'guest_category_id',
         'name',
         'slug',
         'phone',
@@ -86,6 +87,11 @@ class Guest extends Model
     public function invitation(): BelongsTo
     {
         return $this->belongsTo(Invitation::class);
+    }
+
+    public function guestCategory(): BelongsTo
+    {
+        return $this->belongsTo(GuestCategory::class);
     }
 
     public function whatsappLogs(): HasMany
