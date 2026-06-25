@@ -5,11 +5,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <x-meta
-        title="Live Streaming - Rayakan Digital"
+    <x-meta title="Live Streaming - Rayakan Digital"
         description="Siarkan momen pernikahan Anda dengan kualitas sinematik melalui berbagai platform. Hubungkan tamu yang tidak bisa hadir secara fisik dengan live streaming berkualitas tinggi."
-        keywords="live streaming pernikahan, siaran pernikahan online, streaming acara, kamera pernikahan, multi platform streaming"
-    />
+        keywords="live streaming pernikahan, siaran pernikahan online, streaming acara, kamera pernikahan, multi platform streaming" />
 
     @stack('meta')
 
@@ -17,7 +15,8 @@
     <link rel="stylesheet" href="{{ asset('css/landingpage.css') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script>
-        if (localStorage.getItem('dark-mode') === 'true' || (!('dark-mode' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        if (localStorage.getItem('dark-mode') === 'true' || (!('dark-mode' in localStorage) && window.matchMedia(
+            '(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
         } else {
             document.documentElement.classList.remove('dark');
@@ -72,7 +71,8 @@
                 <div
                     class="rounded-2xl overflow-hidden shadow-2xl aspect-video relative bg-gradient-to-br from-primary-100 to-neutral-200 dark:from-secondary-800 dark:to-secondary-800">
                     <!-- Thumbnail overlay -->
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20"></div>
+                    <img src="https://awsimages.detik.net.id/community/media/visual/2021/03/23/ilustrasi-akad-nikah.jpeg?w=600&q=90"
+                        alt="Background" class="w-full h-full object-cover">
                     <!-- Play button -->
                     <div class="absolute inset-0 flex items-center justify-center">
                         <div
@@ -114,7 +114,8 @@
                     <div class="p-3 space-y-2">
                         <div class="anim-d1">
                             <span class="font-semibold text-primary-600 dark:text-primary-400">Maya:</span>
-                            <span class="text-secondary-800/70 dark:text-neutral-200/70"> Selamat! Sangat cantik 🌸</span>
+                            <span class="text-secondary-800/70 dark:text-neutral-200/70"> Selamat! Sangat cantik
+                                🌸</span>
                         </div>
                         <div class="anim-d2">
                             <span class="font-semibold text-primary-600 dark:text-primary-400">Budi:</span>
@@ -245,7 +246,8 @@
             <div class="text-center mb-16 reveal">
                 <h2 class="font-heading font-bold text-4xl text-secondary-900 dark:text-neutral-100 mb-3">Apa Kata
                     Mereka?</h2>
-                <p class="text-neutral-500 dark:text-neutral-400">Kebahagiaan klien adalah prioritas kami dalam mengabadikan momen spesial.
+                <p class="text-neutral-500 dark:text-neutral-400">Kebahagiaan klien adalah prioritas kami dalam
+                    mengabadikan momen spesial.
                 </p>
             </div>
             <div class="grid md:grid-cols-3 gap-6">
@@ -253,7 +255,8 @@
                 <div
                     class="reveal bg-white dark:bg-secondary-800 rounded-2xl p-8 shadow-soft border border-primary-100 dark:border-secondary-700 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                     <div class="text-primary-400 dark:text-primary-300 text-3xl font-heading leading-none mb-4">"</div>
-                    <p class="text-secondary-800/70 dark:text-neutral-200/70 text-sm leading-relaxed mb-6">"Layanan streaming yang sangat
+                    <p class="text-secondary-800/70 dark:text-neutral-200/70 text-sm leading-relaxed mb-6">"Layanan
+                        streaming yang sangat
                         profesional!
                         Kualitas videonya jernih dan keluarga yang tidak bisa hadir merasa seperti berada di lokasi."
                     </p>
@@ -263,7 +266,8 @@
                 <div
                     class="reveal bg-white dark:bg-secondary-800 rounded-2xl p-8 shadow-soft border border-primary-100 dark:border-secondary-700 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                     <div class="text-primary-400 dark:text-primary-300 text-3xl font-heading leading-none mb-4">"</div>
-                    <p class="text-secondary-800/70 dark:text-neutral-200/70 text-sm leading-relaxed mb-6">"Sangat puas dengan fitur Live
+                    <p class="text-secondary-800/70 dark:text-neutral-200/70 text-sm leading-relaxed mb-6">"Sangat puas
+                        dengan fitur Live
                         Cam-nya.
                         Tamu di area belakang tetap bisa melihat prosesi akad dengan jelas melalui layar besar."</p>
                     <p class="font-heading font-bold text-primary-600 dark:text-primary-400">Aditya &amp; Kartika</p>
@@ -272,7 +276,8 @@
                 <div
                     class="reveal bg-white dark:bg-secondary-800 rounded-2xl p-8 shadow-soft border border-primary-100 dark:border-secondary-700 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                     <div class="text-primary-400 dark:text-primary-300 text-3xl font-heading leading-none mb-4">"</div>
-                    <p class="text-secondary-800/70 dark:text-neutral-200/70 text-sm leading-relaxed mb-6">"Fitur multi-platform sangat membantu.
+                    <p class="text-secondary-800/70 dark:text-neutral-200/70 text-sm leading-relaxed mb-6">"Fitur
+                        multi-platform sangat membantu.
                         Teman-teman di luar negeri bisa menonton via YouTube dengan lancar tanpa kendala."</p>
                     <p class="font-heading font-bold text-primary-600 dark:text-primary-400">Dimas &amp; Clarissa</p>
                 </div>
@@ -287,7 +292,8 @@
             <div class="text-center mb-16 reveal">
                 <h2 class="font-heading font-bold text-4xl text-secondary-900 dark:text-neutral-100 mb-3">Pilihan Paket
                     Layanan</h2>
-                <p class="text-neutral-500 dark:text-neutral-400">Pilih paket yang sesuai dengan kebutuhan momen spesial Anda.</p>
+                <p class="text-neutral-500 dark:text-neutral-400">Pilih paket yang sesuai dengan kebutuhan momen spesial
+                    Anda.</p>
             </div>
 
             <div class="grid md:grid-cols-3 gap-6 items-stretch">

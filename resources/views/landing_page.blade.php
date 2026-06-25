@@ -652,7 +652,7 @@
                             <div x-show="filter === 'all' || filter === '{{ $theme->theme_category_id ?? '0' }}'"
                                 x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 scale-95"
                                 x-transition:enter-end="opacity-100 scale-100"
-                                class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden"
+                                class="group relative bg-white dark:bg-secondary-800 rounded-2xl border border-neutral-100 dark:border-secondary-700/50 shadow-soft hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-500 ease-out overflow-hidden"
                                 style="width: 280px; flex-shrink: 0;">
 
                                 <!-- Theme Thumbnail -->
@@ -1308,13 +1308,13 @@
                     </div>
                 </div>
             </div>{{-- end panel buku tamu --}}
-            
+
             {{-- =============================== --}}
             {{-- PANEL: LIVE STREAMING --}}
             {{-- =============================== --}}
             <div x-show="activeTab === 'live-streaming'" x-transition:enter="transition ease-out duration-300"
                 x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0">
-            
+
                 <div class="max-w-2xl mx-auto">
                     {{-- Icon & Heading --}}
                     <div class="text-center mb-10">
@@ -1406,9 +1406,8 @@
                     </div>
                 </div>
             </div>{{-- end panel live streaming --}}
-            
-            </div>
-            </section>
+</div>
+</section>
     <section
         class="relative py-16 px-4 bg-gradient-to-br from-orange-50 via-white to-orange-50/30 dark:from-secondary-900 dark:via-secondary-900 dark:to-secondary-900">
         <div class="max-w-3xl mx-auto">

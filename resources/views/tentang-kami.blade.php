@@ -5,11 +5,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <x-meta
-        title="Tentang Kami - Rayakan Digital"
+    <x-meta title="Tentang Kami - Rayakan Digital"
         description="Berawal dari sebuah visi untuk menyatukan tradisi dan teknologi, kami menghadirkan Rayakan Digital sebagai jembatan untuk merayakan setiap momen berharga Anda."
-        keywords="tentang rayakan digital, undangan digital, sejarah, visi misi, tim"
-    />
+        keywords="tentang rayakan digital, undangan digital, sejarah, visi misi, tim" />
 
     @stack('meta')
 
@@ -17,7 +15,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
     <link rel="stylesheet" href="{{ asset('css/landingpage.css') }}">
     <script>
-        if (localStorage.getItem('dark-mode') === 'true' || (!('dark-mode' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        if (localStorage.getItem('dark-mode') === 'true' || (!('dark-mode' in localStorage) && window.matchMedia(
+            '(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
         } else {
             document.documentElement.classList.remove('dark');
@@ -77,9 +76,10 @@
                 class="rounded-2xl overflow-hidden aspect-[16/7] relative bg-gradient-to-br from-neutral-100 to-neutral-200 dark:from-secondary-800 dark:to-secondary-800">
                 <div class="absolute inset-0 flex items-center justify-center">
                     <div class="text-center text-neutral-500 dark:text-neutral-400">
-                        <i class="fa-solid fa-camera text-5xl mb-3"></i>
-                        <p class="text-sm font-medium tracking-widest uppercase">Wedding Stage Photography</p>
                     </div>
+                    <img class="w-full h-full object-cover"
+                        src="https://asset.kompas.com/crops/i1x4qrVakfjJCRGtuBr7zKlPhkE=/49x0:892x562/1200x800/data/photo/2024/01/05/65977a9919349.jpg"
+                        alt="Tim Rayakan Digital" />
                 </div>
             </div>
 
@@ -90,9 +90,6 @@
             </div>
 
             <!-- Cursive overlay -->
-            <p
-                class="absolute inset-0 flex items-center justify-center font-heading italic text-neutral-400 text-5xl select-none pointer-events-none">
-                Violet &amp; Bernas</p>
 
             <!-- Badge -->
             <div
@@ -228,7 +225,9 @@
                 <div class="absolute right-0 top-6 w-[48%] h-[80%] rounded-2xl overflow-hidden"
                     style="background:linear-gradient(135deg,#b07d5a 0%,#7a4f30 100%);">
                     <div class="w-full h-full flex items-center justify-center">
-                        <i class="fa-solid fa-images text-white/30 text-4xl"></i>
+                        <img class="w-full h-full object-cover"
+                            src="https://asset.kompas.com/crops/i1x4qrVakfjJCRGtuBr7zKlPhkE=/49x0:892x562/1200x800/data/photo/2024/01/05/65977a9919349.jpg"
+                            alt="Tim Rayakan Digital" />
                     </div>
                 </div>
                 <div
@@ -247,7 +246,8 @@
                 <h2 class="font-heading text-4xl font-bold text-secondary-800 dark:text-neutral-200 leading-tight mb-2">
                     Perjalanan Kami<br>Membantu
                 </h2>
-                <h2 class="font-heading text-4xl italic text-primary-500 dark:text-primary-400 mb-6">Ribuan Pasangan</h2>
+                <h2 class="font-heading text-4xl italic text-primary-500 dark:text-primary-400 mb-6">Ribuan Pasangan
+                </h2>
 
                 <p class="text-neutral-500 text-sm leading-relaxed mb-4">
                     Sejak 2021, Rayakan Digital telah bertumbuh dari sebuah proyek kecil menjadi salah satu platform
