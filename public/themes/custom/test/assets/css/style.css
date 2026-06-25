@@ -915,6 +915,25 @@ textarea.form-input {
     font-style: italic;
 }
 
+.quota-full-notice {
+    background: #fef2f2;
+    color: #dc2626;
+    padding: 1.5rem;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    border: 1px solid #fecaca;
+}
+
+.rsvp-quota-info {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: #6b7280;
+}
+
+.rsvp-quota-info strong {
+    color: #d4a574;
+}
+
 /* ==================== FOOTER ==================== */
 .footer {
     padding: 3rem 1.5rem;

@@ -362,6 +362,25 @@ input, textarea, select { font-family: inherit; outline: none; }
     font-style: italic;
 }
 
+.quota-full-notice {
+    padding: 1.5rem;
+    background: #fef2f2;
+    border-radius: 8px;
+    color: #dc2626;
+    font-size: 0.9rem;
+    border: 1px solid #fecaca;
+}
+
+.rsvp-quota-info {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: #7a7267;
+}
+
+.rsvp-quota-info strong {
+    color: #8B9D83;
+}
+
 /* ==================== HERO ==================== */
 .hero-section {
     padding-top: 5rem;

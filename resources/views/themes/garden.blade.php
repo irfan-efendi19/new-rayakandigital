@@ -318,6 +318,10 @@
                 <p class="section-desc">Kehadiran Bapak/Ibu/Sdr/i sangat berarti bagi kami.</p>
                 @if($isPreview ?? false)
                 <div class="preview-notice">Fitur RSVP tidak tersedia dalam mode pratinjau.</div>
+                @elseif($invitation->isRsvpPaxLimited() && $invitation->isRsvpQuotaFull())
+                <div class="quota-full-notice">
+                    <p>Maaf, kuota kehadiran sudah penuh. Terima kasih atas perhatian Anda.</p>
+                </div>
                 @else
                 <form id="rsvpForm" class="rsvp-form" action="{{ route('rsvp.store', $invitation) }}" method="POST">
                     @csrf
@@ -329,12 +333,20 @@
                         <option value="uncertain">Mungkin Hadir</option>
                     </select>
                     <select name="pax" required class="form-input">
-                        <option value="1">1 Orang</option>
-                        <option value="2">2 Orang</option>
-                        <option value="3">3 Orang</option>
-                        <option value="4">4 Orang</option>
-                        <option value="5">5 Orang</option>
+                        @php
+                            $maxPax = $invitation->max_pax_per_guest ?? 5;
+                            $remaining = $invitation->remainingGlobalQuota();
+                            $effectiveMax = $remaining !== null ? min($maxPax, $remaining) : $maxPax;
+                        @endphp
+                        @for($i = 1; $i <= $effectiveMax; $i++)
+                        <option value="{{ $i }}">{{ $i }} Orang</option>
+                        @endfor
                     </select>
+                    @if($invitation->isRsvpPaxLimited())
+                    <p class="rsvp-quota-info">
+                        Sisa kuota: <strong>{{ $invitation->remainingGlobalQuota() }}</strong> dari <strong>{{ $invitation->max_global_pax_quota }}</strong> pax
+                    </p>
+                    @endif
                     <button type="submit" class="btn btn-primary">Konfirmasi Kehadiran</button>
                 </form>
                 @endif

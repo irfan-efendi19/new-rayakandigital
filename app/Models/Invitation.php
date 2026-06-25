@@ -119,6 +119,9 @@ class Invitation extends Model
         'show_qr_checkin',
         'show_comments',
         'show_rsvp',
+        'is_rsvp_pax_limited',
+        'max_global_pax_quota',
+        'max_pax_per_guest',
         'show_gallery',
         'show_gift',
         'show_stories',
@@ -149,6 +152,9 @@ class Invitation extends Model
             'show_qr_checkin' => 'boolean',
             'show_comments' => 'boolean',
             'show_rsvp' => 'boolean',
+            'is_rsvp_pax_limited' => 'boolean',
+            'max_global_pax_quota' => 'integer',
+            'max_pax_per_guest' => 'integer',
             'show_gallery' => 'boolean',
             'show_gift' => 'boolean',
             'show_stories' => 'boolean',
@@ -204,6 +210,36 @@ class Invitation extends Model
     public function isExpired(): bool
     {
         return $this->expires_at !== null && $this->expires_at->isPast();
+    }
+
+    public function isRsvpPaxLimited(): bool
+    {
+        return $this->is_rsvp_pax_limited && $this->max_global_pax_quota !== null;
+    }
+
+    public function totalAcceptedPax(): int
+    {
+        return (int) $this->rsvps()
+            ->where('attendance', 'attending')
+            ->sum('pax');
+    }
+
+    public function remainingGlobalQuota(): ?int
+    {
+        if (! $this->isRsvpPaxLimited()) {
+            return null;
+        }
+
+        return max(0, $this->max_global_pax_quota - $this->totalAcceptedPax());
+    }
+
+    public function isRsvpQuotaFull(): bool
+    {
+        if (! $this->isRsvpPaxLimited()) {
+            return false;
+        }
+
+        return $this->remainingGlobalQuota() <= 0;
     }
 
     public function themeLabel(): string

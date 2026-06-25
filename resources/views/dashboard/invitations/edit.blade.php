@@ -1285,9 +1285,29 @@
                                                 <div
                                                     class="story-card bg-neutral-50 dark:bg-secondary-700 p-4 rounded-xl border border-neutral-200 dark:border-secondary-700 space-y-3">
                                                     <div class="flex items-center justify-between">
-                                                        <span
-                                                            class="text-xs font-semibold text-neutral-500 dark:text-neutral-400">Momen
-                                                            #{{ $loop->iteration }}</span>
+                                                        <div class="flex items-center gap-1">
+                                                            <span
+                                                                class="text-xs font-semibold text-neutral-500 dark:text-neutral-400">Momen
+                                                                #{{ $loop->iteration }}</span>
+                                                            <button type="button"
+                                                                class="story-move-up p-1 text-neutral-400 dark:text-neutral-500 hover:text-neutral-600 dark:hover:text-neutral-400 hover:bg-neutral-200 dark:hover:bg-secondary-600 rounded-lg transition"
+                                                                title="Pindah ke atas">
+                                                                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24"
+                                                                    stroke="currentColor">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                                        stroke-width="2" d="M5 15l7-7 7 7" />
+                                                                </svg>
+                                                            </button>
+                                                            <button type="button"
+                                                                class="story-move-down p-1 text-neutral-400 dark:text-neutral-500 hover:text-neutral-600 dark:hover:text-neutral-400 hover:bg-neutral-200 dark:hover:bg-secondary-600 rounded-lg transition"
+                                                                title="Pindah ke bawah">
+                                                                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24"
+                                                                    stroke="currentColor">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                                        stroke-width="2" d="M19 9l-7 7-7-7" />
+                                                                </svg>
+                                                            </button>
+                                                        </div>
                                                         <button type="button"
                                                             class="remove-story text-red-400 dark:text-red-400 hover:text-red-600 dark:hover:text-red-300 text-xs font-semibold">Hapus</button>
                                                     </div>
@@ -1335,9 +1355,29 @@
                                             <div
                                                 class="story-card bg-neutral-50 dark:bg-secondary-700 p-4 rounded-xl border border-neutral-200 dark:border-secondary-700 space-y-3">
                                                 <div class="flex items-center justify-between">
-                                                    <span
-                                                        class="text-xs font-semibold text-neutral-500 dark:text-neutral-400">Momen
-                                                        Baru</span>
+                                                    <div class="flex items-center gap-1">
+                                                        <span
+                                                            class="text-xs font-semibold text-neutral-500 dark:text-neutral-400">Momen
+                                                            Baru</span>
+                                                        <button type="button"
+                                                            class="story-move-up p-1 text-neutral-400 dark:text-neutral-500 hover:text-neutral-600 dark:hover:text-neutral-400 hover:bg-neutral-200 dark:hover:bg-secondary-600 rounded-lg transition"
+                                                            title="Pindah ke atas">
+                                                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24"
+                                                                stroke="currentColor">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2" d="M5 15l7-7 7 7" />
+                                                            </svg>
+                                                        </button>
+                                                        <button type="button"
+                                                            class="story-move-down p-1 text-neutral-400 dark:text-neutral-500 hover:text-neutral-600 dark:hover:text-neutral-400 hover:bg-neutral-200 dark:hover:bg-secondary-600 rounded-lg transition"
+                                                            title="Pindah ke bawah">
+                                                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24"
+                                                                stroke="currentColor">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2" d="M19 9l-7 7-7-7" />
+                                                            </svg>
+                                                        </button>
+                                                    </div>
                                                     <button type="button"
                                                         class="remove-story text-red-400 dark:text-red-400 hover:text-red-600 dark:hover:text-red-300 text-xs font-semibold">Hapus</button>
                                                 </div>
@@ -1642,11 +1682,7 @@
                                         document.addEventListener(
                                             'DOMContentLoaded',
                                             function() {
-                                                const maxAccounts = {
-                                                    {
-                                                        $maxGift
-                                                    }
-                                                };
+                                                const maxAccounts = {{ $maxGift }};
                                                 const banksContainer =
                                                     document
                                                     .getElementById(
@@ -1973,12 +2009,100 @@
                         </div>
 
                         {{-- ======================================== --}}
-                        {{-- Section 5: Kontrol Visibilitas & Finalisasi --}}
+                        {{-- Section 6: Kontrol RSVP --}}
                         {{-- ======================================== --}}
                         <div class="border-b border-neutral-200 dark:border-secondary-700 pb-8">
                             <div class="flex items-center gap-3 mb-1">
                                 <span
                                     class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 text-sm font-bold">6</span>
+                                <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">
+                                    Kontrol RSVP</h3>
+                            </div>
+                            <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-6">
+                                Atur batasan kuota kehadiran tamu undangan.</p>
+
+                            <div
+                                class="bg-primary-50/50 dark:bg-primary-900/10 border border-primary-100 dark:border-primary-800/30 rounded-xl p-5 space-y-4">
+                                <div class="flex items-start justify-between">
+                                    <div>
+                                        <h4 class="text-sm font-semibold text-secondary-800 dark:text-neutral-100">
+                                            Batasi Pax RSVP</h4>
+                                        <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
+                                            Batasi jumlah maksimal pax/rombongan per tamu dan total kuota global.
+                                        </p>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer flex-shrink-0">
+                                        <input type="hidden" name="is_rsvp_pax_limited" value="0">
+                                        <input type="checkbox" name="is_rsvp_pax_limited" id="is_rsvp_pax_limited"
+                                            value="1"
+                                            {{ old('is_rsvp_pax_limited', $invitation->is_rsvp_pax_limited) ? 'checked' : '' }}
+                                            class="sr-only peer">
+                                        <div
+                                            class="w-9 h-5 bg-neutral-200 dark:bg-secondary-700 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-neutral-300 dark:after:border-neutral-600 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary-500">
+                                        </div>
+                                    </label>
+                                </div>
+
+                                <div id="rsvp-pax-settings" class="space-y-4 {{ old('is_rsvp_pax_limited', $invitation->is_rsvp_pax_limited) ? '' : 'hidden' }}">
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div>
+                                            <label for="max_global_pax_quota"
+                                                class="block text-xs font-medium text-neutral-700 dark:text-neutral-300">
+                                                Total Kuota Global (Maksimal Pax)
+                                            </label>
+                                            <input type="number" name="max_global_pax_quota" id="max_global_pax_quota"
+                                                value="{{ old('max_global_pax_quota', $invitation->max_global_pax_quota) }}"
+                                                min="1"
+                                                class="mt-1 block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 text-sm dark:bg-secondary-700 dark:text-neutral-200"
+                                                placeholder="Contoh: 500">
+                                            <p class="text-xs text-neutral-400 dark:text-neutral-500 mt-1">
+                                                Total maksimal seluruh pax yang hadir (misal: kapasitas gedung).
+                                            </p>
+                                            @error('max_global_pax_quota')
+                                                <span class="text-red-500 dark:text-red-400 text-xs mt-1">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                        <div>
+                                            <label for="max_pax_per_guest"
+                                                class="block text-xs font-medium text-neutral-700 dark:text-neutral-300">
+                                                Maksimal Pax per Tamu
+                                            </label>
+                                            <input type="number" name="max_pax_per_guest" id="max_pax_per_guest"
+                                                value="{{ old('max_pax_per_guest', $invitation->max_pax_per_guest ?? 2) }}"
+                                                min="1" max="50"
+                                                class="mt-1 block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 text-sm dark:bg-secondary-700 dark:text-neutral-200"
+                                                placeholder="2">
+                                            <p class="text-xs text-neutral-400 dark:text-neutral-500 mt-1">
+                                                Jumlah rombongan maksimal yang bisa dibawa setiap tamu.
+                                            </p>
+                                            @error('max_pax_per_guest')
+                                                <span class="text-red-500 dark:text-red-400 text-xs mt-1">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    @if($invitation->isRsvpPaxLimited())
+                                        <div class="bg-white dark:bg-secondary-700 border border-neutral-200 dark:border-neutral-600 rounded-xl p-3">
+                                            <p class="text-xs text-neutral-600 dark:text-neutral-400">
+                                                Saat ini:
+                                                <span class="font-semibold text-primary-600 dark:text-primary-400">{{ $invitation->totalAcceptedPax() }}</span>
+                                                dari
+                                                <span class="font-semibold">{{ $invitation->max_global_pax_quota }}</span>
+                                                pax terpakai
+                                                (sisa <span class="font-semibold text-emerald-600 dark:text-emerald-400">{{ $invitation->remainingGlobalQuota() }}</span>).
+                                            </p>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- ======================================== --}}
+                        {{-- Section 7: Kontrol Visibilitas & Finalisasi --}}
+                        {{-- ======================================== --}}
+                        <div class="border-b border-neutral-200 dark:border-secondary-700 pb-8">
+                            <div class="flex items-center gap-3 mb-1">
+                                <span
+                                    class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 text-sm font-bold">7</span>
                                 <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">
                                     Kontrol Visibilitas & Finalisasi
                                 </h3>
@@ -2049,8 +2173,6 @@
                                         </div>
                                     @endforeach
                                 </div>
-
-                                <hr class="my-4 border-neutral-200 dark:border-secondary-700">
 
                                 <h4 class="text-sm font-semibold text-secondary-800 dark:text-neutral-100 mb-3">
                                     Visibilitas Fitur</h4>
@@ -2149,7 +2271,7 @@
                     class="inline-flex items-center px-5 py-2.5 bg-white dark:bg-secondary-800 border border-neutral-300 dark:border-neutral-600 rounded-xl shadow-sm text-sm font-semibold text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-secondary-700 hover:border-primary-300 transition-all mr-3">
                     Batal
                 </a>
-                <button type="submit" form="invitation-form"
+                <button type="button" id="save-invitation-btn"
                     class="inline-flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-primary to-primary-600 rounded-xl shadow-sm text-sm font-semibold text-white hover:shadow-md hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-all">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
@@ -2289,10 +2411,22 @@
 
         function removeEventCard(btn) {
             const card = btn.closest('.event-card');
-            if (card && confirm('Hapus acara ini?')) {
-                card.remove();
-                reindexEvents();
-            }
+            if (!card) return;
+            Swal.fire({
+                title: 'Hapus Acara?',
+                text: 'Acara ini akan dihapus dari undangan.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    card.remove();
+                    reindexEvents();
+                }
+            });
         }
 
         function moveUp(btn) {
@@ -2385,11 +2519,35 @@
             reindexStories();
         }
 
+        function storyMoveUp(btn) {
+            const card = btn.closest('.story-card');
+            const prev = card ? card.previousElementSibling : null;
+            if (prev) {
+                card.parentNode.insertBefore(card, prev);
+                reindexStories();
+            }
+        }
+
+        function storyMoveDown(btn) {
+            const card = btn.closest('.story-card');
+            const next = card ? card.nextElementSibling : null;
+            if (next) {
+                card.parentNode.insertBefore(next, card);
+                reindexStories();
+            }
+        }
+
         storiesContainer.addEventListener('click', function(e) {
             if (e.target.closest('.remove-story')) {
                 e.target.closest('.story-card')
                     .remove();
                 reindexStories();
+            }
+            if (e.target.closest('.story-move-up')) {
+                storyMoveUp(e.target.closest('.story-move-up'));
+            }
+            if (e.target.closest('.story-move-down')) {
+                storyMoveDown(e.target.closest('.story-move-down'));
             }
         });
 
@@ -2505,6 +2663,36 @@
                     body: formData,
                     headers: { 'Accept': 'application/json' },
                 }).then(() => { window.location.reload(); });
+            });
+        }
+
+        // RSVP Pax Limit toggle
+        const rsvpPaxToggle = document.getElementById('is_rsvp_pax_limited');
+        const rsvpPaxSettings = document.getElementById('rsvp-pax-settings');
+        if (rsvpPaxToggle && rsvpPaxSettings) {
+            rsvpPaxToggle.addEventListener('change', function () {
+                rsvpPaxSettings.classList.toggle('hidden', !this.checked);
+            });
+        }
+
+        // Save confirmation
+        const saveBtn = document.getElementById('save-invitation-btn');
+        if (saveBtn) {
+            saveBtn.addEventListener('click', function(e) {
+                Swal.fire({
+                    title: 'Simpan Perubahan?',
+                    text: 'Pastikan semua data sudah diisi dengan benar.',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#6366f1',
+                    cancelButtonColor: '#6b7280',
+                    confirmButtonText: 'Ya, simpan!',
+                    cancelButtonText: 'Batal',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById('invitation-form').submit();
+                    }
+                });
             });
         }
     });

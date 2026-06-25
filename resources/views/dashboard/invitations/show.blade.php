@@ -155,6 +155,24 @@
                     </div>
                     <div class="text-3xl font-bold text-green-600 dark:text-green-400">{{ $invitation->rsvps->where('attendance', 'attending')->count() }}</div>
                     <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1">Tamu yang hadir</p>
+                    @if($invitation->isRsvpPaxLimited())
+                        @php
+                            $paxUsed = $invitation->totalAcceptedPax();
+                            $paxMax = $invitation->max_global_pax_quota;
+                            $paxPercent = $paxMax > 0 ? round(($paxUsed / $paxMax) * 100) : 0;
+                        @endphp
+                        <div class="mt-3">
+                            <div class="flex items-center justify-between text-xs text-neutral-500 dark:text-neutral-400 mb-1">
+                                <span>Kuota Pax: {{ $paxUsed }} / {{ $paxMax }}</span>
+                                <span>{{ $paxPercent }}%</span>
+                            </div>
+                            <div class="w-full bg-neutral-100 dark:bg-secondary-700 rounded-full h-1.5">
+                                <div class="bg-primary-500 dark:bg-primary-400 h-1.5 rounded-full transition-all duration-500"
+                                     style="width: {{ $paxPercent }}%">
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                 </div>
 
                 <div class="bg-white dark:bg-secondary-800 rounded-2xl shadow-soft border border-neutral-100 dark:border-secondary-700 p-5">
