@@ -46,7 +46,7 @@
                     <span class="w-2 h-2 rounded-full bg-primary-600 inline-block animate-pulse"></span>
                     PENGALAMAN LIVE SINEMATIK
                 </span>
-                <h1 class="font-heading font-black text-5xl md:text-6xl leading-tight text-secondary-900 dark:text-neutral-100 mb-4">
+                <h1 class="font-heading font-black text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-tight text-secondary-900 dark:text-neutral-100 mb-4">
                     Hidupkan Setiap<br>Momen
                     <em class="text-primary-600 dark:text-primary-400 not-italic block">Berharga.</em>
                 </h1>
@@ -91,9 +91,8 @@
                         <i class="fa-regular fa-eye text-xs"></i> 1.248
                     </div>
                     <!-- Title -->
-                    <div class="absolute bottom-12 left-4 right-24">
-                        <p class="text-white font-heading font-bold text-lg leading-tight">Resepsi Pernikahan: Aris
-                            &amp; Sarah</p>
+                    <div class="absolute bottom-12 left-4 right-4 md:right-24">
+                        <p class="text-white font-heading font-bold text-sm sm:text-base md:text-lg leading-tight">Resepsi Pernikahan: Aris &amp; Sarah</p>
                         <p class="text-white/60 text-xs mt-0.5">Langsung Sinematik</p>
                     </div>
                     <!-- Controls -->
@@ -106,7 +105,7 @@
 
                 <!-- Chat panel -->
                 <div
-                    class="absolute -right-4 top-4 w-48 bg-white dark:bg-secondary-800 rounded-xl shadow-soft border border-primary-100 dark:border-secondary-700 overflow-hidden text-xs">
+                    class="hidden md:block absolute -right-4 top-4 w-48 bg-white dark:bg-secondary-800 rounded-xl shadow-soft border border-primary-100 dark:border-secondary-700 overflow-hidden text-xs">
                     <div class="flex items-center justify-between px-3 py-2 border-b border-primary-100 dark:border-secondary-700">
                         <span class="font-semibold text-secondary-800 dark:text-neutral-200">Live Chat</span>
                         <i class="fa-solid fa-xmark text-secondary-800/40 cursor-pointer"></i>
@@ -133,21 +132,21 @@
                 </div>
 
                 <!-- Stats pills -->
-                <div class="flex gap-3 mt-5">
+                <div class="flex flex-wrap gap-2 sm:gap-3 mt-5">
                     <div
-                        class="flex items-center gap-2 bg-white dark:bg-secondary-800 rounded-xl px-4 py-2.5 shadow-soft border border-primary-100 text-sm">
+                        class="flex items-center gap-1.5 sm:gap-2 bg-white dark:bg-secondary-800 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 shadow-soft border border-primary-100 text-xs sm:text-sm">
                         <i class="fa-solid fa-users text-primary-500"></i>
-                        <span class="font-semibold">1.2K+</span>
-                        <span class="text-neutral-500 dark:text-neutral-400">Penonton</span>
+                        <span class="font-semibold whitespace-nowrap">1.2K+</span>
+                        <span class="text-neutral-500 dark:text-neutral-400 hidden sm:inline">Penonton</span>
                     </div>
                     <div
-                        class="flex items-center gap-2 bg-white dark:bg-secondary-800 rounded-xl px-4 py-2.5 shadow-soft border border-primary-100 text-sm">
+                        class="flex items-center gap-1.5 sm:gap-2 bg-white dark:bg-secondary-800 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 shadow-soft border border-primary-100 text-xs sm:text-sm">
                         <i class="fa-solid fa-star text-amber-400"></i>
-                        <span class="font-semibold">4.9</span>
-                        <span class="text-neutral-500 dark:text-neutral-400">Rating</span>
+                        <span class="font-semibold whitespace-nowrap">4.9</span>
+                        <span class="text-neutral-500 dark:text-neutral-400 hidden sm:inline">Rating</span>
                     </div>
                     <div
-                        class="flex items-center gap-2 bg-white dark:bg-secondary-800 rounded-xl px-4 py-2.5 shadow-soft border border-primary-100 text-sm">
+                        class="flex items-center gap-1.5 sm:gap-2 bg-white dark:bg-secondary-800 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 shadow-soft border border-primary-100 text-xs sm:text-sm">
                         <i class="fa-solid fa-shield-halved text-green-500"></i>
                         <span class="font-semibold text-neutral-600 dark:text-neutral-300">HD</span>
                     </div>

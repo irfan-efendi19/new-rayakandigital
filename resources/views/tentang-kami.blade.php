@@ -17,10 +17,10 @@
     <script>
         if (localStorage.getItem('dark-mode') === 'true' || (!('dark-mode' in localStorage) && window.matchMedia(
             '(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
+        document.documentElement.classList.add('dark');
+    } else {
+        document.documentElement.classList.remove('dark');
+    }
     </script>
 </head>
 
@@ -216,7 +216,8 @@
                     <div class="w-full h-full flex items-end p-4">
                         <div class="bg-white/90 rounded-xl p-3 w-full">
                             <i class="fa-solid fa-quote-left text-primary-500 text-xs mb-1"></i>
-                            <p class="text-xs text-secondary-700 dark:text-neutral-200 font-medium leading-snug">"Momen
+                            <p class="text-xs text-secondary-700 dark:text-secondary-900 font-medium leading-snug">
+                                "Momen
                                 yang tepat diabadikan
                                 dengan undangan yang sempurna."</p>
                         </div>

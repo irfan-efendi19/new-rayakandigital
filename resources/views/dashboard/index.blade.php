@@ -6,11 +6,11 @@
                 <p class="text-sm text-neutral-500 dark:text-neutral-400 mt-0.5">Selamat datang kembali, {{ Auth::user()->name }}!</p>
             </div>
             <a href="{{ route('dashboard.invitations.create') }}"
-                class="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-primary to-primary-600 text-white rounded-xl font-semibold text-sm shadow-soft hover:shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all duration-200">
-                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                class="inline-flex items-center gap-2 px-3 sm:px-5 py-2.5 bg-gradient-to-r from-primary to-primary-600 text-white rounded-xl font-semibold text-sm shadow-soft hover:shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all duration-200">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
                 </svg>
-                Buat Undangan Baru
+                <span class="hidden sm:inline">Buat Undangan Baru</span>
             </a>
         </div>
     </x-slot>
