@@ -649,10 +649,11 @@
                             <div x-show="filter === 'all' || filter === '{{ $theme->theme_category_id ?? '0' }}'"
                                 x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 scale-95"
                                 x-transition:enter-end="opacity-100 scale-100"
-                                class="rounded-2xl transition-all duration-500 ease-out hover:shadow-2xl hover:-translate-y-1.5 shadow-soft"
+                                class="rounded-2xl transition-all duration-500 ease-out hover:shadow-[0_24px_60px_-20px_rgba(15,23,42,0.25)] hover:-translate-y-1.5 shadow-[0_12px_30px_-18px_rgba(15,23,42,0.18)]"
                                 style="width: 300px; flex-shrink: 0;">
 
-                                <div class="group relative rounded-2xl overflow-hidden border border-neutral-100 dark:border-secondary-700/50">
+                                <div
+                                    class="group relative rounded-2xl overflow-hidden border border-neutral-100 dark:border-secondary-700/50 bg-white/95 dark:bg-secondary-800/95">
 
                                 {{-- Full-card background image --}}
                                 @if($theme->thumbnail_portrait)
