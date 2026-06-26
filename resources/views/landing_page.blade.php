@@ -629,81 +629,73 @@
             @endif
 
             <!-- Horizontal Scroll Container -->
+            {{-- Scroll Container --}}
             <div class="relative">
-                <!-- Scroll Buttons -->
-                <button @click="scrollLeft()"
-                    class="absolute left-0 top-1/2 -translate-y-1/2 z-10 hidden lg:flex items-center justify-center w-10 h-10 rounded-full bg-white dark:bg-secondary-800 shadow-lg border border-neutral-200 dark:border-secondary-700 text-secondary-600 hover:bg-primary-500 hover:text-white hover:border-primary-500 transition-all duration-200 cursor-pointer"
-                    style="transform: translateY(-50%);">
+                <button @click="$refs.scrollContainer.scrollLeft -= 300"
+                    class="absolute left-0 top-1/2 -translate-y-1/2 z-10 hidden lg:flex items-center justify-center w-10 h-10 rounded-full transition-all duration-200 cursor-pointer bg-white/80 dark:bg-white/10 border border-neutral-300 dark:border-white/15 text-neutral-600 dark:text-white/80 backdrop-blur-sm hover:bg-white dark:hover:bg-white/20">
                     <i class="fas fa-chevron-left text-sm"></i>
                 </button>
 
-                <button @click="scrollRight()"
-                    class="absolute right-0 top-1/2 -translate-y-1/2 z-10 hidden lg:flex items-center justify-center w-10 h-10 rounded-full bg-white dark:bg-secondary-800 shadow-lg border border-neutral-200 dark:border-secondary-700 text-secondary-600 hover:bg-primary-500 hover:text-white hover:border-primary-500 transition-all duration-200 cursor-pointer"
-                    style="transform: translateY(-50%);">
+                <button @click="$refs.scrollContainer.scrollLeft += 300"
+                    class="absolute right-0 top-1/2 -translate-y-1/2 z-10 hidden lg:flex items-center justify-center w-10 h-10 rounded-full transition-all duration-200 cursor-pointer bg-white/80 dark:bg-white/10 border border-neutral-300 dark:border-white/15 text-neutral-600 dark:text-white/80 backdrop-blur-sm hover:bg-white dark:hover:bg-white/20">
                     <i class="fas fa-chevron-right text-sm"></i>
                 </button>
 
-                <!-- Horizontal Scroll Grid -->
-                <div x-ref="scrollContainer" class="overflow-x-auto overflow-y-hidden pb-6 scroll-smooth hide-scrollbar"
-                    style="scrollbar-width: thin; -webkit-overflow-scrolling: touch;">
+                <div x-ref="scrollContainer" class="overflow-x-auto overflow-y-hidden pb-6 scroll-smooth"
+                    style="scrollbar-width: thin; scrollbar-color: #d4d4d8 transparent; -webkit-overflow-scrolling: touch;">
 
-                    <div class="flex gap-6 lg:gap-8" style="min-width: min-content;">
+                    <div class="flex gap-5 lg:gap-6" style="min-width: min-content;">
                         @forelse($themes as $theme)
-                            <div x-show="filter === 'all' || filter === '{{ $theme->theme_category_id ?? '0' }}'"
-                                x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 scale-95"
-                                x-transition:enter-end="opacity-100 scale-100"
-                                class="group relative bg-white dark:bg-secondary-800 rounded-2xl border border-neutral-100 dark:border-secondary-700/50 shadow-soft hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-500 ease-out overflow-hidden"
-                                style="width: 280px; flex-shrink: 0;">
+                                <div x-show="filter === 'all' || filter === '{{ $theme->theme_category_id ?? '0' }}'"
+                                    x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 scale-95"
+                                    x-transition:enter-end="opacity-100 scale-100"
+                                    class="group relative rounded-2xl overflow-hidden transition-all duration-500 ease-out bg-white dark:bg-secondary-800 shadow-sm hover:shadow-2xl hover:-translate-y-1.5 border border-neutral-100 dark:border-secondary-700/50"
+                                    style="width: 260px; flex-shrink: 0;">
 
-                                <!-- Theme Thumbnail -->
-                                <div class="relative aspect-[4/5] bg-gradient-to-br from-secondary-50 to-tertiary overflow-hidden">
+                                {{-- Thumbnail --}}
+                                <div class="relative aspect-[9/16] bg-gradient-to-br from-secondary-50 to-tertiary overflow-hidden">
                                     @if($theme->thumbnail_portrait)
                                         <img src="{{ Storage::url($theme->thumbnail_portrait) }}" alt="{{ $theme->name }}"
-                                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out">
+                                            class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110">
                                     @else
-                                        <div class="flex flex-col items-center justify-center h-full">
-                                            <div
-                                                class="w-20 h-20 bg-gradient-to-br from-primary-100 to-primary-50 rounded-2xl flex items-center justify-center mb-3">
-                                                <i class="fas fa-images text-3xl text-primary-400"></i>
+                                        <div class="flex items-center justify-center h-full">
+                                            <div class="text-center">
+                                                <div class="w-20 h-20 mx-auto bg-gradient-to-br from-primary-100 to-primary-50 rounded-2xl flex items-center justify-center mb-3">
+                                                    <i class="fas fa-images text-3xl text-primary-400"></i>
+                                                </div>
+                                                <span class="text-sm text-neutral-400">{{ $theme->name }}</span>
                                             </div>
-                                            <span class="text-sm text-neutral-400">{{ $theme->name }}</span>
                                         </div>
                                     @endif
 
-                                    <!-- Premium / Free Badge -->
+                                    {{-- Badge --}}
                                     @if($theme->is_premium)
-                                        <div class="absolute top-3 right-3">
-                                            <span
-                                                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-gradient-to-r from-amber-400 to-amber-500 text-white shadow-md">
-                                                <i class="fas fa-crown text-xs"></i>
-                                                Premium
-                                            </span>
-                                        </div>
+                                        <span class="absolute top-3 right-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-gradient-to-r from-amber-400 to-amber-500 text-white shadow-md">
+                                            <i class="fas fa-crown text-xs"></i>
+                                            Premium
+                                        </span>
                                     @else
-                                        <div class="absolute top-3 right-3">
-                                            <span
-                                                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700">
-                                                <i class="fas fa-gem text-xs"></i>
-                                                Gratis
-                                            </span>
-                                        </div>
+                                        <span class="absolute top-3 right-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700 shadow-sm">
+                                            <i class="fas fa-gem text-xs"></i>
+                                            Gratis
+                                        </span>
                                     @endif
 
-                                    <!-- Overlay on Hover -->
-                                    <div
-                                        class="absolute inset-0 bg-gradient-to-t from-secondary-900/80 via-secondary-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3">
+                                    {{-- Hover overlay --}}
+                                    <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
+                                        style="background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.1) 50%, transparent 100%);">
                                         <a href="{{ route('theme.preview', str_replace('themes.', '', $theme->view_path)) }}" target="_blank"
-                                            class="px-4 py-2 bg-white/20 backdrop-blur-md rounded-xl text-white text-sm font-semibold hover:bg-white/30 transition-all duration-200">
-                                            <i class="fas fa-eye mr-1"></i> Pratinjau
+                                            class="flex items-center gap-2 px-4 py-2 rounded-xl text-white text-sm font-semibold transition-all duration-200"
+                                            style="background: rgba(255,255,255,0.15); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.25);">
+                                            <i class="fas fa-eye text-xs"></i> Pratinjau
                                         </a>
                                     </div>
                                 </div>
 
-                                <!-- Theme Info -->
+                                {{-- Card Body --}}
                                 <div class="p-5">
                                     <div class="flex items-start justify-between mb-2">
-                                        <h3
-                                            class="text-lg font-bold text-secondary-800 dark:text-neutral-200 group-hover:text-primary-600 transition-colors">
+                                        <h3 class="text-lg font-bold text-secondary-800 dark:text-neutral-200 group-hover:text-primary-600 transition-colors">
                                             {{ $theme->name }}
                                         </h3>
                                         @if($theme->rating)
@@ -714,7 +706,6 @@
                                         @endif
                                     </div>
 
-                                    <!-- Category tag -->
                                     @if($theme->category)
                                         <div class="mb-4">
                                             <span class="inline-block px-2 py-0.5 bg-primary-50 text-primary-600 rounded-lg text-xs">
@@ -723,7 +714,6 @@
                                         </div>
                                     @endif
 
-                                    <!-- Action Buttons -->
                                     <div class="flex gap-3 mt-3">
                                         <a href="{{ route('theme.preview', str_replace('themes.', '', $theme->view_path)) }}" target="_blank"
                                             class="flex-1 text-center px-3 py-2.5 border-2 border-primary-200 text-primary-600 rounded-xl text-sm font-semibold hover:bg-primary-50 hover:border-primary-300 transition-all duration-200">
@@ -732,12 +722,12 @@
 
                                         @auth
                                             <a href="{{ route('dashboard.invitations.create', ['theme' => str_replace('themes.', '', $theme->view_path)]) }}"
-                                                class="flex-1 text-center px-3 py-2.5 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-xl text-sm font-semibold hover:from-primary-600 hover:to-primary-700 transition-all duration-200 shadow-sm hover:shadow-md">
+                                               class="flex-1 text-center px-3 py-2.5 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-xl text-sm font-semibold hover:from-primary-600 hover:to-primary-700 transition-all duration-200 shadow-sm hover:shadow-md">
                                                 <i class="fas fa-magic mr-1"></i> Gunakan
                                             </a>
                                         @else
                                             <a href="{{ route('register', ['theme' => str_replace('themes.', '', $theme->view_path)]) }}"
-                                                class="flex-1 text-center px-3 py-2.5 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-xl text-sm font-semibold hover:from-primary-600 hover:to-primary-700 transition-all duration-200 shadow-sm hover:shadow-md">
+                                               class="flex-1 text-center px-3 py-2.5 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-xl text-sm font-semibold hover:from-primary-600 hover:to-primary-700 transition-all duration-200 shadow-sm hover:shadow-md">
                                                 <i class="fas fa-magic mr-1"></i> Gunakan
                                             </a>
                                         @endauth
@@ -745,16 +735,12 @@
                                 </div>
                             </div>
                         @empty
-                            <div class="py-16 text-center" style="min-width: 100%;">
-                                <div
-                                    class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-neutral-100 dark:bg-secondary-800 mb-4">
-                                    <i class="fas fa-palette text-3xl text-neutral-400"></i>
+                            <div class="col-span-full py-16 text-center" style="min-width: 100%;">
+                                <div class="w-20 h-20 mx-auto bg-neutral-100 dark:bg-secondary-700 rounded-2xl flex items-center justify-center mb-4">
+                                    <i class="fas fa-paintbrush text-3xl text-neutral-400"></i>
                                 </div>
-                                <p class="text-lg font-semibold text-secondary-800 dark:text-neutral-200">Belum ada tema
-                                    tersedia</p>
-                                <p class="text-neutral-500 mt-2">Silakan hubungi admin untuk informasi lebih
-                                    lanjut.
-                                </p>
+                                <p class="text-lg font-semibold text-secondary-800 dark:text-neutral-200">Belum ada tema tersedia</p>
+                                <p class="text-sm text-neutral-500 mt-1">Silakan hubungi admin untuk menambahkan tema.</p>
                             </div>
                         @endforelse
                     </div>
@@ -1403,7 +1389,7 @@
                 </div>
             </div>{{-- end panel live streaming --}}
         </div>
-        </section>
+    </section>
     <section
         class="relative py-16 px-4 bg-gradient-to-br from-orange-50 via-white to-orange-50/30 dark:from-secondary-900 dark:via-secondary-900 dark:to-secondary-900">
         <div class="max-w-3xl mx-auto">

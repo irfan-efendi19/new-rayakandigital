@@ -49,33 +49,42 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="themeGrid">
                 @forelse($themes as $theme)
-                    <div class="theme-card bg-white dark:bg-secondary-800 rounded-2xl border border-neutral-100 dark:border-secondary-700/50 shadow-sm hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-500 ease-out overflow-hidden group"
+                    <div class="theme-card bg-white dark:bg-secondary-800 rounded-2xl border border-neutral-100 dark:border-secondary-700/50 shadow-soft hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-500 ease-out overflow-hidden group"
                         data-category="{{ $theme->theme_category_id ?? '0' }}">
-                        <div class="relative aspect-[9/16] bg-gradient-to-br from-secondary-50 to-tertiary overflow-hidden">
+                        <div class="relative aspect-[4/5] bg-gradient-to-br from-secondary-50 to-tertiary overflow-hidden">
                             @if($theme->thumbnail_portrait)
                                 <img src="{{ Storage::url($theme->thumbnail_portrait) }}" alt="{{ $theme->name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out">
                             @else
-                                <div class="flex items-center justify-center h-full">
-                                    <div class="text-center">
-                                        <div class="w-20 h-20 mx-auto bg-gradient-to-br from-primary-100 to-primary-50 rounded-2xl flex items-center justify-center mb-3">
-                                            <i class="fas fa-images text-3xl text-primary-400"></i>
-                                        </div>
-                                        <span class="text-sm text-neutral-400">{{ $theme->name }}</span>
+                                <div class="flex flex-col items-center justify-center h-full">
+                                    <div class="w-20 h-20 bg-gradient-to-br from-primary-100 to-primary-50 rounded-2xl flex items-center justify-center mb-3">
+                                        <i class="fas fa-images text-3xl text-primary-400"></i>
                                     </div>
+                                    <span class="text-sm text-neutral-400">{{ $theme->name }}</span>
                                 </div>
                             @endif
 
                             @if($theme->is_premium)
-                                <span class="absolute top-3 right-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-gradient-to-r from-amber-400 to-amber-500 text-white shadow-md">
-                                    <i class="fas fa-crown text-xs"></i>
-                                    Premium
-                                </span>
+                                <div class="absolute top-3 right-3">
+                                    <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-gradient-to-r from-amber-400 to-amber-500 text-white shadow-md">
+                                        <i class="fas fa-crown text-xs"></i>
+                                        Premium
+                                    </span>
+                                </div>
                             @else
-                                <span class="absolute top-3 right-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700 shadow-sm">
-                                    <i class="fas fa-gem text-xs"></i>
-                                    Gratis
-                                </span>
+                                <div class="absolute top-3 right-3">
+                                    <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700">
+                                        <i class="fas fa-gem text-xs"></i>
+                                        Gratis
+                                    </span>
+                                </div>
                             @endif
+
+                            <div class="absolute inset-0 bg-gradient-to-t from-secondary-900/80 via-secondary-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3">
+                                <a href="{{ route('theme.preview', str_replace('themes.', '', $theme->view_path)) }}" target="_blank"
+                                    class="px-4 py-2 bg-white/20 backdrop-blur-md rounded-xl text-white text-sm font-semibold hover:bg-white/30 transition-all duration-200">
+                                    <i class="fas fa-eye mr-1"></i> Pratinjau
+                                </a>
+                            </div>
                         </div>
 
                         <div class="p-5">
@@ -126,11 +135,11 @@
                     </div>
                 @empty
                     <div class="col-span-full py-16 text-center">
-                        <div class="w-20 h-20 mx-auto bg-neutral-100 dark:bg-secondary-700 rounded-2xl flex items-center justify-center mb-4">
-                            <i class="fas fa-paintbrush text-3xl text-neutral-400"></i>
+                        <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-neutral-100 dark:bg-secondary-800 mb-4">
+                            <i class="fas fa-palette text-3xl text-neutral-400"></i>
                         </div>
                         <p class="text-lg font-semibold text-secondary-800 dark:text-neutral-200">Belum ada tema tersedia</p>
-                        <p class="text-sm text-neutral-500 mt-1">Silakan hubungi admin untuk menambahkan tema.</p>
+                        <p class="text-neutral-500 mt-2">Silakan hubungi admin untuk informasi lebih lanjut.</p>
                     </div>
                 @endforelse
             </div>
