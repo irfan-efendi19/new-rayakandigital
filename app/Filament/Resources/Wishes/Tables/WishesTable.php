@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Wishes\Tables;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Tables\Enums\PaginationMode;
 use Filament\Tables\Table;
 
 class WishesTable
@@ -38,6 +39,7 @@ class WishesTable
                     ]),
             ])
             ->defaultSort('created_at', 'desc')
+            ->paginationMode(PaginationMode::Simple)
             ->recordActions([
                 EditAction::make(),
             ])

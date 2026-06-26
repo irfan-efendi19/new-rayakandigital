@@ -4,6 +4,7 @@ namespace App\Filament\Widgets;
 
 use App\Models\Order;
 use Filament\Widgets\ChartWidget;
+use Illuminate\Support\Facades\Cache;
 
 class OrdersByStatusChart extends ChartWidget
 {
@@ -37,43 +38,47 @@ class OrdersByStatusChart extends ChartWidget
             default => 30,
         };
 
-        $query = Order::query();
-        if ($days) {
-            $query->where('created_at', '>=', now()->subDays($days));
-        }
+        $cacheKey = 'filament-orders-status-chart-' . ($this->filter ?? '30d');
 
-        $statuses = (clone $query)
-            ->selectRaw('payment_status, COUNT(*) as total')
-            ->groupBy('payment_status')
-            ->orderByDesc('total')
-            ->pluck('total', 'payment_status');
+        return Cache::remember($cacheKey, 300, function () use ($days) {
+            $query = Order::query();
+            if ($days) {
+                $query->where('created_at', '>=', now()->subDays($days));
+            }
 
-        $labels = [
-            'pending' => 'Pending',
-            'verifying' => 'Verifying',
-            'success' => 'Success',
-            'failed' => 'Failed',
-            'expired' => 'Expired',
-        ];
+            $statuses = (clone $query)
+                ->selectRaw('payment_status, COUNT(*) as total')
+                ->groupBy('payment_status')
+                ->orderByDesc('total')
+                ->pluck('total', 'payment_status');
 
-        $colors = [
-            'pending' => '#f59e0b',
-            'verifying' => '#3b82f6',
-            'success' => '#10b981',
-            'failed' => '#ef4444',
-            'expired' => '#6b7280',
-        ];
+            $labels = [
+                'pending' => 'Pending',
+                'verifying' => 'Verifying',
+                'success' => 'Success',
+                'failed' => 'Failed',
+                'expired' => 'Expired',
+            ];
 
-        return [
-            'datasets' => [
-                [
-                    'label' => 'Jumlah Pesanan',
-                    'data' => collect($labels)->map(fn ($_, $key) => $statuses[$key] ?? 0)->values()->toArray(),
-                    'backgroundColor' => collect($colors)->only(array_keys($labels))->values()->toArray(),
-                    'borderRadius' => 4,
+            $colors = [
+                'pending' => '#f59e0b',
+                'verifying' => '#3b82f6',
+                'success' => '#10b981',
+                'failed' => '#ef4444',
+                'expired' => '#6b7280',
+            ];
+
+            return [
+                'datasets' => [
+                    [
+                        'label' => 'Jumlah Pesanan',
+                        'data' => collect($labels)->map(fn ($_, $key) => $statuses[$key] ?? 0)->values()->toArray(),
+                        'backgroundColor' => collect($colors)->only(array_keys($labels))->values()->toArray(),
+                        'borderRadius' => 4,
+                    ],
                 ],
-            ],
-            'labels' => collect($labels)->values()->toArray(),
-        ];
+                'labels' => collect($labels)->values()->toArray(),
+            ];
+        });
     }
 }

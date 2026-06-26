@@ -15,10 +15,9 @@ class PendingOrders extends BaseWidget
 
     protected function getTableHeading(): string
     {
-        $pending = Order::where('payment_status', 'pending')->count();
-        $verifying = Order::where('payment_status', 'verifying')->count();
+        $total = $this->getTableQuery()->count();
 
-        return 'Pesanan Menunggu (' . ($pending + $verifying) . ')';
+        return 'Pesanan Menunggu (' . $total . ')';
     }
 
     protected function getTableQuery(): Builder

@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Orders\Tables;
 use App\Filament\Resources\Orders\OrderResource;
 use App\Models\Order;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Enums\PaginationMode;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Filament\Actions\Action;
@@ -104,6 +105,7 @@ class OrdersTable
                     ]),
             ])
             ->defaultSort('created_at', 'desc')
+            ->paginationMode(PaginationMode::Simple)
             ->recordActions([
                 Action::make('activate')
                     ->label('Setujui & Aktifkan')

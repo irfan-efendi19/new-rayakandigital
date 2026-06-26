@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Users\Tables;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Tables\Enums\PaginationMode;
 use Filament\Tables\Table;
 
 class UsersTable
@@ -49,6 +50,7 @@ class UsersTable
                     ]),
             ])
             ->defaultSort('created_at', 'desc')
+            ->paginationMode(PaginationMode::Simple)
             ->recordActions([
                 EditAction::make(),
             ])

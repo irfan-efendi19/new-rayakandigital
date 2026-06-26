@@ -5,6 +5,7 @@ namespace App\Filament\Widgets;
 use App\Models\Invitation;
 use Carbon\Carbon;
 use Filament\Widgets\ChartWidget;
+use Illuminate\Support\Facades\Cache;
 
 class InvitationsChart extends ChartWidget
 {
@@ -42,48 +43,52 @@ class InvitationsChart extends ChartWidget
 
         [$startDate, $groupBy, $periodCount] = $period;
 
-        $invitations = Invitation::where('created_at', '>=', $startDate)
-            ->selectRaw("DATE_FORMAT(created_at, '" . ($groupBy === 'month' ? '%Y-%m-01' : '%Y-%m-%d') . "') as date")
-            ->selectRaw('COUNT(*) as total')
-            ->groupBy('date')
-            ->orderBy('date')
-            ->pluck('total', 'date');
+        $cacheKey = 'filament-invitations-chart-' . $this->filter;
 
-        $labels = [];
-        $data = [];
+        return Cache::remember($cacheKey, 300, function () use ($startDate, $groupBy, $periodCount) {
+            $invitations = Invitation::where('created_at', '>=', $startDate)
+                ->selectRaw("DATE_FORMAT(created_at, '" . ($groupBy === 'month' ? '%Y-%m-01' : '%Y-%m-%d') . "') as date")
+                ->selectRaw('COUNT(*) as total')
+                ->groupBy('date')
+                ->orderBy('date')
+                ->pluck('total', 'date');
 
-        if ($groupBy === 'month') {
-            $periodCount ??= 12;
-            for ($i = $periodCount; $i >= 0; $i--) {
-                $date = now()->subMonths($i);
-                $label = $date->translatedFormat('M Y');
-                $key = $date->format('Y-m-01');
-                $labels[] = $label;
-                $data[] = $invitations[$key] ?? 0;
+            $labels = [];
+            $data = [];
+
+            if ($groupBy === 'month') {
+                $periodCount ??= 12;
+                for ($i = $periodCount; $i >= 0; $i--) {
+                    $date = now()->subMonths($i);
+                    $label = $date->translatedFormat('M Y');
+                    $key = $date->format('Y-m-01');
+                    $labels[] = $label;
+                    $data[] = $invitations[$key] ?? 0;
+                }
+            } else {
+                $periodCount ??= 7;
+                for ($i = $periodCount; $i >= 0; $i--) {
+                    $date = now()->subDays($i);
+                    $label = $date->translatedFormat('d M');
+                    $key = $date->format('Y-m-d');
+                    $labels[] = $label;
+                    $data[] = $invitations[$key] ?? 0;
+                }
             }
-        } else {
-            $periodCount ??= 7;
-            for ($i = $periodCount; $i >= 0; $i--) {
-                $date = now()->subDays($i);
-                $label = $date->translatedFormat('d M');
-                $key = $date->format('Y-m-d');
-                $labels[] = $label;
-                $data[] = $invitations[$key] ?? 0;
-            }
-        }
 
-        return [
-            'datasets' => [
-                [
-                    'label' => 'Undangan',
-                    'data' => $data,
-                    'borderColor' => '#f59e0b',
-                    'backgroundColor' => 'rgba(245, 158, 11, 0.1)',
-                    'fill' => true,
-                    'tension' => 0.3,
+            return [
+                'datasets' => [
+                    [
+                        'label' => 'Undangan',
+                        'data' => $data,
+                        'borderColor' => '#f59e0b',
+                        'backgroundColor' => 'rgba(245, 158, 11, 0.1)',
+                        'fill' => true,
+                        'tension' => 0.3,
+                    ],
                 ],
-            ],
-            'labels' => $labels,
-        ];
+                'labels' => $labels,
+            ];
+        });
     }
 }
