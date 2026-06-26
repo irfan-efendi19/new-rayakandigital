@@ -32,10 +32,11 @@ class InvitationController extends Controller
         return view('dashboard.invitations.create', compact('selectedTheme', 'themes', 'hasPredefinedTheme'));
     }
 
-    public function store(Request $request)
+    public function store(Request $request, ImageCompressionService $compressor)
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
+            'slug' => 'nullable|string|max:100|regex:/^[a-z0-9\-]+$/',
             'bride_name' => 'required|string|max:255',
             'groom_name' => 'required|string|max:255',
             'bride_nickname' => 'nullable|string|max:100',
@@ -45,20 +46,92 @@ class InvitationController extends Controller
             'groom_father_name' => 'nullable|string|max:255',
             'groom_mother_name' => 'nullable|string|max:255',
             'theme' => 'required|string',
+            'timezone' => 'nullable|string|max:50',
+            'bride_groom_order' => 'nullable|in:male_first,female_first',
+            'events' => 'nullable|array',
+            'events.*.event_title' => 'required_with:events|string|max:100',
+            'events.*.event_date' => 'required_with:events|date',
+            'events.*.start_time' => 'required_with:events',
+            'events.*.end_time' => 'nullable',
+            'events.*.is_until_finished' => 'nullable|boolean',
+            'events.*.place_name' => 'required_with:events|string|max:150',
+            'events.*.place_address' => 'required_with:events|string',
+            'events.*.google_maps_url' => 'nullable|url',
         ]);
 
-        $slug = Str::slug($validated['title'].'-'.Str::random(5));
+        // Handle slug
+        $newSlug = $request->filled('slug') ? trim($request->slug) : null;
+        if ($newSlug) {
+            $exists = Invitation::where('slug', $newSlug)->exists();
+            if ($exists) {
+                return back()->withErrors(['slug' => 'Tautan sudah digunakan oleh undangan lain.'])->withInput();
+            }
+            $validated['slug'] = $newSlug;
+        } else {
+            $validated['slug'] = Str::slug($validated['title'].'-'.Str::random(5));
+        }
 
         $demoDays = SystemConfig::first()?->demo_duration_days ?? 3;
         $extraData = [
-            'slug' => $slug,
             'trial_started_at' => now(),
             'expires_at' => now()->addDays($demoDays),
         ];
 
-        $request->user()->invitations()->create(array_merge($validated, $extraData));
+        $invitation = $request->user()->invitations()->create(array_merge($validated, $extraData));
 
-        return redirect()->route('dashboard')->with('success', 'Undangan berhasil dibuat! Selanjutnya, lengkapi detail acara Anda.');
+        // Handle bride photo
+        if ($request->hasFile('bride_photo')) {
+            $invitation->update([
+                'bride_photo' => $compressor->compress(
+                    $request->file('bride_photo'),
+                    'profiles/'.$invitation->id
+                ),
+            ]);
+        }
+
+        // Handle groom photo
+        if ($request->hasFile('groom_photo')) {
+            $invitation->update([
+                'groom_photo' => $compressor->compress(
+                    $request->file('groom_photo'),
+                    'profiles/'.$invitation->id
+                ),
+            ]);
+        }
+
+        // Handle cover photo
+        if ($request->hasFile('cover_photo')) {
+            $invitation->update([
+                'cover_photo' => $compressor->compress(
+                    $request->file('cover_photo'),
+                    'cover/'.$invitation->id
+                ),
+            ]);
+        }
+
+        // Handle events
+        if ($request->has('events')) {
+            foreach (array_values($request->input('events', [])) as $index => $eventData) {
+                $eventData['sort_order'] = $index;
+                $eventData['is_until_finished'] = $eventData['is_until_finished'] ?? false;
+                $invitation->events()->create($eventData);
+            }
+        }
+
+        // Handle gallery photos
+        if ($request->hasFile('photos')) {
+            $uploaded = [];
+            foreach ($request->file('photos') as $photo) {
+                $uploaded[] = $compressor->compress($photo, 'gallery/'.$invitation->id);
+            }
+            if (! empty($uploaded)) {
+                $existing = $invitation->gallery_photos ?? [];
+                $invitation->update(['gallery_photos' => array_merge($existing, $uploaded)]);
+            }
+        }
+
+        return redirect()->route('dashboard.invitations.edit', $invitation)
+            ->with('success', 'Undangan berhasil dibuat! Selanjutnya, lengkapi detail acara Anda.');
     }
 
     public function show(Invitation $invitation)

@@ -167,9 +167,28 @@
                                 </div>
                                 <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-6">Data lengkap kedua mempelai yang akan dipasang di halaman utama.</p>
 
-                                <div class="space-y-6">
+                                <div x-data="{
+                                                                                                    order: '{{ old('bride_groom_order', 'male_first') }}',
+                                                                                                    toggleOrder() { this.order = this.order === 'male_first' ? 'female_first' : 'male_first'; }
+                                                                                                }" class="flex flex-col gap-6">
+                                
+                                    <input type="hidden" name="bride_groom_order" :value="order">
+                                
+                                    {{-- Swap Button --}}
+                                    <div class="flex justify-center -mb-2">
+                                        <button @click="toggleOrder" type="button"
+                                            class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-xl text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/50 hover:bg-primary-100 dark:hover:bg-primary-900/70 transition">
+                                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                                            </svg>
+                                            Tukar Posisi
+                                        </button>
+                                    </div>
+
                                     {{-- Bride --}}
-                                    <div class="bg-neutral-50 dark:bg-secondary-700 p-5 rounded-2xl border border-neutral-200 dark:border-secondary-700 space-y-4">
+                                    <div :style="order === 'female_first' ? { order: 1 } : { order: 2 }"
+                                        class="bg-neutral-50 dark:bg-secondary-700 p-5 rounded-2xl border border-neutral-200 dark:border-secondary-700 space-y-4">
                                         <div class="flex items-center gap-3">
                                             <div class="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary dark:text-primary-400">
                                                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -240,7 +259,8 @@
                                     </div>
 
                                     {{-- Groom --}}
-                                    <div class="bg-neutral-50 dark:bg-secondary-700 p-5 rounded-2xl border border-neutral-200 dark:border-secondary-700 space-y-4">
+                                    <div :style="order === 'male_first' ? { order: 1 } : { order: 2 }"
+                                        class="bg-neutral-50 dark:bg-secondary-700 p-5 rounded-2xl border border-neutral-200 dark:border-secondary-700 space-y-4">
                                         <div class="flex items-center gap-3">
                                             <div class="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary dark:text-primary-400">
                                                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -623,6 +643,62 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+
+                            {{-- ======================================== --}}
+                            {{-- STEP 4: Visual & Estetika --}}
+                            {{-- ======================================== --}}
+                            <div class="border-b border-neutral-200 dark:border-secondary-700 pb-8">
+                                <div class="flex items-center gap-3 mb-1">
+                                    <span
+                                        class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 text-sm font-bold">4</span>
+                                    <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">Visual & Estetika</h3>
+                                </div>
+                                <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-6">Atur foto sampul</p>
+                            
+                                {{-- Cover Photo --}}
+                                <h4 class="font-heading text-base font-bold text-secondary-800 dark:text-neutral-100 mb-1">Foto Sampul</h4>
+                                <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-4">Foto sampul akan ditampilkan di kartu undangan
+                                    dashboard. Rasio 9:16 (portrait).</p>
+                            
+                                <div
+                                    class="bg-neutral-50 dark:bg-secondary-700 p-5 rounded-2xl border border-neutral-200 dark:border-secondary-700 space-y-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Foto Sampul</label>
+                                        <div class="mt-2 flex items-start gap-4">
+                                            <div class="relative flex-shrink-0 w-48">
+                                                <div class="rounded-xl overflow-hidden border-2 border-neutral-200 dark:border-neutral-600"
+                                                    style="aspect-ratio:9/16">
+                                                    <img id="cover-preview" src="" alt="Cover photo" class="w-full h-full object-cover hidden">
+                                                    <div id="cover-preview-placeholder"
+                                                        class="w-full h-full bg-neutral-200 dark:bg-secondary-700 flex flex-col items-center justify-center text-neutral-500 dark:text-neutral-400 text-xs font-semibold">
+                                                        <svg class="w-8 h-8 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                        </svg>
+                                                        <span>Belum ada</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <input type="file" name="cover_photo" id="cover_photo_input" class="crop-file-input hidden"
+                                                    accept="image/*" data-preview="cover-preview" data-aspect-ratio="9/16" data-width="360"
+                                                    data-height="640">
+                                                <button type="button" data-crop-target="cover_photo_input"
+                                                    class="px-4 py-2 bg-primary-50 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 rounded-xl text-sm font-semibold hover:bg-primary-100 dark:hover:bg-primary-900/70 transition">
+                                                    Pilih & Crop Foto
+                                                </button>
+                                                <p class="text-xs text-neutral-400 dark:text-neutral-500 mt-1">Format gambar apa pun. Hasil potongan
+                                                    rasio 9:16 portrait.</p>
+                                                @error('cover_photo') <span
+                                                class="text-red-500 dark:text-red-400 text-xs mt-1">{{ $message }}</span> @enderror
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                            
+                            
                             </div>
 
                             {{-- Actions --}}
