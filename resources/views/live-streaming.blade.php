@@ -17,10 +17,10 @@
     <script>
         if (localStorage.getItem('dark-mode') === 'true' || (!('dark-mode' in localStorage) && window.matchMedia(
             '(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
+        document.documentElement.classList.add('dark');
+    } else {
+        document.documentElement.classList.remove('dark');
+    }
     </script>
 </head>
 
@@ -46,7 +46,8 @@
                     <span class="w-2 h-2 rounded-full bg-primary-600 inline-block animate-pulse"></span>
                     PENGALAMAN LIVE SINEMATIK
                 </span>
-                <h1 class="font-heading font-black text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-tight text-secondary-900 dark:text-neutral-100 mb-4">
+                <h1
+                    class="font-heading font-black text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-tight text-secondary-900 dark:text-neutral-100 mb-4">
                     Hidupkan Setiap<br>Momen
                     <em class="text-primary-600 dark:text-primary-400 not-italic block">Berharga.</em>
                 </h1>
@@ -92,8 +93,9 @@
                     </div>
                     <!-- Title -->
                     <div class="absolute bottom-12 left-4 right-4 md:right-24">
-                        <p class="text-white font-heading font-bold text-sm sm:text-base md:text-lg leading-tight">Resepsi Pernikahan: Aris &amp; Sarah</p>
-                        <p class="text-white/60 text-xs mt-0.5">Langsung Sinematik</p>
+                        <p class="text-white font-heading font-bold text-sm sm:text-base md:text-lg leading-tight">
+                            Resepsi Pernikahan: Aris &amp; Sarah</p>
+                        <p class="text-white/60 text-xs mt-0.5">Siaran Langsung</p>
                     </div>
                     <!-- Controls -->
                     <div class="absolute bottom-3 left-4 right-4 flex items-center justify-end gap-3">

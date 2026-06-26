@@ -89,27 +89,27 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    </div>
+                    <div
+                        class="absolute top-8 -right-4 md:right-0 bg-white dark:bg-secondary-800 shadow-soft rounded-2xl px-4 py-3 flex items-center gap-3 w-44">
+                        <div class="w-8 h-8 bg-primary-500 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-music text-white text-xs"></i>
                         </div>
-                        </div>
-                        <div
-                            class="absolute top-8 -right-4 md:right-0 bg-white dark:bg-secondary-800 shadow-soft rounded-2xl px-4 py-3 flex items-center gap-3 w-44">
-                            <div class="w-8 h-8 bg-primary-500 rounded-full flex items-center justify-center flex-shrink-0">
-                                <i class="fa-solid fa-music text-white text-xs"></i>
-                            </div>
-                            <div>
-                                <p class="text-[10px] text-neutral-400 font-medium">Background Music</p>
-                        <p class="text-xs text-secondary-800 dark:text-neutral-200 font-semibold truncate">Romantic Jazz
+                        <div>
+                            <p class="text-[10px] text-neutral-400 font-medium">Background Music</p>
+                        <p class="text-xs text-secondary-800 dark:text-neutral-200 font-semibold truncate">Sandaran Hati
                         </p>
                     </div>
                 </div>
             </div>
-            </div>
-            </section>
-            
-            <!-- =========== FITUR =========== -->
-            <section class="py-20 bg-white dark:bg-secondary-800" id="fitur">
-                <div class="max-w-6xl mx-auto px-6">
-                    <div class="text-center mb-12">
+        </div>
+        </section>
+        
+        <!-- =========== FITUR =========== -->
+        <section class="py-20 bg-white dark:bg-secondary-800" id="fitur">
+            <div class="max-w-6xl mx-auto px-6">
+                <div class="text-center mb-12">
                 <h2 class="font-heading text-3xl md:text-4xl font-bold text-secondary-900 dark:text-neutral-100 mb-3">
                     Fitur Interaktif Tanpa
                     Batas</h2>
@@ -155,39 +155,39 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        </div>
+                        </div>
+                        <div class="bg-primary-500 rounded-3xl p-6 text-white shadow-soft">
+                            <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center mb-4">
+                                <i class="fa-solid fa-music text-white text-lg"></i>
                             </div>
-                            </div>
-                            </div>
-                            <div class="bg-primary-500 rounded-3xl p-6 text-white shadow-soft">
-                                <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center mb-4">
-                                    <i class="fa-solid fa-music text-white text-lg"></i>
+                            <h3 class="font-semibold text-lg mb-1">Background Music</h3>
+                            <p class="text-white/70 text-sm leading-relaxed">Auto-diputar, pilihan untuk suasana spesial.</p>
+                            <div class="mt-5 flex items-end gap-1 h-10">
+                                <div class="w-2 h-3 bg-white/30 rounded-full animate-bounce" style="animation-delay:0s"></div>
+                                <div class="w-2 h-7 bg-white/50 rounded-full animate-bounce" style="animation-delay:0.1s"></div>
+                                <div class="w-2 h-5 bg-white/40 rounded-full animate-bounce" style="animation-delay:0.2s"></div>
+                                <div class="w-2 h-9 bg-white/60 rounded-full animate-bounce" style="animation-delay:0.15s">
                                 </div>
-                                <h3 class="font-semibold text-lg mb-1">Background Music</h3>
-                                <p class="text-white/70 text-sm leading-relaxed">Auto-diputar, pilihan untuk suasana spesial.</p>
-                                <div class="mt-5 flex items-end gap-1 h-10">
-                                    <div class="w-2 h-3 bg-white/30 rounded-full animate-bounce" style="animation-delay:0s"></div>
-                                    <div class="w-2 h-7 bg-white/50 rounded-full animate-bounce" style="animation-delay:0.1s"></div>
-                                    <div class="w-2 h-5 bg-white/40 rounded-full animate-bounce" style="animation-delay:0.2s"></div>
-                                    <div class="w-2 h-9 bg-white/60 rounded-full animate-bounce" style="animation-delay:0.15s">
-                                    </div>
-                                    <div class="w-2 h-4 bg-white/30 rounded-full animate-bounce" style="animation-delay:0.3s"></div>
-                                    <div class="w-2 h-7 bg-white/50 rounded-full animate-bounce" style="animation-delay:0.05s">
-                                    </div>
-                                    <div class="w-2 h-6 bg-white/40 rounded-full animate-bounce" style="animation-delay:0.25s">
-                                    </div>
-                                    <div class="w-2 h-10 bg-white/70 rounded-full animate-bounce" style="animation-delay:0.1s">
-                                    </div>
+                                <div class="w-2 h-4 bg-white/30 rounded-full animate-bounce" style="animation-delay:0.3s"></div>
+                                <div class="w-2 h-7 bg-white/50 rounded-full animate-bounce" style="animation-delay:0.05s">
+                                </div>
+                                <div class="w-2 h-6 bg-white/40 rounded-full animate-bounce" style="animation-delay:0.25s">
+                                </div>
+                                <div class="w-2 h-10 bg-white/70 rounded-full animate-bounce" style="animation-delay:0.1s">
                                 </div>
                             </div>
-                            <div class="bg-neutral-50 dark:bg-secondary-800 rounded-3xl p-6 shadow-soft">
-                                <div class="w-10 h-10 bg-primary-100 rounded-xl flex items-center justify-center mb-4">
-                                    <i class="fa-solid fa-envelope-open-text text-primary-500 text-lg"></i>
-                                </div>
-                                <h3 class="font-semibold text-secondary-900 dark:text-neutral-100 text-lg mb-1">RSVP & Ucapan</h3>
-                                <p class="text-neutral-500 text-sm leading-relaxed">Manajemen tamu dan buku ucapan digital yang
-                                    rapi.
-                                </p>
-                                <div class="mt-5 space-y-2">
+                        </div>
+                        <div class="bg-neutral-50 dark:bg-secondary-800 rounded-3xl p-6 shadow-soft">
+                            <div class="w-10 h-10 bg-primary-100 rounded-xl flex items-center justify-center mb-4">
+                                <i class="fa-solid fa-envelope-open-text text-primary-500 text-lg"></i>
+                            </div>
+                            <h3 class="font-semibold text-secondary-900 dark:text-neutral-100 text-lg mb-1">RSVP & Ucapan</h3>
+                            <p class="text-neutral-500 text-sm leading-relaxed">Manajemen tamu dan buku ucapan digital yang
+                                rapi.
+                            </p>
+                            <div class="mt-5 space-y-2">
                         <div class="flex items-center gap-3 bg-white dark:bg-secondary-800 rounded-xl px-3 py-2 shadow-sm">
                             <div class="w-7 h-7 rounded-full bg-green-100 flex items-center justify-center">
                                 <i class="fa-solid fa-check text-green-500 text-xs"></i>
@@ -209,15 +209,15 @@
                             </div>
                         </div>
                     </div>
-                    </div>
-                    </div>
-                    </div>
-                    </section>
-                    
-                    <!-- =========== HARGA =========== -->
-                    <section class="py-20 bg-neutral-50 dark:bg-secondary-900" id="harga">
-                        <div class="max-w-6xl mx-auto px-6">
-                            <div class="mb-10">
+                </div>
+                </div>
+                </div>
+                </section>
+                
+                <!-- =========== HARGA =========== -->
+                <section class="py-20 bg-neutral-50 dark:bg-secondary-900" id="harga">
+                    <div class="max-w-6xl mx-auto px-6">
+                        <div class="mb-10">
                 <h2 class="font-heading text-3xl md:text-4xl font-bold text-secondary-900 dark:text-neutral-100 mb-2">
                     Pilih Paket Sesuai
                     Kebutuhan</h2>
@@ -360,7 +360,7 @@
         </div>
         </div>
     </section>
-    
+
     <!-- =========== CTA =========== -->
     <section class="py-16 px-6">
         <div

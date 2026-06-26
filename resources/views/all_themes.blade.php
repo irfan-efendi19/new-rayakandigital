@@ -6,12 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <x-meta
-        title="Semua Tema - Rayakan Digital"
+    <x-meta title="Semua Tema - Rayakan Digital"
         description="Jelajahi katalog desain undangan digital premium. Lihat pratinjau langsung dengan data contoh dan pilih tema favorit Anda."
         keywords="tema undangan, desain undangan digital, template undangan pernikahan, katalog tema"
-        image="{{ asset('img/thumnail.jpg') }}"
-    />
+        image="{{ asset('img/thumnail.jpg') }}" />
 
     @stack('meta')
 
@@ -19,7 +17,8 @@
     <link rel="stylesheet" href="{{ asset('css/landingpage.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
     <script>
-        if (localStorage.getItem('dark-mode') === 'true' || (!('dark-mode' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        if (localStorage.getItem('dark-mode') === 'true' || (!('dark-mode' in localStorage) && window.matchMedia(
+            '(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
         } else {
             document.documentElement.classList.remove('dark');
@@ -38,7 +37,8 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-12">
                     <h2 class="text-base text-primary-600 font-semibold tracking-wide uppercase">Katalog Tema</h2>
-                    <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-secondary-900 dark:text-neutral-100 sm:text-4xl font-heading">
+                    <p
+                        class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-secondary-900 dark:text-neutral-100 sm:text-4xl font-heading">
                         Semua Desain Undangan
                     </p>
                     <p class="mt-4 max-w-2xl text-xl text-neutral-500 mx-auto">
@@ -112,7 +112,9 @@
                                 </div>
 
                                 <div class="p-6">
-                                    <h3 class="text-xl font-bold text-secondary-900 dark:text-neutral-100 mb-3">{{ $theme->name }}</h3>
+                                    <h3 class="text-xl font-bold text-secondary-900 dark:text-neutral-100 mb-3">
+                                        {{ $theme->name }}
+                                    </h3>
 
                                     <div class="flex gap-3">
                                         <a href="{{ route('theme.preview', str_replace('themes.', '', $theme->view_path)) }}" target="_blank"

@@ -1050,10 +1050,6 @@
                         class="w-full md:w-auto flex items-center gap-2 px-3 py-2 rounded-xl text-xs md:text-sm font-semibold transition-all duration-200">
                         <i class="fas fa-book text-xs"></i>
                         <span>Buku Tamu</span>
-                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold"
-                            :class="activeTab === 'buku-tamu' ? 'bg-white/20 text-white' : 'bg-emerald-100 text-emerald-700'">
-                            Baru
-                        </span>
                     </button>
 
                     {{-- Tab: Live Streaming --}}
@@ -1062,10 +1058,10 @@
                         class="w-full md:w-auto flex items-center gap-2 px-3 py-2 rounded-xl text-xs md:text-sm font-semibold transition-all duration-200">
                         <i class="fas fa-video text-xs"></i>
                         <span>Live Streaming</span>
-                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold"
+                        <!-- <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold"
                             :class="activeTab === 'live-streaming' ? 'bg-white/20 text-white' : 'bg-emerald-100 text-emerald-700'">
                             Baru
-                        </span>
+                        </span> -->
                     </button>
                 </div>
             </div>
@@ -1406,8 +1402,8 @@
                     </div>
                 </div>
             </div>{{-- end panel live streaming --}}
-</div>
-</section>
+        </div>
+        </section>
     <section
         class="relative py-16 px-4 bg-gradient-to-br from-orange-50 via-white to-orange-50/30 dark:from-secondary-900 dark:via-secondary-900 dark:to-secondary-900">
         <div class="max-w-3xl mx-auto">
