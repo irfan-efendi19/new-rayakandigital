@@ -186,6 +186,7 @@ class InvitationController extends Controller
                 'youtube_url' => 'nullable|string|max:255',
                 'screen_bride_names' => 'nullable|string|max:255',
                 'screen_overlay_opacity' => 'nullable|integer|min:0|max:100',
+                'bride_groom_order' => 'nullable|in:male_first,female_first',
             ]);
         } catch (ValidationException $e) {
             file_put_contents(storage_path('logs/debug.txt'), 'VALIDATION FAILED: '.json_encode([

@@ -6,8 +6,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <x-meta
-        :title="$invitation->bride_name . ' & ' . $invitation->groom_name . ' - Wedding Invitation'"
-        :description="'Undangan Pernikahan ' . $invitation->bride_name . ' & ' . $invitation->groom_name"
+        :title="$invitation->couple_name . ' - Wedding Invitation'"
+        :description="'Undangan Pernikahan ' . $invitation->couple_name"
         :image="$invitation->cover_photo ? asset('storage/' . $invitation->cover_photo) : null"
         :url="url()->current()"
         type="website"

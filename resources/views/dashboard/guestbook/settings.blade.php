@@ -60,7 +60,7 @@
                                     <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-2">Tulis nama panggilan khusus untuk layar proyektor. Kosongkan untuk menggunakan nama default.</p>
                                     <input type="text" name="screen_bride_names" id="screen_bride_names"
                                         value="{{ old('screen_bride_names', $invitation->screen_bride_names) }}"
-                                        placeholder="{{ ($invitation->bride_nickname ?? $invitation->bride_name) . ' & ' . ($invitation->groom_nickname ?? $invitation->groom_name) }}"
+                                        placeholder="{{ $invitation->couple_nickname }}"
                                         class="mt-1 block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-secondary-700 dark:text-neutral-200">
                                     @error('screen_bride_names') <span class="text-red-500 dark:text-red-400 text-xs mt-1">{{ $message }}</span> @enderror
                                 </div>

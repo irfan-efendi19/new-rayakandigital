@@ -136,6 +136,7 @@ class Invitation extends Model
         'screen_bride_names',
         'screen_background_image',
         'screen_overlay_opacity',
+        'bride_groom_order',
     ];
 
     protected function casts(): array
@@ -410,6 +411,30 @@ class Invitation extends Model
         return $this->expires_at !== null && $this->expires_at->isPast();
     }
 
+    public function getCoupleNameAttribute(): string
+    {
+        $bride = $this->bride_name;
+        $groom = $this->groom_name;
+
+        if ($this->bride_groom_order === 'female_first') {
+            return trim("{$bride} & {$groom}", ' &');
+        }
+
+        return trim("{$groom} & {$bride}", ' &');
+    }
+
+    public function getCoupleNicknameAttribute(): string
+    {
+        $bride = $this->bride_nickname ?? $this->bride_name;
+        $groom = $this->groom_nickname ?? $this->groom_name;
+
+        if ($this->bride_groom_order === 'female_first') {
+            return trim("{$bride} & {$groom}", ' &');
+        }
+
+        return trim("{$groom} & {$bride}", ' &');
+    }
+
     public function getWhatsappTemplate(): string
     {
         if ($this->wa_template_enabled && $this->wa_message_template) {
@@ -456,7 +481,7 @@ class Invitation extends Model
         $template = $this->getWhatsappTemplate();
         $firstEvent = $this->firstEvent();
 
-        $namaPengantin = trim($this->groom_name.' & '.$this->bride_name, ' &');
+        $namaPengantin = $this->couple_name;
 
         $replacements = [
             // New {{...}} format

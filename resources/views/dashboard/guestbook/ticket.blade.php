@@ -210,7 +210,7 @@
 
         <div class="ticket-header">
             <h1>Tiket Masuk</h1>
-            <div class="couple">{{ $invitation->bride_nickname ?? $invitation->bride_name }} & {{ $invitation->groom_nickname ?? $invitation->groom_name }}</div>
+            <div class="couple">{{ $invitation->couple_nickname }}</div>
             <div style="font-size: 10px; margin-top: 2px;">{{ $invitation->venue_name ?? 'Undangan Pernikahan' }}</div>
         </div>
 

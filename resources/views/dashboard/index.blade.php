@@ -255,7 +255,7 @@
                                                     {{ $tierCode === 'free' ? 'Gratis' : $tierCode }}
                                                 </span>
                                             </div>
-                                            <p class="text-[10px] sm:text-xs text-neutral-500 dark:text-neutral-400 mt-0.5 truncate">{{ $invitation->bride_name }} & {{ $invitation->groom_name }}</p>
+                                            <p class="text-[10px] sm:text-xs text-neutral-500 dark:text-neutral-400 mt-0.5 truncate">{{ $invitation->couple_name }}</p>
                                             <div class="flex items-center gap-1.5 mt-1">
                                                 @php
                                                     $isExpired = $invitation->isTrialExpired();

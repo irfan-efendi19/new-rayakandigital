@@ -4,9 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    @php $coupleName = $invitation->couple_name; @endphp
+
     <x-meta
-        title="Pernikahan {{ $invitation->groom_name }} &amp; {{ $invitation->bride_name }}"
-        description="Undangan Pernikahan {{ $invitation->groom_name }} &amp; {{ $invitation->bride_name }}"
+        title="Pernikahan {{ $coupleName }}"
+        description="Undangan Pernikahan {{ $coupleName }}"
         image="{{ $invitation->cover_photo ? asset('storage/' . $invitation->cover_photo) : null }}"
     />
 
@@ -35,8 +37,7 @@
         <div class="cover-content">
             <div class="cover-decoration">&#10087;</div>
             <p class="cover-subtitle">The Wedding Of</p>
-            <h1 class="cover-title">{{ $invitation->bride_name }}<span
-                    class="cover-amp">&amp;</span>{{ $invitation->groom_name }}</h1>
+            <h1 class="cover-title">{{ $coupleName }}</h1>
             @php
                 $firstEvent = $invitation->events->sortBy(['event_date', 'start_time'])->first();
             @endphp
@@ -86,8 +87,10 @@
                 <p class="section-subtitle">Assalamu&rsquo;alaikum Warahmatullahi Wabarakatuh</p>
                 <p class="hero-text">Dengan memohon rahmat dan ridha Allah SWT, kami bermaksud menyelenggarakan
                     pernikahan putra-putri kami:</p>
+                @php $isBrideFirst = $invitation->bride_groom_order === 'female_first'; @endphp
                 <div class="couple-grid">
                     <div class="couple-card">
+                        @if($isBrideFirst)
                         <div class="couple-photo">
                             @if($invitation->bride_photo)
                                 <img src="{{ asset('storage/' . $invitation->bride_photo) }}"
@@ -104,9 +107,7 @@
                         <p class="couple-parents">
                             {{ $invitation->bride_parents ?: 'Putri dari Bapak ... &amp; Ibu ...' }}
                         </p>
-                    </div>
-                    <div class="couple-amp">&amp;</div>
-                    <div class="couple-card">
+                        @else
                         <div class="couple-photo">
                             @if($invitation->groom_photo)
                                 <img src="{{ asset('storage/' . $invitation->groom_photo) }}"
@@ -123,6 +124,45 @@
                         <p class="couple-parents">
                             {{ $invitation->groom_parents ?: 'Putra dari Bapak ... &amp; Ibu ...' }}
                         </p>
+                        @endif
+                    </div>
+                    <div class="couple-amp">&amp;</div>
+                    <div class="couple-card">
+                        @if($isBrideFirst)
+                        <div class="couple-photo">
+                            @if($invitation->groom_photo)
+                                <img src="{{ asset('storage/' . $invitation->groom_photo) }}"
+                                    alt="{{ $invitation->groom_name }}">
+                            @else
+                                <img src="https://ui-avatars.com/api/?name={{ urlencode($invitation->groom_name) }}&amp;background=1a1a2e&amp;color=fff&amp;size=400"
+                                    alt="{{ $invitation->groom_name }}">
+                            @endif
+                        </div>
+                        <h2 class="couple-name">{{ $invitation->groom_name }}</h2>
+                        @if($invitation->groom_nickname)
+                            <p class="couple-nickname">{{ $invitation->groom_nickname }}</p>
+                        @endif
+                        <p class="couple-parents">
+                            {{ $invitation->groom_parents ?: 'Putra dari Bapak ... &amp; Ibu ...' }}
+                        </p>
+                        @else
+                        <div class="couple-photo">
+                            @if($invitation->bride_photo)
+                                <img src="{{ asset('storage/' . $invitation->bride_photo) }}"
+                                    alt="{{ $invitation->bride_name }}">
+                            @else
+                                <img src="https://ui-avatars.com/api/?name={{ urlencode($invitation->bride_name) }}&amp;background=d4a574&amp;color=fff&amp;size=400"
+                                    alt="{{ $invitation->bride_name }}">
+                            @endif
+                        </div>
+                        <h2 class="couple-name">{{ $invitation->bride_name }}</h2>
+                        @if($invitation->bride_nickname)
+                            <p class="couple-nickname">{{ $invitation->bride_nickname }}</p>
+                        @endif
+                        <p class="couple-parents">
+                            {{ $invitation->bride_parents ?: 'Putri dari Bapak ... &amp; Ibu ...' }}
+                        </p>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -461,7 +501,7 @@
             <div class="container text-center">
                 <p class="footer-thanks">Merupakan suatu kehormatan dan kebahagiaan apabila Bapak/Ibu/Sdr/i berkenan
                     hadir.</p>
-                <p class="footer-couple">{{ $invitation->groom_name }} &amp; {{ $invitation->bride_name }}</p>
+                <p class="footer-couple">{{ $coupleName }}</p>
                 @php
                     $appUrl = config('app.url');
                 @endphp

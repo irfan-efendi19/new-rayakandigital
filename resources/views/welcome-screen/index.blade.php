@@ -484,7 +484,7 @@
             <div class="idle-decoration"></div>
             <div class="idle-title">Selamat Datang</div>
             <div class="idle-subtitle">
-                {{ $invitation->screen_bride_names ?: (($invitation->bride_nickname ?? $invitation->bride_name) . ' & ' . ($invitation->groom_nickname ?? $invitation->groom_name)) }}
+                {{ $invitation->screen_bride_names ?: $invitation->couple_nickname }}
             </div>
             @if($firstEvent)
                 <div class="idle-date">

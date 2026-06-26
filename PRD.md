@@ -1,7 +1,7 @@
 # PRODUCT REQUIREMENT DOCUMENT (PRD)
-## MODUL: IMPORT DATA TAMU VIA EXCEL (MASS GUEST IMPORTER ENGINE)
-**Versi:** 7.0 (Spesifikasi Integrasi Maatwebsite/Excel - Laravel 13 & Tailwind CSS)  
-**Tanggal:** 25 Juni 2026  
+## MODUL: FITUR UBAH POSISI URUTAN MEMPELAI (BRIDE & GROOM POSITION SWAPPER)
+**Versi:** 8.0 (Spesifikasi Fleksibilitas Tata Letak - Laravel 13 & Tailwind CSS)  
+**Tanggal:** 26 Juni 2026  
 **Status:** Approved  
 **Author:** Mochammad Irfan Efendi  
 
@@ -10,82 +10,40 @@
 ## 1. DESKRIPSI FITUR & ATURAN BISNIS (BUSINESS RULES)
 
 ### 1.1 Deskripsi Fitur
-Untuk mempercepat proses manajemen data, sistem menyediakan fitur **Import Tamu via Excel**. Fitur ini memungkinkan pengguna mengunduh berkas template spreadsheet standar yang sudah disediakan, mengisinya dengan ratusan nama tamu, nomor WhatsApp, serta kategori terkait, lalu mengunggahnya kembali ke halaman `/edit` dashboard user. Proses pemrosesan data dilakukan di latar belakang menggunakan library `maatwebsite/excel`.
+Setiap pasangan memiliki preferensi yang berbeda mengenai tata letak penulisan nama di halaman depan undangan mereka. Beberapa adat atau keinginan pribadi menghendaki nama mempelai pria muncul di urutan pertama, sedangkan yang lain menghendaki nama mempelai wanita terlebih dahulu. Fitur **Ubah Posisi Mempelai** menyediakan satu tombol pintas (*quick swap*) di halaman `/edit` agar pengguna dapat menukar urutan visual urutan mempelai secara instan tanpa perlu menghapus dan menulis ulang profil masing-masing mempelai.
 
-### 1.2 Aturan Bisnis (Excel Import Business Rules)
-1. **Validasi Struktur Kolom (Strict Header Matching):** Berkas Excel yang diunggah wajib mengikuti struktur kolom template resmi: `Nama Tamu`, `Nomor WhatsApp`, dan `Kategori`. Jika struktur kolom diubah atau tidak sesuai, sistem akan membatalkan proses import dan memunculkan pesan kesalahan (*error message*).
-2. **Normalisasi Nomor WhatsApp:** Sistem wajib melakukan sanitasi otomatis terhadap nomor WhatsApp yang diimpor (misalnya mengubah awalan `08xxx` atau `+628xxx` secara otomatis menjadi format internasional murni `628xxx`).
-3. **Penyelarasan Kategori Otomatis (Auto Category Mapping):** * Jika teks kategori pada baris Excel cocok dengan kategori yang sudah dibuat pengguna di database, tamu akan otomatis dikaitkan ke kategori tersebut.
-   * Jika teks kategori belum ada, sistem akan membuatkan kategori baru tersebut secara otomatis (*on-the-fly creation*).
-4. **Perlindungan Data Duplikat:** Jika ditemukan kombinasi nama tamu dan nomor WhatsApp yang sama persis dalam satu undangan, sistem akan melakukan *skip* (mengabaikan) atau melakukan *update* data terbaru (*Upsert mechanism*) guna mencegah penumpukan data ganda.
+### 1.2 Aturan Bisnis (Position Swap Business Rules)
+1. **Penyimpanan State Urutan (Order State Retention):** Sistem wajib mencatat variabel penanda urutan aktif di database menggunakan kolom `bride_groom_order`.
+   * Nilai `male_first`: Mempelai Pria di atas/kiri, Mempelai Wanita di bawah/kanan.
+   * Nilai `female_first`: Mempelai Wanita di atas/kiri, Mempelai Pria di bawah/kanan.
+2. **Pertukaran Instan Sisi Klien (Client-Side Real-Time Swap):** Saat tombol *"Tukar Posisi"* diklik pada dashboard, susunan form input data mempelai (Foto, Nama, Profil Orang Tua) harus langsung berpindah posisi secara visual memanfaatkan reaktivitas Alpine.js.
+3. **Sinkronisasi Generator Teks Otomatis:** Perubahan urutan ini harus secara otomatis memengaruhi urutan variabel gabungan pada sistem, seperti teks default di *WhatsApp Template* (`{{nama_pengantin}}`) dan judul meta tags SEO halaman web.
 
 ---
 
-## 2. REKAYASA BACKEND: IMPLEMENTASI LARAVEL EXCEL (`maatwebsite/excel`)
+## 2. BLUEPRINT ARSITEKTUR DATABASE (MIGRATION PATCH)
 
-### 2.1 Berkas Import Class (`App\Imports\GuestsImport.php`)
-Buat berkas importer menggunakan fitur `ToModel`, `WithHeadingRow`, dan `WithValidation` bawaan Laravel Excel untuk memastikan validitas privasi dan keamanan data:
+Tambahkan kolom kontrol urutan visual pada tabel `invitations`:
 
 ```php
-namespace App\Imports;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-use App\Models\Guest;
-use App\Models\GuestCategory;
-use Maatwebsite\Excel\Concerns\ToModel;
-use Maatwebsite\Excel\Concerns\WithHeadingRow;
-use Maatwebsite\Excel\Concerns\WithValidation;
-use Illuminate\Support\Str;
-
-class GuestsImport implements ToModel, WithHeadingRow, WithValidation
+return new class extends Migration
 {
-    protected $invitationId;
-
-    public function __construct($invitationId)
+    public function up(): void
     {
-        $this->invitationId = $invitationId;
+        Schema::table('invitations', function (Blueprint $table) {
+            // Default 'male_first' (Pria dahulu baru Wanita)
+            $table->enum('bride_groom_order', ['male_first', 'female_first'])->default('male_first')->after('guest_categories_json');
+        });
     }
 
-    public function model(array $row)
+    public function down(): void
     {
-        // 1. Sanitasi & Normalisasi Nomor WhatsApp ke format 628xxx
-        $whatsapp = $row['nomor_whatsapp'] ?? null;
-        if ($whatsapp) {
-            $whatsapp = preg_replace('/[^0-9]/', '', $whatsapp);
-            if (str_starts_with($whatsapp, '08')) {
-                $whatsapp = '628' . substr($whatsapp, 2);
-            } elseif (str_starts_with($whatsapp, '8')) {
-                $whatsapp = '628' . substr($whatsapp, 1);
-            }
-        }
-
-        // 2. Resolve Kategori Tamu secara dinamis
-        $categoryId = null;
-        $categoryName = trim($row['kategori'] ?? '');
-        
-        if (!empty($categoryName)) {
-            $category = GuestCategory::firstOrCreate([
-                'invitation_id' => $this->invitationId,
-                'name' => $categoryName
-            ]);
-            $categoryId = $category->id;
-        }
-
-        // 3. Simpan data tamu ke database (Gunakan mekanisme Upsert berbasis slug/kombinasi)
-        return new Guest([
-            'invitation_id'     => $this->invitationId,
-            'guest_category_id' => $categoryId,
-            'name'              => trim($row['nama_tamu']),
-            'whatsapp_number'   => $whatsapp,
-            'slug'              => Str::slug(trim($row['nama_tamu'])) . '-' . Str::random(5),
-        ]);
+        Schema::table('invitations', function (Blueprint $table) {
+            $table->dropColumn('bride_groom_order');
+        });
     }
-
-    public function rules(): array
-    {
-        return [
-            'nama_tamu' => 'required|string|max:255',
-            'nomor_whatsapp' => 'nullable|string|max:20',
-            'kategori' => 'nullable|string|max:50',
-        ];
-    }
-}
+};
