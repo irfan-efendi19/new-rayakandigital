@@ -886,11 +886,65 @@
             addBtn.addEventListener('click', addEventCard);
         }
 
+        function getFieldLabel(field) {
+            if (field.id) {
+                const label = document.querySelector('label[for="' + field.id + '"]');
+                if (label) return label.textContent.trim();
+            }
+            const parent = field.closest('[class*="col-span"]') || field.parentElement;
+            const label = parent?.querySelector('label');
+            if (label) return label.textContent.trim();
+            return field.getAttribute('name') || 'Field';
+        }
+
+        function validateForm() {
+            const emptyFields = [];
+            const checkedNames = new Set();
+
+            form.querySelectorAll('input[required], select[required], textarea[required]').forEach(function(field) {
+                if (field.type === 'hidden') return;
+                if (field.disabled) return;
+                if (field.closest('.event-card') && !field.closest('.event-card').offsetParent) return;
+
+                const name = field.getAttribute('name') || '';
+                if (checkedNames.has(name)) return;
+                checkedNames.add(name);
+
+                const value = field.value.trim();
+                if (!value) {
+                    emptyFields.push(getFieldLabel(field));
+                }
+            });
+
+            const themeInput = form.querySelector('input[name="theme"]');
+            if (themeInput && !themeInput.value.trim()) {
+                emptyFields.push('Pilih Tema Undangan');
+            }
+
+            return emptyFields;
+        }
+
         const submitBtn = document.getElementById('submit-btn');
         const form = submitBtn?.closest('form');
         if (submitBtn && form) {
             submitBtn.addEventListener('click', function(e) {
                 e.preventDefault();
+                const emptyFields = validateForm();
+                if (emptyFields.length > 0) {
+                    const list = emptyFields.map(function(f) { return '<li>' + f + '</li>'; }).join('');
+                    Swal.fire({
+                        title: '<span class="text-lg">Form Belum Lengkap!</span>',
+                        html: '<div class="text-left">' +
+                            '<p class="text-sm text-neutral-600 dark:text-neutral-400 mb-3">Harap lengkapi bagian berikut sebelum menyimpan:</p>' +
+                            '<ul class="list-none space-y-1.5 text-sm text-red-600 dark:text-red-400 font-medium">' + list + '</ul>' +
+                            '</div>',
+                        icon: 'warning',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Oke, lengkapi',
+                        allowOutsideClick: false,
+                    });
+                    return;
+                }
                 Swal.fire({
                     title: 'Buat Undangan?',
                     text: 'Pastikan semua data sudah benar. Undangan akan dibuat dalam mode trial.',
