@@ -422,7 +422,7 @@ class InvitationController extends Controller
             $invitation->stories()->whereNotIn('id', $submittedStoryIds)->delete();
         }
 
-        return redirect()->route('dashboard.invitations.edit', $invitation)
+        return redirect()->route('dashboard.invitations.show', $invitation)
             ->with('success', 'Undangan berhasil diperbarui.');
     }
 

@@ -94,10 +94,10 @@
 
                                 {{-- Theme Selection --}}
                                 @php $currentTheme = old('theme', $selectedTheme); @endphp
-                                <input type="hidden" name="theme" :value="selectedTheme" required>
 
                                 @if(!$hasPredefinedTheme)
                                 <div x-data="{ selectedTheme: '{{ $currentTheme }}' }" class="space-y-3">
+                                    <input type="hidden" name="theme" x-model="selectedTheme" required>
 
                                     <div class="bg-neutral-50 dark:bg-secondary-700 p-5 rounded-2xl border border-neutral-200 dark:border-secondary-700 space-y-4">
                                         <div class="flex flex-col">
@@ -154,6 +154,8 @@
                                     @enderror
                                 </div>
                                 </div>
+                                @else
+                                    <input type="hidden" name="theme" value="{{ $currentTheme }}" required>
                                 @endif
                             </div>
 
