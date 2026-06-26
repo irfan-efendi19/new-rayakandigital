@@ -1,5 +1,14 @@
 import Swal from 'sweetalert2/dist/sweetalert2.js';
 
+const RESERVED_SLUGS = [
+    'semua-tema', 'undangan-web', 'buku-tamu', 'live-streaming',
+    'syarat-ketentuan', 'kebijakan-privasi', 'tentang-kami', 'hubungi-kami',
+    'auth', 'dashboard', 'profile', 'payments', 'invitations',
+    'register', 'login', 'forgot-password', 'reset-password',
+    'verify-email', 'email', 'confirm-password', 'password', 'logout',
+    'home', 'preview', 'storage', 'css', 'js', 'api',
+];
+
 class SlugEditor {
     constructor() {
         console.log('🔧 SlugEditor constructor started');
@@ -58,6 +67,12 @@ class SlugEditor {
         if (slug === this.slugOriginal) {
             this.setIndicator('same', '');
             this.isAvailable = true;
+            return;
+        }
+
+        if (RESERVED_SLUGS.includes(slug)) {
+            this.setIndicator('unavailable', 'Tidak tersedia (bentrok dengan halaman web)');
+            this.isAvailable = false;
             return;
         }
 
@@ -158,6 +173,13 @@ class SlugEditor {
                 e.preventDefault();
                 console.log('❌ Slug is empty');
                 Swal.fire('Peringatan', 'Tautan kustom tidak boleh kosong', 'warning');
+                return;
+            }
+
+            // If slug is reserved
+            if (RESERVED_SLUGS.includes(slug)) {
+                e.preventDefault();
+                Swal.fire('Peringatan', 'Tautan "' + slug + '" tidak tersedia karena bentrok dengan halaman web. Silakan gunakan tautan lain.', 'warning');
                 return;
             }
 

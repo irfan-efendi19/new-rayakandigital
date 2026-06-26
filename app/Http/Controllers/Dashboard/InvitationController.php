@@ -18,6 +18,14 @@ use Illuminate\Validation\ValidationException;
 
 class InvitationController extends Controller
 {
+    const RESERVED_SLUGS = [
+        'semua-tema', 'undangan-web', 'buku-tamu', 'live-streaming',
+        'syarat-ketentuan', 'kebijakan-privasi', 'tentang-kami', 'hubungi-kami',
+        'auth', 'dashboard', 'profile', 'payments', 'invitations',
+        'register', 'login', 'forgot-password', 'reset-password',
+        'verify-email', 'email', 'confirm-password', 'password', 'logout',
+        'home', 'preview', 'storage', 'css', 'js', 'api',
+    ];
     public function index(Request $request)
     {
         return redirect()->route('dashboard');
@@ -62,6 +70,9 @@ class InvitationController extends Controller
         // Handle slug
         $newSlug = $request->filled('slug') ? trim($request->slug) : null;
         if ($newSlug) {
+            if (in_array($newSlug, self::RESERVED_SLUGS)) {
+                return back()->withErrors(['slug' => 'Tautan "' . $newSlug . '" tidak tersedia. Silakan gunakan tautan kustom lain.'])->withInput();
+            }
             $exists = Invitation::where('slug', $newSlug)->exists();
             if ($exists) {
                 return back()->withErrors(['slug' => 'Tautan sudah digunakan oleh undangan lain.'])->withInput();
@@ -192,6 +203,11 @@ class InvitationController extends Controller
     public function checkSlug(Request $request)
     {
         $slug = $request->query('slug');
+
+        if (in_array($slug, self::RESERVED_SLUGS)) {
+            return response()->json(['available' => false, 'message' => 'Tautan ini tidak tersedia karena bentrok dengan halaman web.']);
+        }
+
         $excludeId = $request->query('exclude');
 
         $query = Invitation::where('slug', $slug);
@@ -321,7 +337,12 @@ class InvitationController extends Controller
         ]).PHP_EOL, FILE_APPEND);
 
         if ($newSlug && $newSlug !== $invitation->slug) {
-            // Slug is different, check if it already exists
+            // Check if slug conflicts with existing routes
+            if (in_array($newSlug, self::RESERVED_SLUGS)) {
+                return back()->withErrors(['slug' => 'Tautan "' . $newSlug . '" tidak tersedia. Silakan gunakan tautan kustom lain.'])->withInput();
+            }
+
+            // Check if it already exists
             $exists = Invitation::where('slug', $newSlug)
                 ->where('id', '!=', $invitation->id)
                 ->exists();
