@@ -130,7 +130,7 @@ class InvitationController extends Controller
             }
         }
 
-        return redirect()->route('dashboard.invitations.edit', $invitation)
+        return redirect()->route('dashboard.invitations.show', $invitation)
             ->with('success', 'Undangan berhasil dibuat! Selanjutnya, lengkapi detail acara Anda.');
     }
 
