@@ -75,64 +75,108 @@
                         </div>
                     @endif
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-6">
                         @forelse($themes as $theme)
                             <div x-show="filter === 'all' || filter === '{{ $theme->theme_category_id ?? '0' }}'"
                                 x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 scale-95"
                                 x-transition:enter-end="opacity-100 scale-100"
-                                class="bg-white dark:bg-secondary-800 rounded-2xl shadow-soft border border-neutral-100 dark:border-secondary-700 overflow-hidden hover:shadow-xl transition-all duration-300 group">
-                                <div class="relative aspect-[9/16] bg-gradient-to-br from-neutral-100 to-neutral-50 overflow-hidden">
+                                class="rounded-2xl transition-all duration-500 ease-out hover:shadow-2xl hover:-translate-y-1.5 shadow-soft">
+
+                                <div class="relative rounded-2xl overflow-hidden border border-neutral-100 dark:border-secondary-700/50 group">
+
+                                    {{-- Full-card background image --}}
                                     @if($theme->thumbnail_portrait)
                                         <img src="{{ Storage::url($theme->thumbnail_portrait) }}" alt="{{ $theme->name }}"
-                                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                                    @else
-                                        <div class="flex items-center justify-center h-full">
-                                            <div class="text-center">
-                                                <svg class="w-16 h-16 mx-auto text-neutral-300 mb-2" fill="none" viewBox="0 0 24 24"
-                                                    stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                                </svg>
-                                                <span class="text-sm text-neutral-400">{{ $theme->name }}</span>
+                                            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105">
+                                    @endif
+
+                                    {{-- Content overlay --}}
+                                    <div class="relative z-10 flex flex-col">
+                                        <div class="relative aspect-[4/5]">
+                                            @if(!$theme->thumbnail_portrait)
+                                                <div class="absolute inset-0 bg-gradient-to-br from-secondary-50 to-tertiary flex items-center justify-center">
+                                                    <div class="text-center">
+                                                        <div
+                                                            class="w-20 h-20 mx-auto bg-gradient-to-br from-primary-100 to-primary-50 rounded-2xl flex items-center justify-center mb-3">
+                                                            <i class="fas fa-images text-3xl text-primary-400"></i>
+                                                        </div>
+                                                        <span class="text-sm text-neutral-400">{{ $theme->name }}</span>
+                                                        </div>
+                                                        </div>
+                                            @else
+                                                <div class="absolute inset-0 bg-gradient-to-b from-black/20 to-transparent"></div>
+                                            @endif
+
+                                            <div class="absolute top-3 left-3 z-20">
+                                                @if($theme->is_premium)
+                                                    <span
+                                                        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-gradient-to-r from-amber-400 to-amber-500 text-white shadow-lg shadow-amber-200/50">
+                                                        <i class="fas fa-crown text-xs"></i>
+                                                        Premium
+                                                    </span>
+                                                @else
+                                                    <span
+                                                        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-white/90 backdrop-blur-sm text-emerald-700 shadow-sm border border-emerald-200/50">
+                                                        <i class="fas fa-gem text-xs"></i>
+                                                        Gratis
+                                                    </span>
+                                                @endif
+                                                    </div>
+
+                                            @if($theme->rating)
+                                                <div
+                                                    class="absolute top-3 right-3 z-20 inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold bg-white/90 backdrop-blur-sm text-amber-700 shadow-sm border border-amber-200/50">
+                                                    <i class="fas fa-star text-amber-400 text-[10px]"></i>
+                                                    <span>{{ $theme->rating }}</span>
+                                                </div>
+                                            @endif
+
+                                            <div class="absolute inset-0 z-10 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center"
+                                                style="background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.15) 50%, transparent 100%);">
+                                                <a href="{{ route('theme.preview', str_replace('themes.', '', $theme->view_path)) }}" target="_blank"
+                                                    class="flex items-center gap-2 px-5 py-2.5 rounded-xl text-white text-sm font-semibold transition-all duration-200 hover:scale-105"
+                                                    style="background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.25);">
+                                                    <i class="fas fa-eye text-xs"></i> Lihat Pratinjau
+                                                </a>
                                             </div>
-                                        </div>
-                                    @endif
+                                            </div>
 
-                                    @if($theme->is_premium)
-                                        <span
-                                            class="absolute top-3 right-3 inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-gradient-to-r from-amber-400 to-amber-500 text-white shadow-sm">
-                                            Premium
-                                        </span>
-                                    @else
-                                        <span
-                                            class="absolute top-3 right-3 inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700">
-                                            Gratis
-                                        </span>
-                                    @endif
-                                </div>
+                                            <div
+                                                class="h-0.5 bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-out origin-left">
+                                            </div>
 
-                                <div class="p-6">
-                                    <h3 class="text-xl font-bold text-secondary-900 dark:text-neutral-100 mb-3">
-                                        {{ $theme->name }}
-                                    </h3>
+                                            <div class="p-5 bg-white/70 dark:bg-secondary-800/70 backdrop-blur-xl">
+                                                <h3
+                                                    class="text-lg font-bold text-secondary-800 dark:text-neutral-200 group-hover:text-primary-600 transition-colors leading-snug mb-2">
+                                                    {{ $theme->name }}
+                                                </h3>
 
-                                    <div class="flex flex-col gap-3 sm:flex-row">
-                                        <a href="{{ route('theme.preview', str_replace('themes.', '', $theme->view_path)) }}" target="_blank"
-                                            class="flex-1 text-center px-4 py-2.5 border-2 border-primary-200 text-primary-600 rounded-xl text-sm font-semibold hover:bg-primary-50 hover:border-primary-300 transition-all duration-200">
-                                            Pratinjau
-                                        </a>
+                                            @if($theme->category)
+                                                <span
+                                                    class="inline-flex items-center gap-1 px-2.5 py-1 bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-300 rounded-lg text-xs font-medium">
+                                                    <i class="fas fa-tag text-[10px]"></i>{{ $theme->category->name }}
+                                                </span>
+                                            @endif
 
-                                        @auth
-                                            <a href="{{ route('dashboard.invitations.create', ['theme' => str_replace('themes.', '', $theme->view_path)]) }}"
-                                                class="flex-1 text-center px-4 py-2.5 bg-gradient-to-r from-primary-600 to-primary-700 text-white rounded-xl text-sm font-semibold hover:from-primary-700 hover:to-primary-800 transition-all duration-200 shadow-soft">
-                                                Gunakan Tema Ini
-                                            </a>
-                                        @else
-                                            <a href="{{ route('register', ['theme' => str_replace('themes.', '', $theme->view_path)]) }}"
-                                                class="flex-1 text-center px-4 py-2.5 bg-gradient-to-r from-primary-600 to-primary-700 text-white rounded-xl text-sm font-semibold hover:from-primary-700 hover:to-primary-800 transition-all duration-200 shadow-soft">
-                                                Gunakan Tema Ini
-                                            </a>
-                                        @endauth
+                                            <div class="flex items-center gap-2 mt-4">
+                                                @auth
+                                                    <a href="{{ route('dashboard.invitations.create', ['theme' => str_replace('themes.', '', $theme->view_path)]) }}"
+                                                            class="flex-1 text-center px-4 py-2.5 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-xl text-sm font-semibold hover:from-primary-600 hover:to-primary-700 transition-all duration-200 shadow-sm hover:shadow-md active:scale-95">
+                                                            <i class="fas fa-magic mr-1.5"></i> Gunakan
+                                                        </a>
+                                                @else
+                                                    <a href="{{ route('register', ['theme' => str_replace('themes.', '', $theme->view_path)]) }}"
+                                                        class="flex-1 text-center px-4 py-2.5 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-xl text-sm font-semibold hover:from-primary-600 hover:to-primary-700 transition-all duration-200 shadow-sm hover:shadow-md active:scale-95">
+                                                        <i class="fas fa-magic mr-1.5"></i> Gunakan
+                                                    </a>
+                                                @endauth
+                                                <a href="{{ route('theme.preview', str_replace('themes.', '', $theme->view_path)) }}" target="_blank"
+                                                    class="flex items-center justify-center w-11 h-11 rounded-xl border-2 border-neutral-200 dark:border-secondary-600 text-neutral-500 dark:text-neutral-400 hover:border-primary-200 hover:text-primary-600 dark:hover:border-primary-500 dark:hover:text-primary-400 transition-all duration-200 hover:bg-primary-50 dark:hover:bg-primary-900/20 active:scale-95"
+                                                    title="Pratinjau">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                                </div>
+                                                </div>
                                     </div>
                                 </div>
                             </div>
