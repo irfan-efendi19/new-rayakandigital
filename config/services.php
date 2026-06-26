@@ -46,4 +46,8 @@ return [
         'redirect' => env('GOOGLE_REDIRECT_URI'),
     ],
 
+    'google_sheet' => [
+        'script_url' => env('GOOGLE_SHEET_SCRIPT_URL'),
+    ],
+
 ];

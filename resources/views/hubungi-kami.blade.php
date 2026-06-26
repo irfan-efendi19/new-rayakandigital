@@ -5,11 +5,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <x-meta
-        title="Hubungi Kami - Rayakan Digital"
+    <x-meta title="Hubungi Kami - Rayakan Digital"
         description="Hubungi tim Rayakan Digital untuk konsultasi gratis, pertanyaan layanan, atau dukungan teknis. Kami siap membantu Anda merayakan momen berharga."
-        keywords="kontak rayakan digital, hubungi kami, layanan pelanggan, konsultasi undangan digital"
-    />
+        keywords="kontak rayakan digital, hubungi kami, layanan pelanggan, konsultasi undangan digital" />
 
     @stack('meta')
 
@@ -17,7 +15,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
     <link rel="stylesheet" href="{{ asset('css/landingpage.css') }}">
     <script>
-        if (localStorage.getItem('dark-mode') === 'true' || (!('dark-mode' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            if (localStorage.getItem('dark-mode') === 'true' || (!('dark-mode' in localStorage) && window.matchMedia(
+                '(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
         } else {
             document.documentElement.classList.remove('dark');
@@ -136,7 +135,9 @@
                     <h3 class="text-xl font-bold text-secondary-900 dark:text-neutral-100 mb-6 font-heading">Kirim Pesan
                         Langsung</h3>
 
-                    <form id="contactForm" class="space-y-5">
+                    <form id="contactForm" class="space-y-5" action="{{ route('hubungi-kami.submit') }}" method="POST">
+                        @csrf
+
                         <div>
                             <label for="name" class="block text-sm font-semibold text-secondary-700 dark:text-neutral-200 mb-2">Nama
                                 Lengkap</label>
@@ -184,50 +185,52 @@
     <script>
         const contactForm = document.getElementById('contactForm');
 
-        contactForm.addEventListener('submit', function (e) {
+            contactForm.addEventListener('submit', async function (e) {
             e.preventDefault();
 
-        const name = document.getElementById('name').value.trim();
-        const email = document.getElementById('email').value.trim();
-        const subject = document.getElementById('subject').value;
-        const message = document.getElementById('message').value.trim();
+            const submitBtn = contactForm.querySelector('button[type="submit"]');
+            const formData = new FormData(contactForm);
 
-        const emptyFields = [];
-        if (!name) emptyFields.push('Nama Lengkap');
-        if (!email) emptyFields.push('Alamat Email');
-        if (!subject) emptyFields.push('Subjek Pesan');
-        if (!message) emptyFields.push('Pesan Anda');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = 'Mengirim...';
 
-        if (emptyFields.length > 0) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Form Belum Lengkap',
-                text: 'Harap isi bidang berikut: ' + emptyFields.join(', '),
-                confirmButtonColor: '#FF7A00',
-            });
-            return;
-        }
+            try {
+                const response = await fetch(contactForm.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json',
+                    },
+                });
 
-        const submitBtn = contactForm.querySelector('button[type="submit"]');
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = 'Mengirim...';
+                const data = await response.json();
 
-        setTimeout(function () {
-            Swal.fire({
-                icon: 'success',
-                title: 'Pesan Terkirim!',
-                text: 'Terima kasih ' + name +
-                    ', pesan Anda telah kami terima. Tim kami akan menghubungi Anda segera.',
-                timer: 4000,
-                showConfirmButton: true,
-                confirmButtonColor: '#FF7A00',
-            });
+                if (!response.ok) {
+                    throw new Error(data.message || 'Terjadi kesalahan. Silakan coba lagi.');
+                }
 
-            contactForm.reset();
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = 'Kirim Pesan';
-        }, 1000);
-    });
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Pesan Terkirim!',
+                    text: data.message,
+                    timer: 4000,
+                    showConfirmButton: true,
+                    confirmButtonColor: '#FF7A00',
+                });
+
+                contactForm.reset();
+            } catch (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal Mengirim',
+                    text: error.message,
+                    confirmButtonColor: '#FF7A00',
+                });
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Kirim Pesan';
+            }
+        });
     </script>
 </body>
 

@@ -97,10 +97,10 @@
                     <!-- Trust Badges / Stats -->
                     <div
                         class="flex flex-wrap items-center gap-6 justify-center lg:justify-start mt-8 pt-4 border-t border-neutral-200 dark:border-secondary-700">
-                        <div class="flex items-center gap-2">
+                        <!-- <div class="flex items-center gap-2">
                             <i class="fas fa-check-circle text-emerald-500 text-sm"></i>
                             <span class="text-xs text-neutral-500">10.000+ Undangan Terbuat</span>
-                        </div>
+                        </div> -->
                         <div class="flex items-center gap-2">
                             <i class="fas fa-star text-amber-400 text-sm"></i>
                             <span class="text-xs text-neutral-500">Rating 4.9/5</span>
@@ -511,7 +511,7 @@
             </div>
 
             <!-- Stats / Trust Indicators -->
-            <div class="mt-20 grid grid-cols-3 md:grid-cols-3 gap-6">
+            <div class="mt-20 grid grid-cols-1 md:grid-cols-3 gap-6">
                 <!-- <div class="text-center">
                     <div class="flex items-center justify-center gap-2 mb-2">
                         <i class="fas fa-users text-primary-500 text-2xl"></i>
@@ -646,11 +646,11 @@
 
                     <div class="flex gap-5 lg:gap-6" style="min-width: min-content;">
                         @forelse($themes as $theme)
-                                <div x-show="filter === 'all' || filter === '{{ $theme->theme_category_id ?? '0' }}'"
-                                    x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 scale-95"
-                                    x-transition:enter-end="opacity-100 scale-100"
-                                    class="group relative rounded-2xl overflow-hidden transition-all duration-500 ease-out bg-white dark:bg-secondary-800 shadow-sm hover:shadow-2xl hover:-translate-y-1.5 border border-neutral-100 dark:border-secondary-700/50"
-                                    style="width: 260px; flex-shrink: 0;">
+                            <div x-show="filter === 'all' || filter === '{{ $theme->theme_category_id ?? '0' }}'"
+                                x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 scale-95"
+                                x-transition:enter-end="opacity-100 scale-100"
+                                class="group relative rounded-2xl overflow-hidden transition-all duration-500 ease-out bg-white dark:bg-secondary-800 shadow-sm hover:shadow-2xl hover:-translate-y-1.5 border border-neutral-100 dark:border-secondary-700/50"
+                                style="width: 260px; flex-shrink: 0;">
 
                                 {{-- Thumbnail --}}
                                 <div class="relative aspect-[9/16] bg-gradient-to-br from-secondary-50 to-tertiary overflow-hidden">
@@ -660,7 +660,8 @@
                                     @else
                                         <div class="flex items-center justify-center h-full">
                                             <div class="text-center">
-                                                <div class="w-20 h-20 mx-auto bg-gradient-to-br from-primary-100 to-primary-50 rounded-2xl flex items-center justify-center mb-3">
+                                                <div
+                                                    class="w-20 h-20 mx-auto bg-gradient-to-br from-primary-100 to-primary-50 rounded-2xl flex items-center justify-center mb-3">
                                                     <i class="fas fa-images text-3xl text-primary-400"></i>
                                                 </div>
                                                 <span class="text-sm text-neutral-400">{{ $theme->name }}</span>
@@ -670,12 +671,14 @@
 
                                     {{-- Badge --}}
                                     @if($theme->is_premium)
-                                        <span class="absolute top-3 right-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-gradient-to-r from-amber-400 to-amber-500 text-white shadow-md">
+                                        <span
+                                            class="absolute top-3 right-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-gradient-to-r from-amber-400 to-amber-500 text-white shadow-md">
                                             <i class="fas fa-crown text-xs"></i>
                                             Premium
                                         </span>
                                     @else
-                                        <span class="absolute top-3 right-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700 shadow-sm">
+                                        <span
+                                            class="absolute top-3 right-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700 shadow-sm">
                                             <i class="fas fa-gem text-xs"></i>
                                             Gratis
                                         </span>
@@ -695,7 +698,8 @@
                                 {{-- Card Body --}}
                                 <div class="p-5">
                                     <div class="flex items-start justify-between mb-2">
-                                        <h3 class="text-lg font-bold text-secondary-800 dark:text-neutral-200 group-hover:text-primary-600 transition-colors">
+                                        <h3
+                                            class="text-lg font-bold text-secondary-800 dark:text-neutral-200 group-hover:text-primary-600 transition-colors">
                                             {{ $theme->name }}
                                         </h3>
                                         @if($theme->rating)
@@ -722,12 +726,12 @@
 
                                         @auth
                                             <a href="{{ route('dashboard.invitations.create', ['theme' => str_replace('themes.', '', $theme->view_path)]) }}"
-                                               class="flex-1 text-center px-3 py-2.5 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-xl text-sm font-semibold hover:from-primary-600 hover:to-primary-700 transition-all duration-200 shadow-sm hover:shadow-md">
+                                                class="flex-1 text-center px-3 py-2.5 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-xl text-sm font-semibold hover:from-primary-600 hover:to-primary-700 transition-all duration-200 shadow-sm hover:shadow-md">
                                                 <i class="fas fa-magic mr-1"></i> Gunakan
                                             </a>
                                         @else
                                             <a href="{{ route('register', ['theme' => str_replace('themes.', '', $theme->view_path)]) }}"
-                                               class="flex-1 text-center px-3 py-2.5 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-xl text-sm font-semibold hover:from-primary-600 hover:to-primary-700 transition-all duration-200 shadow-sm hover:shadow-md">
+                                                class="flex-1 text-center px-3 py-2.5 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-xl text-sm font-semibold hover:from-primary-600 hover:to-primary-700 transition-all duration-200 shadow-sm hover:shadow-md">
                                                 <i class="fas fa-magic mr-1"></i> Gunakan
                                             </a>
                                         @endauth
@@ -736,10 +740,12 @@
                             </div>
                         @empty
                             <div class="col-span-full py-16 text-center" style="min-width: 100%;">
-                                <div class="w-20 h-20 mx-auto bg-neutral-100 dark:bg-secondary-700 rounded-2xl flex items-center justify-center mb-4">
+                                <div
+                                    class="w-20 h-20 mx-auto bg-neutral-100 dark:bg-secondary-700 rounded-2xl flex items-center justify-center mb-4">
                                     <i class="fas fa-paintbrush text-3xl text-neutral-400"></i>
                                 </div>
-                                <p class="text-lg font-semibold text-secondary-800 dark:text-neutral-200">Belum ada tema tersedia</p>
+                                <p class="text-lg font-semibold text-secondary-800 dark:text-neutral-200">Belum ada tema
+                                    tersedia</p>
                                 <p class="text-sm text-neutral-500 mt-1">Silakan hubungi admin untuk menambahkan tema.</p>
                             </div>
                         @endforelse

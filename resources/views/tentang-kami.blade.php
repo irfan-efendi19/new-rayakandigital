@@ -251,17 +251,17 @@
                 </h2>
 
                 <p class="text-neutral-500 text-sm leading-relaxed mb-4">
-                    Sejak 2021, Rayakan Digital telah bertumbuh dari sebuah proyek kecil menjadi salah satu platform
+                    Sejak 2025, Rayakan Digital telah bertumbuh dari sebuah proyek kecil menjadi salah satu platform
                     undangan digital terdepan di Indonesia. Kami memahami bahwa setiap perayaan memiliki cerita uniknya
                     sendiri yang layak diceritakan dengan indah.
                 </p>
                 <p class="text-neutral-500 text-sm leading-relaxed mb-8">
-                    Kami telah membantu lebih dari 5.000 pasangan untuk mengabadikan kebahagiaan mereka dengan cara yang
+                    Kami telah membantu pasangan untuk mengabadikan kebahagiaan mereka dengan cara yang
                     lebih elegan, ramah lingkungan, dan tentu saja, efisien. Perjalanan kami masih panjang, dan kami
                     ingin terus menjadi bagian dari setiap momen bersejarah dalam hidup Anda.
                 </p>
 
-                <div class="flex gap-10">
+                <!-- <div class="flex gap-10">
                     <div>
                         <p class="text-3xl font-heading font-bold text-secondary-800 dark:text-neutral-200">5k+</p>
                         <p class="text-xs text-neutral-400 font-semibold uppercase tracking-widest mt-1">Klien Puas</p>
@@ -272,7 +272,7 @@
                         <p class="text-xs text-neutral-400 font-semibold uppercase tracking-widest mt-1">Tamu Terundang
                         </p>
                     </div>
-                </div>
+                </div> -->
             </div>
 
         </div>

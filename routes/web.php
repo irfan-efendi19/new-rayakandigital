@@ -43,7 +43,8 @@ Route::view('/live-streaming', 'live-streaming')->name('live-streaming');
 Route::view('/syarat-ketentuan', 'syarat-ketentuan')->name('syarat-ketentuan');
 Route::view('/kebijakan-privasi', 'kebijakan-privasi')->name('kebijakan-privasi');
 Route::view('/tentang-kami', 'tentang-kami')->name('tentang-kami');
-Route::view('/hubungi-kami', 'hubungi-kami')->name('hubungi-kami');
+Route::get('/hubungi-kami', [App\Http\Controllers\ContactController::class, 'show'])->name('hubungi-kami');
+Route::post('/hubungi-kami', [App\Http\Controllers\ContactController::class, 'submit'])->name('hubungi-kami.submit');
 
 // Google OAuth
 Route::prefix('auth/google')->name('google.')->group(function () {
