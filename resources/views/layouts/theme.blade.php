@@ -78,7 +78,14 @@
         </button>
         <!-- Custom or default audio based on tier & upload -->
         <audio id="bg-audio" loop preload="auto">
-            <source src="{{ ($invitation->canUseCustomMusic() && $invitation->music_url) ? asset('storage/' . $invitation->music_url) : 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3' }}" type="audio/mpeg">
+            @if($invitation->canUseCustomMusic() && $invitation->music_url)
+                <source src="{{ asset('storage/' . $invitation->music_url) }}" type="audio/mpeg">
+            @else
+                @php $defaultMusic = \App\Models\PreviewData::getPreview()->music_url; @endphp
+                @if($defaultMusic)
+                    <source src="{{ asset('storage/' . $defaultMusic) }}" type="audio/mpeg">
+                @endif
+            @endif
         </audio>
     </div>
 

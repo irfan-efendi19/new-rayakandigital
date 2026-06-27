@@ -69,7 +69,10 @@
         @if($invitation->music_url)
         <source src="{{ asset('storage/' . $invitation->music_url) }}" type="audio/mpeg">
         @else
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+            @php $defaultMusic = \App\Models\PreviewData::getPreview()->music_url; @endphp
+            @if($defaultMusic)
+            <source src="{{ asset('storage/' . $defaultMusic) }}" type="audio/mpeg">
+            @endif
         @endif
     </audio>
     <button id="musicToggle" class="music-btn" aria-label="Toggle Music">
