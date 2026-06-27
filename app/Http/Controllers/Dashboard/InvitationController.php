@@ -205,8 +205,25 @@ class InvitationController extends Controller
             $qrStats = null;
         }
 
+        $guestsData = $invitation->guests->map(fn($guest) => [
+            'id' => $guest->id,
+            'name' => $guest->name,
+            'attendance_status' => $guest->attendance_status,
+            'phone' => $guest->phone ?? $guest->whatsapp_number ?? '-',
+            'checked_in_at' => $guest->checked_in_at?->format('d/m/Y H:i') ?? '-',
+            'created_at' => $guest->created_at->format('d/m/Y H:i'),
+        ])->values();
+
+        $wishesData = $invitation->wishes->map(fn($wish) => [
+            'id' => $wish->id,
+            'guest_name' => $wish->guest_name,
+            'message' => $wish->message,
+            'created_at' => $wish->created_at->format('d/m/Y H:i'),
+            'created_at_diff' => $wish->created_at->diffForHumans(),
+        ])->values();
+
         return view('dashboard.invitations.show', compact(
-            'invitation', 'chartLabels', 'chartTotals', 'chartUniques', 'totalViews', 'totalUniques', 'rsvpData', 'qrCodeData', 'rsvpUrl', 'qrStats'
+            'invitation', 'chartLabels', 'chartTotals', 'chartUniques', 'totalViews', 'totalUniques', 'rsvpData', 'qrCodeData', 'rsvpUrl', 'qrStats', 'guestsData', 'wishesData'
         ));
     }
 

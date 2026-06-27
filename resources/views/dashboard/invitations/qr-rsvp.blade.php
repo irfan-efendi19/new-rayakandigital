@@ -137,7 +137,7 @@
                                         <p class="text-xs font-semibold text-neutral-700 dark:text-neutral-300">Daftar Tamu RSVP</p>
                                         <span class="text-xs text-neutral-400 dark:text-neutral-500">{{ $invitation->rsvps->count() }} respon</span>
                                     </div>
-                                    <div class="overflow-x-auto max-h-96 overflow-y-auto">
+                                    <div class="overflow-x-auto max-h-[410px] overflow-y-auto">
                                         <table class="w-full text-xs">
                                             <thead class="bg-neutral-50 dark:bg-secondary-800 text-neutral-500 dark:text-neutral-400">
                                                 <tr>
