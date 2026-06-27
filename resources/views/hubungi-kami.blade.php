@@ -212,7 +212,6 @@
                 Swal.fire({
                     icon: 'success',
                     title: 'Pesan Terkirim!',
-                    text: data.message,
                     timer: 4000,
                     showConfirmButton: true,
                     confirmButtonColor: '#FF7A00',

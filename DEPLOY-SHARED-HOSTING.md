@@ -2,6 +2,15 @@
 
 ## Persyaratan Server
 
+### Spesifikasi Minimum Server
+- **RAM**: Minimal 512 MB (disarankan 1 GB+)
+- **CPU**: 1 core (disarankan 2 core+)
+- **Disk Space**: Minimal 1 GB free (disarankan 2 GB+)
+- **Bandwidth**: Minimal 10 GB/bulan (tergantung jumlah pengunjung)
+- **Node.js** (opsional): Required jika build asset di server, minimal Node 18
+- **Composer**: Wajib untuk install dependency PHP
+- **PHP Version Manager**: Disarankan hosting yang mendukung multi PHP version (misal: LiteSpeed PHP Selector)
+
 ### PHP
 - **PHP ^8.3** (8.3 atau 8.4)
 - Ekstensi wajib:
