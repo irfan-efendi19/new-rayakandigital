@@ -258,13 +258,13 @@
                                     class="bg-neutral-50 dark:bg-secondary-700 rounded-xl border border-neutral-200 dark:border-secondary-600 p-4 flex flex-col items-center">
                                     <div
                                         class="bg-white p-2 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-600 inline-block">
-                                        <div class="w-28 h-28 flex items-center justify-center">
-                                            {!! $qrCodeSvg !!}
-                                        </div>
+                                <div class="w-28 h-28 flex items-center justify-center">
+                                        <img src="{{ $qrCodeData }}" alt="QR Code" class="w-full h-full">
+                                    </div>
                                     </div>
                                     <div class="mt-3 flex gap-2 w-full">
-                                        <a href="data:image/svg+xml;base64,{{ base64_encode($qrCodeSvg) }}"
-                                            download="qrcode-{{ $invitation->slug }}.svg"
+                                        <a href="{{ $qrCodeData }}"
+                                            download="qrcode-{{ $invitation->slug }}.png"
                                             class="flex-1 text-center px-2 py-1.5 text-xs font-semibold text-white bg-gradient-to-r from-primary to-primary-600 rounded-lg hover:shadow-md transition">
                                             Download
                                         </a>

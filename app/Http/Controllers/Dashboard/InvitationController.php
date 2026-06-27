@@ -8,10 +8,7 @@ use App\Models\InvitationEvent;
 use App\Models\InvitationStory;
 use App\Models\SystemConfig;
 use App\Models\Theme;
-use App\Services\ImageCompressionService;
-use chillerlan\QRCode\Data\QRMatrix;
-use chillerlan\QRCode\QRCode;
-use chillerlan\QRCode\QROptions;
+use App\Services\QrWithLogoService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
@@ -192,30 +189,8 @@ class InvitationController extends Controller
         if ($invitation->hasFeature('qr_rsvp_universal')) {
             $rsvpUrl = url('/') . '/' . $invitation->slug . '?mode=scan_qr';
 
-            $qrOptions = new QROptions([
-                'outputType' => QRCode::OUTPUT_MARKUP_SVG,
-                'eccLevel' => QRCode::ECC_M,
-                'addQuietzone' => true,
-                'quietzoneSize' => 1,
-                'drawLightModules' => false,
-                'outputBase64' => false,
-                'svgAddXmlHeader' => false,
-                'moduleValues' => [
-                    QRMatrix::M_DARKMODULE => '#1e293b',
-                    QRMatrix::M_DATA_DARK => '#1e293b',
-                    QRMatrix::M_FINDER_DARK => '#1e293b',
-                    QRMatrix::M_SEPARATOR_DARK => '#1e293b',
-                    QRMatrix::M_ALIGNMENT_DARK => '#1e293b',
-                    QRMatrix::M_TIMING_DARK => '#1e293b',
-                    QRMatrix::M_FORMAT_DARK => '#1e293b',
-                    QRMatrix::M_VERSION_DARK => '#1e293b',
-                    QRMatrix::M_QUIETZONE_DARK => '#1e293b',
-                    QRMatrix::M_LOGO_DARK => '#1e293b',
-                    QRMatrix::M_FINDER_DOT => '#1e293b',
-                ],
-            ]);
-
-            $qrCodeSvg = (new QRCode($qrOptions))->render($rsvpUrl);
+            $qrData = app(QrWithLogoService::class)->generate($rsvpUrl);
+            $qrCodeData = $qrData['data'];
 
             $qrStats = [
                 'total_pax_hadir' => $invitation->rsvps()->where('attendance', 'attending')->sum('pax'),
@@ -225,13 +200,13 @@ class InvitationController extends Controller
                 'tamu_ragu' => $invitation->rsvps()->where('attendance', 'uncertain')->count(),
             ];
         } else {
-            $qrCodeSvg = null;
+            $qrCodeData = null;
             $rsvpUrl = null;
             $qrStats = null;
         }
 
         return view('dashboard.invitations.show', compact(
-            'invitation', 'chartLabels', 'chartTotals', 'chartUniques', 'totalViews', 'totalUniques', 'rsvpData', 'qrCodeSvg', 'rsvpUrl', 'qrStats'
+            'invitation', 'chartLabels', 'chartTotals', 'chartUniques', 'totalViews', 'totalUniques', 'rsvpData', 'qrCodeData', 'rsvpUrl', 'qrStats'
         ));
     }
 
@@ -257,30 +232,8 @@ class InvitationController extends Controller
 
         $rsvpUrl = url('/') . '/' . $invitation->slug . '?mode=scan_qr';
 
-        $qrOptions = new QROptions([
-            'outputType' => QRCode::OUTPUT_MARKUP_SVG,
-            'eccLevel' => QRCode::ECC_M,
-            'addQuietzone' => true,
-            'quietzoneSize' => 1,
-            'drawLightModules' => false,
-            'outputBase64' => false,
-            'svgAddXmlHeader' => false,
-            'moduleValues' => [
-                QRMatrix::M_DARKMODULE => '#1e293b',
-                QRMatrix::M_DATA_DARK => '#1e293b',
-                QRMatrix::M_FINDER_DARK => '#1e293b',
-                QRMatrix::M_SEPARATOR_DARK => '#1e293b',
-                QRMatrix::M_ALIGNMENT_DARK => '#1e293b',
-                QRMatrix::M_TIMING_DARK => '#1e293b',
-                QRMatrix::M_FORMAT_DARK => '#1e293b',
-                QRMatrix::M_VERSION_DARK => '#1e293b',
-                QRMatrix::M_QUIETZONE_DARK => '#1e293b',
-                QRMatrix::M_LOGO_DARK => '#1e293b',
-                QRMatrix::M_FINDER_DOT => '#1e293b',
-            ],
-        ]);
-
-        $qrCodeSvg = (new QRCode($qrOptions))->render($rsvpUrl);
+        $qrData = app(QrWithLogoService::class)->generate($rsvpUrl);
+        $qrCodeData = $qrData['data'];
 
         $report = [
             'total_pax_hadir' => $invitation->rsvps()->where('attendance', 'attending')->sum('pax'),
@@ -290,7 +243,7 @@ class InvitationController extends Controller
             'tamu_ragu' => $invitation->rsvps()->where('attendance', 'uncertain')->count(),
         ];
 
-        return view('dashboard.invitations.qr-rsvp', compact('invitation', 'qrCodeSvg', 'rsvpUrl', 'report'));
+        return view('dashboard.invitations.qr-rsvp', compact('invitation', 'qrCodeData', 'rsvpUrl', 'report'));
     }
 
     public function checkSlug(Request $request)
