@@ -1427,10 +1427,25 @@
                                     </div>
 
                                     {{-- Quote --}}
+                                    @php
+                                    $quoteTemplates = \App\Models\QuoteTemplate::active()->ordered()->get();
+                                    @endphp
+
                                     <div class="sm:col-span-6">
                                         <label for="quote_content"
                                             class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Kutipan
                                             / Ayat Suci</label>
+
+                                        <div class="mt-2 mb-3 flex flex-wrap gap-1.5">
+                                            @foreach($quoteTemplates as $qt)
+                                            <button type="button" data-quote-content="{{ e($qt->content) }}"
+                                                data-quote-source="{{ e($qt->source) }}"
+                                                class="quote-template-btn px-2.5 py-1 rounded-lg border border-neutral-200 dark:border-neutral-600 text-xs font-medium text-neutral-600 dark:text-neutral-400 bg-white dark:bg-secondary-700 hover:bg-primary-50 dark:hover:bg-primary-900/30 hover:border-primary-300 dark:hover:border-primary-600 hover:text-primary-700 dark:hover:text-primary-300 transition-all active:scale-95">
+                                                {{ $qt->label }}
+                                            </button>
+                                            @endforeach
+                                        </div>
+
                                         <textarea name="quote_content" id="quote_content" rows="4"
                                             class="mt-1 block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
                                             placeholder="Tulis kutipan ayat suci atau kutipan romantis...">{{ old('quote_content', $invitation->quote_content) }}</textarea>
@@ -2909,6 +2924,27 @@
                 rsvpPaxSettings.classList.toggle('hidden', !this.checked);
             });
         }
+
+        // Quote template picker
+        document.querySelectorAll('.quote-template-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                document.getElementById('quote_content').value = this.dataset.quoteContent;
+                document.getElementById('quote_source').value = this.dataset.quoteSource;
+
+                document.querySelectorAll('.quote-template-btn').forEach(function(b) {
+                    b.classList.remove('bg-primary-50', 'dark:bg-primary-900/30',
+                        'border-primary-300', 'dark:border-primary-600',
+                        'text-primary-700', 'dark:text-primary-300');
+                    b.classList.add('border-neutral-200', 'dark:border-neutral-600',
+                        'text-neutral-600', 'dark:text-neutral-400');
+                });
+                this.classList.remove('border-neutral-200', 'dark:border-neutral-600',
+                    'text-neutral-600', 'dark:text-neutral-400');
+                this.classList.add('bg-primary-50', 'dark:bg-primary-900/30',
+                    'border-primary-300', 'dark:border-primary-600',
+                    'text-primary-700', 'dark:text-primary-300');
+            });
+        });
 
         // Save confirmation
         const saveBtn = document.getElementById('save-invitation-btn');

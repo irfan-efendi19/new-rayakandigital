@@ -103,5 +103,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ThemeSeeder::class);
 
         $this->call(PackageSeeder::class);
+
+        $this->call(QuoteTemplateSeeder::class);
     }
 }
