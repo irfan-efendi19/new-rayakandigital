@@ -20,6 +20,11 @@ class InvitationRenderController extends Controller
             return response()->view('invitations.expired', compact('invitation'));
         }
 
+        // Jika parameter ?mode=scan_qr ada, redirect ke halaman QR Gateway RSVP Universal
+        if ($request->query('mode') === 'scan_qr') {
+            return redirect()->route('qr-gateway', $invitation->slug);
+        }
+
         $this->trackPageView($request, $invitation);
 
         $guest = null;

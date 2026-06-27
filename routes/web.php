@@ -16,6 +16,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvitationRenderController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\QRGatewayController;
 use App\Http\Controllers\RsvpController;
 use App\Http\Controllers\ThemeController;
 use App\Http\Controllers\ThemePreviewController;
@@ -89,6 +90,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/invitations/{invitation}/whatsapp/logs', [WhatsAppBlastController::class, 'logs'])->name('invitations.whatsapp.logs');
         Route::post('/invitations/{invitation}/whatsapp/template', [WhatsAppBlastController::class, 'template'])->name('invitations.whatsapp.template');
 
+        // QR RSVP Report (Real-Time)
+        Route::get('/invitations/{invitation}/rsvp-report', [InvitationController::class, 'rsvpReport'])->name('invitations.rsvp-report');
+
+        // QR RSVP Universal
+        Route::get('/invitations/{invitation}/qr-rsvp', [InvitationController::class, 'qrRsvp'])->name('invitations.qr-rsvp');
+
         // Guestbook / QR Scanner
         Route::get('/invitations/{invitation}/guestbook', [GuestbookController::class, 'index'])->name('invitations.guestbook');
         Route::get('/invitations/{invitation}/guestbook/pengaturan-layar-sapa', [WelcomeScreenController::class, 'settings'])->name('invitations.guestbook.settings');
@@ -116,4 +123,7 @@ require __DIR__.'/auth.php';
 // Public Invitation Page & Actions (Must be at the bottom to catch /slug)
 Route::post('/invitations/{invitation}/rsvp', [RsvpController::class, 'store'])->name('rsvp.store');
 Route::post('/invitations/{invitation}/wish', [WishController::class, 'store'])->name('wish.store');
+
+// QR Gateway RSVP Universal
+Route::get('/{slug}/rsvp', [QRGatewayController::class, 'show'])->name('qr-gateway');
 Route::get('/{slug}', [InvitationRenderController::class, 'show'])->name('invitation.show');

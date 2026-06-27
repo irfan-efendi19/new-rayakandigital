@@ -607,6 +607,8 @@
                 startPolling() {
                     this.poll();
                     this.pollTimer = setInterval(() => this.poll(), 3000);
+
+
                 },
 
                 enqueueGuests(guests) {

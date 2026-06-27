@@ -9,7 +9,11 @@ use App\Models\InvitationStory;
 use App\Models\SystemConfig;
 use App\Models\Theme;
 use App\Services\ImageCompressionService;
+use chillerlan\QRCode\Data\QRMatrix;
+use chillerlan\QRCode\QRCode;
+use chillerlan\QRCode\QROptions;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
@@ -185,8 +189,49 @@ class InvitationController extends Controller
             'updated_at' => $rsvp->updated_at->format('d/m/Y H:i'),
         ])->values();
 
+        if ($invitation->hasFeature('qr_rsvp_universal')) {
+            $rsvpUrl = url('/') . '/' . $invitation->slug . '?mode=scan_qr';
+
+            $qrOptions = new QROptions([
+                'outputType' => QRCode::OUTPUT_MARKUP_SVG,
+                'eccLevel' => QRCode::ECC_M,
+                'addQuietzone' => true,
+                'quietzoneSize' => 1,
+                'drawLightModules' => false,
+                'outputBase64' => false,
+                'svgAddXmlHeader' => false,
+                'moduleValues' => [
+                    QRMatrix::M_DARKMODULE => '#1e293b',
+                    QRMatrix::M_DATA_DARK => '#1e293b',
+                    QRMatrix::M_FINDER_DARK => '#1e293b',
+                    QRMatrix::M_SEPARATOR_DARK => '#1e293b',
+                    QRMatrix::M_ALIGNMENT_DARK => '#1e293b',
+                    QRMatrix::M_TIMING_DARK => '#1e293b',
+                    QRMatrix::M_FORMAT_DARK => '#1e293b',
+                    QRMatrix::M_VERSION_DARK => '#1e293b',
+                    QRMatrix::M_QUIETZONE_DARK => '#1e293b',
+                    QRMatrix::M_LOGO_DARK => '#1e293b',
+                    QRMatrix::M_FINDER_DOT => '#1e293b',
+                ],
+            ]);
+
+            $qrCodeSvg = (new QRCode($qrOptions))->render($rsvpUrl);
+
+            $qrStats = [
+                'total_pax_hadir' => $invitation->rsvps()->where('attendance', 'attending')->sum('pax'),
+                'total_tamu_respon' => $invitation->rsvps()->count(),
+                'tamu_hadir' => $invitation->rsvps()->where('attendance', 'attending')->count(),
+                'tamu_absen' => $invitation->rsvps()->where('attendance', 'not_attending')->count(),
+                'tamu_ragu' => $invitation->rsvps()->where('attendance', 'uncertain')->count(),
+            ];
+        } else {
+            $qrCodeSvg = null;
+            $rsvpUrl = null;
+            $qrStats = null;
+        }
+
         return view('dashboard.invitations.show', compact(
-            'invitation', 'chartLabels', 'chartTotals', 'chartUniques', 'totalViews', 'totalUniques', 'rsvpData'
+            'invitation', 'chartLabels', 'chartTotals', 'chartUniques', 'totalViews', 'totalUniques', 'rsvpData', 'qrCodeSvg', 'rsvpUrl', 'qrStats'
         ));
     }
 
@@ -198,6 +243,54 @@ class InvitationController extends Controller
         $themes = Theme::where('is_active', true)->with('themeCategory')->get();
 
         return view('dashboard.invitations.edit', compact('invitation', 'themes'));
+    }
+
+    public function qrRsvp(Invitation $invitation)
+    {
+        Gate::authorize('view', $invitation);
+
+        if (! $invitation->hasFeature('qr_rsvp_universal')) {
+            abort(403, 'Fitur QR RSVP Universal hanya tersedia untuk paket Gold dan Platinum.');
+        }
+
+        $invitation->load(['rsvps']);
+
+        $rsvpUrl = url('/') . '/' . $invitation->slug . '?mode=scan_qr';
+
+        $qrOptions = new QROptions([
+            'outputType' => QRCode::OUTPUT_MARKUP_SVG,
+            'eccLevel' => QRCode::ECC_M,
+            'addQuietzone' => true,
+            'quietzoneSize' => 1,
+            'drawLightModules' => false,
+            'outputBase64' => false,
+            'svgAddXmlHeader' => false,
+            'moduleValues' => [
+                QRMatrix::M_DARKMODULE => '#1e293b',
+                QRMatrix::M_DATA_DARK => '#1e293b',
+                QRMatrix::M_FINDER_DARK => '#1e293b',
+                QRMatrix::M_SEPARATOR_DARK => '#1e293b',
+                QRMatrix::M_ALIGNMENT_DARK => '#1e293b',
+                QRMatrix::M_TIMING_DARK => '#1e293b',
+                QRMatrix::M_FORMAT_DARK => '#1e293b',
+                QRMatrix::M_VERSION_DARK => '#1e293b',
+                QRMatrix::M_QUIETZONE_DARK => '#1e293b',
+                QRMatrix::M_LOGO_DARK => '#1e293b',
+                QRMatrix::M_FINDER_DOT => '#1e293b',
+            ],
+        ]);
+
+        $qrCodeSvg = (new QRCode($qrOptions))->render($rsvpUrl);
+
+        $report = [
+            'total_pax_hadir' => $invitation->rsvps()->where('attendance', 'attending')->sum('pax'),
+            'total_tamu_respon' => $invitation->rsvps()->count(),
+            'tamu_hadir' => $invitation->rsvps()->where('attendance', 'attending')->count(),
+            'tamu_absen' => $invitation->rsvps()->where('attendance', 'not_attending')->count(),
+            'tamu_ragu' => $invitation->rsvps()->where('attendance', 'uncertain')->count(),
+        ];
+
+        return view('dashboard.invitations.qr-rsvp', compact('invitation', 'qrCodeSvg', 'rsvpUrl', 'report'));
     }
 
     public function checkSlug(Request $request)
@@ -445,6 +538,31 @@ class InvitationController extends Controller
 
         return redirect()->route('dashboard.invitations.show', $invitation)
             ->with('success', 'Undangan berhasil diperbarui.');
+    }
+
+    public function rsvpReport(Invitation $invitation)
+    {
+        Gate::authorize('view', $invitation);
+
+        $totalPaxHadir = $invitation->rsvps()->where('attendance', 'attending')->sum('pax');
+        $totalTamuRespon = $invitation->rsvps()->count();
+        $tamuHadir = $invitation->rsvps()->where('attendance', 'attending')->count();
+        $tamuAbsen = $invitation->rsvps()->where('attendance', 'not_attending')->count();
+        $tamuRagu = $invitation->rsvps()->where('attendance', 'uncertain')->count();
+
+        $paxPercentage = 0;
+        if ($invitation->isRsvpPaxLimited() && $invitation->max_global_pax_quota > 0) {
+            $paxPercentage = min(100, round(($totalPaxHadir / $invitation->max_global_pax_quota) * 100));
+        }
+
+        return response()->json([
+            'total_pax_hadir' => $totalPaxHadir,
+            'total_tamu_respon' => $totalTamuRespon,
+            'tamu_hadir' => $tamuHadir,
+            'tamu_absen' => $tamuAbsen,
+            'tamu_ragu' => $tamuRagu,
+            'pax_percentage' => $paxPercentage,
+        ]);
     }
 
     public function destroy(Invitation $invitation)
