@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class InvitationEvent extends Model
 {
@@ -32,5 +33,11 @@ class InvitationEvent extends Model
     public function invitation(): BelongsTo
     {
         return $this->belongsTo(Invitation::class);
+    }
+
+    public function guests(): BelongsToMany
+    {
+        return $this->belongsToMany(Guest::class, 'event_guest', 'event_id', 'guest_id')
+            ->withTimestamps();
     }
 }

@@ -5,7 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    @php $coupleName = $invitation->couple_name; @endphp
+    @php
+        $coupleName = $invitation->couple_name;
+        $displayEvents = $guestEvents ?? $invitation->events;
+    @endphp
 
     <x-meta title="Pernikahan {{ $coupleName }}"
         description="Undangan Pernikahan {{ $coupleName }}"
@@ -47,7 +50,7 @@
             <p class="cover-subtitle">The Wedding Of</p>
             <h1 class="cover-title">{{ $coupleName }}</h1>
             @php
-            $firstEvent = $invitation->events->sortBy(['event_date', 'start_time'])->first();
+            $firstEvent = $displayEvents->sortBy(['event_date', 'start_time'])->first();
             @endphp
             @if($firstEvent)
             <p class="cover-date">{{ \Carbon\Carbon::parse($firstEvent->event_date)->translatedFormat('l, d F Y') }}</p>
@@ -237,7 +240,7 @@
         <section class="section event-section">
             <div class="container text-center">
                 <h2 class="section-title">Waktu &amp; Tempat</h2>
-                @php $sortedEvents = $invitation->events->sortBy(['event_date', 'start_time']); @endphp
+                @php $sortedEvents = $displayEvents->sortBy(['event_date', 'start_time']); @endphp
                 @forelse($sortedEvents as $event)
                 <div class="event-card">
                     <div class="event-dot"></div>

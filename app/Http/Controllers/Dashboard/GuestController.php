@@ -31,7 +31,7 @@ class GuestController extends Controller
         $perPage = in_array($perPage, [10, 20, 50, 100, 'all']) ? $perPage : 20;
 
         $query = $invitation->guests()
-            ->with(['whatsappLogs' => fn ($q) => $q->latest(), 'guestCategory']);
+            ->with(['whatsappLogs' => fn ($q) => $q->latest(), 'guestCategory', 'events', 'invitation']);
 
         if ($search) {
             $query->where(function ($q) use ($search) {
@@ -76,8 +76,9 @@ class GuestController extends Controller
         Gate::authorize('update', $invitation);
 
         $categories = $invitation->guestCategories()->get();
+        $events = $invitation->events()->orderBy('sort_order')->get();
 
-        return view('dashboard.guests.create', compact('invitation', 'categories'));
+        return view('dashboard.guests.create', compact('invitation', 'categories', 'events'));
     }
 
     public function store(Request $request, Invitation $invitation)
@@ -91,9 +92,13 @@ class GuestController extends Controller
             'whatsapp_number' => 'nullable|string|max:20',
             'address' => 'nullable|string|max:500',
             'guest_category_id' => 'nullable|exists:guest_categories,id',
+            'event_ids' => 'nullable|array',
+            'event_ids.*' => 'exists:invitation_events,id',
         ]);
 
-        $invitation->guests()->create($validated);
+        $guest = $invitation->guests()->create($validated);
+
+        $guest->events()->sync($request->input('event_ids', []));
 
         return redirect()->route('dashboard.invitations.guests.index', $invitation)
             ->with('success', 'Tamu berhasil ditambahkan.');
@@ -105,8 +110,10 @@ class GuestController extends Controller
         Gate::authorize('update', $invitation);
 
         $categories = $invitation->guestCategories()->get();
+        $events = $invitation->events()->orderBy('sort_order')->get();
+        $guest->load('events');
 
-        return view('dashboard.guests.edit', compact('invitation', 'guest', 'categories'));
+        return view('dashboard.guests.edit', compact('invitation', 'guest', 'categories', 'events'));
     }
 
     public function update(Request $request, Invitation $invitation, Guest $guest)
@@ -120,9 +127,13 @@ class GuestController extends Controller
             'whatsapp_number' => 'nullable|string|max:20',
             'address' => 'nullable|string|max:500',
             'guest_category_id' => 'nullable|exists:guest_categories,id',
+            'event_ids' => 'nullable|array',
+            'event_ids.*' => 'exists:invitation_events,id',
         ]);
 
         $guest->update($validated);
+
+        $guest->events()->sync($request->input('event_ids', []));
 
         return redirect()->route('dashboard.invitations.guests.index', $invitation)
             ->with('success', 'Data tamu berhasil diperbarui.');

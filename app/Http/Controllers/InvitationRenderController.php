@@ -28,11 +28,17 @@ class InvitationRenderController extends Controller
         $this->trackPageView($request, $invitation);
 
         $guest = null;
+        $guestEvents = null;
         if ($request->has('to')) {
             $guestSlug = $request->query('to');
-            $guest = Guest::where('invitation_id', $invitation->id)
+            $guest = Guest::with('events')
+                ->where('invitation_id', $invitation->id)
                 ->where('slug', $guestSlug)
                 ->first();
+
+            if ($guest && $guest->events->isNotEmpty()) {
+                $guestEvents = $guest->events;
+            }
 
             if (! $guest) {
                 $guest = new Guest(['name' => $guestSlug]);
@@ -45,7 +51,7 @@ class InvitationRenderController extends Controller
             $themeView = 'themes.elegant';
         }
 
-        return view($themeView, compact('invitation', 'guest'));
+        return view($themeView, compact('invitation', 'guest', 'guestEvents'));
     }
 
     protected function trackPageView(Request $request, Invitation $invitation): void

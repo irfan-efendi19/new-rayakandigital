@@ -8,6 +8,7 @@ use App\Models\InvitationEvent;
 use App\Models\InvitationStory;
 use App\Models\SystemConfig;
 use App\Models\Theme;
+use App\Services\ImageCompressionService;
 use App\Services\QrWithLogoService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;

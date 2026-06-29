@@ -22,7 +22,8 @@ class WhatsAppBlastController extends Controller
             'guest_ids.*' => 'exists:guests,id',
         ]);
 
-        $guests = Guest::whereIn('id', $validated['guest_ids'])
+        $guests = Guest::with('invitation')
+            ->whereIn('id', $validated['guest_ids'])
             ->where('invitation_id', $invitation->id)
             ->where(function ($q) {
                 $q->whereNotNull('whatsapp_number')->orWhereNotNull('phone');
@@ -88,6 +89,10 @@ class WhatsAppBlastController extends Controller
 
         if (!$guest->whatsapp_number && !$guest->phone) {
             return back()->with('error', 'Tamu ini tidak memiliki nomor telepon.');
+        }
+
+        if (!$guest->relationLoaded('invitation')) {
+            $guest->load('invitation');
         }
 
         $gateway = WhatsappGatewaySetting::active()->first();

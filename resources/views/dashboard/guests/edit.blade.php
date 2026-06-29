@@ -59,6 +59,32 @@
                                 @error('guest_category_id') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
                             </div>
 
+                            @if($events->isNotEmpty())
+                            <div>
+                                <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">Alokasi Acara (Kloter)</label>
+                                <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-3">Pilih acara yang akan dihadiri tamu ini. Biarkan kosong jika tamu diundang ke semua acara.</p>
+                                <input type="hidden" name="event_ids" value="">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                    @foreach($events as $event)
+                                    @php $checked = in_array($event->id, old('event_ids', $guest->events->pluck('id')->toArray())); @endphp
+                                    <label class="relative flex items-start p-3 rounded-xl border border-neutral-200 dark:border-secondary-600 cursor-pointer has-[:checked]:border-primary has-[:checked]:bg-primary-50 dark:has-[:checked]:bg-primary-900/20 transition-all hover:border-neutral-300 dark:hover:border-neutral-500">
+                                        <input type="checkbox" name="event_ids[]" value="{{ $event->id }}"
+                                            {{ $checked ? 'checked' : '' }}
+                                            class="mt-0.5 rounded border-neutral-300 dark:border-secondary-600 dark:bg-secondary-900 text-primary focus:ring-primary-500 shadow-sm">
+                                        <div class="ml-3">
+                                            <span class="block text-sm font-semibold text-secondary-800 dark:text-neutral-200">{{ $event->event_title }}</span>
+                                            <span class="block text-xs text-neutral-500 dark:text-neutral-400">
+                                                {{ \Carbon\Carbon::parse($event->event_date)->translatedFormat('l, d F Y') }}
+                                                {{ $event->start_time ? \Carbon\Carbon::parse($event->start_time)->format('H:i') : '' }}
+                                            </span>
+                                        </div>
+                                    </label>
+                                    @endforeach
+                                </div>
+                                @error('event_ids') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+                            </div>
+                            @endif
+
                             <div class="pt-6 border-t border-neutral-100 dark:border-secondary-700 flex justify-end gap-3">
                                 <a href="{{ route('dashboard.invitations.guests.index', $invitation) }}"
                                    class="inline-flex items-center px-5 py-2.5 border border-neutral-200 dark:border-secondary-600 rounded-xl text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-secondary-700 transition-colors">

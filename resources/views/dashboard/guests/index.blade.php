@@ -174,6 +174,10 @@
                                 class="text-[11px] font-semibold bg-white dark:bg-secondary-800 border border-neutral-200 dark:border-secondary-600 hover:border-primary text-neutral-700 dark:text-neutral-300 px-2.5 py-1 rounded-lg shadow-sm transition-all cursor-pointer hover:text-primary">
                                 Tempat Acara
                             </button>
+                            <button type="button" @click="insertVariable('@{{daftar_acara}}')"
+                                class="text-[11px] font-semibold bg-white dark:bg-secondary-800 border border-neutral-200 dark:border-secondary-600 hover:border-primary text-neutral-700 dark:text-neutral-300 px-2.5 py-1 rounded-lg shadow-sm transition-all cursor-pointer hover:text-primary">
+                                Daftar Acara
+                            </button>
                             <button type="button" @click="insertVariable('@{{qrcode_link}}')"
                                 class="text-[11px] font-semibold bg-white dark:bg-secondary-800 border border-neutral-200 dark:border-secondary-600 hover:border-primary text-neutral-700 dark:text-neutral-300 px-2.5 py-1 rounded-lg shadow-sm transition-all cursor-pointer hover:text-primary">
                                 QR Code Link
@@ -381,6 +385,7 @@
                                             </th>
                                             <th scope="col" class="px-6 py-3.5 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Nama Tamu</th>
                                             <th scope="col" class="px-6 py-3.5 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Kategori</th>
+                                            <th scope="col" class="px-6 py-3.5 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Acara</th>
                                             <th scope="col" class="px-6 py-3.5 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">No HP</th>
                                             <th scope="col" class="px-6 py-3.5 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Status WA</th>
                                             <th scope="col" class="px-6 py-3.5 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Kehadiran</th>
@@ -409,6 +414,19 @@
                                                         </span>
                                                     @else
                                                         <span class="text-xs text-neutral-400 dark:text-neutral-500">—</span>
+                                                    @endif
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    @if($guest->events->isNotEmpty())
+                                                        <div class="flex flex-wrap gap-1">
+                                                            @foreach($guest->events as $event)
+                                                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 border border-primary-200 dark:border-primary-800">
+                                                                {{ $event->event_title }}
+                                                            </span>
+                                                            @endforeach
+                                                        </div>
+                                                    @else
+                                                        <span class="text-xs text-neutral-400 dark:text-neutral-500">Semua Acara</span>
                                                     @endif
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400">

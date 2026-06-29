@@ -483,6 +483,23 @@ class Invitation extends Model
 
         $namaPengantin = $this->couple_name;
 
+        $guestEvents = $guest->relationLoaded('events')
+            ? $guest->events
+            : $guest->events()->get();
+
+        $displayEvents = $guestEvents->isNotEmpty() ? $guestEvents : $this->events()->orderBy('sort_order')->get();
+
+        $eventList = '';
+        if ($displayEvents->isNotEmpty()) {
+            $lines = [];
+            foreach ($displayEvents as $event) {
+                $date = $event->event_date ? \Carbon\Carbon::parse($event->event_date)->translatedFormat('l, d F Y') : '';
+                $time = $event->start_time ? \Carbon\Carbon::parse($event->start_time)->format('H:i') : '';
+                $lines[] = "• {$event->event_title} - {$date} {$time}";
+            }
+            $eventList = implode("\n", $lines);
+        }
+
         $replacements = [
             // New {{...}} format
             '{{nama_tamu}}' => $guest->name,
@@ -493,6 +510,8 @@ class Invitation extends Model
             '{{waktu_acara}}' => $firstEvent?->start_time ?? $this->event_time ?? '',
             '{{tempat_acara}}' => $firstEvent?->place_name ?? $this->venue_name ?? '',
             '{{alamat_acara}}' => $firstEvent?->place_address ?? $this->venue_address ?? '',
+            '{{daftar_acara}}' => $eventList,
+            '{{event_list}}' => $eventList,
             // Legacy {..} format (backward compatibility)
             '{nama_tamu}' => $guest->name,
             '{nama_mempelai_pria}' => $this->groom_name,
@@ -503,6 +522,8 @@ class Invitation extends Model
             '{waktu_acara}' => $firstEvent?->start_time ?? $this->event_time ?? '',
             '{tempat_acara}' => $firstEvent?->place_name ?? $this->venue_name ?? '',
             '{alamat_acara}' => $firstEvent?->place_address ?? $this->venue_address ?? '',
+            '{daftar_acara}' => $eventList,
+            '{event_list}' => $eventList,
         ];
 
         return str_replace(array_keys($replacements), array_values($replacements), $template);
