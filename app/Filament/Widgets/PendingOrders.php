@@ -2,6 +2,7 @@
 
 namespace App\Filament\Widgets;
 
+use App\Filament\Resources\Orders\OrderActions;
 use App\Filament\Resources\Orders\OrderResource;
 use App\Models\Order;
 use Filament\Actions\Action;
@@ -14,18 +15,18 @@ class PendingOrders extends BaseWidget
 {
     protected static ?int $sort = 6;
 
-    protected int | string | array $columnSpan = 6;
+    protected int|string|array $columnSpan = 6;
 
     protected function getTableHeading(): string
     {
         $total = $this->getTableQuery()->count();
 
-        return 'Pesanan Menunggu (' . $total . ')';
+        return 'Pesanan Menunggu ('.$total.')';
     }
 
     protected function getTableQuery(): Builder
     {
-        return Order::whereIn('payment_status', ['pending', 'verifying']);
+        return Order::with(['user'])->whereIn('payment_status', ['pending', 'verifying']);
     }
 
     protected function getTableColumns(): array
@@ -93,16 +94,14 @@ class PendingOrders extends BaseWidget
                     ->label('Setujui & Aktifkan')
                     ->icon('heroicon-o-check-circle')
                     ->color('success')
-                    ->visible(fn (Order $record): bool =>
-                        $record->payment_status === 'verifying' && $record->payment_method_used === 'manual_bank'
+                    ->visible(fn (Order $record): bool => $record->payment_status === 'verifying' && $record->payment_method_used === 'manual_bank'
                     )
                     ->action(function (Order $record) {
-                        \App\Filament\Resources\Orders\OrderActions::activate($record);
+                        OrderActions::activate($record);
                     })
                     ->requiresConfirmation()
                     ->modalHeading('Setujui & Aktifkan Pesanan')
-                    ->modalDescription(fn (Order $record): string =>
-                        'Pastikan dana dengan kode unik ' . $record->unique_code . ' sudah masuk ke rekening sebelum mengaktifkan.'
+                    ->modalDescription(fn (Order $record): string => 'Pastikan dana dengan kode unik '.$record->unique_code.' sudah masuk ke rekening sebelum mengaktifkan.'
                     )
                     ->modalSubmitActionLabel('Ya, Setujui & Aktifkan'),
                 Action::make('view')

@@ -9,7 +9,6 @@
     <x-meta title="Pernikahan {{ $coupleName }}"
         description="Undangan Pernikahan {{ $coupleName }}"
         image="{{ $invitation->cover_photo ? asset('storage/' . $invitation->cover_photo) : null }}" />
-
     @stack('meta')
 
     <link
@@ -37,7 +36,7 @@
             <p class="cover-subtitle">The Wedding Of</p>
             <h1 class="cover-title">{{ $coupleName }}</h1>
             @php
-                $firstEvent = $invitation->events->sortBy(['event_date', 'start_time'])->first();
+$firstEvent = $invitation->events->sortBy(['event_date', 'start_time'])->first();
             @endphp
             @if($firstEvent)
                 <p class="cover-date">{{ \Carbon\Carbon::parse($firstEvent->event_date)->translatedFormat('l, d F Y') }}</p>
@@ -230,9 +229,9 @@
                             <p class="event-date">{{ \Carbon\Carbon::parse($event->event_date)->translatedFormat('l, d F Y') }}
                             </p>
                             @php
-                                $tzLabel = match ($invitation->timezone ?? 'Asia/Jakarta') {
-                                    'Asia/Jakarta' => 'WIB', 'Asia/Makassar' => 'WITA', 'Asia/Jayapura' => 'WIT', default => 'WIB'
-                                };
+        $tzLabel = match ($invitation->timezone ?? 'Asia/Jakarta') {
+            'Asia/Jakarta' => 'WIB', 'Asia/Makassar' => 'WITA', 'Asia/Jayapura' => 'WIT', default => 'WIB'
+        };
                             @endphp
                             <p class="event-time">
                                 {{ $event->start_time ? \Carbon\Carbon::parse($event->start_time)->format('H:i') : '-' }}
@@ -277,9 +276,9 @@
 
         <!-- Gallery Section -->
         @if(
-                $invitation->show_gallery && $invitation->hasFeature('gallery_photos') &&
-                !empty($invitation->gallery_photos)
-            )
+    $invitation->show_gallery && $invitation->hasFeature('gallery_photos') &&
+    !empty($invitation->gallery_photos)
+)
             <section class="section gallery-section">
                 <div class="container text-center">
                     <h2 class="section-title">Galeri Foto</h2>
@@ -308,11 +307,11 @@
                                 @if($story->story_date)
                                     <span class="story-date">
                                         @php
-                                            try {
-                                                $parsedDate = \Carbon\Carbon::parse($story->story_date)->translatedFormat('d F Y');
-                                            } catch (\Exception $e) {
-                                                $parsedDate = $story->story_date;
-                                            }
+            try {
+                $parsedDate = \Carbon\Carbon::parse($story->story_date)->translatedFormat('d F Y');
+            } catch (\Exception $e) {
+                $parsedDate = $story->story_date;
+            }
                                         @endphp
                                         {{ $parsedDate }}
                                     </span>
@@ -369,31 +368,31 @@
 
         <!-- Gift Section -->
         @php
-            $giftBanks = $invitation->gift_banks ?? [];
-            $giftEwallets = $invitation->gift_ewallets ?? [];
-            if (empty($giftBanks) && ($invitation->gift_bank_name || $invitation->gift_bank_account)) {
-                $giftBanks = [
-                    [
-                        'bank_name' => $invitation->gift_bank_name,
-                        'account_number' => $invitation->gift_bank_account,
-                        'account_holder' => $invitation->gift_bank_holder
-                    ]
-                ];
-            }
-            if (empty($giftEwallets) && ($invitation->gift_ewallet_name || $invitation->gift_ewallet_number)) {
-                $giftEwallets = [
-                    [
-                        'wallet_name' => $invitation->gift_ewallet_name,
-                        'wallet_number' =>
-                            $invitation->gift_ewallet_number
-                    ]
-                ];
-            }
+$giftBanks = $invitation->gift_banks ?? [];
+$giftEwallets = $invitation->gift_ewallets ?? [];
+if (empty($giftBanks) && ($invitation->gift_bank_name || $invitation->gift_bank_account)) {
+    $giftBanks = [
+        [
+            'bank_name' => $invitation->gift_bank_name,
+            'account_number' => $invitation->gift_bank_account,
+            'account_holder' => $invitation->gift_bank_holder
+        ]
+    ];
+}
+if (empty($giftEwallets) && ($invitation->gift_ewallet_name || $invitation->gift_ewallet_number)) {
+    $giftEwallets = [
+        [
+            'wallet_name' => $invitation->gift_ewallet_name,
+            'wallet_number' =>
+                $invitation->gift_ewallet_number
+        ]
+    ];
+}
         @endphp
         @if(
-                $invitation->show_gift && $invitation->canUseGift() && (count($giftBanks) > 0 || count($giftEwallets) > 0 ||
-                    $invitation->gift_qris_image)
-            )
+    $invitation->show_gift && $invitation->canUseGift() && (count($giftBanks) > 0 || count($giftEwallets) > 0 ||
+        $invitation->gift_qris_image)
+)
             <section class="section gift-section">
                 <div class="container text-center">
                     <h2 class="section-title">Kado Digital</h2>
@@ -492,7 +491,7 @@
                     hadir.</p>
                 <p class="footer-couple">{{ $coupleName }}</p>
                 @php
-                    $appUrl = config('app.url');
+$appUrl = config('app.url');
                 @endphp
                 <p class="footer-credit">Dibuat dengan <a href="{{ $appUrl }}" target="_blank">RayakanDigital</a></p>
             </div>
