@@ -12,10 +12,10 @@ class GuestTemplateExport implements FromArray, WithHeadings, WithStyles
     public function array(): array
     {
         return [
-            ['Rina Wijaya', '081234567890', 'Keluarga'],
-            ['Bambang Santoso', '+628123456789', 'Keluarga'],
-            ['Dewi Lestari', '081298765432', 'Teman'],
-            ['Ahmad Fauzi', '628123456788', 'Rekan Kerja'],
+            ['Rina Wijaya', '081234567890', 'Keluarga', 'Akad Nikah|Resepsi'],
+            ['Bambang Santoso', '+628123456789', 'Keluarga', 'Akad Nikah'],
+            ['Dewi Lestari', '081298765432', 'Teman', 'Resepsi'],
+            ['Ahmad Fauzi', '628123456788', 'Rekan Kerja', ''],
         ];
     }
 
@@ -25,6 +25,7 @@ class GuestTemplateExport implements FromArray, WithHeadings, WithStyles
             'Nama Tamu',
             'Nomor WhatsApp',
             'Kategori',
+            'Acara',
         ];
     }
 

@@ -4,6 +4,7 @@ namespace App\Imports;
 
 use App\Models\Guest;
 use App\Models\GuestCategory;
+use App\Models\InvitationEvent;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
@@ -16,6 +17,7 @@ class GuestsImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnFa
     use Importable, SkipsFailures;
 
     protected $invitationId;
+    protected $events;
     protected $imported = 0;
     protected $skipped = 0;
 
@@ -59,6 +61,18 @@ class GuestsImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnFa
             $this->skipped++;
         }
 
+        // Sync event assignments
+        if (! empty(trim($row['acara'] ?? ''))) {
+            $eventNames = array_map('trim', explode('|', $row['acara']));
+            $eventIds = InvitationEvent::where('invitation_id', $this->invitationId)
+                ->whereIn('event_title', $eventNames)
+                ->pluck('id')
+                ->toArray();
+            if (! empty($eventIds)) {
+                $guest->events()->syncWithoutDetaching($eventIds);
+            }
+        }
+
         return $guest;
     }
 
@@ -68,6 +82,7 @@ class GuestsImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnFa
             'nama_tamu' => 'required|max:255',
             'nomor_whatsapp' => 'nullable|max:20',
             'kategori' => 'nullable|max:50',
+            'acara' => 'nullable|max:500',
         ];
     }
 

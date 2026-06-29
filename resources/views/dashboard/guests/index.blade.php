@@ -265,7 +265,7 @@
                         </div>
                     </form>
                     <p class="mt-2.5 text-xs text-neutral-500 dark:text-neutral-400">
-                        Format file <strong class="text-primary">.xlsx</strong> atau <strong class="text-primary">.csv</strong>. Baris pertama (header) wajib memiliki kolom: <strong class="text-primary">Nama Tamu</strong>, <strong class="text-primary">Nomor WhatsApp</strong>, dan <strong class="text-primary">Kategori</strong>. Download template untuk contoh format.
+                        Format file <strong class="text-primary">.xlsx</strong> atau <strong class="text-primary">.csv</strong>. Baris pertama (header) wajib memiliki kolom: <strong class="text-primary">Nama Tamu</strong>, <strong class="text-primary">Nomor WhatsApp</strong>, <strong class="text-primary">Kategori</strong>, dan <strong class="text-primary">Acara</strong> (dipisah dengan tanda | untuk multi-acara). Download template untuk contoh format.
                     </p>
                 </div>
             </div>

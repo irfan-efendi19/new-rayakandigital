@@ -148,7 +148,7 @@ $daysLeft = $invitation->expires_at ? (int) max(0, now()->diffInDays($invitation
                                         &rarr;</a>
                                 @else
                                     <span
-                                        class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-amber-100 dark:bg-amber-900/50 text-amber-800 dark:text-amber-300">Premium</span>
+                                        class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-amber-100 dark:bg-amber-900/50 text-amber-800 dark:text-amber-300">Gold</span>
                                 @endif
                             </div>
                             <div class="text-3xl font-bold text-secondary-800 dark:text-neutral-100">{{ $invitation->guests->count() }}
