@@ -30,7 +30,7 @@
     <div class="h-16"></div>
 
     <!-- ───────────────── HERO ───────────────── -->
-    <section
+    <section data-aos="fade-up"
         class="relative overflow-hidden bg-gradient-to-br from-white via-primary-50/30 to-secondary-50 dark:from-secondary-900 dark:via-secondary-900 dark:to-secondary-900 min-h-[92vh] flex items-center">
         <div class="absolute inset-0 overflow-hidden pointer-events-none">
             <div class="absolute inset-0 bg-gradient-to-tr from-primary-500/[0.03] to-transparent"></div>
@@ -41,7 +41,7 @@
         <div class="relative max-w-6xl mx-auto px-6 py-20 grid md:grid-cols-2 gap-16 items-center">
 
             <!-- Left -->
-            <div class="reveal">
+            <div data-aos="fade-right">
                 <span
                     class="inline-flex items-center gap-2 bg-primary-100 border border-primary-200 text-primary-700 text-xs font-semibold px-3 py-1.5 rounded-full mb-6 tracking-wide uppercase">
                     <i class="fa-regular fa-star text-primary-500 text-[10px]"></i>
@@ -69,7 +69,7 @@
             </div>
 
             <!-- Right – device mockup -->
-            <div class="relative reveal" style="transition-delay:.15s">
+            <div data-aos="fade-left" data-aos-delay="150" class="relative">
                 <div class="relative rounded-3xl overflow-hidden shadow-soft border border-primary-100">
                     <div
                         class="bg-gradient-to-br from-amber-50 to-primary-50 dark:from-secondary-800 dark:to-secondary-800 aspect-[4/3] flex items-center justify-center">
@@ -110,10 +110,10 @@
     </section>
 
     <!-- ───────────────── FITUR ───────────────── -->
-    <section id="fitur" class="bg-white dark:bg-secondary-800 py-24">
+    <section data-aos="fade-up" id="fitur" class="bg-white dark:bg-secondary-800 py-24">
         <div class="max-w-6xl mx-auto px-6">
 
-            <div class="text-center mb-16 reveal">
+            <div data-aos="fade-up" class="text-center mb-16">
                 <h2 class="text-4xl font-heading font-bold text-secondary-900 dark:text-neutral-100 mb-4">Fitur Cerdas
                     untuk Acara Anda</h2>
                 <p class="text-neutral-500 max-w-xl mx-auto leading-relaxed">Kami menyediakan ekosistem lengkap untuk
@@ -122,8 +122,8 @@
 
             <div class="grid md:grid-cols-2 gap-6 mb-6">
 
-                <div
-                    class="bg-white dark:bg-secondary-800 rounded-3xl p-8 shadow-soft border border-neutral-100 dark:border-secondary-700 reveal transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                <div data-aos="fade-up" data-aos-delay="100"
+                    class="bg-white dark:bg-secondary-800 rounded-3xl p-8 shadow-soft border border-neutral-100 dark:border-secondary-700 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                     <h3 class="text-2xl font-heading font-bold text-secondary-900 dark:text-neutral-100 mb-3">Manajemen
                         RSVP Real-time</h3>
                     <p class="text-neutral-500 mb-5 leading-relaxed">Pantau kehadiran tamu secara langsung melalui
@@ -146,8 +146,7 @@
                     </div>
                 </div>
 
-                <div class="bg-primary-500 rounded-3xl p-8 text-white reveal transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
-                    style="transition-delay:.1s">
+                <div data-aos="fade-up" data-aos-delay="200" class="bg-primary-500 rounded-3xl p-8 text-white transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                     <div class="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center mb-6">
                         <i class="fa-brands fa-whatsapp text-2xl"></i>
                     </div>
@@ -165,8 +164,8 @@
 
             <div class="grid md:grid-cols-2 gap-6">
 
-                <div
-                    class="bg-white dark:bg-secondary-800 rounded-3xl p-8 shadow-soft border border-neutral-100 dark:border-secondary-700 reveal transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                <div data-aos="fade-up" data-aos-delay="100"
+                    class="bg-white dark:bg-secondary-800 rounded-3xl p-8 shadow-soft border border-neutral-100 dark:border-secondary-700 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                     <div class="w-12 h-12 bg-primary-50 dark:bg-secondary-800 rounded-2xl flex items-center justify-center mb-6">
                         <i class="fa-solid fa-shield-halved text-primary-500 text-xl"></i>
                     </div>
@@ -177,8 +176,7 @@
                         dienkripsi dengan standar industri terbaru.</p>
                 </div>
 
-                <div class="bg-white dark:bg-secondary-800 rounded-3xl p-8 shadow-soft border border-neutral-100 dark:border-secondary-700 reveal transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
-                    style="transition-delay:.1s">
+                <div data-aos="fade-up" data-aos-delay="200" class="bg-white dark:bg-secondary-800 rounded-3xl p-8 shadow-soft border border-neutral-100 dark:border-secondary-700 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                     <div class="mb-4 rounded-2xl overflow-hidden bg-secondary-800 h-28 flex items-center justify-center">
                         <div class="grid grid-cols-5 gap-1 p-3 opacity-80">
                             <div class="bg-white dark:bg-secondary-800 w-3 h-3 rounded-sm"></div>
@@ -209,10 +207,10 @@
     </section>
 
     <!-- ───────────────── WHATSAPP AUTOMATION ───────────────── -->
-    <section id="whatsapp" class="py-24 bg-neutral-50 dark:bg-secondary-900">
+    <section data-aos="fade-up" id="whatsapp" class="py-24 bg-neutral-50 dark:bg-secondary-900">
         <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
 
-            <div class="reveal">
+            <div data-aos="fade-right">
                 <div class="relative max-w-xs mx-auto">
                     <div class="bg-secondary-900 rounded-[3rem] p-3 shadow-2xl">
                         <div class="bg-secondary-800 rounded-[2.5rem] overflow-hidden aspect-[9/18]">
@@ -258,7 +256,7 @@
                 </div>
             </div>
 
-            <div class="reveal" style="transition-delay:.1s">
+            <div data-aos="fade-left" data-aos-delay="100">
                 <h2 class="text-4xl font-heading font-bold text-secondary-900 dark:text-neutral-100 mb-8">Otomasi
                     WhatsApp yang Personal</h2>
                 <div class="space-y-6">
@@ -304,8 +302,8 @@
     </section>
 
     <!-- ───────────────── CTA ───────────────── -->
-    <section id="harga" class="bg-gradient-to-br from-primary-600 to-primary-800 dark:from-primary-700 dark:to-primary-900 py-20">
-        <div class="max-w-2xl mx-auto px-6 text-center reveal">
+    <section data-aos="fade-up" id="harga" class="bg-gradient-to-br from-primary-600 to-primary-800 dark:from-primary-700 dark:to-primary-900 py-20">
+        <div class="max-w-2xl mx-auto px-6 text-center">
             <h2 class="text-4xl font-heading font-bold text-white mb-4">Siap Memodernisasi Acara Anda?</h2>
             <p class="text-primary-100 mb-10 leading-relaxed">Bergabunglah dengan ribuan penyelenggara acara yang telah
                 beralih ke Buku Tamu Digital Rayakan.</p>

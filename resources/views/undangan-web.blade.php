@@ -30,7 +30,7 @@
     <div class="h-16"></div>
 
     <!-- =========== HERO =========== -->
-    <section
+    <section data-aos="fade-up"
         class="relative overflow-hidden bg-gradient-to-br from-white via-primary-50/30 to-secondary-50 dark:from-secondary-900 dark:via-secondary-900 dark:to-secondary-900 pt-28 pb-16"
         id="layanan">
         <div class="absolute inset-0 overflow-hidden pointer-events-none">
@@ -47,28 +47,28 @@
         </div>
         <div class="relative max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
             <div>
-                <span
-                    class="fade-up inline-flex items-center gap-2 bg-primary-100 border border-primary-200 text-primary-700 text-xs font-semibold px-3 py-1.5 rounded-full mb-5">
+                <span data-aos="fade-up"
+                    class="inline-flex items-center gap-2 bg-primary-100 border border-primary-200 text-primary-700 text-xs font-semibold px-3 py-1.5 rounded-full mb-5">
                     <i class="fa-solid fa-star text-primary-500 text-[10px]"></i>
                     Undangan Digital Modern #1
                 </span>
-                <h1
-                    class="fade-up delay-1 font-heading text-[2.6rem] md:text-5xl font-bold leading-tight text-secondary-900 dark:text-neutral-100 mb-3">
+                <h1 data-aos="fade-up" data-aos-delay="100"
+                    class="font-heading text-[2.6rem] md:text-5xl font-bold leading-tight text-secondary-900 dark:text-neutral-100 mb-3">
                     Rayakan Momen<br>Berharga Dengan<br>
                     <span class="text-primary-500">Sentuhan Digital.</span>
                 </h1>
-                <p class="fade-up delay-2 text-neutral-500 text-[15px] leading-relaxed max-w-sm mb-8">
+                <p data-aos="fade-up" data-aos-delay="200" class="text-neutral-500 text-[15px] leading-relaxed max-w-sm mb-8">
                     Buat undangan pernikahan, ulang tahun, atau acara korporat dalam hitungan menit. Elegan, interaktif,
                     dan mudah dibagikan.
                 </p>
-                <div class="fade-up delay-3 flex items-center gap-3">
+                <div data-aos="fade-up" data-aos-delay="300" class="flex items-center gap-3">
                     <a href="{{ route('register') }}"
                         class="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-semibold px-6 py-3 rounded-full transition shadow-soft">
                         Buat Sekarang <i class="fa-solid fa-arrow-right text-sm"></i>
                     </a>
                 </div>
             </div>
-            <div class="relative flex justify-center fade-up delay-4">
+            <div data-aos="fade-up" data-aos-delay="400" class="relative flex justify-center">
                 <div class="relative w-56 md:w-64 mx-auto">
                     <div class="bg-[#1c1c1e] rounded-[2.5rem] p-2 shadow-2xl">
                         <div class="bg-[#2d1b0e] rounded-[2rem] overflow-hidden relative" style="aspect-ratio:9/19">
@@ -107,9 +107,9 @@
         </section>
         
         <!-- =========== FITUR =========== -->
-        <section class="py-20 bg-white dark:bg-secondary-800" id="fitur">
+        <section data-aos="fade-up" class="py-20 bg-white dark:bg-secondary-800" id="fitur">
             <div class="max-w-6xl mx-auto px-6">
-                <div class="text-center mb-12">
+                <div data-aos="fade-up" class="text-center mb-12">
                 <h2 class="font-heading text-3xl md:text-4xl font-bold text-secondary-900 dark:text-neutral-100 mb-3">
                     Fitur Interaktif Tanpa
                     Batas</h2>
@@ -118,7 +118,7 @@
                     emosi dan kemudahan dalam satu genggaman tamu Anda.</p>
             </div>
             <div class="grid md:grid-cols-2 gap-5">
-                <div class="bg-neutral-50 dark:bg-secondary-800 rounded-3xl p-6 overflow-hidden relative shadow-soft">
+                <div data-aos="fade-up" data-aos-delay="100" class="bg-neutral-50 dark:bg-secondary-800 rounded-3xl p-6 overflow-hidden relative shadow-soft">
                     <div class="w-10 h-10 bg-primary-100 rounded-xl flex items-center justify-center mb-4">
                         <i class="fa-regular fa-images text-primary-500 text-lg"></i>
                     </div>
@@ -135,7 +135,7 @@
                         <div class="bg-primary-100 rounded-xl h-11" style="background:linear-gradient(135deg,#bfdbfe,#60a5fa)"></div>
                     </div>
                 </div>
-                <div class="bg-neutral-50 dark:bg-secondary-800 rounded-3xl p-6 relative overflow-hidden shadow-soft">
+                <div data-aos="fade-up" data-aos-delay="200" class="bg-neutral-50 dark:bg-secondary-800 rounded-3xl p-6 relative overflow-hidden shadow-soft">
                     <div class="w-10 h-10 bg-primary-100 rounded-xl flex items-center justify-center mb-4">
                         <i class="fa-solid fa-location-dot text-primary-500 text-lg"></i>
                     </div>
@@ -158,7 +158,7 @@
                         </div>
                         </div>
                         </div>
-                        <div class="bg-primary-500 rounded-3xl p-6 text-white shadow-soft">
+                        <div data-aos="fade-up" data-aos-delay="300" class="bg-primary-500 rounded-3xl p-6 text-white shadow-soft">
                             <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center mb-4">
                                 <i class="fa-solid fa-music text-white text-lg"></i>
                             </div>
@@ -179,7 +179,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="bg-neutral-50 dark:bg-secondary-800 rounded-3xl p-6 shadow-soft">
+                        <div data-aos="fade-up" data-aos-delay="100" class="bg-neutral-50 dark:bg-secondary-800 rounded-3xl p-6 shadow-soft">
                             <div class="w-10 h-10 bg-primary-100 rounded-xl flex items-center justify-center mb-4">
                                 <i class="fa-solid fa-envelope-open-text text-primary-500 text-lg"></i>
                             </div>
@@ -215,9 +215,9 @@
                 </section>
                 
                 <!-- =========== HARGA =========== -->
-                <section class="py-20 bg-neutral-50 dark:bg-secondary-900" id="harga">
+                <section data-aos="fade-up" class="py-20 bg-neutral-50 dark:bg-secondary-900" id="harga">
                     <div class="max-w-6xl mx-auto px-6">
-                        <div class="mb-10">
+                        <div data-aos="fade-up" class="mb-10">
                 <h2 class="font-heading text-3xl md:text-4xl font-bold text-secondary-900 dark:text-neutral-100 mb-2">
                     Pilih Paket Sesuai
                     Kebutuhan</h2>
@@ -228,8 +228,8 @@
 
 
             <div class="mt-10 space-y-6 sm:space-y-0 sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:gap-6">
-                @forelse($packages as $package)
-                    <div
+                @forelse($packages as $index => $package)
+                    <div data-aos="fade-up" data-aos-delay="{{ ($index % 4) * 100 + 100 }}"
                         class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft transition-all duration-300 hover:shadow-xl hover:-translate-y-1 {{ $package->is_popular ? 'ring-2 ring-primary-500 shadow-lg' : 'border border-neutral-200' }}">
 
                         <!-- Popular Badge -->
@@ -362,7 +362,7 @@
     </section>
 
     <!-- =========== CTA =========== -->
-    <section class="py-16 px-6">
+    <section data-aos="fade-up" class="py-16 px-6">
         <div
             class="max-w-4xl mx-auto bg-gradient-to-br from-primary-600 to-primary-800 rounded-3xl p-10 md:p-14 text-center relative overflow-hidden">
             <div

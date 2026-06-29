@@ -18,6 +18,10 @@ return Application::configure(basePath: dirname(__DIR__))
             'ensure_tier' => \App\Http\Middleware\EnsureTierAccess::class,
         ]);
 
+        $middleware->web(append: [
+            \App\Http\Middleware\Impersonate::class,
+        ]);
+
         $middleware->validateCsrfTokens(except: [
             'payments/notification',
         ]);

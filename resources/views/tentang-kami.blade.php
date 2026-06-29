@@ -30,8 +30,8 @@
     <div class="h-16"></div>
 
     <!-- ═══════════════════════════ HERO ═══════════════════════════ -->
-    <section
-        class="relative overflow-hidden bg-gradient-to-br from-white via-primary-50/30 to-secondary-50 dark:from-secondary-900 dark:via-secondary-900 dark:to-secondary-900 px-6 pt-20 pb-16 text-center reveal">
+    <section data-aos="fade-up"
+        class="relative overflow-hidden bg-gradient-to-br from-white via-primary-50/30 to-secondary-50 dark:from-secondary-900 dark:via-secondary-900 dark:to-secondary-900 px-6 pt-20 pb-16 text-center">
         <div class="absolute inset-0 overflow-hidden pointer-events-none">
             <div class="absolute inset-0 bg-gradient-to-tr from-primary-500/[0.03] to-transparent"></div>
             <div class="absolute inset-0"
@@ -70,7 +70,7 @@
     </section>
 
     <!-- ═══════════════════════════ HERO IMAGE ═══════════════════════════ -->
-    <section class="px-6 pb-20 reveal">
+    <section data-aos="fade-up" class="px-6 pb-20">
         <div class="max-w-4xl mx-auto relative">
             <div
                 class="rounded-2xl overflow-hidden aspect-[16/7] relative bg-gradient-to-br from-neutral-100 to-neutral-200 dark:from-secondary-800 dark:to-secondary-800">
@@ -106,7 +106,7 @@
     </section>
 
     <!-- ═══════════════════════════ VISI & MISI ═══════════════════════════ -->
-    <section class="px-6 py-16 bg-white dark:bg-secondary-800 reveal">
+    <section data-aos="fade-up" class="px-6 py-16 bg-white dark:bg-secondary-800">
         <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-6">
 
             <!-- Visi -->
@@ -157,9 +157,9 @@
     </section>
 
     <!-- ═══════════════════════════ NILAI-NILAI ═══════════════════════════ -->
-    <section class="px-6 py-20 reveal">
+    <section data-aos="fade-up" class="px-6 py-20">
         <div class="max-w-5xl mx-auto">
-            <div class="text-center mb-12">
+            <div data-aos="fade-up" class="text-center mb-12">
                 <h2 class="font-heading text-4xl font-bold text-secondary-800 dark:text-neutral-200 mb-3">Nilai-Nilai
                     Kami</h2>
                 <p class="text-neutral-500 text-sm max-w-sm mx-auto">Filosofi yang mendasari setiap pixel dan baris kode
@@ -168,7 +168,7 @@
 
             <div class="grid md:grid-cols-3 gap-6">
 
-                <div
+                <div data-aos="fade-up" data-aos-delay="100"
                     class="bg-white dark:bg-secondary-800 rounded-2xl p-7 border border-neutral-100 dark:border-secondary-700 shadow-soft transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                     <div class="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center mb-4 text-primary-600">
                         <i class="fa-solid fa-wand-magic-sparkles"></i>
@@ -179,7 +179,7 @@
                         untuk memberikan pengalaman undangan yang interaktif dan berkesan bagi setiap tamu.</p>
                 </div>
 
-                <div
+                <div data-aos="fade-up" data-aos-delay="200"
                     class="bg-white dark:bg-secondary-800 rounded-2xl p-7 border border-neutral-100 dark:border-secondary-700 shadow-soft transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                     <div class="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center mb-4 text-primary-600">
                         <i class="fa-solid fa-film"></i>
@@ -190,7 +190,7 @@
                         untuk memberikan kesan mewah dan profesional layaknya karya film layar lebar.</p>
                 </div>
 
-                <div
+                <div data-aos="fade-up" data-aos-delay="300"
                     class="bg-white dark:bg-secondary-800 rounded-2xl p-7 border border-neutral-100 dark:border-secondary-700 shadow-soft transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                     <div class="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center mb-4 text-primary-600">
                         <i class="fa-regular fa-heart"></i>
@@ -206,7 +206,7 @@
     </section>
 
     <!-- ═══════════════════════════ PERJALANAN ═══════════════════════════ -->
-    <section class="px-6 py-20 bg-white dark:bg-secondary-800 reveal">
+    <section data-aos="fade-up" class="px-6 py-20 bg-white dark:bg-secondary-800">
         <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-12 items-center">
 
             <!-- Images column -->
@@ -279,7 +279,7 @@
     </section>
 
     <!-- ═══════════════════════════ CTA ═══════════════════════════ -->
-    <section class="px-6 py-20 bg-gradient-to-br from-primary-600 to-primary-800 reveal">
+    <section data-aos="fade-up" class="px-6 py-20 bg-gradient-to-br from-primary-600 to-primary-800">
         <div class="max-w-3xl mx-auto text-center">
             <h2 class="font-heading text-4xl md:text-5xl font-bold text-white leading-tight mb-5">
                 Siap Mengabadikan Momen <span class="italic">Bahagia</span> Anda?

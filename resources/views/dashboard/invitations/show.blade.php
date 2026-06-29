@@ -67,17 +67,17 @@
 
             {{-- Package Status --}}
             @php
-                $tierCode = $invitation->currentTier();
-                $tierBadgeColor = match ($tierCode) {
-                    'bronze' => 'bg-orange-100 dark:bg-orange-900/50 text-orange-700 dark:text-orange-300 border-orange-200 dark:border-orange-800',
-                    'silver' => 'bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 border-neutral-200 dark:border-neutral-600',
-                    'gold' => 'bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800',
-                    'platinum' => 'bg-primary-100 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 border-primary-200 dark:border-primary-800',
-                    default => 'bg-neutral-100 dark:bg-neutral-700 text-neutral-500 dark:text-neutral-400 border-neutral-200 dark:border-neutral-600'
-                };
-                $isExpired = $invitation->isTrialExpired();
-                $isTrial = $invitation->expires_at !== null && !$invitation->hasPremiumFeatures();
-                $daysLeft = $invitation->expires_at ? (int) max(0, now()->diffInDays($invitation->expires_at, false)) : null;
+$tierCode = $invitation->currentTier();
+$tierBadgeColor = match ($tierCode) {
+    'bronze' => 'bg-orange-100 dark:bg-orange-900/50 text-orange-700 dark:text-orange-300 border-orange-200 dark:border-orange-800',
+    'silver' => 'bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 border-neutral-200 dark:border-neutral-600',
+    'gold' => 'bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800',
+    'platinum' => 'bg-primary-100 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 border-primary-200 dark:border-primary-800',
+    default => 'bg-neutral-100 dark:bg-neutral-700 text-neutral-500 dark:text-neutral-400 border-neutral-200 dark:border-neutral-600'
+};
+$isExpired = $invitation->isTrialExpired();
+$isTrial = $invitation->expires_at !== null && !$invitation->hasPremiumFeatures();
+$daysLeft = $invitation->expires_at ? (int) max(0, now()->diffInDays($invitation->expires_at, false)) : null;
             @endphp
                 <div
                     class="bg-white dark:bg-secondary-800 border rounded-2xl p-5 flex items-center justify-between {{ $isExpired ? 'border-red-200 dark:border-red-800 bg-red-50/50 dark:bg-red-900/10' : ($isTrial ? 'border-amber-200 dark:border-amber-800 bg-amber-50/50 dark:bg-amber-900/10' : 'border-neutral-200 dark:border-neutral-700') }}">
@@ -170,9 +170,9 @@
                         <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1">Tamu yang hadir</p>
                         @if($invitation->isRsvpPaxLimited())
                             @php
-                                $paxUsed = $invitation->totalAcceptedPax();
-                                $paxMax = $invitation->max_global_pax_quota;
-                                $paxPercent = $paxMax > 0 ? round(($paxUsed / $paxMax) * 100) : 0;
+    $paxUsed = $invitation->totalAcceptedPax();
+    $paxMax = $invitation->max_global_pax_quota;
+    $paxPercent = $paxMax > 0 ? round(($paxUsed / $paxMax) * 100) : 0;
                             @endphp
                             <div class="mt-3">
                                 <div class="flex items-center justify-between text-xs text-neutral-500 dark:text-neutral-400 mb-1">
@@ -467,8 +467,8 @@
                                     <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
                                         @if($invitation->hasFeature('qr_checkin'))
                                             @php
-                                                $checkedIn = $invitation->guests()->where('attendance_status', 'hadir')->count();
-                                                $totalGuests = $invitation->guests()->count();
+    $checkedIn = $invitation->guests()->where('attendance_status', 'hadir')->count();
+    $totalGuests = $invitation->guests()->count();
                                             @endphp
                                             <span class="font-semibold text-emerald-600 dark:text-emerald-400">{{ $checkedIn }}</span> /
                                             {{ $totalGuests }} tamu sudah check-in
@@ -507,103 +507,6 @@
                             <p class="text-xs text-neutral-400 dark:text-neutral-500 mt-1 text-right">
                                 {{ $totalGuests > 0 ? round(($checkedIn / $totalGuests) * 100) : 0 }}% kehadiran
                             </p>
-
-                            {{-- Buku Tamu Terbaru --}}
-                            <div class="mt-6 border-t border-neutral-200 dark:border-secondary-600 pt-6">
-                                <h3 class="text-sm font-semibold text-secondary-800 dark:text-neutral-100 mb-4">Buku Tamu Terbaru</h3>
-                                @if($invitation->guests->isEmpty())
-                                    <p class="text-neutral-500 dark:text-neutral-400 text-center py-4 text-sm">Belum ada data tamu.</p>
-                                @else
-                                    <div x-data="{
-                                        search: '',
-                                        perPage: 10,
-                                        guests: {{ Js::from($guestsData) }},
-                                        get filteredGuests() {
-                                            if (! this.search) return this.guests;
-                                            const q = this.search.toLowerCase();
-                                            return this.guests.filter(g => g.name.toLowerCase().includes(q));
-                                        },
-                                        get displayGuests() {
-                                            const limit = parseInt(this.perPage);
-                                            return limit === 0 ? this.filteredGuests : this.filteredGuests.slice(0, limit);
-                                        },
-                                        get totalFiltered() {
-                                            return this.filteredGuests.length;
-                                        }
-                                    }">
-                                        <div class="flex flex-col sm:flex-row gap-3 mb-4">
-                                            <div class="relative flex-1">
-                                                <input type="text" x-model="search" placeholder="Cari nama tamu..."
-                                                    class="w-full px-4 py-2.5 pl-10 text-sm border border-neutral-200 dark:border-secondary-600 rounded-xl bg-white dark:bg-secondary-800 text-secondary-800 dark:text-neutral-100 focus:ring-2 focus:ring-primary-500 focus:border-transparent placeholder-neutral-400 dark:placeholder-neutral-500">
-                                                <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" fill="none"
-                                                    stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                                                </svg>
-                                            </div>
-                                            <select x-model="perPage"
-                                                class="px-3 py-2.5 text-sm border border-neutral-200 dark:border-secondary-600 rounded-xl bg-white dark:bg-secondary-800 text-secondary-800 dark:text-neutral-100 focus:ring-2 focus:ring-primary-500 focus:border-transparent">
-                                                <option value="10">10 data</option>
-                                                <option value="20">20 data</option>
-                                                <option value="0">Semua</option>
-                                            </select>
-                                        </div>
-
-                                        <div class="overflow-x-auto">
-                                            <table class="min-w-full divide-y divide-neutral-200 dark:divide-secondary-700">
-                                                <thead class="bg-neutral-50 dark:bg-secondary-700">
-                                                    <tr>
-                                                        <th scope="col"
-                                                            class="px-6 py-3 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Nama Tamu</th>
-                                                        <th scope="col"
-                                                            class="px-6 py-3 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Status</th>
-                                                        <th scope="col"
-                                                            class="px-6 py-3 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">No. Telepon</th>
-                                                        <th scope="col"
-                                                            class="px-6 py-3 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Check-in</th>
-                                                        <th scope="col"
-                                                            class="px-6 py-3 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Dibuat</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody
-                                                    class="bg-white dark:bg-secondary-800 divide-y divide-neutral-100 dark:divide-secondary-700">
-                                                    <template x-for="guest in displayGuests" :key="guest.id">
-                                                        <tr class="hover:bg-neutral-50 dark:hover:bg-secondary-700 transition-colors">
-                                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-secondary-800 dark:text-neutral-100"
-                                                                x-text="guest.name"></td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <span
-                                                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold"
-                                                                    :class="{
-                                                                        'bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-300': guest.attendance_status === 'hadir',
-                                                                        'bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300': guest.attendance_status === 'absen',
-                                                                        'bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300': guest.attendance_status === 'pending'
-                                                                    }" x-text="guest.attendance_status === 'hadir' ? 'Hadir' : (guest.attendance_status === 'absen' ? 'Absen' : 'Pending')">
-                                                                </span>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-600 dark:text-neutral-400"
-                                                                x-text="guest.phone"></td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400"
-                                                                x-text="guest.checked_in_at"></td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400"
-                                                                x-text="guest.created_at"></td>
-                                                        </tr>
-                                                    </template>
-                                                </tbody>
-                                            </table>
-                                            <div x-show="totalFiltered === 0"
-                                                class="text-center py-6 text-sm text-neutral-500 dark:text-neutral-400">
-                                                Tidak ada tamu yang cocok dengan pencarian "<span x-text="search"></span>".
-                                            </div>
-                                            <div x-show="totalFiltered > 0"
-                                                class="flex items-center justify-between pt-3 text-xs text-neutral-500 dark:text-neutral-400">
-                                                <span>Menampilkan <span x-text="displayGuests.length"></span> dari <span
-                                                        x-text="totalFiltered"></span> data</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endif
-                            </div>
                         @endif
                     </div>
                 </div>

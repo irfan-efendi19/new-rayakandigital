@@ -286,15 +286,6 @@ class InvitationController extends Controller
 
     public function update(Request $request, Invitation $invitation, ImageCompressionService $compressor)
     {
-        file_put_contents(storage_path('logs/debug.txt'), 'UPDATE CALLED: '.json_encode([
-            'slug_input' => $request->input('slug'),
-            'filled' => $request->filled('slug'),
-            'method' => $request->method(),
-            'venue_maps_url' => $request->input('venue_maps_url'),
-            'event_date' => $request->input('event_date'),
-            'is_active' => $request->input('is_active'),
-        ]).PHP_EOL, FILE_APPEND);
-
         Gate::authorize('update', $invitation);
 
         try {
@@ -341,10 +332,6 @@ class InvitationController extends Controller
                 'bride_groom_order' => 'nullable|in:male_first,female_first',
             ]);
         } catch (ValidationException $e) {
-            file_put_contents(storage_path('logs/debug.txt'), 'VALIDATION FAILED: '.json_encode([
-                'errors' => $e->errors(),
-                'input' => $request->except(['_token', '_method']),
-            ]).PHP_EOL, FILE_APPEND);
             throw $e;
         }
 
@@ -393,28 +380,17 @@ class InvitationController extends Controller
         // Handle slug update
         $newSlug = $request->filled('slug') ? trim($request->slug) : null;
 
-        file_put_contents(storage_path('logs/debug.txt'), 'SLUG LOGIC: '.json_encode([
-            'newSlug' => $newSlug,
-            'currentSlug' => $invitation->slug,
-            'isDifferent' => $newSlug && $newSlug !== $invitation->slug,
-        ]).PHP_EOL, FILE_APPEND);
-
         if ($newSlug && $newSlug !== $invitation->slug) {
             // Check if slug conflicts with existing routes
             if (in_array($newSlug, self::RESERVED_SLUGS)) {
                 return back()->withErrors(['slug' => 'Tautan "' . $newSlug . '" tidak tersedia. Silakan gunakan tautan kustom lain.'])->withInput();
             }
 
-            // Check if it already exists
             $exists = Invitation::where('slug', $newSlug)
                 ->where('id', '!=', $invitation->id)
                 ->exists();
 
-            file_put_contents(storage_path('logs/debug.txt'), 'EXISTS CHECK: '.json_encode(['exists' => $exists]).PHP_EOL, FILE_APPEND);
-
             if ($exists) {
-                file_put_contents(storage_path('logs/debug.txt'), 'SLUG EXISTS - RETURNING BACK'.PHP_EOL, FILE_APPEND);
-
                 return back()->withErrors(['slug' => 'Tautan sudah digunakan oleh undangan lain.'])->withInput();
             }
 
@@ -424,9 +400,7 @@ class InvitationController extends Controller
                 $validated['slug_change_count'] = ($invitation->slug_change_count ?? 0) + 1;
             }
         } else {
-            // Slug is empty or unchanged, don't update it
             unset($validated['slug']);
-            file_put_contents(storage_path('logs/debug.txt'), 'SLUG NOT CHANGED - UNSET'.PHP_EOL, FILE_APPEND);
         }
 
         // Handle YouTube URL & auto-extract video ID

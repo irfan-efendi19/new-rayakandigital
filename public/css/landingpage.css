@@ -91,6 +91,35 @@
     .animation-delay-1000 {
         animation-delay: 1s;
     }
+
+    .changing-texts {
+        height: 1.2em;
+        display: inline-block;
+        vertical-align: bottom;
+    }
+
+    .changing-texts-track {
+        display: block;
+        animation: slide 9s ease-in-out infinite;
+    }
+
+    .changing-texts-track span {
+        display: block;
+        height: 1.2em;
+        line-height: 1.2;
+        -webkit-background-clip: text;
+        background-clip: text;
+        text-shadow: 0 8px 24px rgba(249, 115, 22, 0.16);
+        white-space: nowrap;
+    }
+
+    @keyframes slide {
+        0%, 20% { transform: translateY(0); }
+        25%, 45% { transform: translateY(-25%); }
+        50%, 70% { transform: translateY(-50%); }
+        75%, 95% { transform: translateY(-75%); }
+        100% { transform: translateY(-75%); }
+    }
     
     @media (max-width: 1024px) {
         .animate-bounce-slow {

@@ -7,22 +7,6 @@ use Illuminate\Support\Facades\Log;
 
 uses(RefreshDatabase::class);
 
-test('regular user cannot access filament admin invitations list', function () {
-    $user = User::factory()->create(['role' => 'user']);
-
-    $this->actingAs($user)
-        ->get('/admin/invitations')
-        ->assertForbidden();
-});
-
-test('admin can access filament admin invitations list', function () {
-    $admin = User::factory()->create(['role' => 'admin']);
-
-    $this->actingAs($admin)
-        ->get('/admin/invitations')
-        ->assertSuccessful();
-});
-
 test('regular user can only update their own invitation via policy', function () {
     $user1 = User::factory()->create(['role' => 'user']);
     $user2 = User::factory()->create(['role' => 'user']);

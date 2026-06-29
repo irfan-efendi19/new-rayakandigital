@@ -47,6 +47,13 @@ Route::view('/tentang-kami', 'tentang-kami')->name('tentang-kami');
 Route::get('/hubungi-kami', [App\Http\Controllers\ContactController::class, 'show'])->name('hubungi-kami');
 Route::post('/hubungi-kami', [App\Http\Controllers\ContactController::class, 'submit'])->name('hubungi-kami.submit');
 
+// Admin Impersonation Routes
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'admin'])->group(function () {
+    Route::get('/impersonate', [\App\Http\Controllers\Admin\ImpersonationController::class, 'index'])->name('impersonate.index');
+    Route::post('/impersonate/leave', [\App\Http\Controllers\Admin\ImpersonationController::class, 'leave'])->name('impersonate.leave');
+    Route::post('/impersonate/{user}', [\App\Http\Controllers\Admin\ImpersonationController::class, 'switch'])->name('impersonate.switch');
+});
+
 // Google OAuth
 Route::prefix('auth/google')->name('google.')->group(function () {
     Route::get('/', [SocialiteController::class, 'redirectToGoogle'])->name('redirect');

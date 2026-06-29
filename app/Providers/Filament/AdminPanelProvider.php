@@ -2,7 +2,6 @@
 
 namespace App\Providers\Filament;
 
-use App\Filament\Widgets\InvitationsChart;
 use App\Filament\Widgets\OrdersByStatusChart;
 use App\Filament\Widgets\PendingOrders;
 use App\Filament\Widgets\RevenueChart;
@@ -14,6 +13,7 @@ use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use App\Filament\Pages\Dashboard;
+use App\Http\Middleware\NoindexAdminPanel;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
@@ -62,7 +62,6 @@ class AdminPanelProvider extends PanelProvider
                 AccountWidget::class,
                 StatsOverview::class,
                 RevenueChart::class,
-                InvitationsChart::class,
                 UsersChart::class,
                 OrdersByStatusChart::class,
                 SubscriptionTiersChart::class,
@@ -78,6 +77,7 @@ class AdminPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                NoindexAdminPanel::class,
             ])
             ->authMiddleware([
                 Authenticate::class,

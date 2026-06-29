@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Models\Invitation;
 use App\Models\Order;
 use App\Models\Package;
 use App\Models\PaymentMethodConfig;
@@ -28,7 +29,9 @@ class CheckoutController extends Controller
         $invitationId = $request->query('invitation_id');
         $invitation = null;
         if ($invitationId) {
-            $invitation = $user->invitations()->find($invitationId);
+            $invitation = $user->isAdmin()
+                ? Invitation::find($invitationId)
+                : $user->invitations()->find($invitationId);
             abort_unless($invitation, 404);
         }
 
@@ -56,12 +59,22 @@ class CheckoutController extends Controller
 
         $user = $request->user();
         $tier = $validated['tier'];
+        $isAdmin = $user->isAdmin();
 
-        $invitationId = $validated['invitation_id'] ?? $user->invitations()->first()?->id;
+        $invitationId = $validated['invitation_id'] ?? (
+            $isAdmin ? Invitation::first()?->id : $user->invitations()->first()?->id
+        );
 
-        abort_if($invitationId && !$user->invitations()->where('id', $invitationId)->exists(), 403);
+        if ($invitationId) {
+            $ownsInvitation = $isAdmin
+                ? Invitation::where('id', $invitationId)->exists()
+                : $user->invitations()->where('id', $invitationId)->exists();
+            abort_if(!$ownsInvitation, 403);
+        }
 
-        $invitation = $invitationId ? $user->invitations()->find($invitationId) : null;
+        $invitation = $invitationId ? (
+            $isAdmin ? Invitation::find($invitationId) : $user->invitations()->find($invitationId)
+        ) : null;
         $currentTier = $invitation ? $invitation->currentTier() : 'free';
         $tierRank = Package::where('is_visible', true)->pluck('sort_order', 'package_code');
 

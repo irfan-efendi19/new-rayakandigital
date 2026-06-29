@@ -33,7 +33,7 @@
     <!-- Spacer to prevent content from hiding behind fixed navbar -->
     <div class="h-16"></div>
 
-    <section
+    <section data-aos="fade-up"
         class="relative overflow-hidden bg-gradient-to-br from-white via-primary-50/30 to-secondary-50 dark:from-secondary-900 dark:via-secondary-900 dark:to-secondary-900 py-20 md:py-28 lg:py-32">
         <div class="absolute inset-0 overflow-hidden pointer-events-none">
             <div class="absolute inset-0 bg-gradient-to-tr from-primary-500/[0.03] to-transparent"></div>
@@ -46,7 +46,7 @@
             <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
 
                 <!-- Left Content -->
-                <div class="flex-1 text-center lg:text-left">
+                <div data-aos="fade-right" data-aos-delay="100" class="flex-1 text-center lg:text-left">
                     <!-- Badge / Label -->
                     <div
                         class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-100 text-primary-700 text-sm font-semibold mb-6 shadow-sm">
@@ -62,8 +62,14 @@
                     <h1
                         class="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-secondary-900 dark:text-neutral-100 leading-tight mb-6">
                         Cara Mudah Buat
-                        <span class="relative inline-block">
-                            Undangan Digital!
+                        <span
+                            class="changing-texts relative inline-block align-bottom overflow-hidden min-w-[220px] sm:min-w-[260px] md:min-w-[300px] lg:min-w-[340px]">
+                            <span class="changing-texts-track">
+                                <span>Undangan Digital</span>
+                                <span>Buku Tamu</span>
+                                <span>Live Streaming</span>
+                                <span>Undangan Digital</span>
+                            </span>
                         </span>
                     </h1>
 
@@ -113,7 +119,7 @@
                 </div>
 
                 <!-- Right Content - Mockup / Preview -->
-                <div class="flex-1 relative">
+                <div data-aos="fade-left" data-aos-delay="200" class="flex-1 relative">
                     <!-- Decorative rings -->
                     <div class="absolute -top-10 -right-10 w-40 h-40 border-2 border-primary-200/30 rounded-full">
                     </div>
@@ -122,69 +128,9 @@
 
                     <!-- Main Mockup Card -->
                     <div
-                        class="relative bg-white dark:bg-secondary-800 rounded-3xl shadow-2xl overflow-hidden transform hover:scale-105 transition-transform duration-500 ease-out">
+                        class="relative overflow-hidden transform hover:scale-105 transition-transform duration-500 ease-out">
                         <!-- Mockup Header -->
-                        <div class="bg-gradient-to-r from-primary-500 to-primary-600 px-6 py-4">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center gap-2">
-                                    <div class="w-3 h-3 bg-white/30 rounded-full"></div>
-                                    <div class="w-3 h-3 bg-white/30 rounded-full"></div>
-                                    <div class="w-3 h-3 bg-white/30 rounded-full"></div>
-                                </div>
-                                <span class="text-white/80 text-xs font-medium">Undangan Digital</span>
-                                <i class="fas fa-envelope-open-text text-white/60 text-sm"></i>
-                            </div>
-                        </div>
-
-                        <!-- Mockup Content -->
-                        <div class="p-6 bg-gradient-to-br from-neutral-50 to-white dark:from-secondary-800 dark:to-secondary-800">
-                            <!-- Wedding Couple Illustration -->
-                            <div class="text-center mb-4">
-                                <div
-                                    class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-primary-100 mb-3">
-                                    <i class="fas fa-heart text-3xl text-primary-500"></i>
-                                </div>
-                                <h3 class="font-heading text-xl font-bold text-secondary-800 dark:text-neutral-200">
-                                    Rayakan
-                                    Digital</h3>
-                                <p class="text-sm text-neutral-500">Pernikahan & Acara Spesial</p>
-                            </div>
-
-                            <!-- Mockup Features -->
-                            <div class="space-y-3">
-                                <div class="flex items-center gap-3 p-2 rounded-lg bg-primary-50/50">
-                                    <i class="fas fa-qrcode text-primary-500 w-5"></i>
-                                    <span class="text-sm text-neutral-700 dark:text-neutral-200">Check-in via QR
-                                        Code</span>
-                                </div>
-                                <div class="flex items-center gap-3 p-2 rounded-lg bg-primary-50/50">
-                                    <i class="fab fa-whatsapp text-emerald-500 w-5"></i>
-                                    <span class="text-sm text-neutral-700 dark:text-neutral-200">Kirim Otomatis
-                                        WA</span>
-                                </div>
-                                <div class="flex items-center gap-3 p-2 rounded-lg bg-primary-50/50">
-                                    <i class="fas fa-map-marker-alt text-red-500 w-5"></i>
-                                    <span class="text-sm text-neutral-700 dark:text-neutral-200">Live GPS
-                                        Location</span>
-                                </div>
-                            </div>
-
-                            <!-- Mockup Button -->
-                            <div
-                                class="mt-4 p-3 bg-gradient-to-r from-primary-500 to-primary-600 rounded-xl text-center">
-                                <p class="text-white text-xs font-semibold">✨ Buka Undangan ✨</p>
-                            </div>
-                        </div>
-
-                        <!-- Mockup Footer -->
-                        <div class="bg-neutral-100 dark:bg-secondary-800 px-6 py-3 flex justify-between items-center">
-                            <div class="flex gap-1">
-                                <i class="fas fa-circle text-[6px] text-neutral-400"></i>
-                                <i class="fas fa-circle text-[6px] text-neutral-400"></i>
-                                <i class="fas fa-circle text-[6px] text-neutral-400"></i>
-                            </div>
-                            <span class="text-xs text-neutral-400">themodernheritage.com</span>
-                        </div>
+                        <img src="{{ asset('img/mockup.png') }}" alt="Mockup Header" class="w-full h-full object-cover">
                     </div>
 
                     <!-- Floating Elements -->
@@ -209,12 +155,12 @@
     </section>
 
     <!-- Exclusive Services Section - Alternative Layout -->
-    <section id="services" x-data="reveal" :class="visible || 'opacity-0 translate-y-8'"
-        class="py-20 bg-gradient-to-br from-white via-tertiary/30 to-white dark:from-secondary-900 dark:via-secondary-900 dark:to-secondary-900 transition-all duration-700">
+    <section id="services" data-aos="fade-up"
+        class="py-20 bg-gradient-to-br from-white via-tertiary/30 to-white dark:from-secondary-900 dark:via-secondary-900 dark:to-secondary-900">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
             <!-- Section Header (same as above) -->
-            <div class="text-center max-w-3xl mx-auto mb-16">
+            <div data-aos="fade-up" class="text-center max-w-3xl mx-auto mb-16">
                 <span
                     class="inline-block px-4 py-1.5 rounded-full bg-primary-50 text-primary-600 text-sm font-semibold tracking-wide mb-4">
                     <i class="fas fa-crown mr-2 text-xs"></i>Exclusive Services
@@ -234,7 +180,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
 
                 <!-- Service 1 -->
-                <div
+                <div data-aos="fade-up" data-aos-delay="100"
                     class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-2 p-8">
                     <div class="absolute -top-4 left-6">
                         <div
@@ -261,7 +207,7 @@
                 </div>
 
                 <!-- Service 2 -->
-                <div
+                <div data-aos="fade-up" data-aos-delay="200"
                     class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-2 p-8">
                     <div class="absolute -top-4 left-6">
                         <div
@@ -288,7 +234,7 @@
                 </div>
 
                 <!-- Service 3 -->
-                <div
+                <div data-aos="fade-up" data-aos-delay="300"
                     class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-2 p-8">
                     <div class="absolute -top-4 left-6">
                         <div
@@ -316,7 +262,7 @@
             </div>
 
             <!-- CTA Section -->
-            <div class="mt-16 text-center">
+            <div data-aos="fade-up" class="mt-16 text-center">
                 <div
                     class="bg-gradient-to-r from-primary-50 to-tertiary dark:from-secondary-800 dark:to-secondary-800 rounded-2xl p-8 md:p-10">
                     <h3 class="text-2xl font-bold text-secondary-800 dark:text-neutral-200 mb-3">
@@ -336,7 +282,8 @@
     </section>
 
     <!-- How It Works Section - Modernized -->
-    <section id="how-it-works" class="relative py-24 px-4 overflow-hidden bg-tertiary dark:bg-secondary-900">
+    <section id="how-it-works" data-aos="fade-up"
+        class="relative py-24 px-4 overflow-hidden bg-tertiary dark:bg-secondary-900">
         <div
             class="absolute inset-0 bg-gradient-to-br from-white via-tertiary to-primary-50/30 dark:from-secondary-900 dark:via-secondary-900 dark:to-secondary-900">
         </div>
@@ -346,7 +293,7 @@
 
         <div class="relative max-w-7xl mx-auto">
             <!-- Header -->
-            <div class="text-center max-w-3xl mx-auto mb-16">
+            <div data-aos="fade-up" class="text-center max-w-3xl mx-auto mb-16">
                 <div
                     class="inline-flex items-center gap-2 px-4 py-2 bg-white/70 backdrop-blur-sm rounded-full shadow-soft mb-6 border border-white/50">
                     <i class="fas fa-bolt text-primary-500 text-sm"></i>
@@ -367,7 +314,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
 
                 <!-- Step 1 -->
-                <div class="group relative" x-data="{ hover: false }" @mouseenter="hover = true"
+                <div data-aos="fade-up" data-aos-delay="100" class="group relative" x-data="{ hover: false }" @mouseenter="hover = true"
                     @mouseleave="hover = false">
                     <div class="relative h-full bg-white dark:bg-secondary-800 rounded-2xl p-6 text-center transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 border border-neutral-200/50 dark:border-secondary-700/50"
                         :class="{ 'shadow-xl bg-white dark:bg-secondary-800': hover }">
@@ -401,7 +348,7 @@
                 </div>
 
                 <!-- Step 2 -->
-                <div class="group relative" x-data="{ hover: false }" @mouseenter="hover = true"
+                <div data-aos="fade-up" data-aos-delay="200" class="group relative" x-data="{ hover: false }" @mouseenter="hover = true"
                     @mouseleave="hover = false">
                     <div class="relative h-full bg-white dark:bg-secondary-800 rounded-2xl p-6 text-center transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 border border-neutral-200/50 dark:border-secondary-700/50"
                         :class="{ 'shadow-xl bg-white dark:bg-secondary-800': hover }">
@@ -433,7 +380,7 @@
                 </div>
 
                 <!-- Step 3 -->
-                <div class="group relative" x-data="{ hover: false }" @mouseenter="hover = true"
+                <div data-aos="fade-up" data-aos-delay="300" class="group relative" x-data="{ hover: false }" @mouseenter="hover = true"
                     @mouseleave="hover = false">
                     <div class="relative h-full bg-white dark:bg-secondary-800 rounded-2xl p-6 text-center transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 border border-neutral-200/50 dark:border-secondary-700/50"
                         :class="{ 'shadow-xl bg-white dark:bg-secondary-800': hover }">
@@ -465,7 +412,7 @@
                 </div>
 
                 <!-- Step 4 -->
-                <div class="group relative" x-data="{ hover: false }" @mouseenter="hover = true"
+                <div data-aos="fade-up" data-aos-delay="400" class="group relative" x-data="{ hover: false }" @mouseenter="hover = true"
                     @mouseleave="hover = false">
                     <div class="relative h-full bg-white dark:bg-secondary-800 rounded-2xl p-6 text-center transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 border border-neutral-200/50 dark:border-secondary-700/50"
                         :class="{ 'shadow-xl bg-white dark:bg-secondary-800': hover }">
@@ -511,7 +458,7 @@
             </div>
 
             <!-- Stats / Trust Indicators -->
-            <div class="mt-20 grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div data-aos="fade-up" class="mt-20 grid grid-cols-1 md:grid-cols-3 gap-6">
                 <!-- <div class="text-center">
                     <div class="flex items-center justify-center gap-2 mb-2">
                         <i class="fas fa-users text-primary-500 text-2xl"></i>
@@ -575,11 +522,11 @@
 
     <!-- Theme Catalog Section -->
     <!-- Themes Catalog Section - Modernized -->
-    <section id="themes" x-data="{ filter: 'all' }"
-        class="py-20 bg-tertiary dark:bg-secondary-900 transition-all duration-700 overflow-hidden">
+    <section id="themes" x-data="{ filter: 'all' }" data-aos="fade-up"
+        class="py-20 bg-tertiary dark:bg-secondary-900 overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Section Header -->
-            <div class="text-center max-w-3xl mx-auto mb-12">
+            <div data-aos="fade-up" class="text-center max-w-3xl mx-auto mb-12">
                 <span
                     class="inline-block px-4 py-1.5 rounded-full bg-primary-50 text-primary-600 text-sm font-semibold tracking-wide mb-4">
                     <i class="fas fa-palette mr-2 text-xs"></i>Katalog Tema
@@ -782,11 +729,11 @@
     </section>
 
     <!-- Feature Section -->
-    <section x-data="reveal" :class="visible || 'opacity-0 translate-y-8'"
-        class="py-20 bg-gradient-to-br from-white via-tertiary/30 to-white dark:from-secondary-900 dark:via-secondary-900 dark:to-secondary-900 transition-all duration-700">
+    <section data-aos="fade-up"
+        class="py-20 bg-gradient-to-br from-white via-tertiary/30 to-white dark:from-secondary-900 dark:via-secondary-900 dark:to-secondary-900">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Section Header -->
-            <div class="text-center max-w-3xl mx-auto">
+            <div data-aos="fade-up" class="text-center max-w-3xl mx-auto">
                 <span
                     class="inline-block px-4 py-1.5 rounded-full bg-primary-50 text-primary-600 text-sm font-semibold tracking-wide mb-4">
                     <i class="fas fa-star mr-2 text-xs"></i>Fitur Unggulan
@@ -808,7 +755,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
 
                     <!-- Feature 1 - RSVP Management -->
-                    <div
+                    <div data-aos="fade-up" data-aos-delay="100"
                         class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6">
                         <div
                             class="absolute inset-0 bg-gradient-to-br from-primary-500/5 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -832,7 +779,7 @@
                                 </div>
                                 
                                 <!-- Feature 2 - Personal Links -->
-                                <div
+                                <div data-aos="fade-up" data-aos-delay="200"
                                     class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6">
                                     <div class="relative">
                                         <div
@@ -853,7 +800,7 @@
                                 </div>
                                 
                                 <!-- Feature 3 - Digital Gift -->
-                                <div
+                                <div data-aos="fade-up" data-aos-delay="300"
                                     class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6">
                                     <div class="relative">
                                         <div
@@ -874,7 +821,7 @@
                                 </div>
                                 
                                 <!-- Feature 4 - Guest Book -->
-                                <div
+                                <div data-aos="fade-up" data-aos-delay="100"
                                     class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6">
                                     <div class="relative">
                                         <div
@@ -895,7 +842,7 @@
                                 </div>
                                 
                                 <!-- Feature 5 - Gallery Photo -->
-                                <div
+                                <div data-aos="fade-up" data-aos-delay="200"
                                     class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6">
                                     <div class="relative">
                                         <div
@@ -917,7 +864,7 @@
                                 </div>
                                 
                                 <!-- Feature 6 - Countdown Timer -->
-                                <div
+                                <div data-aos="fade-up" data-aos-delay="300"
                                     class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6">
                                     <div class="relative">
                                         <div
@@ -939,7 +886,7 @@
                                 </div>
                                 
                                 <!-- Feature 7 - Location Maps -->
-                                <div
+                                <div data-aos="fade-up" data-aos-delay="100"
                                     class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6">
                                     <div class="relative">
                                         <div
@@ -962,7 +909,7 @@
                                 </div>
                                 
                                 <!-- Feature 8 - WhatsApp Integration -->
-                                <div
+                                <div data-aos="fade-up" data-aos-delay="200"
                                     class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6">
                                     <div class="relative">
                                         <div
@@ -983,7 +930,7 @@
                                 </div>
                                 
                                 <!-- Feature 9 - Analytics Dashboard -->
-                                <div
+                                <div data-aos="fade-up" data-aos-delay="300"
                                     class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6">
                                     <div class="relative">
                                         <div
@@ -1020,10 +967,10 @@
     <!-- Pricing Section - Modernized -->
     {{-- Pricing & Services Section with Tab Navigation --}}
     {{-- Pricing & Services Section with Tab Navigation --}}
-    <section x-data="{ activeTab: 'undangan' }" class="py-20 bg-tertiary dark:bg-secondary-900 transition-all duration-700">
+    <section x-data="{ activeTab: 'undangan' }" data-aos="fade-up" class="py-20 bg-tertiary dark:bg-secondary-900">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             {{-- Section Header --}}
-            <div class="text-center max-w-3xl mx-auto mb-12">
+            <div data-aos="fade-up" class="text-center max-w-3xl mx-auto mb-12">
                 <span
                     class="inline-block px-4 py-1.5 rounded-full bg-primary-50 text-primary-600 text-sm font-semibold tracking-wide mb-4">
                     <i class="fas fa-layer-group mr-2 text-xs"></i>Layanan Kami
@@ -1410,11 +1357,11 @@
             </div>{{-- end panel live streaming --}}
         </div>
     </section>
-    <section
+    <section data-aos="fade-up"
         class="relative py-16 px-4 bg-gradient-to-br from-orange-50 via-white to-orange-50/30 dark:from-secondary-900 dark:via-secondary-900 dark:to-secondary-900">
         <div class="max-w-3xl mx-auto">
             <!-- Header -->
-            <div class="text-center mb-10">
+            <div data-aos="fade-up" class="text-center mb-10">
                 <div class="inline-flex items-center gap-2 px-3 py-1 bg-orange-100 dark:bg-secondary-800 rounded-full mb-3">
                     <span class="text-xs font-semibold text-orange-600 dark:text-orange-400">FAQ</span>
                 </div>
@@ -1428,7 +1375,7 @@
             <!-- FAQ Items -->
             <div class="space-y-3">
                 <!-- Item 1 -->
-                <div
+                <div data-aos="fade-up" data-aos-delay="100"
                     class="group bg-white/60 dark:bg-secondary-800/60 backdrop-blur-sm rounded-xl border border-white/50 dark:border-secondary-700/50 shadow-sm hover:shadow-md transition-all">
                     <details class="group">
                         <summary class="flex items-center justify-between cursor-pointer list-none p-5">
@@ -1457,7 +1404,7 @@
                                     </div>
                                     
                                     <!-- Item 2 -->
-                                    <div
+                                    <div data-aos="fade-up" data-aos-delay="200"
                                         class="group bg-white/60 dark:bg-secondary-800/60 backdrop-blur-sm rounded-xl border border-white/50 dark:border-secondary-700/50 shadow-sm hover:shadow-md transition-all">
                                         <details class="group">
                                             <summary class="flex items-center justify-between cursor-pointer list-none p-5">
@@ -1485,7 +1432,7 @@
                                     </div>
                                     
                                     <!-- Item 3 -->
-                                    <div
+                                    <div data-aos="fade-up" data-aos-delay="300"
                                         class="group bg-white/60 dark:bg-secondary-800/60 backdrop-blur-sm rounded-xl border border-white/50 dark:border-secondary-700/50 shadow-sm hover:shadow-md transition-all">
                                         <details class="group">
                                             <summary class="flex items-center justify-between cursor-pointer list-none p-5">
@@ -1513,7 +1460,7 @@
                                     </div>
                                     
                                     <!-- Item 4 -->
-                                    <div
+                                    <div data-aos="fade-up" data-aos-delay="100"
                                         class="group bg-white/60 dark:bg-secondary-800/60 backdrop-blur-sm rounded-xl border border-white/50 dark:border-secondary-700/50 shadow-sm hover:shadow-md transition-all">
                                         <details class="group">
                                             <summary class="flex items-center justify-between cursor-pointer list-none p-5">
@@ -1541,7 +1488,7 @@
                                     </div>
                                     
                                     <!-- Item 5 -->
-                                    <div
+                                    <div data-aos="fade-up" data-aos-delay="200"
                                         class="group bg-white/60 dark:bg-secondary-800/60 backdrop-blur-sm rounded-xl border border-white/50 dark:border-secondary-700/50 shadow-sm hover:shadow-md transition-all">
                                         <details class="group">
                                             <summary class="flex items-center justify-between cursor-pointer list-none p-5">
@@ -1569,7 +1516,7 @@
                                     </div>
                                     
                                     <!-- Item 6 -->
-                                    <div
+                                    <div data-aos="fade-up" data-aos-delay="300"
                                         class="group bg-white/60 dark:bg-secondary-800/60 backdrop-blur-sm rounded-xl border border-white/50 dark:border-secondary-700/50 shadow-sm hover:shadow-md transition-all">
                                         <details class="group">
                                             <summary class="flex items-center justify-between cursor-pointer list-none p-5">

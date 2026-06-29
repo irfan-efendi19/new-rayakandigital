@@ -29,7 +29,7 @@
     <div class="h-16"></div>
 
     <!-- ─── HERO ──────────────────────────────────────────── -->
-    <section
+    <section data-aos="fade-up"
         class="relative overflow-hidden bg-gradient-to-br from-white via-primary-50/30 to-secondary-50 dark:from-secondary-900 dark:via-secondary-900 dark:to-secondary-900 pt-16 pb-24">
         <div class="absolute inset-0 overflow-hidden pointer-events-none">
             <div class="absolute inset-0 bg-gradient-to-tr from-primary-500/[0.03] to-transparent"></div>
@@ -40,7 +40,7 @@
 
         <div class="relative max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
             <!-- Left -->
-            <div class="anim-fade-up">
+            <div data-aos="fade-right">
                 <span
                     class="inline-flex items-center gap-2 bg-primary-100 dark:bg-secondary-800 text-primary-700 dark:text-primary-400 text-xs font-semibold px-3 py-1.5 rounded-full mb-6">
                     <span class="w-2 h-2 rounded-full bg-primary-600 inline-block animate-pulse"></span>
@@ -68,7 +68,7 @@
             </div>
 
             <!-- Right — Video Mock -->
-            <div class="anim-fade-up anim-d2 relative">
+            <div data-aos="fade-left" data-aos-delay="200" class="relative">
                 <div
                     class="rounded-2xl overflow-hidden shadow-2xl aspect-video relative bg-gradient-to-br from-primary-100 to-neutral-200 dark:from-secondary-800 dark:to-secondary-800">
                     <!-- Thumbnail overlay -->
@@ -113,16 +113,16 @@
                         <i class="fa-solid fa-xmark text-secondary-800/40 cursor-pointer"></i>
                     </div>
                     <div class="p-3 space-y-2">
-                        <div class="anim-d1">
+                        <div data-aos="fade-up" data-aos-delay="100">
                             <span class="font-semibold text-primary-600 dark:text-primary-400">Maya:</span>
                             <span class="text-secondary-800/70 dark:text-neutral-200/70"> Selamat! Sangat cantik
                                 🌸</span>
                         </div>
-                        <div class="anim-d2">
+                        <div data-aos="fade-up" data-aos-delay="200">
                             <span class="font-semibold text-primary-600 dark:text-primary-400">Budi:</span>
                             <span class="text-secondary-800/70 dark:text-neutral-200/70"> Terlihat luar biasa</span>
                         </div>
-                        <div class="anim-d3">
+                        <div data-aos="fade-up" data-aos-delay="300">
                             <span class="font-semibold text-primary-600 dark:text-primary-400">Indah:</span>
                             <span class="text-secondary-800/70 dark:text-neutral-200/70"> Terharu menontonnya 😭</span>
                         </div>
@@ -158,9 +158,9 @@
     </section>
 
     <!-- ─── FITUR ──────────────────────────────────────────── -->
-    <section id="fitur" class="py-24 bg-white dark:bg-secondary-900">
+    <section data-aos="fade-up" id="fitur" class="py-24 bg-white dark:bg-secondary-900">
         <div class="max-w-6xl mx-auto px-6">
-            <div class="text-center mb-16 reveal">
+            <div data-aos="fade-up" class="text-center mb-16">
                 <h2 class="font-heading font-bold text-4xl text-secondary-900 dark:text-neutral-100 mb-3">Semua yang
                     Anda Butuhkan Ada di Sini</h2>
                 <p class="text-neutral-500 dark:text-neutral-400 max-w-xl mx-auto leading-relaxed">
@@ -170,8 +170,8 @@
             </div>
             <div class="grid md:grid-cols-3 gap-6">
 
-                <div
-                    class="reveal bg-tertiary dark:bg-secondary-900 rounded-2xl p-7 border border-primary-100 dark:border-secondary-700 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                <div data-aos="fade-up" data-aos-delay="100"
+                    class="bg-tertiary dark:bg-secondary-900 rounded-2xl p-7 border border-primary-100 dark:border-secondary-700 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                     <div class="w-12 h-12 rounded-xl bg-primary-100 dark:bg-secondary-800 flex items-center justify-center mb-5">
                         <i class="fa-solid fa-video text-primary-600 dark:text-primary-400 text-lg"></i>
                     </div>
@@ -181,8 +181,8 @@
                         terkasih secara sinematik melalui berbagai platform.</p>
                 </div>
 
-                <div
-                    class="reveal bg-tertiary dark:bg-secondary-900 rounded-2xl p-7 border border-primary-100 dark:border-secondary-700 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                <div data-aos="fade-up" data-aos-delay="200"
+                    class="bg-tertiary dark:bg-secondary-900 rounded-2xl p-7 border border-primary-100 dark:border-secondary-700 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                     <div class="w-12 h-12 rounded-xl bg-primary-100 dark:bg-secondary-800 flex items-center justify-center mb-5">
                         <i class="fa-solid fa-camera-rotate text-primary-600 dark:text-primary-400 text-lg"></i>
                     </div>
@@ -192,8 +192,8 @@
                         semua momen penting pernikahan Anda terekam secara optimal.</p>
                 </div>
 
-                <div
-                    class="reveal bg-tertiary dark:bg-secondary-900 rounded-2xl p-7 border border-primary-100 dark:border-secondary-700 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                <div data-aos="fade-up" data-aos-delay="300"
+                    class="bg-tertiary dark:bg-secondary-900 rounded-2xl p-7 border border-primary-100 dark:border-secondary-700 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                     <div class="w-12 h-12 rounded-xl bg-primary-100 dark:bg-secondary-800 flex items-center justify-center mb-5">
                         <i class="fa-solid fa-sliders text-primary-600 dark:text-primary-400 text-lg"></i>
                     </div>
@@ -203,8 +203,8 @@
                         memudahkan Anda menyesuaikan tampilan live stream dengan tema pernikahan Anda.</p>
                 </div>
 
-                <div
-                    class="reveal bg-tertiary dark:bg-secondary-900 rounded-2xl p-7 border border-primary-100 dark:border-secondary-700 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                <div data-aos="fade-up" data-aos-delay="100"
+                    class="bg-tertiary dark:bg-secondary-900 rounded-2xl p-7 border border-primary-100 dark:border-secondary-700 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                     <div class="w-12 h-12 rounded-xl bg-primary-100 dark:bg-secondary-800 flex items-center justify-center mb-5">
                         <i class="fa-solid fa-circle-dot text-primary-600 dark:text-primary-400 text-lg"></i>
                     </div>
@@ -214,8 +214,8 @@
                         penuh. Anda akan menerima hasilnya dan dapat menyimpan kenangan spesial ini selamanya.</p>
                 </div>
 
-                <div
-                    class="reveal bg-tertiary dark:bg-secondary-900 rounded-2xl p-7 border border-primary-100 dark:border-secondary-700 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                <div data-aos="fade-up" data-aos-delay="200"
+                    class="bg-tertiary dark:bg-secondary-900 rounded-2xl p-7 border border-primary-100 dark:border-secondary-700 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                     <div class="w-12 h-12 rounded-xl bg-primary-100 dark:bg-secondary-800 flex items-center justify-center mb-5">
                         <i class="fa-solid fa-shuffle text-primary-600 dark:text-primary-400 text-lg"></i>
                     </div>
@@ -226,8 +226,8 @@
                         lainnya.</p>
                 </div>
 
-                <div
-                    class="reveal bg-tertiary dark:bg-secondary-900 rounded-2xl p-7 border border-primary-100 dark:border-secondary-700 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                <div data-aos="fade-up" data-aos-delay="300"
+                    class="bg-tertiary dark:bg-secondary-900 rounded-2xl p-7 border border-primary-100 dark:border-secondary-700 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                     <div class="w-12 h-12 rounded-xl bg-primary-100 dark:bg-secondary-800 flex items-center justify-center mb-5">
                         <i class="fa-solid fa-desktop text-primary-600 dark:text-primary-400 text-lg"></i>
                     </div>
@@ -242,9 +242,9 @@
     </section>
 
     <!-- ─── TESTIMONIALS ───────────────────────────────────── -->
-    <section id="testimoni" class="py-24 bg-tertiary dark:bg-secondary-800">
+    <section data-aos="fade-up" id="testimoni" class="py-24 bg-tertiary dark:bg-secondary-800">
         <div class="max-w-6xl mx-auto px-6">
-            <div class="text-center mb-16 reveal">
+            <div data-aos="fade-up" class="text-center mb-16">
                 <h2 class="font-heading font-bold text-4xl text-secondary-900 dark:text-neutral-100 mb-3">Apa Kata
                     Mereka?</h2>
                 <p class="text-neutral-500 dark:text-neutral-400">Kebahagiaan klien adalah prioritas kami dalam
@@ -253,8 +253,8 @@
             </div>
             <div class="grid md:grid-cols-3 gap-6">
 
-                <div
-                    class="reveal bg-white dark:bg-secondary-800 rounded-2xl p-8 shadow-soft border border-primary-100 dark:border-secondary-700 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                <div data-aos="fade-up" data-aos-delay="100"
+                    class="bg-white dark:bg-secondary-800 rounded-2xl p-8 shadow-soft border border-primary-100 dark:border-secondary-700 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                     <div class="text-primary-400 dark:text-primary-300 text-3xl font-heading leading-none mb-4">"</div>
                     <p class="text-secondary-800/70 dark:text-neutral-200/70 text-sm leading-relaxed mb-6">"Layanan
                         streaming yang sangat
@@ -264,8 +264,8 @@
                     <p class="font-heading font-bold text-primary-600 dark:text-primary-400">Rian &amp; Shinta</p>
                 </div>
 
-                <div
-                    class="reveal bg-white dark:bg-secondary-800 rounded-2xl p-8 shadow-soft border border-primary-100 dark:border-secondary-700 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                <div data-aos="fade-up" data-aos-delay="200"
+                    class="bg-white dark:bg-secondary-800 rounded-2xl p-8 shadow-soft border border-primary-100 dark:border-secondary-700 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                     <div class="text-primary-400 dark:text-primary-300 text-3xl font-heading leading-none mb-4">"</div>
                     <p class="text-secondary-800/70 dark:text-neutral-200/70 text-sm leading-relaxed mb-6">"Sangat puas
                         dengan fitur Live
@@ -274,8 +274,8 @@
                     <p class="font-heading font-bold text-primary-600 dark:text-primary-400">Aditya &amp; Kartika</p>
                 </div>
 
-                <div
-                    class="reveal bg-white dark:bg-secondary-800 rounded-2xl p-8 shadow-soft border border-primary-100 dark:border-secondary-700 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                <div data-aos="fade-up" data-aos-delay="300"
+                    class="bg-white dark:bg-secondary-800 rounded-2xl p-8 shadow-soft border border-primary-100 dark:border-secondary-700 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                     <div class="text-primary-400 dark:text-primary-300 text-3xl font-heading leading-none mb-4">"</div>
                     <p class="text-secondary-800/70 dark:text-neutral-200/70 text-sm leading-relaxed mb-6">"Fitur
                         multi-platform sangat membantu.
@@ -288,9 +288,9 @@
     </section>
 
     <!-- ─── PRICING ────────────────────────────────────────── -->
-    <section id="paket" class="py-24 bg-white dark:bg-secondary-900">
+    <section data-aos="fade-up" id="paket" class="py-24 bg-white dark:bg-secondary-900">
         <div class="max-w-6xl mx-auto px-6">
-            <div class="text-center mb-16 reveal">
+            <div data-aos="fade-up" class="text-center mb-16">
                 <h2 class="font-heading font-bold text-4xl text-secondary-900 dark:text-neutral-100 mb-3">Pilihan Paket
                     Layanan</h2>
                 <p class="text-neutral-500 dark:text-neutral-400">Pilih paket yang sesuai dengan kebutuhan momen spesial
@@ -300,8 +300,8 @@
             <div class="grid md:grid-cols-3 gap-6 items-stretch">
 
                 <!-- Silver -->
-                <div
-                    class="reveal flex flex-col bg-tertiary dark:bg-secondary-900 rounded-2xl border border-primary-100 dark:border-secondary-700 p-8 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                <div data-aos="fade-up" data-aos-delay="100"
+                    class="flex flex-col bg-tertiary dark:bg-secondary-900 rounded-2xl border border-primary-100 dark:border-secondary-700 p-8 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                     <div class="mb-6">
                         <h3 class="font-heading font-bold text-2xl text-secondary-900 dark:text-neutral-100">Silver</h3>
                         <p class="text-neutral-500 dark:text-neutral-400 text-sm mt-1">Paket Dasar Terjangkau</p>
@@ -328,8 +328,8 @@
                 </div>
 
                 <!-- Gold (Popular) -->
-                <div
-                    class="reveal relative flex flex-col bg-primary-600 rounded-2xl p-8 text-white ring-2 ring-primary-500 shadow-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
+                <div data-aos="fade-up" data-aos-delay="200"
+                    class="relative flex flex-col bg-primary-600 rounded-2xl p-8 text-white ring-2 ring-primary-500 shadow-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
                     <span
                         class="absolute -top-4 left-1/2 -translate-x-1/2 bg-amber-400 text-secondary-800 dark:text-neutral-200 text-xs font-bold px-4 py-1.5 rounded-full shadow">
                         POPULER
@@ -364,8 +364,8 @@
                 </div>
 
                 <!-- Platinum -->
-                <div
-                    class="reveal flex flex-col bg-tertiary dark:bg-secondary-900 rounded-2xl border border-primary-100 p-8 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                <div data-aos="fade-up" data-aos-delay="300"
+                    class="flex flex-col bg-tertiary dark:bg-secondary-900 rounded-2xl border border-primary-100 p-8 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                     <div class="mb-6">
                         <h3 class="font-heading font-bold text-2xl text-secondary-900 dark:text-neutral-100">Platinum
                         </h3>
@@ -401,11 +401,11 @@
     </section>
 
     <!-- ─── CTA ───────────────────────────────────────────── -->
-    <section class="py-24 bg-gradient-to-br from-secondary-800 to-secondary-900 relative overflow-hidden">
+    <section data-aos="fade-up" class="py-24 bg-gradient-to-br from-secondary-800 to-secondary-900 relative overflow-hidden">
         <div class="absolute inset-0 pointer-events-none"
             style="background-image: radial-gradient(circle, rgba(255,255,255,0.08) 1px, transparent 1px); background-size: 32px 32px;">
         </div>
-        <div class="relative max-w-3xl mx-auto px-6 text-center reveal">
+        <div class="relative max-w-3xl mx-auto px-6 text-center">
             <h2 class="font-heading font-bold text-4xl md:text-5xl text-white mb-4">
                 Siap Menghubungkan Semua Orang?
             </h2>

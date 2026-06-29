@@ -102,6 +102,14 @@ document.addEventListener('alpine:init', () => {
 
 Alpine.start();
 
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+AOS.init({
+    duration: 800,
+    once: true,
+    offset: 100,
+});
+
 import './image-cropper';
 import './sweetalert';
 import './visitor-chart';
