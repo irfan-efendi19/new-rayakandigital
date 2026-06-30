@@ -211,6 +211,51 @@
         });
     }
 
+    function loadWishPage(url) {
+        var wishContainer = document.getElementById("wishContainer");
+        if (!wishContainer) return;
+
+        wishContainer.classList.add("loading");
+        fetch(url, {
+            headers: {
+                "X-Requested-With": "XMLHttpRequest",
+            },
+        })
+            .then(function (res) {
+                return res.text();
+            })
+            .then(function (html) {
+                var parser = new DOMParser();
+                var doc = parser.parseFromString(html, "text/html");
+                var newContainer = doc.getElementById("wishContainer");
+                if (newContainer) {
+                    wishContainer.innerHTML = newContainer.innerHTML;
+                    if (window.history && window.history.pushState) {
+                        window.history.pushState(null, "", url);
+                    }
+                }
+            })
+            .catch(function () {
+                console.warn("Gagal memuat halaman wishbook.");
+            })
+            .finally(function () {
+                wishContainer.classList.remove("loading");
+            });
+    }
+
+    var wishContainer = document.getElementById("wishContainer");
+    if (wishContainer) {
+        wishContainer.addEventListener("click", function (e) {
+            var pageLink = e.target.closest("a.page-link");
+            if (!pageLink || !pageLink.closest(".wish-pagination")) {
+                return;
+            }
+            e.preventDefault();
+            e.stopPropagation();
+            loadWishPage(pageLink.href);
+        });
+    }
+
     /* ==================== LIGHTBOX ==================== */
     var lightbox = document.getElementById('lightbox');
     var lightboxImg = document.getElementById('lightboxImg');

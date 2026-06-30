@@ -229,7 +229,7 @@ input, textarea, select { font-family: inherit; outline: none; }
 /* ==================== MUSIC ==================== */
 .music-btn {
     position: fixed;
-    top: 1.25rem;
+    bottom: 1.25rem;
     right: 1.25rem;
     z-index: 999;
     width: 44px;
@@ -992,6 +992,63 @@ input, textarea, select { font-family: inherit; outline: none; }
     margin-top: 2rem;
 }
 
+.wish-pagination {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+}
+
+.wish-pagination nav {
+    display: inline-flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.wish-pagination .pagination {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    gap: 0.5rem;
+}
+
+.wish-pagination .page-item {
+    display: inline-flex;
+}
+
+.wish-pagination .page-link,
+.wish-pagination .disabled .page-link,
+.wish-pagination .active .page-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.3rem;
+    min-height: 2.3rem;
+    padding: 0 0.75rem;
+    border-radius: 999px;
+    border: 1px solid #e0d8c8;
+    background: #fff;
+    color: #5d6f50;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.wish-pagination .active .page-link {
+    background: #5d6f50;
+    color: #fff;
+    border-color: #5d6f50;
+}
+
+.wish-pagination .disabled .page-link {
+    opacity: 0.5;
+    cursor: default;
+}
+
+#wishContainer.loading {
+    opacity: 0.65;
+    pointer-events: none;
+}
+
 .wish-item {
     padding: 1.25rem;
     background: #fff;
@@ -1097,5 +1154,114 @@ input, textarea, select { font-family: inherit; outline: none; }
 
     .section {
         padding: 3rem 0;
+    }
+}
+
+@media (min-width: 1024px) {
+    .split-content .couple-grid {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .split-content .couple-amp {
+        margin: 0.25rem 0;
+    }
+}
+
+/* ==================== LOADING OVERLAY ==================== */
+body.loading-active {
+    overflow: hidden;
+}
+
+.loading-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(160deg, #6b7f5e 0%, #8b9d83 30%, #7a8d6e 60%, #5d6f50 100%);
+    animation: loadingFade 0.6s ease 4.5s forwards;
+}
+
+.loading-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.loading-spinner {
+    text-align: center;
+    color: #fff8f0;
+}
+
+.loading-ring {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 1rem;
+    border: 3px solid rgba(255, 248, 240, 0.15);
+    border-top-color: #c9a84c;
+    border-radius: 50%;
+    animation: loadingSpin 0.8s linear infinite;
+}
+
+@keyframes loadingSpin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes loadingFade {
+    to { opacity: 0; pointer-events: none; }
+}
+
+.loading-text {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 0.95rem;
+    opacity: 0.8;
+}
+
+/* ==================== SPLIT SCREEN ==================== */
+.invitation-split {
+    display: flex;
+    min-height: 100vh;
+}
+
+.split-content {
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+    flex-shrink: 0;
+    background: #fcf9f4;
+}
+
+.split-wallpaper {
+    flex: 1;
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #6b7f5e;
+    display: none;
+}
+
+
+@media (max-width: 1023px) {
+    .split-content {
+        max-width: 100%;
+    }
+}
+
+@media (min-width: 1024px) {
+    .split-wallpaper {
+        display: block;
+        order: 0;
+    }
+
+    .split-content {
+        margin: 0;
+        order: 1;
+    }
+
+    .invitation-split {
+        justify-content: center;
     }
 }

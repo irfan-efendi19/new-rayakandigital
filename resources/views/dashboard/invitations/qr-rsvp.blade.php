@@ -127,6 +127,7 @@
                                     </div>
                                     <p class="text-xs text-neutral-400 dark:text-neutral-500 mt-1">
                                         {{ $report['total_pax_hadir'] }} dari {{ $invitation->max_global_pax_quota }} pax
+                                        (sisa <span class="font-semibold text-emerald-600 dark:text-emerald-400">{{ $invitation->remainingGlobalQuota() }}</span>)
                                     </p>
                                 </div>
                                 @endif

@@ -1718,11 +1718,7 @@
                                     document.addEventListener(
                                         'DOMContentLoaded',
                                         function() {
-                                            const maxAccounts = {
-                                                {
-                                                    $maxGift
-                                                }
-                                            };
+                                            const maxAccounts = {{ $maxGift }};
                                             const banksContainer =
                                                 document
                                                 .getElementById(
