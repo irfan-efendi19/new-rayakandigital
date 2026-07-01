@@ -561,7 +561,7 @@ if (empty($giftEwallets) && ($invitation->gift_ewallet_name || $invitation->gift
                                                                         </div>
                                                                         @if($wishes->hasPages())
                                                                             <div class="wish-pagination">
-                                                                                {{ $wishes->withQueryString()->links() }}
+                                                                                {{ $wishes->withQueryString()->links('vendor.pagination.garden') }}
                                                                             </div>
                                                                         @endif
                                                                     </div>
