@@ -103,6 +103,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // QR RSVP Universal
         Route::get('/invitations/{invitation}/qr-rsvp', [InvitationController::class, 'qrRsvp'])->name('invitations.qr-rsvp');
 
+        // Wishes
+        Route::delete('/invitations/{invitation}/wishes/{wish}', [WishController::class, 'destroy'])->name('invitations.wishes.destroy');
+
         // Guestbook / QR Scanner
         Route::get('/invitations/{invitation}/guestbook', [GuestbookController::class, 'index'])->name('invitations.guestbook');
         Route::get('/invitations/{invitation}/guestbook/pengaturan-layar-sapa', [WelcomeScreenController::class, 'settings'])->name('invitations.guestbook.settings');

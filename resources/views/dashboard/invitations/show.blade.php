@@ -515,7 +515,7 @@ $daysLeft = $invitation->expires_at ? (int) max(0, now()->diffInDays($invitation
                 <div
                     class="bg-white dark:bg-secondary-800 rounded-2xl shadow-soft border border-neutral-100 dark:border-secondary-700 overflow-hidden">
                     <div class="p-5">
-                        <h3 class="text-sm font-semibold text-secondary-800 dark:text-neutral-100 mb-4">Buku Tamu Terbaru</h3>
+                        <h3 class="text-sm font-semibold text-secondary-800 dark:text-neutral-100 mb-4">Pesan Para Tamu</h3>
                         @if($invitation->wishes->isEmpty())
                             <p class="text-neutral-500 dark:text-neutral-400 text-center py-4 text-sm">Belum ada ucapan dari tamu.</p>
                         @else
@@ -534,6 +534,31 @@ $daysLeft = $invitation->expires_at ? (int) max(0, now()->diffInDays($invitation
                                 },
                                 get totalFiltered() {
                                     return this.filteredWishes.length;
+                                },
+                                deleteWish(id) {
+                                    Swal.fire({
+                                        title: 'Hapus Ucapan?',
+                                        text: 'Ucapan ini akan dihapus permanen.',
+                                        icon: 'warning',
+                                        showCancelButton: true,
+                                        confirmButtonColor: '#d33',
+                                        cancelButtonColor: '#3085d6',
+                                        confirmButtonText: 'Ya, hapus!',
+                                        cancelButtonText: 'Batal',
+                                    }).then((result) => {
+                                        if (! result.isConfirmed) return;
+                                        const url = '{{ route('dashboard.invitations.wishes.destroy', ['invitation' => $invitation, 'wish' => '__ID__']) }}'.replace('__ID__', id);
+                                        fetch(url, { method: 'DELETE', headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' } })
+                                            .then(r => r.json())
+                                            .then(data => {
+                                                if (data.success) {
+                                                    this.wishes = this.wishes.filter(w => w.id !== id);
+                                                    Swal.fire({ icon: 'success', title: 'Berhasil!', text: data.message, timer: 1500, showConfirmButton: false });
+                                                } else {
+                                                    Swal.fire({ icon: 'error', title: 'Gagal!', text: 'Terjadi kesalahan. Silakan coba lagi.', timer: 2000, showConfirmButton: false });
+                                                }
+                                            });
+                                    });
                                 }
                             }">
                                 <div class="flex flex-col sm:flex-row gap-3 mb-4">
@@ -564,6 +589,8 @@ $daysLeft = $invitation->expires_at ? (int) max(0, now()->diffInDays($invitation
                                                     class="px-6 py-3 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Pesan</th>
                                                 <th scope="col"
                                                     class="px-6 py-3 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Waktu</th>
+                                                <th scope="col"
+                                                    class="px-6 py-3 text-right text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody
@@ -576,6 +603,15 @@ $daysLeft = $invitation->expires_at ? (int) max(0, now()->diffInDays($invitation
                                                         x-text="wish.message"></td>
                                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400"
                                                         x-text="wish.created_at_diff"></td>
+                                                    <td class="px-6 py-4 whitespace-nowrap text-right">
+                                                        <button @click="deleteWish(wish.id)"
+                                                            class="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-semibold text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/30 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/50 transition">
+                                                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                            </svg>
+                                                            Hapus
+                                                        </button>
+                                                    </td>
                                                 </tr>
                                             </template>
                                         </tbody>
