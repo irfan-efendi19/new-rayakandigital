@@ -11,19 +11,23 @@ class Addon extends Model
     use HasFactory;
 
     protected $fillable = [
-        'feature_name',
-        'feature_key',
+        'name',
+        'slug',
+        'description',
         'price',
-        'is_active',
+        'icon_identifier',
+        'is_available',
     ];
 
     protected $casts = [
         'price' => 'decimal:2',
-        'is_active' => 'boolean',
+        'is_available' => 'boolean',
     ];
 
     public function invitations(): BelongsToMany
     {
-        return $this->belongsToMany(Invitation::class)->withPivot('purchased_at')->withTimestamps();
+        return $this->belongsToMany(Invitation::class)
+            ->withPivot(['purchased_price', 'status_active', 'activated_at'])
+            ->withTimestamps();
     }
 }

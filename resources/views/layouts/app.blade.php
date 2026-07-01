@@ -11,6 +11,8 @@
 
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=plus-jakarta-sans:400,500,600,700,800|playfair-display:400,500,600,700&display=swap" rel="stylesheet" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+            crossorigin="anonymous" referrerpolicy="no-referrer" />
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         <script>
@@ -35,18 +37,13 @@
 
             @if(Auth::check() && Auth::user()->is_impersonated ?? false)
                 <div class="bg-amber-500 dark:bg-amber-600 text-white text-sm font-medium px-4 py-2.5 flex items-center justify-center gap-2">
-                    <svg class="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                    </svg>
+                    <i class="fa-solid fa-eye text-sm flex-shrink-0"></i>
                     <span>Anda sedang mengintip dasbor sebagai <strong>{{ Auth::user()->name }}</strong></span>
                     <form action="{{ route('admin.impersonate.leave') }}" method="POST" class="inline-flex">
                         @csrf
                         <button type="submit" class="ml-2 inline-flex items-center gap-1 px-3 py-1 bg-white/20 hover:bg-white/30 rounded-lg text-xs font-semibold transition-colors">
                             Kembali ke Admin
-                            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                            </svg>
+                            <i class="fa-solid fa-arrow-right text-[11px]"></i>
                         </button>
                     </form>
                 </div>
@@ -64,6 +61,15 @@
                 </div>
             </footer>
         </div>
+
+        <a href="https://wa.me/{{ config('app.whatsapp_number', '62895349823366') }}?text={{ urlencode('Halo, saya ingin bertanya terkait layanan undangan digital.') }}"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="fixed bottom-4 right-4 z-50 inline-flex items-center gap-2 rounded-full bg-emerald-500 hover:bg-emerald-600 px-4 py-3 text-white shadow-lg shadow-emerald-500/30 transition-all duration-200 hover:scale-105">
+            <i class="fa-brands fa-whatsapp text-xl"></i>
+            <span class="text-sm font-semibold">Butuh Bantuan?</span>
+        </a>
+
         <x-sweet-alert />
     </body>
 </html>

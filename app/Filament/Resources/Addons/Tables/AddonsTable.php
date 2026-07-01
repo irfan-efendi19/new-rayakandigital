@@ -15,20 +15,25 @@ class AddonsTable
     {
         return $table
             ->columns([
-                TextColumn::make('feature_name')
+                TextColumn::make('name')
                     ->label('Nama Add-On')
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('feature_key')
-                    ->label('Feature Key')
+                TextColumn::make('slug')
+                    ->label('Slug')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('description')
+                    ->label('Deskripsi')
+                    ->limit(40)
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('price')
                     ->label('Harga')
                     ->money('IDR', locale: 'id')
                     ->sortable(),
-                IconColumn::make('is_active')
-                    ->label('Aktif')
+                IconColumn::make('is_available')
+                    ->label('Tersedia')
                     ->boolean()
                     ->sortable(),
                 TextColumn::make('updated_at')

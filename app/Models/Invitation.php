@@ -324,12 +324,12 @@ class Invitation extends Model
 
     public function canUseCustomMusic(): bool
     {
-        return $this->hasFeature('custom_music') || $this->hasAddon('addon_custom_music');
+        return $this->hasFeature('custom_music') || $this->hasAddon('addon-custom-music');
     }
 
     public function canUseGift(): bool
     {
-        return $this->hasFeature('digital_gift') || $this->hasAddon('addon_digital_gift');
+        return $this->hasFeature('digital_gift') || $this->hasAddon('addon-digital-gift');
     }
 
     public function maxGiftAccounts(): int
@@ -346,19 +346,28 @@ class Invitation extends Model
             return 1;
         }
 
-        return $this->hasAddon('addon_digital_gift') ? 3 : 0;
+        return $this->hasAddon('addon-digital-gift') ? 3 : 0;
     }
 
     public function addons(): BelongsToMany
     {
-        return $this->belongsToMany(Addon::class)->withPivot('purchased_at')->withTimestamps();
+        return $this->belongsToMany(Addon::class)->withPivot(['purchased_price', 'status_active', 'activated_at'])->withTimestamps();
     }
 
-    public function hasAddon(string $featureKey): bool
+    public function hasAddon(string $slug): bool
     {
         return $this->addons()
-            ->where('feature_key', $featureKey)
-            ->where('addons.is_active', true)
+            ->where('slug', $slug)
+            ->where('addons.is_available', true)
+            ->exists();
+    }
+
+    public function hasActivatedAddon(string $slug): bool
+    {
+        return $this->addons()
+            ->where('slug', $slug)
+            ->where('addons.is_available', true)
+            ->wherePivot('status_active', true)
             ->exists();
     }
 

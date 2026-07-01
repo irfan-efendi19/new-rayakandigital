@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\AddonTransaction;
 use App\Models\Subscription;
 use App\Models\User;
 use Illuminate\Support\Str;
@@ -144,7 +145,7 @@ class MidtransService
     /**
      * Handle Midtrans webhook notification with signature validation.
      */
-    public function handleNotification(array $payload): ?Subscription
+    public function handleNotification(array $payload): Subscription|AddonTransaction|null
     {
         $orderId = $payload['order_id'] ?? null;
         $transactionStatus = $payload['transaction_status'] ?? null;
@@ -168,6 +169,38 @@ class MidtransService
             }
         }
 
+        $isSettled = $transactionStatus === 'settlement'
+            || ($transactionStatus === 'capture' && $fraudStatus === 'accept');
+
+        $transaction = \App\Models\AddonTransaction::where('reference_order_id', $orderId)->first();
+
+        if ($transaction) {
+            if ($isSettled) {
+                $transaction->payment_status = 'settlement';
+
+                $transaction->addon->invitations()->syncWithoutDetaching([
+                    $transaction->invitation_id => [
+                        'purchased_price' => $transaction->amount,
+                        'status_active' => true,
+                        'activated_at' => now(),
+                    ],
+                ]);
+            } elseif ($transactionStatus === 'pending') {
+                $transaction->payment_status = 'pending';
+            } else {
+                $statusMap = [
+                    'deny' => 'deny',
+                    'expire' => 'expire',
+                    'cancel' => 'cancel',
+                ];
+                $transaction->payment_status = $statusMap[$transactionStatus] ?? 'expire';
+            }
+
+            $transaction->save();
+
+            return $transaction;
+        }
+
         $subscription = Subscription::where('midtrans_order_id', $orderId)->first();
 
         if (! $subscription) {
@@ -175,9 +208,6 @@ class MidtransService
         }
 
         $subscription->midtrans_transaction_id = $transactionId;
-
-        $isSettled = $transactionStatus === 'settlement'
-            || ($transactionStatus === 'capture' && $fraudStatus === 'accept');
 
         if ($isSettled) {
             $subscription->payment_status = 'settlement';
@@ -250,6 +280,36 @@ class MidtransService
             return $this->handleNotification($payload);
         } catch (\Throwable $e) {
             logger()->warning('Gagal cek status Midtrans: ' . $e->getMessage());
+
+            return null;
+        }
+    }
+
+    /**
+     * Check transaction status for an addon transaction.
+     */
+    public function checkAddonTransactionStatus(string $referenceOrderId): ?AddonTransaction
+    {
+        if ($this->isSimulationMode()) {
+            return null;
+        }
+
+        try {
+            $status = \Midtrans\Transaction::status($referenceOrderId);
+
+            $payload = [
+                'order_id' => $status->order_id,
+                'transaction_status' => $status->transaction_status,
+                'transaction_id' => $status->transaction_id ?? null,
+                'status_code' => $status->status_code ?? null,
+                'gross_amount' => $status->gross_amount ?? null,
+                'signature_key' => $status->signature_key ?? null,
+                'fraud_status' => $status->fraud_status ?? null,
+            ];
+
+            return $this->handleNotification($payload);
+        } catch (\Throwable $e) {
+            logger()->warning('Gagal cek status Midtrans untuk addon: ' . $e->getMessage());
 
             return null;
         }

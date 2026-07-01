@@ -57,20 +57,24 @@ class DatabaseSeeder extends Seeder
 
         // Addons
         \App\Models\Addon::firstOrCreate(
-            ['feature_key' => 'addon_digital_gift'],
+            ['slug' => 'addon-digital-gift'],
             [
-                'feature_name' => 'Amplop Digital',
+                'name' => 'Amplop Digital',
+                'description' => 'Fitur amplop digital untuk menerima hadiah secara online.',
                 'price' => 15000.00,
-                'is_active' => true,
+                'icon_identifier' => 'heroicon-o-gift',
+                'is_available' => true,
             ]
         );
 
         \App\Models\Addon::firstOrCreate(
-            ['feature_key' => 'addon_custom_music'],
+            ['slug' => 'addon-custom-music'],
             [
-                'feature_name' => 'Musik Kustom',
+                'name' => 'Musik Kustom',
+                'description' => 'Unggah musik latar kustom untuk undangan Anda.',
                 'price' => 15000.00,
-                'is_active' => true,
+                'icon_identifier' => 'heroicon-o-musical-note',
+                'is_available' => true,
             ]
         );
 

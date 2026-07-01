@@ -1,9 +1,10 @@
 <?php
 
 use App\Http\Controllers\Auth\SocialiteController;
+use App\Http\Controllers\AddonPaymentController;
+use App\Http\Controllers\Dashboard\AddonController;
 use App\Http\Controllers\Dashboard\CheckoutController;
 use App\Http\Controllers\Dashboard\GalleryController;
-use App\Http\Controllers\Dashboard\GiftController;
 use App\Http\Controllers\Dashboard\GuestbookController;
 use App\Http\Controllers\Dashboard\GuestCategoryController;
 use App\Http\Controllers\Dashboard\GuestController;
@@ -88,6 +89,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::delete('/invitations/{invitation}/gallery', [GalleryController::class, 'destroy'])->name('invitations.gallery.destroy');
         Route::post('/invitations/{invitation}/gift', [GiftController::class, 'update'])->name('invitations.gift.update');
 
+        // Addon Management
+        Route::get('/invitations/{invitation}/addons', [AddonController::class, 'index'])->name('invitations.addons.index');
+        Route::post('/invitations/{invitation}/addons/{addon}/purchase', [AddonController::class, 'purchase'])->name('invitations.addons.purchase');
+        Route::get('/invitations/{invitation}/addons/transactions/{transaction}/invoice', [AddonController::class, 'invoice'])->name('invitations.addons.invoice');
+        Route::post('/invitations/{invitation}/addons/transactions/{transaction}/send-whatsapp', [AddonController::class, 'sendWhatsApp'])->name('invitations.addons.send-whatsapp');
+        Route::post('/invitations/{invitation}/addons/{addon}/activate', [AddonController::class, 'activate'])->name('invitations.addons.activate');
+        Route::post('/invitations/{invitation}/addons/{addon}/deactivate', [AddonController::class, 'deactivate'])->name('invitations.addons.deactivate');
+
         // WhatsApp Diagnostic
         Route::get('/whatsapp-diagnostic', [WhatsAppDiagnosticController::class, 'check'])->name('whatsapp.diagnostic');
 
@@ -127,6 +136,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 // Payment Callbacks
 Route::post('/payments/notification', [PaymentController::class, 'notification'])->name('payments.notification');
 Route::get('/payments/finish', [PaymentController::class, 'finish'])->name('payments.finish');
+
+// Addon Payment Callbacks
+Route::get('/addon-payment/finish', [AddonPaymentController::class, 'finish'])->name('addon-payment.finish');
 
 require __DIR__.'/auth.php';
 

@@ -98,6 +98,51 @@ document.addEventListener('alpine:init', () => {
             });
         },
     }));
+
+    Alpine.data('addonCheckout', () => ({
+        processing: false,
+        handleSubmit(event) {
+            this.processing = true;
+            const form = event.target;
+            const formData = new FormData(form);
+            const self = this;
+
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Accept': 'application/json',
+                },
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.snap_token && data.snap_token.startsWith('SIMULATION_TOKEN_')) {
+                    window.location.href = '/addon-payment/finish?reference_order_id=' + data.reference_order_id;
+                    return;
+                }
+
+                window.snap.pay(data.snap_token, {
+                    onSuccess: function () {
+                        window.location.href = '/addon-payment/finish?reference_order_id=' + data.reference_order_id;
+                    },
+                    onPending: function () {
+                        window.location.href = '/addon-payment/finish?reference_order_id=' + data.reference_order_id;
+                    },
+                    onError: function () {
+                        alert('Pembayaran gagal, silakan coba lagi.');
+                        self.processing = false;
+                    },
+                    onClose: function () {
+                        self.processing = false;
+                    },
+                });
+            })
+            .catch(() => {
+                self.processing = false;
+            });
+        },
+    }));
 });
 
 Alpine.start();

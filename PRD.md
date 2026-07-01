@@ -1,7 +1,7 @@
 # PRODUCT REQUIREMENT DOCUMENT (PRD)
-## MODUL: SPLIT INVITATION PER EVENT (MULTI-EVENT GUEST ASSIGNMENT SYSTEM)
-**Versi:** 13.0 (Spesifikasi Alokasi Sesi Acara, Saringan Akses QR & Dinamisasi Teks WA - Laravel 13 & Tailwind CSS)  
-**Tanggal:** 29 Juni 2026  
+## MODUL: INTEGRASI GERBANG PEMBAYARAN ADD-ON (AUTOMATED PAYMENT GATEWAY FLOW)
+**Versi:** 16.0 (Spesifikasi Snap Token, Webhook Handling & Auto-Fulfillment - Laravel 13)  
+**Tanggal:** 1 Juli 2026  
 **Status:** Approved  
 **Author:** Mochammad Irfan Efendi  
 
@@ -10,20 +10,18 @@
 ## 1. DESKRIPSI FITUR & ATURAN BISNIS (BUSINESS RULES)
 
 ### 1.1 Deskripsi Fitur
-Seringkali penyelenggara pernikahan memecah tamu ke dalam beberapa kloter acara (misal: *Kloter 1: Akad Nikah/Pemberkatan (Khusus Keluarga)*, *Kloter 2: Resepsi Sesi Siang (Rekan Kerja)*, dan *Kloter 3: Resepsi Sesi Malam (Sahabat/VIP)*) untuk mencegah penumpukan kapasitas gedung. 
+Untuk mengotomatisasi proses bisnis, sistem tidak lagi menggunakan konfirmasi transfer manual. Modul ini mengintegrasikan *Payment Gateway API* (seperti Midtrans/Xendit) ke dalam alur pembelian *add-on* di `/dashboard/invitations/`. Ketika pengguna memilih sebuah fitur ekstra, sistem akan memicu pembuatan token pembayaran (*invoice/snap token*), menampilkan *pop-up* opsi metode pembayaran (QRIS, E-Wallet, Virtual Account), dan mengaktifkan fitur tersebut secara instan setelah status berubah menjadi `settlement`/lunas.
 
-Fitur **Split Invitation per Event** memungkinkan pengguna memetakan secara spesifik setiap tamu undangan ke satu atau beberapa sub-acara yang mereka kehendaki. Saat tamu membuka link undangan digital atau memindai QR code, sistem hanya akan menampilkan informasi detail waktu, peta lokasi, dan form RSVP untuk rangkaian acara yang dialokasikan khusus untuk dirinya saja.
-
-### 1.2 Aturan Bisnis (Split Event Business Rules)
-1. **Pemetaan Relasi Many-to-Many:** Satu baris data tamu (`guests`) dapat dikaitkan dengan satu atau lebih sub-acara (`events`) yang aktif pada paket undangan tersebut.
-2. **Kustomisasi Teks Otomatis:** Variabel penanda waktu dan nama acara pada draf pesan kiriman WhatsApp wajib menyesuaikan secara dinamis berdasarkan hasil *split* acara tamu tersebut (Contoh: Tamu kloter akad mendapatkan draf bertuliskan "Akad Nikah", sedangkan kloter resepsi mendapatkan tulisan "Resepsi").
-3. **Pemberian Hak Istimewa Admin:** Admin yang sedang dalam mode *impersonate* atau moderasi global memiliki hak penuh untuk mengubah alokasi kloter acara tamu mana pun jika klien meminta bantuan teknis.
+### 1.2 Aturan Bisnis (Payment & Activation Rules)
+1. **Penerbitan Invoice Tunggal:** Satu transaksi pembelian *add-on* menghasilkan satu record *invoice* unik di tabel `transactions` dengan status awal `pending`.
+2. **Masa Kedaluwarsa (*Token Timeout*):** Sesi pembayaran dibatasi maksimal **24 jam** (atau sesuai kebijakan Midtrans/Xendit). Jika kedaluwarsa, status transaksi berubah menjadi `expired` dan *add-on* dapat diajukan kembali oleh pengguna.
+3. **Fulfillment Otomatis Tanpa Campur Tangan Admin:** Sistem wajib memanfaatkan *Webhook / Callback handler* dari pihak *payment gateway* untuk mengubah status kolom `status_active` pada tabel pivot `addon_invitation` menjadi `true` (`1`) secara *real-time* tepat saat dana berhasil diverifikasi oleh sistem hulu.
 
 ---
 
-## 2. BLUEPRINT ARSITEKTUR DATABASE (MIGRATION & PIVOT TABLE)
+## 2. BLUEPRINT ARSITEKTUR DATABASE (TRANSACTION PATTERNS)
 
-Gunakan skema tabel pivot untuk menghubungkan data entitas tamu dengan sub-acara secara fleksibel:
+Buat tabel baru `addon_transactions` untuk merekam rekam jejak pembayaran sebelum memanipulasi status di tabel pivot `addon_invitation`:
 
 ```php
 use Illuminate\Database\Migrations\Migration;
@@ -34,23 +32,20 @@ return new class extends Migration
 {
     public function up(): void
     {
-        // 1. Pastikan tabel master sub-acara (events) sudah siap
-        // Biasanya berisi: id, invitation_id, title (Akad/Resepsi), date, start_time, location_name, dll.
-
-        // 2. Buat Tabel Pivot antara Guests dan Events (Split Bridge Table)
-        Schema::create('event_guest', function (Blueprint $table) {
+        Schema::create('addon_transactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('guest_id')->constrained('guests')->onDelete('cascade');
-            $table->foreignId('event_id')->constrained('events')->onDelete('cascade');
+            $table->string('reference_order_id')->unique(); // ID Transaksi unik sistem (misal: INV-ADDON-20260701-XXXX)
+            $table->foreignId('invitation_id')->constrained('invitations')->onDelete('cascade');
+            $table->foreignId('addon_id')->constrained('addons')->onDelete('cascade');
+            $table->decimal('amount', 10, 2);
+            $table->string('payment_status')->default('pending'); // pending, settlement, expire, cancel
+            $table->string('snap_token_url')->nullable(); // URL halaman pembayaran midtrans/xendit
             $table->timestamps();
-            
-            // Mencegah duplikasi data mapping yang sama dalam satu tamu
-            $table->unique(['guest_id', 'event_id']);
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('event_guest');
+        Schema::dropIfExists('addon_transactions');
     }
 };
