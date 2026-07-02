@@ -130,7 +130,7 @@ class CheckoutController extends Controller
 
         $order = DB::transaction(function () use ($user, $tier, $invitationId, $price, $uniqueCode) {
             return Order::create([
-                'order_id' => 'INV-' . now()->format('Ymd') . '-' . Str::upper(Str::random(6)),
+                'order_id' => 'RD-' . now()->format('Ymd') . '-' . $user->id . '-' . Str::upper(Str::random(4)),
                 'user_id' => $user->id,
                 'invitation_id' => $invitationId,
                 'package_type' => $tier,

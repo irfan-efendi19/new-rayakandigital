@@ -53,7 +53,7 @@ class Order extends Model
     {
         $id = $this->id;
         $date = $this->created_at ? $this->created_at->format('Ymd') : now()->format('Ymd');
-        return 'INV-' . $date . '-' . str_pad($id, 4, '0', STR_PAD_LEFT);
+        return 'RD-' . $date . '-' . str_pad($id, 4, '0', STR_PAD_LEFT);
     }
 
     public function getTotalWithCodeAttribute(): string

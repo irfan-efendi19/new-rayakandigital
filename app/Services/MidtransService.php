@@ -80,7 +80,7 @@ class MidtransService
     public function createSnapToken(User $user, string $tier): array
     {
         $price = $this->getPrice($tier);
-        $orderId = 'RD-'.strtoupper($tier).'-'.$user->id.'-'.Str::random(8);
+        $orderId = 'RD-' . now()->format('Ymd') . '-' . $user->id . '-' . strtoupper(Str::random(4));
 
         $subscription = Subscription::create([
             'user_id' => $user->id,
@@ -103,7 +103,7 @@ class MidtransService
             ],
             'item_details' => [
                 [
-                    'id' => 'PAKET-'.strtoupper($tier),
+                    'id' => 'RD-PAKET-' . strtoupper($tier),
                     'price' => $price,
                     'quantity' => 1,
                     'name' => 'Paket '.ucfirst($tier).' - Rayakan Digital',

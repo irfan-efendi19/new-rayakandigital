@@ -21,7 +21,7 @@ class InvoiceController extends Controller
 
         $invoiceNumber = $latestTransaction
             ? $latestTransaction->reference_order_id
-            : 'INV-BASIC-' . $invitation->id . '-' . date('Ymd');
+            : 'RD-' . date('Ymd') . '-' . $invitation->id;
 
         $packagePrice = $invitation->package_price;
         $addonTotal = $invitation->addons->sum('pivot.purchased_price');

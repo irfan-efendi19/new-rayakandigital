@@ -53,7 +53,7 @@ class AddonController extends Controller
             return back()->with('error', 'Add-on sudah dimiliki undangan ini.');
         }
 
-        $referenceOrderId = 'ADDON-' . strtoupper(Str::random(8)) . '-' . $invitation->id . '-' . $addon->id;
+        $referenceOrderId = 'RD-' . now()->format('Ymd') . '-' . $invitation->id . '-' . strtoupper(Str::random(4));
         $price = (int) $addon->price;
 
         $paymentMethod = $routing->activeMethod();
@@ -83,7 +83,7 @@ class AddonController extends Controller
                 ],
                 'item_details' => [
                     [
-                        'id' => 'ADDON-' . $addon->id,
+                        'id' => 'RD-ADDON-' . $addon->id,
                         'price' => $price,
                         'quantity' => 1,
                         'name' => $addon->name . ' - Rayakan Digital',
