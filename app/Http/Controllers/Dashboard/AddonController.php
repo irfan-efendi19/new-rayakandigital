@@ -124,7 +124,7 @@ class AddonController extends Controller
             abort(404);
         }
 
-        if ($transaction->payment_status !== 'pending') {
+        if (!in_array($transaction->payment_status, ['pending', 'verifying'])) {
             return redirect()->route('dashboard.invitations.addons.index', $invitation)
                 ->with('info', 'Transaksi ini sudah tidak dalam status pending.');
         }
