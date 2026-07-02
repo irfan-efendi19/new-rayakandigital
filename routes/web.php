@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\AddonPaymentController;
 use App\Http\Controllers\Dashboard\AddonController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\Dashboard\CheckoutController;
 use App\Http\Controllers\Dashboard\GalleryController;
 use App\Http\Controllers\Dashboard\GuestbookController;
@@ -96,6 +97,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/invitations/{invitation}/addons/transactions/{transaction}/send-whatsapp', [AddonController::class, 'sendWhatsApp'])->name('invitations.addons.send-whatsapp');
         Route::post('/invitations/{invitation}/addons/{addon}/activate', [AddonController::class, 'activate'])->name('invitations.addons.activate');
         Route::post('/invitations/{invitation}/addons/{addon}/deactivate', [AddonController::class, 'deactivate'])->name('invitations.addons.deactivate');
+
+        // Invoice PDF
+        Route::get('/invitations/{invitation}/invoice-pdf', [InvoiceController::class, 'downloadPdf'])->name('invitations.invoice-pdf');
 
         // WhatsApp Diagnostic
         Route::get('/whatsapp-diagnostic', [WhatsAppDiagnosticController::class, 'check'])->name('whatsapp.diagnostic');

@@ -349,6 +349,11 @@ class Invitation extends Model
         return $this->hasAddon('addon-digital-gift') ? 3 : 0;
     }
 
+    public function getPackagePriceAttribute(): float
+    {
+        return (float) ($this->pricingTier?->price ?? $this->package()?->price ?? 0);
+    }
+
     public function addons(): BelongsToMany
     {
         return $this->belongsToMany(Addon::class)->withPivot(['purchased_price', 'status_active', 'activated_at'])->withTimestamps();

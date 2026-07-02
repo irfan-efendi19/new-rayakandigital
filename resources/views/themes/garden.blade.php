@@ -378,17 +378,70 @@ $firstEvent = $displayEvents->sortBy(['event_date', 'start_time'])->first();
                                             @if($story->story_title)
                                                 <h3 class="story-title">{{ $story->story_title }}</h3>
                                             @endif
-                                            <p class="story-text">{{ $story->story_description }}</p>
+                                            @if(!empty($story->story_image))
+                                                <div class="story-photo">
+                                                    <img src="{{ str_starts_with($story->story_image, 'http') ? $story->story_image : asset('storage/' . $story->story_image) }}"
+                                                         alt="{{ $story->story_title ?: 'Foto cerita' }}" loading="lazy"
+                                                         data-full="{{ str_starts_with($story->story_image, 'http') ? $story->story_image : asset('storage/' . $story->story_image) }}">
+                                                </div>
+                                            @endif
+                                            @php $preview = \Illuminate\Support\Str::limit($story->story_description, 250); @endphp
+                                            <div id="story-{{ $story->id }}-preview" style="display:none">{!! nl2br(e($preview)) !!}</div>
+                                            <div id="story-{{ $story->id }}-full" style="display:none">{!! nl2br(e($story->story_description)) !!}</div>
+                                            <div id="story-{{ $story->id }}" class="story-text" data-expanded="0">{!! nl2br(e($preview)) !!}</div>
+                                            @if(mb_strlen($story->story_description) > 250)
+                                                <button type="button" class="story-readmore-btn" data-target="story-{{ $story->id }}">Baca selengkapnya</button>
+                                            @endif
                                         </div>
                                     @endforeach
                                 </div>
                             </div>
                         </section>
+                        <script>
+                            document.addEventListener('click', function(e){
+                                if(e.target && e.target.classList && e.target.classList.contains('story-readmore-btn')){
+                                    var targetId = e.target.dataset.target;
+                                    var contentEl = document.getElementById(targetId);
+                                    var previewEl = document.getElementById(targetId + '-preview');
+                                    var fullEl = document.getElementById(targetId + '-full');
+                                    if(!contentEl || !previewEl || !fullEl) return;
+                                    var expanded = contentEl.dataset.expanded === '1';
+                                    if(expanded){
+                                        contentEl.innerHTML = previewEl.innerHTML;
+                                        contentEl.dataset.expanded = '0';
+                                        e.target.textContent = 'Baca selengkapnya';
+                                    } else {
+                                        contentEl.innerHTML = fullEl.innerHTML;
+                                        contentEl.dataset.expanded = '1';
+                                        e.target.textContent = 'Tutup';
+                                    }
+                                }
+                                var clickedImg = e.target.closest && e.target.closest('.story-photo img');
+                                if(clickedImg){
+                                    var src = clickedImg.getAttribute('data-full') || clickedImg.src;
+                                    var lb = document.getElementById('lightbox');
+                                    var lbImg = document.getElementById('lightboxImg');
+                                    if(!lb || !lbImg) return;
+                                    lbImg.src = src;
+                                    lb.style.display = 'flex';
+                                    lb.classList.add('open');
+                                }
+                            });
+                            var lightboxClose = document.getElementById('lightboxClose');
+                            if(lightboxClose){
+                                lightboxClose.addEventListener('click', function(){
+                                    var lb = document.getElementById('lightbox');
+                                    var lbImg = document.getElementById('lightboxImg');
+                                    lb.classList.remove('open');
+                                    setTimeout(function(){ if(lb) lb.style.display = 'none'; if(lbImg) lbImg.src = ''; }, 300);
+                                });
+                            }
+                        </script>
                     @elseif($invitation->show_stories && $invitation->love_story)
                         <section class="section story-section">
                             <div class="container text-center">
                                 <h2 class="section-title">Cerita Cinta</h2>
-                                <p class="story-text-preview">{{ $invitation->love_story }}</p>
+                                <p class="story-text-preview">{!! nl2br(e($invitation->love_story)) !!}</p>
                             </div>
                         </section>
                     @endif
@@ -466,50 +519,50 @@ if (empty($giftEwallets) && ($invitation->gift_ewallet_name || $invitation->gift
                             $invitation->show_gift && $invitation->canUseGift() && (count($giftBanks) > 0 || count($giftEwallets) > 0 ||
                                 $invitation->gift_qris_image)
                         )
-                                                                        <section class="section gift-section">
-                                                                            <div class="container text-center">
-                                                                                <h2 class="section-title">Kado Digital</h2>
-                                                                                <p class="section-desc">Doa restu Anda adalah karunia terindah. Namun jika ingin memberi tanda
-                                                                                    kasih,
-                                                                                    Anda dapat mengirimkannya melalui:</p>
-                                                                                <div class="gift-toggle-wrap">
-                                                                                    <button id="giftToggleBtn" class="btn btn-primary">Kirim Kado Digital</button>
-                                                                                    <div id="giftContent" class="gift-content">
-                                                                                        @foreach($giftBanks as $bank)
-                                                                                            @php $bank = (object) $bank; @endphp
-                                                                                            @if($bank->bank_name && $bank->account_number)
-                                                                                                <div class="gift-card">
-                                                                                                    <span class="gift-label">Transfer Bank</span>
-                                                                                                    <h4>{{ $bank->bank_name }}</h4>
-                                                                                                    <p class="gift-account">{{ $bank->account_number }}</p>
-                                                                                                    <p class="gift-holder">a.n. {{ $bank->account_holder ?: 'Mempelai' }}</p>
-                                                                                                    <button class="btn-copy" data-copy="{{ $bank->account_number }}">Salin
-                                                                                                        Rekening</button>
+                                                                            <section class="section gift-section">
+                                                                                <div class="container text-center">
+                                                                                    <h2 class="section-title">Kado Digital</h2>
+                                                                                    <p class="section-desc">Doa restu Anda adalah karunia terindah. Namun jika ingin memberi tanda
+                                                                                        kasih,
+                                                                                        Anda dapat mengirimkannya melalui:</p>
+                                                                                    <div class="gift-toggle-wrap">
+                                                                                        <button id="giftToggleBtn" class="btn btn-primary">Kirim Kado Digital</button>
+                                                                                        <div id="giftContent" class="gift-content">
+                                                                                            @foreach($giftBanks as $bank)
+                                                                                                @php $bank = (object) $bank; @endphp
+                                                                                                @if($bank->bank_name && $bank->account_number)
+                                                                                                    <div class="gift-card">
+                                                                                                        <span class="gift-label">Transfer Bank</span>
+                                                                                                        <h4>{{ $bank->bank_name }}</h4>
+                                                                                                        <p class="gift-account">{{ $bank->account_number }}</p>
+                                                                                                        <p class="gift-holder">a.n. {{ $bank->account_holder ?: 'Mempelai' }}</p>
+                                                                                                        <button class="btn-copy" data-copy="{{ $bank->account_number }}">Salin
+                                                                                                            Rekening</button>
+                                                                                                    </div>
+                                                                                                @endif
+                                                                                            @endforeach
+                                                                                            @foreach($giftEwallets as $ewallet)
+                                                                                                @php $ewallet = (object) $ewallet; @endphp
+                                                                                                @if($ewallet->wallet_name && $ewallet->wallet_number)
+                                                                                                    <div class="gift-card">
+                                                                                                        <span class="gift-label">Dompet Digital</span>
+                                                                                                        <h4>{{ $ewallet->wallet_name }}</h4>
+                                                                                                        <p class="gift-account">{{ $ewallet->wallet_number }}</p>
+                                                                                                        <button class="btn-copy" data-copy="{{ $ewallet->wallet_number }}">Salin
+                                                                                                            Nomor</button>
+                                                                                                    </div>
+                                                                                                @endif
+                                                                                            @endforeach
+                                                                                            @if($invitation->gift_qris_image)
+                                                                                                <div class="gift-card gift-qris">
+                                                                                                    <span class="gift-label">Scan QRIS</span>
+                                                                                                    <img src="{{ asset('storage/' . $invitation->gift_qris_image) }}" alt="QRIS" class="qris-img">
                                                                                                 </div>
                                                                                             @endif
-                                                                                        @endforeach
-                                                                                        @foreach($giftEwallets as $ewallet)
-                                                                                            @php $ewallet = (object) $ewallet; @endphp
-                                                                                            @if($ewallet->wallet_name && $ewallet->wallet_number)
-                                                                                                <div class="gift-card">
-                                                                                                    <span class="gift-label">Dompet Digital</span>
-                                                                                                    <h4>{{ $ewallet->wallet_name }}</h4>
-                                                                                                    <p class="gift-account">{{ $ewallet->wallet_number }}</p>
-                                                                                                    <button class="btn-copy" data-copy="{{ $ewallet->wallet_number }}">Salin
-                                                                                                        Nomor</button>
-                                                                                                </div>
-                                                                                            @endif
-                                                                                        @endforeach
-                                                                                        @if($invitation->gift_qris_image)
-                                                                                            <div class="gift-card gift-qris">
-                                                                                                <span class="gift-label">Scan QRIS</span>
-                                                                                                <img src="{{ asset('storage/' . $invitation->gift_qris_image) }}" alt="QRIS" class="qris-img">
-                                                                                            </div>
-                                                                                        @endif
+                                                                                        </div>
                                                                                     </div>
-                                                                                </div>
-                                                                                </div>
-                                                                                </section>
+                                                                                    </div>
+                                                                                    </section>
                     @endif
                                                         
                                                         <!-- QR Check-In Section -->

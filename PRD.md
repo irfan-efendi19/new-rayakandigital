@@ -1,7 +1,7 @@
 # PRODUCT REQUIREMENT DOCUMENT (PRD)
-## MODUL: INTEGRASI GERBANG PEMBAYARAN ADD-ON (AUTOMATED PAYMENT GATEWAY FLOW)
-**Versi:** 16.0 (Spesifikasi Snap Token, Webhook Handling & Auto-Fulfillment - Laravel 13)  
-**Tanggal:** 1 Juli 2026  
+## MODUL: GENERATOR CETAK PDF INVOICE & REKAPITULASI ADD-ON (BILLING ENGINE)
+**Versi:** 17.0 (Spesifikasi Ekspor DomPDF, Kalkulasi Kombinasi Transaksi & Layout Komersial - Laravel 13)  
+**Tanggal:** 2 Juli 2026  
 **Status:** Approved  
 **Author:** Mochammad Irfan Efendi  
 
@@ -10,42 +10,71 @@
 ## 1. DESKRIPSI FITUR & ATURAN BISNIS (BUSINESS RULES)
 
 ### 1.1 Deskripsi Fitur
-Untuk mengotomatisasi proses bisnis, sistem tidak lagi menggunakan konfirmasi transfer manual. Modul ini mengintegrasikan *Payment Gateway API* (seperti Midtrans/Xendit) ke dalam alur pembelian *add-on* di `/dashboard/invitations/`. Ketika pengguna memilih sebuah fitur ekstra, sistem akan memicu pembuatan token pembayaran (*invoice/snap token*), menampilkan *pop-up* opsi metode pembayaran (QRIS, E-Wallet, Virtual Account), dan mengaktifkan fitur tersebut secara instan setelah status berubah menjadi `settlement`/lunas.
+Sebagai transparansi transaksi dan kebutuhan pembukuan bagi pengguna, sistem memerlukan modul **Cetak PDF Invoice**. Fitur ini memungkinkan pengguna mengunduh berkas format `.pdf` resmi dari halaman `/dashboard/invitations/`. Dokumen ini akan merekap total biaya investasi pembuatan undangan digital, yang menggabungkan harga paket dasar undangan beserta rincian lembar baris (*line-items*) dari seluruh fitur premium (*add-on*) yang berhasil dibeli dan aktif.
 
-### 1.2 Aturan Bisnis (Payment & Activation Rules)
-1. **Penerbitan Invoice Tunggal:** Satu transaksi pembelian *add-on* menghasilkan satu record *invoice* unik di tabel `transactions` dengan status awal `pending`.
-2. **Masa Kedaluwarsa (*Token Timeout*):** Sesi pembayaran dibatasi maksimal **24 jam** (atau sesuai kebijakan Midtrans/Xendit). Jika kedaluwarsa, status transaksi berubah menjadi `expired` dan *add-on* dapat diajukan kembali oleh pengguna.
-3. **Fulfillment Otomatis Tanpa Campur Tangan Admin:** Sistem wajib memanfaatkan *Webhook / Callback handler* dari pihak *payment gateway* untuk mengubah status kolom `status_active` pada tabel pivot `addon_invitation` menjadi `true` (`1`) secara *real-time* tepat saat dana berhasil diverifikasi oleh sistem hulu.
+### 1.2 Aturan Bisnis (Invoice PDF Business Rules)
+1. **Penyaringan Saringan Validitas (Settlement Only Sieve):** Komponen *add-on* yang berhak masuk ke dalam struk cetak PDF *hanya* yang memiliki status pembayaran `settlement` (lunas) pada tabel log transaksi. Item yang masih berstatus `pending` atau `expired` wajib diabaikan dari kalkulasi.
+2. **Kunci Nilai Sejarah (Historical Price Integrity):** Angka harga yang dicetak pada PDF wajib merujuk pada kolom `purchased_price` di tabel pivot saat transaksi sukses terjadi, bukan merujuk pada harga master produk yang ada saat ini di Admin Filament.
+3. **Standar Penamaan Berkas (Naming Standardization):** Berkas PDF yang diunduh wajib memiliki format nama yang baku, yaitu: `Invoice-[Nomor_Invoice]-[Slug_Undangan].pdf` (Contoh: `Invoice-INV-20260702-0034-irfan-sasa.pdf`).
 
 ---
 
-## 2. BLUEPRINT ARSITEKTUR DATABASE (TRANSACTION PATTERNS)
+## 2. REKAYASA BACKEND: INVOICE CONTROLLER GENERATOR (LARAVEL 13)
 
-Buat tabel baru `addon_transactions` untuk merekam rekam jejak pembayaran sebelum memanipulasi status di tabel pivot `addon_invitation`:
+Integrasikan pustaka `dompdf` ke dalam controller khusus untuk menyusun data finansial sebelum dikonversi menjadi berkas PDF:
 
 ```php
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+namespace App\Http\Controllers;
 
-return new class extends Migration
+use App\Models\Invitation;
+use App\Models\AddonTransaction;
+use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
+
+class InvoiceController extends Controller
 {
-    public function up(): void
+    /**
+     * Memproses data billing dan mengunduh berkas PDF Invoice resmi
+     */
+    public function downloadPdf($id)
     {
-        Schema::create('addon_transactions', function (Blueprint $table) {
-            $table->id();
-            $table->string('reference_order_id')->unique(); // ID Transaksi unik sistem (misal: INV-ADDON-20260701-XXXX)
-            $table->foreignId('invitation_id')->constrained('invitations')->onDelete('cascade');
-            $table->foreignId('addon_id')->constrained('addons')->onDelete('cascade');
-            $table->decimal('amount', 10, 2);
-            $table->string('payment_status')->default('pending'); // pending, settlement, expire, cancel
-            $table->string('snap_token_url')->nullable(); // URL halaman pembayaran midtrans/xendit
-            $table->timestamps();
-        });
-    }
+        // 1. Ambil data undangan beserta relasi user dan addon yang berstatus lunas (settlement)
+        $invitation = Invitation::with(['user', 'addons' => function ($query) {
+            $query->wherePivot('status_active', true);
+        }])->findOrFail($id);
 
-    public function down(): void
-    {
-        Schema::dropIfExists('addon_transactions');
+        // 2. Ambil semua log transaksi sukses untuk mencantumkan Nomor Referensi Invoice Utama
+        $latestTransaction = AddonTransaction::where('invitation_id', $invitation->id)
+            ->where('payment_status', 'settlement')
+            ->latest()
+            ->first();
+
+        $invoiceNumber = $latestTransaction 
+            ? $latestTransaction->reference_order_id 
+            : 'INV-BASIC-' . $invitation->id . '-' . date('Ymd');
+
+        // 3. Kalkulasi Komponen Biaya Dasar & Add-on
+        $packagePrice = $invitation->package_price ?? 0; // Misal harga paket dasar pembuatan awal
+        $addonTotal = $invitation->addons->sum('pivot.purchased_price');
+        $grandTotal = $packagePrice + $addonTotal;
+
+        // 4. Siapkan Array Payload untuk dilemparkan ke dalam view Blade HTML khusus PDF
+        $data = [
+            'invoice_number' => $invoiceNumber,
+            'issue_date'     => now()->translatedFormat('d F Y'),
+            'invitation'     => $invitation,
+            'user'           => $invitation->user,
+            'package_price'  => $packagePrice,
+            'addons'         => $invitation->addons,
+            'grand_total'    => $grandTotal
+        ];
+
+        // 5. Generate DOMPDF menggunakan view template terisolasi dengan set ukuran kertas A4
+        $pdf = Pdf::loadView('dashboard.billing.invoice_pdf', $data)
+                  ->setPaper('a4', 'portrait')
+                  ->setWarnings(false);
+
+        // 6. Alirkan stream unduhan ke browser pengguna secara instan
+        return $pdf->download('Invoice-' . $invoiceNumber . '-' . $invitation->slug . '.pdf');
     }
-};
+}
