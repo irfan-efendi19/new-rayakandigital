@@ -177,6 +177,7 @@ class MidtransService
         if ($transaction) {
             if ($isSettled) {
                 $transaction->payment_status = 'settlement';
+                $transaction->paid_at = now();
 
                 $transaction->addon->invitations()->syncWithoutDetaching([
                     $transaction->invitation_id => [

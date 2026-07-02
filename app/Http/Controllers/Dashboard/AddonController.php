@@ -23,6 +23,12 @@ class AddonController extends Controller
 
         $availableAddons = Addon::where('is_available', true)->get();
 
+        $pendingTransactions = AddonTransaction::where('invitation_id', $invitation->id)
+            ->whereIn('payment_status', ['pending', 'verifying'])
+            ->with('addon')
+            ->get()
+            ->keyBy('addon_id');
+
         $paymentMethod = $routing->activeMethod();
         $clientKey = config('midtrans.client_key');
 
@@ -35,7 +41,7 @@ class AddonController extends Controller
             // fallback
         }
 
-        return view('dashboard.addons.index', compact('invitation', 'availableAddons', 'paymentMethod', 'clientKey'));
+        return view('dashboard.addons.index', compact('invitation', 'availableAddons', 'pendingTransactions', 'paymentMethod', 'clientKey'));
     }
 
     public function purchase(Request $request, Invitation $invitation, Addon $addon, MidtransService $midtransService, PaymentRoutingService $routing)
@@ -50,15 +56,18 @@ class AddonController extends Controller
         $referenceOrderId = 'ADDON-' . strtoupper(Str::random(8)) . '-' . $invitation->id . '-' . $addon->id;
         $price = (int) $addon->price;
 
+        $paymentMethod = $routing->activeMethod();
+
         $transaction = AddonTransaction::create([
             'reference_order_id' => $referenceOrderId,
             'invitation_id' => $invitation->id,
             'addon_id' => $addon->id,
             'amount' => $price,
             'payment_status' => 'pending',
+            'payment_method' => $paymentMethod,
         ]);
 
-        if ($routing->isMidtrans()) {
+        if ($paymentMethod === 'midtrans') {
             $email = filter_var($request->user()->email, FILTER_VALIDATE_EMAIL)
                 ? $request->user()->email
                 : 'user-' . $request->user()->id . '@rayakandigital.com';

@@ -91,9 +91,10 @@
                     $pivot = $invitation->addons->firstWhere('id', $addon->id);
                     $isOwned = $pivot !== null;
                     $isActive = $pivot?->pivot->status_active ?? false;
+                    $pendingTx = $pendingTransactions->get($addon->id);
                 @endphp
                 <div class="bg-white dark:bg-secondary-800 rounded-2xl shadow-soft border overflow-hidden
-                    {{ $isActive ? 'border-emerald-200 dark:border-emerald-800' : 'border-neutral-100 dark:border-secondary-700' }}">
+                    {{ $isActive ? 'border-emerald-200 dark:border-emerald-800' : ($pendingTx ? 'border-amber-200 dark:border-amber-800' : 'border-neutral-100 dark:border-secondary-700') }}">
                     <div class="p-5">
                         <div class="flex items-start justify-between gap-4">
                             <div class="flex items-start gap-4 flex-1">
@@ -110,6 +111,14 @@
                                         @if($isActive)
                                             <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300">
                                                 Aktif
+                                            </span>
+                                        @elseif($pendingTx && $pendingTx->payment_status === 'verifying')
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300">
+                                                Verifikasi (WA)
+                                            </span>
+                                        @elseif($pendingTx)
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300">
+                                                Menunggu Pembayaran
                                             </span>
                                         @elseif($isOwned)
                                             <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-neutral-100 dark:bg-secondary-700 text-neutral-600 dark:text-neutral-400">
@@ -136,11 +145,39 @@
                                                 Diaktifkan {{ \Carbon\Carbon::parse($pivot->pivot->activated_at)->diffForHumans() }}
                                             </span>
                                         @endif
+                                        @if($pendingTx && $pendingTx->payment_status === 'pending')
+                                            <span class="text-xs text-amber-500 dark:text-amber-400">
+                                                {{ $pendingTx->created_at->diffForHumans() }}
+                                            </span>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
                             <div class="flex-shrink-0">
-                                @if(!$isOwned)
+                                @if($pendingTx && $pendingTx->payment_status === 'pending')
+                                    @if($paymentMethod === 'midtrans')
+                                        <form action="{{ route('dashboard.invitations.addons.purchase', [$invitation, $addon]) }}" method="POST"
+                                            x-data="addonCheckout" @submit.prevent="handleSubmit">
+                                            @csrf
+                                            <button type="submit"
+                                                x-bind:disabled="processing"
+                                                class="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-xl text-sm font-semibold transition-all">
+                                                <span x-show="!processing">Bayar Sekarang</span>
+                                                <span x-show="processing" x-cloak>Memproses...</span>
+                                            </button>
+                                        </form>
+                                    @else
+                                        <a href="{{ route('dashboard.invitations.addons.invoice', [$invitation, $pendingTx]) }}"
+                                            class="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-xl text-sm font-semibold transition-all">
+                                            Lihat Invoice
+                                        </a>
+                                    @endif
+                                @elseif($pendingTx && $pendingTx->payment_status === 'verifying')
+                                    <a href="{{ route('dashboard.invitations.addons.invoice', [$invitation, $pendingTx]) }}"
+                                        class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold transition-all">
+                                        Cek Status
+                                    </a>
+                                @elseif(!$isOwned)
                                     @if($paymentMethod === 'midtrans')
                                         <form action="{{ route('dashboard.invitations.addons.purchase', [$invitation, $addon]) }}" method="POST"
                                             x-data="addonCheckout" @submit.prevent="handleSubmit">
