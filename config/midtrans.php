@@ -18,7 +18,7 @@ return [
 
     'duration_days' => [
         'silver' => 90,
-        'gold' => 365,
-        'platinum' => null, // lifetime
+        'gold' => 90,
+        'platinum' => 90,
     ],
 ];

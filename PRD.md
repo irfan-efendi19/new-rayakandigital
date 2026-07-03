@@ -1,7 +1,7 @@
 # PRODUCT REQUIREMENT DOCUMENT (PRD)
-## MODUL: GENERATOR CETAK PDF INVOICE & REKAPITULASI ADD-ON (BILLING ENGINE)
-**Versi:** 17.0 (Spesifikasi Ekspor DomPDF, Kalkulasi Kombinasi Transaksi & Layout Komersial - Laravel 13)  
-**Tanggal:** 2 Juli 2026  
+## MODUL: DYNAMIC PREVIEW DATA PER TEMA (THEME-SPECIFIC DEMO DATA ENGINE)
+**Versi:** 18.0 (Spesifikasi Isolasi Data Pratinjau Tema & Integrasi Form Filament v3 - Laravel 13)  
+**Tanggal:** 3 Juli 2026  
 **Status:** Approved  
 **Author:** Mochammad Irfan Efendi  
 
@@ -10,71 +10,56 @@
 ## 1. DESKRIPSI FITUR & ATURAN BISNIS (BUSINESS RULES)
 
 ### 1.1 Deskripsi Fitur
-Sebagai transparansi transaksi dan kebutuhan pembukuan bagi pengguna, sistem memerlukan modul **Cetak PDF Invoice**. Fitur ini memungkinkan pengguna mengunduh berkas format `.pdf` resmi dari halaman `/dashboard/invitations/`. Dokumen ini akan merekap total biaya investasi pembuatan undangan digital, yang menggabungkan harga paket dasar undangan beserta rincian lembar baris (*line-items*) dari seluruh fitur premium (*add-on*) yang berhasil dibeli dan aktif.
+Saat calon pelanggan menjelajahi katalog tema di website utama, mereka dapat mengklik tombol "Preview Tema" untuk melihat bagaimana tema tersebut terlihat saat diisi data. Sebelumnya, sistem menggunakan satu data tiruan (*mock data*) global yang kaku untuk semua jenis tema. 
 
-### 1.2 Aturan Bisnis (Invoice PDF Business Rules)
-1. **Penyaringan Saringan Validitas (Settlement Only Sieve):** Komponen *add-on* yang berhak masuk ke dalam struk cetak PDF *hanya* yang memiliki status pembayaran `settlement` (lunas) pada tabel log transaksi. Item yang masih berstatus `pending` atau `expired` wajib diabaikan dari kalkulasi.
-2. **Kunci Nilai Sejarah (Historical Price Integrity):** Angka harga yang dicetak pada PDF wajib merujuk pada kolom `purchased_price` di tabel pivot saat transaksi sukses terjadi, bukan merujuk pada harga master produk yang ada saat ini di Admin Filament.
-3. **Standar Penamaan Berkas (Naming Standardization):** Berkas PDF yang diunduh wajib memiliki format nama yang baku, yaitu: `Invoice-[Nomor_Invoice]-[Slug_Undangan].pdf` (Contoh: `Invoice-INV-20260702-0034-irfan-sasa.pdf`).
+Fitur **Dynamic Preview Data** memberikan kemampuan bagi Admin melalui panel **Filament v3** untuk menyuntikkan data tiruan khusus (Nama Pengantin, Foto Hero, Tanggal Acara Tiruan) yang terikat langsung pada masing-masing entitas Tema (`themes`). Dengan demikian, tema bernuansa Tradisional akan menampilkan contoh nama & foto adat, sementara tema Modern akan menampilkan visual yang relevan.
+
+### 1.2 Aturan Bisnis (Theme Preview Business Rules)
+1. **Isolasi Data Terikat (Theme Binding):** Setiap tema wajib memiliki satu baris data pratinjau independen. Jika data pratinjau spesifik belum diisi oleh Admin, sistem harus beralih (*fallback*) ke data contoh default platform agar halaman preview tidak kosong (*Null Pointer Safeguard*).
+2. **Kemandirian URL Preview:** URL untuk melihat pratinjau tema diatur menggunakan struktur slug tema khusus, contoh: `platform.id/themes/{theme_slug}/preview`.
+3. **Pengendalian Gambar Kreatif:** Foto-foto contoh pratinjau tema (seperti foto mempelai pria/wanita) dikelola menggunakan *Filament File Upload* dan disimpan secara teratur pada folder `storage/app/public/theme_previews/`.
 
 ---
 
-## 2. REKAYASA BACKEND: INVOICE CONTROLLER GENERATOR (LARAVEL 13)
+## 2. BLUEPRINT ARSITEKTUR DATABASE (MIGRATION SCHEMA)
 
-Integrasikan pustaka `dompdf` ke dalam controller khusus untuk menyusun data finansial sebelum dikonversi menjadi berkas PDF:
+Ubah tabel `themes` atau buat tabel relasi baru `theme_preview_data` untuk mengisolasi informasi demo:
 
 ```php
-namespace App\Http\Controllers;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-use App\Models\Invitation;
-use App\Models\AddonTransaction;
-use Illuminate\Http\Request;
-use Barryvdh\DomPDF\Facade\Pdf;
-
-class InvoiceController extends Controller
+return new class extends Migration
 {
-    /**
-     * Memproses data billing dan mengunduh berkas PDF Invoice resmi
-     */
-    public function downloadPdf($id)
+    public function up(): void
     {
-        // 1. Ambil data undangan beserta relasi user dan addon yang berstatus lunas (settlement)
-        $invitation = Invitation::with(['user', 'addons' => function ($query) {
-            $query->wherePivot('status_active', true);
-        }])->findOrFail($id);
-
-        // 2. Ambil semua log transaksi sukses untuk mencantumkan Nomor Referensi Invoice Utama
-        $latestTransaction = AddonTransaction::where('invitation_id', $invitation->id)
-            ->where('payment_status', 'settlement')
-            ->latest()
-            ->first();
-
-        $invoiceNumber = $latestTransaction 
-            ? $latestTransaction->reference_order_id 
-            : 'INV-BASIC-' . $invitation->id . '-' . date('Ymd');
-
-        // 3. Kalkulasi Komponen Biaya Dasar & Add-on
-        $packagePrice = $invitation->package_price ?? 0; // Misal harga paket dasar pembuatan awal
-        $addonTotal = $invitation->addons->sum('pivot.purchased_price');
-        $grandTotal = $packagePrice + $addonTotal;
-
-        // 4. Siapkan Array Payload untuk dilemparkan ke dalam view Blade HTML khusus PDF
-        $data = [
-            'invoice_number' => $invoiceNumber,
-            'issue_date'     => now()->translatedFormat('d F Y'),
-            'invitation'     => $invitation,
-            'user'           => $invitation->user,
-            'package_price'  => $packagePrice,
-            'addons'         => $invitation->addons,
-            'grand_total'    => $grandTotal
-        ];
-
-        // 5. Generate DOMPDF menggunakan view template terisolasi dengan set ukuran kertas A4
-        $pdf = Pdf::loadView('dashboard.billing.invoice_pdf', $data)
-                  ->setPaper('a4', 'portrait')
-                  ->setWarnings(false);
-
-        // 6. Alirkan stream unduhan ke browser pengguna secara instan
-        return $pdf->download('Invoice-' . $invoiceNumber . '-' . $invitation->slug . '.pdf');
+        Schema::create('theme_preview_data', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('theme_id')->constrained('themes')->onDelete('cascade');
+            
+            // Komponen Data Mempelai Pria (Groom)
+            $table->string('groom_full_name')->default('Mochammad Irfan');
+            $table->string('groom_short_name')->default('Irfan');
+            $table->string('groom_father_name')->nullable();
+            $table->string('groom_mother_name')->nullable();
+            
+            // Komponen Data Mempelai Wanita (Bride)
+            $table->string('bride_full_name')->default('Siti Salsabila');
+            $table->string('bride_short_name')->default('Sasa');
+            $table->string('bride_father_name')->nullable();
+            $table->string('bride_mother_name')->nullable();
+            
+            // Aset Gambar Spesifik Tema
+            $table->string('hero_image_path')->nullable(); // Foto utama bertema khusus
+            $table->string('bg_music_path')->nullable();   // Backsound musik yang cocok dengan tema
+            
+            $table->timestamps();
+        });
     }
-}
+
+    public function down(): void
+    {
+        Schema::dropIfExists('theme_preview_data');
+    }
+};

@@ -127,12 +127,26 @@
                     <p class="text-neutral-500 text-sm leading-relaxed max-w-xs">Bagikan momen pre-wedding terbaik Anda
                         dalam tampilan slideshow premium yang memukau.</p>
                     <div class="mt-5 grid grid-cols-4 gap-1.5 rounded-xl overflow-hidden">
-                        <div class="col-span-2 row-span-2 bg-primary-200 rounded-xl h-24"
-                            style="background: linear-gradient(135deg,#fed7aa,#fb923c)"></div>
-                        <div class="bg-primary-100 rounded-xl h-11" style="background:linear-gradient(135deg,#fde68a,#fbbf24)"></div>
-                        <div class="bg-primary-300 rounded-xl h-11" style="background:linear-gradient(135deg,#fca5a5,#f87171)"></div>
-                        <div class="bg-primary-200 rounded-xl h-11" style="background:linear-gradient(135deg,#bbf7d0,#4ade80)"></div>
-                        <div class="bg-primary-100 rounded-xl h-11" style="background:linear-gradient(135deg,#bfdbfe,#60a5fa)"></div>
+                        <div class="col-span-2 row-span-2 bg-primary-200 rounded-xl h-24">
+                            <img src="https://semar.co.id/wp-content/uploads/2022/05/prewed-1.jpg" alt="Foto 1"
+                                class="w-full h-full object-cover rounded-xl">
+                        </div>
+                        <div class="rounded-xl h-11">
+                            <img src="https://cdn1-production-images-kly.akamaized.net/0hS8EiMFn9LzJN_pZB-dIGVoHFU=/1280x720/smart/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/2922077/original/010070100_1569420799-ILUSTRASI_PREWEDDING.jpg"
+                                alt="Foto 1" class="w-full h-full object-cover rounded-xl">
+                        </div>
+                        <div class="bg-primary-300 rounded-xl h-11">
+                            <img src="https://tendasidomulyo.com/wp-content/uploads/2023/09/Konsep-foto-fun-di-alam-terbuka-untuk-kesan-unik.jpg"
+                                alt="Foto 1" class="w-full h-full object-cover rounded-xl">
+                        </div>
+                        <div class="bg-primary-300 rounded-xl h-11">
+                            <img src="https://www.keboncinta.com/uploads/artikel/1758726586_tampak-realistis-ini-prompt-foto-prewedding-bareng-pasangan-gemini-ai.webp"
+                                alt="Foto 1" class="w-full h-full object-cover rounded-xl">
+                        </div>
+                        <div class="bg-primary-300 rounded-xl h-11">
+                            <img src="https://i.pinimg.com/originals/62/88/33/628833390eeed9b14bacb742a35dbfdb.jpg" alt="Foto 1"
+                                class="w-full h-full object-cover rounded-xl">
+                        </div>
                     </div>
                 </div>
                 <div data-aos="fade-up" data-aos-delay="200" class="bg-neutral-50 dark:bg-secondary-800 rounded-3xl p-6 relative overflow-hidden shadow-soft">
