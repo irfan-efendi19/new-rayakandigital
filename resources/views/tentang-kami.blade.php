@@ -17,10 +17,10 @@
     <script>
         if (localStorage.getItem('dark-mode') === 'true' || (!('dark-mode' in localStorage) && window.matchMedia(
             '(prefers-color-scheme: dark)').matches)) {
-        document.documentElement.classList.add('dark');
-    } else {
-        document.documentElement.classList.remove('dark');
-    }
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
     </script>
 </head>
 
@@ -45,7 +45,8 @@
                 Our Origin Story
             </span>
 
-            <h1 class="font-heading text-5xl md:text-6xl font-bold leading-tight text-secondary-800 dark:text-neutral-200 mb-3">
+            <h1
+                class="font-heading text-5xl md:text-6xl font-bold leading-tight text-secondary-800 dark:text-neutral-200 mb-3">
                 Menciptakan Kenangan<br>Digital yang
             </h1>
             <h1 class="font-heading text-5xl md:text-6xl italic text-primary-500 dark:text-primary-400 mb-6">
@@ -121,7 +122,8 @@
                     Menjadi partner utama dalam merayakan momen berharga melalui inovasi digital yang melampaui batas
                     jarak dan waktu, menciptakan kenangan yang abadi bagi setiap pasangan di seluruh penjuru negeri.
                 </p>
-                <a href="#" class="text-primary-500 font-semibold text-sm hover:underline inline-flex items-center gap-1">
+                <a href="#"
+                    class="text-primary-500 font-semibold text-sm hover:underline inline-flex items-center gap-1">
                     Membangun Masa Depan Perayaan <i class="fa-solid fa-arrow-right text-xs"></i>
                 </a>
             </div>
@@ -170,7 +172,8 @@
 
                 <div data-aos="fade-up" data-aos-delay="100"
                     class="bg-white dark:bg-secondary-800 rounded-2xl p-7 border border-neutral-100 dark:border-secondary-700 shadow-soft transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-                    <div class="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center mb-4 text-primary-600">
+                    <div
+                        class="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center mb-4 text-primary-600">
                         <i class="fa-solid fa-wand-magic-sparkles"></i>
                     </div>
                     <h4 class="font-heading font-bold text-lg mb-2 text-secondary-800 dark:text-neutral-200">Inovasi
@@ -181,7 +184,8 @@
 
                 <div data-aos="fade-up" data-aos-delay="200"
                     class="bg-white dark:bg-secondary-800 rounded-2xl p-7 border border-neutral-100 dark:border-secondary-700 shadow-soft transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-                    <div class="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center mb-4 text-primary-600">
+                    <div
+                        class="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center mb-4 text-primary-600">
                         <i class="fa-solid fa-film"></i>
                     </div>
                     <h4 class="font-heading font-bold text-lg mb-2 text-secondary-800 dark:text-neutral-200">Kualitas
@@ -192,7 +196,8 @@
 
                 <div data-aos="fade-up" data-aos-delay="300"
                     class="bg-white dark:bg-secondary-800 rounded-2xl p-7 border border-neutral-100 dark:border-secondary-700 shadow-soft transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-                    <div class="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center mb-4 text-primary-600">
+                    <div
+                        class="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center mb-4 text-primary-600">
                         <i class="fa-regular fa-heart"></i>
                     </div>
                     <h4 class="font-heading font-bold text-lg mb-2 text-secondary-800 dark:text-neutral-200">Kepuasan

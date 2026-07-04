@@ -5,11 +5,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <x-meta
-        title="Buku Tamu Digital - Rayakan Digital"
+    <x-meta title="Buku Tamu Digital - Rayakan Digital"
         description="Gantikan buku tamu kertas tradisional dengan sistem registrasi digital yang cepat, aman, dan terintegrasi otomatis dengan WhatsApp. Check-in QR code, manajemen RSVP real-time."
-        keywords="buku tamu digital, buku tamu online, QR code check-in, registrasi tamu digital, manajemen tamu"
-    />
+        keywords="buku tamu digital, buku tamu online, QR code check-in, registrasi tamu digital, manajemen tamu" />
 
     @stack('meta')
 
@@ -73,10 +71,13 @@
                 <div class="relative rounded-3xl overflow-hidden shadow-soft border border-primary-100">
                     <div
                         class="bg-gradient-to-br from-amber-50 to-primary-50 dark:from-secondary-800 dark:to-secondary-800 aspect-[4/3] flex items-center justify-center">
-                        <div class="bg-white dark:bg-secondary-800 rounded-2xl p-6 shadow-soft w-56 text-center mx-auto">
-                            <div class="text-3xl font-mono font-bold text-secondary-800 dark:text-neutral-200 tracking-widest mb-3">
+                        <div
+                            class="bg-white dark:bg-secondary-800 rounded-2xl p-6 shadow-soft w-56 text-center mx-auto">
+                            <div
+                                class="text-3xl font-mono font-bold text-secondary-800 dark:text-neutral-200 tracking-widest mb-3">
                                 09822106</div>
-                            <div class="h-24 w-24 mx-auto mb-3 bg-secondary-900 rounded-xl flex items-center justify-center">
+                            <div
+                                class="h-24 w-24 mx-auto mb-3 bg-secondary-900 rounded-xl flex items-center justify-center">
                                 <div class="grid grid-cols-3 gap-1 p-2">
                                     <div class="bg-white dark:bg-secondary-800 w-4 h-4 rounded-sm"></div>
                                     <div class="bg-secondary-900 w-4 h-4 rounded-sm"></div>
@@ -96,7 +97,8 @@
 
                 <div
                     class="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-white dark:bg-secondary-800 rounded-2xl shadow-soft px-5 py-3 flex items-center gap-3 border border-primary-100 whitespace-nowrap">
-                    <div class="w-9 h-9 rounded-full bg-primary-500 flex items-center justify-center text-white text-sm">
+                    <div
+                        class="w-9 h-9 rounded-full bg-primary-500 flex items-center justify-center text-white text-sm">
                         <i class="fa-solid fa-qrcode"></i>
                     </div>
                     <div>
@@ -146,7 +148,8 @@
                     </div>
                 </div>
 
-                <div data-aos="fade-up" data-aos-delay="200" class="bg-primary-500 rounded-3xl p-8 text-white transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                <div data-aos="fade-up" data-aos-delay="200"
+                    class="bg-primary-500 rounded-3xl p-8 text-white transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                     <div class="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center mb-6">
                         <i class="fa-brands fa-whatsapp text-2xl"></i>
                     </div>
@@ -166,7 +169,8 @@
 
                 <div data-aos="fade-up" data-aos-delay="100"
                     class="bg-white dark:bg-secondary-800 rounded-3xl p-8 shadow-soft border border-neutral-100 dark:border-secondary-700 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-                    <div class="w-12 h-12 bg-primary-50 dark:bg-secondary-800 rounded-2xl flex items-center justify-center mb-6">
+                    <div
+                        class="w-12 h-12 bg-primary-50 dark:bg-secondary-800 rounded-2xl flex items-center justify-center mb-6">
                         <i class="fa-solid fa-shield-halved text-primary-500 text-xl"></i>
                     </div>
                     <h3 class="text-2xl font-heading font-bold text-secondary-900 dark:text-neutral-100 mb-3">Data
@@ -176,8 +180,10 @@
                         dienkripsi dengan standar industri terbaru.</p>
                 </div>
 
-                <div data-aos="fade-up" data-aos-delay="200" class="bg-white dark:bg-secondary-800 rounded-3xl p-8 shadow-soft border border-neutral-100 dark:border-secondary-700 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-                    <div class="mb-4 rounded-2xl overflow-hidden bg-secondary-800 h-28 flex items-center justify-center">
+                <div data-aos="fade-up" data-aos-delay="200"
+                    class="bg-white dark:bg-secondary-800 rounded-3xl p-8 shadow-soft border border-neutral-100 dark:border-secondary-700 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                    <div
+                        class="mb-4 rounded-2xl overflow-hidden bg-secondary-800 h-28 flex items-center justify-center">
                         <div class="grid grid-cols-5 gap-1 p-3 opacity-80">
                             <div class="bg-white dark:bg-secondary-800 w-3 h-3 rounded-sm"></div>
                             <div class="bg-secondary-700 w-3 h-3 rounded-sm"></div>
@@ -215,7 +221,8 @@
                     <div class="bg-secondary-900 rounded-[3rem] p-3 shadow-2xl">
                         <div class="bg-secondary-800 rounded-[2.5rem] overflow-hidden aspect-[9/18]">
                             <div class="bg-[#075e54] dark:bg-[#202c33] p-3 flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-full bg-primary-500 flex items-center justify-center text-white text-xs font-bold">
+                                <div
+                                    class="w-8 h-8 rounded-full bg-primary-500 flex items-center justify-center text-white text-xs font-bold">
                                     R</div>
                                 <div>
                                     <p class="text-white text-xs font-bold">Rayakan Events</p>
@@ -223,13 +230,15 @@
                                 </div>
                             </div>
                             <div class="bg-[#ece5dd] dark:bg-[#0b141a] p-3 space-y-3 h-full">
-                                <div class="bg-white dark:bg-secondary-800 rounded-2xl rounded-tl-none p-3 max-w-[80%] shadow-sm">
+                                <div
+                                    class="bg-white dark:bg-secondary-800 rounded-2xl rounded-tl-none p-3 max-w-[80%] shadow-sm">
                                     <p class="text-xs text-secondary-800 dark:text-neutral-200">Halo Budi! 👋 Anda
                                         terdaftar sebagai tamu VIP di
                                         pernikahan <strong>Sari & Andi</strong>.</p>
                                     <p class="text-[10px] text-neutral-400 mt-1 text-right">09:01 ✓✓</p>
                                 </div>
-                                <div class="bg-white dark:bg-secondary-800 rounded-2xl rounded-tl-none p-3 max-w-[80%] shadow-sm">
+                                <div
+                                    class="bg-white dark:bg-secondary-800 rounded-2xl rounded-tl-none p-3 max-w-[80%] shadow-sm">
                                     <div class="bg-secondary-800 dark:bg-secondary-700 rounded-xl p-2 mb-2 text-center">
                                         <p class="text-white text-xs mb-1">Kode QR Anda</p>
                                         <div class="grid grid-cols-3 gap-0.5 w-10 mx-auto">
@@ -241,13 +250,17 @@
                                             <div class="bg-secondary-900 dark:bg-secondary-500 w-2 h-2"></div>
                                         </div>
                                     </div>
-                                    <p class="text-[10px] text-neutral-500 dark:text-neutral-400">Tunjukkan QR ini saat tiba di venue ✨</p>
-                                    <p class="text-[10px] text-neutral-400 dark:text-neutral-500 mt-1 text-right">09:02 ✓✓</p>
+                                    <p class="text-[10px] text-neutral-500 dark:text-neutral-400">Tunjukkan QR ini saat
+                                        tiba di venue ✨</p>
+                                    <p class="text-[10px] text-neutral-400 dark:text-neutral-500 mt-1 text-right">09:02
+                                        ✓✓</p>
                                 </div>
-                                <div class="ml-auto bg-[#dcf8c6] dark:bg-[#005c4b] rounded-2xl rounded-tr-none p-3 max-w-[75%] shadow-sm">
+                                <div
+                                    class="ml-auto bg-[#dcf8c6] dark:bg-[#005c4b] rounded-2xl rounded-tr-none p-3 max-w-[75%] shadow-sm">
                                     <p class="text-xs text-secondary-800 dark:text-white">Terima kasih! Siap hadir
                                         🎉</p>
-                                    <p class="text-[10px] text-neutral-400 dark:text-white/60 mt-1 text-right">09:05 ✓✓</p>
+                                    <p class="text-[10px] text-neutral-400 dark:text-white/60 mt-1 text-right">09:05 ✓✓
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -302,7 +315,8 @@
     </section>
 
     <!-- ───────────────── CTA ───────────────── -->
-    <section data-aos="fade-up" id="harga" class="bg-gradient-to-br from-primary-600 to-primary-800 dark:from-primary-700 dark:to-primary-900 py-20">
+    <section data-aos="fade-up" id="harga"
+        class="bg-gradient-to-br from-primary-600 to-primary-800 dark:from-primary-700 dark:to-primary-900 py-20">
         <div class="max-w-2xl mx-auto px-6 text-center">
             <h2 class="text-4xl font-heading font-bold text-white mb-4">Siap Memodernisasi Acara Anda?</h2>
             <p class="text-primary-100 mb-10 leading-relaxed">Bergabunglah dengan ribuan penyelenggara acara yang telah
