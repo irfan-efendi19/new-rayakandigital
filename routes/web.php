@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\AddonPaymentController;
+use App\Http\Controllers\Admin\ImpersonationController;
+use App\Http\Controllers\Auth\SocialiteController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Dashboard\AddonController;
-use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\Dashboard\CheckoutController;
 use App\Http\Controllers\Dashboard\GalleryController;
 use App\Http\Controllers\Dashboard\GuestbookController;
@@ -16,6 +17,7 @@ use App\Http\Controllers\Dashboard\WhatsAppPaymentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvitationRenderController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QRGatewayController;
@@ -30,7 +32,8 @@ use Illuminate\Support\Facades\Route;
 // Landing Page & Public Preview
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/semua-tema', [ThemeController::class, 'index'])->name('themes.index');
-Route::get('/preview/{themeSlug}', [ThemePreviewController::class, 'show'])->name('theme.preview');
+Route::get('/themes/{themeSlug}/preview', [ThemePreviewController::class, 'show'])->name('theme.preview');
+Route::get('/preview/{themeSlug}', fn (string $themeSlug) => redirect()->route('theme.preview', $themeSlug));
 
 // Public Pages
 Route::get('/undangan-web', function () {
@@ -46,14 +49,14 @@ Route::view('/live-streaming', 'live-streaming')->name('live-streaming');
 Route::view('/syarat-ketentuan', 'syarat-ketentuan')->name('syarat-ketentuan');
 Route::view('/kebijakan-privasi', 'kebijakan-privasi')->name('kebijakan-privasi');
 Route::view('/tentang-kami', 'tentang-kami')->name('tentang-kami');
-Route::get('/hubungi-kami', [App\Http\Controllers\ContactController::class, 'show'])->name('hubungi-kami');
-Route::post('/hubungi-kami', [App\Http\Controllers\ContactController::class, 'submit'])->name('hubungi-kami.submit');
+Route::get('/hubungi-kami', [ContactController::class, 'show'])->name('hubungi-kami');
+Route::post('/hubungi-kami', [ContactController::class, 'submit'])->name('hubungi-kami.submit');
 
 // Admin Impersonation Routes
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'admin'])->group(function () {
-    Route::get('/impersonate', [\App\Http\Controllers\Admin\ImpersonationController::class, 'index'])->name('impersonate.index');
-    Route::post('/impersonate/leave', [\App\Http\Controllers\Admin\ImpersonationController::class, 'leave'])->name('impersonate.leave');
-    Route::post('/impersonate/{user}', [\App\Http\Controllers\Admin\ImpersonationController::class, 'switch'])->name('impersonate.switch');
+    Route::get('/impersonate', [ImpersonationController::class, 'index'])->name('impersonate.index');
+    Route::post('/impersonate/leave', [ImpersonationController::class, 'leave'])->name('impersonate.leave');
+    Route::post('/impersonate/{user}', [ImpersonationController::class, 'switch'])->name('impersonate.switch');
 });
 
 // Google OAuth

@@ -41,7 +41,7 @@ class ThemeResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->with(['themeCategory']);
+        return parent::getEloquentQuery()->with(['themeCategory', 'previewData']);
     }
 
     public static function getRelations(): array

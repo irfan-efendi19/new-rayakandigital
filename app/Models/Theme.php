@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -29,6 +30,31 @@ class Theme extends Model
     public function themeCategory(): BelongsTo
     {
         return $this->belongsTo(ThemeCategory::class);
+    }
+
+    public function previewData(): HasOne
+    {
+        return $this->hasOne(ThemePreviewData::class);
+    }
+
+    public function getSlugAttribute(): string
+    {
+        return str_replace('themes.', '', $this->view_path ?? '');
+    }
+
+    public function resolvedPreviewData(): PreviewData
+    {
+        $fallback = PreviewData::getPreview();
+
+        if (! $this->relationLoaded('previewData')) {
+            $this->load('previewData');
+        }
+
+        if (! $this->previewData) {
+            return $fallback;
+        }
+
+        return $this->previewData->mergeWithFallback($fallback);
     }
 
     public function cleanupFiles(): void

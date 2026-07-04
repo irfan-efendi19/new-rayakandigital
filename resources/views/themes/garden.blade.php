@@ -13,8 +13,7 @@
         $coupleFirst = $isBrideFirst ? $brideLabel : $groomLabel;
         $coupleSecond = $isBrideFirst ? $groomLabel : $brideLabel;
     @endphp
-    <x-meta title="Pernikahan {{ $coupleName }}" description="Undangan Pernikahan {{ $coupleName }}"
-        image="{{ $invitation->cover_photo ? asset('storage/' . $invitation->cover_photo) : null }}" />
+    <x-meta :title="'Pernikahan ' . $coupleName" :description="'Undangan pernikahan digital ' . $coupleName . '. Informasi lengkap acara, lokasi, waktu, dan galeri foto. Kirimkan doa dan kehadiran Anda secara virtual di sini.'" image="{{ $invitation->cover_photo ? asset('storage/' . $invitation->cover_photo) : null }}" />
 
     @stack('meta')
     <link
@@ -22,6 +21,7 @@
         rel="stylesheet">
     <link rel="stylesheet"
         href="{{ asset('themes/garden/assets/css/style.css') }}?v={{ filemtime(public_path('themes/garden/assets/css/style.css')) }}">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
 
 <body class="loading-active">
@@ -30,15 +30,23 @@
     <div id="loadingOverlay" class="loading-overlay">
         <div class="loading-spinner">
             <div class="loading-ring"></div>
-            <p class="loading-text">Memuat undangan...</p>
+            <div class="loading-spinner-img">
+                <img src="{{ asset('themes/garden/assets/images/logonew.png') }}" alt="Logo">
+            </div>
+            <p class="loading-text">Dua hati bersatu dalam satu asa...</p>
+
         </div>
     </div>
     <script>
         (function () {
             var o = document.getElementById('loadingOverlay');
             if (!o) return;
+
+            var loaded = false;
+
             function done() {
-                if (o.dataset.done) return;
+                if (loaded) return;
+                loaded = true;
                 o.dataset.done = '1';
                 o.classList.add('hidden');
                 document.body.classList.remove('loading-active');
@@ -46,10 +54,24 @@
                     o.style.display = 'none';
                 }, 600);
             }
-            if (document.readyState === 'complete') done();
-            else window.addEventListener('load', done);
-            if (document.fonts) document.fonts.ready.then(done, done);
-            setTimeout(done, 5000);
+
+            // Tunggu DOM dan semua asset (gambar, iframe, dll)
+            if (document.readyState === 'complete') {
+                done();
+            } else {
+                window.addEventListener('load', done);
+            }
+
+            // Tunggu font hanya jika ada yang loading
+            if (document.fonts && document.fonts.status === 'loading') {
+                document.fonts.ready.then(done).catch(done);
+            }
+
+            // Fallback timeout - lebih panjang untuk safety
+            setTimeout(done, 8000);
+
+            // Opsional: tambahkan progress tracking untuk UX lebih baik
+            // console.log('Loading assets...');
         })();
     </script>
 
@@ -186,7 +208,12 @@
                                             <p class="couple-nickname">{{ $invitation->bride_nickname }}</p>
                                         @endif
                                         <p class="couple-parents">
-                                            {{ $invitation->bride_parents ?: 'Putri dari Bapak ... &amp; Ibu ...' }}
+                                            @php
+                                                $brideParentsText = $invitation->bride_parents ?: 'Putri dari Bapak ... & Ibu ...';
+                                                $brideParentsParts = explode(' & ', $brideParentsText, 2);
+                                            @endphp
+                                            {{ $brideParentsParts[0] }}@if(isset($brideParentsParts[1]))<br>
+                                            & {{ $brideParentsParts[1] }}@endif
                                         </p>
                                     @else
                                         <div class="couple-photo">
@@ -203,7 +230,12 @@
                                             <p class="couple-nickname">{{ $invitation->groom_nickname }}</p>
                                         @endif
                                         <p class="couple-parents">
-                                            {{ $invitation->groom_parents ?: 'Putra dari Bapak ... &amp; Ibu ...' }}
+                                            @php
+                                                $groomParentsText = $invitation->groom_parents ?: 'Putra dari Bapak ... & Ibu ...';
+                                                $groomParentsParts = explode(' & ', $groomParentsText, 2);
+                                            @endphp
+                                            {{ $groomParentsParts[0] }}@if(isset($groomParentsParts[1]))<br>
+                                            & {{ $groomParentsParts[1] }}@endif
                                         </p>
                                     @endif
                                 </div>
@@ -224,7 +256,12 @@
                                             <p class="couple-nickname">{{ $invitation->groom_nickname }}</p>
                                         @endif
                                         <p class="couple-parents">
-                                            {{ $invitation->groom_parents ?: 'Putra dari Bapak ... &amp; Ibu ...' }}
+                                            @php
+                                                $groomParentsText = $invitation->groom_parents ?: 'Putra dari Bapak ... & Ibu ...';
+                                                $groomParentsParts = explode(' & ', $groomParentsText, 2);
+                                            @endphp
+                                            {{ $groomParentsParts[0] }}@if(isset($groomParentsParts[1]))<br>
+                                            & {{ $groomParentsParts[1] }}@endif
                                         </p>
                                     @else
                                         <div class="couple-photo">
@@ -241,7 +278,12 @@
                                             <p class="couple-nickname">{{ $invitation->bride_nickname }}</p>
                                         @endif
                                         <p class="couple-parents">
-                                            {{ $invitation->bride_parents ?: 'Putri dari Bapak ... &amp; Ibu ...' }}
+                                            @php
+                                                $brideParentsText = $invitation->bride_parents ?: 'Putri dari Bapak ... & Ibu ...';
+                                                $brideParentsParts = explode(' & ', $brideParentsText, 2);
+                                            @endphp
+                                            {{ $brideParentsParts[0] }}@if(isset($brideParentsParts[1]))<br>
+                                            & {{ $brideParentsParts[1] }}@endif
                                         </p>
                                     @endif
                                 </div>
@@ -747,9 +789,13 @@
                         @php
                             $appUrl = config('app.url');
                         @endphp
-                        <p class="footer-credit">Dibuat dengan <a href="{{ $appUrl }}"
-                                target="_blank">RayakanDigital</a>
+                        <p class="footer-credit">Dibuat dengan
                         </p>
+                        <div class="footer-imglogo"><a href="{{ $appUrl }}" target="_blank">
+                                <img src="{{ asset('themes/garden/assets/images/logo.png') }}" alt="Logo"
+                                    class="footer-logo">
+                            </a>
+                        </div>
                     </div>
                 </footer>
 
@@ -769,9 +815,13 @@
                     <div class="intro-amp">&amp;</div>
                     <h1 class="intro-name">{{ $invitation->bride_nickname ?: $invitation->bride_name }}</h1>
                 @endif
-            </div></div>
+            </div>
         </div>
-
+    </div>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
     <script src="{{ asset('themes/garden/assets/js/script.js') }}"></script>
 </body>
 

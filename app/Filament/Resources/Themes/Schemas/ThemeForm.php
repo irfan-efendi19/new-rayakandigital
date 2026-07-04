@@ -61,6 +61,8 @@ class ThemeForm
                 Toggle::make('is_active')
                     ->label('Active')
                     ->default(true),
+
+                ThemePreviewDataForm::section(),
             ]);
     }
 }

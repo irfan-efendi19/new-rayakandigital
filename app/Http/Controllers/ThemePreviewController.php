@@ -6,7 +6,6 @@ use App\Models\Guest;
 use App\Models\Invitation;
 use App\Models\InvitationEvent;
 use App\Models\InvitationStory;
-use App\Models\PreviewData;
 use App\Models\Theme;
 use Illuminate\Support\Collection;
 
@@ -14,11 +13,12 @@ class ThemePreviewController extends Controller
 {
     public function show(string $themeSlug)
     {
-        $theme = Theme::where('view_path', 'themes.' . $themeSlug)
+        $theme = Theme::with('previewData')
+            ->where('view_path', 'themes.'.$themeSlug)
             ->where('is_active', true)
             ->firstOrFail();
 
-        $preview = PreviewData::getPreview();
+        $preview = $theme->resolvedPreviewData();
 
         $invitation = new Invitation([
             'title' => $preview->title,
@@ -93,7 +93,7 @@ class ThemePreviewController extends Controller
 
         $guest = new Guest([
             'name' => 'Nama Tamu',
-            'qr_code_token' => 'preview-demo-' . str_replace([' ', '.'], '', microtime()),
+            'qr_code_token' => 'preview-demo-'.str_replace([' ', '.'], '', microtime()),
         ]);
 
         $themeView = $theme->view_path;
