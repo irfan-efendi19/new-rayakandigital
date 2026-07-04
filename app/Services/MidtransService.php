@@ -3,9 +3,17 @@
 namespace App\Services;
 
 use App\Models\AddonTransaction;
+use App\Models\Invitation;
+use App\Models\Order;
+use App\Models\Package;
+use App\Models\PaymentGatewaySetting;
+use App\Models\PaymentMethodConfig;
 use App\Models\Subscription;
 use App\Models\User;
 use Illuminate\Support\Str;
+use Midtrans\Config;
+use Midtrans\Snap;
+use Midtrans\Transaction;
 
 class MidtransService
 {
@@ -15,9 +23,9 @@ class MidtransService
         $isProduction = config('midtrans.is_production');
 
         try {
-            if (class_exists(\App\Models\PaymentMethodConfig::class)) {
-                $methodConfig = \App\Models\PaymentMethodConfig::getActive();
-                if ($methodConfig && $methodConfig->isMidtrans() && !empty($methodConfig->midtrans_server_key)) {
+            if (class_exists(PaymentMethodConfig::class)) {
+                $methodConfig = PaymentMethodConfig::getActive();
+                if ($methodConfig && $methodConfig->isMidtrans() && ! empty($methodConfig->midtrans_server_key)) {
                     $serverKey = $methodConfig->midtrans_server_key;
                     $isProduction = $methodConfig->midtrans_environment === 'production';
                 }
@@ -28,8 +36,8 @@ class MidtransService
 
         if (empty($serverKey)) {
             try {
-                if (class_exists(\App\Models\PaymentGatewaySetting::class)) {
-                    $setting = \App\Models\PaymentGatewaySetting::where('provider_name', 'midtrans')
+                if (class_exists(PaymentGatewaySetting::class)) {
+                    $setting = PaymentGatewaySetting::where('provider_name', 'midtrans')
                         ->where('is_active', true)
                         ->first();
 
@@ -43,27 +51,27 @@ class MidtransService
             }
         }
 
-        \Midtrans\Config::$serverKey = $serverKey;
-        \Midtrans\Config::$isProduction = $isProduction;
-        \Midtrans\Config::$isSanitized = config('midtrans.is_sanitized');
-        \Midtrans\Config::$is3ds = config('midtrans.is_3ds');
+        Config::$serverKey = $serverKey;
+        Config::$isProduction = $isProduction;
+        Config::$isSanitized = config('midtrans.is_sanitized');
+        Config::$is3ds = config('midtrans.is_3ds');
     }
 
     public function isSimulationMode(): bool
     {
-        return empty(\Midtrans\Config::$serverKey);
+        return empty(Config::$serverKey);
     }
 
     public function getPrice(string $tier): int
     {
-        $package = \App\Models\Package::where('package_code', $tier)->first();
+        $package = Package::where('package_code', $tier)->first();
 
         return $package ? (int) $package->price : (int) config('midtrans.pricing.'.$tier, 0);
     }
 
     public function getDurationDays(string $tier): ?int
     {
-        $package = \App\Models\Package::where('package_code', $tier)->first();
+        $package = Package::where('package_code', $tier)->first();
 
         if ($package) {
             return $package->active_period_days > 0 ? $package->active_period_days : null;
@@ -80,7 +88,7 @@ class MidtransService
     public function createSnapToken(User $user, string $tier): array
     {
         $price = $this->getPrice($tier);
-        $orderId = 'RD-' . now()->format('Ymd') . '-' . $user->id . '-' . strtoupper(Str::random(4));
+        $orderId = 'RD-'.now()->format('Ymd').'-'.$user->id.'-'.strtoupper(Str::random(4));
 
         $subscription = Subscription::create([
             'user_id' => $user->id,
@@ -103,7 +111,7 @@ class MidtransService
             ],
             'item_details' => [
                 [
-                    'id' => 'RD-PAKET-' . strtoupper($tier),
+                    'id' => 'RD-PAKET-'.strtoupper($tier),
                     'price' => $price,
                     'quantity' => 1,
                     'name' => 'Paket '.ucfirst($tier).' - Rayakan Digital',
@@ -122,9 +130,9 @@ class MidtransService
         }
 
         try {
-            $snapToken = \Midtrans\Snap::getSnapToken($params);
+            $snapToken = Snap::getSnapToken($params);
         } catch (\Throwable $e) {
-            logger()->error('Gagal buat Snap token: ' . $e->getMessage());
+            logger()->error('Gagal buat Snap token: '.$e->getMessage());
 
             return [
                 'snap_token' => 'SIMULATION_TOKEN_'.$orderId,
@@ -160,19 +168,23 @@ class MidtransService
         }
 
         if ($signatureKey !== null) {
-            $calculated = hash('sha512', $orderId . $statusCode . $grossAmount . \Midtrans\Config::$serverKey);
+            $calculated = hash('sha512', $orderId.$statusCode.$grossAmount.Config::$serverKey);
 
             if (! hash_equals($calculated, $signatureKey)) {
-                logger()->warning('Midtrans webhook signature mismatch for order: ' . $orderId);
+                logger()->warning('Midtrans webhook signature mismatch for order: '.$orderId);
 
                 return null;
             }
+        } elseif (! $this->isSimulationMode()) {
+            logger()->warning('Midtrans webhook missing signature key for order: '.$orderId);
+
+            return null;
         }
 
         $isSettled = $transactionStatus === 'settlement'
             || ($transactionStatus === 'capture' && $fraudStatus === 'accept');
 
-        $transaction = \App\Models\AddonTransaction::where('reference_order_id', $orderId)->first();
+        $transaction = AddonTransaction::where('reference_order_id', $orderId)->first();
 
         if ($transaction) {
             if ($isSettled) {
@@ -229,7 +241,7 @@ class MidtransService
         $subscription->save();
 
         // Sync Order status
-        $order = \App\Models\Order::where('order_id', $orderId)->first();
+        $order = Order::where('order_id', $orderId)->first();
         if ($order) {
             $order->payment_status = match (true) {
                 $isSettled => 'success',
@@ -241,9 +253,9 @@ class MidtransService
 
         // Update invitation tier and expiry on successful payment
         if ($isSettled && $order && $order->invitation_id) {
-            $invitation = \App\Models\Invitation::find($order->invitation_id);
+            $invitation = Invitation::find($order->invitation_id);
             if ($invitation) {
-                $package = \App\Models\Package::where('package_code', $subscription->tier)->first();
+                $package = Package::where('package_code', $subscription->tier)->first();
                 $durationDays = $this->getDurationDays($subscription->tier);
                 $invitation->tier = $subscription->tier;
                 $invitation->pricing_tier_id = $package?->id;
@@ -266,7 +278,7 @@ class MidtransService
         }
 
         try {
-            $status = \Midtrans\Transaction::status($orderId);
+            $status = Transaction::status($orderId);
 
             $payload = [
                 'order_id' => $status->order_id,
@@ -280,7 +292,7 @@ class MidtransService
 
             return $this->handleNotification($payload);
         } catch (\Throwable $e) {
-            logger()->warning('Gagal cek status Midtrans: ' . $e->getMessage());
+            logger()->warning('Gagal cek status Midtrans: '.$e->getMessage());
 
             return null;
         }
@@ -296,7 +308,7 @@ class MidtransService
         }
 
         try {
-            $status = \Midtrans\Transaction::status($referenceOrderId);
+            $status = Transaction::status($referenceOrderId);
 
             $payload = [
                 'order_id' => $status->order_id,
@@ -310,7 +322,7 @@ class MidtransService
 
             return $this->handleNotification($payload);
         } catch (\Throwable $e) {
-            logger()->warning('Gagal cek status Midtrans untuk addon: ' . $e->getMessage());
+            logger()->warning('Gagal cek status Midtrans untuk addon: '.$e->getMessage());
 
             return null;
         }
@@ -325,7 +337,7 @@ class MidtransService
             return;
         }
 
-        \Midtrans\Transaction::cancel($orderId);
+        Transaction::cancel($orderId);
     }
 
     /**

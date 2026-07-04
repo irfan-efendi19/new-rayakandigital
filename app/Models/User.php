@@ -5,16 +5,16 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Notifications\ResetPassword;
 use Database\Factories\UserFactory;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Filament\Models\Contracts\FilamentUser;
-use Filament\Panel;
 
-#[Fillable(['name', 'email', 'password', 'role', 'is_banned', 'is_super_admin', 'google_id', 'google_token', 'google_refresh_token', 'avatar'])]
+#[Fillable(['name', 'email', 'password', 'role', 'is_banned', 'google_id', 'google_token', 'google_refresh_token', 'avatar'])]
 #[Hidden(['password', 'remember_token', 'google_token', 'google_refresh_token'])]
 class User extends Authenticatable implements FilamentUser
 {
@@ -23,7 +23,7 @@ class User extends Authenticatable implements FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
-        return $this->isAdmin() && !$this->is_banned;
+        return $this->isAdmin() && ! $this->is_banned;
     }
 
     protected function casts(): array
@@ -75,5 +75,4 @@ class User extends Authenticatable implements FilamentUser
     {
         $this->notify(new ResetPassword($token));
     }
-
 }
