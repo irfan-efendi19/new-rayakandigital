@@ -1075,19 +1075,19 @@
             </p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
                 <a href="{{ route('register') }}" id="final-cta-register"
-                    class="group inline-flex items-center justify-center gap-2.5 px-10 py-4.5 bg-primary-500 hover:bg-primary-600 text-white font-bold rounded-2xl shadow-[0_8px_32px_-8px_rgba(255,122,0,0.6)] hover:shadow-[0_12px_40px_-8px_rgba(255,122,0,0.75)] transition-all duration-300 hover:-translate-y-0.5 text-base">
+                    class="group inline-flex items-center justify-center gap-2.5 px-6 sm:px-10 py-3.5 sm:py-4 bg-primary-500 hover:bg-primary-600 text-white font-bold rounded-2xl shadow-[0_8px_32px_-8px_rgba(255,122,0,0.6)] hover:shadow-[0_12px_40px_-8px_rgba(255,122,0,0.75)] transition-all duration-300 hover:-translate-y-0.5 text-sm sm:text-base w-full sm:w-auto">
                     <i class="fas fa-gem"></i>
                     Buat Undangan Gratis
                     <i class="fas fa-arrow-right text-sm group-hover:translate-x-1 transition-transform duration-300"></i>
                 </a>
                 <a href="https://wa.me/62895349823366?text=Halo%2C%20saya%20ingin%20bertanya%20tentang%20layanan%20Rayakan%20Digital."
                     target="_blank" id="final-cta-wa"
-                    class="inline-flex items-center justify-center gap-2.5 px-10 py-4.5 bg-white/8 border border-white/15 text-white font-semibold rounded-2xl hover:bg-white/15 hover:border-white/30 transition-all duration-300 text-base">
+                    class="inline-flex items-center justify-center gap-2.5 px-6 sm:px-10 py-3.5 sm:py-4 bg-white/8 border border-white/15 text-white font-semibold rounded-2xl hover:bg-white/15 hover:border-white/30 transition-all duration-300 text-sm sm:text-base w-full sm:w-auto">
                     <i class="fab fa-whatsapp text-green-400"></i>
                     Konsultasi Gratis
                 </a>
             </div>
-            <p class="mt-8 text-xs text-neutral-600">Tidak perlu kartu kredit &nbsp;·&nbsp; Batalkan kapan saja &nbsp;·&nbsp; Support via WhatsApp</p>
+            <p class="mt-8 text-xs text-neutral-600">Tidak perlu kartu kredit &nbsp;·&nbsp; Support via WhatsApp</p>
         </div>
     </section>
 
