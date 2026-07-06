@@ -783,20 +783,20 @@
 
             {{-- Tab navigation --}}
             <div class="flex justify-center mb-12">
-                <div class="inline-flex items-center gap-1 p-1.5 bg-neutral-100 dark:bg-secondary-800 rounded-2xl border border-neutral-200/50 dark:border-secondary-700">
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-1 p-1.5 bg-neutral-100 dark:bg-secondary-800 rounded-2xl sm:rounded-2xl border border-neutral-200/50 dark:border-secondary-700">
                     <button @click="activeTab = 'undangan'" id="tab-undangan"
                         :class="activeTab === 'undangan' ? 'bg-white dark:bg-secondary-700 text-primary-600 shadow-sm' : 'text-neutral-500 hover:text-secondary-700 dark:hover:text-neutral-300'"
-                        class="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200">
+                        class="flex items-center justify-center sm:justify-start gap-2 px-5 py-3 sm:py-2.5 rounded-xl text-sm font-semibold transition-all duration-200">
                         <i class="fas fa-heart text-xs"></i> Undangan Digital
                     </button>
                     <button @click="activeTab = 'buku-tamu'" id="tab-bukutamu"
                         :class="activeTab === 'buku-tamu' ? 'bg-white dark:bg-secondary-700 text-primary-600 shadow-sm' : 'text-neutral-500 hover:text-secondary-700 dark:hover:text-neutral-300'"
-                        class="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200">
+                        class="flex items-center justify-center sm:justify-start gap-2 px-5 py-3 sm:py-2.5 rounded-xl text-sm font-semibold transition-all duration-200">
                         <i class="fas fa-book text-xs"></i> Buku Tamu
                     </button>
                     <button @click="activeTab = 'live-streaming'" id="tab-streaming"
                         :class="activeTab === 'live-streaming' ? 'bg-white dark:bg-secondary-700 text-primary-600 shadow-sm' : 'text-neutral-500 hover:text-secondary-700 dark:hover:text-neutral-300'"
-                        class="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200">
+                        class="flex items-center justify-center sm:justify-start gap-2 px-5 py-3 sm:py-2.5 rounded-xl text-sm font-semibold transition-all duration-200">
                         <i class="fas fa-video text-xs"></i> Live Streaming
                     </button>
                 </div>
