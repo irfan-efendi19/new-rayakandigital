@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Reset Kata Sandi</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style type="text/css">
         body, table, td, p, a, li, blockquote {
             -webkit-text-size-adjust: 100%;
@@ -66,12 +67,7 @@
                     <!-- Logo -->
                     <tr>
                         <td align="center" style="padding-bottom: 32px;">
-                            <span style="font-family: 'Playfair Display', Georgia, serif; font-size: 26px; font-weight: 700; font-style: italic; color: #FF7A00; letter-spacing: -0.5px;">
-                                Rayakan
-                            </span>
-                            <span style="font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 26px; font-weight: 800; color: #1A1A1A; letter-spacing: -0.5px;">
-                                Digital
-                            </span>
+                            <img src="{{ asset('themes/garden/assets/images/logonew.png') }}" alt="{{ $appName }}" width="160" style="display: block; border: 0; max-width: 160px; height: auto;">
                         </td>
                     </tr>
 
@@ -97,8 +93,8 @@
                                                 <td align="center" style="padding-bottom: 24px;">
                                                     <table role="presentation" cellpadding="0" cellspacing="0" style="width: 64px; height: 64px; background-color: #FFF4EB; border-radius: 16px;">
                                                         <tr>
-                                                            <td align="center" valign="middle" style="font-size: 28px; line-height: 64px;">
-                                                                🔒
+                                                            <td align="center" valign="middle" style="font-size: 28px; line-height: 64px; color: #FF7A00;">
+                                                                <i class="fas fa-lock"></i>
                                                             </td>
                                                         </tr>
                                                     </table>

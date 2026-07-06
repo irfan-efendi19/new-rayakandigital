@@ -1,4 +1,4 @@
 User-agent: *
 Disallow: /admin
 
-Sitemap: https://rayakandigital.com/sitemap.xml
+Sitemap: https://rayakandigital.id/sitemap.xml
