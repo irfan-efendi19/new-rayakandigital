@@ -22,6 +22,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QRGatewayController;
 use App\Http\Controllers\RsvpController;
+use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\ThemeController;
 use App\Http\Controllers\ThemePreviewController;
 use App\Http\Controllers\WelcomeScreenController;
@@ -146,6 +147,9 @@ Route::get('/payments/finish', [PaymentController::class, 'finish'])->name('paym
 
 // Addon Payment Callbacks
 Route::get('/addon-payment/finish', [AddonPaymentController::class, 'finish'])->name('addon-payment.finish');
+
+// Sitemap
+Route::get('/sitemap.xml', [SitemapController::class, 'index']);
 
 require __DIR__.'/auth.php';
 
