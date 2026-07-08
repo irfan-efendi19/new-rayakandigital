@@ -105,7 +105,7 @@
             @if($guest)
                 <div class="cover-guest">
                     <p class="cover-guest-label">Kepada Yth.</p>
-                    <p class="cover-guest-name">{{ $guest->name }}</p>
+                    <p class="cover-guest-name">{{ $guest->name ?? 'Tamu Undangan' }}</p>
                 </div>
             @endif
             <br>
@@ -365,39 +365,29 @@
                                         </div>
                                     </div>
 
-                                    <div class="event-info-box">
-                                        <div class="info-date-row">
-                                            <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                stroke-width="2">
-                                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                                                <line x1="16" y1="2" x2="16" y2="6"></line>
-                                                <line x1="8" y1="2" x2="8" y2="6"></line>
-                                                <line x1="3" y1="10" x2="21" y2="10"></line>
-                                            </svg>
-                                            <span class="event-date">
-                                                {{ \Carbon\Carbon::parse($event->event_date)->translatedFormat('l, d F Y') }}
-                                            </span>
-                                        </div>
-
+                                    <div class="event-date-hero">
                                         @php
+                                            $dayName = \Carbon\Carbon::parse($event->event_date)->translatedFormat('l');
+                                            $fullDate = \Carbon\Carbon::parse($event->event_date)->translatedFormat('d F Y');
                                             $tzLabel = match ($invitation->timezone ?? 'Asia/Jakarta') {
                                                 'Asia/Jakarta' => 'WIB', 'Asia/Makassar' => 'WITA', 'Asia/Jayapura' => 'WIT', default => 'WIB'
                                             };
                                         @endphp
-                                        <div class="info-time-row">
-                                            <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                stroke-width="2">
+                                        <span class="event-day">{{ $dayName }}</span>
+                                        <span class="event-full-date">{{ $fullDate }}</span>
+                                        <div class="event-time-row">
+                                            <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                 <circle cx="12" cy="12" r="10"></circle>
                                                 <polyline points="12 6 12 12 16 14"></polyline>
                                             </svg>
-                                            <span class="event-time">
+                                            <span class="event-time-text">
                                                 Pukul
                                                 {{ $event->start_time ? \Carbon\Carbon::parse($event->start_time)->format('H:i') : '-' }}
                                                 @if($event->is_until_finished) - Selesai
-                                                @elseif($event->end_time) -
-                                                    {{ \Carbon\Carbon::parse($event->end_time)->format('H:i') }}
+                                                @elseif($event->end_time) {{ $tzLabel }} -
+                                                    {{ \Carbon\Carbon::parse($event->end_time)->format('H:i') }} {{ $tzLabel }}
                                                 @else - Selesai
-                                                @endif {{ $tzLabel }}
+                                                @endif
                                             </span>
                                         </div>
                                     </div>
@@ -435,19 +425,13 @@
                                         </div>
                                     </div>
 
-                                    <div class="event-info-box">
-                                        <div class="info-date-row">
-                                            <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                stroke-width="2">
-                                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                                                <line x1="16" y1="2" x2="16" y2="6"></line>
-                                                <line x1="8" y1="2" x2="8" y2="6"></line>
-                                                <line x1="3" y1="10" x2="21" y2="10"></line>
-                                            </svg>
-                                            <span class="event-date">
-                                                {{ $invitation->event_date ? \Carbon\Carbon::parse($invitation->event_date)->translatedFormat('l, d F Y') : '-' }}
-                                            </span>
-                                        </div>
+                                    <div class="event-date-hero">
+                                        @php
+                                            $dayName = $invitation->event_date ? \Carbon\Carbon::parse($invitation->event_date)->translatedFormat('l') : '-';
+                                            $fullDate = $invitation->event_date ? \Carbon\Carbon::parse($invitation->event_date)->translatedFormat('d F Y') : '-';
+                                        @endphp
+                                        <span class="event-day">{{ $dayName }}</span>
+                                        <span class="event-full-date">{{ $fullDate }}</span>
                                     </div>
 
                                     <div class="event-venue-box">
