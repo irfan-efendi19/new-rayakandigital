@@ -24,7 +24,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Gate::policy(Invitation::class, InvitationPolicy::class);
 
-        Model::preventLazyLoading(! $this->app->isProduction());
+        Model::preventLazyLoading(!$this->app->isProduction());
 
         Gate::before(function (User $user, string $ability, ...$arguments) {
             if ($user->role !== 'admin') {
@@ -41,7 +41,7 @@ class AppServiceProvider extends ServiceProvider
                         return User::where('role', 'admin')->pluck('id')->toArray();
                     });
 
-                    if (in_array($arg->user_id, $adminIds) && ! ($user->getAttribute('is_super_admin') ?? false)) {
+                    if (in_array($arg->user_id, $adminIds) && !($user->getAttribute('is_super_admin') ?? false)) {
                         return null;
                     }
                 }
