@@ -24,7 +24,7 @@ class InvitationPolicy
 
     public function view(User $user, Invitation $invitation): bool
     {
-        return $user->id === $invitation->user_id;
+        return $user->id == $invitation->user_id;
     }
 
     public function create(User $user): bool
@@ -34,21 +34,21 @@ class InvitationPolicy
 
     public function update(User $user, Invitation $invitation): bool
     {
-        return $user->id === $invitation->user_id;
+        return $user->id == $invitation->user_id;
     }
 
     public function delete(User $user, Invitation $invitation): bool
     {
-        return $user->id === $invitation->user_id;
+        return $user->id == $invitation->user_id;
     }
 
     public function restore(User $user, Invitation $invitation): bool
     {
-        return $user->id === $invitation->user_id;
+        return $user->id == $invitation->user_id;
     }
 
     public function forceDelete(User $user, Invitation $invitation): bool
     {
-        return $user->id === $invitation->user_id;
+        return $user->id == $invitation->user_id;
     }
 }

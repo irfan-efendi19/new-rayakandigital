@@ -7,6 +7,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Dashboard\AddonController;
 use App\Http\Controllers\Dashboard\CheckoutController;
 use App\Http\Controllers\Dashboard\GalleryController;
+use App\Http\Controllers\Dashboard\GiftController;
 use App\Http\Controllers\Dashboard\GuestbookController;
 use App\Http\Controllers\Dashboard\GuestCategoryController;
 use App\Http\Controllers\Dashboard\GuestController;
