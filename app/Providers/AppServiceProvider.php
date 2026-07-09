@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\Invitation;
 use App\Models\User;
+use App\Policies\InvitationPolicy;
 use App\Services\FeatureGateService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
@@ -21,6 +22,8 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        Gate::policy(Invitation::class, InvitationPolicy::class);
+
         Model::preventLazyLoading(! $this->app->isProduction());
 
         Gate::before(function (User $user, string $ability, ...$arguments) {
