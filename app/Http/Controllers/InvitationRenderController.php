@@ -48,7 +48,7 @@ class InvitationRenderController extends Controller
         $themeView = 'themes.'.$invitation->theme;
 
         if (! view()->exists($themeView)) {
-            $themeView = 'themes.elegant';
+            $themeView = 'themes.jawa';
         }
 
         return view($themeView, compact('invitation', 'guest', 'guestEvents'));

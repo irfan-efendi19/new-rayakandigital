@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('venue_maps_url')->nullable();
             $table->string('cover_photo')->nullable();
             $table->text('love_story')->nullable();
-            $table->enum('theme', ['elegant', 'modern', 'garden'])->default('elegant');
+            $table->enum('theme', ['elegant', 'modern', 'jawa'])->default('elegant');
             $table->enum('tier', ['free', 'silver', 'gold', 'platinum'])->default('free');
             $table->boolean('is_active')->default(true);
             $table->timestamp('expires_at')->nullable();

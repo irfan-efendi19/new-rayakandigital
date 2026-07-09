@@ -21,8 +21,8 @@ class ThemeSeeder extends Seeder
         );
 
         $garden = Theme::updateOrCreate(
-            ['view_path' => 'themes.garden'],
-            ['name' => 'Garden Green', 'thumbnail_portrait' => '/images/themes/garden-thumb.svg', 'is_premium' => true, 'is_active' => true]
+            ['view_path' => 'themes.jawa'],
+            ['name' => 'Jawa', 'thumbnail_portrait' => '/images/themes/jawa-thumb.svg', 'is_premium' => true, 'is_active' => true]
         );
 
         $themes = [

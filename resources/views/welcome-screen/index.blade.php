@@ -34,7 +34,7 @@
             --text-secondary: rgba(229, 193, 167, 0.7);
             --border-color: rgba(229, 193, 167, 0.25);
         }
-        @elseif($themeName === 'garden')
+        @elseif($themeName === 'jawa')
         :root {
             --font-heading: 'Playfair Display', serif;
             --font-body: 'Inter', sans-serif;
@@ -100,7 +100,7 @@
             100% { transform: translateY(-100vh) rotate(360deg) translateX(50px); opacity: 0; }
         }
 
-        .particle-garden {
+        .particle-jawa {
             background: linear-gradient(135deg, #c2dcc0 0%, #6e9465 100%);
             border-radius: 100% 0; /* Leaf shape */
             opacity: 0.4;
@@ -179,24 +179,24 @@
         .corner-bl.corner-elegant::after { bottom: -15px; left: -15px; }
         .corner-br.corner-elegant::after { bottom: -15px; right: -15px; }
 
-        .corner-garden {
+        .corner-jawa {
             border-color: rgba(168, 195, 160, 0.4);
             border-width: 1px 0 0 1px;
         }
-        .corner-tr.corner-garden { border-width: 1px 1px 0 0; }
-        .corner-bl.corner-garden { border-width: 0 0 1px 1px; }
-        .corner-br.corner-garden { border-width: 0 1px 1px 0; }
+        .corner-tr.corner-jawa { border-width: 1px 1px 0 0; }
+        .corner-bl.corner-jawa { border-width: 0 0 1px 1px; }
+        .corner-br.corner-jawa { border-width: 0 1px 1px 0; }
 
-        .corner-garden::after {
+.corner-jawa::after {
             content: '🌿';
             position: absolute;
             font-size: 1.25rem;
             opacity: 0.6;
         }
-        .corner-tl.corner-garden::after { top: -15px; left: -15px; }
-        .corner-tr.corner-garden::after { top: -15px; right: -15px; }
-        .corner-bl.corner-garden::after { bottom: -15px; left: -15px; }
-        .corner-br.corner-garden::after { bottom: -15px; right: -15px; }
+        .corner-tl.corner-jawa::after { top: -15px; left: -15px; }
+        .corner-tr.corner-jawa::after { top: -15px; right: -15px; }
+        .corner-bl.corner-jawa::after { bottom: -15px; left: -15px; }
+        .corner-br.corner-jawa::after { bottom: -15px; right: -15px; }
 
         .corner-modern {
             border-color: rgba(254, 160, 133, 0.4);
@@ -674,7 +674,7 @@
                         span.className = 'particle-' + theme;
                         span.style.left = Math.random() * 100 + '%';
                         // Petals and leaves can be larger than single pixel spark particles
-                        span.style.width = (Math.random() * (theme === 'elegant' || theme === 'garden' ? 8 : 4) + 4) + 'px';
+                        span.style.width = (Math.random() * (theme === 'elegant' || theme === 'jawa' ? 8 : 4) + 4) + 'px';
                         span.style.height = span.style.width;
                         span.style.animationDelay = Math.random() * 20 + 's';
                         span.style.animationDuration = (Math.random() * 15 + 15) + 's';

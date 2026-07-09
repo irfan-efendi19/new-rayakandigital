@@ -27,6 +27,6 @@ return new class extends Migration
             return;
         }
 
-        DB::statement("ALTER TABLE invitations MODIFY COLUMN theme ENUM('elegant', 'modern', 'garden') NOT NULL DEFAULT 'elegant'");
+        DB::statement("ALTER TABLE invitations MODIFY COLUMN theme ENUM('elegant', 'modern', 'jawa') NOT NULL DEFAULT 'elegant'");
     }
 };

@@ -99,7 +99,7 @@ class ThemePreviewController extends Controller
         $themeView = $theme->view_path;
 
         if (! view()->exists($themeView)) {
-            $themeView = 'themes.elegant';
+            $themeView = 'themes.jawa';
         }
 
         return view($themeView, [

@@ -11,13 +11,13 @@ test('theme preview uses global fallback when no theme-specific data exists', fu
     PreviewData::getPreview();
 
     Theme::create([
-        'name' => 'Garden Green',
-        'view_path' => 'themes.garden',
+        'name' => 'Jawa',
+        'view_path' => 'themes.jawa',
         'is_premium' => false,
         'is_active' => true,
     ]);
 
-    $this->get(route('theme.preview', 'garden'))
+    $this->get(route('theme.preview', 'jawa'))
         ->assertSuccessful()
         ->assertSee('Ani Suryani');
 });
@@ -26,8 +26,8 @@ test('theme preview uses theme-specific data when configured', function () {
     PreviewData::getPreview();
 
     $theme = Theme::create([
-        'name' => 'Garden Green',
-        'view_path' => 'themes.garden',
+        'name' => 'Jawa',
+        'view_path' => 'themes.jawa',
         'is_premium' => false,
         'is_active' => true,
     ]);
@@ -40,7 +40,7 @@ test('theme preview uses theme-specific data when configured', function () {
         'bride_short_name' => 'Dewi',
     ]);
 
-    $this->get(route('theme.preview', 'garden'))
+    $this->get(route('theme.preview', 'jawa'))
         ->assertSuccessful()
         ->assertSee('Dewi Lestari')
         ->assertSee('Rizky Pratama')
@@ -51,8 +51,8 @@ test('theme preview merges partial theme data with global fallback', function ()
     $fallback = PreviewData::getPreview();
 
     $theme = Theme::create([
-        'name' => 'Garden Green',
-        'view_path' => 'themes.garden',
+        'name' => 'Jawa',
+        'view_path' => 'themes.jawa',
         'is_premium' => false,
         'is_active' => true,
     ]);
@@ -75,22 +75,22 @@ test('legacy preview url redirects to new theme preview url', function () {
     PreviewData::getPreview();
 
     Theme::create([
-        'name' => 'Garden Green',
-        'view_path' => 'themes.garden',
+        'name' => 'Jawa',
+        'view_path' => 'themes.jawa',
         'is_premium' => false,
         'is_active' => true,
     ]);
 
-    $this->get('/preview/garden')
-        ->assertRedirect(route('theme.preview', 'garden'));
+    $this->get('/preview/jawa')
+        ->assertRedirect(route('theme.preview', 'jawa'));
 });
 
 test('resolved preview data merges parents from theme-specific data', function () {
     PreviewData::getPreview();
 
     $theme = Theme::create([
-        'name' => 'Garden Green',
-        'view_path' => 'themes.garden',
+        'name' => 'Jawa',
+        'view_path' => 'themes.jawa',
         'is_premium' => false,
         'is_active' => true,
     ]);
