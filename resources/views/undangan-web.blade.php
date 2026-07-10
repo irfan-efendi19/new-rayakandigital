@@ -71,24 +71,8 @@
             <div data-aos="fade-up" data-aos-delay="400" class="relative flex justify-center">
                 <div class="relative w-56 md:w-64 mx-auto">
                     <div class="bg-[#1c1c1e] rounded-[2.5rem] p-2 shadow-2xl">
-                        <div class="bg-[#2d1b0e] rounded-[2rem] overflow-hidden relative" style="aspect-ratio:9/19">
-                            <div class="absolute top-3 left-1/2 -translate-x-1/2 w-16 h-3 bg-black/70 rounded-full z-10">
-                            </div>
-                            <div class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-b from-[#3d2010] to-[#7a4020]">
-                                <div class="mt-8 text-center px-4">
-                                    <p class="font-heading text-white/60 text-xs tracking-widest uppercase mb-1">The
-                                        Wedding of</p>
-                                    <h2 class="font-heading text-white text-xl font-bold leading-snug">Aditya
-                                        &<br />Arini</h2>
-                                    <p class="text-white/50 text-[10px] mt-2">Minggu, 14 Juli 2024</p>
-                                    <div class="mt-4 w-10 h-0.5 bg-primary-500 mx-auto rounded"></div>
-                                </div>
-                                <div class="absolute top-10 right-4 w-16 h-16 rounded-full bg-primary-500/20 blur-xl">
-                                </div>
-                                <div class="absolute bottom-20 left-4 w-20 h-20 rounded-full bg-primary-500/10 blur-2xl">
-                                </div>
-                            </div>
-                        </div>
+                        <img src="{{ asset('img/undangan.webp') }}" alt="Preview Undangan Web"
+                            class="w-full h-auto">
                     </div>
                     </div>
                     <div
