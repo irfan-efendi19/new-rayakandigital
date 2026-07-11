@@ -107,6 +107,8 @@ class GuestbookController extends Controller
             ->where('checked_in_at', '<=', $guest->checked_in_at)
             ->count();
 
+        $guest->load('events');
+
         return view('dashboard.guestbook.ticket', compact('invitation', 'guest', 'checkinOrder'));
     }
 }

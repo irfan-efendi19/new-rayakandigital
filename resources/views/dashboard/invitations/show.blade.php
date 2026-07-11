@@ -42,7 +42,7 @@
             {{-- Slug Info --}}
             <div class="bg-white dark:bg-secondary-800 rounded-2xl shadow-soft border border-neutral-100 dark:border-secondary-700 overflow-hidden">
                 <div class="p-5">
-                    <div class="flex items-center justify-between">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                         <div class="flex items-center gap-3">
                             <div class="w-9 h-9 rounded-xl bg-primary-50 dark:bg-primary-900/50 flex items-center justify-center text-primary dark:text-primary-400">
                                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -52,7 +52,7 @@
                             <div>
                                 <h3 class="text-sm font-semibold text-secondary-800 dark:text-neutral-100">Tautan Undangan</h3>
                                 <a href="{{ route('invitation.show', $invitation->slug) }}" target="_blank"
-                                    class="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-mono text-sm">
+                                    class="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-mono text-sm break-all">
                                     {{ parse_url(config('app.url'), PHP_URL_HOST) }}/<strong>{{ $invitation->slug }}</strong>
                                 </a>
                             </div>
@@ -87,7 +87,7 @@ $isTrial = $invitation->expires_at !== null && !$invitation->hasPremiumFeatures(
 $daysLeft = $invitation->expires_at ? (int) max(0, now()->diffInDays($invitation->expires_at, false)) : null;
             @endphp
                 <div
-                    class="bg-white dark:bg-secondary-800 border rounded-2xl p-5 flex items-center justify-between {{ $isExpired ? 'border-red-200 dark:border-red-800 bg-red-50/50 dark:bg-red-900/10' : ($isTrial ? 'border-amber-200 dark:border-amber-800 bg-amber-50/50 dark:bg-amber-900/10' : 'border-neutral-200 dark:border-neutral-700') }}">
+                    class="bg-white dark:bg-secondary-800 border rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 {{ $isExpired ? 'border-red-200 dark:border-red-800 bg-red-50/50 dark:bg-red-900/10' : ($isTrial ? 'border-amber-200 dark:border-amber-800 bg-amber-50/50 dark:bg-amber-900/10' : 'border-neutral-200 dark:border-neutral-700') }}">
                     <div class="flex items-center gap-4">
                         <div
                             class="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center
@@ -132,7 +132,7 @@ $daysLeft = $invitation->expires_at ? (int) max(0, now()->diffInDays($invitation
                     </div>
                     @if(!$isExpired && $tierCode === 'free')
                         <a href="{{ route('dashboard.checkout', ['invitation_id' => $invitation->id]) }}"
-                            class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-primary to-primary-600 rounded-xl hover:shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all flex-shrink-0">
+                            class="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-primary to-primary-600 rounded-xl hover:shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all flex-shrink-0">
                             Upgrade
                             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
@@ -161,6 +161,14 @@ $daysLeft = $invitation->expires_at ? (int) max(0, now()->diffInDays($invitation
                             <div class="text-3xl font-bold text-secondary-800 dark:text-neutral-100">{{ $invitation->guests->count() }}
                             </div>
                             <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1">Total tamu yang diundang</p>
+                            @if(!$invitation->hasFeature('personal_link'))
+                                <div class="mt-3">
+                                    <a href="https://wa.me/6281234567890" target="_blank"
+                                        class="inline-flex items-center justify-center w-full px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-xl shadow-sm transition-all">
+                                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                                    </a>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 
@@ -420,7 +428,7 @@ $daysLeft = $invitation->expires_at ? (int) max(0, now()->diffInDays($invitation
                                 @endif
                             </div>
                         @else
-                            <div class="flex items-center justify-between">
+                            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                                 <div class="flex items-center gap-3">
                                     <div
                                         class="flex-shrink-0 inline-flex items-center justify-center w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-900/20 text-amber-500 dark:text-amber-400">
@@ -439,9 +447,9 @@ $daysLeft = $invitation->expires_at ? (int) max(0, now()->diffInDays($invitation
                                             Cetak pada kartu undangan fisik.</p>
                                     </div>
                                 </div>
-                                <a href="{{ route('dashboard.checkout', ['invitation_id' => $invitation->id]) }}"
-                                    class="inline-flex items-center gap-2 px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-sm font-semibold shadow-sm transition-all flex-shrink-0">
-                                    Upgrade ke Gold
+                                <a href="https://wa.me/6281234567890" target="_blank"
+                                    class="inline-flex items-center justify-center w-full sm:w-auto px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-white rounded-xl shadow-sm transition-all flex-shrink-0">
+                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
                                 </a>
                             </div>
                         @endif
@@ -453,7 +461,7 @@ $daysLeft = $invitation->expires_at ? (int) max(0, now()->diffInDays($invitation
                     class="bg-white dark:bg-secondary-800 rounded-2xl shadow-soft border overflow-hidden
                                             {{ $invitation->hasFeature('qr_checkin') ? 'border-emerald-100 dark:border-emerald-800' : 'border-amber-100 dark:border-amber-800 bg-amber-50/20 dark:bg-amber-900/10' }}">
                     <div class="p-5">
-                        <div class="flex items-center justify-between">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                             <div class="flex items-center gap-3">
                                 <div
                                     class="flex-shrink-0 inline-flex items-center justify-center w-10 h-10 rounded-xl
@@ -488,7 +496,7 @@ $daysLeft = $invitation->expires_at ? (int) max(0, now()->diffInDays($invitation
                 
                             @if($invitation->hasFeature('qr_checkin'))
                                 <a href="{{ route('dashboard.invitations.guestbook', $invitation) }}"
-                                    class="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-semibold shadow-sm transition-all">
+                                    class="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-semibold shadow-sm transition-all">
                                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
@@ -498,9 +506,9 @@ $daysLeft = $invitation->expires_at ? (int) max(0, now()->diffInDays($invitation
                                     Buka Scanner
                                 </a>
                             @else
-                                <a href="{{ route('dashboard.checkout', ['invitation_id' => $invitation->id]) }}"
-                                    class="inline-flex items-center gap-2 px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-sm font-semibold shadow-sm transition-all">
-                                    Upgrade ke Platinum
+                                <a href="https://wa.me/6281234567890" target="_blank"
+                                    class="inline-flex items-center justify-center w-full sm:w-auto px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-white rounded-xl shadow-sm transition-all">
+                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
                                 </a>
                             @endif
                         </div>
@@ -521,7 +529,7 @@ $daysLeft = $invitation->expires_at ? (int) max(0, now()->diffInDays($invitation
                 {{-- Addons --}}
                 <div class="bg-white dark:bg-secondary-800 rounded-2xl shadow-soft border border-neutral-100 dark:border-secondary-700 overflow-hidden">
                     <div class="p-5">
-                        <div class="flex items-center justify-between">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                             <div class="flex items-center gap-3">
                                 <div class="w-9 h-9 rounded-xl bg-primary-50 dark:bg-primary-900/50 flex items-center justify-center text-primary dark:text-primary-400">
                                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -538,7 +546,7 @@ $daysLeft = $invitation->expires_at ? (int) max(0, now()->diffInDays($invitation
                                 </div>
                             </div>
                             <a href="{{ route('dashboard.invitations.addons.index', $invitation) }}"
-                                class="inline-flex items-center gap-2 px-4 py-2 bg-primary-50 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 rounded-xl text-sm font-semibold hover:bg-primary-100 dark:hover:bg-primary-900/70 transition-all">
+                                class="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-2 bg-primary-50 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 rounded-xl text-sm font-semibold hover:bg-primary-100 dark:hover:bg-primary-900/70 transition-all">
                                 Kelola Add-On
                                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
@@ -818,7 +826,7 @@ $daysLeft = $invitation->expires_at ? (int) max(0, now()->diffInDays($invitation
                         @csrf
                         @method('DELETE')
                         <button type="submit"
-                            class="inline-flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-xl text-sm font-semibold hover:bg-red-700 hover:shadow-md transition-all">
+                            class="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-2 bg-red-600 text-white rounded-xl text-sm font-semibold hover:bg-red-700 hover:shadow-md transition-all">
                             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                             </svg>

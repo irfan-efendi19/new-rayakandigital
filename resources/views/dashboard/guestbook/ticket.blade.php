@@ -1,19 +1,21 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <x-meta
-        title="Tiket - {{ $guest->name }} | {{ config('app.name') }}"
-        description="Tiket check-in untuk {{ $guest->name }}"
-        robots="noindex, nofollow"
-    />
+    <x-meta title="Tiket - {{ $guest->name }} | {{ config('app.name') }}"
+        description="Tiket check-in untuk {{ $guest->name }}" robots="noindex, nofollow" />
 
     @stack('meta')
 
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
             font-family: 'Courier New', monospace;
@@ -171,7 +173,7 @@
 
             .ticket {
                 background: white;
-                box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
                 border-radius: 12px;
                 padding: 6mm 4mm;
             }
@@ -182,22 +184,40 @@
                 size: 58mm auto;
                 margin: 0;
             }
-            body { width: 58mm; }
-            .screen-controls { display: none !important; }
+
+            body {
+                width: 58mm;
+            }
+
+            .screen-controls {
+                display: none !important;
+            }
         }
 
-        body.width-80 .ticket { width: 80mm; max-width: 80mm; }
+        body.width-80 .ticket {
+            width: 80mm;
+            max-width: 80mm;
+        }
+
         @media print {
-            body.width-80 { width: 80mm; }
-            body.width-80 @page { size: 80mm auto; }
+            body.width-80 {
+                width: 80mm;
+            }
+
+            body.width-80 @page {
+                size: 80mm auto;
+            }
         }
     </style>
 </head>
+
 <body>
     <div class="screen-controls">
         <button class="btn-print" onclick="window.print()">
-            <svg style="display:inline;width:16px;height:16px;margin-right:6px;vertical-align:middle" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+            <svg style="display:inline;width:16px;height:16px;margin-right:6px;vertical-align:middle" fill="none"
+                viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
             </svg>
             Cetak Tiket
         </button>
@@ -239,10 +259,22 @@
                 <span>{{ $guest->checked_in_at?->timezone($tz)->format('d/m/Y') }}</span>
             </div>
             @if($guest->whatsapp_number ?? $guest->phone)
-            <div class="info-row">
-                <span class="label">Telp:</span>
-                <span>{{ $guest->whatsapp_number ?? $guest->phone }}</span>
-            </div>
+                <div class="info-row">
+                    <span class="label">Telp:</span>
+                    <span>{{ $guest->whatsapp_number ?? $guest->phone }}</span>
+                </div>
+            @endif
+            @if($guest->events->isNotEmpty())
+                <div style="border-top:1px dashed #1a1a1a;padding-top:2mm;margin-top:2mm;">
+                    <div style="font-weight:bold;font-size:10px;margin-bottom:1mm;">Alokasi Acara</div>
+                    @foreach($guest->events as $event)
+                        <div style="font-size:9px;margin-bottom:1mm;line-height:1.3;">
+                            <div style="font-weight:bold;">{{ $event->event_title }}</div>
+                            <div>{{ $event->event_date->isoFormat('dddd, D MMMM Y') }}</div>
+                            <div>{{ \Carbon\Carbon::parse($event->start_time)->format('H:i') }}{{ $event->is_until_finished ? ' - Selesai' : ($event->end_time ? ' - '.\Carbon\Carbon::parse($event->end_time)->format('H:i') : '') }} {{ $event->place_name ? '| '.$event->place_name : '' }}</div>
+                        </div>
+                    @endforeach
+                </div>
             @endif
         </div>
 
@@ -258,7 +290,7 @@
     </div>
 
     <script>
-        window.addEventListener('load', function() {
+        window.addEventListener('load', function () {
             setTimeout(() => window.print(), 500);
         });
 
@@ -269,4 +301,5 @@
         }
     </script>
 </body>
+
 </html>
