@@ -181,7 +181,7 @@
         </div>
     </div>
 
-    <div :class="{'block': open, 'hidden': !open}" class="hidden sm:hidden dark:bg-secondary-900">
+    <div x-cloak :class="{'block': open, 'hidden': !open}" class="hidden sm:hidden dark:bg-secondary-900">
         <div class="pt-2 pb-3 space-y-1 border-t border-neutral-200 dark:border-secondary-700">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 <div class="flex items-center gap-3">

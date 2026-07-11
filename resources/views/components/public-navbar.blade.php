@@ -163,7 +163,7 @@
                 </button>
 
                 <!-- Hamburger Button with animation -->
-                <button @click="mobileMenuOpen = !mobileMenuOpen"
+                <button @click="mobileMenuOpen = !mobileMenuOpen" x-cloak
                     class="md:hidden relative w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-300 hover:bg-orange-50 group"
                     :class="{ 'bg-orange-50': mobileMenuOpen }" :aria-expanded="mobileMenuOpen">
                     <div class="relative w-5 h-5">
@@ -184,7 +184,7 @@
     </div>
 
     <!-- Mobile Menu with glassmorphism -->
-    <div x-show="mobileMenuOpen" x-transition:enter="transition ease-out duration-300"
+    <div x-show="mobileMenuOpen" x-cloak x-transition:enter="transition ease-out duration-300"
         x-transition:enter-start="opacity-0 -translate-y-4" x-transition:enter-end="opacity-100 translate-y-0"
         x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0"
         x-transition:leave-end="opacity-0 -translate-y-4"
