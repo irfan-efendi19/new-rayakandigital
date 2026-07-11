@@ -279,9 +279,9 @@
                             <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">Daftar Tamu</h3>
                             <span class="inline-flex items-center justify-center min-w-[1.5rem] h-6 px-2 rounded-full bg-primary-50 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 text-xs font-bold">{{ $guests->total() }}</span>
                         </div>
-                        <div class="flex gap-2">
+                        <div class="flex flex-wrap gap-2">
                             <button id="bulkSendBtn" disabled
-                                class="inline-flex items-center gap-1.5 bg-emerald-600 text-white px-3 sm:px-4 py-2 rounded-xl text-sm font-medium hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                class="inline-flex items-center justify-center gap-1.5 bg-emerald-600 text-white px-3 py-2 rounded-xl text-sm font-medium hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                                 onclick="bulkSend()">
                                 <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
@@ -289,7 +289,7 @@
                                 <span class="hidden sm:inline">Kirim WA Massal</span>
                             </button>
                             <button id="bulkDeleteBtn" disabled
-                                class="inline-flex items-center gap-1.5 bg-red-500 text-white px-3 sm:px-4 py-2 rounded-xl text-sm font-medium hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                class="inline-flex items-center justify-center gap-1.5 bg-red-500 text-white px-3 py-2 rounded-xl text-sm font-medium hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                                 onclick="bulkDelete()">
                                 <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -300,7 +300,7 @@
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit"
-                                    class="inline-flex items-center gap-1.5 bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300 px-3 sm:px-4 py-2 rounded-xl text-sm font-medium hover:bg-red-200 dark:hover:bg-red-900/70 transition-colors">
+                                    class="inline-flex items-center justify-center gap-1.5 bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300 px-3 py-2 rounded-xl text-sm font-medium hover:bg-red-200 dark:hover:bg-red-900/70 transition-colors">
                                     <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                     </svg>
@@ -308,7 +308,7 @@
                                 </button>
                             </form>
                             <a href="{{ route('dashboard.invitations.guests.create', $invitation) }}"
-                               class="inline-flex items-center gap-1.5 bg-gradient-to-r from-primary to-primary-600 text-white px-3 sm:px-4 py-2 rounded-xl text-sm font-medium hover:shadow-lg transition-all">
+                               class="inline-flex items-center justify-center gap-1.5 bg-gradient-to-r from-primary to-primary-600 text-white px-3 py-2 rounded-xl text-sm font-medium hover:shadow-lg transition-all">
                                 <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                                 </svg>
@@ -357,7 +357,7 @@
                                     placeholder="Cari nama, nomor, atau kategori..."
                                     class="block w-full pl-10 pr-3 py-2 rounded-xl border-neutral-300 dark:border-secondary-600 dark:bg-secondary-700 dark:text-neutral-200 shadow-sm focus:border-primary-500 focus:ring-primary-500 text-sm">
                             </div>
-                            <div class="flex gap-2">
+                            <div class="flex flex-wrap gap-2">
                                 <select name="per_page" onchange="this.form.submit()"
                                     class="rounded-xl border-neutral-300 dark:border-secondary-600 dark:bg-secondary-700 dark:text-neutral-200 shadow-sm focus:border-primary-500 focus:ring-primary-500 text-sm">
                                     <option value="10" {{ request('per_page') == 10 ? 'selected' : '' }}>10</option>
@@ -396,12 +396,11 @@
                                     <tbody class="bg-white dark:bg-secondary-800 divide-y divide-neutral-100 dark:divide-secondary-700">
                                         @foreach($guests as $guest)
                                             @php $waStatus = $guest->wa_status; @endphp
-                                            <tr class="hover:bg-neutral-50 dark:hover:bg-secondary-700/50 transition-colors">
+                                            <tr class="guest-row hover:bg-neutral-50 dark:hover:bg-secondary-700/50 transition-colors cursor-pointer">
                                                 <td class="px-3 py-4 whitespace-nowrap">
-                                                    @if($guest->whatsapp_number ?? $guest->phone)
-                                                        <input type="checkbox" name="guest_ids[]" value="{{ $guest->id }}"
-                                                            class="guest-checkbox rounded-lg border-neutral-300 dark:border-secondary-600 dark:bg-secondary-900 text-primary focus:ring-primary-500 shadow-sm">
-                                                    @endif
+                                                    <input type="checkbox" name="guest_ids[]" value="{{ $guest->id }}"
+                                                        class="guest-checkbox rounded-lg border-neutral-300 dark:border-secondary-600 dark:bg-secondary-900 text-primary focus:ring-primary-500 shadow-sm"
+                                                        data-has-phone="{{ ($guest->whatsapp_number ?? $guest->phone) ? '1' : '0' }}">
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap">
                                                     <span class="text-sm font-semibold text-secondary-800 dark:text-neutral-200">{{ $guest->name }}</span>
@@ -538,6 +537,17 @@
                                 cb.addEventListener('change', updateBulkButton);
                             });
 
+                            document.querySelectorAll('.guest-row').forEach(row => {
+                                row.addEventListener('click', function(e) {
+                                    if (e.target.closest('a') || e.target.closest('button') || e.target.closest('form')) return;
+                                    const cb = this.querySelector('.guest-checkbox');
+                                    if (cb) {
+                                        cb.checked = !cb.checked;
+                                        updateBulkButton();
+                                    }
+                                });
+                            });
+
                             function updateBulkButton() {
                                 const checked = document.querySelectorAll('.guest-checkbox:checked').length;
                                 const sendBtn = document.getElementById('bulkSendBtn');
@@ -555,6 +565,20 @@
                             function bulkSend() {
                                 const checked = document.querySelectorAll('.guest-checkbox:checked');
                                 if (checked.length === 0) return;
+
+                                const noPhone = Array.from(checked).filter(cb => cb.dataset.hasPhone === '0');
+                                if (noPhone.length > 0) {
+                                    if (typeof Swal !== 'undefined') {
+                                        Swal.fire({
+                                            title: 'Tidak Dapat Dikirim',
+                                            text: noPhone.length + ' tamu terpilih tidak memiliki nomor WhatsApp. Hanya tamu dengan nomor HP yang bisa dikirim undangan.',
+                                            icon: 'error',
+                                            confirmButtonColor: '#FF7A00',
+                                            confirmButtonText: 'Mengerti',
+                                        });
+                                    }
+                                    return;
+                                }
 
                                 if (typeof Swal !== 'undefined') {
                                     Swal.fire({

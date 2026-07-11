@@ -835,7 +835,6 @@ $daysLeft = $invitation->expires_at ? (int) max(0, now()->diffInDays($invitation
                     </form>
                 </div>
             </div>
-
         </div>
     </div>
 </x-app-layout>
