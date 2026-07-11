@@ -67,7 +67,7 @@
 
                                 {{-- Title --}}
                                 <div>
-                                    <label for="title" class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Judul Undangan</label>
+                                    <label for="title" class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Judul Undangan <span class="text-red-500">*</span></label>
                                     <input type="text" name="title" id="title"
                                         class="mt-1 block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
                                         required placeholder="Contoh: The Wedding of Andi & Rara">
@@ -201,7 +201,7 @@
                                         </div>
                                         <div class="grid grid-cols-1 gap-y-5 gap-x-4 sm:grid-cols-6">
                                             <div class="sm:col-span-3">
-                                                <label for="bride_name" class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Nama Lengkap Mempelai Wanita</label>
+                                                <label for="bride_name" class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Nama Lengkap Mempelai Wanita <span class="text-red-500">*</span></label>
                                                 <input type="text" name="bride_name" id="bride_name"
                                                     value="{{ old('bride_name') }}"
                                                     class="mt-1 block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
@@ -273,7 +273,7 @@
                                         </div>
                                         <div class="grid grid-cols-1 gap-y-5 gap-x-4 sm:grid-cols-6">
                                             <div class="sm:col-span-3">
-                                                <label for="groom_name" class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Nama Lengkap Mempelai Pria</label>
+                                                <label for="groom_name" class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Nama Lengkap Mempelai Pria <span class="text-red-500">*</span></label>
                                                 <input type="text" name="groom_name" id="groom_name"
                                                     value="{{ old('groom_name') }}"
                                                     class="mt-1 block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
@@ -410,7 +410,7 @@
                                                     </div>
                                                     <div class="grid grid-cols-1 gap-y-4 gap-x-4 sm:grid-cols-6">
                                                         <div class="sm:col-span-6">
-                                                            <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Nama Acara</label>
+                                                            <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Nama Acara <span class="text-red-500">*</span></label>
                                                             <input type="text" name="events[{{ $ei }}][event_title]" value="{{ $ev['event_title'] ?? '' }}" list="event-titles-{{ $ei }}"
                                                                 class="mt-1 block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
                                                                 placeholder="Pilih atau ketik nama acara" required>
@@ -419,12 +419,12 @@
                                                             </datalist>
                                                         </div>
                                                         <div class="sm:col-span-2">
-                                                            <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Tanggal Acara</label>
+                                                            <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Tanggal Acara <span class="text-red-500">*</span></label>
                                                             <input type="date" name="events[{{ $ei }}][event_date]" value="{{ $ev['event_date'] ?? '' }}"
                                                                 class="mt-1 block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-secondary-700 dark:text-neutral-200" required>
                                                         </div>
                                                         <div class="sm:col-span-2">
-                                                            <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Jam Mulai</label>
+                                                            <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Jam Mulai <span class="text-red-500">*</span></label>
                                                             <input type="time" name="events[{{ $ei }}][start_time]" value="{{ $ev['start_time'] ?? '' }}"
                                                                 class="mt-1 block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-secondary-700 dark:text-neutral-200" required>
                                                         </div>
@@ -441,13 +441,13 @@
                                                             </div>
                                                         </div>
                                                         <div class="sm:col-span-6">
-                                                            <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Nama Tempat / Lokasi</label>
+                                                            <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Nama Tempat / Lokasi <span class="text-red-500">*</span></label>
                                                             <input type="text" name="events[{{ $ei }}][place_name]" value="{{ $ev['place_name'] ?? '' }}"
                                                                 class="mt-1 block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
                                                                 placeholder="Nama gedung atau lokasi" required>
                                                         </div>
                                                         <div class="sm:col-span-6">
-                                                            <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Alamat Lengkap</label>
+                                                            <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Alamat Lengkap <span class="text-red-500">*</span></label>
                                                             <textarea name="events[{{ $ei }}][place_address]" rows="2"
                                                                 class="mt-1 block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
                                                                 placeholder="Alamat lengkap lokasi" required>{{ $ev['place_address'] ?? '' }}</textarea>
@@ -494,8 +494,8 @@
                                                 </div>
                                                 <div class="grid grid-cols-1 gap-y-4 gap-x-4 sm:grid-cols-6">
                                                     <div class="sm:col-span-6">
-                                                        <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Nama Acara</label>
-                                                        <input type="text" name="events[0][event_title]" value="" list="event-titles-0"
+                                                    <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Nama Acara <span class="text-red-500">*</span></label>
+                                                    <input type="text" name="events[0][event_title]" value="" list="event-titles-0"
                                                             class="mt-1 block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
                                                             placeholder="Pilih atau ketik nama acara" required>
                                                         <datalist id="event-titles-0">
@@ -503,12 +503,12 @@
                                                         </datalist>
                                                     </div>
                                                     <div class="sm:col-span-2">
-                                                        <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Tanggal Acara</label>
-                                                        <input type="date" name="events[0][event_date]" value=""
-                                                            class="mt-1 block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-secondary-700 dark:text-neutral-200" required>
+                                                    <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Tanggal Acara <span class="text-red-500">*</span></label>
+                                                    <input type="date" name="events[0][event_date]" value=""
+                                                        class="mt-1 block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-secondary-700 dark:text-neutral-200" required>
                                                     </div>
                                                     <div class="sm:col-span-2">
-                                                        <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Jam Mulai</label>
+                                                        <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Jam Mulai <span class="text-red-500">*</span></label>
                                                         <input type="time" name="events[0][start_time]" value=""
                                                             class="mt-1 block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-secondary-700 dark:text-neutral-200" required>
                                                     </div>
@@ -524,13 +524,13 @@
                                                         </div>
                                                     </div>
                                                     <div class="sm:col-span-6">
-                                                        <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Nama Tempat / Lokasi</label>
-                                                        <input type="text" name="events[0][place_name]" value=""
-                                                            class="mt-1 block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
-                                                            placeholder="Nama gedung atau lokasi" required>
+                                                    <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Nama Tempat / Lokasi <span class="text-red-500">*</span></label>
+                                                    <input type="text" name="events[0][place_name]" value=""
+                                                        class="mt-1 block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
+                                                        placeholder="Nama gedung atau lokasi" required>
                                                     </div>
                                                     <div class="sm:col-span-6">
-                                                        <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Alamat Lengkap</label>
+                                                        <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Alamat Lengkap <span class="text-red-500">*</span></label>
                                                         <textarea name="events[0][place_address]" rows="2"
                                                             class="mt-1 block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
                                                             placeholder="Alamat lengkap lokasi" required></textarea>
@@ -579,7 +579,7 @@
                                             </div>
                                             <div class="grid grid-cols-1 gap-y-4 gap-x-4 sm:grid-cols-6">
                                                 <div class="sm:col-span-6">
-                                                    <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Nama Acara</label>
+                                                    <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Nama Acara <span class="text-red-500">*</span></label>
                                                     <input type="text" name="events[__INDEX__][event_title]" value="" list="event-titles-__INDEX__"
                                                         class="mt-1 block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
                                                         placeholder="Pilih atau ketik nama acara" required>
@@ -588,12 +588,12 @@
                                                     </datalist>
                                                 </div>
                                                 <div class="sm:col-span-2">
-                                                    <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Tanggal Acara</label>
+                                                    <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Tanggal Acara <span class="text-red-500">*</span></label>
                                                     <input type="date" name="events[__INDEX__][event_date]" value=""
                                                         class="mt-1 block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-secondary-700 dark:text-neutral-200" required>
-                                                </div>
-                                                <div class="sm:col-span-2">
-                                                    <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Jam Mulai</label>
+                                                    </div>
+                                                    <div class="sm:col-span-2">
+                                                        <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Jam Mulai <span class="text-red-500">*</span></label>
                                                     <input type="time" name="events[__INDEX__][start_time]" value=""
                                                         class="mt-1 block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-secondary-700 dark:text-neutral-200" required>
                                                 </div>
@@ -609,14 +609,14 @@
                                                     </div>
                                                 </div>
                                                 <div class="sm:col-span-6">
-                                                    <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Nama Tempat / Lokasi</label>
+                                                    <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Nama Tempat / Lokasi <span class="text-red-500">*</span></label>
                                                     <input type="text" name="events[__INDEX__][place_name]" value=""
                                                         class="mt-1 block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
                                                         placeholder="Nama gedung atau lokasi" required>
-                                                </div>
-                                                <div class="sm:col-span-6">
-                                                    <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Alamat Lengkap</label>
-                                                    <textarea name="events[__INDEX__][place_address]" rows="2"
+                                                    </div>
+                                                    <div class="sm:col-span-6">
+                                                        <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Alamat Lengkap <span class="text-red-500">*</span></label>
+                                                        <textarea name="events[__INDEX__][place_address]" rows="2"
                                                         class="mt-1 block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
                                                         placeholder="Alamat lengkap lokasi" required></textarea>
                                                 </div>
@@ -701,6 +701,11 @@
                             
                             
                             
+                            </div>
+
+                            {{-- Required fields note --}}
+                            <div class="text-xs text-neutral-500 dark:text-neutral-400 flex items-center gap-1">
+                                <span class="text-red-500 font-bold">*</span> Kolom yang bertanda wajib diisi
                             </div>
 
                             {{-- Actions --}}
