@@ -2,114 +2,33 @@ html {
     scroll-behavior: smooth;
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-    width: 8px;
-}
-::-webkit-scrollbar-track {
-    background: #f1f1f1;
-}
-::-webkit-scrollbar-thumb {
-    background: #f97316;
-    border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-    background: #ea580c;
+/* ── Grain overlay ── */
+.grain-bg::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
 }
 
-.nav-link .arrow {
-    opacity: 0;
-    transform: translateX(0);
-    transition:
-        opacity 0.15s,
-        transform 0.15s;
-}
-
-.nav-link:hover .arrow {
-    opacity: 1;
-    transform: translateX(4px);
-}
-
-.heart {
-    animation: pulse 1.8s ease-in-out infinite;
-    display: inline-block;
-}
-
-@keyframes pulse {
-    0%,
-    100% {
-        transform: scale(1);
-    }
-
-    50% {
-        transform: scale(1.3);
-    }
-}
-
-/* Hide scrollbar for Chrome, Safari and Opera */
-.hide-scrollbar::-webkit-scrollbar {
-    height: 6px;
-}
-
-.hide-scrollbar::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 10px;
-}
-
-.hide-scrollbar::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
-    border-radius: 10px;
-}
-
-.hide-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
-}
-
-/* For Firefox */
-.hide-scrollbar {
-    scrollbar-width: thin;
-    scrollbar-color: #cbd5e1 #f1f1f1;
-}
-
-@keyframes bounce-slow {
-    0%,
-    100% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(-10px);
-    }
-}
-
-.animate-bounce-slow {
-    animation: bounce-slow 3s ease-in-out infinite;
-}
-
-.animation-delay-1000 {
-    animation-delay: 1s;
-}
-
+/* ── Changing text animation ── */
 .changing-texts {
-    height: 1.2em;
+    height: 1.15em;
     display: inline-block;
     vertical-align: bottom;
+    overflow: hidden;
 }
-
 .changing-texts-track {
     display: block;
     animation: slide 9s ease-in-out infinite;
 }
-
 .changing-texts-track span {
     display: block;
-    height: 1.2em;
-    line-height: 1.2;
-    -webkit-background-clip: text;
-    background-clip: text;
-    text-shadow: 0 8px 24px rgba(249, 115, 22, 0.16);
+    height: 1.15em;
+    line-height: 1.15;
     white-space: nowrap;
 }
-
 @keyframes slide {
     0%,
     20% {
@@ -130,6 +49,179 @@ html {
     100% {
         transform: translateY(-75%);
     }
+}
+
+/* ── Orb glow ── */
+.orb-orange {
+    background: radial-gradient(
+        circle,
+        rgba(255, 122, 0, 0.22) 0%,
+        transparent 70%
+    );
+}
+.orb-warm {
+    background: radial-gradient(
+        circle,
+        rgba(255, 180, 100, 0.14) 0%,
+        transparent 70%
+    );
+}
+
+/* ── Marquee ── */
+@keyframes marquee {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-50%);
+    }
+}
+.marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee 28s linear infinite;
+}
+.marquee-track:hover {
+    animation-play-state: paused;
+}
+
+/* ── Bounce slow ── */
+@keyframes bounce-slow {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+.animate-bounce-slow {
+    animation: bounce-slow 3s ease-in-out infinite;
+}
+.animation-delay-1000 {
+    animation-delay: 1s;
+}
+
+/* ── Timeline ── */
+.timeline-line {
+    position: absolute;
+    left: 2rem;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, #ff7a00, #ffd0a3, transparent);
+}
+
+/* ── Feature chip ── */
+.feature-chip {
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.feature-chip:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px -8px rgba(255, 122, 0, 0.2);
+}
+
+/* ── FAQ ── */
+.faq-item details[open] summary {
+    color: #ff7a00;
+}
+.faq-item details[open] .faq-arrow {
+    transform: rotate(180deg);
+}
+.faq-arrow {
+    transition: transform 0.3s ease;
+}
+.faq-item details > div {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition:
+        max-height 0.4s ease,
+        opacity 0.3s ease,
+        padding 0.3s ease;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+.faq-item details[open] > div {
+    max-height: 600px;
+    opacity: 1;
+}
+
+/* ── Pricing popular ring pulse ── */
+@keyframes ring-pulse {
+    0%,
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 122, 0, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 0 8px rgba(255, 122, 0, 0);
+    }
+}
+.popular-pulse {
+    animation: ring-pulse 2.5s ease-in-out infinite;
+}
+
+/* ── Custom scrollbar ── */
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: #ff7a00;
+    border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #ea580c;
+}
+
+/* ── Nav link arrow ── */
+.nav-link .arrow {
+    opacity: 0;
+    transform: translateX(0);
+    transition:
+        opacity 0.15s,
+        transform 0.15s;
+}
+.nav-link:hover .arrow {
+    opacity: 1;
+    transform: translateX(4px);
+}
+
+/* ── Heart pulse ── */
+.heart {
+    animation: pulse 1.8s ease-in-out infinite;
+    display: inline-block;
+}
+@keyframes pulse {
+    0%,
+    100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.3);
+    }
+}
+
+/* ── Hide scrollbar utility ── */
+.hide-scrollbar::-webkit-scrollbar {
+    height: 6px;
+}
+.hide-scrollbar::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+.hide-scrollbar::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+.hide-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+.hide-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 #f1f1f1;
 }
 
 @media (max-width: 1024px) {

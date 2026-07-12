@@ -26,110 +26,6 @@
         }
     </script>
 
-    <style>
-        /* ── Grain overlay ── */
-        .grain-bg::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        /* ── Changing text animation ── */
-        .changing-texts {
-            height: 1.15em;
-            display: inline-block;
-            vertical-align: bottom;
-            overflow: hidden;
-        }
-        .changing-texts-track {
-            display: block;
-            animation: slide 9s ease-in-out infinite;
-        }
-        .changing-texts-track span {
-            display: block;
-            height: 1.15em;
-            line-height: 1.15;
-            white-space: nowrap;
-        }
-        @keyframes slide {
-            0%,20%   { transform: translateY(0); }
-            25%,45%  { transform: translateY(-25%); }
-            50%,70%  { transform: translateY(-50%); }
-            75%,95%  { transform: translateY(-75%); }
-            100%     { transform: translateY(-75%); }
-        }
-
-        /* ── Orb glow ── */
-        .orb-orange {
-            background: radial-gradient(circle, rgba(255,122,0,0.22) 0%, transparent 70%);
-        }
-        .orb-warm {
-            background: radial-gradient(circle, rgba(255,180,100,0.14) 0%, transparent 70%);
-        }
-
-        /* ── Marquee ── */
-        @keyframes marquee {
-            from { transform: translateX(0); }
-            to   { transform: translateX(-50%); }
-        }
-        .marquee-track {
-            display: flex;
-            width: max-content;
-            animation: marquee 28s linear infinite;
-        }
-        .marquee-track:hover { animation-play-state: paused; }
-
-        /* ── Bounce slow ── */
-        @keyframes bounce-slow {
-            0%,100% { transform: translateY(0); }
-            50%     { transform: translateY(-10px); }
-        }
-        .animate-bounce-slow { animation: bounce-slow 3s ease-in-out infinite; }
-        .animation-delay-1000 { animation-delay: 1s; }
-
-        /* ── Timeline ── */
-        .timeline-line {
-            position: absolute;
-            left: 2rem;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: linear-gradient(to bottom, #FF7A00, #FFD0A3, transparent);
-        }
-
-        /* ── Feature chip ── */
-        .feature-chip {
-            transition: all 0.25s cubic-bezier(.4,0,.2,1);
-        }
-        .feature-chip:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 32px -8px rgba(255,122,0,0.2);
-        }
-
-        /* ── FAQ ── */
-        .faq-item details[open] summary { color: #FF7A00; }
-        .faq-item details[open] .faq-arrow { transform: rotate(180deg); }
-        .faq-arrow { transition: transform 0.3s ease; }
-
-        /* ── Pricing popular ring pulse ── */
-        @keyframes ring-pulse {
-            0%,100% { box-shadow: 0 0 0 0 rgba(255,122,0,0.3); }
-            50%     { box-shadow: 0 0 0 8px rgba(255,122,0,0); }
-        }
-        .popular-pulse { animation: ring-pulse 2.5s ease-in-out infinite; }
-
-        /* ── Dark scrollbar ── */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #FF7A00; border-radius: 3px; }
-
-        @media (max-width:1024px) {
-            .animate-bounce-slow { animation: none; }
-        }
-    </style>
 </head>
 
 <body class="font-sans antialiased bg-[#FDFCFA] dark:bg-secondary-900 text-gray-900 dark:text-neutral-100 overflow-x-hidden">
@@ -1106,6 +1002,23 @@
     <x-public-footer />
 
     <script src="{{ asset('js/landingpage.js') }}"></script>
+    <script>
+        document.querySelectorAll('.faq-item details').forEach(details => {
+            const content = details.querySelector(':scope > div');
+            if (!content) return;
+
+            content.style.maxHeight = '0';
+
+            details.addEventListener('toggle', () => {
+                if (details.open) {
+                    const open = details.querySelector(':scope > div');
+                    if (open) open.style.maxHeight = open.scrollHeight + 'px';
+                } else {
+                    content.style.maxHeight = '0';
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
