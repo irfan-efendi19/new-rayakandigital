@@ -96,8 +96,8 @@
                 <div class="bg-white dark:bg-secondary-800 rounded-2xl shadow-soft border overflow-hidden
                     {{ $isActive ? 'border-emerald-200 dark:border-emerald-800' : ($pendingTx ? 'border-amber-200 dark:border-amber-800' : 'border-neutral-100 dark:border-secondary-700') }}">
                     <div class="p-5">
-                        <div class="flex items-start justify-between gap-4">
-                            <div class="flex items-start gap-4 flex-1">
+                        <div class="flex flex-col sm:flex-row sm:items-start gap-4">
+                            <div class="flex items-start gap-4 flex-1 min-w-0">
                                 <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-primary-50 dark:bg-primary-900/50 flex items-center justify-center text-primary dark:text-primary-400">
                                     <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
@@ -131,7 +131,7 @@
                                             {{ $addon->description }}
                                         </p>
                                     @endif
-                                    <div class="flex items-center gap-3 mt-2">
+                                    <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 mt-2">
                                         <span class="text-sm font-semibold text-primary-600 dark:text-primary-400">
                                             Rp {{ number_format($addon->price, 0, ',', '.') }}
                                         </span>
@@ -153,7 +153,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="flex-shrink-0">
+                            <div class="flex-shrink-0 w-full sm:w-auto">
                                 @if($pendingTx && $pendingTx->payment_status === 'pending')
                                     @if($paymentMethod === 'midtrans')
                                         <form action="{{ route('dashboard.invitations.addons.purchase', [$invitation, $addon]) }}" method="POST"
@@ -161,20 +161,20 @@
                                             @csrf
                                             <button type="submit"
                                                 x-bind:disabled="processing"
-                                                class="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-xl text-sm font-semibold transition-all">
+                                                class="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-xl text-sm font-semibold transition-all">
                                                 <span x-show="!processing">Bayar Sekarang</span>
                                                 <span x-show="processing" x-cloak>Memproses...</span>
                                             </button>
                                         </form>
                                     @else
                                         <a href="{{ route('dashboard.invitations.addons.invoice', [$invitation, $pendingTx]) }}"
-                                            class="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-xl text-sm font-semibold transition-all">
+                                            class="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-xl text-sm font-semibold transition-all">
                                             Lihat Invoice
                                         </a>
                                     @endif
                                 @elseif($pendingTx && $pendingTx->payment_status === 'verifying')
                                     <a href="{{ route('dashboard.invitations.addons.invoice', [$invitation, $pendingTx]) }}"
-                                        class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold transition-all">
+                                        class="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold transition-all">
                                         Cek Status
                                     </a>
                                 @elseif(!$isOwned)
@@ -184,7 +184,7 @@
                                             @csrf
                                             <button type="submit"
                                                 x-bind:disabled="processing"
-                                                class="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-xl text-sm font-semibold transition-all">
+                                                class="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-xl text-sm font-semibold transition-all">
                                                 <span x-show="!processing">Beli Rp {{ number_format($addon->price, 0, ',', '.') }}</span>
                                                 <span x-show="processing" x-cloak>Memproses...</span>
                                             </button>
@@ -193,7 +193,7 @@
                                         <form action="{{ route('dashboard.invitations.addons.purchase', [$invitation, $addon]) }}" method="POST">
                                             @csrf
                                             <button type="submit"
-                                                class="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-xl text-sm font-semibold transition-all">
+                                                class="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-xl text-sm font-semibold transition-all">
                                                 Beli Rp {{ number_format($addon->price, 0, ',', '.') }}
                                             </button>
                                         </form>
@@ -202,7 +202,7 @@
                                     <form action="{{ route('dashboard.invitations.addons.activate', [$invitation, $addon]) }}" method="POST">
                                         @csrf
                                         <button type="submit"
-                                            class="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-xl text-sm font-semibold transition-all">
+                                            class="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-xl text-sm font-semibold transition-all">
                                             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                             </svg>
@@ -213,7 +213,7 @@
                                     <form action="{{ route('dashboard.invitations.addons.deactivate', [$invitation, $addon]) }}" method="POST">
                                         @csrf
                                         <button type="submit"
-                                            class="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-secondary-800 border border-neutral-300 dark:border-neutral-600 rounded-xl text-sm font-semibold text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-secondary-700 transition-all">
+                                            class="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-2 bg-white dark:bg-secondary-800 border border-neutral-300 dark:border-neutral-600 rounded-xl text-sm font-semibold text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-secondary-700 transition-all">
                                             Nonaktifkan
                                         </button>
                                     </form>
