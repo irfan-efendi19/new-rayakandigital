@@ -453,14 +453,6 @@
                                     <h4
                                         class="font-heading text-base font-bold text-secondary-800 dark:text-neutral-100">
                                         Waktu & Tempat</h4>
-                                    <button type="button" id="add-event-btn"
-                                        class="inline-flex items-center justify-center gap-1.5 w-full sm:w-auto px-4 py-2 text-sm font-semibold rounded-xl text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/50 hover:bg-primary-100 dark:hover:bg-primary-900/70 transition">
-                                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M12 4v16m8-8H4" />
-                                        </svg>
-                                        Tambah Acara
-                                    </button>
                                 </div>
 
                                 @error('events') <span
@@ -618,7 +610,16 @@
                                             </div>
                                         </div>
                                     @endforeach
-                                </div>
+                                 </div>
+
+                                <button type="button" id="add-event-btn"
+                                    class="inline-flex items-center justify-center gap-1.5 w-full sm:w-auto px-4 py-2 mt-5 text-sm font-semibold rounded-xl text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/50 hover:bg-primary-100 dark:hover:bg-primary-900/70 transition">
+                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 4v16m8-8H4" />
+                                    </svg>
+                                    Tambah Acara
+                                </button>
 
                                 {{-- Template for new event card (hidden, cloned by JS) --}}
                                 <template id="event-card-template">
@@ -888,8 +889,8 @@
                                         <label
                                             class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Foto
                                             Sampul</label>
-                                        <div class="mt-2 flex items-start gap-4">
-                                            <div class="relative flex-shrink-0 w-48">
+                                        <div class="mt-2 flex flex-col sm:flex-row items-start gap-4">
+                                            <div class="relative flex-shrink-0 w-full sm:w-48 max-w-[180px] sm:max-w-none">
                                                 <div class="rounded-xl overflow-hidden border-2 border-neutral-200 dark:border-neutral-600"
                                                     style="aspect-ratio:9/16">
                                                     <img id="cover-preview"
