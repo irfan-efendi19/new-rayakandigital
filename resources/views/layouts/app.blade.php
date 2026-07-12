@@ -68,7 +68,7 @@
             </div>
         </footer>
     </div>
-    @if(request()->is('dashboard/*') && !request()->is('*/edit*') && !request()->is('*/create*'))
+    @if((request()->is('dashboard') || request()->is('dashboard/*')) && !request()->is('*/edit*') && !request()->is('*/create*'))
     <a href="https://wa.me/{{ config('app.whatsapp_number', '62895349823366') }}?text={{ urlencode('Halo, saya ingin bertanya terkait layanan undangan digital.') }}"
         target="_blank" rel="noopener noreferrer"
         class="fixed bottom-4 right-4 z-50 inline-flex items-center gap-2 rounded-full bg-emerald-500 hover:bg-emerald-600 px-4 py-3 text-white shadow-lg shadow-emerald-500/30 transition-all duration-200 hover:scale-105">

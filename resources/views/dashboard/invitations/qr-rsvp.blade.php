@@ -139,7 +139,7 @@
                                         <span class="text-xs text-neutral-400 dark:text-neutral-500">{{ $invitation->rsvps->count() }} respon</span>
                                     </div>
                                     <div class="overflow-x-auto max-h-[410px] overflow-y-auto">
-                                        <table class="w-full text-xs">
+                                        <table class="w-full text-xs table-stacked">
                                             <thead class="bg-neutral-50 dark:bg-secondary-800 text-neutral-500 dark:text-neutral-400">
                                                 <tr>
                                                     <th class="text-left px-4 py-2 font-medium">Nama Tamu</th>
@@ -151,8 +151,8 @@
                                             <tbody class="divide-y divide-neutral-100 dark:divide-neutral-600">
                                                 @forelse($invitation->rsvps->sortByDesc('created_at') as $rsvp)
                                                 <tr class="hover:bg-neutral-50 dark:hover:bg-secondary-600/50 transition-colors">
-                                                    <td class="px-4 py-2.5 text-neutral-700 dark:text-neutral-300 font-medium">{{ $rsvp->guest_name }}</td>
-                                                    <td class="px-2 py-2.5 text-center">
+                                                    <td class="px-4 py-2.5 text-neutral-700 dark:text-neutral-300 font-medium" data-label="Nama Tamu">{{ $rsvp->guest_name }}</td>
+                                                    <td class="px-2 py-2.5 text-center" data-label="Status">
                                                         @if($rsvp->attendance === 'attending')
                                                         <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 text-[10px] font-semibold">Hadir</span>
                                                         @elseif($rsvp->attendance === 'not_attending')
@@ -161,8 +161,8 @@
                                                         <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 text-[10px] font-semibold">Ragu</span>
                                                         @endif
                                                     </td>
-                                                    <td class="px-2 py-2.5 text-center text-neutral-600 dark:text-neutral-400">{{ $rsvp->pax }}</td>
-                                                    <td class="px-4 py-2.5 text-right text-neutral-400 dark:text-neutral-500 whitespace-nowrap">{{ $rsvp->created_at->format('d/m H:i') }}</td>
+                                                    <td class="px-2 py-2.5 text-center text-neutral-600 dark:text-neutral-400 font-mono" data-label="Pax">{{ $rsvp->pax }}</td>
+                                                    <td class="px-4 py-2.5 text-right text-neutral-400 dark:text-neutral-500 whitespace-nowrap font-mono" data-label="Waktu">{{ $rsvp->created_at->format('d/m H:i') }}</td>
                                                 </tr>
                                                 @empty
                                                 <tr>

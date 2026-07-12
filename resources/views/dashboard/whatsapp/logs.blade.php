@@ -36,8 +36,9 @@
                             <p class="mt-1 text-sm text-neutral-500 dark:text-neutral-400">Riwayat WhatsApp akan muncul setelah Anda mengirim undangan ke tamu.</p>
                         </div>
                     @else
+                        <div class="table-scrollable-wrapper">
                         <div class="overflow-x-auto border border-neutral-200 dark:border-secondary-700 rounded-2xl">
-                            <table class="min-w-full divide-y divide-neutral-200 dark:divide-secondary-700">
+                            <table class="min-w-full divide-y divide-neutral-200 dark:divide-secondary-700 table-stacked">
                                 <thead class="bg-neutral-50 dark:bg-secondary-900">
                                     <tr>
                                         <th scope="col" class="px-6 py-3.5 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Tamu</th>
@@ -51,10 +52,10 @@
                                 <tbody class="bg-white dark:bg-secondary-800 divide-y divide-neutral-100 dark:divide-secondary-700">
                                     @foreach($logs as $log)
                                         <tr class="hover:bg-neutral-50 dark:hover:bg-secondary-700/50 transition-colors">
-                                            <td class="px-6 py-4 whitespace-nowrap">
+                                            <td class="px-6 py-4 whitespace-nowrap" data-label="Tamu">
                                                 <span class="text-sm font-semibold text-secondary-800 dark:text-neutral-200">{{ $log->guest?->name ?? 'Unknown' }}</span>
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
+                                            <td class="px-6 py-4 whitespace-nowrap" data-label="Status">
                                                 @php
                                                     $statusBadge = match($log->status) {
                                                         'sent' => ['bg-emerald-100 dark:bg-emerald-900/50 text-emerald-800 dark:text-emerald-200', 'Terkirim'],
@@ -68,16 +69,16 @@
                                                     {{ $statusBadge[1] }}
                                                 </span>
                                             </td>
-                                            <td class="px-6 py-4 text-sm text-neutral-500 dark:text-neutral-400 max-w-xs truncate">
+                                            <td class="px-6 py-4 text-sm text-neutral-500 dark:text-neutral-400 max-w-xs truncate" data-label="Pesan">
                                                 {{ Str::limit($log->message_content, 80) }}
                                             </td>
-                                            <td class="px-6 py-4 text-sm text-red-500 dark:text-red-400 max-w-xs truncate">
+                                            <td class="px-6 py-4 text-sm text-red-500 dark:text-red-400 max-w-xs truncate" data-label="Error">
                                                 {{ $log->error_message ?? '—' }}
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400">
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400 font-mono" data-label="Waktu Kirim">
                                                 {{ $log->sent_at ? $log->sent_at->format('d/m/Y H:i') : '—' }}
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400">
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400 font-mono" data-label="Dibuat">
                                                 {{ $log->created_at->format('d/m/Y H:i') }}
                                             </td>
                                         </tr>
@@ -85,6 +86,7 @@
                                 </tbody>
                             </table>
                         </div>
+                        </div><!-- end table-scrollable-wrapper -->
 
                         <div class="mt-6">
                             {{ $logs->links() }}

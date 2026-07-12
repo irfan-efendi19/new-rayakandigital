@@ -7,3 +7,86 @@
 [x-cloak] {
     display: none !important;
 }
+
+@layer components {
+    /* Stacked Table for Transactional Data */
+    @media (max-width: 767px) {
+        .table-stacked {
+            display: block;
+            width: 100%;
+        }
+        .table-stacked thead {
+            display: none;
+        }
+        .table-stacked tbody, .table-stacked tr {
+            display: block;
+            width: 100%;
+        }
+        .table-stacked tr {
+            @apply mb-4 border border-neutral-200 bg-white rounded-xl shadow-sm;
+            overflow: hidden;
+        }
+        :is(.dark .table-stacked tr) {
+            @apply border-secondary-700 bg-secondary-800;
+        }
+        .table-stacked td {
+            @apply flex justify-between items-center px-4 py-3 border-b border-neutral-100;
+            text-align: right;
+        }
+        .table-stacked td:last-child {
+            border-bottom: 0;
+        }
+        :is(.dark .table-stacked td) {
+            @apply border-secondary-700;
+        }
+        .table-stacked td::before {
+            content: attr(data-label);
+            @apply text-[11px] font-bold text-neutral-500 uppercase tracking-wider mr-4;
+            display: block;
+            text-align: left;
+            flex-shrink: 0;
+        }
+        :is(.dark .table-stacked td::before) {
+            @apply text-neutral-400;
+        }
+        /* Special handling for checkboxes or single-action items */
+        .table-stacked td.hide-label::before {
+            content: none;
+        }
+        .table-stacked td.full-width {
+            justify-content: flex-end;
+        }
+        .table-stacked td.full-width::before {
+            content: none;
+        }
+    }
+
+    /* Scrollable Wrapper for Matrix/Log Data (mobile fade indicator) */
+    @media (max-width: 767px) {
+        .table-scrollable-wrapper {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+        }
+        .table-scrollable-wrapper .overflow-x-auto {
+            position: relative;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        /* Visual fade shadow indicator on the right edge */
+        .table-scrollable-wrapper::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 2rem;
+            pointer-events: none;
+            background: linear-gradient(to left, white, transparent);
+        }
+        :is(.dark .table-scrollable-wrapper::after) {
+            background: linear-gradient(to left, #1A1A1A, transparent);
+        }
+    }
+}

@@ -376,7 +376,7 @@
                             </div>
                         </form>
                         <div class="overflow-x-auto border border-neutral-200 dark:border-secondary-700 rounded-2xl">
-                                <table class="min-w-full divide-y divide-neutral-200 dark:divide-secondary-700">
+                                <table class="min-w-full divide-y divide-neutral-200 dark:divide-secondary-700 table-stacked">
                                     <thead class="bg-neutral-50 dark:bg-secondary-900">
                                         <tr>
                                             <th scope="col" class="px-3 py-3.5 text-left">
@@ -397,15 +397,15 @@
                                         @foreach($guests as $guest)
                                             @php $waStatus = $guest->wa_status; @endphp
                                             <tr class="guest-row hover:bg-neutral-50 dark:hover:bg-secondary-700/50 transition-colors cursor-pointer">
-                                                <td class="px-3 py-4 whitespace-nowrap">
+                                                <td class="px-3 py-4 whitespace-nowrap hide-label">
                                                     <input type="checkbox" name="guest_ids[]" value="{{ $guest->id }}"
                                                         class="guest-checkbox rounded-lg border-neutral-300 dark:border-secondary-600 dark:bg-secondary-900 text-primary focus:ring-primary-500 shadow-sm"
                                                         data-has-phone="{{ ($guest->whatsapp_number ?? $guest->phone) ? '1' : '0' }}">
                                                 </td>
-                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                <td class="px-6 py-4 whitespace-nowrap" data-label="Nama Tamu">
                                                     <span class="text-sm font-semibold text-secondary-800 dark:text-neutral-200">{{ $guest->name }}</span>
                                                 </td>
-                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                <td class="px-6 py-4 whitespace-nowrap" data-label="Kategori">
                                                     @if($guest->guestCategory)
                                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
                                                               style="background-color: {{ $guest->guestCategory->color_code }}20; color: {{ $guest->guestCategory->color_code }}; border: 1px solid {{ $guest->guestCategory->color_code }}40;">
@@ -415,7 +415,7 @@
                                                         <span class="text-xs text-neutral-400 dark:text-neutral-500">—</span>
                                                     @endif
                                                 </td>
-                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                <td class="px-6 py-4 whitespace-nowrap" data-label="Acara">
                                                     @if($guest->events->isNotEmpty())
                                                         <div class="flex flex-wrap gap-1">
                                                             @foreach($guest->events as $event)
@@ -428,10 +428,10 @@
                                                         <span class="text-xs text-neutral-400 dark:text-neutral-500">Semua Acara</span>
                                                     @endif
                                                 </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400">
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400 font-mono" data-label="No HP">
                                                     {{ $guest->whatsapp_number ?? $guest->phone ?? '—' }}
                                                 </td>
-                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                <td class="px-6 py-4 whitespace-nowrap" data-label="Status WA">
                                                     @php
                                                         $waBadge = match($waStatus) {
                                                             'sent' => ['bg-emerald-100 dark:bg-emerald-900/50 text-emerald-800 dark:text-emerald-200', 'Terkirim'],
@@ -444,7 +444,7 @@
                                                         {{ $waBadge[1] }}
                                                     </span>
                                                 </td>
-                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                <td class="px-6 py-4 whitespace-nowrap" data-label="Kehadiran">
                                                     @php
                                                         $attBadge = match($guest->attendance_status) {
                                                             'hadir' => ['bg-emerald-100 dark:bg-emerald-900/50 text-emerald-800 dark:text-emerald-200', 'Hadir'],
@@ -459,7 +459,7 @@
                                                         {{ $attBadge[1] }}
                                                     </span>
                                                 </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400">
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400" data-label="Link Personal">
                                                     <div class="flex items-center gap-1.5">
                                                         <input type="text" readonly value="{{ $guest->personalized_link }}"
                                                             class="text-xs border-neutral-200 dark:border-secondary-600 rounded-lg shadow-sm w-36 bg-neutral-50 dark:bg-secondary-900 dark:text-neutral-300 focus:ring-0 cursor-default"
@@ -470,7 +470,7 @@
                                                         </button>
                                                     </div>
                                                 </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium full-width hide-label">
                                                     <div class="flex items-center justify-end gap-2">
                                                         @if($guest->whatsapp_number ?? $guest->phone)
                                                             <form action="{{ route('dashboard.invitations.whatsapp.send-single', [$invitation, $guest]) }}" method="POST" class="inline-block">

@@ -77,11 +77,11 @@
                                 {{-- Slug --}}
                                 <div class="mt-6">
                                     <label for="slug-input" class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Tautan Undangan (URL Kustom)</label>
-                                    <div class="mt-1.5 flex items-stretch gap-0">
-                                        <span class="inline-flex items-center px-3 rounded-l-xl border border-r-0 border-neutral-300 dark:border-neutral-600 bg-neutral-100 dark:bg-secondary-700 text-sm text-neutral-500 dark:text-neutral-400 whitespace-nowrap">{{ parse_url(config('app.url'), PHP_URL_HOST) }}/</span>
+                                    <div class="mt-1.5 flex flex-wrap sm:flex-nowrap items-stretch gap-0">
+                                        <span class="inline-flex items-center px-3 rounded-tl-xl sm:rounded-l-xl sm:rounded-tr-none border sm:border-r-0 border-neutral-300 dark:border-neutral-600 bg-neutral-100 dark:bg-secondary-700 text-sm text-neutral-500 dark:text-neutral-400 whitespace-nowrap">{{ parse_url(config('app.url'), PHP_URL_HOST) }}/</span>
                                         <input type="text" name="slug" id="slug-input"
                                             value="{{ old('slug') }}"
-                                            class="block w-full rounded-r-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm font-mono dark:bg-secondary-700 dark:text-neutral-200"
+                                            class="block flex-1 min-w-0 rounded-bl-xl sm:rounded-r-xl sm:rounded-bl-none border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm font-mono dark:bg-secondary-700 dark:text-neutral-200"
                                             placeholder="nama-undangan-anda" maxlength="100" pattern="^[a-z0-9\-]+$">
                                     </div>
                                     <div id="slug-indicator" class="mt-1.5 text-xs flex items-center gap-1.5 text-neutral-400 dark:text-neutral-500">
@@ -119,7 +119,7 @@
                                                     'border-primary ring-2 ring-primary/20 shadow-md bg-primary-50 dark:bg-primary-900/20': selectedTheme === '{{ $themeKey }}',
                                                     'border-neutral-200 dark:border-neutral-600 hover:border-neutral-300 dark:hover:border-neutral-500 bg-white dark:bg-secondary-800': selectedTheme !== '{{ $themeKey }}'
                                                 }"
-                                                class="w-40 sm:w-48 flex-shrink-0 border rounded-2xl p-2.5 transition-all duration-200 cursor-pointer snap-start relative flex flex-col justify-between select-none"
+                                                class="w-36 sm:w-48 flex-shrink-0 border rounded-2xl p-2.5 transition-all duration-200 cursor-pointer snap-start relative flex flex-col justify-between select-none"
                                             >
                                                 <div x-show="selectedTheme === '{{ $themeKey }}'" class="absolute top-4 right-4 bg-primary text-white rounded-full p-1 z-10 shadow-sm" x-cloak>
                                                     <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
@@ -667,8 +667,8 @@
                                     class="bg-neutral-50 dark:bg-secondary-700 p-5 rounded-2xl border border-neutral-200 dark:border-secondary-700 space-y-4">
                                     <div>
                                         <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Foto Sampul</label>
-                                        <div class="mt-2 flex items-start gap-4">
-                                            <div class="relative flex-shrink-0 w-48">
+                                        <div class="mt-2 flex flex-col sm:flex-row sm:items-start gap-4">
+                                            <div class="relative flex-shrink-0 w-full max-w-[192px] sm:w-48">
                                                 <div class="rounded-xl overflow-hidden border-2 border-neutral-200 dark:border-neutral-600"
                                                     style="aspect-ratio:9/16">
                                                     <img id="cover-preview" src="" alt="Cover photo" class="w-full h-full object-cover hidden">
@@ -747,7 +747,7 @@
                     </svg>
                 </button>
             </div>
-            <div class="p-4 bg-secondary-900" style="height:400px">
+            <div class="p-4 bg-secondary-900" style="height:400px;max-height:50vh">
                 <div id="crop-container" class="w-full mx-auto" style="max-width:500px;overflow:hidden">
                 </div>
             </div>

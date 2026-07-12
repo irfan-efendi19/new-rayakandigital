@@ -368,7 +368,7 @@ $daysLeft = $invitation->expires_at ? (int) max(0, now()->diffInDays($invitation
                                         </div>
 
                                         <div class="overflow-x-auto">
-                                            <table class="min-w-full divide-y divide-neutral-200 dark:divide-secondary-700">
+                                            <table class="min-w-full divide-y divide-neutral-200 dark:divide-secondary-700 table-stacked">
                                                 <thead class="bg-neutral-50 dark:bg-secondary-700">
                                                     <tr>
                                                         <th scope="col"
@@ -393,8 +393,8 @@ $daysLeft = $invitation->expires_at ? (int) max(0, now()->diffInDays($invitation
                                                     <template x-for="rsvp in displayRsvps" :key="rsvp.id">
                                                         <tr class="hover:bg-neutral-50 dark:hover:bg-secondary-700 transition-colors">
                                                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-secondary-800 dark:text-neutral-100"
-                                                                x-text="rsvp.guest_name"></td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                                x-text="rsvp.guest_name" data-label="Nama Tamu"></td>
+                                                            <td class="px-6 py-4 whitespace-nowrap" data-label="Kehadiran">
                                                                 <span
                                                                     class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold"
                                                                     :class="{
@@ -404,12 +404,12 @@ $daysLeft = $invitation->expires_at ? (int) max(0, now()->diffInDays($invitation
                                                                                                             }" x-text="rsvp.attendance_label">
                                                                 </span>
                                                             </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-600 dark:text-neutral-400"
-                                                                x-text="rsvp.pax"></td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400"
-                                                                x-text="rsvp.created_at"></td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400"
-                                                                x-text="rsvp.updated_at"></td>
+                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-600 dark:text-neutral-400 font-mono"
+                                                                x-text="rsvp.pax" data-label="Jumlah (Pax)"></td>
+                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400 font-mono"
+                                                                x-text="rsvp.created_at" data-label="Waktu"></td>
+                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400 font-mono"
+                                                                x-text="rsvp.updated_at" data-label="Terakhir Diupdate"></td>
                                                         </tr>
                                                     </template>
                                                 </tbody>
@@ -625,7 +625,7 @@ $daysLeft = $invitation->expires_at ? (int) max(0, now()->diffInDays($invitation
                                 </div>
 
                                 <div class="overflow-x-auto">
-                                    <table class="min-w-full divide-y divide-neutral-200 dark:divide-secondary-700">
+                                    <table class="min-w-full divide-y divide-neutral-200 dark:divide-secondary-700 table-stacked">
                                         <thead class="bg-neutral-50 dark:bg-secondary-700">
                                             <tr>
                                                 <th scope="col"
@@ -643,12 +643,12 @@ $daysLeft = $invitation->expires_at ? (int) max(0, now()->diffInDays($invitation
                                             <template x-for="wish in displayWishes" :key="wish.id">
                                                 <tr class="hover:bg-neutral-50 dark:hover:bg-secondary-700 transition-colors">
                                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-secondary-800 dark:text-neutral-100"
-                                                        x-text="wish.guest_name"></td>
+                                                        x-text="wish.guest_name" data-label="Nama Tamu"></td>
                                                     <td class="px-6 py-4 text-sm text-neutral-600 dark:text-neutral-400 max-w-xs break-words"
-                                                        x-text="wish.message"></td>
-                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400"
-                                                        x-text="wish.created_at_diff"></td>
-                                                    <td class="px-6 py-4 whitespace-nowrap text-right">
+                                                        x-text="wish.message" data-label="Pesan"></td>
+                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400 font-mono"
+                                                        x-text="wish.created_at_diff" data-label="Waktu"></td>
+                                                    <td class="px-6 py-4 whitespace-nowrap text-right full-width hide-label">
                                                         <button @click="deleteWish(wish.id)"
                                                             class="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-semibold text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/30 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/50 transition">
                                                             <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
