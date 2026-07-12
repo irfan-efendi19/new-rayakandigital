@@ -2353,24 +2353,25 @@
                             </div>
 
                             {{-- Active toggle --}}
+                            @php $isActive = old('is_active', $invitation->is_active); @endphp
                             <div class="mt-6">
-                                <div
-                                    class="flex items-start gap-3 p-4 bg-neutral-50 dark:bg-secondary-700 rounded-xl border border-neutral-200 dark:border-secondary-700">
-                                    <div class="flex h-5 items-center">
-                                        <input type="hidden" name="is_active" value="0">
-                                        <input id="is_active" name="is_active" type="checkbox" value="1"
-                                            {{ old('is_active', $invitation->is_active) ? 'checked' : '' }}
-                                            class="h-4 w-4 rounded border-neutral-300 dark:border-neutral-600 text-primary-600 dark:text-primary-400 focus:ring-primary-500">
+                                <input type="hidden" name="is_active" value="0">
+                                <div class="flex flex-col sm:flex-row sm:items-center gap-3 p-4 bg-neutral-50 dark:bg-secondary-700 rounded-xl border border-neutral-200 dark:border-secondary-700">
+                                    <div class="flex-1">
+                                        <p class="text-sm font-medium text-neutral-700 dark:text-neutral-300">Status Undangan</p>
+                                        <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">Undangan yang tidak aktif tidak dapat diakses oleh tamu.</p>
                                     </div>
-                                    <div class="text-sm">
-                                        <label for="is_active"
-                                            class="font-medium text-neutral-700 dark:text-neutral-300">Aktifkan
-                                            Undangan</label>
-                                        <p class="text-neutral-500 dark:text-neutral-400 text-xs mt-0.5">
-                                            Undangan
-                                            yang
-                                            tidak aktif tidak dapat
-                                            diakses oleh tamu.</p>
+                                    <div class="flex gap-2">
+                                        <button type="button" id="activate-btn"
+                                            class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all {{ $isActive ? 'bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800' : 'bg-white dark:bg-secondary-800 border border-neutral-300 dark:border-neutral-600 text-neutral-600 dark:text-neutral-400 hover:border-emerald-300 hover:text-emerald-600' }}">
+                                            <span class="w-2 h-2 rounded-full {{ $isActive ? 'bg-emerald-500' : 'bg-neutral-300 dark:bg-neutral-500' }}"></span>
+                                            Aktif
+                                        </button>
+                                        <button type="button" id="deactivate-btn"
+                                            class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all {{ !$isActive ? 'bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-800' : 'bg-white dark:bg-secondary-800 border border-neutral-300 dark:border-neutral-600 text-neutral-600 dark:text-neutral-400 hover:border-red-300 hover:text-red-600' }}">
+                                            <span class="w-2 h-2 rounded-full {{ !$isActive ? 'bg-red-500' : 'bg-neutral-300 dark:bg-neutral-500' }}"></span>
+                                            Nonaktif
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -2940,6 +2941,26 @@
                     'text-primary-700', 'dark:text-primary-300');
             });
         });
+
+        // Activate / Deactivate toggle
+        const activateBtn = document.getElementById('activate-btn');
+        const deactivateBtn = document.getElementById('deactivate-btn');
+        const activeInput = document.querySelector('input[name="is_active"]');
+
+        function setActiveState(active) {
+            activeInput.value = active ? '1' : '0';
+            activateBtn.className = `inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${active ? 'bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800' : 'bg-white dark:bg-secondary-800 border border-neutral-300 dark:border-neutral-600 text-neutral-600 dark:text-neutral-400 hover:border-emerald-300 hover:text-emerald-600'}`;
+            deactivateBtn.className = `inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${!active ? 'bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-800' : 'bg-white dark:bg-secondary-800 border border-neutral-300 dark:border-neutral-600 text-neutral-600 dark:text-neutral-400 hover:border-red-300 hover:text-red-600'}`;
+            const dot1 = activateBtn.querySelector('span');
+            const dot2 = deactivateBtn.querySelector('span');
+            if (dot1) dot1.className = `w-2 h-2 rounded-full ${active ? 'bg-emerald-500' : 'bg-neutral-300 dark:bg-neutral-500'}`;
+            if (dot2) dot2.className = `w-2 h-2 rounded-full ${!active ? 'bg-red-500' : 'bg-neutral-300 dark:bg-neutral-500'}`;
+        }
+
+        if (activateBtn && deactivateBtn) {
+            activateBtn.addEventListener('click', function() { setActiveState(true); });
+            deactivateBtn.addEventListener('click', function() { setActiveState(false); });
+        }
 
         // Save confirmation
         const saveBtn = document.getElementById('save-invitation-btn');
