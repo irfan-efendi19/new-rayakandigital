@@ -1,5 +1,7 @@
 import Alpine from 'alpinejs';
+import Collapse from '@alpinejs/collapse';
 window.Alpine = Alpine;
+Alpine.plugin(Collapse);
 
 document.addEventListener('alpine:init', () => {
     Alpine.store('darkMode', {
