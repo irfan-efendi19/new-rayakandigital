@@ -6,7 +6,6 @@ use App\Models\AddonTransaction;
 use App\Models\Invitation;
 use App\Models\Order;
 use App\Models\Package;
-use App\Models\PaymentGatewaySetting;
 use App\Models\PaymentMethodConfig;
 use App\Models\Subscription;
 use App\Models\User;
@@ -32,23 +31,6 @@ class MidtransService
             }
         } catch (\Throwable $e) {
             // Fallback
-        }
-
-        if (empty($serverKey)) {
-            try {
-                if (class_exists(PaymentGatewaySetting::class)) {
-                    $setting = PaymentGatewaySetting::where('provider_name', 'midtrans')
-                        ->where('is_active', true)
-                        ->first();
-
-                    if ($setting) {
-                        $serverKey = $setting->server_key ?? $serverKey;
-                        $isProduction = $setting->environment === 'production';
-                    }
-                }
-            } catch (\Throwable $e) {
-                // Fallback
-            }
         }
 
         Config::$serverKey = $serverKey;

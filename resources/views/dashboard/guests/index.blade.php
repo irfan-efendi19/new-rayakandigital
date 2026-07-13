@@ -465,32 +465,43 @@
                                                             class="text-xs border-neutral-200 dark:border-secondary-600 rounded-lg shadow-sm w-36 bg-neutral-50 dark:bg-secondary-900 dark:text-neutral-300 focus:ring-0 cursor-default"
                                                             id="link-{{ $guest->id }}">
                                                         <button onclick="copyToClipboard('link-{{ $guest->id }}')"
-                                                            class="text-primary hover:text-primary-600 dark:hover:text-primary-400 text-xs font-semibold">
-                                                            Copy
+                                                            title="Copy" aria-label="Copy"
+                                                            class="p-1.5 rounded-lg text-primary hover:bg-primary-50 dark:hover:bg-primary-900/30 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                                                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                                            </svg>
                                                         </button>
                                                     </div>
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium full-width hide-label">
-                                                    <div class="flex items-center justify-end gap-2">
+                                                    <div class="flex items-center justify-end gap-1.5">
                                                         @if($guest->whatsapp_number ?? $guest->phone)
                                                             <form action="{{ route('dashboard.invitations.whatsapp.send-single', [$invitation, $guest]) }}" method="POST" class="inline-block">
                                                                 @csrf
-                                                                <button type="submit" class="text-emerald-600 hover:text-emerald-700 text-xs font-semibold">
-                                                                    <span class="flex items-center gap-1">
-                                                                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                                                                        </svg>
-                                                                        Kirim WA
-                                                                    </span>
+                                                                <button type="submit" title="Kirim WA" aria-label="Kirim WA"
+                                                                    class="p-2 rounded-lg text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 hover:text-emerald-700 transition-colors">
+                                                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                                                                    </svg>
                                                                 </button>
                                                             </form>
                                                         @endif
                                                         <a href="{{ route('dashboard.invitations.guests.edit', [$invitation, $guest]) }}"
-                                                           class="text-primary hover:text-primary-600 text-xs font-semibold">Edit</a>
+                                                           title="Edit" aria-label="Edit"
+                                                           class="p-2 rounded-lg text-primary hover:bg-primary-50 dark:hover:bg-primary-900/30 hover:text-primary-600 transition-colors">
+                                                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                                            </svg>
+                                                        </a>
                                                         <form action="{{ route('dashboard.invitations.guests.destroy', [$invitation, $guest]) }}" method="POST" class="inline-block" onsubmit="return confirmSwal(event, 'Yakin ingin menghapus tamu ini?');">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button type="submit" class="text-red-500 hover:text-red-700 text-xs font-semibold">Hapus</button>
+                                                            <button type="submit" title="Hapus" aria-label="Hapus"
+                                                                class="p-2 rounded-lg text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 hover:text-red-700 transition-colors">
+                                                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                                </svg>
+                                                            </button>
                                                         </form>
                                                     </div>
                                                 </td>

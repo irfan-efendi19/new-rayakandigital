@@ -18,17 +18,6 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('payment_gateway_settings', function (Blueprint $table) {
-            $table->id();
-            $table->string('provider_name', 50)->unique();
-            $table->text('client_key')->nullable();
-            $table->text('server_key')->nullable();
-            $table->text('webhook_secret')->nullable();
-            $table->enum('environment', ['sandbox', 'production'])->default('sandbox');
-            $table->boolean('is_active')->default(false);
-            $table->timestamps();
-        });
-
         Schema::create('addons', function (Blueprint $table) {
             $table->id();
             $table->string('feature_name', 100);
@@ -54,7 +43,6 @@ return new class extends Migration
     {
         Schema::dropIfExists('addon_invitation');
         Schema::dropIfExists('addons');
-        Schema::dropIfExists('payment_gateway_settings');
         Schema::dropIfExists('system_configs');
     }
 };

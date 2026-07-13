@@ -21,40 +21,6 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // Payment Gateway Settings
-        \App\Models\PaymentGatewaySetting::firstOrCreate(
-            ['provider_name' => 'midtrans'],
-            [
-                'client_key' => 'SB-Mid-client-SampleKey123',
-                'server_key' => 'SB-Mid-server-SampleKey123',
-                'webhook_secret' => 'webhook_secret_midtrans_sample',
-                'environment' => 'sandbox',
-                'is_active' => true,
-            ]
-        );
-
-        \App\Models\PaymentGatewaySetting::firstOrCreate(
-            ['provider_name' => 'xendit'],
-            [
-                'client_key' => 'xnd_public_key_sample',
-                'server_key' => 'xnd_secret_key_sample',
-                'webhook_secret' => 'xnd_webhook_secret_sample',
-                'environment' => 'sandbox',
-                'is_active' => false,
-            ]
-        );
-
-        \App\Models\PaymentGatewaySetting::firstOrCreate(
-            ['provider_name' => 'stripe'],
-            [
-                'client_key' => 'pk_test_sample',
-                'server_key' => 'sk_test_sample',
-                'webhook_secret' => 'whsec_sample',
-                'environment' => 'sandbox',
-                'is_active' => false,
-            ]
-        );
-
         // Addons
         \App\Models\Addon::firstOrCreate(
             ['slug' => 'addon-digital-gift'],
