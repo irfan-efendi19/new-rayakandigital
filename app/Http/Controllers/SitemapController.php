@@ -19,7 +19,14 @@ class SitemapController extends Controller
             ['loc' => '/hubungi-kami', 'priority' => '0.7', 'changefreq' => 'monthly'],
             ['loc' => '/syarat-ketentuan', 'priority' => '0.5', 'changefreq' => 'yearly'],
             ['loc' => '/kebijakan-privasi', 'priority' => '0.5', 'changefreq' => 'yearly'],
+            ['loc' => '/dashboard', 'priority' => '0.4', 'changefreq' => 'weekly'],
+            ['loc' => '/login', 'priority' => '0.3', 'changefreq' => 'yearly'],
+            ['loc' => '/register', 'priority' => '0.3', 'changefreq' => 'yearly'],
+            ['loc' => '/forgot-password', 'priority' => '0.3', 'changefreq' => 'yearly'],
+            ['loc' => '/verify-email', 'priority' => '0.3', 'changefreq' => 'yearly'],
         ];
+
+        // Filament admin (/admin) is intentionally excluded from the sitemap.
 
         $themes = Theme::where('is_active', true)->get()->map(fn (Theme $theme) => [
             'loc' => '/themes/'.$theme->slug.'/preview',
