@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Reset Kata Sandi</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style type="text/css">
         body,
         table,
@@ -88,7 +87,7 @@
                     <!-- Logo -->
                     <tr>
                         <td align="center" style="padding-bottom: 32px;">
-                            <img src="https://rayakan.id/img/logolong.png" alt="{{ $appName }}" width="160"
+                            <img src="https://rayakandigital.id/img/logolong.png" alt="{{ $appName }}" width="160"
                                 style="display: block; border: 0; max-width: 160px; height: auto;">
                         </td>
                     </tr>
@@ -119,10 +118,16 @@
                                                     <table role="presentation" cellpadding="0" cellspacing="0"
                                                         style="width: 64px; height: 64px; background-color: #FFF4EB; border-radius: 16px;">
                                                         <tr>
-                                                            <td align="center" valign="middle"
-                                                                style="font-size: 28px; line-height: 64px; color: #FF7A00;">
-                                                                <i class="fas fa-lock"></i>
-                                                            </td>
+                                                    <td align="center" valign="middle"
+                                                        style="line-height: 64px;">
+                                                        <svg width="28" height="28" viewBox="0 0 448 512"
+                                                            xmlns="http://www.w3.org/2000/svg" role="img"
+                                                            aria-hidden="true"
+                                                            style="display: inline-block; vertical-align: middle; border: 0;">
+                                                            <path fill="#FF7A00"
+                                                                d="M144 144v48h160v-48c0-44.2-35.8-80-80-80s-80 35.8-80 80zM80 192v-48C80 64.5 144.5 0 224 0s144 64.5 144 144v48h16c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V256c0-35.3 28.7-64 64-64h16z" />
+                                                        </svg>
+                                                    </td>
                                                         </tr>
                                                     </table>
                                                 </td>
