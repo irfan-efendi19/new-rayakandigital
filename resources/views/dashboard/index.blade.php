@@ -224,10 +224,23 @@
                     @else
                         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4">
                             @foreach($invitations as $invitation)
-                                <div class="group relative bg-neutral-50 dark:bg-secondary-900/50 rounded-lg sm:rounded-xl overflow-hidden border border-neutral-200 dark:border-secondary-700 hover:shadow-md hover:border-primary-200 dark:hover:border-primary-800 transition-all duration-200
-                                    {{ $invitation->isTrialExpired() ? 'opacity-50' : '' }}">
+                                @php
+                                    $tierCode = $invitation->currentTier();
+                                    $tierBadgeColor = match($tierCode) {
+                                        'bronze' => 'bg-orange-100 dark:bg-orange-900/50 text-orange-700 dark:text-orange-300',
+                                        'silver' => 'bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300',
+                                        'gold' => 'bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300',
+                                        'platinum' => 'bg-primary-100 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300',
+                                        default => 'bg-neutral-100 dark:bg-neutral-700 text-neutral-500 dark:text-neutral-400'
+                                    };
+                                    $isExpired = $invitation->isTrialExpired();
+                                    $isTrial = $invitation->expires_at !== null && !$invitation->hasPremiumFeatures();
+                                    $daysLeft = $invitation->expires_at ? (int) max(0, now()->diffInDays($invitation->expires_at, false)) : null;
+                                @endphp
+                                <div class="group relative bg-white dark:bg-secondary-900 rounded-xl overflow-hidden border border-neutral-200 dark:border-secondary-700 hover:shadow-lg hover:-translate-y-0.5 hover:border-primary-200 dark:hover:border-primary-800 transition-all duration-200
+                                    {{ $isExpired ? 'opacity-60' : '' }}">
                                     <a href="{{ route('dashboard.invitations.show', $invitation) }}" class="block">
-                                        <div class="aspect-[4/3] bg-neutral-100 dark:bg-secondary-700 overflow-hidden">
+                                        <div class="relative aspect-[4/3] bg-neutral-100 dark:bg-secondary-700 overflow-hidden">
                                             @if($invitation->cover_photo)
                                                 <img src="{{ asset('storage/' . $invitation->cover_photo) }}" alt="Cover" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                             @else
@@ -237,46 +250,57 @@
                                                     </svg>
                                                 </div>
                                             @endif
+                                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
+                                            <span class="absolute top-1.5 left-1.5 sm:top-2 sm:left-2 inline-flex items-center px-1.5 py-0.5 rounded text-[10px] sm:text-xs font-semibold whitespace-nowrap uppercase tracking-wider shadow-sm {{ $tierBadgeColor }}">
+                                                {{ $tierCode === 'free' ? 'Gratis' : $tierCode }}
+                                            </span>
+                                            @if($invitation->expires_at)
+                                                <span class="absolute bottom-1.5 left-1.5 sm:bottom-2 sm:left-2 inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] sm:text-[10px] font-medium bg-black/40 text-white backdrop-blur-sm">
+                                                    <svg class="w-2.5 h-2.5 sm:w-3 sm:h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                    </svg>
+                                                    {{ $invitation->expires_at->format('d/m/Y') }}
+                                                </span>
+                                            @endif
                                         </div>
                                         <div class="p-2.5 sm:p-3">
-                                            <div class="flex items-start justify-between gap-1">
-                                                <h4 class="font-semibold text-xs sm:text-sm text-secondary-800 dark:text-neutral-100 truncate flex-1">{{ $invitation->title }}</h4>
-                                                @php
-                                                    $tierCode = $invitation->currentTier();
-                                                    $tierBadgeColor = match($tierCode) {
-                                                        'bronze' => 'bg-orange-100 dark:bg-orange-900/50 text-orange-700 dark:text-orange-300',
-                                                        'silver' => 'bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300',
-                                                        'gold' => 'bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300',
-                                                        'platinum' => 'bg-primary-100 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300',
-                                                        default => 'bg-neutral-100 dark:bg-neutral-700 text-neutral-500 dark:text-neutral-400'
-                                                    };
-                                                @endphp
-                                                <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] sm:text-xs font-semibold whitespace-nowrap uppercase tracking-wider {{ $tierBadgeColor }}">
-                                                    {{ $tierCode === 'free' ? 'Gratis' : $tierCode }}
-                                                </span>
-                                            </div>
+                                            <h4 class="font-semibold text-xs sm:text-sm text-secondary-800 dark:text-neutral-100 truncate">{{ $invitation->title }}</h4>
                                             <p class="text-[10px] sm:text-xs text-neutral-500 dark:text-neutral-400 mt-0.5 truncate">{{ $invitation->couple_name }}</p>
-                                            <div class="flex items-center gap-1.5 mt-1">
-                                                @php
-                                                    $isExpired = $invitation->isTrialExpired();
-                                                    $isTrial = $invitation->expires_at !== null && !$invitation->hasPremiumFeatures();
-                                                    $daysLeft = $invitation->expires_at ? (int) max(0, now()->diffInDays($invitation->expires_at, false)) : null;
-                                                @endphp
+                                            <div class="flex items-center gap-1.5 mt-1.5 flex-wrap">
                                                 @if($isExpired)
-                                                    <span class="inline-flex items-center px-1 py-0.5 rounded text-[9px] sm:text-[10px] font-medium bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300">Kedaluwarsa</span>
+                                                    <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] sm:text-[10px] font-medium bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300">
+                                                        <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>Kedaluwarsa
+                                                    </span>
                                                 @elseif($isTrial)
-                                                    <span class="inline-flex items-center px-1 py-0.5 rounded text-[9px] sm:text-[10px] font-medium bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300">Masa Percobaan</span>
+                                                    <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] sm:text-[10px] font-medium bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300">
+                                                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>Masa Percobaan
+                                                    </span>
+                                                @else
+                                                    <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] sm:text-[10px] font-medium bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-300">
+                                                        <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>Aktif
+                                                    </span>
                                                 @endif
-                                                @if($invitation->expires_at)
-                                                    <span class="text-[9px] sm:text-[10px] text-neutral-400 dark:text-neutral-500">{{ $invitation->expires_at->format('d/m/Y') }}</span>
-                                                    @if($daysLeft !== null)
-                                                        <span class="text-[9px] sm:text-[10px] font-medium {{ $daysLeft <= 7 ? 'text-red-500' : 'text-neutral-400 dark:text-neutral-500' }}">{{ $daysLeft }} Hari</span>
-                                                    @endif
+                                                @if($daysLeft !== null)
+                                                    <span class="text-[9px] sm:text-[10px] font-medium {{ $daysLeft <= 7 ? 'text-red-500' : 'text-neutral-400 dark:text-neutral-500' }}">{{ $daysLeft }} Hari</span>
                                                 @endif
                                             </div>
                                         </div>
                                     </a>
-                                    <div class="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <div class="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <a href="{{ route('invitation.show', $invitation->slug) }}" target="_blank" rel="noopener"
+                                            class="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/90 dark:bg-secondary-800/90 shadow-sm flex items-center justify-center text-primary hover:text-primary-700 transition-colors backdrop-blur-sm"
+                                            title="Lihat Undangan">
+                                            <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                            </svg>
+                                        </a>
+                                        <a href="{{ route('dashboard.invitations.edit', $invitation) }}"
+                                            class="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/90 dark:bg-secondary-800/90 shadow-sm flex items-center justify-center text-neutral-500 hover:text-secondary-700 dark:hover:text-neutral-200 transition-colors backdrop-blur-sm"
+                                            title="Edit Undangan">
+                                            <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                            </svg>
+                                        </a>
                                         <form action="{{ route('dashboard.invitations.destroy', $invitation) }}" method="POST"
                                             onsubmit="return confirmSwal(event, 'Yakin ingin menghapus undangan &quot;{{ $invitation->title }}&quot;?');">
                                             @csrf

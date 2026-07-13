@@ -79,18 +79,8 @@
                                 <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-6">Bagian awal untuk
                                     menentukan identitas proyek dan visual dasar.</p>
 
-                                {{-- Title --}}
-                                <div>
-                                    <label for="title"
-                                        class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Judul
-                                        Undangan <span class="text-red-500">*</span></label>
-                                    <input type="text" name="title" id="title"
-                                        class="mt-1 block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
-                                        required placeholder="Contoh: The Wedding of Andi & Rara">
-                                    @error('title') <span
-                                        class="text-red-500 dark:text-red-400 text-xs mt-1">{{ $message }}</span>
-                                    @enderror
-                                </div>
+                                {{-- Title (auto-generated from bride & groom names) --}}
+                                <input type="hidden" name="title" id="title" value="{{ old('title') }}" required>
 
                                 {{-- Slug --}}
                                 <div class="mt-6">
@@ -142,9 +132,9 @@
                                                 @foreach($themes as $tema)
                                                     @php $themeKey = str_replace('themes.', '', $tema->view_path); @endphp
                                                     <div @click="selectedTheme = '{{ $themeKey }}'" :class="{
-                                                                    'border-primary ring-2 ring-primary/20 shadow-md bg-primary-50 dark:bg-primary-900/20': selectedTheme === '{{ $themeKey }}',
-                                                                    'border-neutral-200 dark:border-neutral-600 hover:border-neutral-300 dark:hover:border-neutral-500 bg-white dark:bg-secondary-800': selectedTheme !== '{{ $themeKey }}'
-                                                                }"
+                                                                            'border-primary ring-2 ring-primary/20 shadow-md bg-primary-50 dark:bg-primary-900/20': selectedTheme === '{{ $themeKey }}',
+                                                                            'border-neutral-200 dark:border-neutral-600 hover:border-neutral-300 dark:hover:border-neutral-500 bg-white dark:bg-secondary-800': selectedTheme !== '{{ $themeKey }}'
+                                                                        }"
                                                         class="w-36 sm:w-48 flex-shrink-0 border rounded-2xl p-2.5 transition-all duration-200 cursor-pointer snap-start relative flex flex-col justify-between select-none">
                                                         <div x-show="selectedTheme === '{{ $themeKey }}'"
                                                             class="absolute top-4 right-4 bg-primary text-white rounded-full p-1 z-10 shadow-sm"
@@ -1246,6 +1236,26 @@
                     });
                 });
             }
+
+            const titleInput = document.getElementById('title');
+            const brideNameInput = document.getElementById('bride_name');
+            const groomNameInput = document.getElementById('groom_name');
+            function autoGenerateTitle() {
+                const bride = brideNameInput?.value.trim();
+                const groom = groomNameInput?.value.trim();
+                if (bride && groom) {
+                    titleInput.value = 'Pernikahan ' + groom + ' & ' + bride;
+                } else if (bride) {
+                    titleInput.value = 'Pernikahan ' + bride;
+                } else if (groom) {
+                    titleInput.value = 'Pernikahan ' + groom;
+                } else {
+                    titleInput.value = '';
+                }
+            }
+            brideNameInput?.addEventListener('input', autoGenerateTitle);
+            groomNameInput?.addEventListener('input', autoGenerateTitle);
+            autoGenerateTitle();
         });
     </script>
 </x-app-layout>
