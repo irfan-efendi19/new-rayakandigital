@@ -88,7 +88,7 @@
                     <!-- Logo -->
                     <tr>
                         <td align="center" style="padding-bottom: 32px;">
-                            <img src="https://rayakandigital.test/img/logolong.png" alt="{{ $appName }}" width="160"
+                            <img src="https://rayakan.id/img/logolong.png" alt="{{ $appName }}" width="160"
                                 style="display: block; border: 0; max-width: 160px; height: auto;">
                         </td>
                     </tr>
