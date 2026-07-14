@@ -102,16 +102,6 @@ html {
     animation-delay: 1s;
 }
 
-/* ── Timeline ── */
-.timeline-line {
-    position: absolute;
-    left: 2rem;
-    top: 0;
-    bottom: 0;
-    width: 2px;
-    background: linear-gradient(to bottom, #ff7a00, #ffd0a3, transparent);
-}
-
 /* ── Feature chip ── */
 .feature-chip {
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);

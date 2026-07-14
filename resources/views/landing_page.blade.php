@@ -326,15 +326,15 @@
                 </div>
 
                 {{-- Right: Timeline steps --}}
-                <div class="relative pl-12" data-aos="fade-left" data-aos-delay="100">
-                    <div class="timeline-line"></div>
+                <div class="relative" data-aos="fade-left" data-aos-delay="100">
 
                     {{-- Step 1 --}}
-                    <div class="relative mb-10">
-                        <div class="absolute -left-8 top-2 w-8 h-8 rounded-full bg-primary-500 flex items-center justify-center shadow-[0_0_0_4px_rgba(255,122,0,0.15)]">
+                    <div class="relative flex items-start gap-4 mb-8">
+                        <div class="absolute left-[18px] top-[18px] -translate-x-1/2 w-0.5 h-[calc(100%_+_2rem)] bg-gradient-to-b from-primary-500/70 to-primary-500/10"></div>
+                        <div class="relative z-10 flex-shrink-0 w-9 h-9 rounded-full bg-primary-500 flex items-center justify-center shadow-[0_0_0_4px_rgba(255,122,0,0.15)]">
                             <span class="text-white text-xs font-black">1</span>
                         </div>
-                        <div class="bg-white/5 hover:bg-white/8 border border-white/8 hover:border-primary-500/30 rounded-2xl p-6 transition-all duration-300 group cursor-default">
+                        <div class="flex-1 bg-white/5 hover:bg-white/8 border border-white/8 hover:border-primary-500/30 rounded-2xl p-6 transition-all duration-300 group cursor-default">
                             <div class="flex items-start gap-4">
                                 <div class="w-12 h-12 rounded-xl bg-primary-500/15 flex items-center justify-center flex-shrink-0 group-hover:bg-primary-500/25 transition-colors duration-300">
                                     <i class="fas fa-palette text-primary-400 text-lg"></i>
@@ -348,11 +348,12 @@
                     </div>
 
                     {{-- Step 2 --}}
-                    <div class="relative mb-10">
-                        <div class="absolute -left-8 top-2 w-8 h-8 rounded-full bg-secondary-600 border border-white/15 flex items-center justify-center">
+                    <div class="relative flex items-start gap-4 mb-8">
+                        <div class="absolute left-[18px] top-[18px] -translate-x-1/2 w-0.5 h-[calc(100%_+_2rem)] bg-gradient-to-b from-secondary-600/70 to-secondary-600/10"></div>
+                        <div class="relative z-10 flex-shrink-0 w-9 h-9 rounded-full bg-secondary-600 border border-white/15 flex items-center justify-center">
                             <span class="text-white text-xs font-black">2</span>
                         </div>
-                        <div class="bg-white/5 hover:bg-white/8 border border-white/8 hover:border-white/20 rounded-2xl p-6 transition-all duration-300 group cursor-default">
+                        <div class="flex-1 bg-white/5 hover:bg-white/8 border border-white/8 hover:border-white/20 rounded-2xl p-6 transition-all duration-300 group cursor-default">
                             <div class="flex items-start gap-4">
                                 <div class="w-12 h-12 rounded-xl bg-blue-500/15 flex items-center justify-center flex-shrink-0 group-hover:bg-blue-500/25 transition-colors duration-300">
                                     <i class="fas fa-user-plus text-blue-400 text-lg"></i>
@@ -366,11 +367,12 @@
                     </div>
 
                     {{-- Step 3 --}}
-                    <div class="relative mb-10">
-                        <div class="absolute -left-8 top-2 w-8 h-8 rounded-full bg-secondary-600 border border-white/15 flex items-center justify-center">
+                    <div class="relative flex items-start gap-4 mb-8">
+                        <div class="absolute left-[18px] top-[18px] -translate-x-1/2 w-0.5 h-[calc(100%_+_2rem)] bg-gradient-to-b from-amber-500/70 to-amber-500/10"></div>
+                        <div class="relative z-10 flex-shrink-0 w-9 h-9 rounded-full bg-secondary-600 border border-white/15 flex items-center justify-center">
                             <span class="text-white text-xs font-black">3</span>
                         </div>
-                        <div class="bg-white/5 hover:bg-white/8 border border-white/8 hover:border-amber-500/30 rounded-2xl p-6 transition-all duration-300 group cursor-default">
+                        <div class="flex-1 bg-white/5 hover:bg-white/8 border border-white/8 hover:border-amber-500/30 rounded-2xl p-6 transition-all duration-300 group cursor-default">
                             <div class="flex items-start gap-4">
                                 <div class="w-12 h-12 rounded-xl bg-amber-500/15 flex items-center justify-center flex-shrink-0 group-hover:bg-amber-500/25 transition-colors duration-300">
                                     <i class="fas fa-rocket text-amber-400 text-lg"></i>
@@ -384,11 +386,11 @@
                     </div>
 
                     {{-- Step 4 --}}
-                    <div class="relative">
-                        <div class="absolute -left-8 top-2 w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center shadow-[0_0_0_4px_rgba(16,185,129,0.15)]">
+                    <div class="relative flex items-start gap-4">
+                        <div class="relative z-10 flex-shrink-0 w-9 h-9 rounded-full bg-emerald-500 flex items-center justify-center shadow-[0_0_0_4px_rgba(16,185,129,0.15)]">
                             <span class="text-white text-xs font-black">4</span>
                         </div>
-                        <div class="bg-white/5 hover:bg-white/8 border border-white/8 hover:border-emerald-500/30 rounded-2xl p-6 transition-all duration-300 group cursor-default">
+                        <div class="flex-1 bg-white/5 hover:bg-white/8 border border-white/8 hover:border-emerald-500/30 rounded-2xl p-6 transition-all duration-300 group cursor-default">
                             <div class="flex items-start gap-4">
                                 <div class="w-12 h-12 rounded-xl bg-emerald-500/15 flex items-center justify-center flex-shrink-0 group-hover:bg-emerald-500/25 transition-colors duration-300">
                                     <i class="fas fa-share-alt text-emerald-400 text-lg"></i>
@@ -613,29 +615,47 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 
                 @php
-                $features = [
-                    ['icon' => 'fa-calendar-check', 'color' => 'primary', 'title' => 'Manajemen RSVP', 'desc' => 'Ketahui siapa saja yang hadir. Sistem RSVP terintegrasi dashboard dengan notifikasi real-time.', 'tag' => 'Real-time tracking'],
-                    ['icon' => 'fa-link', 'color' => 'emerald', 'title' => 'Link Personal Tamu', 'desc' => 'Sapa tamu dengan nama. Link khusus setiap tamu lengkap dengan template WhatsApp otomatis.', 'tag' => 'Personalized greeting'],
-                    ['icon' => 'fa-gift', 'color' => 'amber', 'title' => 'Digital Gift (Angpao)', 'desc' => 'Transfer bank, QRIS, atau e-wallet. Tamu bisa kirim hadiah dari mana saja.', 'tag' => 'Multi payment'],
-                    ['icon' => 'fa-book-open', 'color' => 'purple', 'title' => 'Buku Tamu Interaktif', 'desc' => 'Ucapan dan doa real-time di halaman undangan, dilengkapi emoji dan stiker.', 'tag' => 'Real-time messages'],
-                    ['icon' => 'fa-images', 'color' => 'rose', 'title' => 'Galeri Foto & Video', 'desc' => 'Unggah foto kenangan. Tamu juga bisa kirim foto mereka ke galeri bersama.', 'tag' => 'Unlimited uploads*'],
-                    ['icon' => 'fa-hourglass-half', 'color' => 'blue', 'title' => 'Countdown Timer', 'desc' => 'Hitung mundur menuju hari H. Buat tamu semakin antusias dan tidak lupa tanggal.', 'tag' => 'Auto countdown'],
-                    ['icon' => 'fa-map-marker-alt', 'color' => 'indigo', 'title' => 'Peta Lokasi', 'desc' => 'Google Maps langsung di undangan. Tamu buka navigasi dengan satu klik.', 'tag' => 'Google Maps'],
-                    ['icon' => 'fa-whatsapp fab', 'color' => 'green', 'title' => 'Broadcast WhatsApp', 'desc' => 'Kirim pengingat otomatis ke semua tamu. Template pesan siap pakai dan bisa diedit.', 'tag' => 'Auto reminder'],
-                    ['icon' => 'fa-chart-line', 'color' => 'slate', 'title' => 'Analytics & Insight', 'desc' => 'Pantau pengunjung, RSVP, dan interaksi tamu. Data real-time di dashboard lengkap.', 'tag' => 'Real-time analytics'],
-                ];
-                $colorMap = [
-                    'primary' => ['bg' => 'bg-primary-500', 'light' => 'bg-primary-50 dark:bg-primary-900/20', 'text' => 'text-primary-500', 'tag' => 'bg-primary-100 text-primary-700 dark:bg-primary-900/30 dark:text-primary-300'],
-                    'emerald' => ['bg' => 'bg-emerald-500', 'light' => 'bg-emerald-50 dark:bg-emerald-900/20', 'text' => 'text-emerald-500', 'tag' => 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300'],
-                    'amber'   => ['bg' => 'bg-amber-500', 'light' => 'bg-amber-50 dark:bg-amber-900/20', 'text' => 'text-amber-500', 'tag' => 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300'],
-                    'purple'  => ['bg' => 'bg-purple-500', 'light' => 'bg-purple-50 dark:bg-purple-900/20', 'text' => 'text-purple-500', 'tag' => 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300'],
-                    'rose'    => ['bg' => 'bg-rose-500', 'light' => 'bg-rose-50 dark:bg-rose-900/20', 'text' => 'text-rose-500', 'tag' => 'bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-300'],
-                    'blue'    => ['bg' => 'bg-blue-500', 'light' => 'bg-blue-50 dark:bg-blue-900/20', 'text' => 'text-blue-500', 'tag' => 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'],
-                    'indigo'  => ['bg' => 'bg-indigo-500', 'light' => 'bg-indigo-50 dark:bg-indigo-900/20', 'text' => 'text-indigo-500', 'tag' => 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300'],
-                    'green'   => ['bg' => 'bg-green-500', 'light' => 'bg-green-50 dark:bg-green-900/20', 'text' => 'text-green-500', 'tag' => 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300'],
-                    'slate'   => ['bg' => 'bg-slate-500', 'light' => 'bg-slate-50 dark:bg-slate-900/20', 'text' => 'text-slate-500', 'tag' => 'bg-slate-100 text-slate-700 dark:bg-slate-900/30 dark:text-slate-300'],
-                ];
-                @endphp
+$features = [
+    // 1. Mengundang Tamu
+    ['icon' => 'fa-link', 'color' => 'emerald', 'title' => 'Link Personal Tamu', 'desc' => 'Sapa tamu dengan nama. Link khusus setiap tamu lengkap dengan template WhatsApp otomatis.', 'tag' => 'Personalized greeting'],
+    ['icon' => 'fa-whatsapp fab', 'color' => 'green', 'title' => 'Broadcast WhatsApp', 'desc' => 'Kirim pengingat otomatis ke semua tamu. Template pesan siap pakai dan bisa diedit.', 'tag' => 'Auto reminder'],
+
+    // 2. Sebelum Acara
+    ['icon' => 'fa-calendar-check', 'color' => 'primary', 'title' => 'Manajemen RSVP', 'desc' => 'Ketahui siapa saja yang hadir. Sistem RSVP terintegrasi dashboard dengan notifikasi real-time.', 'tag' => 'Real-time tracking'],
+    ['icon' => 'fa-hourglass-half', 'color' => 'blue', 'title' => 'Countdown Timer', 'desc' => 'Hitung mundur menuju hari H. Buat tamu semakin antusias dan tidak lupa tanggal.', 'tag' => 'Auto countdown'],
+    ['icon' => 'fa-map-marker-alt', 'color' => 'indigo', 'title' => 'Peta Lokasi', 'desc' => 'Google Maps langsung di undangan. Tamu buka navigasi dengan satu klik.', 'tag' => 'Google Maps'],
+
+    // 3. Saat Acara
+    ['icon' => 'fa-qrcode', 'color' => 'cyan', 'title' => 'QR Code Check-in', 'desc' => 'Proses registrasi tamu lebih cepat dengan QR Code unik. Kehadiran tercatat otomatis di dashboard.', 'tag' => 'Fast check-in'],
+    ['icon' => 'fa-video', 'color' => 'orange', 'title' => 'Live Streaming', 'desc' => 'Siarkan acara secara langsung melalui YouTube atau Zoom agar keluarga dan teman tetap bisa menyaksikan.', 'tag' => 'Live event'],
+    ['icon' => 'fa-music', 'color' => 'pink', 'title' => 'Background Music', 'desc' => 'Tambahkan musik favorit sebagai latar undangan untuk menciptakan pengalaman yang lebih berkesan.', 'tag' => 'Auto play'],
+
+    // 4. Interaksi Tamu
+    ['icon' => 'fa-book-open', 'color' => 'purple', 'title' => 'Buku Tamu Interaktif', 'desc' => 'Ucapan dan doa real-time di halaman undangan, dilengkapi emoji dan stiker.', 'tag' => 'Real-time messages'],
+    ['icon' => 'fa-gift', 'color' => 'amber', 'title' => 'Digital Gift (Angpao)', 'desc' => 'Transfer bank, QRIS, atau e-wallet. Tamu bisa kirim hadiah dari mana saja.', 'tag' => 'Multi payment'],
+
+    // 5. Setelah Acara
+    ['icon' => 'fa-images', 'color' => 'rose', 'title' => 'Galeri Foto & Video', 'desc' => 'Unggah foto kenangan. Tamu juga bisa kirim foto mereka ke galeri bersama.', 'tag' => 'Unlimited uploads*'],
+    ['icon' => 'fa-chart-line', 'color' => 'slate', 'title' => 'Analytics & Insight', 'desc' => 'Pantau pengunjung, RSVP, dan interaksi tamu. Data real-time di dashboard lengkap.', 'tag' => 'Real-time analytics'],
+];
+
+$colorMap = [
+    'primary' => ['bg' => 'bg-primary-500', 'light' => 'bg-primary-50 dark:bg-primary-900/20', 'text' => 'text-primary-500', 'tag' => 'bg-primary-100 text-primary-700 dark:bg-primary-900/30 dark:text-primary-300'],
+    'emerald' => ['bg' => 'bg-emerald-500', 'light' => 'bg-emerald-50 dark:bg-emerald-900/20', 'text' => 'text-emerald-500', 'tag' => 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300'],
+    'amber'   => ['bg' => 'bg-amber-500', 'light' => 'bg-amber-50 dark:bg-amber-900/20', 'text' => 'text-amber-500', 'tag' => 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300'],
+    'purple'  => ['bg' => 'bg-purple-500', 'light' => 'bg-purple-50 dark:bg-purple-900/20', 'text' => 'text-purple-500', 'tag' => 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300'],
+    'rose'    => ['bg' => 'bg-rose-500', 'light' => 'bg-rose-50 dark:bg-rose-900/20', 'text' => 'text-rose-500', 'tag' => 'bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-300'],
+    'blue'    => ['bg' => 'bg-blue-500', 'light' => 'bg-blue-50 dark:bg-blue-900/20', 'text' => 'text-blue-500', 'tag' => 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'],
+    'indigo'  => ['bg' => 'bg-indigo-500', 'light' => 'bg-indigo-50 dark:bg-indigo-900/20', 'text' => 'text-indigo-500', 'tag' => 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300'],
+    'green'   => ['bg' => 'bg-green-500', 'light' => 'bg-green-50 dark:bg-green-900/20', 'text' => 'text-green-500', 'tag' => 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300'],
+    'slate'   => ['bg' => 'bg-slate-500', 'light' => 'bg-slate-50 dark:bg-slate-900/20', 'text' => 'text-slate-500', 'tag' => 'bg-slate-100 text-slate-700 dark:bg-slate-900/30 dark:text-slate-300'],
+
+    // Warna baru
+    'cyan' => ['bg' => 'bg-cyan-500', 'light' => 'bg-cyan-50 dark:bg-cyan-900/20', 'text' => 'text-cyan-500', 'tag' => 'bg-cyan-100 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-300'],
+    'pink' => ['bg' => 'bg-pink-500', 'light' => 'bg-pink-50 dark:bg-pink-900/20', 'text' => 'text-pink-500', 'tag' => 'bg-pink-100 text-pink-700 dark:bg-pink-900/30 dark:text-pink-300'],
+    'orange' => ['bg' => 'bg-orange-500', 'light' => 'bg-orange-50 dark:bg-orange-900/20', 'text' => 'text-orange-500', 'tag' => 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300'],
+];
+@endphp
 
                 @foreach($features as $i => $feat)
                     @php $c = $colorMap[$feat['color']]; $delay = ($i % 3 + 1) * 100; @endphp
