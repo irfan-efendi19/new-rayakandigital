@@ -473,7 +473,7 @@
                 </button>
 
                 <div x-ref="scrollContainer"
-                    class="overflow-x-auto overflow-y-hidden pb-6 scroll-smooth"
+                    class="overflow-x-auto pt-10 pb-6 scroll-smooth"
                     style="scrollbar-width: thin; scrollbar-color: #FFD0A3 transparent; -webkit-overflow-scrolling: touch;">
                     <div class="flex gap-5" style="min-width: min-content;">
                         @forelse($themes as $theme)
@@ -699,7 +699,7 @@ $colorMap = [
 
             {{-- Tab navigation --}}
             <div class="flex justify-center mb-12">
-                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-1 p-1.5 bg-neutral-100 dark:bg-secondary-800 rounded-2xl sm:rounded-2xl border border-neutral-200/50 dark:border-secondary-700">
+                <div class="w-full sm:w-auto flex flex-col sm:flex-row items-stretch sm:items-center gap-1 p-1.5 bg-neutral-100 dark:bg-secondary-800 rounded-2xl sm:rounded-2xl border border-neutral-200/50 dark:border-secondary-700">
                     <button @click="activeTab = 'undangan'" id="tab-undangan"
                         :class="activeTab === 'undangan' ? 'bg-white dark:bg-secondary-700 text-primary-600 shadow-sm' : 'text-neutral-500 hover:text-secondary-700 dark:hover:text-neutral-300'"
                         class="flex items-center justify-center sm:justify-start gap-2 px-5 py-3 sm:py-2.5 rounded-xl text-sm font-semibold transition-all duration-200">
