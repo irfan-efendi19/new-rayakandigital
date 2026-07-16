@@ -151,7 +151,7 @@ class WhatsAppBlastController extends Controller
             'wa_message_template' => 'nullable|string',
         ]);
 
-        $invitation->update($validated);
+        $invitation->update(array_merge($validated, ['is_active' => true]));
 
         return back()->with('success', 'Template pesan WhatsApp berhasil diperbarui.');
     }

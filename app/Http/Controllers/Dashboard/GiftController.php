@@ -52,7 +52,7 @@ class GiftController extends Controller
             );
         }
 
-        $invitation->update($validated);
+        $invitation->update(array_merge($validated, ['is_active' => true]));
 
         return back()->with('success', 'Informasi kado digital berhasil disimpan.');
     }

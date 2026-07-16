@@ -413,7 +413,7 @@ class InvitationController extends Controller
             $validated['youtube_video_id'] = null;
         }
 
-        $invitation->update($validated);
+        $invitation->update(array_merge($validated, ['is_active' => true]));
 
         // Handle events upsert
         if ($request->has('events_enabled')) {

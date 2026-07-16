@@ -119,7 +119,7 @@ class WelcomeScreenController extends Controller
             );
         }
 
-        $invitation->update($updateData);
+        $invitation->update(array_merge($updateData, ['is_active' => true]));
 
         // Handle gallery photos upload
         if ($request->hasFile('screen_gallery_photos')) {

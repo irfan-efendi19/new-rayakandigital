@@ -32,7 +32,7 @@ class GalleryController extends Controller
             $currentPhotos[] = $path;
         }
 
-        $invitation->update(['gallery_photos' => $currentPhotos]);
+        $invitation->update(['gallery_photos' => $currentPhotos, 'is_active' => true]);
 
         return back()->with('success', 'Foto berhasil diunggah.');
     }
@@ -51,7 +51,7 @@ class GalleryController extends Controller
         if (isset($photos[$index])) {
             Storage::disk('public')->delete($photos[$index]);
             unset($photos[$index]);
-            $invitation->update(['gallery_photos' => array_values($photos)]);
+            $invitation->update(['gallery_photos' => array_values($photos), 'is_active' => true]);
         }
 
         return back()->with('success', 'Foto berhasil dihapus.');
