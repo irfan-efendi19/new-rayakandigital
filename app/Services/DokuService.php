@@ -140,7 +140,7 @@ class DokuService
             return null;
         }
 
-        $transactionStatus = $payload['transaction']['status'] ?? null;
+        $transactionStatus = $payload['payment']['status'] ?? $payload['transaction']['status'] ?? null;
 
         if ($transactionStatus === 'SUCCESS') {
             $order->update([

@@ -53,11 +53,11 @@ it('handles successful webhook notification', function () {
 
     $payload = [
         'order' => [
-            'invoice_number' => 'RD-12345',
+            'invoice_number' => 'RD-12345'
         ],
-        'transaction' => [
+        'payment' => [
             'status' => 'SUCCESS',
-        ],
+        ]
     ];
 
     $request = new Request([], [], [], [], [], [
