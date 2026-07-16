@@ -202,30 +202,39 @@ class DokuService
     protected function verifySignature(Request $request): bool
     {
         $incomingSignature = $request->header('Signature');
-        if (! $incomingSignature) {
+        if (!$incomingSignature) {
+            Log::error('DOKU Webhook: Missing Signature header');
             return false;
         }
-
-        $requestId = $request->header('Request-Id');
-        $timestamp = $request->header('Request-Timestamp');
-
-        // Use the actual request path, in case it's behind a proxy
-        // Often webhooks hit something like /doku/notification
+        
+        $requestId = $request->header('Request-Id', '');
+        $timestamp = $request->header('Request-Timestamp', '');
+        
         $targetPath = $request->getRequestUri();
-        // Just take the path without query string for target
         $targetPath = parse_url($targetPath, PHP_URL_PATH);
-
+        
         $body = $request->getContent();
         $digest = base64_encode(hash('sha256', $body, true));
+        
+        $signatureString = "Client-Id:" . $this->clientId . "\n" .
+            "Request-Id:" . $requestId . "\n" .
+            "Request-Timestamp:" . $timestamp . "\n" .
+            "Request-Target:" . $targetPath . "\n" .
+            "Digest:" . $digest;
+            
+        $expectedSignature = "HMACSHA256=" . base64_encode(hash_hmac('sha256', $signatureString, $this->secretKey, true));
+        
+        $isValid = hash_equals($expectedSignature, (string)$incomingSignature);
 
-        $signatureString = 'Client-Id:'.$this->clientId."\n".
-            'Request-Id:'.$requestId."\n".
-            'Request-Timestamp:'.$timestamp."\n".
-            'Request-Target:'.$targetPath."\n".
-            'Digest:'.$digest;
+        if (!$isValid) {
+            Log::error('DOKU Webhook Signature Mismatch', [
+                'expected' => $expectedSignature,
+                'received' => $incomingSignature,
+                'signature_string' => $signatureString,
+                'client_id' => $this->clientId,
+            ]);
+        }
 
-        $expectedSignature = 'HMACSHA256='.base64_encode(hash_hmac('sha256', $signatureString, $this->secretKey, true));
-
-        return hash_equals($expectedSignature, (string) $incomingSignature);
+        return $isValid;
     }
 }
