@@ -16,14 +16,6 @@ class DokuWebhookController extends Controller
     {
         logger()->info('DOKU webhook received', $request->all());
 
-        if (! $dokuService->validateNotification($request)) {
-            logger()->warning('DOKU webhook: invalid signature', [
-                'client_id' => $request->header('Client-Id'),
-            ]);
-
-            return response()->json(['status' => 'error', 'message' => 'Invalid signature'], 401);
-        }
-
         $order = $dokuService->handleNotification($request);
 
         if (! $order) {
