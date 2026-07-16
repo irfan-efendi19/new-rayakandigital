@@ -136,26 +136,57 @@ class DokuService
             return null;
         }
 
-        $order = Order::where('order_id', $orderId)->first();
-        if (! $order) {
-            return null;
+        $transactionStatus = $payload['payment']['status'] ?? $payload['transaction']['status'] ?? null;
+        $isSettled = $transactionStatus === 'SUCCESS';
+
+        // Check if it's an AddonTransaction
+        $addonTransaction = \App\Models\AddonTransaction::where('reference_order_id', $orderId)->first();
+        if ($addonTransaction) {
+            if ($isSettled) {
+                $addonTransaction->payment_status = 'settlement';
+                $addonTransaction->paid_at = now();
+
+                if ($addonTransaction->addon) {
+                    $addonTransaction->addon->invitations()->syncWithoutDetaching([
+                        $addonTransaction->invitation_id => [
+                            'purchased_price' => $addonTransaction->amount,
+                            'status_active' => true,
+                            'activated_at' => now(),
+                        ],
+                    ]);
+                }
+            } else {
+                $addonTransaction->payment_status = $transactionStatus === 'pending' ? 'pending' : 'expire';
+            }
+            $addonTransaction->save();
+
+            // Try to update generic order if it exists, but don't fail if not
+            $order = Order::where('order_id', $orderId)->first();
+            if ($order) {
+                $order->update(['payment_status' => $isSettled ? 'success' : 'expired']);
+            }
+            return $order;
         }
 
-        $transactionStatus = $payload['payment']['status'] ?? $payload['transaction']['status'] ?? null;
+        // Standard Order/Subscription handling
+        $order = Order::where('order_id', $orderId)->first();
+        if (!$order) {
+            return null;
+        }
 
         if ($transactionStatus === 'SUCCESS') {
             $order->update([
                 'payment_status' => 'success',
             ]);
 
-            // Activate the order package logic
-            $subscription = Subscription::where('midtrans_order_id', $orderId)->first();
+            $subscription = Subscription::where('midtrans_order_id', $order->order_id)->first();
             if ($subscription) {
                 $subscription->payment_status = 'settlement';
                 $subscription->starts_at = now();
+                
                 $package = Package::where('package_code', $subscription->tier)->first();
-                $durationDays = $package?->active_period ?? 365;
-                $subscription->expires_at = now()->addDays($durationDays);
+                $durationDays = $package?->active_period_days;
+                $subscription->expires_at = $durationDays ? now()->addDays($durationDays) : null;
                 $subscription->save();
 
                 if ($order->invitation_id) {
