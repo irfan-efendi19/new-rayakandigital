@@ -18,10 +18,12 @@ class PaymentMethodConfigsTable
                     ->color(fn (string $state): string => match ($state) {
                         'manual_bank' => 'warning',
                         'midtrans' => 'success',
+                        'doku' => 'info',
                     })
                     ->formatStateUsing(fn (string $state): string => match ($state) {
                         'manual_bank' => 'Bank Manual',
                         'midtrans' => 'Midtrans Gateway',
+                        'doku' => 'DOKU',
                     }),
                 TextColumn::make('manual_bank_name')
                     ->label('Bank'),

@@ -17,12 +17,17 @@ class PaymentMethodConfig extends Model
         'midtrans_client_key',
         'midtrans_server_key',
         'midtrans_environment',
+        'doku_client_id',
+        'doku_secret_key',
+        'doku_private_key',
+        'doku_environment',
     ];
 
     protected function casts(): array
     {
         return [
             'midtrans_environment' => 'string',
+            'doku_environment' => 'string',
         ];
     }
 
@@ -39,5 +44,10 @@ class PaymentMethodConfig extends Model
     public function isMidtrans(): bool
     {
         return $this->active_method === 'midtrans';
+    }
+
+    public function isDoku(): bool
+    {
+        return $this->active_method === 'doku';
     }
 }

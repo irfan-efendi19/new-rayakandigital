@@ -173,6 +173,11 @@
                                                 </svg>
                                                 Kirim Bukti via WA
                                             </a>
+                                        @elseif($order->payment_status === 'pending' && $order->payment_method_used === 'doku')
+                                            <a href="{{ route('dashboard.payment.doku.invoice', $order) }}"
+                                               class="inline-flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-semibold hover:bg-red-700 transition-colors">
+                                                Lanjutkan Pembayaran DOKU
+                                            </a>
                                         @elseif($order->payment_status === 'verifying')
                                             <a href="{{ route('dashboard.payment.invoice', $order) }}"
                                                class="inline-flex items-center gap-2 px-4 py-2 bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 rounded-lg text-sm font-semibold hover:bg-blue-200 dark:hover:bg-blue-900/70 transition-colors">

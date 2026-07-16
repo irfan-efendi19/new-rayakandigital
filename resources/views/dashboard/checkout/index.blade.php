@@ -153,28 +153,29 @@
                             {{ $currentTier === $pkg->package_code ? 'Paket Aktif' : 'Sudah Lebih Tinggi' }}
                         </div>
                     @elseif($invitationId)
-                        <form action="{{ route('dashboard.checkout.process') }}" method="POST" @if($activeMethod === 'midtrans')
-                        x-data="checkout" @submit.prevent="handleSubmit" @endif>
-                            @csrf
-                            <input type="hidden" name="tier" value="{{ $pkg->package_code }}">
-                            <input type="hidden" name="invitation_id" value="{{ $invitationId }}">
-                            <button type="submit" @if($activeMethod === 'midtrans') x-bind:disabled="processing" @endif class="flex items-center justify-center gap-2 w-full rounded-xl py-3 text-sm font-semibold text-center transition-all duration-200
-                                                        @if($activeMethod === 'manual_bank')
-                                                            bg-emerald-600 text-white hover:bg-emerald-700
-                                                        @else
-                                                                                                {{ $pkg->is_popular
-                                                            ? 'bg-primary-500 text-white hover:bg-primary-600 shadow-md hover:shadow-lg'
-                                                            : 'bg-secondary-800 dark:bg-primary-600 text-white hover:bg-secondary-700 dark:hover:bg-primary-700' }}
-                                                        @endif
-                                                    ">
-                                @if($activeMethod === 'manual_bank')
-                                    Pilih {{ $pkg->package_name }}
-                                @else
-                                    <span x-show="!processing">Pilih {{ $pkg->package_name }}</span>
-                                    <span x-show="processing" x-cloak>Memproses...</span>
-                                @endif
-                            </button>
-                        </form>
+                            <form action="{{ route('dashboard.checkout.process') }}" method="POST" @if($activeMethod === 'midtrans')
+                            x-data="checkout" @submit.prevent="handleSubmit" @endif>
+                                @csrf
+                                <input type="hidden" name="tier" value="{{ $pkg->package_code }}">
+                                <input type="hidden" name="invitation_id" value="{{ $invitationId }}">
+                                
+                                <button type="submit" @if($activeMethod === 'midtrans') x-bind:disabled="processing" @endif class="flex items-center justify-center gap-2 w-full rounded-xl py-3 text-sm font-semibold text-center transition-all duration-200
+                                                            @if($activeMethod === 'manual_bank')
+                                                                bg-emerald-600 text-white hover:bg-emerald-700
+                                                            @else
+                                                                                                    {{ $pkg->is_popular
+                                                                ? 'bg-primary-500 text-white hover:bg-primary-600 shadow-md hover:shadow-lg'
+                                                                : 'bg-secondary-800 dark:bg-primary-600 text-white hover:bg-secondary-700 dark:hover:bg-primary-700' }}
+                                                            @endif
+                                                        ">
+                                    @if($activeMethod === 'manual_bank')
+                                        Pilih {{ $pkg->package_name }}
+                                    @else
+                                        <span x-show="!processing">Pilih {{ $pkg->package_name }}</span>
+                                        <span x-show="processing" x-cloak>Memproses...</span>
+                                    @endif
+                                </button>
+                            </form>
                     @endif
                 </div>
             </div>

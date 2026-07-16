@@ -10,10 +10,10 @@ class PaymentRoutingService
 
     public function config(): PaymentMethodConfig
     {
-        if (!$this->config) {
+        if (! $this->config) {
             $this->config = PaymentMethodConfig::getActive();
 
-            if (!$this->config) {
+            if (! $this->config) {
                 $this->config = PaymentMethodConfig::create([
                     'active_method' => 'manual_bank',
                 ]);
@@ -31,6 +31,11 @@ class PaymentRoutingService
     public function isMidtrans(): bool
     {
         return $this->config()->isMidtrans();
+    }
+
+    public function isDoku(): bool
+    {
+        return $this->config()->isDoku();
     }
 
     public function activeMethod(): string
@@ -61,14 +66,25 @@ class PaymentRoutingService
     public function isMidtransConfigured(): bool
     {
         $cfg = $this->config();
-        return !empty($cfg->midtrans_client_key) && !empty($cfg->midtrans_server_key);
+
+        return ! empty($cfg->midtrans_client_key) && ! empty($cfg->midtrans_server_key);
     }
 
     public function isManualBankConfigured(): bool
     {
         $cfg = $this->config();
-        return !empty($cfg->manual_bank_name)
-            && !empty($cfg->manual_account_number)
-            && !empty($cfg->admin_whatsapp_number);
+
+        return ! empty($cfg->manual_bank_name)
+            && ! empty($cfg->manual_account_number)
+            && ! empty($cfg->admin_whatsapp_number);
+    }
+
+    public function isDokuConfigured(): bool
+    {
+        $cfg = $this->config();
+
+        return ! empty($cfg->doku_client_id)
+            && ! empty($cfg->doku_secret_key)
+            && ! empty($cfg->doku_private_key);
     }
 }

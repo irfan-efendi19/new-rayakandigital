@@ -1,8 +1,12 @@
 <?php
 
+use App\Http\Middleware\EnsureTierAccess;
+use App\Http\Middleware\Impersonate;
+use App\Http\Middleware\IsAdmin;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Http\Middleware\ValidatePostSize;
 use Illuminate\Http\Request;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -14,19 +18,20 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
-            'admin' => \App\Http\Middleware\IsAdmin::class,
-            'ensure_tier' => \App\Http\Middleware\EnsureTierAccess::class,
+            'admin' => IsAdmin::class,
+            'ensure_tier' => EnsureTierAccess::class,
         ]);
 
         $middleware->web(append: [
-            \App\Http\Middleware\Impersonate::class,
+            Impersonate::class,
         ]);
 
         $middleware->validateCsrfTokens(except: [
             'payments/notification',
+            'doku/notification',
         ]);
 
-        $middleware->remove(\Illuminate\Http\Middleware\ValidatePostSize::class);
+        $middleware->remove(ValidatePostSize::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

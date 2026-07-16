@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Dashboard\AddonController;
 use App\Http\Controllers\Dashboard\CheckoutController;
+use App\Http\Controllers\Dashboard\DokuPaymentController;
 use App\Http\Controllers\Dashboard\GalleryController;
 use App\Http\Controllers\Dashboard\GiftController;
 use App\Http\Controllers\Dashboard\GuestbookController;
@@ -16,6 +17,7 @@ use App\Http\Controllers\Dashboard\WhatsAppBlastController;
 use App\Http\Controllers\Dashboard\WhatsAppDiagnosticController;
 use App\Http\Controllers\Dashboard\WhatsAppPaymentController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DokuWebhookController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvitationRenderController;
 use App\Http\Controllers\InvoiceController;
@@ -77,8 +79,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process');
 
         // WhatsApp Manual Payment
-        Route::get('/payment/{order}', [WhatsAppPaymentController::class, 'showInvoice'])->name('payment.invoice');
-        Route::post('/payment/{order}/send-whatsapp', [WhatsAppPaymentController::class, 'sendWhatsApp'])->name('payment.send-whatsapp');
+        Route::get('/payment/{order:order_id}', [WhatsAppPaymentController::class, 'showInvoice'])->name('payment.invoice');
+        Route::post('/payment/{order:order_id}/send-whatsapp', [WhatsAppPaymentController::class, 'sendWhatsApp'])->name('payment.send-whatsapp');
+
+        // DOKU Payment
+        Route::get('/payment/doku/{order:order_id}', [DokuPaymentController::class, 'showInvoice'])->name('payment.doku.invoice');
 
         // Invitations and nested resources
         Route::get('/invitations/check-slug', [InvitationController::class, 'checkSlug'])->name('invitations.check-slug');
@@ -145,6 +150,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 // Payment Callbacks
 Route::post('/payments/notification', [PaymentController::class, 'notification'])->name('payments.notification');
 Route::get('/payments/finish', [PaymentController::class, 'finish'])->name('payments.finish');
+
+// DOKU Virtual Account Webhook
+Route::post('/doku/notification', [DokuWebhookController::class, 'handleWebhook'])->name('doku.notification');
 
 // Addon Payment Callbacks
 Route::get('/addon-payment/finish', [AddonPaymentController::class, 'finish'])->name('addon-payment.finish');

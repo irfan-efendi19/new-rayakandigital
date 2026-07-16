@@ -23,6 +23,9 @@ class Order extends Model
         'is_manual_whatsapp',
         'verified_by',
         'snap_token',
+        'doku_va_number',
+        'doku_channel_code',
+        'doku_expired_at',
     ];
 
     protected function casts(): array
@@ -31,6 +34,7 @@ class Order extends Model
             'gross_amount' => 'decimal:2',
             'unique_code' => 'integer',
             'is_manual_whatsapp' => 'boolean',
+            'doku_expired_at' => 'datetime',
         ];
     }
 
@@ -53,7 +57,8 @@ class Order extends Model
     {
         $id = $this->id;
         $date = $this->created_at ? $this->created_at->format('Ymd') : now()->format('Ymd');
-        return 'RD-' . $date . '-' . str_pad($id, 4, '0', STR_PAD_LEFT);
+
+        return 'RD-'.$date.'-'.str_pad($id, 4, '0', STR_PAD_LEFT);
     }
 
     public function getTotalWithCodeAttribute(): string
@@ -89,5 +94,10 @@ class Order extends Model
     public function scopeMidtrans($query)
     {
         return $query->where('payment_method_used', 'midtrans');
+    }
+
+    public function scopeDoku($query)
+    {
+        return $query->where('payment_method_used', 'doku');
     }
 }

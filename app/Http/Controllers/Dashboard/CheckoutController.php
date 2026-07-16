@@ -8,6 +8,7 @@ use App\Models\Order;
 use App\Models\Package;
 use App\Models\PaymentMethodConfig;
 use App\Models\Subscription;
+use App\Services\DokuService;
 use App\Services\MidtransService;
 use App\Services\PaymentRoutingService;
 use Illuminate\Http\Request;
@@ -40,14 +41,19 @@ class CheckoutController extends Controller
         $clientKey = config('midtrans.client_key');
         try {
             $methodConfig = PaymentMethodConfig::getActive();
-            if ($methodConfig && $methodConfig->isMidtrans() && !empty($methodConfig->midtrans_client_key)) {
+            if ($methodConfig && $methodConfig->isMidtrans() && ! empty($methodConfig->midtrans_client_key)) {
                 $clientKey = $methodConfig->midtrans_client_key;
             }
         } catch (\Throwable $e) {
             // fallback
         }
 
-        return view('dashboard.checkout.index', compact('currentTier', 'packages', 'activeMethod', 'clientKey', 'invitation'));
+        $dokuConfigured = false;
+        if ($routing->isDoku()) {
+            $dokuConfigured = app(DokuService::class)->isDokuConfigured();
+        }
+
+        return view('dashboard.checkout.index', compact('currentTier', 'packages', 'activeMethod', 'clientKey', 'invitation', 'dokuConfigured'));
     }
 
     public function process(Request $request, MidtransService $midtransService, PaymentRoutingService $routing)
@@ -69,7 +75,7 @@ class CheckoutController extends Controller
             $ownsInvitation = $isAdmin
                 ? Invitation::where('id', $invitationId)->exists()
                 : $user->invitations()->where('id', $invitationId)->exists();
-            abort_if(!$ownsInvitation, 403);
+            abort_if(! $ownsInvitation, 403);
         }
 
         $invitation = $invitationId ? (
@@ -82,13 +88,19 @@ class CheckoutController extends Controller
         $selectedRank = $tierRank[$tier] ?? -1;
 
         if ($currentRank >= $selectedRank) {
-            return back()->with('info', 'Undangan ini sudah memiliki paket ' . ucfirst($currentTier) . ' yang setara atau lebih tinggi.');
+            return back()->with('info', 'Undangan ini sudah memiliki paket '.ucfirst($currentTier).' yang setara atau lebih tinggi.');
         }
 
         $this->cancelPendingOrders($invitationId, $midtransService);
 
         if ($routing->isMidtrans()) {
             return $this->processMidtrans($user, $tier, $invitationId, $midtransService);
+        }
+
+        if ($routing->isDoku()) {
+            $dokuService = app(DokuService::class);
+
+            return $this->processDoku($user, $tier, $invitationId, $dokuService, $request);
         }
 
         return $this->processManualBank($user, $tier, $invitationId, $midtransService);
@@ -130,7 +142,7 @@ class CheckoutController extends Controller
 
         $order = DB::transaction(function () use ($user, $tier, $invitationId, $price, $uniqueCode) {
             return Order::create([
-                'order_id' => 'RD-' . now()->format('Ymd') . '-' . $user->id . '-' . Str::upper(Str::random(4)),
+                'order_id' => 'RD-'.now()->format('Ymd').'-'.$user->id.'-'.Str::upper(Str::random(4)),
                 'user_id' => $user->id,
                 'invitation_id' => $invitationId,
                 'package_type' => $tier,
@@ -147,9 +159,52 @@ class CheckoutController extends Controller
             ->with('success', 'Silakan lakukan pembayaran dan kirim bukti transfer via WhatsApp.');
     }
 
+    protected function processDoku($user, $tier, $invitationId, DokuService $dokuService, Request $request)
+    {
+        $midtransService = app(MidtransService::class);
+        $price = $midtransService->getPrice($tier);
+        $uniqueCode = Order::generateUniqueCode();
+
+        $order = DB::transaction(function () use ($user, $tier, $invitationId, $price) {
+            return Order::create([
+                'order_id' => 'RD-'.now()->format('Ymd').'-'.$user->id.'-'.Str::upper(Str::random(4)),
+                'user_id' => $user->id,
+                'invitation_id' => $invitationId,
+                'package_type' => $tier,
+                'payment_method_used' => 'doku',
+                'gross_amount' => $price,
+                'unique_code' => 0, // DOKU Checkout does not need unique code
+                'payment_status' => 'pending',
+                'payment_gateway_used' => 'doku',
+            ]);
+        });
+
+        // Also create subscription
+        Subscription::create([
+            'user_id' => $user->id,
+            'tier' => $tier,
+            'midtrans_order_id' => $order->order_id,
+            'payment_status' => 'pending',
+            'amount' => $price,
+        ]);
+
+        if ($dokuService->isDokuConfigured()) {
+
+            $checkoutUrl = $dokuService->createCheckoutUrl($order);
+
+            if ($checkoutUrl) {
+                return redirect()->away($checkoutUrl);
+            }
+        }
+
+        // If fails to generate URL, revert to pending
+        return redirect()->route('dashboard')
+            ->with('error', 'Gagal memproses pembayaran DOKU. Silakan pastikan konfigurasi DOKU sudah benar (Client ID & Secret Key).');
+    }
+
     protected function cancelPendingOrders(?string $invitationId, MidtransService $midtransService): void
     {
-        if (!$invitationId) {
+        if (! $invitationId) {
             return;
         }
 
@@ -162,7 +217,7 @@ class CheckoutController extends Controller
                 try {
                     $midtransService->cancelTransaction($oldOrder->order_id);
                 } catch (\Throwable $e) {
-                    logger()->warning('Gagal cancel order lama di Midtrans: ' . $e->getMessage());
+                    logger()->warning('Gagal cancel order lama di Midtrans: '.$e->getMessage());
                 }
             }
 

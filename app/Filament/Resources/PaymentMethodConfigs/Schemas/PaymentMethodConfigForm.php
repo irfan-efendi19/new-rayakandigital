@@ -19,10 +19,12 @@ class PaymentMethodConfigForm
                     ->options([
                         'manual_bank' => 'Bank Manual (Transfer + Verifikasi WA)',
                         'midtrans' => 'Automated Gateway (Midtrans)',
+                        'doku' => 'DOKU Virtual Account (SNAP API)',
                     ])
                     ->descriptions([
                         'manual_bank' => 'User akan melihat instruksi transfer bank manual dan tombol kirim bukti via WhatsApp. Admin harus memverifikasi pembayaran secara manual.',
                         'midtrans' => 'User akan membayar melalui pop-up Midtrans Snap (QRIS/VA/E-Wallet). Aktivasi berjalan otomatis via webhook.',
+                        'doku' => 'User akan memilih bank Virtual Account DOKU (CIMB, Mandiri, BRI, dll). Aktivasi berjalan otomatis via webhook DOKU.',
                     ])
                     ->live()
                     ->required(),
@@ -74,6 +76,37 @@ class PaymentMethodConfigForm
                             ])
                             ->default('sandbox')
                             ->required(fn ($get) => $get('active_method') === 'midtrans'),
+                    ]),
+
+                Section::make('Konfigurasi DOKU')
+                    ->description('Kredensial dari DOKU Dashboard (https://dashboard.doku.com)')
+                    ->visible(fn ($get) => $get('active_method') === 'doku')
+                    ->schema([
+                        TextInput::make('doku_client_id')
+                            ->label('Client ID')
+                            ->placeholder('MCH-XXXX-XXXXXXXXXX')
+                            ->helperText('Client ID dari DOKU Dashboard → Settings → General Information.')
+                            ->required(fn ($get) => $get('active_method') === 'doku'),
+                        TextInput::make('doku_secret_key')
+                            ->label('Secret Key')
+                            ->password()
+                            ->revealable()
+                            ->helperText('Secret Key dari DOKU Dashboard → Settings → API Keys.')
+                            ->required(fn ($get) => $get('active_method') === 'doku'),
+                        TextInput::make('doku_private_key')
+                            ->label('Private Key (RSA)')
+                            ->password()
+                            ->revealable()
+                            ->helperText('Private Key RSA (format PEM). Generate dari DOKU Dashboard → Settings → Security.')
+                            ->required(fn ($get) => $get('active_method') === 'doku'),
+                        Select::make('doku_environment')
+                            ->label('Environment')
+                            ->options([
+                                'sandbox' => 'Sandbox / Staging',
+                                'production' => 'Production / Live',
+                            ])
+                            ->default('sandbox')
+                            ->required(fn ($get) => $get('active_method') === 'doku'),
                     ]),
             ]);
     }
