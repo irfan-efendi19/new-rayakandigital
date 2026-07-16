@@ -165,7 +165,7 @@ class DokuService
             if ($order) {
                 $order->update(['payment_status' => $isSettled ? 'success' : 'expired']);
             }
-            return $order;
+            return $addonTransaction;
         }
 
         // Standard Order/Subscription handling
@@ -274,5 +274,10 @@ class DokuService
         }
 
         return $isValid;
+    }
+
+    public function testSignature(Request $request): bool
+    {
+        return $this->verifySignature($request);
     }
 }
