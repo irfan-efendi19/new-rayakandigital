@@ -213,6 +213,12 @@ class DokuService
         $targetPath = $request->getRequestUri();
         $targetPath = parse_url($targetPath, PHP_URL_PATH);
         
+        // Beberapa konfigurasi proxy/staging (Nginx/Apache) bisa mendistorsi getRequestUri.
+        // Jika berakhiran /doku/notification, kita pastikan jalurnya baku.
+        if (str_ends_with($targetPath, '/doku/notification')) {
+            $targetPath = '/doku/notification';
+        }
+        
         $body = $request->getContent();
         $digest = base64_encode(hash('sha256', $body, true));
         
