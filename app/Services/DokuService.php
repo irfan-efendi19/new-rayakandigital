@@ -73,7 +73,8 @@ class DokuService
                 'amount' => $order->gross_amount + $order->unique_code,
                 'invoice_number' => $order->order_id,
                 'currency' => 'IDR',
-                'callback_url' => route('doku.callback'), // URL to redirect after payment
+                'callback_url' => route('doku.callback'),
+                'notification_url' => route('doku.notification'),
             ],
             'payment' => [
                 'payment_due_date' => 120, // 2 hours
@@ -121,13 +122,11 @@ class DokuService
      */
     public function handleNotification(Request $request): ?Order
     {
-        // Log seluruh request untuk debugging
         Log::info('DOKU Webhook RAW', [
             'headers' => $request->headers->all(),
             'body' => $request->getContent(),
         ]);
 
-        // 1. Validasi Signature
         $isValid = $this->verifySignature($request);
         if (!$isValid) {
             Log::error('DOKU Signature Verification Failed', [
@@ -138,17 +137,29 @@ class DokuService
         }
 
         $payload = $request->all();
+        if (empty($payload) || !isset($payload['order'])) {
+            $decoded = json_decode($request->getContent(), true);
+            if (json_last_error() === JSON_ERROR_NONE) {
+                $payload = $decoded;
+            }
+        }
+
         $orderId = $payload['order']['invoice_number'] ?? null;
 
         if (!$orderId) {
+            Log::error('DOKU Webhook: invoice_number not found in payload', [
+                'payload' => $payload,
+                'raw_body' => $request->getContent(),
+            ]);
             return null;
         }
 
-        // Sesuai dokumentasi resmi DOKU: status ada di transaction.status
-        $transactionStatus = $payload['transaction']['status']
+        $transactionStatus = strtoupper(
+            $payload['transaction']['status']
             ?? $payload['payment']['status']
             ?? $payload['status']
-            ?? null;
+            ?? ''
+        );
 
         Log::info('DOKU Webhook parsed', [
             'order_id' => $orderId,
@@ -187,9 +198,12 @@ class DokuService
             return $addonTransaction;
         }
 
-        // Standard Order/Subscription handling
         $order = Order::where('order_id', $orderId)->first();
         if (!$order) {
+            Log::error('DOKU Webhook: Order not found', [
+                'order_id' => $orderId,
+                'transaction_status' => $transactionStatus,
+            ]);
             return null;
         }
 
