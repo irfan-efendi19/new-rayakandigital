@@ -63,23 +63,23 @@ class DokuWebhookController extends Controller
 
         if ($order && $order->payment_status === 'pending') {
             $dokuService->processSuccessOrder($order);
-
             session()->forget('doku_pending_order');
-
-            return redirect()->route('dashboard.payment.doku.invoice', $order)
-                ->with('success', 'Pembayaran berhasil!');
         }
 
-        if ($order && $order->payment_status === 'success') {
-            return redirect()->route('dashboard.payment.doku.invoice', $order)
-                ->with('success', 'Pembayaran berhasil!');
-        }
-
-        logger()->warning('DOKU callback: No pending order found', [
-            'invoiceNumber' => $invoiceNumber,
+        logger()->info('DOKU callback processed', [
+            'order_id' => $order?->order_id,
+            'payment_status' => $order?->payment_status,
+            'found' => $order !== null,
         ]);
 
-        return redirect()->route('dashboard')
-            ->with('info', 'Pembayaran sedang diproses. Silakan tunggu konfirmasi.');
+        return redirect()->route('home')
+            ->with(
+                $order && $order->payment_status === 'success'
+                    ? 'success'
+                    : 'info',
+                $order && $order->payment_status === 'success'
+                    ? 'Pembayaran berhasil! Silakan login untuk melihat detail pesanan.'
+                    : 'Pembayaran sedang diproses. Silakan cek kembali nanti.'
+            );
     }
 }
