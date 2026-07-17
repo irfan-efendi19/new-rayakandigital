@@ -76,6 +76,7 @@ class DokuService
                 'invoice_number' => $order->order_id,
                 'currency' => 'IDR',
                 'callback_url' => route('doku.callback'),
+                'auto_redirect' => true,
             ],
             'payment' => [
                 'payment_due_date' => 120,
@@ -212,31 +213,7 @@ class DokuService
         }
 
         if ($transactionStatus === 'SUCCESS') {
-            $order->update([
-                'payment_status' => 'success',
-            ]);
-
-            $subscription = Subscription::where('midtrans_order_id', $order->order_id)->first();
-            if ($subscription) {
-                $subscription->payment_status = 'settlement';
-                $subscription->starts_at = now();
-
-                $package = Package::where('package_code', $subscription->tier)->first();
-                $durationDays = $package?->active_period_days;
-                $subscription->expires_at = $durationDays ? now()->addDays($durationDays) : null;
-                $subscription->save();
-
-                if ($order->invitation_id) {
-                    $invitation = Invitation::find($order->invitation_id);
-                    if ($invitation) {
-                        $invitation->tier = $subscription->tier;
-                        $invitation->pricing_tier_id = $package?->id;
-                        $invitation->expires_at = $subscription->expires_at;
-                        $invitation->is_active = true;
-                        $invitation->save();
-                    }
-                }
-            }
+            $this->processSuccessOrder($order);
         } elseif ($transactionStatus === 'FAILED' || $transactionStatus === 'EXPIRED') {
             $order->update([
                 'payment_status' => strtolower($transactionStatus),
@@ -244,6 +221,35 @@ class DokuService
         }
 
         return $order;
+    }
+
+    public function processSuccessOrder(Order $order): void
+    {
+        $order->update([
+            'payment_status' => 'success',
+        ]);
+
+        $subscription = Subscription::where('midtrans_order_id', $order->order_id)->first();
+        if ($subscription) {
+            $subscription->payment_status = 'settlement';
+            $subscription->starts_at = now();
+
+            $package = Package::where('package_code', $subscription->tier)->first();
+            $durationDays = $package?->active_period_days;
+            $subscription->expires_at = $durationDays ? now()->addDays($durationDays) : null;
+            $subscription->save();
+
+            if ($order->invitation_id) {
+                $invitation = Invitation::find($order->invitation_id);
+                if ($invitation) {
+                    $invitation->tier = $subscription->tier;
+                    $invitation->pricing_tier_id = $package?->id;
+                    $invitation->expires_at = $subscription->expires_at;
+                    $invitation->is_active = true;
+                    $invitation->save();
+                }
+            }
+        }
     }
 
     /**

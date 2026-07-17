@@ -36,14 +36,22 @@ class DokuWebhookController extends Controller
     /**
      * Handle DOKU Checkout redirect callback after payment.
      */
-    public function callback(Request $request)
+    public function callback(Request $request, DokuService $dokuService)
     {
         $status = $request->query('status', 'unknown');
         $invoiceNumber = $request->query('invoice_number');
 
         if ($invoiceNumber) {
             $order = Order::where('order_id', $invoiceNumber)->first();
+
             if ($order && $order->payment_status === 'success') {
+                return redirect()->route('dashboard.payment.doku.invoice', $order)
+                    ->with('success', 'Pembayaran berhasil!');
+            }
+
+            if ($order && $status === 'SUCCESS' && $order->payment_status === 'pending') {
+                $dokuService->processSuccessOrder($order);
+
                 return redirect()->route('dashboard.payment.doku.invoice', $order)
                     ->with('success', 'Pembayaran berhasil!');
             }
@@ -51,7 +59,7 @@ class DokuWebhookController extends Controller
 
         if ($status === 'SUCCESS') {
             return redirect()->route('dashboard')
-                ->with('success', 'Pembayaran berhasil diproses. Status pesanan akan segera diperbarui.');
+                ->with('success', 'Pembayaran berhasil diproses.');
         }
 
         return redirect()->route('dashboard')
