@@ -98,7 +98,7 @@ class DokuWebhookController extends Controller
                 ->with('success', 'Pembayaran berhasil!');
         }
 
-        return redirect()->route('home')
+        return redirect()->route('login')
             ->with('info', 'Pembayaran sedang diproses. Silakan cek kembali nanti.');
     }
 }
