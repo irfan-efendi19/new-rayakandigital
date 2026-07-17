@@ -64,48 +64,34 @@ class DokuWebhookController extends Controller
             $addonTransaction = AddonTransaction::where('reference_order_id', $addonReferenceId)->first();
         }
 
-        if ($order && $order->payment_status === 'pending') {
-            $dokuService->processSuccessOrder($order);
-            session()->forget('doku_pending_order');
-        }
+        session()->forget(['doku_pending_order', 'doku_pending_addon']);
 
-        if ($addonTransaction && $addonTransaction->payment_status === 'pending') {
-            $addonTransaction->payment_status = 'settlement';
-            $addonTransaction->paid_at = now();
-
-            if ($addonTransaction->addon) {
-                $addonTransaction->addon->invitations()->syncWithoutDetaching([
-                    $addonTransaction->invitation_id => [
-                        'purchased_price' => $addonTransaction->amount,
-                        'status_active' => true,
-                        'activated_at' => now(),
-                    ],
-                ]);
-            }
-
-            $addonTransaction->save();
-            session()->forget('doku_pending_addon');
-        }
-
-        $success = ($order?->payment_status === 'success') || ($addonTransaction?->payment_status === 'settlement');
+        $orderSuccess = $order && $order->payment_status === 'success';
+        $addonSuccess = $addonTransaction && $addonTransaction->payment_status === 'settlement';
 
         logger()->info('DOKU callback processed', [
             'order_id' => $order?->order_id,
             'addon_id' => $addonTransaction?->reference_order_id,
             'order_status' => $order?->payment_status,
             'addon_status' => $addonTransaction?->payment_status,
-            'success' => $success,
+            'order_success' => $orderSuccess,
+            'addon_success' => $addonSuccess,
         ]);
 
-        if ($success) {
-            if ($addonTransaction && $addonTransaction->invitation) {
-                return redirect()->route('dashboard.invitations.addons.index', $addonTransaction->invitation)
-                    ->with('success', 'Pembayaran berhasil! Add-on sudah aktif.');
-            }
-
-            if ($order && $order->invitation) {
+        if ($orderSuccess) {
+            if ($order->invitation) {
                 return redirect()->route('dashboard.invitations.show', $order->invitation)
                     ->with('success', 'Pembayaran berhasil! Paket sudah aktif.');
+            }
+
+            return redirect()->route('dashboard')
+                ->with('success', 'Pembayaran berhasil!');
+        }
+
+        if ($addonSuccess) {
+            if ($addonTransaction->invitation) {
+                return redirect()->route('dashboard.invitations.addons.index', $addonTransaction->invitation)
+                    ->with('success', 'Pembayaran berhasil! Add-on sudah aktif.');
             }
 
             return redirect()->route('dashboard')
