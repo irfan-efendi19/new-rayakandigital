@@ -68,20 +68,24 @@ class DokuService
         $timestamp = gmdate("Y-m-d\TH:i:s\Z");
         $targetPath = '/checkout/v1/payment';
 
+        $amount = (int) ($order->gross_amount + $order->unique_code);
+
         $payload = [
             'order' => [
-                'amount' => $order->gross_amount + $order->unique_code,
+                'amount' => $amount,
                 'invoice_number' => $order->order_id,
                 'currency' => 'IDR',
                 'callback_url' => route('doku.callback'),
-                'notification_url' => route('doku.notification'),
             ],
             'payment' => [
-                'payment_due_date' => 120, // 2 hours
+                'payment_due_date' => 120,
             ],
             'customer' => [
                 'name' => substr(preg_replace('/[^A-Za-z0-9 ]/', '', $order->user->name), 0, 50),
                 'email' => $order->user->email,
+            ],
+            'additional_info' => [
+                'override_notification_url' => route('doku.notification'),
             ],
         ];
 
