@@ -1062,6 +1062,61 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const container = document.getElementById('events-container');
+
+            // Timezone conversion
+            var tzSelect = document.getElementById('timezone');
+            if (tzSelect) {
+                var tzOffsets = {
+                    'Asia/Jakarta': 7,
+                    'Asia/Makassar': 8,
+                    'Asia/Jayapura': 9
+                };
+                var oldTz = tzSelect.value;
+
+                tzSelect.addEventListener('change', function () {
+                    var newTz = this.value;
+                    var oldOffset = tzOffsets[oldTz] || 7;
+                    var newOffset = tzOffsets[newTz] || 7;
+                    var diff = newOffset - oldOffset;
+
+                    if (diff === 0) return;
+
+                    container.querySelectorAll('.event-card').forEach(function (card) {
+                        var dateInput = card.querySelector('input[name$="[event_date]"]');
+                        var startInput = card.querySelector('input[name$="[start_time]"]');
+                        var endInput = card.querySelector('input[name$="[end_time]"]');
+
+                        function convertTime(input, dateInput) {
+                            if (!input || !input.value) return;
+                            var parts = input.value.split(':');
+                            var hours = parseInt(parts[0]);
+                            var minutes = parseInt(parts[1]);
+                            hours += diff;
+                            if (hours >= 24) {
+                                hours -= 24;
+                                if (dateInput && dateInput.value) {
+                                    var d = new Date(dateInput.value + 'T00:00:00');
+                                    d.setDate(d.getDate() + 1);
+                                    dateInput.value = d.toISOString().slice(0, 10);
+                                }
+                            } else if (hours < 0) {
+                                hours += 24;
+                                if (dateInput && dateInput.value) {
+                                    var d = new Date(dateInput.value + 'T00:00:00');
+                                    d.setDate(d.getDate() - 1);
+                                    dateInput.value = d.toISOString().slice(0, 10);
+                                }
+                            }
+                            input.value = String(hours).padStart(2, '0') + ':' + String(minutes).padStart(2, '0');
+                        }
+
+                        convertTime(startInput, dateInput);
+                        convertTime(endInput, dateInput);
+                    });
+
+                    oldTz = newTz;
+                });
+            }
             const template = document.getElementById('event-card-template');
             const addBtn = document.getElementById('add-event-btn');
             let eventIndex = container ? container.children.length : 0;
