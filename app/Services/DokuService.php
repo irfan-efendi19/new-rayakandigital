@@ -2,12 +2,12 @@
 
 namespace App\Services;
 
+use App\Models\AddonTransaction;
 use App\Models\Invitation;
 use App\Models\Order;
 use App\Models\Package;
 use App\Models\PaymentMethodConfig;
 use App\Models\Subscription;
-use App\Services\PaymentRoutingService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -27,7 +27,7 @@ class DokuService
     {
         $this->clientId = config('doku.client_id', '');
         $this->secretKey = config('doku.secret_key', '');
-        $this->isProduction = config('doku.environment') === 'production';
+        $this->isProduction = filter_var(config('doku.is_production', false), FILTER_VALIDATE_BOOLEAN);
 
         try {
             $this->methodConfig = PaymentMethodConfig::where('active_method', 'doku')->first();
@@ -73,7 +73,7 @@ class DokuService
                 'amount' => $order->gross_amount + $order->unique_code,
                 'invoice_number' => $order->order_id,
                 'currency' => 'IDR',
-                'callback_url' => route('dashboard'), // URL to redirect after payment
+                'callback_url' => route('doku.callback'), // URL to redirect after payment
             ],
             'payment' => [
                 'payment_due_date' => 120, // 2 hours
@@ -121,11 +121,19 @@ class DokuService
      */
     public function handleNotification(Request $request): ?Order
     {
+        // Log seluruh request untuk debugging
+        Log::info('DOKU Webhook RAW', [
+            'headers' => $request->headers->all(),
+            'body' => $request->getContent(),
+        ]);
+
         // 1. Validasi Signature
         $isValid = $this->verifySignature($request);
         if (! $isValid) {
-            Log::error('DOKU Signature Verification Failed', ['headers' => $request->headers->all(), 'body' => $request->getContent()]);
-
+            Log::error('DOKU Signature Verification Failed', [
+                'headers' => $request->headers->all(),
+                'body' => $request->getContent(),
+            ]);
             return null;
         }
 
@@ -136,11 +144,21 @@ class DokuService
             return null;
         }
 
-        $transactionStatus = $payload['payment']['status'] ?? $payload['transaction']['status'] ?? null;
+        // Sesuai dokumentasi resmi DOKU: status ada di transaction.status
+        $transactionStatus = $payload['transaction']['status']
+            ?? $payload['payment']['status']
+            ?? $payload['status']
+            ?? null;
+
+        Log::info('DOKU Webhook parsed', [
+            'order_id' => $orderId,
+            'transaction_status' => $transactionStatus,
+            'full_payload' => $payload,
+        ]);
         $isSettled = $transactionStatus === 'SUCCESS';
 
         // Check if it's an AddonTransaction
-        $addonTransaction = \App\Models\AddonTransaction::where('reference_order_id', $orderId)->first();
+        $addonTransaction = AddonTransaction::where('reference_order_id', $orderId)->first();
         if ($addonTransaction) {
             if ($isSettled) {
                 $addonTransaction->payment_status = 'settlement';
@@ -165,12 +183,13 @@ class DokuService
             if ($order) {
                 $order->update(['payment_status' => $isSettled ? 'success' : 'expired']);
             }
+
             return $addonTransaction;
         }
 
         // Standard Order/Subscription handling
         $order = Order::where('order_id', $orderId)->first();
-        if (!$order) {
+        if (! $order) {
             return null;
         }
 
@@ -183,7 +202,7 @@ class DokuService
             if ($subscription) {
                 $subscription->payment_status = 'settlement';
                 $subscription->starts_at = now();
-                
+
                 $package = Package::where('package_code', $subscription->tier)->first();
                 $durationDays = $package?->active_period_days;
                 $subscription->expires_at = $durationDays ? now()->addDays($durationDays) : null;
@@ -234,37 +253,38 @@ class DokuService
     protected function verifySignature(Request $request): bool
     {
         $incomingSignature = $request->header('Signature');
-        if (!$incomingSignature) {
+        if (! $incomingSignature) {
             Log::error('DOKU Webhook: Missing Signature header');
+
             return false;
         }
-        
+
         $requestId = $request->header('Request-Id', '');
         $timestamp = $request->header('Request-Timestamp', '');
-        
+
         $targetPath = $request->getRequestUri();
         $targetPath = parse_url($targetPath, PHP_URL_PATH);
-        
+
         // Beberapa konfigurasi proxy/staging (Nginx/Apache) bisa mendistorsi getRequestUri.
         // Jika berakhiran /doku/notification, kita pastikan jalurnya baku.
         if (str_ends_with($targetPath, '/doku/notification')) {
             $targetPath = '/doku/notification';
         }
-        
+
         $body = $request->getContent();
         $digest = base64_encode(hash('sha256', $body, true));
-        
-        $signatureString = "Client-Id:" . $this->clientId . "\n" .
-            "Request-Id:" . $requestId . "\n" .
-            "Request-Timestamp:" . $timestamp . "\n" .
-            "Request-Target:" . $targetPath . "\n" .
-            "Digest:" . $digest;
-            
-        $expectedSignature = "HMACSHA256=" . base64_encode(hash_hmac('sha256', $signatureString, $this->secretKey, true));
-        
-        $isValid = hash_equals($expectedSignature, (string)$incomingSignature);
 
-        if (!$isValid) {
+        $signatureString = 'Client-Id:'.$this->clientId."\n".
+            'Request-Id:'.$requestId."\n".
+            'Request-Timestamp:'.$timestamp."\n".
+            'Request-Target:'.$targetPath."\n".
+            'Digest:'.$digest;
+
+        $expectedSignature = 'HMACSHA256='.base64_encode(hash_hmac('sha256', $signatureString, $this->secretKey, true));
+
+        $isValid = hash_equals($expectedSignature, (string) $incomingSignature);
+
+        if (! $isValid) {
             Log::error('DOKU Webhook Signature Mismatch', [
                 'expected' => $expectedSignature,
                 'received' => $incomingSignature,

@@ -151,6 +151,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::post('/payments/notification', [PaymentController::class, 'notification'])->name('payments.notification');
 Route::get('/payments/finish', [PaymentController::class, 'finish'])->name('payments.finish');
 
+// DOKU Callback (redirect after payment)
+Route::get('/doku/callback', [DokuWebhookController::class, 'callback'])->name('doku.callback');
+
 // DOKU Virtual Account Webhook
 Route::post('/doku/notification', [DokuWebhookController::class, 'handleWebhook'])->name('doku.notification');
 

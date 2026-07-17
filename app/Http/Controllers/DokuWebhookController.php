@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use App\Services\DokuService;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,7 @@ class DokuWebhookController extends Controller
     public function handleWebhook(Request $request, DokuService $dokuService)
     {
         logger()->info('DOKU webhook received', $request->all());
-        
+
         // Simpan log ke public/doku-log.json agar bisa dilihat via browser
         file_put_contents(public_path('doku-log.json'), json_encode([
             'headers' => $request->headers->all(),
@@ -30,5 +31,30 @@ class DokuWebhookController extends Controller
         }
 
         return response()->json(['status' => 'ok']);
+    }
+
+    /**
+     * Handle DOKU Checkout redirect callback after payment.
+     */
+    public function callback(Request $request)
+    {
+        $status = $request->query('status', 'unknown');
+        $invoiceNumber = $request->query('invoice_number');
+
+        if ($invoiceNumber) {
+            $order = Order::where('order_id', $invoiceNumber)->first();
+            if ($order && $order->payment_status === 'success') {
+                return redirect()->route('dashboard.payment.doku.invoice', $order)
+                    ->with('success', 'Pembayaran berhasil!');
+            }
+        }
+
+        if ($status === 'SUCCESS') {
+            return redirect()->route('dashboard')
+                ->with('success', 'Pembayaran berhasil diproses. Status pesanan akan segera diperbarui.');
+        }
+
+        return redirect()->route('dashboard')
+            ->with('info', 'Pembayaran sedang diproses. Silakan tunggu konfirmasi.');
     }
 }
