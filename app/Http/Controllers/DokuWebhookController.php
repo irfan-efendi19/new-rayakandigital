@@ -39,22 +39,59 @@ class DokuWebhookController extends Controller
     public function callback(Request $request, DokuService $dokuService)
     {
         $status = $request->query('status', 'unknown');
-        $invoiceNumber = $request->query('invoice_number');
+        $invoiceNumber = $request->query('invoice_number')
+            ?? $request->query('invoice')
+            ?? $request->query('order_id')
+            ?? $request->query('reference')
+            ?? $request->query('trx_id');
+
+        logger()->info('DOKU callback received', [
+            'query' => $request->query->all(),
+            'status' => $status,
+            'invoiceNumber' => $invoiceNumber,
+        ]);
+
+        $order = null;
 
         if ($invoiceNumber) {
             $order = Order::where('order_id', $invoiceNumber)->first();
+        }
 
-            if ($order && $order->payment_status === 'success') {
-                return redirect()->route('dashboard.payment.doku.invoice', $order)
-                    ->with('success', 'Pembayaran berhasil!');
+        if (!$order && $status === 'SUCCESS') {
+            $recentOrder = Order::where('payment_method_used', 'doku')
+                ->where('payment_status', 'pending')
+                ->latest()
+                ->first();
+
+            if ($recentOrder) {
+                $diff = now()->diffInMinutes($recentOrder->created_at);
+                if ($diff <= 30) {
+                    $order = $recentOrder;
+                    logger()->info('DOKU callback: Fallback to recent order', [
+                        'order_id' => $order->order_id,
+                        'minutes_ago' => $diff,
+                    ]);
+                }
             }
+        }
 
-            if ($order && $status === 'SUCCESS' && $order->payment_status === 'pending') {
-                $dokuService->processSuccessOrder($order);
+        if ($order && $order->payment_status === 'success') {
+            return redirect()->route('dashboard.payment.doku.invoice', $order)
+                ->with('success', 'Pembayaran berhasil!');
+        }
 
-                return redirect()->route('dashboard.payment.doku.invoice', $order)
-                    ->with('success', 'Pembayaran berhasil!');
-            }
+        if ($order && $status === 'SUCCESS' && $order->payment_status === 'pending') {
+            $dokuService->processSuccessOrder($order);
+
+            return redirect()->route('dashboard.payment.doku.invoice', $order)
+                ->with('success', 'Pembayaran berhasil!');
+        }
+
+        if (!$order) {
+            logger()->warning('DOKU callback: No order found', [
+                'invoiceNumber' => $invoiceNumber,
+                'status' => $status,
+            ]);
         }
 
         if ($status === 'SUCCESS') {
