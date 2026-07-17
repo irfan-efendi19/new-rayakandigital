@@ -106,7 +106,7 @@
                 <div class="grid grid-cols-3 lg:grid-cols-4 gap-2 lg:gap-3">
                     @foreach($logos as $logo)
                         <div
-                            class="bg-white dark:bg-secondary-800 border border-footer-border dark:border-secondary-700 rounded-lg h-12 overflow-hidden flex items-center justify-center p-2">
+                            class="bg-white dark:bg-white border border-footer-border dark:border-secondary-700 rounded-lg h-12 overflow-hidden flex items-center justify-center p-2">
                             <img src="{{ asset($logo) }}" alt="{{ pathinfo($logo, PATHINFO_FILENAME) }}"
                                 class="max-w-[90%] max-h-[90%] object-contain">
                         </div>
