@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AddonTransaction;
 use App\Models\Order;
 use App\Services\DokuService;
 use Illuminate\Http\Request;
@@ -41,6 +42,7 @@ class DokuWebhookController extends Controller
         logger()->info('DOKU callback received', [
             'query' => $request->query->all(),
             'session_order' => session('doku_pending_order'),
+            'session_addon' => session('doku_pending_addon'),
         ]);
 
         $invoiceNumber = $request->query('invoice_number')
@@ -48,17 +50,18 @@ class DokuWebhookController extends Controller
             ?? $request->query('order_id')
             ?? session('doku_pending_order');
 
+        $addonReferenceId = $request->query('reference_order_id')
+            ?? session('doku_pending_addon');
+
         $order = null;
+        $addonTransaction = null;
 
         if ($invoiceNumber) {
             $order = Order::where('order_id', $invoiceNumber)->first();
         }
 
-        if (!$order) {
-            $order = Order::where('payment_method_used', 'doku')
-                ->where('payment_status', 'pending')
-                ->latest()
-                ->first();
+        if (!$order && $addonReferenceId) {
+            $addonTransaction = AddonTransaction::where('reference_order_id', $addonReferenceId)->first();
         }
 
         if ($order && $order->payment_status === 'pending') {
@@ -66,20 +69,50 @@ class DokuWebhookController extends Controller
             session()->forget('doku_pending_order');
         }
 
+        if ($addonTransaction && $addonTransaction->payment_status === 'pending') {
+            $addonTransaction->payment_status = 'settlement';
+            $addonTransaction->paid_at = now();
+
+            if ($addonTransaction->addon) {
+                $addonTransaction->addon->invitations()->syncWithoutDetaching([
+                    $addonTransaction->invitation_id => [
+                        'purchased_price' => $addonTransaction->amount,
+                        'status_active' => true,
+                        'activated_at' => now(),
+                    ],
+                ]);
+            }
+
+            $addonTransaction->save();
+            session()->forget('doku_pending_addon');
+        }
+
+        $success = ($order?->payment_status === 'success') || ($addonTransaction?->payment_status === 'settlement');
+
         logger()->info('DOKU callback processed', [
             'order_id' => $order?->order_id,
-            'payment_status' => $order?->payment_status,
-            'found' => $order !== null,
+            'addon_id' => $addonTransaction?->reference_order_id,
+            'order_status' => $order?->payment_status,
+            'addon_status' => $addonTransaction?->payment_status,
+            'success' => $success,
         ]);
 
+        if ($success) {
+            if ($addonTransaction && $addonTransaction->invitation) {
+                return redirect()->route('dashboard.invitations.addons.index', $addonTransaction->invitation)
+                    ->with('success', 'Pembayaran berhasil! Add-on sudah aktif.');
+            }
+
+            if ($order && $order->invitation) {
+                return redirect()->route('dashboard.invitations.show', $order->invitation)
+                    ->with('success', 'Pembayaran berhasil! Paket sudah aktif.');
+            }
+
+            return redirect()->route('dashboard')
+                ->with('success', 'Pembayaran berhasil!');
+        }
+
         return redirect()->route('home')
-            ->with(
-                $order && $order->payment_status === 'success'
-                    ? 'success'
-                    : 'info',
-                $order && $order->payment_status === 'success'
-                    ? 'Pembayaran berhasil! Silakan login untuk melihat detail pesanan.'
-                    : 'Pembayaran sedang diproses. Silakan cek kembali nanti.'
-            );
+            ->with('info', 'Pembayaran sedang diproses. Silakan cek kembali nanti.');
     }
 }

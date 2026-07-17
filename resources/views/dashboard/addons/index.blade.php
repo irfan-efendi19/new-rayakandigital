@@ -26,6 +26,10 @@
     <style>[x-cloak] { display: none !important }</style>
     @endif
 
+    @if($paymentMethod === 'doku')
+    <style>[x-cloak] { display: none !important }</style>
+    @endif
+
     <div class="py-8">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
             @if(session('success'))
@@ -155,7 +159,7 @@
                             </div>
                             <div class="flex-shrink-0 w-full sm:w-auto">
                                 @if($pendingTx && $pendingTx->payment_status === 'pending')
-                                    @if($paymentMethod === 'midtrans')
+                                    @if($paymentMethod === 'midtrans' || $paymentMethod === 'doku')
                                         <form action="{{ route('dashboard.invitations.addons.purchase', [$invitation, $addon]) }}" method="POST"
                                             x-data="addonCheckout" @submit.prevent="handleSubmit">
                                             @csrf
@@ -178,7 +182,7 @@
                                         Cek Status
                                     </a>
                                 @elseif(!$isOwned)
-                                    @if($paymentMethod === 'midtrans')
+                                    @if($paymentMethod === 'midtrans' || $paymentMethod === 'doku')
                                         <form action="{{ route('dashboard.invitations.addons.purchase', [$invitation, $addon]) }}" method="POST"
                                             x-data="addonCheckout" @submit.prevent="handleSubmit">
                                             @csrf

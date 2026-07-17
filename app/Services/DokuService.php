@@ -60,6 +60,55 @@ class DokuService
      */
     public function createCheckoutUrl(Order $order): ?string
     {
+        $amount = (int) ($order->gross_amount + $order->unique_code);
+
+        $customerName = substr(preg_replace('/[^A-Za-z0-9 ]/', '', $order->user->name), 0, 50);
+        $customerEmail = $order->user->email;
+
+        return $this->requestCheckoutUrl(
+            invoiceNumber: $order->order_id,
+            amount: $amount,
+            customerName: $customerName,
+            customerEmail: $customerEmail,
+            callback: function (string $paymentUrl) use ($order) {
+                $order->update([
+                    'snap_token' => $paymentUrl,
+                    'payment_gateway_used' => 'doku',
+                ]);
+            }
+        );
+    }
+
+    /**
+     * Generate DOKU Checkout URL for an AddonTransaction
+     */
+    public function createAddonCheckoutUrl(AddonTransaction $transaction): ?string
+    {
+        $customer = $transaction->invitation?->user;
+
+        $customerName = $customer ? substr(preg_replace('/[^A-Za-z0-9 ]/', '', $customer->name), 0, 50) : 'Customer';
+        $customerEmail = $customer?->email ?? 'customer@rayakandigital.com';
+
+        return $this->requestCheckoutUrl(
+            invoiceNumber: $transaction->reference_order_id,
+            amount: (int) $transaction->amount,
+            customerName: $customerName,
+            customerEmail: $customerEmail,
+            callback: function (string $paymentUrl) use ($transaction) {
+                $transaction->update([
+                    'snap_token' => $paymentUrl,
+                ]);
+            }
+        );
+    }
+
+    protected function requestCheckoutUrl(
+        string $invoiceNumber,
+        int $amount,
+        string $customerName,
+        string $customerEmail,
+        callable $callback,
+    ): ?string {
         $url = $this->isProduction
             ? 'https://api.doku.com/checkout/v1/payment'
             : 'https://api-sandbox.doku.com/checkout/v1/payment';
@@ -68,12 +117,10 @@ class DokuService
         $timestamp = gmdate("Y-m-d\TH:i:s\Z");
         $targetPath = '/checkout/v1/payment';
 
-        $amount = (int) ($order->gross_amount + $order->unique_code);
-
         $payload = [
             'order' => [
                 'amount' => $amount,
-                'invoice_number' => $order->order_id,
+                'invoice_number' => $invoiceNumber,
                 'currency' => 'IDR',
                 'callback_url' => route('doku.callback'),
                 'auto_redirect' => true,
@@ -82,8 +129,8 @@ class DokuService
                 'payment_due_date' => 120,
             ],
             'customer' => [
-                'name' => substr(preg_replace('/[^A-Za-z0-9 ]/', '', $order->user->name), 0, 50),
-                'email' => $order->user->email,
+                'name' => $customerName,
+                'email' => $customerEmail,
             ],
             'additional_info' => [
                 'override_notification_url' => route('doku.notification'),
@@ -104,17 +151,14 @@ class DokuService
             $paymentUrl = $responseData['response']['payment']['url'] ?? null;
 
             if ($paymentUrl) {
-                // We'll store the URL in snap_token so it can be resumed if needed
-                $order->update([
-                    'snap_token' => $paymentUrl,
-                    'payment_gateway_used' => 'doku',
-                ]);
+                $callback($paymentUrl);
 
                 return $paymentUrl;
             }
         }
 
         Log::error('DOKU Checkout URL generation failed', [
+            'invoice_number' => $invoiceNumber,
             'status' => $response->status(),
             'body' => $response->body(),
         ]);

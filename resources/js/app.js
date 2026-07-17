@@ -119,26 +119,37 @@ document.addEventListener('alpine:init', () => {
             })
             .then(r => r.json())
             .then(data => {
+                if (data.redirect_url) {
+                    window.location.href = data.redirect_url;
+                    return;
+                }
+
                 if (data.snap_token && data.snap_token.startsWith('SIMULATION_TOKEN_')) {
                     window.location.href = '/addon-payment/finish?reference_order_id=' + data.reference_order_id;
                     return;
                 }
 
-                window.snap.pay(data.snap_token, {
-                    onSuccess: function () {
-                        window.location.href = '/addon-payment/finish?reference_order_id=' + data.reference_order_id;
-                    },
-                    onPending: function () {
-                        window.location.href = '/addon-payment/finish?reference_order_id=' + data.reference_order_id;
-                    },
-                    onError: function () {
-                        alert('Pembayaran gagal, silakan coba lagi.');
-                        self.processing = false;
-                    },
-                    onClose: function () {
-                        self.processing = false;
-                    },
-                });
+                if (data.snap_token && typeof window.snap !== 'undefined') {
+                    window.snap.pay(data.snap_token, {
+                        onSuccess: function () {
+                            window.location.href = '/addon-payment/finish?reference_order_id=' + data.reference_order_id;
+                        },
+                        onPending: function () {
+                            window.location.href = '/addon-payment/finish?reference_order_id=' + data.reference_order_id;
+                        },
+                        onError: function () {
+                            alert('Pembayaran gagal, silakan coba lagi.');
+                            self.processing = false;
+                        },
+                        onClose: function () {
+                            self.processing = false;
+                        },
+                    });
+                    return;
+                }
+
+                alert('Metode pembayaran tidak tersedia. Silakan coba lagi.');
+                self.processing = false;
             })
             .catch(() => {
                 self.processing = false;

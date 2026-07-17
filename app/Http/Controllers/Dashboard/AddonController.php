@@ -7,6 +7,7 @@ use App\Models\Addon;
 use App\Models\AddonTransaction;
 use App\Models\Invitation;
 use App\Models\PaymentMethodConfig;
+use App\Services\DokuService;
 use App\Services\MidtransService;
 use App\Services\PaymentRoutingService;
 use Illuminate\Http\Request;
@@ -44,7 +45,7 @@ class AddonController extends Controller
         return view('dashboard.addons.index', compact('invitation', 'availableAddons', 'pendingTransactions', 'paymentMethod', 'clientKey'));
     }
 
-    public function purchase(Request $request, Invitation $invitation, Addon $addon, MidtransService $midtransService, PaymentRoutingService $routing)
+    public function purchase(Request $request, Invitation $invitation, Addon $addon, MidtransService $midtransService, PaymentRoutingService $routing, DokuService $dokuService)
     {
         Gate::authorize('update', $invitation);
 
@@ -110,6 +111,28 @@ class AddonController extends Controller
                 'snap_token' => $snapToken,
                 'reference_order_id' => $referenceOrderId,
             ]);
+        }
+
+        if ($paymentMethod === 'doku') {
+            session(['doku_pending_addon' => $transaction->reference_order_id]);
+
+            if ($request->expectsJson() || $request->ajax()) {
+                $checkoutUrl = $dokuService->createAddonCheckoutUrl($transaction);
+
+                return response()->json([
+                    'redirect_url' => $checkoutUrl,
+                    'reference_order_id' => $transaction->reference_order_id,
+                ]);
+            }
+
+            $checkoutUrl = $dokuService->createAddonCheckoutUrl($transaction);
+
+            if ($checkoutUrl) {
+                return redirect()->away($checkoutUrl);
+            }
+
+            return redirect()->route('dashboard.invitations.addons.index', $invitation)
+                ->with('error', 'Gagal memproses pembayaran DOKU. Silakan coba lagi.');
         }
 
         return redirect()->route('dashboard.invitations.addons.invoice', [$invitation, $transaction])
