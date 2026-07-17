@@ -193,6 +193,8 @@ class CheckoutController extends Controller
             $checkoutUrl = $dokuService->createCheckoutUrl($order);
 
             if ($checkoutUrl) {
+                session(['doku_pending_order' => $order->order_id]);
+
                 return redirect()->away($checkoutUrl);
             }
         }
