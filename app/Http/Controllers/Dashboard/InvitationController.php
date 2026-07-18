@@ -183,6 +183,7 @@ class InvitationController extends Controller
             'attendance' => $rsvp->attendance,
             'attendance_label' => $rsvp->attendanceLabel(),
             'pax' => (string) $rsvp->pax,
+            'message' => $rsvp->message ?? '',
             'created_at' => $rsvp->created_at->format('d/m/Y H:i'),
             'updated_at' => $rsvp->updated_at->format('d/m/Y H:i'),
         ])->values();

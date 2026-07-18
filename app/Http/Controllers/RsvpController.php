@@ -14,6 +14,7 @@ class RsvpController extends Controller
             'guest_name' => 'required|string|max:255',
             'attendance' => 'required|in:attending,not_attending,uncertain',
             'pax' => 'required|integer|min:1|max:50',
+            'message' => 'nullable|string|max:500',
         ]);
 
         if ($invitation->isRsvpPaxLimited()) {

@@ -18,6 +18,7 @@ class Rsvp extends Model
         'guest_name',
         'attendance',
         'pax',
+        'message',
     ];
 
     protected function casts(): array

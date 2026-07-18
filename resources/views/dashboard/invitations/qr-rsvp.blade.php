@@ -145,6 +145,7 @@
                                                     <th class="text-left px-4 py-2 font-medium">Nama Tamu</th>
                                                     <th class="text-center px-2 py-2 font-medium">Status</th>
                                                     <th class="text-center px-2 py-2 font-medium">Pax</th>
+                                                    <th class="text-left px-4 py-2 font-medium">Pesan</th>
                                                     <th class="text-right px-4 py-2 font-medium">Waktu</th>
                                                 </tr>
                                             </thead>
@@ -162,11 +163,12 @@
                                                         @endif
                                                     </td>
                                                     <td class="px-2 py-2.5 text-center text-neutral-600 dark:text-neutral-400 font-mono" data-label="Pax">{{ $rsvp->pax }}</td>
+                                                    <td class="px-4 py-2.5 text-left text-neutral-500 dark:text-neutral-400 max-w-[200px] truncate" data-label="Pesan">{{ $rsvp->message ?? '-' }}</td>
                                                     <td class="px-4 py-2.5 text-right text-neutral-400 dark:text-neutral-500 whitespace-nowrap font-mono" data-label="Waktu">{{ $rsvp->created_at->format('d/m H:i') }}</td>
                                                 </tr>
                                                 @empty
                                                 <tr>
-                                                    <td colspan="4" class="px-4 py-6 text-center text-neutral-400 dark:text-neutral-500">Belum ada respon RSVP</td>
+                                                    <td colspan="5" class="px-4 py-6 text-center text-neutral-400 dark:text-neutral-500">Belum ada respon RSVP</td>
                                                 </tr>
                                                 @endforelse
                                             </tbody>

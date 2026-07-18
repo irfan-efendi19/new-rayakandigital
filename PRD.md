@@ -1,28 +1,28 @@
-# PRODUCT REQUIREMENT DOCUMENT (PRD)
+# PRODUCT REQUIREMENT DOCUMENT (PRD) ADDENDUM
 
-## MODUL: HYBRID QRIS PAYMENT SYSTEM (DYNAMIC & STATIC COEXISTENCE)
+## MODUL: DYNAMIC THEME SELECTOR - LAYAR SAPA & CHECK-IN TAMU
 
-**Versi:** 22.0 (Spesifikasi Integrasi QRIS Dinamis Verssache & Media Library Filament v3)  
-**Tanggal:** 14 Juli 2026  
+**Versi:** 23.0 (Multi-Theme Welcoming Screen Configuration)  
+**Tanggal:** 18 Juli 2026  
 **Status:** Approved  
 **Author:** Mochammad Irfan Efendi
 
 ---
 
-## 1. STRATEGI ALUR KERJA (PAYMENT WORKFLOW ENGINE)
+## 1. PENGERTIAN & ALUR FITUR (CONCEPT OVERVIEW)
 
-Sistem akan menentukan metode pembayaran QRIS yang disajikan kepada pengguna berdasarkan konfigurasi transaksi:
+**Layar Sapa (Welcoming Screen)** adalah halaman khusus penanda kehadiran fisik di lokasi acara. Ketika petugas pendaftaran memindai QR Code tamu atau menginput nama mereka pada sistem _Check-In_, monitor besar yang menghadap ke tamu akan otomatis berubah menampilkan:
 
-1. **Skenario QRIS Statis (Manual Transfer):** Pengguna melihat gambar QRIS milik platform yang diunggah Admin. Pengguna harus mengunggah bukti transfer manual setelah melakukan pembayaran.
-2. **Skenario QRIS Dinamis (Auto-Generated):** Sistem menggunakan payload string QRIS statis milik Anda (biasanya didapatkan dari merchant acquirer) kemudian menyuntikkan nominal tagihan secara dinamis menggunakan algoritma CRC16 dari library `verssache/qris-dinamis`. Pengguna cukup memindai, dan nominal transfer akan terisi otomatis di aplikasi perbankan mereka.
+1. **Animasi Selamat Datang:** Menyebut nama tamu secara personal (Contoh: _"Selamat Datang, Bapak Ahmad & Keluarga"_).
+2. **Slideshow Doa & Ucapan:** Menampilkan kompilasi ucapan/doa dari tamu tersebut yang sebelumnya telah mereka kirimkan melalui undangan digital.
+
+Melalui penambahan modul ini, User dapat menentukan **kombinasi tema visual** yang selaras dengan dekorasi fisik gedung pernikahan mereka (misal: _Rustic, Minimalist Typography, atau Dark Elegant_).
 
 ---
 
-## 2. BLUEPRINT DATABASES & CONFIGURATION
+## 2. REKAYASA DATABASE (`invitation_themes`)
 
-### 2.1 Migrasi Data Tabel Pengaturan (`payment_settings`)
-
-Tabel ini digunakan untuk menyimpan payload QRIS Master (untuk di-generate dinamis) serta file gambar QRIS Statis.
+Kita akan menambahkan tabel baru atau memodifikasi pengaturan layar sapa pada basis data agar mampu menyimpan variasi tema yang dipilih.
 
 ```php
 use Illuminate\Database\Migrations\Migration;
@@ -33,19 +33,19 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('payment_settings', function (Blueprint $table) {$table->id();
-            // Jalur Dinamis (Verssache Library)
-            $table->string('qris_merchant_name')->default('PLATFORM ID');$table->text('qris_master_payload')->nullable(); // Isi teks/string dari QRIS statis Anda
+        Schema::create('screen_settings', function (Blueprint $table) {
+            $table->id();$table->foreignId('invitation_id')->constrained()->onDelete('cascade');
 
-            // Jalur Statis (Manual File Upload)
-            $table->string('qris_static_image')->nullable(); // Path file gambar QRIS
-            $table->boolean('is_dynamic_active')->default(true); // Toggle penentu metode utama$table->timestamps();
+            // Konfigurasi Fitur Layar Sapa
+            $table->string('active_theme')->default('minimalist'); // default theme
+            $table->json('selected_themes_pool')->nullable(); // Menyimpan daftar tema yang diaktifkan user$table->integer('slideshow_speed')->default(5); // Kecepatan transisi dalam detik
+            $table->boolean('show_rsvp_wishes')->default(true); // Tampilkan ucapan/doa tamu di layar$table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('payment_settings');
+        Schema::dropIfExists('screen_settings');
     }
 };
 ```

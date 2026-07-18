@@ -382,6 +382,9 @@ $daysLeft = $invitation->expires_at ? (int) max(0, now()->diffInDays($invitation
                                                             Jumlah (Pax)</th>
                                                         <th scope="col"
                                                             class="px-6 py-3 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                                                            Pesan</th>
+                                                        <th scope="col"
+                                                            class="px-6 py-3 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
                                                             Waktu</th>
                                                         <th scope="col"
                                                             class="px-6 py-3 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
@@ -406,6 +409,8 @@ $daysLeft = $invitation->expires_at ? (int) max(0, now()->diffInDays($invitation
                                                             </td>
                                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-600 dark:text-neutral-400 font-mono"
                                                                 x-text="rsvp.pax" data-label="Jumlah (Pax)"></td>
+                                                            <td class="px-6 py-4 text-sm text-neutral-500 dark:text-neutral-400 max-w-[200px] truncate"
+                                                                x-text="rsvp.message || '-'" data-label="Pesan"></td>
                                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400 font-mono"
                                                                 x-text="rsvp.created_at" data-label="Waktu"></td>
                                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400 font-mono"

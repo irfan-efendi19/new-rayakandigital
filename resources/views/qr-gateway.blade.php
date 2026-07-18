@@ -124,6 +124,17 @@
                             </p>
                         </div>
 
+                        <div>
+                            <label for="message"
+                                class="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-1.5">
+                                Pesan untuk Pengantin
+                            </label>
+                            <textarea name="message" id="message" rows="3" maxlength="500"
+                                placeholder="Tuliskan ucapan atau doa untuk pengantin..."
+                                class="block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 text-sm dark:bg-secondary-700 dark:text-neutral-200 resize-none"></textarea>
+                            <p class="text-xs text-neutral-400 dark:text-neutral-500 mt-1">Doa dan ucapan untuk kedua mempelai (opsional)</p>
+                        </div>
+
                         <button type="submit" id="submit-btn"
                             class="w-full py-3 px-6 bg-gradient-to-r from-primary to-primary-600 text-white rounded-xl font-semibold text-sm shadow-md hover:shadow-lg hover:scale-[1.01] active:scale-[0.99] transition-all disabled:opacity-50 disabled:cursor-not-allowed">
                             <span id="btn-text">Kirim Konfirmasi</span>
@@ -151,7 +162,7 @@
                     </div>
                     <h2 class="font-heading text-xl font-bold text-secondary-800 dark:text-neutral-100 mb-2">Terima
                         Kasih!</h2>
-                    <p class="text-neutral-600 dark:text-neutral-400 text-sm mb-6">Konfirmasi kehadiran Anda telah
+                    <p class="text-neutral-600 dark:text-neutral-400 text-sm mb-6">Konfirmasi kehadiran dan pesan Anda telah
                         diterima.</p>
                     <button type="button" onclick="window.location.reload()"
                         class="inline-flex items-center gap-2 px-6 py-2.5 bg-primary-50 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 rounded-xl text-sm font-semibold hover:bg-primary-100 dark:hover:bg-primary-900/70 transition">
@@ -248,6 +259,7 @@
                 formData.append('guest_name', document.getElementById('guest_name').value);
                 formData.append('attendance', selectedAttendance.value);
                 formData.append('pax', selectedAttendance.value === 'attending' ? paxInput.value : 1);
+                formData.append('message', document.getElementById('message').value);
                 formData.append('_token', document.querySelector('meta[name="csrf-token"]').content);
 
                 fetch('{{ route("rsvp.store", $invitation) }}', {
