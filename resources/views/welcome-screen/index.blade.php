@@ -18,47 +18,16 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     @php
-        $themeName = str_replace('themes.', '', $invitation->theme ?? 'modern');
+        $selectedTheme = $screen->selected_theme ?? 'minimal-clean';
     @endphp
 
-    <style>
-        /* Theme Variables */
-        @if($themeName === 'elegant')
-        :root {
-            --font-heading: 'Cormorant Garamond', serif;
-            --font-body: 'Inter', sans-serif;
-            --bg-gradient: linear-gradient(135deg, #2a151b 0%, #1c0c11 50%, #100407 100%);
-            --accent-color: #e5c1a7;
-            --accent-gradient: linear-gradient(135deg, #e5c1a7 0%, #d8a280 50%, #e5c1a7 100%);
-            --text-primary: #fff;
-            --text-secondary: rgba(229, 193, 167, 0.7);
-            --border-color: rgba(229, 193, 167, 0.25);
-        }
-        @elseif($themeName === 'jawa')
-        :root {
-            --font-heading: 'Playfair Display', serif;
-            --font-body: 'Inter', sans-serif;
-            --bg-gradient: linear-gradient(135deg, #0d1b15 0%, #07100c 50%, #030504 100%);
-            --accent-color: #a8c3a0;
-            --accent-gradient: linear-gradient(135deg, #c2dcc0 0%, #a8c3a0 50%, #8ca684 100%);
-            --text-primary: #fff;
-            --text-secondary: rgba(168, 195, 160, 0.7);
-            --border-color: rgba(168, 195, 160, 0.25);
-        }
-        @else {{-- modern / default --}}
-        :root {
-            --font-heading: 'Playfair Display', serif;
-            --font-body: 'Inter', sans-serif;
-            --bg-gradient: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #16213e 100%);
-            --accent-color: #fda085;
-            --accent-gradient: linear-gradient(135deg, #f6d365 0%, #fda085 50%, #f6d365 100%);
-            --text-primary: #fff;
-            --text-secondary: rgba(255, 255, 255, 0.5);
-            --border-color: rgba(255, 255, 255, 0.15);
-        }
-        @endif
+    @if($themeHtmlContent)
+        {!! $themeHtmlContent !!}
+    @endif
 
+    <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+
 
         body {
             font-family: var(--font-body), sans-serif;
@@ -70,7 +39,7 @@
             align-items: center;
             justify-content: center;
             user-select: none;
-            background-color: #0f0f1a;
+            background: var(--bg-gradient);
         }
 
         /* Decorative background particles */
@@ -86,11 +55,26 @@
         }
 
         /* Particle Styles by Theme */
-        .particle-elegant {
-            background: radial-gradient(circle, #ffc2d1 0%, #ff85a2 100%);
-            border-radius: 50% 0 50% 50%; /* Petal shape */
+        .particle-minimal-clean {
+            background: radial-gradient(circle, #fff 0%, #e2d9c8 70%, transparent 100%);
+            border-radius: 50%;
+            opacity: 0.4;
+            animation: float-sparkle 25s infinite linear;
+        }
+
+        .particle-rustic-floral {
+            background: linear-gradient(135deg, #c3d1be 0%, #8fa882 100%);
+            border-radius: 100% 0; /* Leaf shape */
             opacity: 0.5;
-            animation: float-petal 25s infinite linear;
+            animation: float-leaf 22s infinite ease-in-out;
+        }
+
+        .particle-modern-dark {
+            background: radial-gradient(circle, #fff 0%, #f6d365 70%, transparent 100%);
+            box-shadow: 0 0 10px #f6d365, 0 0 20px #fda085;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float-sparkle 18s infinite linear;
         }
 
         @keyframes float-petal {
@@ -100,27 +84,12 @@
             100% { transform: translateY(-100vh) rotate(360deg) translateX(50px); opacity: 0; }
         }
 
-        .particle-jawa {
-            background: linear-gradient(135deg, #c2dcc0 0%, #6e9465 100%);
-            border-radius: 100% 0; /* Leaf shape */
-            opacity: 0.4;
-            animation: float-leaf 22s infinite ease-in-out;
-        }
-
         @keyframes float-leaf {
             0% { transform: translateY(100vh) rotate(0deg) translateX(0); opacity: 0; }
             10% { opacity: 0.6; }
             50% { transform: translateY(50vh) rotate(180deg) translateX(40px); }
             90% { opacity: 0.6; }
             100% { transform: translateY(-100vh) rotate(720deg) translateX(-40px); opacity: 0; }
-        }
-
-        .particle-modern {
-            background: radial-gradient(circle, #fff 0%, #f6d365 70%, transparent 100%);
-            box-shadow: 0 0 10px #f6d365, 0 0 20px #fda085;
-            border-radius: 50%;
-            opacity: 0.3;
-            animation: float-sparkle 18s infinite linear;
         }
 
         @keyframes float-sparkle {
@@ -151,6 +120,7 @@
             border-style: solid;
             z-index: 4;
             transition: all 0.3s ease;
+            border-color: var(--border-color);
         }
         .corner-tl { top: 30px; left: 30px; border-width: 2px 0 0 2px; }
         .corner-tr { top: 30px; right: 30px; border-width: 2px 2px 0 0; }
@@ -158,62 +128,43 @@
         .corner-br { bottom: 30px; right: 30px; border-width: 0 2px 2px 0; }
 
         /* Ornate ornaments based on themes */
-        .corner-elegant {
-            border-color: rgba(229, 193, 167, 0.4);
-            border-width: 1px 0 0 1px;
-        }
-        .corner-tr.corner-elegant { border-width: 1px 1px 0 0; }
-        .corner-bl.corner-elegant { border-width: 0 0 1px 1px; }
-        .corner-br.corner-elegant { border-width: 0 1px 1px 0; }
-
-        .corner-elegant::after {
-            content: '✿';
+        .corner-minimal-clean::after {
+            content: '✦';
             position: absolute;
-            font-size: 1.25rem;
-            color: #e5c1a7;
-            opacity: 0.6;
+            font-size: 1rem;
+            color: var(--accent-color);
+            opacity: 0.8;
             transition: transform 0.3s ease;
         }
-        .corner-tl.corner-elegant::after { top: -15px; left: -15px; }
-        .corner-tr.corner-elegant::after { top: -15px; right: -15px; }
-        .corner-bl.corner-elegant::after { bottom: -15px; left: -15px; }
-        .corner-br.corner-elegant::after { bottom: -15px; right: -15px; }
+        .corner-tl.corner-minimal-clean::after { top: -12px; left: -10px; }
+        .corner-tr.corner-minimal-clean::after { top: -12px; right: -10px; }
+        .corner-bl.corner-minimal-clean::after { bottom: -12px; left: -10px; }
+        .corner-br.corner-minimal-clean::after { bottom: -12px; right: -10px; }
 
-        .corner-jawa {
-            border-color: rgba(168, 195, 160, 0.4);
-            border-width: 1px 0 0 1px;
-        }
-        .corner-tr.corner-jawa { border-width: 1px 1px 0 0; }
-        .corner-bl.corner-jawa { border-width: 0 0 1px 1px; }
-        .corner-br.corner-jawa { border-width: 0 1px 1px 0; }
-
-.corner-jawa::after {
+        .corner-rustic-floral::after {
             content: '🌿';
             position: absolute;
             font-size: 1.25rem;
-            opacity: 0.6;
+            opacity: 0.8;
         }
-        .corner-tl.corner-jawa::after { top: -15px; left: -15px; }
-        .corner-tr.corner-jawa::after { top: -15px; right: -15px; }
-        .corner-bl.corner-jawa::after { bottom: -15px; left: -15px; }
-        .corner-br.corner-jawa::after { bottom: -15px; right: -15px; }
+        .corner-tl.corner-rustic-floral::after { top: -15px; left: -15px; }
+        .corner-tr.corner-rustic-floral::after { top: -15px; right: -15px; }
+        .corner-bl.corner-rustic-floral::after { bottom: -15px; left: -15px; }
+        .corner-br.corner-rustic-floral::after { bottom: -15px; right: -15px; }
 
-        .corner-modern {
-            border-color: rgba(254, 160, 133, 0.4);
-        }
-        .corner-modern::after {
+        .corner-modern-dark::after {
             content: '';
             position: absolute;
-            width: 6px;
-            height: 6px;
-            background-color: #fda085;
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-color);
             border-radius: 50%;
-            box-shadow: 0 0 8px #fda085;
+            box-shadow: 0 0 10px var(--accent-color);
         }
-        .corner-tl.corner-modern::after { top: -3px; left: -3px; }
-        .corner-tr.corner-modern::after { top: -3px; right: -3px; }
-        .corner-bl.corner-modern::after { bottom: -3px; left: -3px; }
-        .corner-br.corner-modern::after { bottom: -3px; right: -3px; }
+        .corner-tl.corner-modern-dark::after { top: -4px; left: -4px; }
+        .corner-tr.corner-modern-dark::after { top: -4px; right: -4px; }
+        .corner-bl.corner-modern-dark::after { bottom: -4px; left: -4px; }
+        .corner-br.corner-modern-dark::after { bottom: -4px; right: -4px; }
 
         /* Idle state */
         .idle-content { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
@@ -235,7 +186,7 @@
             font-family: var(--font-heading), serif;
             font-size: clamp(2.5rem, 5vw, 5rem);
             font-weight: 700;
-            color: rgba(255,255,255,0.9);
+            color: var(--text-primary);
             line-height: 1.2;
             letter-spacing: 0.02em;
         }
@@ -293,7 +244,7 @@
 
         .guest-message {
             font-size: clamp(1.1rem, 1.8vw, 1.6rem);
-            color: rgba(255,255,255,0.7);
+            color: var(--text-secondary);
             font-weight: 300;
         }
 
@@ -403,6 +354,92 @@
             letter-spacing: 0.05em;
         }
 
+        /* Wish Wall Container & Ticker */
+        .wish-wall-container {
+            position: fixed;
+            bottom: 60px;
+            left: 5%;
+            width: 90%;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .wish-wall-title {
+            align-self: center;
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--accent-color);
+            font-weight: 600;
+            opacity: 0.8;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .wish-wall-title::before, .wish-wall-title::after {
+            content: '';
+            display: inline-block;
+            width: 15px;
+            height: 1px;
+            background-color: var(--border-color);
+        }
+
+        .wish-wall-ticker {
+            overflow: hidden;
+            white-space: nowrap;
+            width: 100%;
+            position: relative;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            border-radius: 50px;
+            padding: 0.75rem 2rem;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .wish-wall-track {
+            display: inline-flex;
+            animation: scroll-ticker 30s linear infinite;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .wish-wall-track:hover {
+            animation-play-state: paused;
+        }
+
+        .wish-card {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--card-text);
+        }
+
+        .wish-author {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--accent-color);
+        }
+
+        .wish-text {
+            font-weight: 400;
+            font-size: 0.9rem;
+            opacity: 0.95;
+            max-width: 350px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        @keyframes scroll-ticker {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
         /* Hide scrollbar */
         ::-webkit-scrollbar { display: none; }
     </style>
@@ -445,20 +482,11 @@
         </template>
     </div>
 
-    {{-- Dark Overlay --}}
-    <div class="screen-overlay" style="
-        position: fixed;
-        inset: 0;
-        background-color: black;
-        opacity: {{ ($invitation->screen_overlay_opacity ?? 50) / 100 }};
-        z-index: 2;
-    "></div>
-
     {{-- Corner decorations --}}
-    <div class="corner corner-tl corner-{{ $themeName }}"></div>
-    <div class="corner corner-tr corner-{{ $themeName }}"></div>
-    <div class="corner corner-bl corner-{{ $themeName }}"></div>
-    <div class="corner corner-br corner-{{ $themeName }}"></div>
+    <div class="corner corner-tl corner-{{ $selectedTheme }}"></div>
+    <div class="corner corner-tr corner-{{ $selectedTheme }}"></div>
+    <div class="corner corner-bl corner-{{ $selectedTheme }}"></div>
+    <div class="corner corner-br corner-{{ $selectedTheme }}"></div>
 
     {{-- Countdown bar --}}
     <div class="countdown-bar"
@@ -482,7 +510,7 @@
                 </svg>
             </div>
             <div class="idle-decoration"></div>
-            <div class="idle-title">Selamat Datang</div>
+            <div class="idle-title">{{ $screen->custom_title ?: 'Selamat Datang' }}</div>
             <div class="idle-subtitle">
                 {{ $invitation->screen_bride_names ?: $invitation->couple_nickname }}
             </div>
@@ -515,6 +543,24 @@
             <div class="guest-order" x-text="activeGuest && activeGuest.checkin_order ? 'Tamu ke-' + activeGuest.checkin_order : ''"></div>
         </div>
     </div>
+
+    @if($screen->show_wishes_wall && $wishes->count() > 0)
+        <div class="wish-wall-container" x-show="!isDisplaying" x-transition:enter="transition-opacity duration-500" x-transition:leave="transition-opacity duration-500">
+            <div class="wish-wall-title">
+                <span>Doa & Ucapan Tamu</span>
+            </div>
+            <div class="wish-wall-ticker">
+                <div class="wish-wall-track">
+                    @foreach($wishes->concat($wishes) as $wish)
+                        <div class="wish-card">
+                            <span class="wish-author">{{ $wish->guest_name }}</span>
+                            <span class="wish-text">“{{ $wish->message }}”</span>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    @endif
 
     <div class="screen-footer">{{ config('app.name') }}</div>
 
@@ -668,13 +714,13 @@
                 initParticles() {
                     const container = document.getElementById('particles');
                     if (!container) return;
-                    const theme = @json($themeName);
+                    const theme = @json($selectedTheme);
                     for (let i = 0; i < 30; i++) {
                         const span = document.createElement('span');
                         span.className = 'particle-' + theme;
                         span.style.left = Math.random() * 100 + '%';
                         // Petals and leaves can be larger than single pixel spark particles
-                        span.style.width = (Math.random() * (theme === 'elegant' || theme === 'jawa' ? 8 : 4) + 4) + 'px';
+                        span.style.width = (Math.random() * (theme === 'rustic-floral' ? 8 : 4) + 4) + 'px';
                         span.style.height = span.style.width;
                         span.style.animationDelay = Math.random() * 20 + 's';
                         span.style.animationDuration = (Math.random() * 15 + 15) + 's';

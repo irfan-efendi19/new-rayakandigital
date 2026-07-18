@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Database\Factories\InvitationFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Invitation extends Model
 {
@@ -135,7 +137,6 @@ class Invitation extends Model
         'quote_source',
         'screen_bride_names',
         'screen_background_image',
-        'screen_overlay_opacity',
         'bride_groom_order',
     ];
 
@@ -164,7 +165,6 @@ class Invitation extends Model
             'show_quote' => 'boolean',
             'show_video' => 'boolean',
             'slug_change_count' => 'integer',
-            'screen_overlay_opacity' => 'integer',
         ];
     }
 
@@ -206,6 +206,11 @@ class Invitation extends Model
     public function screenGalleries(): HasMany
     {
         return $this->hasMany(ScreenGallery::class)->orderBy('sort_order');
+    }
+
+    public function screen(): HasOne
+    {
+        return $this->hasOne(InvitationScreen::class);
     }
 
     public function wishes(): HasMany
@@ -507,8 +512,8 @@ class Invitation extends Model
         if ($displayEvents->isNotEmpty()) {
             $lines = [];
             foreach ($displayEvents as $event) {
-                $date = $event->event_date ? \Carbon\Carbon::parse($event->event_date)->translatedFormat('l, d F Y') : '';
-                $time = $event->start_time ? \Carbon\Carbon::parse($event->start_time)->format('H:i') : '';
+                $date = $event->event_date ? Carbon::parse($event->event_date)->translatedFormat('l, d F Y') : '';
+                $time = $event->start_time ? Carbon::parse($event->start_time)->format('H:i') : '';
                 $lines[] = "• {$event->event_title} - {$date} {$time}";
             }
             $eventList = implode("\n", $lines);

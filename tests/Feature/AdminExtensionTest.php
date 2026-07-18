@@ -41,12 +41,12 @@ test('free tier user invitation has expires_at set dynamically based on system c
         'theme' => 'elegant',
     ];
 
-    $this->actingAs($user)
-        ->post(route('dashboard.invitations.store'), $invitationData)
-        ->assertRedirect(route('dashboard'));
+    $response = $this->actingAs($user)
+        ->post(route('dashboard.invitations.store'), $invitationData);
 
     $invitation = Invitation::where('title', 'My Wedding Dream')->first();
     expect($invitation)->not->toBeNull();
+    $response->assertRedirect(route('dashboard.invitations.show', $invitation));
     expect($invitation->expires_at)->not->toBeNull();
 
     $expectedExpiration = now()->addDays(5);

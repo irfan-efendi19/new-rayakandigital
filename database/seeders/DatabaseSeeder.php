@@ -2,6 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Addon;
+use App\Models\PreviewData;
+use App\Models\SystemConfig;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -13,7 +16,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // System Config
-        \App\Models\SystemConfig::firstOrCreate(
+        SystemConfig::firstOrCreate(
             ['id' => 1],
             [
                 'demo_duration_days' => 3,
@@ -22,7 +25,7 @@ class DatabaseSeeder extends Seeder
         );
 
         // Addons
-        \App\Models\Addon::firstOrCreate(
+        Addon::firstOrCreate(
             ['slug' => 'addon-digital-gift'],
             [
                 'name' => 'Amplop Digital',
@@ -33,7 +36,7 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        \App\Models\Addon::firstOrCreate(
+        Addon::firstOrCreate(
             ['slug' => 'addon-custom-music'],
             [
                 'name' => 'Musik Kustom',
@@ -65,9 +68,9 @@ class DatabaseSeeder extends Seeder
         );
 
         // Preview Data (default dummy for theme preview)
-        \App\Models\PreviewData::firstOrCreate(
+        PreviewData::firstOrCreate(
             ['id' => 1],
-            \App\Models\PreviewData::defaultData()
+            PreviewData::defaultData()
         );
 
         $this->call(ThemeSeeder::class);
@@ -75,5 +78,7 @@ class DatabaseSeeder extends Seeder
         $this->call(PackageSeeder::class);
 
         $this->call(QuoteTemplateSeeder::class);
+
+        $this->call(ScreenPresetSeeder::class);
     }
 }

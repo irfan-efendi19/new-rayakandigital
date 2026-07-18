@@ -4,7 +4,9 @@ use App\Models\Guest;
 use App\Models\Invitation;
 use App\Models\Package;
 use App\Models\PlatformFeature;
+use App\Models\ScreenPreset;
 use App\Models\User;
+use App\Models\Wish;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -13,6 +15,13 @@ uses(RefreshDatabase::class);
 
 beforeEach(function () {
     Storage::fake('public');
+
+    // Seed screen presets so theme validation works
+    ScreenPreset::insert([
+        ['name' => 'Minimalist Typography', 'slug' => 'minimal-clean', 'description' => null, 'thumbnail_image' => null, 'html_content' => '<style>:root{--font-body:"Inter",sans-serif}</style>', 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
+        ['name' => 'Rustic Floral', 'slug' => 'rustic-floral', 'description' => null, 'thumbnail_image' => null, 'html_content' => '<style>:root{--font-body:"Inter",sans-serif}</style>', 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
+        ['name' => 'Modern Dark', 'slug' => 'modern-dark', 'description' => null, 'thumbnail_image' => null, 'html_content' => '<style>:root{--font-body:"Inter",sans-serif}</style>', 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
+    ]);
 
     // Seed packages and features
     $this->feature = PlatformFeature::create([
@@ -71,23 +80,30 @@ test('owner can update welcome screen settings', function () {
     $response = $this->actingAs($this->user)
         ->post(route('dashboard.welcome-screen.settings.update', $this->invitation), [
             'screen_bride_names' => 'Romeo & Juliet',
-            'screen_overlay_opacity' => 75,
+            'selected_theme' => 'rustic-floral',
+            'custom_title' => 'Selamat Datang di Resepsi Kami',
+            'show_wishes_wall' => '1',
         ]);
 
     $response->assertRedirect();
 
     $this->invitation->refresh();
     expect($this->invitation->screen_bride_names)->toBe('Romeo & Juliet');
-    expect($this->invitation->screen_overlay_opacity)->toBe(75);
+
+    $screen = $this->invitation->screen;
+    expect($screen)->not->toBeNull();
+    expect($screen->selected_theme)->toBe('rustic-floral');
+    expect($screen->custom_title)->toBe('Selamat Datang di Resepsi Kami');
+    expect($screen->show_wishes_wall)->toBeTrue();
 });
 
-test('welcome screen settings validation rules', function () {
+test('welcome screen settings validates selected theme', function () {
     $response = $this->actingAs($this->user)
         ->post(route('dashboard.welcome-screen.settings.update', $this->invitation), [
-            'screen_overlay_opacity' => 150, // invalid: max 100
+            'selected_theme' => 'invalid-theme',
         ]);
 
-    $response->assertSessionHasErrors(['screen_overlay_opacity']);
+    $response->assertSessionHasErrors(['selected_theme']);
 });
 
 test('owner can upload background image', function () {
@@ -95,7 +111,6 @@ test('owner can upload background image', function () {
 
     $response = $this->actingAs($this->user)
         ->post(route('dashboard.welcome-screen.settings.update', $this->invitation), [
-            'screen_overlay_opacity' => 50,
             'screen_background_image' => $file,
         ]);
 
@@ -111,7 +126,6 @@ test('owner can remove background image', function () {
     $file = UploadedFile::fake()->image('background.jpg');
     $this->actingAs($this->user)
         ->post(route('dashboard.welcome-screen.settings.update', $this->invitation), [
-            'screen_overlay_opacity' => 50,
             'screen_background_image' => $file,
         ]);
 
@@ -122,7 +136,6 @@ test('owner can remove background image', function () {
     // Remove it
     $response = $this->actingAs($this->user)
         ->post(route('dashboard.welcome-screen.settings.update', $this->invitation), [
-            'screen_overlay_opacity' => 50,
             'remove_background' => true,
         ]);
 
@@ -138,7 +151,6 @@ test('owner can upload multiple gallery photos', function () {
 
     $response = $this->actingAs($this->user)
         ->post(route('dashboard.welcome-screen.settings.update', $this->invitation), [
-            'screen_overlay_opacity' => 50,
             'screen_gallery_photos' => [$photo1, $photo2],
         ]);
 
@@ -159,7 +171,6 @@ test('owner can delete a gallery photo', function () {
 
     $this->actingAs($this->user)
         ->post(route('dashboard.welcome-screen.settings.update', $this->invitation), [
-            'screen_overlay_opacity' => 50,
             'screen_gallery_photos' => [$photo],
         ]);
 
@@ -180,7 +191,6 @@ test('owner cannot delete gallery photo of another invitation', function () {
 
     $this->actingAs($this->user)
         ->post(route('dashboard.welcome-screen.settings.update', $this->invitation), [
-            'screen_overlay_opacity' => 50,
             'screen_gallery_photos' => [$photo],
         ]);
 
@@ -245,4 +255,62 @@ test('get latest checkin endpoint filters by since parameter', function () {
     $guests = $response->json('guests');
     expect(count($guests))->toBe(1);
     expect($guests[0]['name'])->toBe('New Guest');
+});
+
+test('welcome screen initializes default screen settings on index access', function () {
+    expect($this->invitation->screen)->toBeNull();
+
+    $response = $this->actingAs($this->user)
+        ->get(route('dashboard.welcome-screen.index', $this->invitation));
+
+    $response->assertSuccessful();
+
+    $this->invitation->refresh();
+    expect($this->invitation->screen)->not->toBeNull();
+    expect($this->invitation->screen->selected_theme)->toBe('minimal-clean');
+    expect($this->invitation->screen->show_wishes_wall)->toBeTrue();
+});
+
+test('welcome screen displays custom title and wishes wall when configured', function () {
+    $this->invitation->screen()->create([
+        'selected_theme' => 'rustic-floral',
+        'custom_title' => 'Titel Kustom Kita',
+        'show_wishes_wall' => true,
+    ]);
+
+    // Create a wish
+    $this->invitation->wishes()->create([
+        'guest_name' => 'Tamu Istimewa',
+        'message' => 'Semoga bahagia selalu!',
+    ]);
+
+    $response = $this->actingAs($this->user)
+        ->get(route('dashboard.welcome-screen.index', $this->invitation));
+
+    $response->assertSuccessful()
+        ->assertSee('Titel Kustom Kita')
+        ->assertSee('Tamu Istimewa')
+        ->assertSee('Semoga bahagia selalu!');
+});
+
+test('welcome screen does not display wishes wall when disabled', function () {
+    $this->invitation->screen()->create([
+        'selected_theme' => 'rustic-floral',
+        'custom_title' => 'Titel Kustom Kita',
+        'show_wishes_wall' => false,
+    ]);
+
+    // Create a wish
+    $this->invitation->wishes()->create([
+        'guest_name' => 'Tamu Istimewa',
+        'message' => 'Semoga bahagia selalu!',
+    ]);
+
+    $response = $this->actingAs($this->user)
+        ->get(route('dashboard.welcome-screen.index', $this->invitation));
+
+    $response->assertSuccessful()
+        ->assertSee('Titel Kustom Kita')
+        ->assertDontSee('Tamu Istimewa')
+        ->assertDontSee('Semoga bahagia selalu!');
 });

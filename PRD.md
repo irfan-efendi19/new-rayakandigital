@@ -1,51 +1,39 @@
 # PRODUCT REQUIREMENT DOCUMENT (PRD) ADDENDUM
 
-## MODUL: DYNAMIC THEME SELECTOR - LAYAR SAPA & CHECK-IN TAMU
+## MODUL: LAYAR SAPA - DYNAMIC ZIP TEMPLATE UPLOADER ENGINE
 
-**Versi:** 23.0 (Multi-Theme Welcoming Screen Configuration)  
-**Tanggal:** 18 Juli 2026  
+**Versi:** 6.0 (Sistem Unggah Berkas ZIP dari Admin Filament & Rendering Dinamis)  
+**Tanggal:** 19 Juli 2026  
 **Status:** Approved  
 **Author:** Mochammad Irfan Efendi
 
 ---
 
-## 1. PENGERTIAN & ALUR FITUR (CONCEPT OVERVIEW)
+## 1. STRATEGIC OVERVIEW
 
-**Layar Sapa (Welcoming Screen)** adalah halaman khusus penanda kehadiran fisik di lokasi acara. Ketika petugas pendaftaran memindai QR Code tamu atau menginput nama mereka pada sistem _Check-In_, monitor besar yang menghadap ke tamu akan otomatis berubah menampilkan:
+### 1.1 Perubahan Mekanisme Distribusi Tema
 
-1. **Animasi Selamat Datang:** Menyebut nama tamu secara personal (Contoh: _"Selamat Datang, Bapak Ahmad & Keluarga"_).
-2. **Slideshow Doa & Ucapan:** Menampilkan kompilasi ucapan/doa dari tamu tersebut yang sebelumnya telah mereka kirimkan melalui undangan digital.
+- **Lama (Fase 5.0):** Admin harus menyalin dan menempelkan ribuan baris kode HTML murni ke dalam kotak teks Filament. Rentan terjadi kesalahan format tanda kutip atau karakter rusak (_code escape error_).
+- **Baru (Fase 6.0):** Developer/Desainer menyusun struktur tema di komputer lokal mereka (`index.html`, `style.css`, `app.js`, dan folder gambar pendukung). Struktur ini dibungkus menjadi file **`.zip`** dan diunggah langsung melalui komponen File Upload di Filament. Sistem backend Laravel akan mengekstrak berkas tersebut secara otomatis ke dalam ruang penyimpanan publik (_Storage Disk_).
 
-Melalui penambahan modul ini, User dapat menentukan **kombinasi tema visual** yang selaras dengan dekorasi fisik gedung pernikahan mereka (misal: _Rustic, Minimalist Typography, atau Dark Elegant_).
+### 1.2 Manfaat Utama
+
+- **Kerapian Struktur Kode:** Proses _coding_ tetap dilakukan di kode editor lokal (VS Code, dll) dengan fitur _auto-complete_ dan struktur direktori yang rapi.
+- **Dukungan Aset Lokal:** Tema dapat membawa aset bawaan mereka sendiri (seperti font khusus, gambar dekorasi floral, atau ikon svg) di dalam satu paket zip tanpa bergantung pada tautan luar (_external CDN dependency_).
 
 ---
 
-## 2. REKAYASA DATABASE (`invitation_themes`)
+## 2. STRUKTUR BERKAS TEMPLATE LOKAL (STANDARISASI)
 
-Kita akan menambahkan tabel baru atau memodifikasi pengaturan layar sapa pada basis data agar mampu menyimpan variasi tema yang dipilih.
+Setiap paket template `.zip` yang dibuat oleh pengembang wajib mematuhi arsitektur folder berikut sebelum diunggah ke admin Filament:
 
-```php
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
-
-return new class extends Migration
-{
-    public function up(): void
-    {
-        Schema::create('screen_settings', function (Blueprint $table) {
-            $table->id();$table->foreignId('invitation_id')->constrained()->onDelete('cascade');
-
-            // Konfigurasi Fitur Layar Sapa
-            $table->string('active_theme')->default('minimalist'); // default theme
-            $table->json('selected_themes_pool')->nullable(); // Menyimpan daftar tema yang diaktifkan user$table->integer('slideshow_speed')->default(5); // Kecepatan transisi dalam detik
-            $table->boolean('show_rsvp_wishes')->default(true); // Tampilkan ucapan/doa tamu di layar$table->timestamps();
-        });
-    }
-
-    public function down(): void
-    {
-        Schema::dropIfExists('screen_settings');
-    }
-};
+```text
+nama-tema.zip/
+├── index.html          <-- File utama (wajib menggunakan placeholder tags)
+├── css/
+│   └── style.css       <-- File styling khusus tema
+├── js/
+│   └── main.js         <-- Script animasi/interaksi live-refresh
+└── assets/
+    └── bg-pattern.png  <-- Ornamen grafis / background pendukung
 ```

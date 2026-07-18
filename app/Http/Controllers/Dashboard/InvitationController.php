@@ -11,7 +11,6 @@ use App\Models\Theme;
 use App\Services\ImageCompressionService;
 use App\Services\QrWithLogoService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
@@ -28,6 +27,7 @@ class InvitationController extends Controller
         'verify-email', 'email', 'confirm-password', 'password', 'logout',
         'home', 'preview', 'storage', 'css', 'js', 'api',
     ];
+
     public function index(Request $request)
     {
         return redirect()->route('dashboard');
@@ -73,7 +73,7 @@ class InvitationController extends Controller
         $newSlug = $request->filled('slug') ? trim($request->slug) : null;
         if ($newSlug) {
             if (in_array($newSlug, self::RESERVED_SLUGS)) {
-                return back()->withErrors(['slug' => 'Tautan "' . $newSlug . '" tidak tersedia. Silakan gunakan tautan kustom lain.'])->withInput();
+                return back()->withErrors(['slug' => 'Tautan "'.$newSlug.'" tidak tersedia. Silakan gunakan tautan kustom lain.'])->withInput();
             }
             $exists = Invitation::where('slug', $newSlug)->exists();
             if ($exists) {
@@ -177,7 +177,7 @@ class InvitationController extends Controller
             ->selectRaw('COUNT(DISTINCT visitor_id) as count')
             ->value('count') ?? 0;
 
-        $rsvpData = $invitation->rsvps->map(fn($rsvp) => [
+        $rsvpData = $invitation->rsvps->map(fn ($rsvp) => [
             'id' => $rsvp->id,
             'guest_name' => $rsvp->guest_name,
             'attendance' => $rsvp->attendance,
@@ -189,7 +189,7 @@ class InvitationController extends Controller
         ])->values();
 
         if ($invitation->hasFeature('qr_rsvp_universal')) {
-            $rsvpUrl = url('/') . '/' . $invitation->slug . '?mode=scan_qr';
+            $rsvpUrl = url('/').'/'.$invitation->slug.'?mode=scan_qr';
 
             $qrData = app(QrWithLogoService::class)->generate($rsvpUrl);
             $qrCodeData = $qrData['data'];
@@ -207,7 +207,7 @@ class InvitationController extends Controller
             $qrStats = null;
         }
 
-        $guestsData = $invitation->guests->map(fn($guest) => [
+        $guestsData = $invitation->guests->map(fn ($guest) => [
             'id' => $guest->id,
             'name' => $guest->name,
             'attendance_status' => $guest->attendance_status,
@@ -216,7 +216,7 @@ class InvitationController extends Controller
             'created_at' => $guest->created_at->format('d/m/Y H:i'),
         ])->values();
 
-        $wishesData = $invitation->wishes->map(fn($wish) => [
+        $wishesData = $invitation->wishes->map(fn ($wish) => [
             'id' => $wish->id,
             'guest_name' => $wish->guest_name,
             'message' => $wish->message,
@@ -249,7 +249,7 @@ class InvitationController extends Controller
 
         $invitation->load(['rsvps']);
 
-        $rsvpUrl = url('/') . '/' . $invitation->slug . '?mode=scan_qr';
+        $rsvpUrl = url('/').'/'.$invitation->slug.'?mode=scan_qr';
 
         $qrData = app(QrWithLogoService::class)->generate($rsvpUrl);
         $qrCodeData = $qrData['data'];
@@ -330,7 +330,6 @@ class InvitationController extends Controller
                 'show_video' => 'boolean',
                 'youtube_url' => 'nullable|string|max:255',
                 'screen_bride_names' => 'nullable|string|max:255',
-                'screen_overlay_opacity' => 'nullable|integer|min:0|max:100',
                 'bride_groom_order' => 'nullable|in:male_first,female_first',
             ]);
         } catch (ValidationException $e) {
@@ -385,7 +384,7 @@ class InvitationController extends Controller
         if ($newSlug && $newSlug !== $invitation->slug) {
             // Check if slug conflicts with existing routes
             if (in_array($newSlug, self::RESERVED_SLUGS)) {
-                return back()->withErrors(['slug' => 'Tautan "' . $newSlug . '" tidak tersedia. Silakan gunakan tautan kustom lain.'])->withInput();
+                return back()->withErrors(['slug' => 'Tautan "'.$newSlug.'" tidak tersedia. Silakan gunakan tautan kustom lain.'])->withInput();
             }
 
             $exists = Invitation::where('slug', $newSlug)

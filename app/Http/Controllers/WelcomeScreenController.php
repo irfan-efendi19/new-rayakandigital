@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Invitation;
 use App\Models\ScreenGallery;
+use App\Models\ScreenPreset;
 use App\Services\ImageCompressionService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class WelcomeScreenController extends Controller
 {
@@ -23,8 +25,19 @@ class WelcomeScreenController extends Controller
 
         $firstEvent = $invitation->firstEvent();
         $screenGalleries = $invitation->screenGalleries()->get();
+        $screen = $invitation->screen()->firstOrCreate([], [
+            'selected_theme' => 'minimal-clean',
+            'show_wishes_wall' => true,
+        ]);
+        $screen->load('preset');
+        $wishes = $screen->show_wishes_wall
+            ? $invitation->wishes()->where('is_hidden', false)->latest()->get()
+            : collect();
 
-        return view('welcome-screen.index', compact('invitation', 'firstEvent', 'screenGalleries'));
+        $preset = $screen->preset;
+        $themeHtmlContent = $preset?->html_content;
+
+        return view('welcome-screen.index', compact('invitation', 'firstEvent', 'screenGalleries', 'screen', 'wishes', 'themeHtmlContent'));
     }
 
     public function settings(Invitation $invitation)
@@ -36,8 +49,13 @@ class WelcomeScreenController extends Controller
         }
 
         $screenGalleries = $invitation->screenGalleries()->get();
+        $screen = $invitation->screen()->firstOrCreate([], [
+            'selected_theme' => 'minimal-clean',
+            'show_wishes_wall' => true,
+        ]);
+        $presets = ScreenPreset::where('is_active', true)->orderBy('name')->get();
 
-        return view('dashboard.guestbook.settings', compact('invitation', 'screenGalleries'));
+        return view('dashboard.guestbook.settings', compact('invitation', 'screenGalleries', 'screen', 'presets'));
     }
 
     public function getLatestCheckIn(Request $request, Invitation $invitation): JsonResponse
@@ -85,18 +103,22 @@ class WelcomeScreenController extends Controller
     {
         Gate::authorize('update', $invitation);
 
+        $activePresetSlugs = ScreenPreset::where('is_active', true)->pluck('slug');
+
         $validated = $request->validate([
             'screen_bride_names' => 'nullable|string|max:255',
-            'screen_overlay_opacity' => 'required|integer|min:0|max:100',
+
             'screen_background_image' => 'nullable|image|max:10240',
             'screen_gallery_photos' => 'nullable|array',
             'screen_gallery_photos.*' => 'image|max:10240',
             'remove_background' => 'nullable|boolean',
+            'selected_theme' => ['nullable', 'string', Rule::in($activePresetSlugs)],
+            'custom_title' => 'nullable|string|max:255',
+            'show_wishes_wall' => 'nullable',
         ]);
 
         $updateData = [
             'screen_bride_names' => $validated['screen_bride_names'] ?? null,
-            'screen_overlay_opacity' => $validated['screen_overlay_opacity'],
         ];
 
         // Handle background image removal
@@ -121,6 +143,22 @@ class WelcomeScreenController extends Controller
 
         $invitation->update(array_merge($updateData, ['is_active' => true]));
 
+        // Update or create screen configuration
+        $screenData = [];
+        if ($request->has('selected_theme')) {
+            $screenData['selected_theme'] = $validated['selected_theme'] ?? 'minimal-clean';
+        }
+        if ($request->has('custom_title')) {
+            $screenData['custom_title'] = $validated['custom_title'];
+        }
+        if ($request->has('selected_theme') || $request->has('custom_title') || $request->has('show_wishes_wall')) {
+            $screenData['show_wishes_wall'] = $request->has('show_wishes_wall');
+        }
+
+        if (! empty($screenData)) {
+            $invitation->screen()->updateOrCreate([], $screenData);
+        }
+
         // Handle gallery photos upload
         if ($request->hasFile('screen_gallery_photos')) {
             $maxOrder = $invitation->screenGalleries()->max('sort_order') ?? -1;
@@ -137,7 +175,7 @@ class WelcomeScreenController extends Controller
         return back()->with('success', 'Pengaturan Layar Sapa berhasil disimpan.');
     }
 
-    public function deleteGalleryImage(Invitation $invitation, ScreenGallery $screenGallery)
+    public function deleteGalleryImage(Request $request, Invitation $invitation, ScreenGallery $screenGallery)
     {
         Gate::authorize('update', $invitation);
 
@@ -147,6 +185,10 @@ class WelcomeScreenController extends Controller
 
         Storage::disk('public')->delete($screenGallery->image_path);
         $screenGallery->delete();
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json(['success' => true, 'message' => 'Foto galeri berhasil dihapus.']);
+        }
 
         return back()->with('success', 'Foto galeri berhasil dihapus.');
     }

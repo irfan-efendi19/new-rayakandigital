@@ -34,7 +34,7 @@ test('user flow 4 langkah pernikahan platform', function () {
     // Guest visits preview page
     $this->get(route('theme.preview', 'elegant'))
         ->assertSuccessful()
-        ->assertSee('Ani Suryani');
+        ->assertSee('Raisa Andriana');
 
     // LANGKAH 2: REGISTER & DAFTAR DATA
     // Guest registers with selected theme parameter
@@ -66,10 +66,10 @@ test('user flow 4 langkah pernikahan platform', function () {
     $storeResponse = $this->actingAs($user)
         ->post(route('dashboard.invitations.store'), $invitationData);
 
-    $storeResponse->assertRedirect(route('dashboard'));
-
     $invitation = Invitation::where('title', 'John & Jane Wedding')->first();
     expect($invitation)->not->toBeNull();
+
+    $storeResponse->assertRedirect(route('dashboard.invitations.show', $invitation));
     expect($invitation->bride_nickname)->toBe('Jane');
     expect($invitation->groom_nickname)->toBe('John');
 
@@ -88,7 +88,7 @@ test('user flow 4 langkah pernikahan platform', function () {
 
     $this->actingAs($user)
         ->put(route('dashboard.invitations.update', $invitation), $extendedData)
-        ->assertRedirect(route('dashboard.invitations.edit', $invitation));
+        ->assertRedirect(route('dashboard.invitations.show', $invitation));
 
     $invitation->refresh();
     expect($invitation->event_time_end)->toBe('13:00:00');
@@ -147,7 +147,7 @@ test('user flow 4 langkah pernikahan platform', function () {
     expect($invitation->gift_banks[0]['account_number'])->toBe('987654321');
 
     // 2. Import guests via CSV
-    $csvContent = "Nama,Phone\nBudi Santoso,08123456789\nAni Suryani,08987654321\n";
+    $csvContent = "Nama Tamu,Nomor WhatsApp\nBudi Santoso,08123456789\nAni Suryani,08987654321\n";
     $csvFile = UploadedFile::fake()->createWithContent('guests.csv', $csvContent);
 
     $this->actingAs($user)
