@@ -75,6 +75,7 @@ class OrdersTable
                     ->color(fn (string $state): string => match ($state) {
                         'manual_bank' => 'warning',
                         'midtrans' => 'success',
+                        default => 'gray',
                     })
                     ->formatStateUsing(fn (string $state): string => match ($state) {
                         'manual_bank' => 'Bank Manual',
