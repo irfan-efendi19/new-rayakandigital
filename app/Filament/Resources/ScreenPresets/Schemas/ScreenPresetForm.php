@@ -50,7 +50,7 @@ class ScreenPresetForm
                     ->directory('temp_screen_preset_uploads')
                     ->required(fn (string $operation): bool => $operation === 'create')
                     ->hidden(fn (string $operation): bool => $operation !== 'create')
-                    ->helperText('Upload file ZIP yang berisi index.html, css/style.css, js/main.js, dan folder assets/.')
+                    ->helperText('Upload file ZIP yang berisi index.html, css/style.css, js/app.js, dan folder assets/.')
                     ->columnSpanFull(),
 
                 FileUpload::make('zip_file_edit')

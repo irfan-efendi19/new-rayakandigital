@@ -37,7 +37,7 @@ class WelcomeScreenController extends Controller
         $preset = $screen->preset;
         $themeHtmlContent = $preset?->html_content;
 
-        return view('welcome-screen.index', compact('invitation', 'firstEvent', 'screenGalleries', 'screen', 'wishes', 'themeHtmlContent'));
+        return view('welcome-screen.index', compact('invitation', 'firstEvent', 'screenGalleries', 'screen', 'wishes', 'themeHtmlContent', 'preset'));
     }
 
     public function settings(Invitation $invitation)
@@ -53,7 +53,11 @@ class WelcomeScreenController extends Controller
             'selected_theme' => 'minimal-clean',
             'show_wishes_wall' => true,
         ]);
-        $presets = ScreenPreset::where('is_active', true)->orderBy('name')->get();
+        // PRD 2.1.2: kecualikan kolom besar `html_content` (longText) dari kueri massal.
+        $presets = ScreenPreset::where('is_active', true)
+            ->orderBy('name')
+            ->select(['id', 'name', 'slug', 'description', 'thumbnail_image', 'is_active'])
+            ->get();
 
         return view('dashboard.guestbook.settings', compact('invitation', 'screenGalleries', 'screen', 'presets'));
     }
@@ -80,19 +84,24 @@ class WelcomeScreenController extends Controller
 
         $guests = $query->get(['id', 'name', 'checked_in_at']);
 
+        // PRD 2.1.1: hindari N+1. Hitung urutan check-in sekali via window function
+        // (rank berdasarkan checked_in_at ascending) alih-alih query per tamu di dalam loop.
+        $checkinOrderMap = $invitation->guests()
+            ->where('attendance_status', 'hadir')
+            ->whereNotNull('checked_in_at')
+            ->orderBy('checked_in_at')
+            ->pluck('id')
+            ->values()
+            ->mapWithKeys(fn ($id, $index) => [$id => $index + 1]);
+
         return response()->json([
             'success' => true,
-            'guests' => $guests->map(function ($g) use ($invitation) {
-                $checkinOrder = $invitation->guests()
-                    ->where('attendance_status', 'hadir')
-                    ->where('checked_in_at', '<=', $g->checked_in_at)
-                    ->count();
-
+            'guests' => $guests->map(function ($g) use ($checkinOrderMap) {
                 return [
                     'id' => $g->id,
                     'name' => $g->name,
                     'checked_in_at' => $g->checked_in_at->toIso8601String(),
-                    'checkin_order' => $checkinOrder,
+                    'checkin_order' => $checkinOrderMap->get($g->id, 0),
                 ];
             }),
             'server_time' => now()->toIso8601String(),

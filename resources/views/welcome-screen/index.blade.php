@@ -1,20 +1,21 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <x-meta
-        title="Layar Sapa - {{ $invitation->title }}"
+    <x-meta title="Layar Sapa - {{ $invitation->title }}"
         description="Layar sapa digital untuk {{ $invitation->title }}. Scan QR code untuk check-in dan memberikan ucapan."
-        image="{{ $invitation->cover_photo ? asset('storage/' . $invitation->cover_photo) : asset('img/thumnail.jpg') }}"
-    />
+        image="{{ $invitation->cover_photo ? asset('storage/' . $invitation->cover_photo) : asset('img/thumnail.jpg') }}" />
 
     @stack('meta')
 
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=cormorant-garamond:400,400i,600,700|playfair-display:400,600,700,800,900|inter:300,400,500,600&display=swap" rel="stylesheet" />
+    <link
+        href="https://fonts.bunny.net/css?family=cormorant-garamond:400,400i,600,700|playfair-display:400,600,700,800,900|inter:300,400,500,600&display=swap"
+        rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     @php
@@ -22,11 +23,21 @@
     @endphp
 
     @if($themeHtmlContent)
+        {{-- Inline CSS variables / theme tokens extracted from the preset's index.html --}}
         {!! $themeHtmlContent !!}
     @endif
 
+    @if($preset)
+        {{-- Native CSS file (pure stylesheet, stored as a separate file) --}}
+        <link rel="stylesheet" href="{{ asset('screen-presets/' . $preset->slug . '/css/style.css') }}">
+    @endif
+
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
 
         body {
@@ -64,7 +75,8 @@
 
         .particle-rustic-floral {
             background: linear-gradient(135deg, #c3d1be 0%, #8fa882 100%);
-            border-radius: 100% 0; /* Leaf shape */
+            border-radius: 100% 0;
+            /* Leaf shape */
             opacity: 0.5;
             animation: float-leaf 22s infinite ease-in-out;
         }
@@ -78,25 +90,67 @@
         }
 
         @keyframes float-petal {
-            0% { transform: translateY(100vh) rotate(0deg) translateX(0); opacity: 0; }
-            10% { opacity: 0.7; }
-            90% { opacity: 0.7; }
-            100% { transform: translateY(-100vh) rotate(360deg) translateX(50px); opacity: 0; }
+            0% {
+                transform: translateY(100vh) rotate(0deg) translateX(0);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 0.7;
+            }
+
+            90% {
+                opacity: 0.7;
+            }
+
+            100% {
+                transform: translateY(-100vh) rotate(360deg) translateX(50px);
+                opacity: 0;
+            }
         }
 
         @keyframes float-leaf {
-            0% { transform: translateY(100vh) rotate(0deg) translateX(0); opacity: 0; }
-            10% { opacity: 0.6; }
-            50% { transform: translateY(50vh) rotate(180deg) translateX(40px); }
-            90% { opacity: 0.6; }
-            100% { transform: translateY(-100vh) rotate(720deg) translateX(-40px); opacity: 0; }
+            0% {
+                transform: translateY(100vh) rotate(0deg) translateX(0);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 0.6;
+            }
+
+            50% {
+                transform: translateY(50vh) rotate(180deg) translateX(40px);
+            }
+
+            90% {
+                opacity: 0.6;
+            }
+
+            100% {
+                transform: translateY(-100vh) rotate(720deg) translateX(-40px);
+                opacity: 0;
+            }
         }
 
         @keyframes float-sparkle {
-            0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
-            10% { opacity: 0.8; }
-            90% { opacity: 0.8; }
-            100% { transform: translateY(-100vh) scale(1.2); opacity: 0; }
+            0% {
+                transform: translateY(100vh) scale(0.5);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 0.8;
+            }
+
+            90% {
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: translateY(-100vh) scale(1.2);
+                opacity: 0;
+            }
         }
 
         .screen {
@@ -122,10 +176,30 @@
             transition: all 0.3s ease;
             border-color: var(--border-color);
         }
-        .corner-tl { top: 30px; left: 30px; border-width: 2px 0 0 2px; }
-        .corner-tr { top: 30px; right: 30px; border-width: 2px 2px 0 0; }
-        .corner-bl { bottom: 30px; left: 30px; border-width: 0 0 2px 2px; }
-        .corner-br { bottom: 30px; right: 30px; border-width: 0 2px 2px 0; }
+
+        .corner-tl {
+            top: 30px;
+            left: 30px;
+            border-width: 2px 0 0 2px;
+        }
+
+        .corner-tr {
+            top: 30px;
+            right: 30px;
+            border-width: 2px 2px 0 0;
+        }
+
+        .corner-bl {
+            bottom: 30px;
+            left: 30px;
+            border-width: 0 0 2px 2px;
+        }
+
+        .corner-br {
+            bottom: 30px;
+            right: 30px;
+            border-width: 0 2px 2px 0;
+        }
 
         /* Ornate ornaments based on themes */
         .corner-minimal-clean::after {
@@ -136,10 +210,26 @@
             opacity: 0.8;
             transition: transform 0.3s ease;
         }
-        .corner-tl.corner-minimal-clean::after { top: -12px; left: -10px; }
-        .corner-tr.corner-minimal-clean::after { top: -12px; right: -10px; }
-        .corner-bl.corner-minimal-clean::after { bottom: -12px; left: -10px; }
-        .corner-br.corner-minimal-clean::after { bottom: -12px; right: -10px; }
+
+        .corner-tl.corner-minimal-clean::after {
+            top: -12px;
+            left: -10px;
+        }
+
+        .corner-tr.corner-minimal-clean::after {
+            top: -12px;
+            right: -10px;
+        }
+
+        .corner-bl.corner-minimal-clean::after {
+            bottom: -12px;
+            left: -10px;
+        }
+
+        .corner-br.corner-minimal-clean::after {
+            bottom: -12px;
+            right: -10px;
+        }
 
         .corner-rustic-floral::after {
             content: '🌿';
@@ -147,10 +237,26 @@
             font-size: 1.25rem;
             opacity: 0.8;
         }
-        .corner-tl.corner-rustic-floral::after { top: -15px; left: -15px; }
-        .corner-tr.corner-rustic-floral::after { top: -15px; right: -15px; }
-        .corner-bl.corner-rustic-floral::after { bottom: -15px; left: -15px; }
-        .corner-br.corner-rustic-floral::after { bottom: -15px; right: -15px; }
+
+        .corner-tl.corner-rustic-floral::after {
+            top: -15px;
+            left: -15px;
+        }
+
+        .corner-tr.corner-rustic-floral::after {
+            top: -15px;
+            right: -15px;
+        }
+
+        .corner-bl.corner-rustic-floral::after {
+            bottom: -15px;
+            left: -15px;
+        }
+
+        .corner-br.corner-rustic-floral::after {
+            bottom: -15px;
+            right: -15px;
+        }
 
         .corner-modern-dark::after {
             content: '';
@@ -161,13 +267,34 @@
             border-radius: 50%;
             box-shadow: 0 0 10px var(--accent-color);
         }
-        .corner-tl.corner-modern-dark::after { top: -4px; left: -4px; }
-        .corner-tr.corner-modern-dark::after { top: -4px; right: -4px; }
-        .corner-bl.corner-modern-dark::after { bottom: -4px; left: -4px; }
-        .corner-br.corner-modern-dark::after { bottom: -4px; right: -4px; }
+
+        .corner-tl.corner-modern-dark::after {
+            top: -4px;
+            left: -4px;
+        }
+
+        .corner-tr.corner-modern-dark::after {
+            top: -4px;
+            right: -4px;
+        }
+
+        .corner-bl.corner-modern-dark::after {
+            bottom: -4px;
+            left: -4px;
+        }
+
+        .corner-br.corner-modern-dark::after {
+            bottom: -4px;
+            right: -4px;
+        }
 
         /* Idle state */
-        .idle-content { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
+        .idle-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
 
         .idle-icon {
             width: 80px;
@@ -217,7 +344,12 @@
         }
 
         /* Active (guest) state */
-        .guest-content { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+        .guest-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
 
         .guest-enter-icon {
             font-size: clamp(2rem, 4vw, 3.5rem);
@@ -285,8 +417,17 @@
         }
 
         @keyframes pulse {
-            0%, 100% { opacity: 0.3; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.3); }
+
+            0%,
+            100% {
+                opacity: 0.3;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.3);
+            }
         }
 
         /* Countdown bar */
@@ -308,9 +449,17 @@
         }
 
         @keyframes idleBar {
-            0% { opacity: 0.2; }
-            50% { opacity: 0.6; }
-            100% { opacity: 0.2; }
+            0% {
+                opacity: 0.2;
+            }
+
+            50% {
+                opacity: 0.6;
+            }
+
+            100% {
+                opacity: 0.2;
+            }
         }
 
         /* Queue indicator */
@@ -379,7 +528,8 @@
             gap: 0.5rem;
         }
 
-        .wish-wall-title::before, .wish-wall-title::after {
+        .wish-wall-title::before,
+        .wish-wall-title::after {
             content: '';
             display: inline-block;
             width: 15px;
@@ -436,14 +586,22 @@
         }
 
         @keyframes scroll-ticker {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
         }
 
         /* Hide scrollbar */
-        ::-webkit-scrollbar { display: none; }
+        ::-webkit-scrollbar {
+            display: none;
+        }
     </style>
 </head>
+
 <body x-data="welcomeScreen">
     {{-- Background particles --}}
     <div class="bg-particles" id="particles"></div>
@@ -463,21 +621,14 @@
     "></div>
 
     {{-- Slideshow Background Container --}}
-    <div x-show="isSlideshowActive"
-         x-transition:enter="transition-opacity duration-1000"
-         x-transition:leave="transition-opacity duration-1000"
-         class="absolute inset-0 z-1"
-         style="display: none;">
+    <div x-show="isSlideshowActive" x-transition:enter="transition-opacity duration-1000"
+        x-transition:leave="transition-opacity duration-1000" class="absolute inset-0 z-1" style="display: none;">
         <template x-for="(image, index) in galleries" :key="image.id">
-            <div x-show="currentSlide === index"
-                 x-transition:enter="transition-opacity duration-1000"
-                 x-transition:enter-start="opacity-0"
-                 x-transition:enter-end="opacity-100"
-                 x-transition:leave="transition-opacity duration-1000"
-                 x-transition:leave-start="opacity-100"
-                 x-transition:leave-end="opacity-0"
-                 class="absolute inset-0 bg-cover bg-center"
-                 :style="'background-image: url(/storage/' + image.image_path + ')'">
+            <div x-show="currentSlide === index" x-transition:enter="transition-opacity duration-1000"
+                x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                x-transition:leave="transition-opacity duration-1000" x-transition:leave-start="opacity-100"
+                x-transition:leave-end="opacity-0" class="absolute inset-0 bg-cover bg-center"
+                :style="'background-image: url(/storage/' + image.image_path + ')'">
             </div>
         </template>
     </div>
@@ -489,24 +640,26 @@
     <div class="corner corner-br corner-{{ $selectedTheme }}"></div>
 
     {{-- Countdown bar --}}
-    <div class="countdown-bar"
-         :class="{ 'idle': !isDisplaying }"
-         :style="isDisplaying ? 'transform: scaleX(' + (countdownProgress / 100) + '); transition: none;' : ''"></div>
+    <div class="countdown-bar" :class="{ 'idle': !isDisplaying }"
+        :style="isDisplaying ? 'transform: scaleX(' + (countdownProgress / 100) + '); transition: none;' : ''"></div>
 
     {{-- Queue indicator --}}
     <div class="queue-indicator">
         <template x-for="n in Math.min(queue.length + (isDisplaying ? 1 : 0), 8)" :key="n">
-            <span class="queue-dot" :class="{ 'active': n === 1 && isDisplaying, 'queued': n > 1 || !isDisplaying }"></span>
+            <span class="queue-dot"
+                :class="{ 'active': n === 1 && isDisplaying, 'queued': n > 1 || !isDisplaying }"></span>
         </template>
     </div>
 
     {{-- Main screen --}}
     <div class="screen">
         {{-- Idle state --}}
-        <div class="idle-content" x-show="!isDisplaying" x-transition:enter="transition-opacity duration-500" x-transition:leave="transition-opacity duration-500">
+        <div class="idle-content" x-show="!isDisplaying" x-transition:enter="transition-opacity duration-500"
+            x-transition:leave="transition-opacity duration-500">
             <div class="idle-icon">
                 <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
                 </svg>
             </div>
             <div class="idle-decoration"></div>
@@ -530,8 +683,10 @@
         </div>
 
         {{-- Guest state --}}
-        <div class="guest-content" x-show="isDisplaying" style="display: none;" x-transition:enter="transition-opacity duration-500" x-transition:leave="transition-opacity duration-500">
-            <div class="guest-enter-icon" x-text="['🎉', '👋', '✨', '🎊', '🌟', '💐', '🥂', '🎵'][activeGuest ? activeGuest.id % 8 : 0]">🎉</div>
+        <div class="guest-content" x-show="isDisplaying" style="display: none;"
+            x-transition:enter="transition-opacity duration-500" x-transition:leave="transition-opacity duration-500">
+            <div class="guest-enter-icon"
+                x-text="['🎉', '👋', '✨', '🎊', '🌟', '💐', '🥂', '🎵'][activeGuest ? activeGuest.id % 8 : 0]">🎉</div>
             <div class="guest-label">Tamu Hadir</div>
             <div class="guest-name" x-text="activeGuest ? activeGuest.name : ''"></div>
             <div class="guest-message">Terima kasih telah hadir</div>
@@ -540,12 +695,14 @@
                 <span class="diamond"></span>
                 <span class="line"></span>
             </div>
-            <div class="guest-order" x-text="activeGuest && activeGuest.checkin_order ? 'Tamu ke-' + activeGuest.checkin_order : ''"></div>
+            <div class="guest-order"
+                x-text="activeGuest && activeGuest.checkin_order ? 'Tamu ke-' + activeGuest.checkin_order : ''"></div>
         </div>
     </div>
 
     @if($screen->show_wishes_wall && $wishes->count() > 0)
-        <div class="wish-wall-container" x-show="!isDisplaying" x-transition:enter="transition-opacity duration-500" x-transition:leave="transition-opacity duration-500">
+        <div class="wish-wall-container" x-show="!isDisplaying" x-transition:enter="transition-opacity duration-500"
+            x-transition:leave="transition-opacity duration-500">
             <div class="wish-wall-title">
                 <span>Doa & Ucapan Tamu</span>
             </div>
@@ -627,13 +784,13 @@
                         if (this.lastCheckedInAt) {
                             params.set('since', this.lastCheckedInAt);
                         }
-                        const url = @json(route('dashboard.welcome-screen.latest-checkin', $invitation)) + 
+                        const url = @json(route('dashboard.welcome-screen.latest-checkin', $invitation)) +
                             (params.toString() ? '?' + params.toString() : '');
 
                         const response = await fetch(url, {
-                            headers: { 
-                                'Accept': 'application/json', 
-                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') 
+                            headers: {
+                                'Accept': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                             }
                         });
                         const data = await response.json();
@@ -730,5 +887,10 @@
             }));
         });
     </script>
+    @if($preset)
+        {{-- Native JS file (pure script, stored as a separate file) --}}
+        <script src="{{ asset('screen-presets/' . $preset->slug . '/js/app.js') }}" defer></script>
+    @endif
 </body>
+
 </html>

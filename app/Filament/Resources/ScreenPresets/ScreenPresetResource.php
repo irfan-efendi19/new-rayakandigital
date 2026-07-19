@@ -35,7 +35,13 @@ class ScreenPresetResource extends Resource
 
     public static function table(Table $table): Table
     {
-        return ScreenPresetsTable::configure($table);
+        // PRD 2.1.2: kecualikan kolom besar `html_content` (longText) dari daftar preset
+        // agar memori runtime PHP tidak terbebani saat menampilkan banyak baris.
+        return ScreenPresetsTable::configure($table)
+            ->modifyQueryUsing(fn ($query) => $query->select([
+                'id', 'name', 'slug', 'description', 'thumbnail_image',
+                'zip_path', 'is_active', 'created_at', 'updated_at',
+            ]));
     }
 
     public static function getRelations(): array
