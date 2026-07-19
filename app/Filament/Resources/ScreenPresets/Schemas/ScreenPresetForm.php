@@ -32,7 +32,9 @@ class ScreenPresetForm
                     ->required()
                     ->unique(ignoreRecord: true)
                     ->maxLength(255)
-                    ->helperText('Digunakan sebagai nilai selected_theme. Contoh: midnight-gold'),
+                    ->disabled()
+                    ->dehydrated()
+                    ->helperText('Diisi otomatis berdasarkan Nama Preset.'),
 
                 Textarea::make('description')
                     ->label('Deskripsi')

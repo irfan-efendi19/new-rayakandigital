@@ -327,110 +327,26 @@ $daysLeft = $invitation->expires_at ? (int) max(0, now()->diffInDays($invitation
 
                             {{-- RSVP Terbaru --}}
                             <div class="mt-6 border-t border-neutral-200 dark:border-secondary-600 pt-6">
-                                <h3 class="text-sm font-semibold text-secondary-800 dark:text-neutral-100 mb-4">RSVP Terbaru</h3>
-                                @if($invitation->rsvps->isEmpty())
-                                    <p class="text-neutral-500 dark:text-neutral-400 text-center py-4 text-sm">Belum ada konfirmasi kehadiran
-                                        dari tamu.</p>
-                                @else
-                                    <div x-data="{
-                                                                                search: '',
-                                                                                perPage: 10,
-                                                                                rsvps: {{ Js::from($rsvpData) }},
-                                                                                get filteredRsvps() {
-                                                                                    if (! this.search) return this.rsvps;
-                                                                                    const q = this.search.toLowerCase();
-                                                                                    return this.rsvps.filter(r => r.guest_name.toLowerCase().includes(q));
-                                                                                },
-                                                                                get displayRsvps() {
-                                                                                    const limit = parseInt(this.perPage);
-                                                                                    return limit === 0 ? this.filteredRsvps : this.filteredRsvps.slice(0, limit);
-                                                                                },
-                                                                                get totalFiltered() {
-                                                                                    return this.filteredRsvps.length;
-                                                                                }
-                                                                            }">
-                                        <div class="flex flex-col sm:flex-row gap-3 mb-4">
-                                            <div class="relative flex-1">
-                                                <input type="text" x-model="search" placeholder="Cari nama tamu..."
-                                                    class="w-full px-4 py-2.5 pl-10 text-sm border border-neutral-200 dark:border-secondary-600 rounded-xl bg-white dark:bg-secondary-800 text-secondary-800 dark:text-neutral-100 focus:ring-2 focus:ring-primary-500 focus:border-transparent placeholder-neutral-400 dark:placeholder-neutral-500">
-                                                <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" fill="none"
-                                                    stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                                                </svg>
-                                            </div>
-                                            <select x-model="perPage"
-                                                class="px-3 py-2.5 text-sm border border-neutral-200 dark:border-secondary-600 rounded-xl bg-white dark:bg-secondary-800 text-secondary-800 dark:text-neutral-100 focus:ring-2 focus:ring-primary-500 focus:border-transparent">
-                                                <option value="10">10 data</option>
-                                                <option value="20">20 data</option>
-                                                <option value="0">Semua</option>
-                                            </select>
+                                <a href="{{ route('dashboard.invitations.rsvp-list', $invitation) }}"
+                                    class="group flex items-center justify-between p-4 bg-neutral-50 dark:bg-secondary-700 rounded-xl hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-9 h-9 rounded-xl bg-primary-50 dark:bg-primary-900/50 flex items-center justify-center text-primary dark:text-primary-400">
+                                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
                                         </div>
-
-                                        <div class="overflow-x-auto">
-                                            <table class="min-w-full divide-y divide-neutral-200 dark:divide-secondary-700 table-stacked">
-                                                <thead class="bg-neutral-50 dark:bg-secondary-700">
-                                                    <tr>
-                                                        <th scope="col"
-                                                            class="px-6 py-3 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                                                            Nama Tamu</th>
-                                                        <th scope="col"
-                                                            class="px-6 py-3 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                                                            Kehadiran</th>
-                                                        <th scope="col"
-                                                            class="px-6 py-3 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                                                            Jumlah (Pax)</th>
-                                                        <th scope="col"
-                                                            class="px-6 py-3 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                                                            Pesan</th>
-                                                        <th scope="col"
-                                                            class="px-6 py-3 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                                                            Waktu</th>
-                                                        <th scope="col"
-                                                            class="px-6 py-3 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                                                            Terakhir Diupdate</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody
-                                                    class="bg-white dark:bg-secondary-800 divide-y divide-neutral-100 dark:divide-secondary-700">
-                                                    <template x-for="rsvp in displayRsvps" :key="rsvp.id">
-                                                        <tr class="hover:bg-neutral-50 dark:hover:bg-secondary-700 transition-colors">
-                                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-secondary-800 dark:text-neutral-100"
-                                                                x-text="rsvp.guest_name" data-label="Nama Tamu"></td>
-                                                            <td class="px-6 py-4 whitespace-nowrap" data-label="Kehadiran">
-                                                                <span
-                                                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold"
-                                                                    :class="{
-                                                                                                                'bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-300': rsvp.attendance === 'attending',
-                                                                                                                'bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300': rsvp.attendance === 'not_attending',
-                                                                                                                'bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300': rsvp.attendance === 'uncertain'
-                                                                                                            }" x-text="rsvp.attendance_label">
-                                                                </span>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-600 dark:text-neutral-400 font-mono"
-                                                                x-text="rsvp.pax" data-label="Jumlah (Pax)"></td>
-                                                            <td class="px-6 py-4 text-sm text-neutral-500 dark:text-neutral-400 max-w-[200px] truncate"
-                                                                x-text="rsvp.message || '-'" data-label="Pesan"></td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400 font-mono"
-                                                                x-text="rsvp.created_at" data-label="Waktu"></td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400 font-mono"
-                                                                x-text="rsvp.updated_at" data-label="Terakhir Diupdate"></td>
-                                                        </tr>
-                                                    </template>
-                                                </tbody>
-                                            </table>
-                                            <div x-show="totalFiltered === 0"
-                                                class="text-center py-6 text-sm text-neutral-500 dark:text-neutral-400">
-                                                Tidak ada tamu yang cocok dengan pencarian "<span x-text="search"></span>".
-                                            </div>
-                                            <div x-show="totalFiltered > 0"
-                                                class="flex items-center justify-between pt-3 text-xs text-neutral-500 dark:text-neutral-400">
-                                                <span>Menampilkan <span x-text="displayRsvps.length"></span> dari <span
-                                                        x-text="totalFiltered"></span> data</span>
-                                            </div>
+                                        <div>
+                                            <h4 class="text-sm font-semibold text-secondary-800 dark:text-neutral-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">RSVP Terbaru</h4>
+                                            <p class="text-xs text-neutral-500 dark:text-neutral-400">Lihat semua konfirmasi kehadiran dari tamu</p>
                                         </div>
                                     </div>
-                                @endif
+                                    <div class="flex items-center gap-2 text-primary-600 dark:text-primary-400 group-hover:gap-3 transition-all">
+                                        <span class="text-xs font-semibold">{{ $invitation->rsvps->count() }} respon</span>
+                                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                        </svg>
+                                    </div>
+                                </a>
                             </div>
                         @else
                             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
@@ -460,6 +376,33 @@ $daysLeft = $invitation->expires_at ? (int) max(0, now()->diffInDays($invitation
                         @endif
                     </div>
                 </div>
+
+                {{-- Wishes --}}
+                <a href="{{ route('dashboard.invitations.wishes-list', $invitation) }}"
+                    class="group bg-white dark:bg-secondary-800 rounded-2xl shadow-soft border border-neutral-100 dark:border-secondary-700 overflow-hidden block hover:bg-neutral-50 dark:hover:bg-secondary-700 transition-all">
+                    <div class="p-5">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-9 h-9 rounded-xl bg-primary-50 dark:bg-primary-900/50 flex items-center justify-center text-primary dark:text-primary-400">
+                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-semibold text-secondary-800 dark:text-neutral-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">Pesan Para Tamu</h3>
+                                    <p class="text-xs text-neutral-500 dark:text-neutral-400">Semua ucapan dan doa dari tamu</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2 text-primary-600 dark:text-primary-400 group-hover:gap-3 transition-all">
+                                <span class="text-xs font-semibold">{{ $invitation->wishes->count() }} ucapan</span>
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
                 
                 {{-- QR Check-In Scanner --}}
                 <div
@@ -561,126 +504,7 @@ $daysLeft = $invitation->expires_at ? (int) max(0, now()->diffInDays($invitation
                     </div>
                 </div>
 
-                {{-- Wishes --}}
-                <div
-                    class="bg-white dark:bg-secondary-800 rounded-2xl shadow-soft border border-neutral-100 dark:border-secondary-700 overflow-hidden">
-                    <div class="p-5">
-                        <h3 class="text-sm font-semibold text-secondary-800 dark:text-neutral-100 mb-4">Pesan Para Tamu</h3>
-                        @if($invitation->wishes->isEmpty())
-                            <p class="text-neutral-500 dark:text-neutral-400 text-center py-4 text-sm">Belum ada ucapan dari tamu.</p>
-                        @else
-                            <div x-data="{
-                                search: '',
-                                perPage: 10,
-                                wishes: {{ Js::from($wishesData) }},
-                                get filteredWishes() {
-                                    if (! this.search) return this.wishes;
-                                    const q = this.search.toLowerCase();
-                                    return this.wishes.filter(w => w.guest_name.toLowerCase().includes(q) || w.message.toLowerCase().includes(q));
-                                },
-                                get displayWishes() {
-                                    const limit = parseInt(this.perPage);
-                                    return limit === 0 ? this.filteredWishes : this.filteredWishes.slice(0, limit);
-                                },
-                                get totalFiltered() {
-                                    return this.filteredWishes.length;
-                                },
-                                deleteWish(id) {
-                                    Swal.fire({
-                                        title: 'Hapus Ucapan?',
-                                        text: 'Ucapan ini akan dihapus permanen.',
-                                        icon: 'warning',
-                                        showCancelButton: true,
-                                        confirmButtonColor: '#d33',
-                                        cancelButtonColor: '#3085d6',
-                                        confirmButtonText: 'Ya, hapus!',
-                                        cancelButtonText: 'Batal',
-                                    }).then((result) => {
-                                        if (! result.isConfirmed) return;
-                                        const url = '{{ route('dashboard.invitations.wishes.destroy', ['invitation' => $invitation, 'wish' => '__ID__']) }}'.replace('__ID__', id);
-                                        fetch(url, { method: 'DELETE', headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' } })
-                                            .then(r => r.json())
-                                            .then(data => {
-                                                if (data.success) {
-                                                    this.wishes = this.wishes.filter(w => w.id !== id);
-                                                    Swal.fire({ icon: 'success', title: 'Berhasil!', text: data.message, timer: 1500, showConfirmButton: false });
-                                                } else {
-                                                    Swal.fire({ icon: 'error', title: 'Gagal!', text: 'Terjadi kesalahan. Silakan coba lagi.', timer: 2000, showConfirmButton: false });
-                                                }
-                                            });
-                                    });
-                                }
-                            }">
-                                <div class="flex flex-col sm:flex-row gap-3 mb-4">
-                                    <div class="relative flex-1">
-                                        <input type="text" x-model="search" placeholder="Cari nama atau pesan..."
-                                            class="w-full px-4 py-2.5 pl-10 text-sm border border-neutral-200 dark:border-secondary-600 rounded-xl bg-white dark:bg-secondary-800 text-secondary-800 dark:text-neutral-100 focus:ring-2 focus:ring-primary-500 focus:border-transparent placeholder-neutral-400 dark:placeholder-neutral-500">
-                                        <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" fill="none"
-                                            stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                                        </svg>
-                                    </div>
-                                    <select x-model="perPage"
-                                        class="px-3 py-2.5 text-sm border border-neutral-200 dark:border-secondary-600 rounded-xl bg-white dark:bg-secondary-800 text-secondary-800 dark:text-neutral-100 focus:ring-2 focus:ring-primary-500 focus:border-transparent">
-                                        <option value="10">10 data</option>
-                                        <option value="20">20 data</option>
-                                        <option value="0">Semua</option>
-                                    </select>
-                                </div>
-
-                                <div class="overflow-x-auto">
-                                    <table class="min-w-full divide-y divide-neutral-200 dark:divide-secondary-700 table-stacked">
-                                        <thead class="bg-neutral-50 dark:bg-secondary-700">
-                                            <tr>
-                                                <th scope="col"
-                                                    class="px-6 py-3 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Nama Tamu</th>
-                                                <th scope="col"
-                                                    class="px-6 py-3 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Pesan</th>
-                                                <th scope="col"
-                                                    class="px-6 py-3 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Waktu</th>
-                                                <th scope="col"
-                                                    class="px-6 py-3 text-right text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Aksi</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody
-                                            class="bg-white dark:bg-secondary-800 divide-y divide-neutral-100 dark:divide-secondary-700">
-                                            <template x-for="wish in displayWishes" :key="wish.id">
-                                                <tr class="hover:bg-neutral-50 dark:hover:bg-secondary-700 transition-colors">
-                                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-secondary-800 dark:text-neutral-100"
-                                                        x-text="wish.guest_name" data-label="Nama Tamu"></td>
-                                                    <td class="px-6 py-4 text-sm text-neutral-600 dark:text-neutral-400 max-w-xs break-words"
-                                                        x-text="wish.message" data-label="Pesan"></td>
-                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400 font-mono"
-                                                        x-text="wish.created_at_diff" data-label="Waktu"></td>
-                                                    <td class="px-6 py-4 whitespace-nowrap text-right full-width hide-label">
-                                                        <button @click="deleteWish(wish.id)"
-                                                            class="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-semibold text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/30 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/50 transition">
-                                                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                                            </svg>
-                                                            Hapus
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            </template>
-                                        </tbody>
-                                    </table>
-                                    <div x-show="totalFiltered === 0"
-                                        class="text-center py-6 text-sm text-neutral-500 dark:text-neutral-400">
-                                        Tidak ada ucapan yang cocok dengan pencarian "<span x-text="search"></span>".
-                                    </div>
-                                    <div x-show="totalFiltered > 0"
-                                        class="flex items-center justify-between pt-3 text-xs text-neutral-500 dark:text-neutral-400">
-                                        <span>Menampilkan <span x-text="displayWishes.length"></span> dari <span
-                                                x-text="totalFiltered"></span> data</span>
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
-                </div>
-            </div>
-
+                
             {{-- Gallery Upload Script --}}
             <script>
                 document.addEventListener('DOMContentLoaded', function () {

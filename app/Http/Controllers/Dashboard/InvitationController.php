@@ -216,16 +216,8 @@ class InvitationController extends Controller
             'created_at' => $guest->created_at->format('d/m/Y H:i'),
         ])->values();
 
-        $wishesData = $invitation->wishes->map(fn ($wish) => [
-            'id' => $wish->id,
-            'guest_name' => $wish->guest_name,
-            'message' => $wish->message,
-            'created_at' => $wish->created_at->format('d/m/Y H:i'),
-            'created_at_diff' => $wish->created_at->diffForHumans(),
-        ])->values();
-
         return view('dashboard.invitations.show', compact(
-            'invitation', 'chartLabels', 'chartTotals', 'chartUniques', 'totalViews', 'totalUniques', 'rsvpData', 'qrCodeData', 'rsvpUrl', 'qrStats', 'guestsData', 'wishesData'
+            'invitation', 'chartLabels', 'chartTotals', 'chartUniques', 'totalViews', 'totalUniques', 'rsvpData', 'qrCodeData', 'rsvpUrl', 'qrStats', 'guestsData'
         ));
     }
 
@@ -508,6 +500,41 @@ class InvitationController extends Controller
             'tamu_ragu' => $tamuRagu,
             'pax_percentage' => $paxPercentage,
         ]);
+    }
+
+    public function rsvpList(Invitation $invitation)
+    {
+        Gate::authorize('view', $invitation);
+        $invitation->load(['rsvps']);
+
+        $rsvpData = $invitation->rsvps->map(fn ($rsvp) => [
+            'id' => $rsvp->id,
+            'guest_name' => $rsvp->guest_name,
+            'attendance' => $rsvp->attendance,
+            'attendance_label' => $rsvp->attendanceLabel(),
+            'pax' => (string) $rsvp->pax,
+            'message' => $rsvp->message ?? '',
+            'created_at' => $rsvp->created_at->format('d/m/Y H:i'),
+            'updated_at' => $rsvp->updated_at->format('d/m/Y H:i'),
+        ])->values();
+
+        return view('dashboard.invitations.rsvp-list', compact('invitation', 'rsvpData'));
+    }
+
+    public function wishesList(Invitation $invitation)
+    {
+        Gate::authorize('view', $invitation);
+        $invitation->load(['wishes']);
+
+        $wishesData = $invitation->wishes->map(fn ($wish) => [
+            'id' => $wish->id,
+            'guest_name' => $wish->guest_name,
+            'message' => $wish->message,
+            'created_at' => $wish->created_at->format('d/m/Y H:i'),
+            'created_at_diff' => $wish->created_at->diffForHumans(),
+        ])->values();
+
+        return view('dashboard.invitations.wishes-list', compact('invitation', 'wishesData'));
     }
 
     public function destroy(Invitation $invitation)

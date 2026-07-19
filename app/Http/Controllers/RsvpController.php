@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Invitation;
+use App\Models\Wish;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
@@ -51,6 +52,13 @@ class RsvpController extends Controller
             $existing->update($validated);
         } else {
             $invitation->rsvps()->create($validated);
+        }
+
+        if (!empty($validated['message'])) {
+            $invitation->wishes()->create([
+                'guest_name' => $validated['guest_name'],
+                'message' => $validated['message'],
+            ]);
         }
 
         return response()->json([

@@ -127,7 +127,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/invitations/{invitation}/qr-rsvp', [InvitationController::class, 'qrRsvp'])->name('invitations.qr-rsvp');
 
         // Wishes
+        Route::get('/invitations/{invitation}/wishes', [InvitationController::class, 'wishesList'])->name('invitations.wishes-list');
         Route::delete('/invitations/{invitation}/wishes/{wish}', [WishController::class, 'destroy'])->name('invitations.wishes.destroy');
+
+        // RSVP List
+        Route::get('/invitations/{invitation}/rsvp', [InvitationController::class, 'rsvpList'])->name('invitations.rsvp-list');
 
         // Guestbook / QR Scanner
         Route::get('/invitations/{invitation}/guestbook', [GuestbookController::class, 'index'])->name('invitations.guestbook');
