@@ -6,10 +6,18 @@
 
     <x-meta
         :title="View::yieldContent('title') ?: config('app.name', 'Rayakan Digital')"
+        description="Terjadi kesalahan. Silakan coba lagi atau hubungi tim dukungan."
         robots="noindex, nofollow"
     />
 
     @stack('meta')
+
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link
+        href="https://fonts.bunny.net/css?family=plus-jakarta-sans:400,500,600,700,800|playfair-display:400,500,600,700&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -21,17 +29,10 @@
         }
     </script>
 </head>
+
 <body class="font-sans antialiased bg-neutral-50 dark:bg-secondary-900 text-secondary-800 dark:text-neutral-200 h-full">
-    <div class="min-h-full flex items-center justify-center p-6">
-        <div class="text-center max-w-md">
-            <div class="font-mono font-bold text-[clamp(36px,8vw,56px)] text-secondary-900 dark:text-neutral-100 mb-4">
-                @yield('message')
-            </div>
-            <div class="w-9 h-0.5 bg-secondary-900 dark:bg-neutral-100 rounded-full mx-auto mb-4"></div>
-            <p class="text-neutral-500 dark:text-neutral-400 text-sm">
-                Silakan coba lagi atau hubungi tim dukungan jika masalah berlanjut.
-            </p>
-        </div>
+    <div class="min-h-full flex flex-col">
+        @yield('content')
     </div>
 </body>
 </html>

@@ -3,3 +3,4 @@
 @section('title', 'Halaman Tidak Ditemukan')
 @section('code', '404')
 @section('message', 'Halaman yang Anda cari tidak ditemukan atau telah dipindahkan.')
+@section('icon', 'fa-compass')
