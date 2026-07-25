@@ -7,7 +7,9 @@ use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Str;
 
 class PackageForm
 {
@@ -18,13 +20,20 @@ class PackageForm
             ->components([
                 TextInput::make('package_code')
                     ->label('Kode Paket')
-                    ->required()
+                    ->disabled()
+                    ->dehydrated()
                     ->maxLength(30)
                     ->unique(ignoreRecord: true),
                 TextInput::make('package_name')
                     ->label('Nama Paket')
                     ->required()
-                    ->maxLength(50),
+                    ->maxLength(50)
+                    ->live(onBlur: true)
+                    ->afterStateUpdated(function (string $operation, string $state, Set $set): void {
+                        if ($operation === 'create') {
+                            $set('package_code', Str::slug($state));
+                        }
+                    }),
                 TextInput::make('price')
                     ->label('Harga (Rp)')
                     ->numeric()

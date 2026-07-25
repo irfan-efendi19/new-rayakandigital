@@ -1,33 +1,42 @@
 # Product Requirement Document (PRD)
 
-## Enterprise Performance Architecture & Optimization (Laravel Core System Wide)
+## Standarisasi Unopinionated Standalone Template Engine (Layar Sapa)
 
-| Atribut               | Detail                                                                           |
-| :-------------------- | :------------------------------------------------------------------------------- |
-| **Status**            | Approved                                                                         |
-| **Penulis**           | Mochammad Irfan Efendi                                                           |
-| **Tanggal Pembuatan** | 20 Juli 2026                                                                     |
-| **Cakupan Sistem**    | Seluruh Subsistem Laravel (Core Backend, Database, Filament Admin, & Guest View) |
-| **Objektif Utama**    | Global RAM Efficiency, Zero Database Overhead, Maximum Request Per Second (RPS)  |
+| Atribut               | Detail                                                       |
+| :-------------------- | :----------------------------------------------------------- |
+| **Status**            | Approved                                                     |
+| **Penulis**           | Mochammad Irfan Efendi                                       |
+| **Tanggal Pembuatan** | 26 Juli 2026                                                 |
+| **Target Komponen**   | Modul Layar Sapa & Filament Admin Upload Engine              |
+| **Filosofi Utama**    | **Zero Design System Enforcement (100% Free UI/UX Freedom)** |
 
 ---
 
-## 1. STRATEGI ALOKASI RAM & DATABASE (DATABASE LAYER)
+## 1. FILOSOFI KEBEBASAN DESAIN (UNOPINIONATED DESIGN)
 
-Beban terbesar pada aplikasi berbasis Laravel adalah alokasi memori objek Eloquent dan I/O _database_. Seluruh komponen aplikasi wajib mematuhi standar kueri berikut.
+Sistem **TIDAK MENENTUKAN** aturan tampilan sama sekali:
 
-### 1.1 Larangan Total Kueri N+1 & Lazy Loading
+- **Bebas Kelas CSS:** Developer bebas membuat nama kelas CSS sendiri (`.kartu-ucapan`, `.box-pesan`, `.card-item`, dll) tanpa terikat aturan konvensi Laravel.
+- **Bebas Pustaka Frontend:** Bebas memakai CSS murni, Tailwind via CDN, Bootstrap, GSAP Animation, Three.js, Canvas, atau pustaka JavaScript apa pun di dalam paket ZIP.
+- **Bebas Layouting:** Tata letak grid, flexbox, posisi melayang (_absolute/fixed_), atau tampilan proyektor ultrawide sepenuhnya ditentukan oleh developer di komputer lokal.
 
-Sistem wajib menolak kueri yang dipanggil berulang di dalam sebuah perulangan data. Mekanisme pengujian otomatis (QA) harus memastikan hal ini bersih di semua modul (Undangan, Buku Tamu, Galeri, dan Pembayaran).
+---
 
-- **Aturan Dasar:** Selalu definisikan relasi di awal menggunakan metode `with()` (_Eager Loading_).
-- **Keamanan Ekstrem:** Aktifkan proteksi _Lazy Loading_ pada _AppServiceProvider_ di lingkungan lokal/testing agar sistem langsung memicu _error_ jika ada _developer_ yang tidak sengaja menulis kueri tidak efisien.
+## 2. ATURAN INTEGRASI MINIMAL (THE ONLY CONTRACT)
 
-```php
-// app/Providers/AppServiceProvider.php
-public function boot(): void
-{
-    // Memicu crash di lokal jika terjadi kueri N+1 secara tidak sengaja
-    Model::preventLazyLoading(! app()->isProduction());
-}
+Agar data dari server Laravel dapat masuk ke dalam desain bebas milik developer, sistem hanya membutuhkan **2 aturan sederhana**:
+
+### 2.1 Struktur Berkas ZIP Lokal
+
+Developer membuat folder kerja secara bebas di VS Code, lalu membungkusnya menjadi file `.zip` dengan struktur berkas dasar berikut:
+
+```text
+nama-bebas-template.zip/
+├── index.html          <-- File utama HTML (bebas desain)
+├── css/                <-- Folder CSS (nama file bebas)
+│   └── style.css
+├── js/                 <-- Folder JS (nama file bebas)
+│   └── script.js
+└── assets/             <-- Folder aset media (gambar, font, video, sound)
+    └── background.mp4
 ```

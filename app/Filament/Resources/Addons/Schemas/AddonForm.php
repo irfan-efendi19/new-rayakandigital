@@ -6,7 +6,9 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Str;
 
 class AddonForm
 {
@@ -17,13 +19,19 @@ class AddonForm
                 TextInput::make('name')
                     ->label('Nama Add-On')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->live(onBlur: true)
+                    ->afterStateUpdated(function (string $operation, string $state, Set $set): void {
+                        if ($operation === 'create') {
+                            $set('slug', Str::slug($state));
+                        }
+                    }),
                 TextInput::make('slug')
                     ->label('Slug')
-                    ->required()
+                    ->disabled()
+                    ->dehydrated()
                     ->maxLength(255)
-                    ->unique(ignoreRecord: true)
-                    ->helperText('Identifier unik untuk add-on. Contoh: addon-digital-gift'),
+                    ->unique(ignoreRecord: true),
                 Textarea::make('description')
                     ->label('Deskripsi')
                     ->rows(3)

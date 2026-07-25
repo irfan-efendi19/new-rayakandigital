@@ -7,8 +7,10 @@ use App\Models\PlatformFeature;
 use App\Models\ScreenPreset;
 use App\Models\User;
 use App\Models\Wish;
+use App\Services\ScreenPresetUploaderService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
 uses(RefreshDatabase::class);
@@ -282,6 +284,7 @@ test('welcome screen displays custom title and wishes wall when configured', fun
     $this->invitation->wishes()->create([
         'guest_name' => 'Tamu Istimewa',
         'message' => 'Semoga bahagia selalu!',
+        'is_hidden' => false,
     ]);
 
     $response = $this->actingAs($this->user)
@@ -304,6 +307,7 @@ test('welcome screen does not display wishes wall when disabled', function () {
     $this->invitation->wishes()->create([
         'guest_name' => 'Tamu Istimewa',
         'message' => 'Semoga bahagia selalu!',
+        'is_hidden' => false,
     ]);
 
     $response = $this->actingAs($this->user)
@@ -313,4 +317,77 @@ test('welcome screen does not display wishes wall when disabled', function () {
         ->assertSee('Titel Kustom Kita')
         ->assertDontSee('Tamu Istimewa')
         ->assertDontSee('Semoga bahagia selalu!');
+});
+
+test('screen preset uploader deploys zip and rewrites HTML/CSS asset paths', function () {
+    $zipFile = tempnam(sys_get_temp_dir(), 'zip');
+    $zip = new ZipArchive;
+    if ($zip->open($zipFile, ZipArchive::CREATE) !== true) {
+        throw new Exception('Cannot create zip');
+    }
+    $zip->addFromString('index.html', '<html><head><link href="css/style.css"><style>body { background: url("assets/bg.jpg"); }</style></head><body><h1>{{ $invitation->couple_nickname }}</h1><img src="assets/image.jpg"></body></html>');
+    $zip->addFromString('css/style.css', 'body { background: url("../assets/bg.jpg"); }');
+    $zip->addFromString('js/script.js', 'console.log("hello");');
+    $zip->addFromString('assets/image.jpg', 'fake-image-content');
+    $zip->addFromString('assets/bg.jpg', 'fake-bg-content');
+    $zip->close();
+
+    $zipPath = 'temp_screen_preset_uploads/test-preset.zip';
+    Storage::disk('public')->put($zipPath, file_get_contents($zipFile));
+    unlink($zipFile);
+
+    $uploader = app(ScreenPresetUploaderService::class);
+    $result = $uploader->deploy($zipPath, 'Test Custom Preset');
+
+    expect($result['zip_path'])->toBe('uploaded:test-custom-preset');
+
+    // Check HTML rewriting
+    expect($result['html_content'])->toContain('href="{{ asset(\'screen-presets/test-custom-preset/css/style.css\') }}"');
+    expect($result['html_content'])->toContain('src="{{ asset(\'screen-presets/test-custom-preset/assets/image.jpg\') }}"');
+    expect($result['html_content'])->toContain('url(\'{{ asset("screen-presets/test-custom-preset/assets/bg.jpg") }}\')');
+
+    // Check deployed public files
+    $publicDir = public_path('screen-presets/test-custom-preset');
+    expect(File::exists($publicDir.'/css/style.css'))->toBeTrue();
+    expect(File::exists($publicDir.'/js/script.js'))->toBeTrue();
+    expect(File::exists($publicDir.'/assets/image.jpg'))->toBeTrue();
+    expect(File::exists($publicDir.'/assets/bg.jpg'))->toBeTrue();
+    expect(File::exists($publicDir.'/index.html'))->toBeFalse(); // skipped
+
+    // Check CSS rewriting
+    $cssContent = File::get($publicDir.'/css/style.css');
+    expect($cssContent)->toContain("url('/screen-presets/test-custom-preset/assets/bg.jpg')");
+
+    // Cleanup
+    File::deleteDirectory($publicDir);
+});
+
+test('welcome screen renders custom preset via Blade::render', function () {
+    $this->invitation->bride_nickname = 'Anya';
+    $this->invitation->groom_nickname = 'Loid';
+    $this->invitation->bride_groom_order = 'female_first';
+    $this->invitation->save();
+
+    $preset = ScreenPreset::create([
+        'name' => 'Test Custom Preset',
+        'slug' => 'test-custom-preset',
+        'description' => 'Test',
+        'zip_path' => 'uploaded:test-custom-preset',
+        'html_content' => '<html><body><h1>Hello {{ $invitation->couple_nickname }}</h1><img src="{{ asset(\'screen-presets/test-custom-preset/assets/image.jpg\') }}"></body></html>',
+        'is_active' => true,
+    ]);
+
+    $this->invitation->screen()->create([
+        'selected_theme' => 'test-custom-preset',
+        'custom_title' => 'Custom Title',
+        'show_wishes_wall' => false,
+    ]);
+
+    $response = $this->actingAs($this->user)
+        ->get(route('dashboard.welcome-screen.index', $this->invitation));
+
+    $response->assertSuccessful()
+        ->assertSee('Hello Anya & Loid')
+        ->assertSee('/screen-presets/test-custom-preset/assets/image.jpg')
+        ->assertDontSee('welcome-screen'); // verifies default template was NOT used
 });

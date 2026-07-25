@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Str;
 
 class Package extends Model
 {
@@ -31,6 +32,21 @@ class Package extends Model
     ];
 
     protected $appends = ['slug'];
+
+    protected static function booted(): void
+    {
+        static::creating(function (self $package) {
+            if (empty($package->package_code)) {
+                $package->package_code = Str::slug($package->package_name);
+            }
+        });
+
+        static::updating(function (self $package) {
+            if ($package->isDirty('package_name') && !$package->isDirty('package_code')) {
+                $package->package_code = Str::slug($package->package_name);
+            }
+        });
+    }
 
     public function getSlugAttribute(): string
     {

@@ -50,19 +50,10 @@ class ScreenPresetUploaderService
 
         $rootThemeDir = $this->findRootDirectory($tempExtractDir);
 
-        // 1. Extract only inline <style> blocks from index.html.
-        //    These contain CSS variables/theme tokens that must live in <head>
-        //    before the external stylesheet is loaded.
+        // 1. Process the entire index.html.
+        //    All asset paths (href, src, url()) are rewritten to point to public assets.
         $htmlContent = File::get($rootThemeDir.'/index.html');
-        preg_match_all('/<style[^>]*>.*?<\/style>/si', $htmlContent, $styleMatches);
-
-        $inlineStyles = '';
-        if (! empty($styleMatches[0])) {
-            $inlineStyles = $this->rewriteAssetUrlsToAbsolute(
-                implode("\n", $styleMatches[0]),
-                $presetSlug
-            );
-        }
+        $processedHtmlContent = $this->rewriteAssetPaths($htmlContent, $presetSlug);
 
         // 2. Deploy all files to public/screen-presets/{slug}/ maintaining native structure.
         //    css/style.css, js/app.js, and assets/* are stored as real separate files.
@@ -74,7 +65,7 @@ class ScreenPresetUploaderService
         foreach ($files as $file) {
             $relativePath = str_replace($rootThemeDir.DIRECTORY_SEPARATOR, '', $file->getPathname());
 
-            // Skip root index.html — local-preview only; inline styles already extracted.
+            // Skip root index.html — local-preview only; the whole file is saved to database.
             if ($relativePath === 'index.html') {
                 continue;
             }
@@ -97,9 +88,66 @@ class ScreenPresetUploaderService
         Storage::disk('public')->delete($zipFilePath);
 
         return [
-            'html_content' => $inlineStyles,
+            'html_content' => $processedHtmlContent,
             'zip_path' => "uploaded:{$presetSlug}",
         ];
+    }
+
+    /**
+     * Rewrite relative asset paths in index.html to point to public screen-presets directory.
+     */
+    private function rewriteAssetPaths(string $html, string $presetSlug): string
+    {
+        // Replace href="..."
+        $html = preg_replace_callback('/href="([^"]+)"/i', function ($matches) use ($presetSlug) {
+            return $this->processPath('href', $matches[1], $presetSlug);
+        }, $html);
+
+        // Replace src="..."
+        $html = preg_replace_callback('/src="([^"]+)"/i', function ($matches) use ($presetSlug) {
+            return $this->processPath('src', $matches[1], $presetSlug);
+        }, $html);
+
+        // Rewrite inline style url() references
+        $html = preg_replace_callback(
+            '/url\(\s*["\']?([^"\')\s]+)["\']?\s*\)/i',
+            function (array $matches) use ($presetSlug) {
+                $path = $matches[1];
+
+                if (preg_match('/^(https?:\/\/|\/\/|data:|#)/i', $path) || str_contains($path, '{{') || str_contains($path, '%7B%7B')) {
+                    return $matches[0];
+                }
+
+                $normalized = $this->normalizePath($path);
+
+                return "url('{{ asset(\"screen-presets/{$presetSlug}/{$normalized}\") }}')";
+            },
+            $html
+        );
+
+        // Remove Blade escaping if the user already wrote {{ ... }} manually
+        $html = str_replace(['%7B%7B', '%7D%7D'], ['{{', '}}'], $html);
+
+        return $html;
+    }
+
+    /**
+     * Process path for href/src rewriting to asset() calls.
+     */
+    private function processPath(string $attribute, string $path, string $presetSlug): string
+    {
+        // Ignore absolute URLs, data URIs, mailto, tel, anchor links, and already-templated segments
+        if (
+            preg_match('/^(http|https|\/\/|data:|mailto:|tel:|#)/i', $path) ||
+            str_contains($path, '{{') ||
+            str_contains($path, '%7B%7B')
+        ) {
+            return "{$attribute}=\"{$path}\"";
+        }
+
+        $cleanPath = $this->normalizePath($path);
+
+        return "{$attribute}=\"{{ asset('screen-presets/{$presetSlug}/{$cleanPath}') }}\"";
     }
 
     private function findRootDirectory(string $path): string

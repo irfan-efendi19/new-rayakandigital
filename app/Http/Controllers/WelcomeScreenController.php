@@ -9,6 +9,7 @@ use App\Services\ImageCompressionService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
@@ -35,6 +36,16 @@ class WelcomeScreenController extends Controller
             : collect();
 
         $preset = $screen->preset;
+
+        if ($preset && $preset->zip_path) {
+            $html = Blade::render(
+                $preset->html_content,
+                compact('invitation', 'firstEvent', 'screenGalleries', 'screen', 'wishes', 'preset')
+            );
+
+            return response($html);
+        }
+
         $themeHtmlContent = $preset?->html_content;
 
         return view('welcome-screen.index', compact('invitation', 'firstEvent', 'screenGalleries', 'screen', 'wishes', 'themeHtmlContent', 'preset'));

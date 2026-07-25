@@ -4,7 +4,9 @@ namespace App\Filament\Resources\PlatformFeatures\Schemas;
 
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Str;
 
 class PlatformFeatureForm
 {
@@ -14,14 +16,20 @@ class PlatformFeatureForm
             ->components([
                 TextInput::make('feature_key')
                     ->label('Feature Key')
-                    ->required()
+                    ->disabled()
+                    ->dehydrated()
                     ->maxLength(50)
-                    ->unique(ignoreRecord: true)
-                    ->helperText('Contoh: qr_checkin, wa_sender, digital_gift'),
+                    ->unique(ignoreRecord: true),
                 TextInput::make('feature_name')
                     ->label('Nama Fasilitas')
                     ->required()
-                    ->maxLength(100),
+                    ->maxLength(100)
+                    ->live(onBlur: true)
+                    ->afterStateUpdated(function (string $operation, string $state, Set $set): void {
+                        if ($operation === 'create') {
+                            $set('feature_key', Str::slug($state));
+                        }
+                    }),
                 TextInput::make('group_name')
                     ->label('Grup')
                     ->default('Dasar')
