@@ -198,7 +198,7 @@
                         Jika Anda memiliki pertanyaan, keluhan, atau permintaan terkait kebijakan privasi ini, silakan
                         hubungi kami:
                     </p>
-                    <div class="mt-4 p-4 bg-primary-50 rounded-xl border border-primary-100">
+                    <div class="mt-4 p-4 bg-primary-50 dark:bg-primary-900/50 rounded-xl border border-primary-100 dark:border-primary-800">
                         <p class="text-neutral-700 dark:text-neutral-200"><strong>Email:</strong> <a href="mailto:support@rayakandigital.com"
                                 class="text-primary hover:text-primary-600 underline">support@rayakandigital.com</a></p>
                         <p class="text-neutral-700 dark:text-neutral-200 mt-2"><strong>WhatsApp:</strong> <a href="https://wa.me/6281234567890"
