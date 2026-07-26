@@ -10,9 +10,19 @@ class OrdersByStatusChart extends ChartWidget
 {
     protected ?string $heading = 'Status Pesanan';
 
+    protected ?string $description = 'Distribusi pesanan berdasarkan status pembayaran';
+
     protected static ?int $sort = 4;
 
-    protected int | string | array $columnSpan = 6;
+    protected int|string|array $columnSpan = [
+        'default' => 'full',
+        'md' => 6,
+    ];
+
+    public function getMaxHeight(): ?string
+    {
+        return '280px';
+    }
 
     protected function getType(): string
     {
@@ -38,7 +48,7 @@ class OrdersByStatusChart extends ChartWidget
             default => 30,
         };
 
-        $cacheKey = 'filament-orders-status-chart-' . ($this->filter ?? '30d');
+        $cacheKey = 'filament-orders-status-chart-'.($this->filter ?? '30d');
 
         return Cache::remember($cacheKey, 300, function () use ($days) {
             $query = Order::query();
@@ -74,7 +84,8 @@ class OrdersByStatusChart extends ChartWidget
                         'label' => 'Jumlah Pesanan',
                         'data' => collect($labels)->map(fn ($_, $key) => $statuses[$key] ?? 0)->values()->toArray(),
                         'backgroundColor' => collect($colors)->only(array_keys($labels))->values()->toArray(),
-                        'borderRadius' => 4,
+                        'borderRadius' => 8,
+                        'borderSkipped' => false,
                     ],
                 ],
                 'labels' => collect($labels)->values()->toArray(),

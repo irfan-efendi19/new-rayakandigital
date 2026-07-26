@@ -9,11 +9,21 @@ use Illuminate\Support\Facades\Cache;
 
 class RevenueChart extends ChartWidget
 {
-    protected ?string $heading = 'Revenue';
+    protected ?string $heading = 'Grafik Pendapatan';
+
+    protected ?string $description = 'Total pendapatan dari langganan berhasil';
 
     protected static ?int $sort = 1;
 
-    protected int | string | array $columnSpan = 6;
+    protected int|string|array $columnSpan = [
+        'default' => 'full',
+        'md' => 8,
+    ];
+
+    public function getMaxHeight(): ?string
+    {
+        return '300px';
+    }
 
     protected function getType(): string
     {
@@ -43,12 +53,12 @@ class RevenueChart extends ChartWidget
 
         [$startDate, $groupBy, $periodCount] = $period;
 
-        $cacheKey = 'filament-revenue-chart-' . $this->filter;
+        $cacheKey = 'filament-revenue-chart-'.$this->filter;
 
         return Cache::remember($cacheKey, 300, function () use ($startDate, $groupBy, $periodCount) {
             $revenues = Subscription::where('payment_status', 'settlement')
                 ->where('created_at', '>=', $startDate)
-                ->selectRaw("DATE_FORMAT(created_at, '" . ($groupBy === 'month' ? '%Y-%m-01' : '%Y-%m-%d') . "') as date")
+                ->selectRaw("DATE_FORMAT(created_at, '".($groupBy === 'month' ? '%Y-%m-01' : '%Y-%m-%d')."') as date")
                 ->selectRaw('SUM(amount) as total')
                 ->groupBy('date')
                 ->orderBy('date')
@@ -83,9 +93,13 @@ class RevenueChart extends ChartWidget
                         'label' => 'Revenue (Rp)',
                         'data' => $data,
                         'borderColor' => '#10b981',
-                        'backgroundColor' => 'rgba(16, 185, 129, 0.1)',
+                        'backgroundColor' => 'rgba(16, 185, 129, 0.08)',
+                        'pointBackgroundColor' => '#10b981',
+                        'pointRadius' => 4,
+                        'pointHoverRadius' => 6,
                         'fill' => true,
-                        'tension' => 0.3,
+                        'tension' => 0.4,
+                        'borderWidth' => 2,
                     ],
                 ],
                 'labels' => $labels,

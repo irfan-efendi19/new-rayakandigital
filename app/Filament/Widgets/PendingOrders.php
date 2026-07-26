@@ -13,9 +13,9 @@ use Illuminate\Database\Eloquent\Builder;
 
 class PendingOrders extends BaseWidget
 {
-    protected static ?int $sort = 6;
+    protected static ?int $sort = 5;
 
-    protected int|string|array $columnSpan = 6;
+    protected int|string|array $columnSpan = 'full';
 
     protected function getTableHeading(): string
     {

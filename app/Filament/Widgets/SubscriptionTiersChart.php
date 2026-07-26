@@ -10,9 +10,19 @@ class SubscriptionTiersChart extends ChartWidget
 {
     protected ?string $heading = 'Distribusi Tier Langganan';
 
-    protected static ?int $sort = 5;
+    protected ?string $description = 'Langganan aktif per paket';
 
-    protected int | string | array $columnSpan = 6;
+    protected static ?int $sort = 2;
+
+    protected int|string|array $columnSpan = [
+        'default' => 'full',
+        'md' => 4,
+    ];
+
+    public function getMaxHeight(): ?string
+    {
+        return '300px';
+    }
 
     protected function getType(): string
     {

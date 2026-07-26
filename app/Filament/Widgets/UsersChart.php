@@ -11,9 +11,19 @@ class UsersChart extends ChartWidget
 {
     protected ?string $heading = 'Registrasi User';
 
+    protected ?string $description = 'Pertumbuhan pengguna baru';
+
     protected static ?int $sort = 3;
 
-    protected int | string | array $columnSpan = 3;
+    protected int|string|array $columnSpan = [
+        'default' => 'full',
+        'md' => 6,
+    ];
+
+    public function getMaxHeight(): ?string
+    {
+        return '280px';
+    }
 
     protected function getType(): string
     {
@@ -43,11 +53,11 @@ class UsersChart extends ChartWidget
 
         [$startDate, $groupBy, $periodCount] = $period;
 
-        $cacheKey = 'filament-users-chart-' . $this->filter;
+        $cacheKey = 'filament-users-chart-'.$this->filter;
 
         return Cache::remember($cacheKey, 300, function () use ($startDate, $groupBy, $periodCount) {
             $users = User::where('created_at', '>=', $startDate)
-                ->selectRaw("DATE_FORMAT(created_at, '" . ($groupBy === 'month' ? '%Y-%m-01' : '%Y-%m-%d') . "') as date")
+                ->selectRaw("DATE_FORMAT(created_at, '".($groupBy === 'month' ? '%Y-%m-01' : '%Y-%m-%d')."') as date")
                 ->selectRaw('COUNT(*) as total')
                 ->groupBy('date')
                 ->orderBy('date')
@@ -82,9 +92,13 @@ class UsersChart extends ChartWidget
                         'label' => 'User Baru',
                         'data' => $data,
                         'borderColor' => '#6366f1',
-                        'backgroundColor' => 'rgba(99, 102, 241, 0.1)',
+                        'backgroundColor' => 'rgba(99, 102, 241, 0.08)',
+                        'pointBackgroundColor' => '#6366f1',
+                        'pointRadius' => 4,
+                        'pointHoverRadius' => 6,
                         'fill' => true,
-                        'tension' => 0.3,
+                        'tension' => 0.4,
+                        'borderWidth' => 2,
                     ],
                 ],
                 'labels' => $labels,
