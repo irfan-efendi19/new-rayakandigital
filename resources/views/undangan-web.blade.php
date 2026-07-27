@@ -18,10 +18,10 @@
     <script>
         if (localStorage.getItem('dark-mode') === 'true' || (!('dark-mode' in localStorage) && window.matchMedia(
             '(prefers-color-scheme: dark)').matches)) {
-        document.documentElement.classList.add('dark');
-    } else {
-        document.documentElement.classList.remove('dark');
-    }
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
     </script>
 </head>
 
@@ -29,7 +29,6 @@
     <x-public-navbar />
     <div class="h-16"></div>
 
-    <!-- =========== HERO =========== -->
     <section data-aos="fade-up"
         class="relative overflow-hidden bg-gradient-to-br from-white via-primary-50/30 to-secondary-50 dark:from-secondary-900 dark:via-secondary-900 dark:to-secondary-900 pt-28 pb-16"
         id="layanan">
@@ -43,7 +42,6 @@
         </div>
         <div
             class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary-100/10 rounded-full blur-3xl">
-        </div>
         </div>
         <div class="relative max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
             <div>
@@ -74,7 +72,6 @@
                         <img src="{{ asset('img/undangan.webp') }}" alt="Preview Undangan Web"
                             class="w-full h-auto">
                     </div>
-                    </div>
                     <div
                         class="absolute top-8 -right-4 md:right-0 bg-white dark:bg-secondary-800 shadow-soft rounded-2xl px-4 py-3 flex items-center gap-3 w-44">
                         <div class="w-8 h-8 bg-primary-500 rounded-full flex items-center justify-center flex-shrink-0">
@@ -82,32 +79,30 @@
                         </div>
                         <div>
                             <p class="text-[10px] text-neutral-400 font-medium">Background Music</p>
-                        <p class="text-xs text-secondary-800 dark:text-neutral-200 font-semibold truncate">Sandaran Hati
-                        </p>
+                            <p class="text-xs text-secondary-800 dark:text-neutral-200 font-semibold truncate">Sandaran Hati
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        </section>
-        
-        <!-- =========== FITUR =========== -->
-        <section data-aos="fade-up" class="py-20 bg-white dark:bg-secondary-800" id="fitur">
-            <div class="max-w-6xl mx-auto px-6">
-                <div data-aos="fade-up" class="text-center mb-12">
+    </section>
+
+    <section data-aos="fade-up" class="py-20 bg-white dark:bg-secondary-800" id="fitur">
+        <div class="max-w-6xl mx-auto px-6">
+            <div data-aos="fade-up" class="text-center mb-12">
                 <h2 class="font-heading text-3xl md:text-4xl font-bold text-secondary-900 dark:text-neutral-100 mb-3">
-                    Fitur Interaktif Tanpa
-                    Batas</h2>
-                <p class="text-neutral-500 text-[15px] max-w-md mx-auto">Pengalaman yang lebih dari sekadar teks.
-                    Hadirkan
-                    emosi dan kemudahan dalam satu genggaman tamu Anda.</p>
+                    Semua yang Butuh
+                    dalam Satu Platform</h2>
+                <p class="text-neutral-500 text-[15px] max-w-md mx-auto">Dari galeri kenangan hingga buku tamu,
+                    semua terintegrasi tanpa perlu alat tambahan.</p>
             </div>
             <div class="grid md:grid-cols-2 gap-5">
                 <div data-aos="fade-up" data-aos-delay="100" class="bg-neutral-50 dark:bg-secondary-800 rounded-3xl p-6 overflow-hidden relative shadow-soft">
                     <div class="w-10 h-10 bg-primary-100 rounded-xl flex items-center justify-center mb-4">
                         <i class="fa-regular fa-images text-primary-500 text-lg"></i>
                     </div>
-                    <h3 class="font-semibold text-secondary-900 dark:text-neutral-100 text-lg mb-1">Galeri Foto & Video
-                    </h3>
+                    <h3 class="font-semibold text-secondary-900 dark:text-neutral-100 text-lg mb-1">Galeri Foto & Video</h3>
                     <p class="text-neutral-500 text-sm leading-relaxed max-w-xs">Bagikan momen pre-wedding terbaik Anda
                         dalam tampilan slideshow premium yang memukau.</p>
                     <div class="mt-5 grid grid-cols-4 gap-1.5 rounded-xl overflow-hidden">
@@ -117,19 +112,19 @@
                         </div>
                         <div class="rounded-xl h-11">
                             <img src="https://cdn1-production-images-kly.akamaized.net/0hS8EiMFn9LzJN_pZB-dIGVoHFU=/1280x720/smart/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/2922077/original/010070100_1569420799-ILUSTRASI_PREWEDDING.jpg"
-                                alt="Foto 1" class="w-full h-full object-cover rounded-xl">
+                                alt="Foto 2" class="w-full h-full object-cover rounded-xl">
                         </div>
                         <div class="bg-primary-300 rounded-xl h-11">
-                            <img src="https://tendasidomulyo.com/wp-content/uploads/2023/09/Konsep-foto-fun-di-alam-terbuka-untuk-kesan-unik.jpg"
-                                alt="Foto 1" class="w-full h-full object-cover rounded-xl">
+                            <img src="https://i.pinimg.com/originals/62/88/33/628833390eeed9b14bacb742a35dbfdb.jpg"
+                                alt="Foto 3" class="w-full h-full object-cover rounded-xl">
                         </div>
                         <div class="bg-primary-300 rounded-xl h-11">
                             <img src="https://www.keboncinta.com/uploads/artikel/1758726586_tampak-realistis-ini-prompt-foto-prewedding-bareng-pasangan-gemini-ai.webp"
-                                alt="Foto 1" class="w-full h-full object-cover rounded-xl">
+                                alt="Foto 4" class="w-full h-full object-cover rounded-xl">
                         </div>
                         <div class="bg-primary-300 rounded-xl h-11">
-                            <img src="https://i.pinimg.com/originals/62/88/33/628833390eeed9b14bacb742a35dbfdb.jpg" alt="Foto 1"
-                                class="w-full h-full object-cover rounded-xl">
+                            <img src="https://tendasidomulyo.com/wp-content/uploads/2023/09/Konsep-foto-fun-di-alam-terbuka-untuk-kesan-unik.jpg"
+                                alt="Foto 5" class="w-full h-full object-cover rounded-xl">
                         </div>
                     </div>
                 </div>
@@ -139,14 +134,10 @@
                     </div>
                     <h3 class="font-semibold text-secondary-900 dark:text-neutral-100 text-lg mb-1">Navigasi Peta</h3>
                     <p class="text-neutral-500 text-sm leading-relaxed max-w-xs">Terintegrasi langsung dengan Google
-                        Maps &
-                        Waze untuk memudahkan tamu hadir tepat waktu.</p>
+                        Maps & Waze untuk memudahkan tamu hadir tepat waktu.</p>
                     <div class="mt-5 w-full h-24 rounded-2xl overflow-hidden relative bg-blue-50">
                         <div class="absolute inset-0 flex items-center justify-center">
-                            <div class="w-full h-full" style="background:linear-gradient(135deg,#e0f2fe,#bae6fd); position:relative;">
-                                <div class="absolute inset-0 opacity-30"
-                                    style="background-image: repeating-linear-gradient(0deg,#93c5fd 0,#93c5fd 1px,transparent 1px,transparent 20px), repeating-linear-gradient(90deg,#93c5fd 0,#93c5fd 1px,transparent 1px,transparent 20px);">
-                                </div>
+                            <div class="w-full h-full" style="background:linear-gradient(135deg,#e0f2fe,#bae6fd);">
                                 <div class="absolute inset-0 flex items-center justify-center">
                                     <div class="w-8 h-8 bg-primary-500 rounded-full flex items-center justify-center shadow-soft">
                                         <i class="fa-solid fa-location-dot text-white text-sm"></i>
@@ -154,45 +145,39 @@
                                 </div>
                             </div>
                         </div>
-                        </div>
-                        </div>
-                        <div data-aos="fade-up" data-aos-delay="300" class="bg-primary-500 rounded-3xl p-6 text-white shadow-soft">
-                            <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center mb-4">
-                                <i class="fa-solid fa-music text-white text-lg"></i>
-                            </div>
-                            <h3 class="font-semibold text-lg mb-1">Background Music</h3>
-                            <p class="text-white/70 text-sm leading-relaxed">Auto-diputar, pilihan untuk suasana spesial.</p>
-                            <div class="mt-5 flex items-end gap-1 h-10">
-                                <div class="w-2 h-3 bg-white/30 rounded-full animate-bounce" style="animation-delay:0s"></div>
-                                <div class="w-2 h-7 bg-white/50 rounded-full animate-bounce" style="animation-delay:0.1s"></div>
-                                <div class="w-2 h-5 bg-white/40 rounded-full animate-bounce" style="animation-delay:0.2s"></div>
-                                <div class="w-2 h-9 bg-white/60 rounded-full animate-bounce" style="animation-delay:0.15s">
-                                </div>
-                                <div class="w-2 h-4 bg-white/30 rounded-full animate-bounce" style="animation-delay:0.3s"></div>
-                                <div class="w-2 h-7 bg-white/50 rounded-full animate-bounce" style="animation-delay:0.05s">
-                                </div>
-                                <div class="w-2 h-6 bg-white/40 rounded-full animate-bounce" style="animation-delay:0.25s">
-                                </div>
-                                <div class="w-2 h-10 bg-white/70 rounded-full animate-bounce" style="animation-delay:0.1s">
-                                </div>
-                            </div>
-                        </div>
-                        <div data-aos="fade-up" data-aos-delay="100" class="bg-neutral-50 dark:bg-secondary-800 rounded-3xl p-6 shadow-soft">
-                            <div class="w-10 h-10 bg-primary-100 rounded-xl flex items-center justify-center mb-4">
-                                <i class="fa-solid fa-envelope-open-text text-primary-500 text-lg"></i>
-                            </div>
-                            <h3 class="font-semibold text-secondary-900 dark:text-neutral-100 text-lg mb-1">RSVP & Ucapan</h3>
-                            <p class="text-neutral-500 text-sm leading-relaxed">Manajemen tamu dan buku ucapan digital yang
-                                rapi.
-                            </p>
-                            <div class="mt-5 space-y-2">
+                    </div>
+                </div>
+                <div data-aos="fade-up" data-aos-delay="300" class="bg-primary-500 rounded-3xl p-6 text-white shadow-soft">
+                    <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-music text-white text-lg"></i>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-1">Background Music</h3>
+                    <p class="text-white/70 text-sm leading-relaxed">Auto-diputar, pilihan untuk suasana spesial.</p>
+                    <div class="mt-5 flex items-end gap-1 h-10">
+                        <div class="w-2 h-3 bg-white/30 rounded-full animate-bounce" style="animation-delay:0s"></div>
+                        <div class="w-2 h-7 bg-white/50 rounded-full animate-bounce" style="animation-delay:0.1s"></div>
+                        <div class="w-2 h-5 bg-white/40 rounded-full animate-bounce" style="animation-delay:0.2s"></div>
+                        <div class="w-2 h-9 bg-white/60 rounded-full animate-bounce" style="animation-delay:0.15s"></div>
+                        <div class="w-2 h-4 bg-white/30 rounded-full animate-bounce" style="animation-delay:0.3s"></div>
+                        <div class="w-2 h-7 bg-white/50 rounded-full animate-bounce" style="animation-delay:0.05s"></div>
+                        <div class="w-2 h-6 bg-white/40 rounded-full animate-bounce" style="animation-delay:0.25s"></div>
+                        <div class="w-2 h-10 bg-white/70 rounded-full animate-bounce" style="animation-delay:0.1s"></div>
+                    </div>
+                </div>
+                <div data-aos="fade-up" data-aos-delay="100" class="bg-neutral-50 dark:bg-secondary-800 rounded-3xl p-6 shadow-soft">
+                    <div class="w-10 h-10 bg-primary-100 rounded-xl flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-envelope-open-text text-primary-500 text-lg"></i>
+                    </div>
+                    <h3 class="font-semibold text-secondary-900 dark:text-neutral-100 text-lg mb-1">RSVP & Ucapan</h3>
+                    <p class="text-neutral-500 text-sm leading-relaxed">Manajemen tamu dan buku ucapan digital yang
+                        rapi.</p>
+                    <div class="mt-5 space-y-2">
                         <div class="flex items-center gap-3 bg-white dark:bg-secondary-800 rounded-xl px-3 py-2 shadow-sm">
                             <div class="w-7 h-7 rounded-full bg-green-100 flex items-center justify-center">
                                 <i class="fa-solid fa-check text-green-500 text-xs"></i>
                             </div>
                             <div>
-                                <p class="text-xs font-semibold text-secondary-800 dark:text-neutral-200">Rina &
-                                    Keluarga</p>
+                                <p class="text-xs font-semibold text-secondary-800 dark:text-neutral-200">Rina & Keluarga</p>
                                 <p class="text-[10px] text-neutral-400">Hadir · 3 orang</p>
                             </div>
                         </div>
@@ -201,21 +186,19 @@
                                 <i class="fa-solid fa-clock text-primary-500 text-xs"></i>
                             </div>
                             <div>
-                                <p class="text-xs font-semibold text-secondary-800 dark:text-neutral-200">Budi Santoso
-                                </p>
+                                <p class="text-xs font-semibold text-secondary-800 dark:text-neutral-200">Budi Santoso</p>
                                 <p class="text-[10px] text-neutral-400">Menunggu konfirmasi</p>
                             </div>
                         </div>
                     </div>
                 </div>
-                </div>
-                </div>
-                </section>
-                
-                <!-- =========== HARGA =========== -->
-                <section data-aos="fade-up" class="py-20 bg-neutral-50 dark:bg-secondary-900" id="harga">
-                    <div class="max-w-6xl mx-auto px-6">
-                        <div data-aos="fade-up" class="mb-10">
+            </div>
+        </div>
+    </section>
+
+    <section data-aos="fade-up" class="py-20 bg-neutral-50 dark:bg-secondary-900" id="harga">
+        <div class="max-w-6xl mx-auto px-6">
+            <div data-aos="fade-up" class="mb-10">
                 <h2 class="font-heading text-3xl md:text-4xl font-bold text-secondary-900 dark:text-neutral-100 mb-2">
                     Pilih Paket Sesuai
                     Kebutuhan</h2>
@@ -224,13 +207,11 @@
                     Pilih yang terbaik untuk momen sekali seumur hidup Anda.</p>
             </div>
 
-
             <div class="mt-10 space-y-6 sm:space-y-0 sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:gap-6">
                 @forelse($packages as $index => $package)
                     <div data-aos="fade-up" data-aos-delay="{{ ($index % 4) * 100 + 100 }}"
-                        class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft transition-all duration-300 hover:shadow-xl hover:-translate-y-1 {{ $package->is_popular ? 'ring-2 ring-primary-500 shadow-lg' : 'border border-neutral-200' }}">
+                        class="group relative bg-white dark:bg-secondary-800 rounded-2xl shadow-soft transition-all duration-300 hover:shadow-xl hover:-translate-y-1 {{ $package->is_popular ? 'ring-2 ring-primary-500 shadow-lg' : 'border border-neutral-200 dark:border-secondary-700' }}">
 
-                        <!-- Popular Badge -->
                         @if($package->is_popular)
                             <div class="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
                                 <span
@@ -244,22 +225,18 @@
                             </div>
                         @endif
 
-                        <!-- Card Content -->
                         <div class="p-6">
-                            <!-- Package Name -->
                             <h3
                                 class="font-heading text-xl font-bold {{ $package->is_popular ? 'text-primary-600 dark:text-primary-400' : 'text-secondary-800 dark:text-neutral-100' }}">
                                 {{ $package->package_name }}
                             </h3>
 
-                            <!-- Description -->
                             @if($package->description)
                                 <p class="mt-2 text-sm text-neutral-500">
                                     {{ $package->description }}
                                 </p>
                             @endif
 
-                            <!-- Price -->
                             <div class="mt-6">
                                 @if($package->slashed_price && $package->slashed_price > $package->price)
                                     <span class="text-neutral-400 line-through text-sm">Rp
@@ -278,7 +255,7 @@
                                     @endif
                                 </div>
                             </div>
-                            <!-- CTA Button -->
+
                             @auth
                                 @if($package->package_code === 'free')
                                     <div
@@ -295,35 +272,23 @@
                                     </a>
                                 @endif
                             @else
-                                @if($package->package_code === 'free')
-                                    <a href="{{ route('register') }}"
-                                        class="mt-6 flex items-center justify-center gap-2 w-full bg-secondary-800 text-white rounded-xl py-3 text-sm font-semibold text-center hover:bg-secondary-900 transition-colors">
-                                        Daftar Gratis
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                                        </svg>
-                                    </a>
-                                @else
-                                    <a href="{{ route('register') }}"
-                                        class="mt-6 flex items-center justify-center gap-2 w-full rounded-xl py-3 text-sm font-semibold text-center transition-all duration-200 {{ $package->is_popular ? 'bg-primary-500 text-white hover:bg-primary-600 shadow-md hover:shadow-lg' : 'bg-primary-50 dark:bg-secondary-800 border border-primary-200 dark:border-primary-800 text-primary-700 dark:text-primary-400 hover:bg-primary-100 dark:hover:bg-secondary-700' }}">
-                                        Pilih {{ $package->package_name }}
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                                        </svg>
-                                    </a>
-                                @endif
+                                <a href="{{ route('register') }}"
+                                    class="mt-6 flex items-center justify-center gap-2 w-full rounded-xl py-3 text-sm font-semibold text-center transition-all duration-200 {{ $package->is_popular ? 'bg-primary-500 text-white hover:bg-primary-600 shadow-md hover:shadow-lg' : 'bg-primary-50 dark:bg-secondary-800 border border-primary-200 dark:border-primary-800 text-primary-700 dark:text-primary-400 hover:bg-primary-100 dark:hover:bg-secondary-700' }}">
+                                    {{ $package->package_code === 'free' ? 'Daftar Gratis' : 'Pilih ' . $package->package_name }}
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </a>
                             @endauth
                         </div>
 
-                        <!-- Features List -->
                         <div class="border-t border-neutral-100 dark:border-secondary-700 pt-5 pb-6 px-6">
                             <div class="flex items-center gap-2 mb-4">
                                 <svg class="w-4 h-4 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                 </svg>
                                 <h4 class="text-xs font-semibold text-neutral-400 uppercase tracking-wider">
-                                    Fitur
-                                    Termasuk</h4>
+                                    Fitur Termasuk</h4>
                             </div>
                             <ul class="space-y-3">
                                 @forelse($package->features as $feature)
@@ -350,25 +315,18 @@
                             </svg>
                         </div>
                         <p class="text-lg font-medium text-secondary-800 dark:text-neutral-200">Belum ada paket tersedia</p>
-                        <p class="text-neutral-500 mt-1">Silakan hubungi admin untuk informasi lebih lanjut.
-                        </p>
+                        <p class="text-neutral-500 mt-1">Silakan hubungi admin untuk informasi lebih lanjut.</p>
                     </div>
                 @endforelse
             </div>
         </div>
-        </div>
     </section>
 
-    <!-- =========== CTA =========== -->
     <section data-aos="fade-up" class="py-16 px-6">
         <div
             class="max-w-4xl mx-auto bg-gradient-to-br from-primary-600 to-primary-800 rounded-3xl p-10 md:p-14 text-center relative overflow-hidden">
-            <div
-                class="absolute top-0 left-0 w-48 h-48 bg-white/10 rounded-full -translate-x-1/2 -translate-y-1/2 blur-2xl">
-            </div>
-            <div
-                class="absolute bottom-0 right-0 w-64 h-64 bg-black/10 rounded-full translate-x-1/3 translate-y-1/3 blur-2xl">
-            </div>
+            <div class="absolute top-0 left-0 w-48 h-48 bg-white/10 rounded-full -translate-x-1/2 -translate-y-1/2 blur-2xl"></div>
+            <div class="absolute bottom-0 right-0 w-64 h-64 bg-black/10 rounded-full translate-x-1/3 translate-y-1/3 blur-2xl"></div>
             <h2 class="font-heading text-3xl md:text-4xl font-bold text-white relative z-10 mb-3">
                 Siap Membuat Undangan Anda?
             </h2>

@@ -27,9 +27,8 @@
 <body class="font-sans antialiased bg-neutral-50 dark:bg-secondary-900 text-secondary-800 dark:text-neutral-200">
     <x-public-navbar />
     <div class="h-16"></div>
-    <div class="h-16"></div>
 
-    <!-- ═══════════════════════════ HERO ═══════════════════════════ -->
+    {{-- ═══════════════════════════ HERO ═══════════════════════════ --}}
     <section data-aos="fade-up"
         class="relative overflow-hidden bg-gradient-to-br from-white via-primary-50/30 to-secondary-50 dark:from-secondary-900 dark:via-secondary-900 dark:to-secondary-900 px-6 pt-20 pb-16 text-center">
         <div class="absolute inset-0 overflow-hidden pointer-events-none">
@@ -42,12 +41,12 @@
             <span
                 class="inline-flex items-center gap-2 bg-primary-100 dark:bg-primary-900/50 border border-primary-200 dark:border-primary-800 text-primary-700 dark:text-primary-300 text-xs font-semibold px-3 py-1.5 rounded-full mb-4">
                 <i class="fa-regular fa-star text-primary-500 dark:text-primary-400 text-[10px]"></i>
-                Our Origin Story
+                Asal Usul
             </span>
 
             <h1
                 class="font-heading text-5xl md:text-6xl font-bold leading-tight text-secondary-800 dark:text-neutral-200 mb-3">
-                Menciptakan Kenangan<br>Digital yang
+                Menciptakan Kenangan Digital yang
             </h1>
             <h1 class="font-heading text-5xl md:text-6xl italic text-primary-500 dark:text-primary-400 mb-6">
                 Abadi &amp; Bermakna
@@ -58,41 +57,20 @@
                 sebagai jembatan untuk merayakan setiap momen berharga Anda dengan cara yang lebih personal, indah, dan
                 berkelanjutan.
             </p>
-
-            <!-- <div class="flex flex-col sm:flex-row gap-3 justify-center">
-                <button class="bg-secondary-800 text-white font-semibold px-7 py-3.5 rounded-full hover:bg-secondary-900 transition text-sm">
-                    Pelajari Layanan
-                </button>
-                <button class="border border-neutral-300 dark:border-secondary-600 text-secondary-800 dark:text-neutral-200 font-semibold px-7 py-3.5 rounded-full hover:border-primary-500 dark:hover:border-primary-400 hover:text-primary-500 dark:hover:text-primary-400 transition text-sm">
-                    Hubungi Kami
-                </button>
-            </div> -->
         </div>
     </section>
 
-    <!-- ═══════════════════════════ HERO IMAGE ═══════════════════════════ -->
+    {{-- ═══════════════════════════ HERO IMAGE ═══════════════════════════ --}}
     <section data-aos="fade-up" class="px-6 pb-20">
         <div class="max-w-4xl mx-auto relative">
             <div
                 class="rounded-2xl overflow-hidden aspect-[16/7] relative bg-gradient-to-br from-neutral-100 to-neutral-200 dark:from-secondary-800 dark:to-secondary-800">
-                <div class="absolute inset-0 flex items-center justify-center">
-                    <div class="text-center text-neutral-500 dark:text-neutral-400">
-                    </div>
-                    <img class="w-full h-full object-cover"
-                        src="https://asset.kompas.com/crops/i1x4qrVakfjJCRGtuBr7zKlPhkE=/49x0:892x562/1200x800/data/photo/2024/01/05/65977a9919349.jpg"
-                        alt="Tim Rayakan Digital" />
-                </div>
+                <img class="w-full h-full object-cover"
+                    src="https://asset.kompas.com/crops/i1x4qrVakfjJCRGtuBr7zKlPhkE=/49x0:892x562/1200x800/data/photo/2024/01/05/65977a9919349.jpg"
+                    alt="Tim Rayakan Digital" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
             </div>
 
-            <!-- Flower accents -->
-            <div class="absolute top-4 left-8 w-16 h-16 rounded-full bg-amber-400/40 blur-xl"></div>
-            <div class="absolute top-4 right-8 w-16 h-16 rounded-full bg-primary-300/40 blur-xl"></div>
-            <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-32 h-32 rounded-full bg-primary-600/30 blur-2xl">
-            </div>
-
-            <!-- Cursive overlay -->
-
-            <!-- Badge -->
             <div
                 class="absolute bottom-5 right-5 flex items-center gap-2.5 bg-white dark:bg-secondary-800 px-4 py-2.5 rounded-2xl shadow-soft">
                 <div class="w-8 h-8 bg-primary-500/10 rounded-xl flex items-center justify-center">
@@ -106,11 +84,10 @@
         </div>
     </section>
 
-    <!-- ═══════════════════════════ VISI & MISI ═══════════════════════════ -->
+    {{-- ═══════════════════════════ VISI & MISI ═══════════════════════════ --}}
     <section data-aos="fade-up" class="px-6 py-16 bg-white dark:bg-secondary-800">
         <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-6">
 
-            <!-- Visi -->
             <div
                 class="bg-neutral-50 dark:bg-secondary-700 rounded-2xl p-8 border border-neutral-100 dark:border-secondary-600 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                 <div
@@ -128,7 +105,6 @@
                 </a>
             </div>
 
-            <!-- Misi -->
             <div
                 class="bg-neutral-50 dark:bg-secondary-700 rounded-2xl p-8 border border-neutral-100 dark:border-secondary-600 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                 <div
@@ -158,14 +134,14 @@
         </div>
     </section>
 
-    <!-- ═══════════════════════════ NILAI-NILAI ═══════════════════════════ -->
+    {{-- ═══════════════════════════ NILAI-NILAI ═══════════════════════════ --}}
     <section data-aos="fade-up" class="px-6 py-20">
         <div class="max-w-5xl mx-auto">
             <div data-aos="fade-up" class="text-center mb-12">
                 <h2 class="font-heading text-4xl font-bold text-secondary-800 dark:text-neutral-200 mb-3">Nilai-Nilai
                     Kami</h2>
-                <p class="text-neutral-500 text-sm max-w-sm mx-auto">Filosofi yang mendasari setiap pixel dan baris kode
-                    yang kami ciptakan untuk Anda.</p>
+                <p class="text-neutral-500 text-sm max-w-sm mx-auto">Filosofi yang mendasari setiap layanan yang
+                    kami ciptakan untuk Anda.</p>
             </div>
 
             <div class="grid md:grid-cols-3 gap-6">
@@ -210,39 +186,26 @@
         </div>
     </section>
 
-    <!-- ═══════════════════════════ PERJALANAN ═══════════════════════════ -->
+    {{-- ═══════════════════════════ PERJALANAN ═══════════════════════════ --}}
     <section data-aos="fade-up" class="px-6 py-20 bg-white dark:bg-secondary-800">
         <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-12 items-center">
 
-            <!-- Images column -->
-            <div class="relative h-80 md:h-auto">
+            <div class="relative">
                 <div
-                    class="absolute left-0 top-0 w-[48%] h-full rounded-2xl overflow-hidden bg-gradient-to-br from-neutral-100 to-neutral-200 dark:from-secondary-800 dark:to-secondary-800">
-                    <div class="w-full h-full flex items-end p-4">
-                        <div class="bg-white/90 rounded-xl p-3 w-full">
-                            <i class="fa-solid fa-quote-left text-primary-500 text-xs mb-1"></i>
-                            <p class="text-xs text-secondary-700 dark:text-secondary-900 font-medium leading-snug">
-                                "Momen
-                                yang tepat diabadikan
-                                dengan undangan yang sempurna."</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="absolute right-0 top-6 w-[48%] h-[80%] rounded-2xl overflow-hidden"
-                    style="background:linear-gradient(135deg,#b07d5a 0%,#7a4f30 100%);">
-                    <div class="w-full h-full flex items-center justify-center">
-                        <img class="w-full h-full object-cover"
-                            src="https://asset.kompas.com/crops/i1x4qrVakfjJCRGtuBr7zKlPhkE=/49x0:892x562/1200x800/data/photo/2024/01/05/65977a9919349.jpg"
-                            alt="Tim Rayakan Digital" />
-                    </div>
+                    class="rounded-2xl overflow-hidden aspect-[4/5] bg-gradient-to-br from-neutral-100 to-neutral-200 dark:from-secondary-700 dark:to-secondary-800">
+                    <img class="w-full h-full object-cover"
+                        src="https://asset.kompas.com/crops/i1x4qrVakfjJCRGtuBr7zKlPhkE=/49x0:892x562/1200x800/data/photo/2024/01/05/65977a9919349.jpg"
+                        alt="Tim Rayakan Digital" />
                 </div>
                 <div
-                    class="absolute -bottom-4 left-[46%] -translate-x-1/2 w-12 h-12 bg-primary-500 rounded-2xl flex items-center justify-center shadow-lg z-10">
-                    <i class="fa-solid fa-heart text-white text-sm"></i>
+                    class="absolute -bottom-4 -right-4 bg-white dark:bg-secondary-800 rounded-2xl p-4 shadow-soft max-w-[70%]">
+                    <i class="fa-solid fa-quote-left text-primary-500 text-xs mb-1"></i>
+                    <p class="text-xs text-secondary-700 dark:text-neutral-300 font-medium leading-snug">
+                        "Momen yang tepat diabadikan dengan undangan yang sempurna."
+                    </p>
                 </div>
             </div>
 
-            <!-- Text column -->
             <div>
                 <span
                     class="inline-flex items-center gap-2 bg-primary-100 dark:bg-primary-900/50 border border-primary-200 dark:border-primary-800 text-primary-700 dark:text-primary-300 text-xs font-semibold px-3 py-1.5 rounded-full mb-3">
@@ -250,7 +213,7 @@
                     Perjalanan Kami
                 </span>
                 <h2 class="font-heading text-4xl font-bold text-secondary-800 dark:text-neutral-200 leading-tight mb-2">
-                    Perjalanan Kami<br>Membantu
+                    Perjalanan Kami Membantu
                 </h2>
                 <h2 class="font-heading text-4xl italic text-primary-500 dark:text-primary-400 mb-6">Ribuan Pasangan
                 </h2>
@@ -261,33 +224,33 @@
                     sendiri yang layak diceritakan dengan indah.
                 </p>
                 <p class="text-neutral-500 text-sm leading-relaxed mb-8">
-                    Kami telah membantu pasangan untuk mengabadikan kebahagiaan mereka dengan cara yang
-                    lebih elegan, ramah lingkungan, dan tentu saja, efisien. Perjalanan kami masih panjang, dan kami
-                    ingin terus menjadi bagian dari setiap momen bersejarah dalam hidup Anda.
+                    Kami telah membantu pasangan untuk mengabadikan kebahagiaan mereka dengan cara yang lebih elegan,
+                    ramah lingkungan, dan efisien. Perjalanan kami masih panjang, dan kami ingin terus menjadi bagian
+                    dari setiap momen bersejarah dalam hidup Anda.
                 </p>
 
-                <!-- <div class="flex gap-10">
+                <div class="flex gap-10 py-6 border-t border-b border-neutral-200 dark:border-secondary-600">
                     <div>
                         <p class="text-3xl font-heading font-bold text-secondary-800 dark:text-neutral-200">5k+</p>
-                        <p class="text-xs text-neutral-400 font-semibold uppercase tracking-widest mt-1">Klien Puas</p>
+                        <p class="text-xs text-neutral-500 font-semibold uppercase tracking-widest mt-1">Klien Puas</p>
                     </div>
                     <div class="w-px bg-neutral-200 dark:bg-secondary-600"></div>
                     <div>
                         <p class="text-3xl font-heading font-bold text-secondary-800 dark:text-neutral-200">200k+</p>
-                        <p class="text-xs text-neutral-400 font-semibold uppercase tracking-widest mt-1">Tamu Terundang
-                        </p>
+                        <p class="text-xs text-neutral-500 font-semibold uppercase tracking-widest mt-1">Tamu
+                            Terundang</p>
                     </div>
-                </div> -->
+                </div>
             </div>
 
         </div>
     </section>
 
-    <!-- ═══════════════════════════ CTA ═══════════════════════════ -->
+    {{-- ═══════════════════════════ CTA ═══════════════════════════ --}}
     <section data-aos="fade-up" class="px-6 py-20 bg-gradient-to-br from-primary-600 to-primary-800">
         <div class="max-w-3xl mx-auto text-center">
             <h2 class="font-heading text-4xl md:text-5xl font-bold text-white leading-tight mb-5">
-                Siap Mengabadikan Momen <span class="italic">Bahagia</span> Anda?
+                Siap Mengabadikan Momen Bahagia Anda?
             </h2>
             <p class="text-white/80 text-sm leading-relaxed max-w-lg mx-auto mb-10">
                 Bergabunglah dengan ribuan pasangan lainnya yang telah berani ke cara modern merayakan cinta. Wujudkan
