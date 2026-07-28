@@ -41,11 +41,6 @@
 
             <!-- Left -->
             <div data-aos="fade-right">
-                <span
-                    class="inline-flex items-center gap-2 bg-primary-100 border border-primary-200 text-primary-700 text-xs font-semibold px-3 py-1.5 rounded-full mb-6 tracking-wide uppercase">
-                    <i class="fa-regular fa-star text-primary-500 text-[10px]"></i>
-                    Premium Event Solution
-                </span>
                 <h1
                     class="max-sm:text-4xl text-5xl md:text-6xl font-heading font-extrabold leading-tight text-secondary-900 dark:text-neutral-100 mb-6">
                     Check-in Tamu,<br />

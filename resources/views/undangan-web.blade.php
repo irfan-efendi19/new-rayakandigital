@@ -45,11 +45,6 @@
         </div>
         <div class="relative max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
             <div>
-                <span data-aos="fade-up"
-                    class="inline-flex items-center gap-2 bg-primary-100 border border-primary-200 text-primary-700 text-xs font-semibold px-3 py-1.5 rounded-full mb-5">
-                    <i class="fa-solid fa-star text-primary-500 text-[10px]"></i>
-                    Undangan Digital Modern #1
-                </span>
                 <h1 data-aos="fade-up" data-aos-delay="100"
                     class="font-heading text-[2.6rem] md:text-5xl font-bold leading-tight text-secondary-900 dark:text-neutral-100 mb-3">
                     Rayakan Momen<br>Berharga Dengan<br>

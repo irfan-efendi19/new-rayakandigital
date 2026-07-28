@@ -38,12 +38,6 @@
             </div>
         </div>
         <div class="relative max-w-2xl mx-auto">
-            <span
-                class="inline-flex items-center gap-2 bg-primary-100 dark:bg-primary-900/50 border border-primary-200 dark:border-primary-800 text-primary-700 dark:text-primary-300 text-xs font-semibold px-3 py-1.5 rounded-full mb-4">
-                <i class="fa-regular fa-star text-primary-500 dark:text-primary-400 text-[10px]"></i>
-                Asal Usul
-            </span>
-
             <h1
                 class="font-heading text-5xl md:text-6xl font-bold leading-tight text-secondary-800 dark:text-neutral-200 mb-3">
                 Menciptakan Kenangan Digital yang
@@ -207,11 +201,6 @@
             </div>
 
             <div>
-                <span
-                    class="inline-flex items-center gap-2 bg-primary-100 dark:bg-primary-900/50 border border-primary-200 dark:border-primary-800 text-primary-700 dark:text-primary-300 text-xs font-semibold px-3 py-1.5 rounded-full mb-3">
-                    <i class="fa-regular fa-star text-primary-500 dark:text-primary-400 text-[10px]"></i>
-                    Perjalanan Kami
-                </span>
                 <h2 class="font-heading text-4xl font-bold text-secondary-800 dark:text-neutral-200 leading-tight mb-2">
                     Perjalanan Kami Membantu
                 </h2>

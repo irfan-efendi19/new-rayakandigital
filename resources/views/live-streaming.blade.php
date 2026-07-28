@@ -41,11 +41,6 @@
         <div class="relative max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
             <!-- Left -->
             <div data-aos="fade-right">
-                <span
-                    class="inline-flex items-center gap-2 bg-primary-100 dark:bg-secondary-800 text-primary-700 dark:text-primary-400 text-xs font-semibold px-3 py-1.5 rounded-full mb-6">
-                    <span class="w-2 h-2 rounded-full bg-primary-600 inline-block animate-pulse"></span>
-                    PENGALAMAN LIVE SINEMATIK
-                </span>
                 <h1
                     class="font-heading font-black text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-tight text-secondary-900 dark:text-neutral-100 mb-4">
                     Hidupkan Setiap<br>Momen
