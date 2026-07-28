@@ -790,14 +790,14 @@
                                             <label for="slug-input"
                                                 class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Tautan
                                                 Kustom</label>
-                                            <div class="mt-1.5 flex items-stretch gap-0">
+                                            <div class="mt-1.5 flex flex-col sm:flex-row items-stretch gap-2 sm:gap-0">
                                                 <span
-                                                    class="inline-flex items-center px-3 rounded-l-xl border border-r-0 border-neutral-300 dark:border-neutral-600 bg-neutral-100 dark:bg-secondary-700 text-sm text-neutral-500 dark:text-neutral-400 whitespace-nowrap">{{ parse_url(config('app.url'), PHP_URL_HOST) }}/</span>
+                                                    class="inline-flex items-center px-3 py-2 sm:py-0 rounded-xl sm:rounded-r-none border border-neutral-300 dark:border-neutral-600 bg-neutral-100 dark:bg-secondary-800 text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 whitespace-nowrap font-mono w-full sm:w-auto justify-center sm:justify-start sm:border-r-0">{{ parse_url(config('app.url'), PHP_URL_HOST) }}/</span>
                                                 <input type="text" name="slug" id="slug-input"
                                                     value="{{ old('slug', $invitation->slug) }}"
                                                     data-original="{{ $invitation->slug }}"
                                                     data-id="{{ $invitation->id }}"
-                                                    class="block w-full rounded-r-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm font-mono dark:bg-secondary-700 dark:text-neutral-200"
+                                                    class="block w-full flex-1 rounded-xl sm:rounded-l-none border border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 text-sm font-mono dark:bg-secondary-700 dark:text-neutral-200 py-2.5 px-3"
                                                     placeholder="nama-undangan-anda" maxlength="100"
                                                     pattern="^[a-z0-9\-]+$">
                                             </div>
@@ -2229,126 +2229,138 @@
                                 tampilan fitur di halaman undangan
                                 publik.</p>
 
-                            <div
-                                class="bg-neutral-50 dark:bg-secondary-700 rounded-2xl border border-neutral-200 dark:border-secondary-700 p-5">
-                                <h4 class="text-sm font-semibold text-secondary-800 dark:text-neutral-100 mb-3">
-                                    Fitur Interaktif</h4>
-                                <div class="space-y-4">
-                                    @php
-                                        $interactiveToggles = [
-                                            [
-                                                'id' => 'show_rsvp',
-                                                'label' => 'RSVP',
-                                                'desc' => 'Tampilkan form konfirmasi
-                                                                            kehadiran'
-                                            ],
-                                            [
-                                                'id' => 'show_gallery',
-                                                'label' => 'Galeri Foto',
-                                                'desc' => 'Tampilkan galeri foto
-                                                                            momen indah'
-                                            ],
-                                            [
-                                                'id' => 'show_gift',
-                                                'label' => 'Kado Digital',
-                                                'desc' => 'Tampilkan informasi
-                                                                            transfer bank & e-wallet'
-                                            ],
-                                            [
-                                                'id' => 'show_comments',
-                                                'label' => 'Buku Tamu / Komentar',
-                                                'desc' => 'Tampilkan kolom ucapan
-                                                                            dan doa'
-                                            ],
-                                            [
-                                                'id' => 'show_qr_checkin',
-                                                'label' => 'QR Check-In',
-                                                'desc' => 'Tampilkan kode QR unik
-                                                                            tamu'
-                                            ],
-                                        ];
-                                    @endphp
-                                    @foreach($interactiveToggles as $toggle)
-                                        <div class="flex items-start gap-3 py-1">
-                                            <div class="text-sm flex-1">
-                                                <label for="{{ $toggle['id'] }}"
-                                                    class="font-medium text-neutral-700 dark:text-neutral-300">{{ $toggle['label'] }}</label>
-                                                <p class="text-neutral-500 dark:text-neutral-400 text-xs">
-                                                    {{ $toggle['desc'] }}
-                                                </p>
-                                            </div>
-                                            <label class="relative inline-flex items-center cursor-pointer flex-shrink-0 mt-0.5">
-                                                <input type="hidden" name="{{ $toggle['id'] }}" value="0">
-                                                <input type="checkbox" name="{{ $toggle['id'] }}" id="{{ $toggle['id'] }}"
-                                                    value="1"
-                                                    {{ old($toggle['id'], $invitation->{$toggle['id']}) ? 'checked' : '' }}
-                                                    class="sr-only peer">
-                                                <div
-                                                    class="w-9 h-5 bg-neutral-200 dark:bg-secondary-700 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-neutral-300 dark:after:border-neutral-600 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary-500">
-                                                </div>
-                                            </label>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {{-- Card 1: Fitur Interaktif --}}
+                                <div class="bg-neutral-50 dark:bg-secondary-700/60 rounded-2xl border border-neutral-200 dark:border-secondary-600 p-5 flex flex-col justify-between">
+                                    <div>
+                                        <div class="flex items-center gap-2 mb-4 pb-3 border-b border-neutral-200/80 dark:border-secondary-600">
+                                            <svg class="w-4 h-4 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path>
+                                            </svg>
+                                            <h4 class="text-sm font-bold text-secondary-800 dark:text-neutral-100">
+                                                Fitur Interaktif
+                                            </h4>
                                         </div>
-                                    @endforeach
+                                        <div class="space-y-4">
+                                            @php
+                                                $interactiveToggles = [
+                                                    [
+                                                        'id' => 'show_rsvp',
+                                                        'label' => 'RSVP',
+                                                        'desc' => 'Tampilkan form konfirmasi kehadiran'
+                                                    ],
+                                                    [
+                                                        'id' => 'show_gallery',
+                                                        'label' => 'Galeri Foto',
+                                                        'desc' => 'Tampilkan galeri foto momen indah'
+                                                    ],
+                                                    [
+                                                        'id' => 'show_gift',
+                                                        'label' => 'Kado Digital',
+                                                        'desc' => 'Tampilkan informasi transfer bank & e-wallet'
+                                                    ],
+                                                    [
+                                                        'id' => 'show_comments',
+                                                        'label' => 'Buku Tamu / Komentar',
+                                                        'desc' => 'Tampilkan kolom ucapan dan doa'
+                                                    ],
+                                                    [
+                                                        'id' => 'show_qr_checkin',
+                                                        'label' => 'QR Check-In',
+                                                        'desc' => 'Tampilkan kode QR unik tamu'
+                                                    ],
+                                                ];
+                                            @endphp
+                                            @foreach($interactiveToggles as $toggle)
+                                                <div class="flex items-start gap-3 py-1">
+                                                    <div class="text-sm flex-1">
+                                                        <label for="{{ $toggle['id'] }}"
+                                                            class="font-medium text-neutral-700 dark:text-neutral-300 cursor-pointer">{{ $toggle['label'] }}</label>
+                                                        <p class="text-neutral-500 dark:text-neutral-400 text-xs">
+                                                            {{ $toggle['desc'] }}
+                                                        </p>
+                                                    </div>
+                                                    <label class="relative inline-flex items-center cursor-pointer flex-shrink-0 mt-0.5">
+                                                        <input type="hidden" name="{{ $toggle['id'] }}" value="0">
+                                                        <input type="checkbox" name="{{ $toggle['id'] }}" id="{{ $toggle['id'] }}"
+                                                            value="1"
+                                                            {{ old($toggle['id'], $invitation->{$toggle['id']}) ? 'checked' : '' }}
+                                                            class="sr-only peer">
+                                                        <div
+                                                            class="w-9 h-5 bg-neutral-200 dark:bg-secondary-800 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-neutral-300 dark:after:border-neutral-600 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary-500">
+                                                        </div>
+                                                    </label>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <h4 class="text-sm font-semibold text-secondary-800 dark:text-neutral-100 mb-3">
-                                    Visibilitas Fitur</h4>
-                                <div class="space-y-4">
-                                    @php
-                                        $visibilityToggles = [
-                                            [
-                                                'id' => 'show_stories',
-                                                'label' => 'Cerita Cinta',
-                                                'desc' => 'Tampilkan timeline
-                                                                            perjalanan cinta'
-                                            ],
-                                            [
-                                                'id' => 'show_countdown',
-                                                'label' => 'Hitung Mundur',
-                                                'desc' => 'Tampilkan timer hitung
-                                                                            mundur ke acara'
-                                            ],
-                                            [
-                                                'id' => 'show_event_detail',
-                                                'label' => 'Detail Acara',
-                                                'desc' => 'Tampilkan informasi waktu
-                                                                            & tempat'
-                                            ],
-                                            [
-                                                'id' => 'show_quote',
-                                                'label' => 'Kutipan',
-                                                'desc' => 'Tampilkan kutipan atau
-                                                                            ayat suci'
-                                            ],
-                                            [
-                                                'id' => 'show_video',
-                                                'label' => 'Video YouTube',
-                                                'desc' => 'Tampilkan video YouTube &
-                                                                            live streaming'
-                                            ],
-                                        ];
-                                    @endphp
-                                    @foreach($visibilityToggles as $toggle)
-                                        <div class="flex items-start gap-3 py-1">
-                                            <div class="text-sm flex-1">
-                                                <label for="{{ $toggle['id'] }}"
-                                                    class="font-medium text-neutral-700 dark:text-neutral-300">{{ $toggle['label'] }}</label>
-                                                <p class="text-neutral-500 dark:text-neutral-400 text-xs">
-                                                    {{ $toggle['desc'] }}
-                                                </p>
-                                            </div>
-                                            <label class="relative inline-flex items-center cursor-pointer flex-shrink-0 mt-0.5">
-                                                <input type="hidden" name="{{ $toggle['id'] }}" value="0">
-                                                <input type="checkbox" name="{{ $toggle['id'] }}" id="{{ $toggle['id'] }}"
-                                                    value="1"
-                                                    {{ old($toggle['id'], $invitation->{$toggle['id']}) ? 'checked' : '' }}
-                                                    class="sr-only peer">
-                                                <div
-                                                    class="w-9 h-5 bg-neutral-200 dark:bg-secondary-700 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-neutral-300 dark:after:border-neutral-600 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary-500">
-                                                </div>
-                                            </label>
+                                {{-- Card 2: Visibilitas Fitur --}}
+                                <div class="bg-neutral-50 dark:bg-secondary-700/60 rounded-2xl border border-neutral-200 dark:border-secondary-600 p-5 flex flex-col justify-between">
+                                    <div>
+                                        <div class="flex items-center gap-2 mb-4 pb-3 border-b border-neutral-200/80 dark:border-secondary-600">
+                                            <svg class="w-4 h-4 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                            </svg>
+                                            <h4 class="text-sm font-bold text-secondary-800 dark:text-neutral-100">
+                                                Visibilitas Fitur
+                                            </h4>
                                         </div>
-                                    @endforeach
+                                        <div class="space-y-4">
+                                            @php
+                                                $visibilityToggles = [
+                                                    [
+                                                        'id' => 'show_stories',
+                                                        'label' => 'Cerita Cinta',
+                                                        'desc' => 'Tampilkan timeline perjalanan cinta'
+                                                    ],
+                                                    [
+                                                        'id' => 'show_countdown',
+                                                        'label' => 'Hitung Mundur',
+                                                        'desc' => 'Tampilkan timer hitung mundur ke acara'
+                                                    ],
+                                                    [
+                                                        'id' => 'show_event_detail',
+                                                        'label' => 'Detail Acara',
+                                                        'desc' => 'Tampilkan informasi waktu & tempat'
+                                                    ],
+                                                    [
+                                                        'id' => 'show_quote',
+                                                        'label' => 'Kutipan',
+                                                        'desc' => 'Tampilkan kutipan atau ayat suci'
+                                                    ],
+                                                    [
+                                                        'id' => 'show_video',
+                                                        'label' => 'Video YouTube',
+                                                        'desc' => 'Tampilkan video YouTube & live streaming'
+                                                    ],
+                                                ];
+                                            @endphp
+                                            @foreach($visibilityToggles as $toggle)
+                                                <div class="flex items-start gap-3 py-1">
+                                                    <div class="text-sm flex-1">
+                                                        <label for="{{ $toggle['id'] }}"
+                                                            class="font-medium text-neutral-700 dark:text-neutral-300 cursor-pointer">{{ $toggle['label'] }}</label>
+                                                        <p class="text-neutral-500 dark:text-neutral-400 text-xs">
+                                                            {{ $toggle['desc'] }}
+                                                        </p>
+                                                    </div>
+                                                    <label class="relative inline-flex items-center cursor-pointer flex-shrink-0 mt-0.5">
+                                                        <input type="hidden" name="{{ $toggle['id'] }}" value="0">
+                                                        <input type="checkbox" name="{{ $toggle['id'] }}" id="{{ $toggle['id'] }}"
+                                                            value="1"
+                                                            {{ old($toggle['id'], $invitation->{$toggle['id']}) ? 'checked' : '' }}
+                                                            class="sr-only peer">
+                                                        <div
+                                                            class="w-9 h-5 bg-neutral-200 dark:bg-secondary-800 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-neutral-300 dark:after:border-neutral-600 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary-500">
+                                                        </div>
+                                                    </label>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
