@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
+use App\Support\UniqueSlugGenerator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Support\Str;
 
 class Addon extends Model
 {
@@ -29,13 +29,13 @@ class Addon extends Model
     {
         static::creating(function (self $addon) {
             if (empty($addon->slug)) {
-                $addon->slug = Str::slug($addon->name);
+                $addon->slug = UniqueSlugGenerator::generate(static::class, $addon->name);
             }
         });
 
         static::updating(function (self $addon) {
-            if ($addon->isDirty('name') && !$addon->isDirty('slug')) {
-                $addon->slug = Str::slug($addon->name);
+            if ($addon->isDirty('name') && ! $addon->isDirty('slug')) {
+                $addon->slug = UniqueSlugGenerator::generate(static::class, $addon->name, 'slug', $addon->id);
             }
         });
     }

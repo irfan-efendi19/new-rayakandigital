@@ -2,13 +2,14 @@
 
 namespace App\Filament\Resources\Addons\Schemas;
 
+use App\Models\Addon;
+use App\Support\UniqueSlugGenerator;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
-use Illuminate\Support\Str;
 
 class AddonForm
 {
@@ -23,7 +24,7 @@ class AddonForm
                     ->live(onBlur: true)
                     ->afterStateUpdated(function (string $operation, string $state, Set $set): void {
                         if ($operation === 'create') {
-                            $set('slug', Str::slug($state));
+                            $set('slug', UniqueSlugGenerator::generate(Addon::class, $state));
                         }
                     }),
                 TextInput::make('slug')

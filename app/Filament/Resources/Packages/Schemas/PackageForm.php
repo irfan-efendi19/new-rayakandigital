@@ -2,14 +2,15 @@
 
 namespace App\Filament\Resources\Packages\Schemas;
 
+use App\Models\Package;
 use App\Models\PlatformFeature;
+use App\Support\UniqueSlugGenerator;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
-use Illuminate\Support\Str;
 
 class PackageForm
 {
@@ -31,7 +32,7 @@ class PackageForm
                     ->live(onBlur: true)
                     ->afterStateUpdated(function (string $operation, string $state, Set $set): void {
                         if ($operation === 'create') {
-                            $set('package_code', Str::slug($state));
+                            $set('package_code', UniqueSlugGenerator::generate(Package::class, $state, 'package_code'));
                         }
                     }),
                 TextInput::make('price')

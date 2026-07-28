@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\UniqueSlugGenerator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -28,6 +29,18 @@ class ScreenPreset extends Model
 
     protected static function booted(): void
     {
+        static::creating(function (self $preset) {
+            if (empty($preset->slug)) {
+                $preset->slug = UniqueSlugGenerator::generate(static::class, $preset->name);
+            }
+        });
+
+        static::updating(function (self $preset) {
+            if ($preset->isDirty('name') && ! $preset->isDirty('slug')) {
+                $preset->slug = UniqueSlugGenerator::generate(static::class, $preset->name, 'slug', $preset->id);
+            }
+        });
+
         static::deleting(function (self $preset) {
             $preset->cleanupFiles();
         });

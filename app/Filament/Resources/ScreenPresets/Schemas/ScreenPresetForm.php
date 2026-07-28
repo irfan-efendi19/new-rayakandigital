@@ -2,13 +2,14 @@
 
 namespace App\Filament\Resources\ScreenPresets\Schemas;
 
+use App\Models\ScreenPreset;
+use App\Support\UniqueSlugGenerator;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
-use Illuminate\Support\Str;
 
 class ScreenPresetForm
 {
@@ -23,7 +24,7 @@ class ScreenPresetForm
                     ->live(onBlur: true)
                     ->afterStateUpdated(function (string $operation, string $state, Set $set): void {
                         if ($operation === 'create') {
-                            $set('slug', Str::slug($state));
+                            $set('slug', UniqueSlugGenerator::generate(ScreenPreset::class, $state));
                         }
                     }),
 

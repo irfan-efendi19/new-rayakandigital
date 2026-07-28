@@ -2,10 +2,11 @@
 
 namespace App\Filament\Resources\ThemeCategories\Schemas;
 
+use App\Models\ThemeCategory;
+use App\Support\UniqueSlugGenerator;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
-use Illuminate\Support\Str;
 
 class ThemeCategoryForm
 {
@@ -22,7 +23,7 @@ class ThemeCategoryForm
                     ->live(onBlur: true)
                     ->afterStateUpdated(function (string $operation, string $state, Set $set): void {
                         if ($operation === 'create') {
-                            $set('slug', Str::slug($state));
+                            $set('slug', UniqueSlugGenerator::generate(ThemeCategory::class, $state));
                         }
                     }),
 

@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
+use App\Support\UniqueSlugGenerator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Support\Str;
 
 class Package extends Model
 {
@@ -37,13 +37,13 @@ class Package extends Model
     {
         static::creating(function (self $package) {
             if (empty($package->package_code)) {
-                $package->package_code = Str::slug($package->package_name);
+                $package->package_code = UniqueSlugGenerator::generate(static::class, $package->package_name, 'package_code');
             }
         });
 
         static::updating(function (self $package) {
-            if ($package->isDirty('package_name') && !$package->isDirty('package_code')) {
-                $package->package_code = Str::slug($package->package_name);
+            if ($package->isDirty('package_name') && ! $package->isDirty('package_code')) {
+                $package->package_code = UniqueSlugGenerator::generate(static::class, $package->package_name, 'package_code', $package->id);
             }
         });
     }

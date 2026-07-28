@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use App\Support\UniqueSlugGenerator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Str;
 
 class ThemeCategory extends Model
 {
@@ -18,13 +18,13 @@ class ThemeCategory extends Model
     {
         static::creating(function (self $category) {
             if (empty($category->slug)) {
-                $category->slug = Str::slug($category->name);
+                $category->slug = UniqueSlugGenerator::generate(static::class, $category->name);
             }
         });
 
         static::updating(function (self $category) {
-            if ($category->isDirty('name') && !$category->isDirty('slug')) {
-                $category->slug = Str::slug($category->name);
+            if ($category->isDirty('name') && ! $category->isDirty('slug')) {
+                $category->slug = UniqueSlugGenerator::generate(static::class, $category->name, 'slug', $category->id);
             }
         });
     }

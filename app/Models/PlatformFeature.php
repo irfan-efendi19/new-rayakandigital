@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
+use App\Support\UniqueSlugGenerator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Support\Str;
 
 class PlatformFeature extends Model
 {
@@ -22,13 +22,13 @@ class PlatformFeature extends Model
     {
         static::creating(function (self $feature) {
             if (empty($feature->feature_key)) {
-                $feature->feature_key = Str::slug($feature->feature_name);
+                $feature->feature_key = UniqueSlugGenerator::generate(static::class, $feature->feature_name, 'feature_key');
             }
         });
 
         static::updating(function (self $feature) {
-            if ($feature->isDirty('feature_name') && !$feature->isDirty('feature_key')) {
-                $feature->feature_key = Str::slug($feature->feature_name);
+            if ($feature->isDirty('feature_name') && ! $feature->isDirty('feature_key')) {
+                $feature->feature_key = UniqueSlugGenerator::generate(static::class, $feature->feature_name, 'feature_key', $feature->id);
             }
         });
     }
