@@ -1,209 +1,164 @@
-# Product Requirement Document (PRD)
+prd_spotlight_md = """# Product Requirement Document (PRD)
 
-## MODUL: LAYAR SAPA - INDEPENDENT FULL-CUSTOM ENGINE
+## MODUL: INTERACTIVE SPOTLIGHT TUTORIAL (DRIVER.JS ENGINE)
 
-| Atribut               | Detail                                                                                |
-| :-------------------- | :------------------------------------------------------------------------------------ |
-| **Status**            | Approved                                                                              |
-| **Penulis**           | Mochammad Irfan Efendi                                                                |
-| **Tanggal Pembuatan** | 28 Juli 2026                                                                          |
-| **Target Komponen**   | Modul Layar Sapa & Filament Admin Upload Engine                                       |
-| **Filosofi Utama**    | **Unopinionated Standalone Template & Native ZIP Pipeline (100% Free UI/UX Freedom)** |
-
----
-
-## 1. KONSEP & ARSITEKTUR INDEPENDEN (DECOUPLED DESIGN)
-
-Sistem Layar Sapa tidak lagi memaksakan struktur CSS/JS atau komponen template tertentu. **Setiap tema adalah berkas web murni yang bisa dibuka dan diuji secara independen di komputer lokal (VS Code)** tanpa memerlukan Laravel, database, atau koneksi internet.
-
-### 1.1 Struktur Berkas Wajib di Lingkungan Lokal (VS Code)
-
-Pengembang lokal bebas menentukan desain, tetapi berkas ZIP yang diunggah harus memiliki struktur hirarki berikut:
-
-```text
-nama-tema-bebas.zip/
-├── index.html          <-- Pure HTML (Struktur visual & penempatan bracket placeholder)
-├── css/
-│   └── style.css       <-- Pure CSS (Aturan styling, layout, grid/flex, keyframe animasi)
-├── js/
-│   └── app.js          <-- Pure JS (Logika manipulasi DOM, marquee scroll, atau WebSockets)
-└── assets/
-    ├── bg-video.mp4     <-- Aset media lokal (opsional: video, gambar, audio)
-    └── custom-font.ttf <-- Font kustom
-```
-
-### 1.2 Aturan Penulisan Kode Lokal (Local Rules)
-
-1. **Path Relatif Murni:** Pemanggilan berkas pendukung pada `index.html` **wajib** menggunakan path relatif standar agar dapat berjalan langsung saat _double-click_ file `index.html` di laptop lokal:
-    ```html
-    <link rel="stylesheet" href="css/style.css" />
-    <script src="js/app.js" defer></script>
-    <img src="assets/bg.jpg" alt="Background" />
-    ```
-2. **Kebebasan Total Frontend:** Pengembang bebas menggunakan Pure CSS, Tailwind via CDN, GSAP Animation, Three.js, Canvas, atau pustaka JavaScript apa pun di dalam berkas murni tersebut.
-3. **Penyisipan Variable Placeholder (Contract Layer):** Laravel hanya bertugas mengganti tag bracket `{...}` yang diletakkan secara bebas oleh pengembang pada `index.html`:
-    - `{judul_kustom}` : Judul ucapan/layar (misal: "Selamat Datang").
-    - `{nama_pengantin}` : Nama pasangan/mempelai.
-    - `{wish_list_items}` : Penampung elemen daftar ucapan tamu.
+| Atribut               | Detail                                                                                          |
+| :-------------------- | :---------------------------------------------------------------------------------------------- |
+| **Status**            | Approved                                                                                        |
+| **Penulis**           | Mochammad Irfan Efendi                                                                          |
+| **Tanggal Pembuatan** | 29 Juli 2026                                                                                    |
+| **Target Komponent**  | Dashboard Editor Undangan & Form Input Data                                                     |
+| **Library Utama**     | **Driver.js v1.3+** (Zero Dependency, Lightweight < 5KB)                                        |
+| **Filosofi Utama**    | **Non-Intrusive Onboarding, Highly Scalable HTML Data-Attributes, & Seamless State Management** |
 
 ---
 
-## 2. ENGINE REFAKTORISASI PARSER (`ScreenDisplayController.php`)
+## 1. DESKRIPSI & OBJECTIVE
 
-Controller bekerja secara pasif tanpa mengubah atau memotong logika JS/CSS kustom buatan pengembang. Mesin parser memindai pemanggilan berkas relatif (`href="..."`, `src="..."`, `url(...)`) lalu mengubahnya secara otomatis menjadi **URL Publik Storage Server Laravel**.
-
-```php
-<?php
-
-namespace App\Http\Controllers;
-
-use App\Models\Invitation;
-use App\Models\InvitationScreen;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Storage;
-
-class ScreenDisplayController extends Controller
-{
-    public function showLiveScreen($slug)
-    {
-        // 1. Eksekusi dari Cache Redis untuk memastikan TTFB cepat (< 80ms)
-        $cacheKey = "live_screen_output_{$slug}";
-
-        $htmlOutput = Cache::remember($cacheKey, now()->addHours(2), function () use ($slug) {
-            $invitation = Invitation::where('slug', $slug)->firstOrFail();
-            $settings = InvitationScreen::with('screenPreset')
-                ->where('invitation_id', $invitation->id)
-                ->firstOrFail();
-
-            $preset = $settings->screenPreset;
-
-            // Validasi keberadaan file index.html di storage hasil ekstrak ZIP admin Filament
-            if (!$preset || !$preset->is_active || !Storage::disk('public')->exists($preset->storage_path . '/index.html')) {
-                return response("Template Layar Sapa tidak ditemukan atau berkas ZIP belum diekstrak.", 404);
-            }
-
-            $folderPath = $preset->storage_path;
-            $baseUrl = asset('storage/' . $folderPath) . '/';
-
-            // 2. Baca isi Pure HTML mentah buatan pengembang lokal
-            $rawHtml = Storage::disk('public')->get($folderPath . '/index.html');
-
-            // 3. AUTOMATION PARSER: Mengubah SELURUH path relatif lokal (css/, js/, assets/) ke Absolute URL Storage
-            // Regex ini mendeteksi atribut href="...", src="...", dan action="..." yang berupa path relatif
-            $parsedHtml = preg_replace_callback(
-                '/(href|src)=["']((?!http|https|\/\/|data:)[^"']+)["']/',
-                function ($matches) use ($baseUrl) {
-                    $attribute = $matches[1];
-                    $relativePath = ltrim($matches[2], '/');
-                    return $attribute . '="' . $baseUrl . $relativePath . '"';
-                },
-                $rawHtml
-            );
-
-            // 4. GENERATE UCAPAN TAMU (Renders Standard HTML Items)
-            $wishes = $invitation->comments()->latest()->take(12)->get();
-            $wishesHtml = '';
-            foreach ($wishes as $wish) {
-                $wishesHtml .= "
-                    <div class='wish-card'>
-                        <h4 class='wish-sender'>" . e($wish->name) . "</h4>
-                        <p class='wish-message'>"" . e($wish->content) . ""</p>
-                    </div>
-                ";
-            }
-
-            // 5. INJEKSI VARIABEL: Substitusi data ke tag bracket placeholder HTML murni
-            return str_replace([
-                '{judul_kustom}',
-                '{nama_pengantin}',
-                '{wish_list_items}'
-            ], [
-                e($settings->custom_title ?? 'Selamat Datang'),
-                e($invitation->title ?? 'Pasangan Mempelai'),
-                $wishesHtml
-            ], $parsedHtml);
-        });
-
-        // 6. Kembalikan respons sebagai Pure HTML
-        return response($htmlOutput, 200)
-            ->header('Content-Type', 'text/html; charset=utf-8');
-    }
-}
-```
+Fitur Interactive Spotlight Tutorial dirancang untuk memberikan panduan langkah demi langkah (_onboarding tour_) kepada pengguna baru saat pertama kali mengakses editor undangan digital. Menggunakan **Driver.js**, sistem akan menyorot elemen-elemen kunci dalam pembuatan undangan (seperti pemilihan tema, pengisian data mempelai, pengaturan Layar Sapa, hingga publikasi) tanpa mengganggu fungsionalitas utama aplikasi.
 
 ---
 
-## 3. DUKUNGAN RENDERING KHUSUS (DUA OPSI MANAJEMEN UCAPAN)
+## 2. SPESIFIKASI ALUR PENGGUNA (USER JOURNEY)
 
-Agar pengembang tidak terikat pada komponen `div.wish-card` buatan Laravel, sistem mendukung dua skenario interaksi:
+1. **Auto-Trigger First Visit:** Saat pengguna baru membuka halaman editor undangan untuk pertama kalinya, overlay _spotlight_ akan otomatis aktif.
+2. **Interactive Stepper:** Pengguna dipandu melalui urutan elemen visual dengan _popover card_ yang menjelaskan fungsi elemen terkait.
+3. **Flexible Controls:** Pengguna dapat berpindah ke langkah selanjutnya, kembali ke langkah sebelumnya, atau menutup panduan kapan saja (`Esc` / tombol tutup).
+4. **Manual Re-trigger:** Menyediakan tombol "Panduan / Bantuan" di navigasi editor untuk memicu ulang tutorial secara manual tanpa menghapus riwayat penggunaan.
 
-### Opsi A: Default CSS Injection (Sederhana)
+---
 
-Pengembang cukup menyisipkan `{wish_list_items}` di mana saja dalam file `index.html`. Pengembang kemudian bebas menentukan visual kartu ucapan tersebut melalui file `css/style.css` lokal:
+## 3. INTEGRASI & ATRIBUT ELEMEN (`data-tour`)
 
-```css
-/* Bebas styling kelas .wish-card, .wish-sender, & .wish-message di style.css lokal */
-.wish-card {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(8px);
-    border-radius: 12px;
-    padding: 16px;
-    margin-bottom: 12px;
-}
-.wish-sender {
-    font-weight: bold;
-    color: #ffd700;
-}
-.wish-message {
-    font-size: 0.9rem;
-    color: #ffffff;
-}
-```
+Pengembang hanya perlu menambahkan atribut `data-tour="..."` pada komponen HTML/Blade target:
 
-### Opsi B: Pure JS Polling / REST API (100% Custom Motion / Canvas / 3D)
+| Step  | Target Selector (`data-tour`)     | Title Popover                | Deskripsi Popover                                                                             |    Position    |
+| :---: | :-------------------------------- | :--------------------------- | :-------------------------------------------------------------------------------------------- | :------------: |
+| **1** | `[data-tour="select-theme"]`      | 🎨 Pilih Desain Undangan     | Pilih preset tema visual undangan yang sesuai dengan konsep acara Anda.                       | `bottom-start` |
+| **2** | `[data-tour="mempelai-info"]`     | 💍 Isikan Informasi Pasangan | Lengkapi nama lengkap, nama panggilan, serta foto calon mempelai pria dan wanita.             |    `right`     |
+| **3** | `[data-tour="event-schedule"]`    | 📅 Tanggal & Waktu Acara     | Tentukan sesi acara, waktu pelaksanaan, serta tautan Google Maps untuk navigasi tamu.         |    `bottom`    |
+| **4** | `[data-tour="layar-sapa-config"]` | 📺 Konfigurasi Layar Sapa    | Atur tampilan ucapan live untuk proyektor lokasi acara dan pilih preset tema Layar Sapa Anda. |     `top`      |
+| **5** | `[data-tour="guest-management"]`  | 👥 Manajemen Tamu & RSVP     | Kelola daftar tamu, buat tautan kustom per tamu, dan pantau konfirmasi kehadiran.             |    `right`     |
+| **6** | `[data-tour="publish-btn"]`       | 🚀 Publikasikan Undangan     | Klik tombol ini jika semua data sudah siap untuk mengaktifkan dan membagikan tautan undangan. |     `left`     |
 
-Jika pengembang ingin membuat efek visual animasi kompleks (seperti balon ucapan melayang, running text 3D, atau Canvas Particles), pengembang **tidak perlu memasang bracket `{wish_list_items}`**.
+---
 
-Pengembang cukup menulis skrip Pure JS di `js/app.js` untuk mengambil data JSON secara langsung melalui Endpoint API publik Laravel:
+## 4. SKRIP IMPLEMENTASI ENGINE (`tutorial-spotlight.js`)
 
 ```javascript
-// js/app.js - Dijalankan di dalam browser proyektor
 document.addEventListener("DOMContentLoaded", () => {
-    const invitationSlug = window.location.pathname.split("/").pop();
+    // Inisialisasi Driver.js
+    const driver = window.driver.js.driver;
 
-    // Fetch data ucapan secara berkala (Polling)
-    setInterval(() => {
-        fetch(`/api/v1/screen-wishes/${invitationSlug}`)
-            .then((res) => res.json())
-            .then((wishes) => {
-                // Bebas me-render data ucapan ke elemen Canvas, Three.js, atau DOM kustom
-                renderCustomAnimation(wishes);
-            });
-    }, 5000);
+    const tourDriver = driver({
+        showProgress: true,
+        animate: true,
+        allowClose: true,
+        doneBtnText: "Selesai 🙌",
+        nextBtnText: "Lanjut →",
+        prevBtnText: "← Kembali",
+        progressText: "Langkah {{current}} dari {{total}}",
+
+        // Callback saat tour ditutup atau selesai
+        onDestroyed: () => {
+            // 1. Simpan di LocalStorage
+            localStorage.setItem("editor_tour_completed", "true");
+
+            // 2. Simpan State ke Server Laravel via API (Optional)
+            const csrfToken = document
+                .querySelector('meta[name="csrf-token"]')
+                ?.getAttribute("content");
+            if (csrfToken) {
+                fetch("/api/v1/user/complete-onboarding", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": csrfToken,
+                    },
+                    body: JSON.stringify({ tour_key: "editor_tour" }),
+                }).catch((err) =>
+                    console.error("Failed to sync tour state:", err),
+                );
+            }
+        },
+
+        // Definisikan langkah-langkah spotlight
+        steps: [
+            {
+                element: '[data-tour="select-theme"]',
+                popover: {
+                    title: "🎨 Pilih Desain Undangan",
+                    description:
+                        "Pilih preset tema visual undangan yang sesuai dengan konsep acara Anda.",
+                    side: "bottom",
+                    align: "start",
+                },
+            },
+            {
+                element: '[data-tour="mempelai-info"]',
+                popover: {
+                    title: "💍 Isikan Informasi Pasangan",
+                    description:
+                        "Lengkapi nama lengkap, nama panggilan, serta foto calon mempelai pria dan wanita.",
+                    side: "right",
+                    align: "center",
+                },
+            },
+            {
+                element: '[data-tour="event-schedule"]',
+                popover: {
+                    title: "📅 Tanggal & Waktu Acara",
+                    description:
+                        "Tentukan sesi acara, waktu pelaksanaan, serta tautan Google Maps untuk navigasi tamu.",
+                    side: "bottom",
+                    align: "center",
+                },
+            },
+            {
+                element: '[data-tour="layar-sapa-config"]',
+                popover: {
+                    title: "📺 Konfigurasi Layar Sapa",
+                    description:
+                        "Atur tampilan ucapan live untuk proyektor lokasi acara dan pilih preset tema Layar Sapa Anda.",
+                    side: "top",
+                    align: "center",
+                },
+            },
+            {
+                element: '[data-tour="guest-management"]',
+                popover: {
+                    title: "👥 Manajemen Tamu & RSVP",
+                    description:
+                        "Kelola daftar tamu, buat tautan kustom per tamu, dan pantau konfirmasi kehadiran.",
+                    side: "right",
+                    align: "center",
+                },
+            },
+            {
+                element: '[data-tour="publish-btn"]',
+                popover: {
+                    title: "🚀 Publikasikan Undangan",
+                    description:
+                        "Klik tombol ini jika semua data sudah siap untuk mengaktifkan dan membagikan tautan undangan.",
+                    side: "left",
+                    align: "center",
+                },
+            },
+        ],
+    });
+
+    // 1. AUTO-TRIGGER: Jalankan otomatis jika pengguna belum pernah melihat tutorial
+    if (!localStorage.getItem("editor_tour_completed")) {
+        tourDriver.drive();
+    }
+
+    // 2. MANUAL RE-TRIGGER: Buka kembali saat pengguna mengklik tombol "Panduan / Bantuan"
+    const startHelpBtn = document.getElementById("btn-start-tour");
+    if (startHelpBtn) {
+        startHelpBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            tourDriver.drive();
+        });
+    }
 });
 ```
-
----
-
-## 4. BYPASS ASET STATIS SERVER NGINX (LOW CPU USAGE)
-
-Aplikasi Laravel **tidak boleh membuang daya komputasi CPU** untuk melayani berkas fisik `.css`, `.js`, gambar, atau video dari tema Layar Sapa. Pengiriman berkas ini diserahkan sepenuhnya ke web server **Nginx**.
-
-```nginx
-# Nginx Static Asset Direct Access
-location ~* ^/storage/screen-templates/.*\.(js|css|png|jpg|jpeg|gif|ico|svg|webp|mp4|ttf|woff2)$ {
-    expires 365d;
-    add_header Cache-Control "public, no-transform, immutable";
-    access_log off;
-    log_not_found off;
-    try_files $uri =404;
-}
-```
-
----
-
-## 5. SKENARIO PENGUJIAN ALUR KERJA (QA MATRICES)
-
-- **TC-CUSTOM-001 (Local Offline Preview):** Pengembang dapat membuka file `index.html` langsung dari file explorer laptop (tanpa local server/XAMPP). Seluruh visual, animasi CSS, dan skrip JS harus berjalan 100% normal.
-- **TC-CUSTOM-002 (Zip Upload & Automatic Extraction):** Admin mengunggah berkas `.zip` tema baru via Filament Admin. Sistem mengestrak isi direktori ke folder `storage/app/public/screen-templates/{slug}` tanpa ada berkas yang hilang.
-- **TC-CUSTOM-003 (Asset Path Resolution):** Buka halaman proyektor di browser (`/screen/{slug}`). Konsol pengembang (_F12 Developer Tools_) tidak boleh menampilkan pesan kesalahan `404 Not Found` pada pemanggilan berkas CSS, JS, maupun gambar/video di folder `assets/`.

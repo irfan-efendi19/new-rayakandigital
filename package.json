@@ -22,6 +22,7 @@
         "aos": "^2.3.4",
         "chart.js": "^4.5.1",
         "cropperjs": "^2.1.1",
+        "driver.js": "^1.8.0",
         "sweetalert2": "^11.26.25"
     }
 }

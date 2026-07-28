@@ -8,14 +8,23 @@
                 <p class="text-sm text-neutral-500 dark:text-neutral-400 mt-0.5">Lengkapi data berikut untuk membuat
                     undangan digital Anda.</p>
             </div>
-            <a href="{{ route('dashboard') }}"
-                class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-neutral-600 dark:text-neutral-400 bg-white dark:bg-secondary-800 border border-neutral-300 dark:border-neutral-600 rounded-xl hover:bg-neutral-50 dark:hover:bg-secondary-700 hover:border-primary-300 transition-all">
-                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                </svg>
-                Kembali
-            </a>
+            <div class="flex items-center gap-2">
+                <button type="button" id="btn-start-tour"
+                    class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/40 border border-primary-200 dark:border-primary-800 rounded-xl hover:bg-primary-100 dark:hover:bg-primary-900/60 transition-all">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Panduan Tutorial
+                </button>
+                <a href="{{ route('dashboard') }}"
+                    class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-neutral-600 dark:text-neutral-400 bg-white dark:bg-secondary-800 border border-neutral-300 dark:border-neutral-600 rounded-xl hover:bg-neutral-50 dark:hover:bg-secondary-700 hover:border-primary-300 transition-all">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                    Kembali
+                </a>
+            </div>
         </div>
     </x-slot>
 
@@ -83,7 +92,7 @@
                                 <input type="hidden" name="title" id="title" value="{{ old('title') }}" required>
 
                                 {{-- Slug / Tautan Kustom --}}
-                                <div class="mt-6">
+                                <div data-tour="invitation-link" class="mt-6">
                                     <div class="flex items-center gap-2.5 mb-1">
                                         <div
                                             class="w-7 h-7 rounded-lg bg-primary-50 dark:bg-primary-900/50 flex items-center justify-center text-primary dark:text-primary-400 flex-shrink-0">
@@ -195,7 +204,7 @@
                                 @php $currentTheme = old('theme', $selectedTheme); @endphp
 
                                 @if(!$hasPredefinedTheme)
-                                    <div x-data="{ selectedTheme: '{{ $currentTheme }}' }" class="space-y-3">
+                                    <div x-data="{ selectedTheme: '{{ $currentTheme }}' }" class="space-y-3" data-tour="select-theme">
                                         <input type="hidden" name="theme" x-model="selectedTheme" required>
 
                                         <div
@@ -273,7 +282,7 @@
                             {{-- ======================================== --}}
                             {{-- STEP 2: Informasi Mempelai (Profil) --}}
                             {{-- ======================================== --}}
-                            <div class="border-b border-neutral-200 dark:border-secondary-700 pb-8">
+                            <div class="border-b border-neutral-200 dark:border-secondary-700 pb-8" data-tour="mempelai-info">
                                 <div class="flex items-center gap-3 mb-1">
                                     <span
                                         class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 text-sm font-bold">2</span>
@@ -516,7 +525,7 @@
                             {{-- ======================================== --}}
                             {{-- STEP 3: Waktu & Tempat (Detail Acara) --}}
                             {{-- ======================================== --}}
-                            <div class="border-b border-neutral-200 dark:border-secondary-700 pb-8">
+                            <div class="border-b border-neutral-200 dark:border-secondary-700 pb-8" data-tour="event-schedule">
                                 <div class="flex items-center gap-3 mb-1">
                                     <span
                                         class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 text-sm font-bold">3</span>
@@ -989,7 +998,7 @@
                             {{-- ======================================== --}}
                             {{-- STEP 4: Visual & Estetika --}}
                             {{-- ======================================== --}}
-                            <div class="border-b border-neutral-200 dark:border-secondary-700 pb-8">
+                            <div class="border-b border-neutral-200 dark:border-secondary-700 pb-8" data-tour="layar-sapa-config">
                                 <div class="flex items-center gap-3 mb-1">
                                     <span
                                         class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 text-sm font-bold">4</span>
@@ -1069,7 +1078,7 @@
                                     </svg>
                                     Batal
                                 </a>
-                                <button type="button" id="submit-btn"
+                                <button type="button" id="submit-btn" data-tour="publish-btn"
                                     class="inline-flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-primary to-primary-600 rounded-xl shadow-sm text-sm font-semibold text-white hover:shadow-md hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-all">
                                     Simpan & Lanjutkan
                                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

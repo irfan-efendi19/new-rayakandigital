@@ -172,3 +172,5 @@ import './image-cropper';
 import './sweetalert';
 import './visitor-chart';
 import './slug-editor';
+import './tutorial-spotlight';
+
