@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Cache;
 
 class ScreenGallery extends Model
 {
@@ -23,5 +24,11 @@ class ScreenGallery extends Model
     public function invitation(): BelongsTo
     {
         return $this->belongsTo(Invitation::class);
+    }
+
+    protected static function booted()
+    {
+        static::saved(fn ($gallery) => Cache::forget("live_screen_output_{$gallery->invitation_id}"));
+        static::deleted(fn ($gallery) => Cache::forget("live_screen_output_{$gallery->invitation_id}"));
     }
 }

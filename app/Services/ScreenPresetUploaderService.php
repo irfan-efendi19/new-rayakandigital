@@ -10,6 +10,17 @@ use ZipArchive;
 
 class ScreenPresetUploaderService
 {
+    /**
+     * Deploy a ZIP template to storage/app/public/screen-templates/{slug}/.
+     *
+     * Per PRD §1.1 & §2: berkas diekstrak ke Storage public agar Nginx dapat
+     * melayaninya langsung tanpa melewati PHP (PRD §4). Runtime parser di
+     * ScreenDisplayController yang bertugas mengganti path relatif → URL absolut.
+     *
+     * @return array{storage_path: string, zip_path: string}
+     *
+     * @throws Exception
+     */
     public function deploy(string $zipFilePath, string $presetName): array
     {
         $presetSlug = Str::slug($presetName);
@@ -50,104 +61,36 @@ class ScreenPresetUploaderService
 
         $rootThemeDir = $this->findRootDirectory($tempExtractDir);
 
-        // 1. Process the entire index.html.
-        //    All asset paths (href, src, url()) are rewritten to point to public assets.
-        $htmlContent = File::get($rootThemeDir.'/index.html');
-        $processedHtmlContent = $this->rewriteAssetPaths($htmlContent, $presetSlug);
+        // Direktori tujuan di storage public (PRD §1.1)
+        $storagePath = "screen-templates/{$presetSlug}";
+        $fullStoragePath = Storage::disk('public')->path($storagePath);
 
-        // 2. Deploy all files to public/screen-presets/{slug}/ maintaining native structure.
-        //    css/style.css, js/app.js, and assets/* are stored as real separate files.
-        $publicPresetDir = public_path("screen-presets/{$presetSlug}");
-        File::deleteDirectory($publicPresetDir);
-        File::makeDirectory($publicPresetDir, 0755, true, true);
+        // Hapus folder lama jika ada, lalu buat ulang
+        if (Storage::disk('public')->exists($storagePath)) {
+            Storage::disk('public')->deleteDirectory($storagePath);
+        }
+        File::makeDirectory($fullStoragePath, 0755, true, true);
 
+        // Salin seluruh isi template ke storage (termasuk index.html)
         $files = File::allFiles($rootThemeDir);
         foreach ($files as $file) {
             $relativePath = str_replace($rootThemeDir.DIRECTORY_SEPARATOR, '', $file->getPathname());
+            // Normalisasi separator untuk Storage
+            $relativePath = str_replace('\\', '/', $relativePath);
 
-            // Skip root index.html — local-preview only; the whole file is saved to database.
-            if ($relativePath === 'index.html') {
-                continue;
-            }
-
-            $targetPath = $publicPresetDir.DIRECTORY_SEPARATOR.$relativePath;
+            $targetPath = $fullStoragePath.DIRECTORY_SEPARATOR.$relativePath;
             File::makeDirectory(dirname($targetPath), 0755, true, true);
-
-            // Rewrite CSS url() to absolute server paths so assets resolve from any URL.
-            if ($file->getExtension() === 'css') {
-                $cssContent = File::get($file->getPathname());
-                $cssContent = $this->rewriteAssetUrlsToAbsolute($cssContent, $presetSlug);
-                File::put($targetPath, $cssContent);
-            } else {
-                File::copy($file->getPathname(), $targetPath);
-            }
+            File::copy($file->getPathname(), $targetPath);
         }
 
-        // 3. Cleanup temp files.
+        // Bersihkan file temp dan ZIP upload sementara
         File::deleteDirectory($tempExtractDir);
         Storage::disk('public')->delete($zipFilePath);
 
         return [
-            'html_content' => $processedHtmlContent,
+            'storage_path' => $storagePath,
             'zip_path' => "uploaded:{$presetSlug}",
         ];
-    }
-
-    /**
-     * Rewrite relative asset paths in index.html to point to public screen-presets directory.
-     */
-    private function rewriteAssetPaths(string $html, string $presetSlug): string
-    {
-        // Replace href="..."
-        $html = preg_replace_callback('/href="([^"]+)"/i', function ($matches) use ($presetSlug) {
-            return $this->processPath('href', $matches[1], $presetSlug);
-        }, $html);
-
-        // Replace src="..."
-        $html = preg_replace_callback('/src="([^"]+)"/i', function ($matches) use ($presetSlug) {
-            return $this->processPath('src', $matches[1], $presetSlug);
-        }, $html);
-
-        // Rewrite inline style url() references
-        $html = preg_replace_callback(
-            '/url\(\s*["\']?([^"\')\s]+)["\']?\s*\)/i',
-            function (array $matches) use ($presetSlug) {
-                $path = $matches[1];
-
-                if (preg_match('/^(https?:\/\/|\/\/|data:|#)/i', $path) || str_contains($path, '{{') || str_contains($path, '%7B%7B')) {
-                    return $matches[0];
-                }
-
-                $normalized = $this->normalizePath($path);
-
-                return "url('{{ asset(\"screen-presets/{$presetSlug}/{$normalized}\") }}')";
-            },
-            $html
-        );
-
-        // Remove Blade escaping if the user already wrote {{ ... }} manually
-        $html = str_replace(['%7B%7B', '%7D%7D'], ['{{', '}}'], $html);
-
-        return $html;
-    }
-
-    /**
-     * Process path for href/src rewriting to asset() calls.
-     */
-    private function processPath(string $attribute, string $path, string $presetSlug): string
-    {
-        // Ignore absolute URLs, data URIs, mailto, tel, anchor links, and already-templated segments
-        if (
-            preg_match('/^(http|https|\/\/|data:|mailto:|tel:|#)/i', $path) ||
-            str_contains($path, '{{') ||
-            str_contains($path, '%7B%7B')
-        ) {
-            return "{$attribute}=\"{$path}\"";
-        }
-
-        $cleanPath = $this->normalizePath($path);
-
-        return "{$attribute}=\"{{ asset('screen-presets/{$presetSlug}/{$cleanPath}') }}\"";
     }
 
     private function findRootDirectory(string $path): string
@@ -164,43 +107,5 @@ class ScreenPresetUploaderService
         }
 
         throw new Exception('Tidak dapat menemukan index.html dalam struktur folder yang diekstrak.');
-    }
-
-    /**
-     * Rewrite relative url() references in CSS/inline-style content to absolute
-     * server paths: /screen-presets/{slug}/{normalized-path}.
-     *
-     * http/https/data/protocol-relative URLs are left untouched.
-     */
-    private function rewriteAssetUrlsToAbsolute(string $content, string $presetSlug): string
-    {
-        return preg_replace_callback(
-            '/url\(\s*["\']?([^"\')\s]+)["\']?\s*\)/i',
-            function (array $matches) use ($presetSlug) {
-                $path = $matches[1];
-
-                if (preg_match('/^(https?:\/\/|\/\/|data:|#)/i', $path)) {
-                    return $matches[0];
-                }
-
-                $normalized = $this->normalizePath($path);
-
-                return "url('/screen-presets/{$presetSlug}/{$normalized}')";
-            },
-            $content
-        );
-    }
-
-    /**
-     * Strip leading ./ and ../ segments from a relative path.
-     *
-     * Examples:
-     *   ../assets/bg.jpg  → assets/bg.jpg
-     *   ./assets/bg.jpg   → assets/bg.jpg
-     *   assets/bg.jpg     → assets/bg.jpg
-     */
-    private function normalizePath(string $path): string
-    {
-        return preg_replace('/^(\.\.\/|\.\/)+/', '', $path);
     }
 }

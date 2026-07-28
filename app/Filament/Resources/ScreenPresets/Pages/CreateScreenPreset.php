@@ -4,8 +4,8 @@ namespace App\Filament\Resources\ScreenPresets\Pages;
 
 use App\Filament\Resources\ScreenPresets\ScreenPresetResource;
 use App\Services\ScreenPresetUploaderService;
-use Filament\Resources\Pages\CreateRecord;
 use Filament\Notifications\Notification;
+use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Validation\ValidationException;
 
 class CreateScreenPreset extends CreateRecord
@@ -16,7 +16,7 @@ class CreateScreenPreset extends CreateRecord
     {
         $zipFilePath = $data['zip_file'] ?? null;
 
-        if (!$zipFilePath) {
+        if (! $zipFilePath) {
             throw ValidationException::withMessages([
                 'zip_file' => 'File ZIP wajib diunggah.',
             ]);
@@ -26,7 +26,8 @@ class CreateScreenPreset extends CreateRecord
             $uploader = app(ScreenPresetUploaderService::class);
             $result = $uploader->deploy($zipFilePath, $data['name']);
 
-            $data['html_content'] = $result['html_content'];
+            // PRD §2: simpan storage_path, bukan html_content
+            $data['storage_path'] = $result['storage_path'];
             $data['zip_path'] = $result['zip_path'];
             unset($data['zip_file']);
 

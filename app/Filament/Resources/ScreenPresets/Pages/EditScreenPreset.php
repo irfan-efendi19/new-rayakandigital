@@ -5,8 +5,8 @@ namespace App\Filament\Resources\ScreenPresets\Pages;
 use App\Filament\Resources\ScreenPresets\ScreenPresetResource;
 use App\Services\ScreenPresetUploaderService;
 use Filament\Actions\DeleteAction;
-use Filament\Resources\Pages\EditRecord;
 use Filament\Notifications\Notification;
+use Filament\Resources\Pages\EditRecord;
 
 class EditScreenPreset extends EditRecord
 {
@@ -28,7 +28,8 @@ class EditScreenPreset extends EditRecord
                 $uploader = app(ScreenPresetUploaderService::class);
                 $result = $uploader->deploy($zipFilePath, $data['name']);
 
-                $data['html_content'] = $result['html_content'];
+                // PRD §2: simpan storage_path, bukan html_content
+                $data['storage_path'] = $result['storage_path'];
                 $data['zip_path'] = $result['zip_path'];
             } catch (\Exception $e) {
                 Notification::make()

@@ -9,7 +9,7 @@ use App\Services\ImageCompressionService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
@@ -24,27 +24,25 @@ class WelcomeScreenController extends Controller
             abort(403, 'Fitur QR Check-In diperlukan untuk Layar Sapa.');
         }
 
-        $firstEvent = $invitation->firstEvent();
-        $screenGalleries = $invitation->screenGalleries()->get();
+        // PRD §2: Preset baru menggunakan ScreenDisplayController via route /screen/{slug}.
+        // Redirect langsung agar admin dapat membuka layar proyektor.
         $screen = $invitation->screen()->firstOrCreate([], [
             'selected_theme' => 'minimal-clean',
             'show_wishes_wall' => true,
         ]);
         $screen->load('preset');
+        $preset = $screen->preset;
+
+        if ($preset && $preset->is_active && $preset->storage_path) {
+            return redirect()->route('screen.live', ['slug' => $invitation->slug]);
+        }
+
+        // Fallback: preset lama berbasis Blade view (legacy)
+        $firstEvent = $invitation->firstEvent();
+        $screenGalleries = $invitation->screenGalleries()->get();
         $wishes = $screen->show_wishes_wall
             ? $invitation->wishes()->where('is_hidden', false)->latest()->get()
             : collect();
-
-        $preset = $screen->preset;
-
-        if ($preset && $preset->zip_path) {
-            $html = Blade::render(
-                $preset->html_content,
-                compact('invitation', 'firstEvent', 'screenGalleries', 'screen', 'wishes', 'preset')
-            );
-
-            return response($html);
-        }
 
         $themeHtmlContent = $preset?->html_content;
 
@@ -192,6 +190,9 @@ class WelcomeScreenController extends Controller
             }
         }
 
+        // Clear welcome screen output cache
+        Cache::forget("live_screen_output_{$invitation->id}");
+
         return back()->with('success', 'Pengaturan Layar Sapa berhasil disimpan.');
     }
 
@@ -205,6 +206,9 @@ class WelcomeScreenController extends Controller
 
         Storage::disk('public')->delete($screenGallery->image_path);
         $screenGallery->delete();
+
+        // Clear welcome screen output cache
+        Cache::forget("live_screen_output_{$invitation->id}");
 
         if ($request->ajax() || $request->wantsJson()) {
             return response()->json(['success' => true, 'message' => 'Foto galeri berhasil dihapus.']);

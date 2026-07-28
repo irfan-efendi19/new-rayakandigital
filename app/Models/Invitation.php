@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Facades\Cache;
 
 class Invitation extends Model
 {
@@ -70,6 +71,13 @@ class Invitation extends Model
                     $invitation->slug,
                     $invitation->user_id
                 ));
+            }
+        });
+
+        // Clear live screen cache when screen-related fields change
+        static::saved(function (self $invitation) {
+            if ($invitation->wasChanged(['screen_bride_names', 'screen_background_image'])) {
+                Cache::forget("live_screen_output_{$invitation->id}");
             }
         });
     }

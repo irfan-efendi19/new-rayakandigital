@@ -25,6 +25,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QRGatewayController;
 use App\Http\Controllers\RsvpController;
+use App\Http\Controllers\ScreenDisplayController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\ThemeController;
 use App\Http\Controllers\ThemePreviewController;
@@ -140,7 +141,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/invitations/{invitation}/guestbook/{guest}/ticket', [GuestbookController::class, 'ticket'])->name('invitations.guestbook.ticket');
 
         // Welcome Screen (Layar Sapa)
-        Route::get('/invitations/{invitation}/welcome-screen', [WelcomeScreenController::class, 'index'])->name('welcome-screen.index');
+        Route::get('/invitations/{invitation}/welcome-screen', [ScreenDisplayController::class, 'showLiveScreen'])->name('welcome-screen.index');
         Route::get('/invitations/{invitation}/latest-checkin', [WelcomeScreenController::class, 'getLatestCheckIn'])->name('welcome-screen.latest-checkin');
         Route::post('/invitations/{invitation}/welcome-screen/settings', [WelcomeScreenController::class, 'updateSettings'])->name('welcome-screen.settings.update');
         Route::delete('/invitations/{invitation}/welcome-screen/gallery/{screenGallery}', [WelcomeScreenController::class, 'deleteGalleryImage'])->name('welcome-screen.gallery.destroy');

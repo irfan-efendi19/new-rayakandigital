@@ -3,13 +3,14 @@
 namespace Database\Factories;
 
 use App\Models\Invitation;
-use App\Models\Wish;
+use App\Models\InvitationScreen;
+use App\Models\ScreenPreset;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<Wish>
+ * @extends Factory<InvitationScreen>
  */
-class WishFactory extends Factory
+class InvitationScreenFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -20,15 +21,9 @@ class WishFactory extends Factory
     {
         return [
             'invitation_id' => Invitation::factory(),
-            'guest_name' => $this->faker->name(),
-            'message' => $this->faker->sentence(10),
-            'is_hidden' => false,
+            'selected_theme' => ScreenPreset::factory()->create()->slug,
+            'custom_title' => null,
+            'show_wishes_wall' => true,
         ];
-    }
-
-    /** State: ucapan tersembunyi. */
-    public function hidden(): static
-    {
-        return $this->state(['is_hidden' => true]);
     }
 }
