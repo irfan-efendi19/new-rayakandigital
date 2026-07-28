@@ -82,28 +82,113 @@
                                 {{-- Title (auto-generated from bride & groom names) --}}
                                 <input type="hidden" name="title" id="title" value="{{ old('title') }}" required>
 
-                                {{-- Slug --}}
+                                {{-- Slug / Tautan Kustom --}}
                                 <div class="mt-6">
-                                    <label for="slug-input"
-                                        class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Tautan
-                                        Undangan (URL Kustom)</label>
-                                    <div class="mt-1.5 flex flex-wrap sm:flex-nowrap items-stretch gap-0">
-                                        <span
-                                            class="inline-flex items-center px-3 rounded-tl-xl sm:rounded-l-xl sm:rounded-tr-none border sm:border-r-0 border-neutral-300 dark:border-neutral-600 bg-neutral-100 dark:bg-secondary-700 text-sm text-neutral-500 dark:text-neutral-400 whitespace-nowrap">{{ parse_url(config('app.url'), PHP_URL_HOST) }}/</span>
-                                        <input type="text" name="slug" id="slug-input" value="{{ old('slug') }}"
-                                            class="block flex-1 min-w-0 rounded-bl-xl sm:rounded-r-xl sm:rounded-bl-none border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm font-mono dark:bg-secondary-700 dark:text-neutral-200"
-                                            placeholder="nama-undangan-anda" maxlength="100" pattern="^[a-z0-9\-]+$">
+                                    <div class="flex items-center gap-2.5 mb-1">
+                                        <div
+                                            class="w-7 h-7 rounded-lg bg-primary-50 dark:bg-primary-900/50 flex items-center justify-center text-primary dark:text-primary-400 flex-shrink-0">
+                                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24"
+                                                stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <label for="slug-input"
+                                                class="block text-sm font-semibold text-secondary-800 dark:text-neutral-100">Tautan
+                                                Undangan</label>
+                                        </div>
                                     </div>
-                                    <div id="slug-indicator"
-                                        class="mt-1.5 text-xs flex items-center gap-1.5 text-neutral-400 dark:text-neutral-500">
-                                        <span class="slug-icon">🔗</span>
-                                        <span class="slug-text">Masukkan tautan kustom</span>
+                                    <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-3 ml-[38px]">Buat
+                                        alamat web unik agar tamu dapat membuka undangan Anda secara online.</p>
+
+                                    <div
+                                        class="bg-neutral-50 dark:bg-secondary-700/50 p-4 sm:p-5 rounded-2xl border border-neutral-200 dark:border-secondary-600 space-y-4">
+
+                                        {{-- Input Field --}}
+                                        <div>
+                                            <label for="slug-input"
+                                                class="block text-xs font-medium text-neutral-600 dark:text-neutral-400 mb-1.5">Tautan
+                                                Kustom</label>
+                                            <div class="flex flex-col sm:flex-row items-stretch gap-1.5 sm:gap-0">
+                                                <span
+                                                    class="inline-flex items-center px-3 py-2 sm:py-0 rounded-xl sm:rounded-r-none border border-neutral-300 dark:border-neutral-600 bg-neutral-100 dark:bg-secondary-700 text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 whitespace-nowrap font-mono w-full sm:w-auto justify-center sm:justify-start sm:border-r-0">{{ parse_url(config('app.url'), PHP_URL_HOST) }}/</span>
+                                                <input type="text" name="slug" id="slug-input"
+                                                    value="{{ old('slug') }}"
+                                                    class="block w-full flex-1 rounded-xl sm:rounded-l-none border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 text-sm font-mono dark:bg-secondary-700 dark:text-neutral-200 py-2"
+                                                    placeholder="contoh: andi-dan-sari" maxlength="100"
+                                                    pattern="^[a-z0-9\-]+$">
+                                            </div>
+                                            <div id="slug-indicator"
+                                                class="mt-1.5 text-xs flex items-center gap-1.5 text-neutral-400 dark:text-neutral-500">
+                                                <span class="slug-icon">🔗</span>
+                                                <span class="slug-text">Masukkan tautan kustom</span>
+                                            </div>
+                                            @error('slug')
+                                                <span
+                                                    class="text-red-500 dark:text-red-400 text-xs mt-1">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+
+                                        {{-- Live URL Preview --}}
+                                        <div id="slug-preview-box"
+                                            class="bg-white dark:bg-secondary-800 rounded-xl border border-neutral-200 dark:border-secondary-600 p-3 transition-all duration-300"
+                                            style="display: none;">
+                                            <p
+                                                class="text-[10px] uppercase tracking-wider font-bold text-neutral-400 dark:text-neutral-500 mb-1.5">
+                                                Pratinjau Tautan</p>
+                                            <div class="flex items-center gap-2">
+                                                <div
+                                                    class="w-6 h-6 rounded-md bg-green-50 dark:bg-green-900/30 flex items-center justify-center flex-shrink-0">
+                                                    <svg class="w-3 h-3 text-green-600 dark:text-green-400"
+                                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                    </svg>
+                                                </div>
+                                                <p class="font-mono text-sm text-primary-600 dark:text-primary-400 break-all"
+                                                    id="slug-preview-url">
+                                                    {{ parse_url(config('app.url'), PHP_URL_HOST) }}/<span
+                                                        id="slug-preview-text"
+                                                        class="font-semibold">nama-undangan</span>
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        {{-- Format Rules --}}
+                                        <div>
+                                            <p
+                                                class="text-[10px] uppercase tracking-wider font-bold text-neutral-400 dark:text-neutral-500 mb-2">
+                                                Format yang diperbolehkan</p>
+                                            <div class="flex flex-wrap gap-1.5">
+                                                <span
+                                                    class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-neutral-100 dark:bg-secondary-600 text-[11px] text-neutral-600 dark:text-neutral-300">
+                                                    <span class="font-mono font-bold">a-z</span> huruf kecil
+                                                </span>
+                                                <span
+                                                    class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-neutral-100 dark:bg-secondary-600 text-[11px] text-neutral-600 dark:text-neutral-300">
+                                                    <span class="font-mono font-bold">0-9</span> angka
+                                                </span>
+                                                <span
+                                                    class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-neutral-100 dark:bg-secondary-600 text-[11px] text-neutral-600 dark:text-neutral-300">
+                                                    <span class="font-mono font-bold">-</span> tanda hubung
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        {{-- Tip: Auto-generate --}}
+                                        <div
+                                            class="flex items-start gap-2.5 bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800/50 rounded-xl p-3">
+                                            <span
+                                                class="text-blue-500 dark:text-blue-400 flex-shrink-0 mt-0.5 text-base">💡</span>
+                                            <p class="text-xs text-blue-700 dark:text-blue-300">
+                                                <strong>Tips:</strong> Kosongkan kolom ini jika ingin tautan di-generate
+                                                otomatis dari nama pengantin. Anda juga bisa mengubahnya nanti di
+                                                halaman edit undangan.
+                                            </p>
+                                        </div>
                                     </div>
-                                    @error('slug') <span
-                                        class="text-red-500 dark:text-red-400 text-xs mt-1">{{ $message }}</span>
-                                    @enderror
-                                    <p class="mt-1.5 text-xs text-neutral-400 dark:text-neutral-500">Huruf kecil, angka,
-                                        dan tanda hubung (-). Kosongkan untuk generate otomatis.</p>
                                 </div>
 
                                 {{-- Theme Selection --}}

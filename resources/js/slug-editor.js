@@ -15,6 +15,8 @@ class SlugEditor {
         
         this.input = document.getElementById('slug-input');
         this.indicator = document.getElementById('slug-indicator');
+        this.previewBox = document.getElementById('slug-preview-box');
+        this.previewText = document.getElementById('slug-preview-text');
         this.form = this.input?.closest('form');
         this.slugOriginal = this.input?.dataset.original || '';
         this.invitationId = this.input?.dataset.id || '';
@@ -24,6 +26,7 @@ class SlugEditor {
         console.log('🔍 SlugEditor elements:', {
             inputFound: !!this.input,
             indicatorFound: !!this.indicator,
+            previewBoxFound: !!this.previewBox,
             formFound: !!this.form,
             slugOriginal: this.slugOriginal,
             invitationId: this.invitationId
@@ -37,7 +40,23 @@ class SlugEditor {
         this.setupAutoSanitize();
         this.setupFormSubmit();
         
+        // Show preview if input already has a value (e.g. old() repopulation)
+        if (this.input.value.trim()) {
+            this.updatePreview(this.input.value.trim());
+        }
+        
         console.log('✅ SlugEditor initialized successfully');
+    }
+
+    updatePreview(slug) {
+        if (!this.previewBox || !this.previewText) return;
+
+        if (slug) {
+            this.previewBox.style.display = '';
+            this.previewText.textContent = slug;
+        } else {
+            this.previewBox.style.display = 'none';
+        }
     }
 
     setupAutoSanitize() {
@@ -50,6 +69,7 @@ class SlugEditor {
                 this.input.value = value;
             }
 
+            this.updatePreview(value);
             this.checkAvailability();
         });
     }
