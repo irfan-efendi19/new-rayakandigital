@@ -12,7 +12,7 @@
 
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link
-        href="https://fonts.bunny.net/css?family=plus-jakarta-sans:400,500,600,700,800|playfair-display:400,500,600,700&display=swap"
+        href="https://fonts.bunny.net/css?family=plus-jakarta-sans:300,400,500,600,700,800|playfair-display:400i,400,500,600,700&display=swap"
         rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
         crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -60,22 +60,33 @@
             {{ $slot }}
         </main>
 
-        <footer class="bg-white dark:bg-secondary-800 border-t border-neutral-200 dark:border-secondary-700 py-6">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <p class="text-center text-sm text-neutral-500 dark:text-neutral-400">
-                    &copy; {{ date('Y') }} {{ config('app.name') }}. All rights reserved.
+        <footer
+            class="bg-white/60 dark:bg-secondary-900/80 backdrop-blur-sm border-t border-neutral-200/70 dark:border-secondary-700/50 py-5">
+            <div
+                class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2">
+                <p class="text-xs text-neutral-400 dark:text-neutral-500">
+                    &copy; {{ date('Y') }} <span
+                        class="font-semibold text-neutral-500 dark:text-neutral-400">{{ config('app.name') }}</span>.
+                    All rights reserved.
+                </p>
+                <p class="text-xs text-neutral-400 dark:text-neutral-500">
+                    Rayakan Cinta Dengan Sentuhan Digital
                 </p>
             </div>
         </footer>
     </div>
+
     @if((request()->is('dashboard') || request()->is('dashboard/*')) && !request()->is('*/edit*') && !request()->is('*/create*'))
         <a href="https://wa.me/{{ config('app.whatsapp_number', '62895349823366') }}?text={{ urlencode('Halo, saya ingin bertanya terkait layanan undangan digital.') }}"
             target="_blank" rel="noopener noreferrer"
-            class="fixed bottom-4 right-4 z-50 inline-flex items-center gap-2 rounded-full bg-emerald-500 hover:bg-emerald-600 px-4 py-3 text-white shadow-lg shadow-emerald-500/30 transition-all duration-200 hover:scale-105">
-            <i class="fa-brands fa-whatsapp text-xl"></i>
-            <span class="text-sm font-semibold">Butuh Bantuan?</span>
+            class="fixed bottom-5 right-5 z-50 group inline-flex items-center gap-0 overflow-hidden rounded-full bg-emerald-500 hover:bg-emerald-600 px-4 py-3 text-white shadow-lg shadow-emerald-500/30 transition-all duration-300 hover:gap-2 hover:pr-5">
+            <i class="fa-brands fa-whatsapp text-xl flex-shrink-0"></i>
+            <span
+                class="max-w-0 overflow-hidden whitespace-nowrap text-sm font-semibold transition-all duration-300 group-hover:max-w-xs">Butuh
+                Bantuan?</span>
         </a>
     @endif
+
     <x-sweet-alert />
 </body>
 

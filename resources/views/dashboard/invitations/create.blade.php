@@ -1,32 +1,79 @@
 <x-app-layout>
-    <x-slot name="header">
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <div>
-                <h2 class="font-heading text-2xl font-bold text-secondary-800 dark:text-neutral-100">
-                    Buat Undangan Baru
-                </h2>
-                <p class="text-sm text-neutral-500 dark:text-neutral-400 mt-0.5">Lengkapi data berikut untuk membuat
-                    undangan digital Anda.</p>
+    {{-- Hero Header --}}
+    <div class="hero-mesh grain-overlay border-b border-neutral-200/60 dark:border-secondary-700/40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-7 sm:py-8">
+            <nav class="flex items-center gap-1.5 text-xs text-neutral-400 dark:text-neutral-500 mb-4">
+                <a href="{{ route('dashboard') }}" class="hover:text-primary dark:hover:text-primary-400 transition-colors">Dashboard</a>
+                <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                <span class="text-neutral-600 dark:text-neutral-400 font-medium">Buat Undangan</span>
+            </nav>
+
+            <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+                <div>
+                    <h1 class="font-heading text-2xl sm:text-3xl font-bold text-secondary-800 dark:text-neutral-50 leading-tight">
+                        Buat Undangan Baru
+                    </h1>
+                    <p class="text-sm text-neutral-500 dark:text-neutral-400 mt-1">Lengkapi data berikut untuk membuat undangan digital Anda.</p>
+                </div>
+                <div class="flex items-center gap-2 self-start">
+                    <button type="button" id="btn-start-tour"
+                        class="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-primary dark:text-primary-300 bg-white/70 dark:bg-secondary-800/50 border border-primary/30 dark:border-primary-800 rounded-xl hover:bg-primary-50 dark:hover:bg-primary-900/30 transition-all backdrop-blur-sm">
+                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Panduan Tutorial
+                    </button>
+                    <a href="{{ route('dashboard') }}"
+                        class="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-neutral-700 dark:text-neutral-300 bg-white/70 dark:bg-secondary-800/50 border border-neutral-300/80 dark:border-secondary-600 rounded-xl hover:bg-white dark:hover:bg-secondary-700 transition-all backdrop-blur-sm">
+                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                        </svg>
+                        Kembali
+                    </a>
+                </div>
             </div>
-            <div class="flex items-center gap-2">
-                <button type="button" id="btn-start-tour"
-                    class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/40 border border-primary-200 dark:border-primary-800 rounded-xl hover:bg-primary-100 dark:hover:bg-primary-900/60 transition-all">
-                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    Panduan Tutorial
-                </button>
-                <a href="{{ route('dashboard') }}"
-                    class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-neutral-600 dark:text-neutral-400 bg-white dark:bg-secondary-800 border border-neutral-300 dark:border-neutral-600 rounded-xl hover:bg-neutral-50 dark:hover:bg-secondary-700 hover:border-primary-300 transition-all">
-                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                    </svg>
-                    Kembali
+        </div>
+    </div>
+
+    {{-- Sticky Step Progress Bar --}}
+    <div x-data="{ activeStep: 1 }" x-init="() => {
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    activeStep = parseInt(entry.target.dataset.step);
+                }
+            });
+        }, { rootMargin: '-120px 0px -60% 0px' });
+        document.querySelectorAll('[data-step]').forEach(el => observer.observe(el));
+    }" class="sticky top-[64px] z-30 bg-white/90 dark:bg-secondary-900/90 backdrop-blur-md border-b border-neutral-200/80 dark:border-secondary-700/60 py-3 shadow-xs">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between gap-2 overflow-x-auto py-1 no-scrollbar text-xs">
+                <a href="#step-1" @click.prevent="document.getElementById('step-1').scrollIntoView({ behavior: 'smooth' })"
+                    :class="activeStep === 1 ? 'bg-primary-50 dark:bg-primary-900/40 text-primary dark:text-primary-300' : 'text-neutral-500 hover:text-secondary-800 dark:hover:text-neutral-200'"
+                    class="flex items-center gap-2 px-3 py-1.5 rounded-xl font-semibold transition-all flex-shrink-0">
+                    <span :class="activeStep === 1 ? 'bg-primary text-white' : 'bg-neutral-200 dark:bg-secondary-700 text-neutral-600 dark:text-neutral-300'"
+                        class="w-5 h-5 rounded-full text-[11px] flex items-center justify-center font-bold transition-all">1</span>
+                    <span>Konsep & Tema</span>
+                </a>
+                <div class="h-px bg-neutral-200 dark:bg-secondary-700 flex-1 min-w-[12px]"></div>
+                <a href="#step-2" @click.prevent="document.getElementById('step-2').scrollIntoView({ behavior: 'smooth' })"
+                    :class="activeStep === 2 ? 'bg-primary-50 dark:bg-primary-900/40 text-primary dark:text-primary-300' : 'text-neutral-500 hover:text-secondary-800 dark:hover:text-neutral-200'"
+                    class="flex items-center gap-2 px-3 py-1.5 rounded-xl font-semibold transition-all flex-shrink-0">
+                    <span :class="activeStep === 2 ? 'bg-primary text-white' : 'bg-neutral-200 dark:bg-secondary-700 text-neutral-600 dark:text-neutral-300'"
+                        class="w-5 h-5 rounded-full text-[11px] flex items-center justify-center font-bold transition-all">2</span>
+                    <span>Mempelai</span>
+                </a>
+                <div class="h-px bg-neutral-200 dark:bg-secondary-700 flex-1 min-w-[12px]"></div>
+                <a href="#step-3" @click.prevent="document.getElementById('step-3').scrollIntoView({ behavior: 'smooth' })"
+                    :class="activeStep === 3 ? 'bg-primary-50 dark:bg-primary-900/40 text-primary dark:text-primary-300' : 'text-neutral-500 hover:text-secondary-800 dark:hover:text-neutral-200'"
+                    class="flex items-center gap-2 px-3 py-1.5 rounded-xl font-semibold transition-all flex-shrink-0">
+                    <span :class="activeStep === 3 ? 'bg-primary text-white' : 'bg-neutral-200 dark:bg-secondary-700 text-neutral-600 dark:text-neutral-300'"
+                        class="w-5 h-5 rounded-full text-[11px] flex items-center justify-center font-bold transition-all">3</span>
+                    <span>Waktu & Tempat</span>
                 </a>
             </div>
         </div>
-    </x-slot>
+    </div>
 
     <style>
         #crop-container {
@@ -76,7 +123,7 @@
                             {{-- ======================================== --}}
                             {{-- STEP 1: Konsep & Tema (Inisiasi) --}}
                             {{-- ======================================== --}}
-                            <div class="border-b border-neutral-200 dark:border-secondary-700 pb-8">
+                            <div id="step-1" data-step="1" class="border-b border-neutral-200 dark:border-secondary-700 pb-8">
                                 <div class="flex items-center gap-3 mb-1">
                                     <span
                                         class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 text-sm font-bold">1</span>
@@ -282,7 +329,7 @@
                             {{-- ======================================== --}}
                             {{-- STEP 2: Informasi Mempelai (Profil) --}}
                             {{-- ======================================== --}}
-                            <div class="border-b border-neutral-200 dark:border-secondary-700 pb-8" data-tour="mempelai-info">
+                            <div id="step-2" data-step="2" class="border-b border-neutral-200 dark:border-secondary-700 pb-8" data-tour="mempelai-info">
                                 <div class="flex items-center gap-3 mb-1">
                                     <span
                                         class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 text-sm font-bold">2</span>
@@ -525,7 +572,7 @@
                             {{-- ======================================== --}}
                             {{-- STEP 3: Waktu & Tempat (Detail Acara) --}}
                             {{-- ======================================== --}}
-                            <div class="border-b border-neutral-200 dark:border-secondary-700 pb-8" data-tour="event-schedule">
+                            <div id="step-3" data-step="3" class="border-b border-neutral-200 dark:border-secondary-700 pb-8" data-tour="event-schedule">
                                 <div class="flex items-center gap-3 mb-1">
                                     <span
                                         class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 text-sm font-bold">3</span>
@@ -993,74 +1040,6 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-
-                            {{-- ======================================== --}}
-                            {{-- STEP 4: Visual & Estetika --}}
-                            {{-- ======================================== --}}
-                            <div class="border-b border-neutral-200 dark:border-secondary-700 pb-8" data-tour="layar-sapa-config">
-                                <div class="flex items-center gap-3 mb-1">
-                                    <span
-                                        class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 text-sm font-bold">4</span>
-                                    <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">
-                                        Visual & Estetika</h3>
-                                </div>
-                                <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-6">Atur foto sampul</p>
-
-                                {{-- Cover Photo --}}
-                                <h4
-                                    class="font-heading text-base font-bold text-secondary-800 dark:text-neutral-100 mb-1">
-                                    Foto Sampul</h4>
-                                <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-4">Foto sampul akan
-                                    ditampilkan di kartu undangan
-                                    dashboard. Rasio 9:16 (portrait).</p>
-
-                                <div
-                                    class="bg-neutral-50 dark:bg-secondary-700 p-5 rounded-2xl border border-neutral-200 dark:border-secondary-700 space-y-4">
-                                    <div>
-                                        <label
-                                            class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Foto
-                                            Sampul</label>
-                                        <div class="mt-2 flex flex-col sm:flex-row sm:items-start gap-4">
-                                            <div class="relative flex-shrink-0 w-full max-w-[192px] sm:w-48">
-                                                <div class="rounded-xl overflow-hidden border-2 border-neutral-200 dark:border-neutral-600"
-                                                    style="aspect-ratio:9/16">
-                                                    <img id="cover-preview" src="" alt="Cover photo"
-                                                        class="w-full h-full object-cover hidden">
-                                                    <div id="cover-preview-placeholder"
-                                                        class="w-full h-full bg-neutral-200 dark:bg-secondary-700 flex flex-col items-center justify-center text-neutral-500 dark:text-neutral-400 text-xs font-semibold">
-                                                        <svg class="w-8 h-8 mb-1" fill="none" viewBox="0 0 24 24"
-                                                            stroke="currentColor">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                stroke-width="1.5"
-                                                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                                        </svg>
-                                                        <span>Belum ada</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <input type="file" name="cover_photo" id="cover_photo_input"
-                                                    class="crop-file-input hidden" accept="image/*"
-                                                    data-preview="cover-preview" data-aspect-ratio="9/16"
-                                                    data-width="360" data-height="640">
-                                                <button type="button" data-crop-target="cover_photo_input"
-                                                    class="px-4 py-2 bg-primary-50 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 rounded-xl text-sm font-semibold hover:bg-primary-100 dark:hover:bg-primary-900/70 transition">
-                                                    Pilih & Crop Foto
-                                                </button>
-                                                <p class="text-xs text-neutral-400 dark:text-neutral-500 mt-1">Format
-                                                    gambar apa pun. Hasil potongan
-                                                    rasio 9:16 portrait.</p>
-                                                @error('cover_photo') <span
-                                                    class="text-red-500 dark:text-red-400 text-xs mt-1">{{ $message }}</span>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-
-
                             </div>
 
                             {{-- Required fields note --}}

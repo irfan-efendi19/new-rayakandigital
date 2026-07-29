@@ -1,73 +1,85 @@
 <x-app-layout>
-    <x-slot name="header">
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <div>
-                <h2 class="font-heading text-2xl font-bold text-secondary-800 dark:text-neutral-100">
-                    Edit Undangan
-                </h2>
-                <p class="text-sm text-neutral-500 dark:text-neutral-400 mt-0.5">
-                    {{ $invitation->title }}
-                </p>
-            </div>
-            <div class="flex flex-col sm:flex-row gap-2">
-                <button type="button" id="btn-start-tour"
-                    class="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-2 text-sm font-semibold text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/40 border border-primary-200 dark:border-primary-800 rounded-xl hover:bg-primary-100 dark:hover:bg-primary-900/60 transition-all">
-                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    Panduan Tutorial
-                </button>
-                <a href="{{ route('dashboard.invitations.show', $invitation) }}"
-                    class="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-2 text-sm font-semibold text-neutral-600 dark:text-neutral-400 bg-white dark:bg-secondary-800 border border-neutral-300 dark:border-neutral-600 rounded-xl hover:bg-neutral-50 dark:hover:bg-secondary-700 hover:border-primary-300 transition-all">
-                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                    </svg>
-                    Kembali
-                </a>
+    <div class="min-h-screen">
+
+        {{-- ─── HERO ─── --}}
+        <div class="hero-mesh grain-overlay border-b border-neutral-200/60 dark:border-secondary-700/40">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-7 sm:py-8">
+
+                {{-- Breadcrumb --}}
+                <nav class="flex items-center gap-1.5 text-xs text-neutral-400 dark:text-neutral-500 mb-4">
+                    <a href="{{ route('dashboard') }}" class="hover:text-primary dark:hover:text-primary-400 transition-colors">Dashboard</a>
+                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                    <a href="{{ route('dashboard.invitations.show', $invitation) }}" class="hover:text-primary dark:hover:text-primary-400 transition-colors truncate max-w-[150px]">{{ $invitation->title }}</a>
+                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                    <span class="text-neutral-600 dark:text-neutral-400 font-medium">Edit Undangan</span>
+                </nav>
+
+                <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+                    <div>
+                        <h1 class="font-heading text-2xl sm:text-3xl font-bold text-secondary-800 dark:text-neutral-50 leading-tight">
+                            Edit Undangan
+                        </h1>
+                        <p class="text-sm text-neutral-500 dark:text-neutral-400 mt-1">{{ $invitation->title }}</p>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-2 flex-shrink-0">
+                        <button type="button" id="btn-start-tour"
+                            class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-primary-700 dark:text-primary-300 border border-primary/30 dark:border-primary-700/50 rounded-xl hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all bg-white/70 dark:bg-secondary-800/50 backdrop-blur-sm">
+                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Panduan Tutorial
+                        </button>
+                        <a href="{{ route('dashboard.invitations.show', $invitation) }}"
+                            class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-secondary-700 dark:text-neutral-300 border border-neutral-300/80 dark:border-secondary-600 rounded-xl hover:bg-white dark:hover:bg-secondary-700 transition-all bg-white/70 dark:bg-secondary-800/50 backdrop-blur-sm">
+                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                            </svg>
+                            Kembali
+                        </a>
+                    </div>
+                </div>
+
             </div>
         </div>
-    </x-slot>
 
-    <style>
-    #crop-container {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-    }
+        <style>
+        #crop-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
 
-    #crop-container cropper-canvas {
-        flex: 1;
-        min-height: 0;
-    }
+        #crop-container cropper-canvas {
+            flex: 1;
+            min-height: 0;
+        }
 
-    .scrollbar-thin::-webkit-scrollbar {
-        height: 6px;
-    }
+        .scrollbar-thin::-webkit-scrollbar {
+            height: 6px;
+        }
 
-    .scrollbar-thin::-webkit-scrollbar-track {
-        background: transparent;
-    }
+        .scrollbar-thin::-webkit-scrollbar-track {
+            background: transparent;
+        }
 
-    .scrollbar-thin::-webkit-scrollbar-thumb {
-        background-color: rgb(226, 232, 240);
-        border-radius: 10px;
-    }
+        .scrollbar-thin::-webkit-scrollbar-thumb {
+            background-color: rgb(226, 232, 240);
+            border-radius: 10px;
+        }
 
-    .dark .scrollbar-thin::-webkit-scrollbar-thumb {
-        background-color: rgb(51, 65, 85);
-    }
+        .dark .scrollbar-thin::-webkit-scrollbar-thumb {
+            background-color: rgb(51, 65, 85);
+        }
 
-    [x-cloak] {
-        display: none !important;
-    }
-    </style>
+        [x-cloak] {
+            display: none !important;
+        }
+        </style>
 
-    <div class="py-8">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-7 sm:py-8">
             <div
-                class="bg-white dark:bg-secondary-800 rounded-2xl shadow-soft border border-neutral-100 dark:border-secondary-700 overflow-hidden">
+                class="bg-white dark:bg-secondary-800 rounded-2xl border border-neutral-200/80 dark:border-secondary-700/60 overflow-hidden">
                 <div class="p-6 md:p-8">
                     <form id="invitation-form" action="{{ route('dashboard.invitations.update', $invitation) }}"
                         method="POST" enctype="multipart/form-data">
@@ -881,61 +893,63 @@
                                     musik latar.</p>
 
                                 {{-- Cover Photo --}}
-                                <h4
-                                    class="font-heading text-base font-bold text-secondary-800 dark:text-neutral-100 mb-1">
-                                    Foto Sampul</h4>
-                                <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-4">
-                                    Foto sampul akan
-                                    ditampilkan di kartu undangan
-                                    dashboard. Rasio 9:16
-                                    (portrait).</p>
+                                <div data-tour="cover-photo">
+                                    <h4
+                                        class="font-heading text-base font-bold text-secondary-800 dark:text-neutral-100 mb-1">
+                                        Foto Sampul</h4>
+                                    <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-4">
+                                        Foto sampul akan
+                                        ditampilkan di kartu undangan
+                                        dashboard. Rasio 9:16
+                                        (portrait).</p>
 
-                                <div
-                                    class="bg-neutral-50 dark:bg-secondary-700 p-5 rounded-2xl border border-neutral-200 dark:border-secondary-700 space-y-4">
-                                    <div>
-                                        <label
-                                            class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Foto
-                                            Sampul</label>
-                                        <div class="mt-2 flex flex-col sm:flex-row items-start gap-4">
-                                            <div class="relative flex-shrink-0 w-full sm:w-48 max-w-[180px] sm:max-w-none">
-                                                <div class="rounded-xl overflow-hidden border-2 border-neutral-200 dark:border-neutral-600"
-                                                    style="aspect-ratio:9/16">
-                                                    <img id="cover-preview"
-                                                        src="{{ $invitation->cover_photo ? asset('storage/' . $invitation->cover_photo) : '' }}"
-                                                        alt="Cover photo"
-                                                        class="w-full h-full object-cover {{ $invitation->cover_photo ? '' : 'hidden' }}">
-                                                    <div id="cover-preview-placeholder"
-                                                        class="w-full h-full bg-neutral-200 dark:bg-secondary-700 flex flex-col items-center justify-center text-neutral-500 dark:text-neutral-400 text-xs font-semibold {{ $invitation->cover_photo ? 'hidden' : '' }}">
-                                                        <svg class="w-8 h-8 mb-1" fill="none" viewBox="0 0 24 24"
-                                                            stroke="currentColor">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                stroke-width="1.5"
-                                                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                                        </svg>
-                                                        <span>Belum
-                                                            ada</span>
+                                    <div
+                                        class="bg-neutral-50 dark:bg-secondary-700 p-5 rounded-2xl border border-neutral-200 dark:border-secondary-700 space-y-4">
+                                        <div>
+                                            <label
+                                                class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Foto
+                                                Sampul</label>
+                                            <div class="mt-2 flex flex-col sm:flex-row items-start gap-4">
+                                                <div class="relative flex-shrink-0 w-full sm:w-48 max-w-[180px] sm:max-w-none">
+                                                    <div class="rounded-xl overflow-hidden border-2 border-neutral-200 dark:border-neutral-600"
+                                                        style="aspect-ratio:9/16">
+                                                        <img id="cover-preview"
+                                                            src="{{ $invitation->cover_photo ? asset('storage/' . $invitation->cover_photo) : '' }}"
+                                                            alt="Cover photo"
+                                                            class="w-full h-full object-cover {{ $invitation->cover_photo ? '' : 'hidden' }}">
+                                                        <div id="cover-preview-placeholder"
+                                                            class="w-full h-full bg-neutral-200 dark:bg-secondary-700 flex flex-col items-center justify-center text-neutral-500 dark:text-neutral-400 text-xs font-semibold {{ $invitation->cover_photo ? 'hidden' : '' }}">
+                                                            <svg class="w-8 h-8 mb-1" fill="none" viewBox="0 0 24 24"
+                                                                stroke="currentColor">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="1.5"
+                                                                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                            </svg>
+                                                            <span>Belum
+                                                                ada</span>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div>
-                                                <input type="file" name="cover_photo" id="cover_photo_input"
-                                                    class="crop-file-input hidden" accept="image/*"
-                                                    data-preview="cover-preview" data-aspect-ratio="9/16"
-                                                    data-width="360" data-height="640">
-                                                <button type="button" data-crop-target="cover_photo_input"
-                                                    class="px-4 py-2 bg-primary-50 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 rounded-xl text-sm font-semibold hover:bg-primary-100 dark:hover:bg-primary-900/70 transition">
-                                                    Pilih & Crop Foto
-                                                </button>
-                                                <p class="text-xs text-neutral-400 dark:text-neutral-500 mt-1">
-                                                    Format
-                                                    gambar apa pun.
-                                                    Hasil potongan rasio
-                                                    9:16
-                                                    portrait.</p>
-                                                @error('cover_photo')
-                                                    <span
-                                                        class="text-red-500 dark:text-red-400 text-xs mt-1">{{ $message }}</span>
-                                                @enderror
+                                                <div>
+                                                    <input type="file" name="cover_photo" id="cover_photo_input"
+                                                        class="crop-file-input hidden" accept="image/*"
+                                                        data-preview="cover-preview" data-aspect-ratio="9/16"
+                                                        data-width="360" data-height="640">
+                                                    <button type="button" data-crop-target="cover_photo_input"
+                                                        class="px-4 py-2 bg-primary-50 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 rounded-xl text-sm font-semibold hover:bg-primary-100 dark:hover:bg-primary-900/70 transition">
+                                                        Pilih & Crop Foto
+                                                    </button>
+                                                    <p class="text-xs text-neutral-400 dark:text-neutral-500 mt-1">
+                                                        Format
+                                                        gambar apa pun.
+                                                        Hasil potongan rasio
+                                                        9:16
+                                                        portrait.</p>
+                                                    @error('cover_photo')
+                                                        <span
+                                                            class="text-red-500 dark:text-red-400 text-xs mt-1">{{ $message }}</span>
+                                                    @enderror
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -2394,11 +2408,10 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        </div>
-                </div>
+                    </div>
                 </form>
             </div>
+        </div>
         </div>
 
         {{-- Fixed bottom bar --}}
@@ -2418,8 +2431,6 @@
                 </button>
             </div>
         </div>
-    </div>
-    </div>
 
     {{-- Spacer for fixed bottom bar --}}
     <div class="h-16"></div>
@@ -3058,4 +3069,5 @@
         }
     });
     </script>
+    </div>
 </x-app-layout>

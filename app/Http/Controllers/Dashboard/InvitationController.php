@@ -88,6 +88,7 @@ class InvitationController extends Controller
         $extraData = [
             'trial_started_at' => now(),
             'expires_at' => now()->addDays($demoDays),
+            'is_active' => true,
         ];
 
         $invitation = $request->user()->invitations()->create(array_merge($validated, $extraData));
@@ -405,7 +406,7 @@ class InvitationController extends Controller
             $validated['youtube_video_id'] = null;
         }
 
-        $invitation->update(array_merge($validated, ['is_active' => true]));
+        $invitation->update($validated);
 
         // Handle events upsert
         if ($request->has('events_enabled')) {

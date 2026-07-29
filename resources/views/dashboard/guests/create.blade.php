@@ -1,22 +1,43 @@
 <x-app-layout>
-    <x-slot name="header">
-        <div>
-            <h2 class="font-heading text-2xl font-bold text-secondary-800 dark:text-neutral-100">
-                Tambah Tamu
-            </h2>
-            <p class="text-sm text-neutral-500 dark:text-neutral-400 mt-0.5">{{ $invitation->title }}</p>
-        </div>
-    </x-slot>
+    <div class="min-h-screen">
 
-    <div class="py-8">
-        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-secondary-800 rounded-2xl shadow-soft border border-neutral-100 dark:border-secondary-700">
-                <div class="p-8">
+        {{-- ─── HERO ─── --}}
+        <div class="hero-mesh grain-overlay border-b border-neutral-200/60 dark:border-secondary-700/40">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-7 sm:py-8">
+
+                {{-- Breadcrumb --}}
+                <nav class="flex items-center gap-1.5 text-xs text-neutral-400 dark:text-neutral-500 mb-4">
+                    <a href="{{ route('dashboard') }}" class="hover:text-primary dark:hover:text-primary-400 transition-colors">Dashboard</a>
+                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                    <a href="{{ route('dashboard.invitations.show', $invitation) }}" class="hover:text-primary dark:hover:text-primary-400 transition-colors truncate max-w-[150px]">{{ $invitation->title }}</a>
+                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                    <a href="{{ route('dashboard.invitations.guests.index', $invitation) }}" class="hover:text-primary dark:hover:text-primary-400 transition-colors">Tamu Undangan</a>
+                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                    <span class="text-neutral-600 dark:text-neutral-400 font-medium">Tambah Tamu</span>
+                </nav>
+
+                <div>
+                    <h1 class="font-heading text-2xl sm:text-3xl font-bold text-secondary-800 dark:text-neutral-50 leading-tight">
+                        Tambah Tamu
+                    </h1>
+                    <p class="text-sm text-neutral-500 dark:text-neutral-400 mt-1">{{ $invitation->title }}</p>
+                </div>
+            </div>
+        </div>
+
+        {{-- ─── MAIN CONTENT ─── --}}
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-7 sm:py-8">
+            <div class="bg-white dark:bg-secondary-800 rounded-2xl border border-neutral-200/80 dark:border-secondary-700/60 overflow-hidden">
+                <div class="px-5 sm:px-6 py-4 border-b border-neutral-100 dark:border-secondary-700/60">
+                    <h2 class="font-semibold text-sm text-secondary-800 dark:text-neutral-100">Data Tamu</h2>
+                    <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">Lengkapi informasi tamu undangan.</p>
+                </div>
+                <div class="p-5 sm:p-6">
                     <form action="{{ route('dashboard.invitations.guests.store', $invitation) }}" method="POST">
                         @csrf
                         <div class="space-y-6">
                             <div>
-                                <label for="name" class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">Nama Tamu</label>
+                                <label for="name" class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">Nama Tamu <span class="text-red-500">*</span></label>
                                 <input type="text" name="name" id="name"
                                     class="block w-full rounded-xl border-neutral-300 dark:border-secondary-600 dark:bg-secondary-700 dark:text-neutral-200 shadow-sm focus:border-primary-500 focus:ring-primary-500 text-sm"
                                     required placeholder="Contoh: Bapak Budi Santoso">
@@ -24,21 +45,23 @@
                                 @error('name') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
                             </div>
 
-                            <div>
-                                <label for="whatsapp_number" class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">No. WhatsApp <span class="text-neutral-400 dark:text-neutral-500 font-normal">(opsional)</span></label>
-                                <input type="text" name="whatsapp_number" id="whatsapp_number"
-                                    class="block w-full rounded-xl border-neutral-300 dark:border-secondary-600 dark:bg-secondary-700 dark:text-neutral-200 shadow-sm focus:border-primary-500 focus:ring-primary-500 text-sm"
-                                    placeholder="Contoh: 08123456789">
-                                <p class="mt-1.5 text-xs text-neutral-500 dark:text-neutral-400">Digunakan untuk mengirim link undangan via WhatsApp otomatis.</p>
-                                @error('whatsapp_number') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
-                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="whatsapp_number" class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">No. WhatsApp <span class="text-neutral-400 dark:text-neutral-500 font-normal">(opsional)</span></label>
+                                    <input type="text" name="whatsapp_number" id="whatsapp_number"
+                                        class="block w-full rounded-xl border-neutral-300 dark:border-secondary-600 dark:bg-secondary-700 dark:text-neutral-200 shadow-sm focus:border-primary-500 focus:ring-primary-500 text-sm"
+                                        placeholder="Contoh: 08123456789">
+                                    <p class="mt-1.5 text-xs text-neutral-500 dark:text-neutral-400">Digunakan untuk mengirim link undangan via WhatsApp otomatis.</p>
+                                    @error('whatsapp_number') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+                                </div>
 
-                            <div>
-                                <label for="phone" class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">No. Telepon <span class="text-neutral-400 dark:text-neutral-500 font-normal">(opsional)</span></label>
-                                <input type="text" name="phone" id="phone"
-                                    class="block w-full rounded-xl border-neutral-300 dark:border-secondary-600 dark:bg-secondary-700 dark:text-neutral-200 shadow-sm focus:border-primary-500 focus:ring-primary-500 text-sm"
-                                    placeholder="Contoh: 0211234567">
-                                @error('phone') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+                                <div>
+                                    <label for="phone" class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">No. Telepon <span class="text-neutral-400 dark:text-neutral-500 font-normal">(opsional)</span></label>
+                                    <input type="text" name="phone" id="phone"
+                                        class="block w-full rounded-xl border-neutral-300 dark:border-secondary-600 dark:bg-secondary-700 dark:text-neutral-200 shadow-sm focus:border-primary-500 focus:ring-primary-500 text-sm"
+                                        placeholder="Contoh: 0211234567">
+                                    @error('phone') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+                                </div>
                             </div>
 
                             <div>

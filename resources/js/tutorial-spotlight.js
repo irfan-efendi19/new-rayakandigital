@@ -46,16 +46,6 @@ document.addEventListener("DOMContentLoaded", () => {
             },
         },
         {
-            element: '[data-tour="layar-sapa-config"]',
-            popover: {
-                title: "📸 Foto Sampul Undangan",
-                description:
-                    "Unggah foto sampul untuk mempercantik tampilan undangan Anda.",
-                side: "top",
-                align: "center",
-            },
-        },
-        {
             element: '[data-tour="publish-btn"]',
             popover: {
                 title: "🚀 Publikasikan Undangan",
@@ -134,6 +124,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 title: "🎨 Ganti Tema Undangan",
                 description:
                     "Ganti preset tema visual undangan kapan saja sesuai konsep acara Anda.",
+                side: "bottom",
+                align: "start",
+            },
+        },
+        {
+            element: '[data-tour="cover-photo"]',
+            popover: {
+                title: "📸 Foto Sampul Undangan",
+                description:
+                    "Unggah foto sampul untuk mempercantik tampilan undangan Anda.",
                 side: "bottom",
                 align: "start",
             },
