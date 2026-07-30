@@ -303,7 +303,10 @@ class Invitation extends Model
     public function package(): ?Package
     {
         if ($this->pricing_tier_id) {
-            return Package::find($this->pricing_tier_id);
+            $package = Package::find($this->pricing_tier_id);
+            if ($package) {
+                return $package;
+            }
         }
 
         return Package::where('package_code', $this->currentTier())->first();
@@ -350,7 +353,7 @@ class Invitation extends Model
 
     public function canUseWhatsappGateway(): bool
     {
-        return true;
+        return $this->hasFeature('whatsapp_gateway') || in_array($this->currentTier(), ['gold', 'platinum']);
     }
 
     public function canUseGift(): bool
