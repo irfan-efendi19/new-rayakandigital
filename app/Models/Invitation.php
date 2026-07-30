@@ -350,7 +350,7 @@ class Invitation extends Model
 
     public function canUseWhatsappGateway(): bool
     {
-        return $this->hasFeature('whatsapp_gateway');
+        return true;
     }
 
     public function canUseGift(): bool
