@@ -21,6 +21,10 @@ class WaSettingController extends Controller
     {
         Gate::authorize('update', $invitation);
 
+        if (! $invitation->canUseWhatsappGateway()) {
+            abort(403, 'Fitur WhatsApp Gateway hanya tersedia untuk paket Gold ke atas.');
+        }
+
         $waSetting = $invitation->waSetting;
 
         if (! $waSetting) {

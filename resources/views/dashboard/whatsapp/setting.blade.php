@@ -78,8 +78,8 @@
                 phone: '{{ $phone }}'
             })" class="space-y-6">
 
-                {{-- ── STATUS BANNER ── --}}
-                @if($status === 'PENDING_VERIFICATION')
+                 {{-- ── STATUS BANNER ── --}}
+                 @if($status === 'PENDING_VERIFICATION' && !empty($phone))
                     <div class="p-4 rounded-2xl bg-amber-50/80 dark:bg-amber-900/20 border border-amber-200/80 dark:border-amber-700/50 shadow-sm">
                         <div class="flex items-start gap-3">
                             <div class="w-8 h-8 rounded-xl bg-amber-100 dark:bg-amber-900/40 flex items-center justify-center shrink-0 mt-0.5">
@@ -88,8 +88,8 @@
                                 </svg>
                             </div>
                             <div class="flex-1">
-                                <p class="font-semibold text-amber-800 dark:text-amber-300 text-sm">Menunggu Verifikasi Admin</p>
-                                <p class="text-amber-700 dark:text-amber-400/80 text-xs mt-0.5">Nomor WhatsApp pengirim sedang menunggu konfirmasi dari admin. Proses verifikasi biasanya memakan waktu 1×24 jam.</p>
+                                <p class="font-semibold text-amber-800 dark:text-amber-300 text-sm">Nomor Sedang Ditinjau Admin</p>
+                                <p class="text-amber-700 dark:text-amber-400/80 text-xs mt-0.5">Nomor WhatsApp yang kamu daftarkan masih diperiksa oleh admin. Biasanya proses ini selesai dalam 1×24 jam.</p>
                             </div>
                         </div>
                         @if(!empty($adminWa))
@@ -119,11 +119,11 @@
                             </svg>
                         </div>
                         <div>
-                            <p class="font-semibold text-red-800 dark:text-red-300 text-sm">Pengajuan Ditolak</p>
+                            <p class="font-semibold text-red-800 dark:text-red-300 text-sm">Nomor Ditolak</p>
                             @if($waSetting->admin_notes)
                                 <p class="text-red-700 dark:text-red-400/80 text-xs mt-0.5">Alasan: {{ $waSetting->admin_notes }}</p>
                             @endif
-                            <p class="text-red-600 dark:text-red-400 text-xs mt-1">Ubah nomor di bawah dan ajukan ulang.</p>
+                            <p class="text-red-600 dark:text-red-400 text-xs mt-1">Ganti nomor di bawah lalu ajukan ulang.</p>
                         </div>
                     </div>
                 @elseif($status === 'READY_TO_PAIR')
@@ -134,8 +134,8 @@
                             </svg>
                         </div>
                         <div>
-                            <p class="font-semibold text-blue-800 dark:text-blue-300 text-sm">Nomor Diverifikasi — Siap Pairing!</p>
-                            <p class="text-blue-700 dark:text-blue-400/80 text-xs mt-0.5">Admin telah memverifikasi nomor ini. Scroll ke bawah dan klik <strong>"Tampilkan QR Code"</strong> untuk memindai.</p>
+                            <p class="font-semibold text-blue-800 dark:text-blue-300 text-sm">Nomor Disetujui — Siap Dihubungkan!</p>
+                            <p class="text-blue-700 dark:text-blue-400/80 text-xs mt-0.5">Nomormu sudah disetujui admin. Gulir ke bawah, klik <strong>"Tampilkan QR Code"</strong> lalu pindai dengan WhatsApp.</p>
                         </div>
                     </div>
                 @elseif($status === 'CONNECTED')
@@ -146,9 +146,9 @@
                             </svg>
                         </div>
                         <div>
-                            <p class="font-semibold text-emerald-800 dark:text-emerald-300 text-sm">WhatsApp Terhubung</p>
+                            <p class="font-semibold text-emerald-800 dark:text-emerald-300 text-sm">WhatsApp Sudah Terhubung</p>
                             <p class="text-emerald-700 dark:text-emerald-400/80 text-xs mt-0.5">
-                                Nomor <strong>{{ $waSetting->phone_number ? '+'.ltrim($waSetting->phone_number, '+') : '-' }}</strong> sudah terhubung dan siap mengirim pesan undangan.
+                                Nomor <strong>{{ $waSetting->phone_number ? '+'.ltrim($waSetting->phone_number, '+') : '-' }}</strong> sudah aktif dan bisa dipakai kirim undangan ke tamu.
                             </p>
                         </div>
                     </div>
@@ -156,13 +156,13 @@
 
                 {{-- ── ALUR PROSES ── --}}
                 <div class="bg-white/80 dark:bg-secondary-800/80 backdrop-blur-xl rounded-2xl p-6 border border-neutral-200/80 dark:border-secondary-700/80 shadow-sm">
-                    <h2 class="text-xs font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-widest mb-5">Alur Aktivasi</h2>
+                    <h2 class="text-xs font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-widest mb-5">Panduan Aktivasi</h2>
                     @php
                         $steps = [
-                            ['label' => 'Input No. HP',     'icon' => 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z', 'statuses' => ['PENDING_VERIFICATION','READY_TO_PAIR','PAIRING','CONNECTED','REJECTED']],
-                            ['label' => 'Verifikasi Admin',  'icon' => 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z', 'statuses' => ['READY_TO_PAIR','PAIRING','CONNECTED']],
-                            ['label' => 'Scan QR',           'icon' => 'M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z', 'statuses' => ['PAIRING','CONNECTED']],
-                            ['label' => 'Selesai',           'icon' => 'M5 13l4 4L19 7', 'statuses' => ['CONNECTED']],
+                            ['label' => 'Masukkan Nomor WA',     'icon' => 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z', 'statuses' => ['PENDING_VERIFICATION','READY_TO_PAIR','PAIRING','CONNECTED','REJECTED']],
+                            ['label' => 'Tunggu Konfirmasi Admin',  'icon' => 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z', 'statuses' => ['READY_TO_PAIR','PAIRING','CONNECTED']],
+                            ['label' => 'Pindai QR',           'icon' => 'M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z', 'statuses' => ['PAIRING','CONNECTED']],
+                            ['label' => 'Siap Digunakan',           'icon' => 'M5 13l4 4L19 7', 'statuses' => ['CONNECTED']],
                         ];
                         $totalSteps = count($steps);
                     @endphp
@@ -241,7 +241,7 @@
                         <span class="w-7 h-7 rounded-lg bg-primary-100 dark:bg-primary-900/50 text-primary dark:text-primary-400 text-xs font-extrabold flex items-center justify-center">1</span>
                         <div>
                             <h2 class="text-sm font-bold text-secondary-800 dark:text-neutral-100">Nomor WhatsApp Pengirim</h2>
-                            <p class="text-[11px] text-neutral-500 dark:text-neutral-400">Masukkan nomor yang akan digunakan sebagai pengirim undangan</p>
+                            <p class="text-[11px] text-neutral-500 dark:text-neutral-400">Nomor ini yang akan dipakai untuk kirim pesen ke tamu undangan</p>
                         </div>
                     </div>
 
@@ -250,9 +250,9 @@
                         <form method="POST" action="{{ route('dashboard.whatsapp.setting.update-phone', $invitation) }}" class="space-y-4">
                             @csrf
                             <div>
-                                <label for="phone_number" class="block text-xs font-semibold text-neutral-600 dark:text-neutral-400 mb-2">
-                                    Nomor WhatsApp <span class="text-red-500">*</span>
-                                </label>
+                                    <label for="phone_number" class="block text-xs font-semibold text-neutral-600 dark:text-neutral-400 mb-2">
+                                        Nomor WhatsApp Kamu <span class="text-red-500">*</span>
+                                    </label>
                                 <div class="flex gap-2">
                                     <div class="flex items-center px-3.5 rounded-xl border border-neutral-200 dark:border-secondary-600 bg-neutral-50 dark:bg-secondary-900/50 text-neutral-500 dark:text-neutral-400 text-sm font-mono select-none shrink-0">
                                         62
@@ -264,10 +264,10 @@
                                            class="flex-1 min-w-0 px-4 py-2.5 rounded-xl border border-neutral-200 dark:border-secondary-600 bg-white dark:bg-secondary-900 text-neutral-800 dark:text-neutral-100 text-sm focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all font-mono placeholder:text-neutral-300 dark:placeholder:text-neutral-600" />
                                 </div>
                                 <p class="text-[11px] text-neutral-400 dark:text-neutral-500 mt-2 leading-relaxed">
-                                    Format bebas: <code class="bg-neutral-100 dark:bg-secondary-700/80 px-1.5 py-0.5 rounded-md text-[10px]">0812xxx</code>,
+                                    Bisa pakai format: <code class="bg-neutral-100 dark:bg-secondary-700/80 px-1.5 py-0.5 rounded-md text-[10px]">0812xxx</code>,
                                     <code class="bg-neutral-100 dark:bg-secondary-700/80 px-1.5 py-0.5 rounded-md text-[10px]">812xxx</code>, atau
                                     <code class="bg-neutral-100 dark:bg-secondary-700/80 px-1.5 py-0.5 rounded-md text-[10px]">62812xxx</code>
-                                    — otomatis dinormalisasi.
+                                    — nanti dibenerin otomatis.
                                 </p>
                                 @error('phone_number')
                                     <p class="text-xs text-red-500 dark:text-red-400 mt-2 flex items-center gap-1.5">
@@ -281,7 +281,7 @@
                             <div class="flex justify-end pt-1">
                                 <button type="submit" id="btn-simpan-nomor"
                                         class="px-5 py-2.5 rounded-xl bg-primary hover:bg-primary-600 text-white font-semibold text-sm transition-all shadow-sm hover:shadow-md hover:shadow-primary/20 active:translate-y-0">
-                                    Simpan & Ajukan Verifikasi
+                                        Simpan & Minta Persetujuan
                                 </button>
                             </div>
                         </form>
@@ -296,7 +296,7 @@
                             <span class="w-7 h-7 rounded-lg bg-primary-100 dark:bg-primary-900/50 text-primary dark:text-primary-400 text-xs font-extrabold flex items-center justify-center">2</span>
                             <div>
                                 <h2 class="text-sm font-bold text-secondary-800 dark:text-neutral-100">Hubungkan WhatsApp</h2>
-                                <p class="text-[11px] text-neutral-500 dark:text-neutral-400">Tampilkan QR Code dan pindai dari aplikasi WhatsApp</p>
+                                <p class="text-[11px] text-neutral-500 dark:text-neutral-400">Tampilkan QR lalu pindai pakai WhatsApp kamu</p>
                             </div>
                         </div>
 
@@ -312,14 +312,14 @@
                                     </div>
                                     <div>
                                         <p class="font-semibold text-emerald-700 dark:text-emerald-400 text-sm">WhatsApp Sudah Terhubung!</p>
-                                        <p class="text-neutral-500 dark:text-neutral-400 text-xs mt-1">Perangkat ini sudah terdaftar dan siap mengirim pesan.</p>
+                                        <p class="text-neutral-500 dark:text-neutral-400 text-xs mt-1">Nomormu sudah aktif dan siap kirim undangan ke tamu.</p>
                                     </div>
                                     <button @click="checkStatus()" :disabled="loadingStatus"
                                             class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-neutral-200 dark:border-secondary-600 text-sm font-medium text-neutral-600 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-secondary-700/50 transition-colors disabled:opacity-50">
                                         <svg class="w-4 h-4" :class="{'animate-spin': loadingStatus}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                                         </svg>
-                                        Verifikasi Ulang Status
+                                        Cek Ulang Status
                                     </button>
 
                                 @else

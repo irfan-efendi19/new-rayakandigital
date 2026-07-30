@@ -31,6 +31,7 @@ class PackageSeeder extends Seeder
             ['feature_key' => 'qr_checkin', 'feature_name' => 'QR Code Check-In', 'group_name' => 'Interaktif', 'description' => 'Scan QR code untuk check-in tamu'],
             ['feature_key' => 'qr_rsvp_universal', 'feature_name' => 'QR RSVP Universal', 'group_name' => 'Interaktif', 'description' => 'QR Code untuk konfirmasi kehadiran oleh tamu'],
             ['feature_key' => 'youtube_video', 'feature_name' => 'Video YouTube & Live Streaming', 'group_name' => 'Multimedia', 'description' => 'Sematan video YouTube dan siaran langsung di halaman undangan'],
+            ['feature_key' => 'whatsapp_gateway', 'feature_name' => 'WhatsApp Gateway', 'group_name' => 'Integrasi', 'description' => 'Kirim undangan otomatis via WhatsApp'],
         ];
 
         foreach ($features as $f) {
@@ -42,7 +43,7 @@ class PackageSeeder extends Seeder
 
         $freeFeatureKeys = ['basic_theme', 'gallery_photos', 'rsvp', 'personal_link', 'wa_template', 'real_time_guestbook'];
         $silverFeatureKeys = array_merge($freeFeatureKeys, ['digital_gift', 'guest_import']);
-        $goldFeatureKeys = array_merge($silverFeatureKeys, ['all_themes', 'multi_gift', 'custom_music', 'youtube_video', 'unlimited_guests', 'no_watermark', 'qr_rsvp_universal']);
+        $goldFeatureKeys = array_merge($silverFeatureKeys, ['all_themes', 'multi_gift', 'custom_music', 'whatsapp_gateway', 'youtube_video', 'unlimited_guests', 'no_watermark', 'qr_rsvp_universal']);
         $platinumFeatureKeys = array_merge($goldFeatureKeys, ['unlimited_gift', 'custom_css', 'eo_branding', 'multi_quota', 'qr_checkin']);
 
         $packages = [

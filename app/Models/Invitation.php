@@ -348,6 +348,11 @@ class Invitation extends Model
         return $this->hasFeature('custom_music') || $this->hasAddon('addon-custom-music');
     }
 
+    public function canUseWhatsappGateway(): bool
+    {
+        return $this->hasFeature('whatsapp_gateway');
+    }
+
     public function canUseGift(): bool
     {
         return $this->hasFeature('digital_gift') || $this->hasAddon('addon-digital-gift');
