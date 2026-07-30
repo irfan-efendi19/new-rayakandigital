@@ -146,6 +146,8 @@ class Invitation extends Model
         'screen_bride_names',
         'screen_background_image',
         'bride_groom_order',
+        'use_custom_music',
+        'custom_music',
     ];
 
     protected function casts(): array
@@ -173,6 +175,7 @@ class Invitation extends Model
             'show_quote' => 'boolean',
             'show_video' => 'boolean',
             'slug_change_count' => 'integer',
+            'use_custom_music' => 'boolean',
         ];
     }
 

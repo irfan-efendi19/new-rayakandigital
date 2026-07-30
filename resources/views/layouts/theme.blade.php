@@ -76,15 +76,19 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
             </svg>
         </button>
-        <!-- Custom or default audio based on tier & upload -->
+        @php
+            $defaultThemeMusic = $invitation->music_url;
+            if (! $defaultThemeMusic) {
+                $themeModel = \App\Models\Theme::where('view_path', 'themes.' . $invitation->theme)->first();
+                $defaultThemeMusic = $themeModel?->resolvedPreviewData()?->music_url;
+            }
+        @endphp
+        <!-- Custom or default audio based on toggle & upload -->
         <audio id="bg-audio" loop preload="auto">
-            @if($invitation->canUseCustomMusic() && $invitation->music_url)
-                <source src="{{ asset('storage/' . $invitation->music_url) }}" type="audio/mpeg">
-            @else
-                @php $defaultMusic = \App\Models\PreviewData::getPreview()->music_url; @endphp
-                @if($defaultMusic)
-                    <source src="{{ asset('storage/' . $defaultMusic) }}" type="audio/mpeg">
-                @endif
+            @if($invitation->use_custom_music && $invitation->custom_music)
+                <source src="{{ asset('storage/' . $invitation->custom_music) }}">
+            @elseif($defaultThemeMusic)
+                <source src="{{ asset('storage/' . $defaultThemeMusic) }}">
             @endif
         </audio>
     </div>

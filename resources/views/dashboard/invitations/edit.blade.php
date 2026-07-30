@@ -1161,23 +1161,47 @@
                                     <label
                                         class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Musik
                                         Latar Belakang</label>
+
                                     @if($invitation->canUseCustomMusic())
-                                        <div class="mt-2 space-y-2">
-                                            @if($invitation->music_url)
-                                                <div
-                                                    class="flex items-center gap-3 bg-primary-50 dark:bg-primary-900/50 p-3 rounded-xl border border-primary-100 dark:border-primary-800/50">
-                                                    <span
-                                                        class="text-xs font-semibold text-primary-700 dark:text-primary-300">🎵
-                                                        Musik Aktif:</span>
-                                                    <audio src="{{ asset('storage/' . $invitation->music_url) }}" controls
-                                                        class="h-8 max-w-xs"></audio>
-                                                </div>
-                                            @endif
-                                            <input type="file" name="music_file" id="music_file"
-                                                class="text-sm text-neutral-500 dark:text-neutral-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-primary-50 dark:file:bg-primary-900/50 file:text-primary-700 dark:file:text-primary-300 hover:file:bg-primary-100 dark:hover:file:bg-primary-900/70">
-                                            <p class="text-xs text-neutral-500 dark:text-neutral-400">
-                                                Mendukung format
-                                                MP3, WAV, OGG.</p>
+                                        <div class="mt-3 space-y-3">
+                                            <div
+                                                class="bg-white dark:bg-secondary-800 rounded-xl border border-neutral-200 dark:border-neutral-700 divide-y divide-neutral-100 dark:divide-neutral-700">
+                                                <label
+                                                    class="flex items-center gap-3 p-4 cursor-pointer hover:bg-neutral-50 dark:hover:bg-secondary-700/50 transition-all rounded-t-xl {{ !$invitation->use_custom_music ? 'bg-primary-50 dark:bg-primary-900/20 border-l-2 border-l-primary' : '' }}">
+                                                    <input type="radio" name="use_custom_music" value="0"
+                                                        class="h-4 w-4 text-primary focus:ring-primary-500"
+                                                        {{ !$invitation->use_custom_music ? 'checked' : '' }}>
+                                                    <div>
+                                                        <span class="text-sm font-semibold text-secondary-800 dark:text-neutral-200">Gunakan Musik Bawaan Tema</span>
+                                                        <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">Putar musik default dari tema yang dipilih</p>
+                                                    </div>
+                                                </label>
+                                                <label
+                                                    class="flex items-center gap-3 p-4 cursor-pointer hover:bg-neutral-50 dark:hover:bg-secondary-700/50 transition-all rounded-b-xl {{ $invitation->use_custom_music ? 'bg-primary-50 dark:bg-primary-900/20 border-l-2 border-l-primary' : '' }}">
+                                                    <input type="radio" name="use_custom_music" value="1"
+                                                        class="h-4 w-4 text-primary focus:ring-primary-500"
+                                                        {{ $invitation->use_custom_music ? 'checked' : '' }}>
+                                                    <div>
+                                                        <span class="text-sm font-semibold text-secondary-800 dark:text-neutral-200">Gunakan Lagu Sendiri</span>
+                                                        <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">Unggah file MP3/audio dari perangkat Anda</p>
+                                                    </div>
+                                                </label>
+                                            </div>
+
+                                            <div class="ml-7 pl-4 border-l-2 border-primary/30 dark:border-primary-700/50 space-y-3">
+                                                @if($invitation->custom_music)
+                                                    <div
+                                                        class="flex items-center gap-3 bg-neutral-50 dark:bg-secondary-700 p-3 rounded-xl border border-neutral-200 dark:border-secondary-600">
+                                                        <span class="text-xs font-semibold text-neutral-700 dark:text-neutral-300">Musik Aktif:</span>
+                                                        <audio src="{{ asset('storage/' . $invitation->custom_music) }}" controls
+                                                            class="h-8 max-w-xs"></audio>
+                                                    </div>
+                                                @endif
+                                                <input type="file" name="music_file" id="music_file" accept=".mp3,.wav,.ogg"
+                                                    class="text-sm text-neutral-500 dark:text-neutral-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-primary-50 dark:file:bg-primary-900/50 file:text-primary-700 dark:file:text-primary-300 hover:file:bg-primary-100 dark:hover:file:bg-primary-900/70">
+                                                <p class="text-xs text-neutral-500 dark:text-neutral-400">
+                                                    Format: MP3, WAV, OGG. Maks 10MB.</p>
+                                            </div>
                                         </div>
                                     @else
                                         <div
@@ -1185,14 +1209,9 @@
                                             <span class="text-xl flex-shrink-0">✨</span>
                                             <div>
                                                 <p class="text-sm font-semibold text-amber-800 dark:text-amber-300">
-                                                    Fitur Kustom Musik
-                                                    Terkunci</p>
+                                                    Fitur Kustom Musik Terkunci</p>
                                                 <p class="text-xs text-amber-700 dark:text-amber-400">
-                                                    Silakan upgrade ke
-                                                    paket Gold atau Platinum
-                                                    untuk mengunggah musik
-                                                    latar belakang
-                                                    favorit Anda.</p>
+                                                    Upgrade ke Gold atau Platinum untuk upload musik sendiri.</p>
                                             </div>
                                         </div>
                                     @endif
@@ -2388,7 +2407,7 @@
                             {{-- Active toggle --}}
                             @php $isActive = old('is_active', $invitation->is_active); @endphp
                             <div class="mt-6">
-                                <input type="hidden" name="is_active" value="0">
+                                <input type="hidden" name="is_active" value="{{ $isActive ? '1' : '0' }}">
                                 <div class="flex flex-col sm:flex-row sm:items-center gap-3 p-4 bg-neutral-50 dark:bg-secondary-700 rounded-xl border border-neutral-200 dark:border-secondary-700">
                                     <div class="flex-1">
                                         <p class="text-sm font-medium text-neutral-700 dark:text-neutral-300">Status Undangan</p>

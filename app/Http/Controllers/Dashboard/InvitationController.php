@@ -144,6 +144,24 @@ class InvitationController extends Controller
             }
         }
 
+        // Handle music upload
+        $musicUpdate = [];
+        if ($request->hasFile('music_file')) {
+            $request->validate(['music_file' => 'file|mimes:mp3,wav,ogg|max:10240']);
+            $musicPath = $request->file('music_file')
+                ->store('music/'.$invitation->id, 'public');
+            $musicUpdate['custom_music'] = $musicPath;
+            $musicUpdate['use_custom_music'] = true;
+            $musicUpdate['music_url'] = $musicPath;
+        } elseif ($request->has('use_custom_music') && ! $request->boolean('use_custom_music')) {
+            $musicUpdate['use_custom_music'] = false;
+            $musicUpdate['music_url'] = null;
+        }
+
+        if (! empty($musicUpdate)) {
+            $invitation->update($musicUpdate);
+        }
+
         return redirect()->route('dashboard.invitations.show', $invitation)
             ->with('success', 'Undangan berhasil dibuat! Selanjutnya, lengkapi detail acara Anda.');
     }
@@ -324,6 +342,7 @@ class InvitationController extends Controller
                 'youtube_url' => 'nullable|string|max:255',
                 'screen_bride_names' => 'nullable|string|max:255',
                 'bride_groom_order' => 'nullable|in:male_first,female_first',
+                'use_custom_music' => 'nullable|in:0,1',
             ]);
         } catch (ValidationException $e) {
             throw $e;
@@ -353,11 +372,22 @@ class InvitationController extends Controller
             );
         }
 
-        // Handle music upload
+        // Handle music upload and toggle
         if ($request->hasFile('music_file')) {
             $request->validate(['music_file' => 'file|mimes:mp3,wav,ogg|max:10240']);
-            $validated['music_url'] = $request->file('music_file')
+            $validated['custom_music'] = $request->file('music_file')
                 ->store('music/'.$invitation->id, 'public');
+            $validated['use_custom_music'] = true;
+            $validated['music_url'] = $validated['custom_music'];
+        } elseif ($request->has('use_custom_music')) {
+            $useCustom = $request->input('use_custom_music') === '1';
+            if ($useCustom) {
+                if ($invitation->custom_music) {
+                    $validated['music_url'] = $invitation->custom_music;
+                }
+            } else {
+                $validated['music_url'] = null;
+            }
         }
 
         // Handle screen background upload

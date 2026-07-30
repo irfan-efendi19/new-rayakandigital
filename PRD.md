@@ -1,34 +1,40 @@
 # Product Requirement Document (PRD)
 
-## MODUL: INTEGRASI WHATSAPP GATEWAY PER-UNDANGAN (ADMIN-VERIFIED TOKEN)
+## MODUL: PENGATURAN MUSIK BACKGROUND UNDANGAN (DEFAULT TEMA VS UPLOAD MP3 LOKAL)
 
-| Atribut               | Detail                                                                                                    |
-| :-------------------- | :-------------------------------------------------------------------------------------------------------- |
-| **Status**            | Approved                                                                                                  |
-| **Penulis**           | Mochammad Irfan Efendi                                                                                    |
-| **Tanggal Pembuatan** | 31 Juli 2026                                                                                              |
-| **Target Komponen**   | Dashboard Data Tamu (Per Undangan), Admin Panel (Filament/Laravel Admin), Backend Service, & Queue Worker |
-| **Penyedia Service**  | **Fonnte API Engine (api.fonnte.com)**                                                                    |
-| **Arsitektur**        | **Per-Invitation Scope, Admin Token Injection, Shared-Hosting Optimized**                                 |
+| Atribut               | Detail                                                                                     |
+| :-------------------- | :----------------------------------------------------------------------------------------- |
+| **Status**            | Approved                                                                                   |
+| **Penulis**           | Mochammad Irfan Efendi                                                                     |
+| **Tanggal Pembuatan** | 31 Juli 2026                                                                               |
+| **Target Komponen**   | Dashboard Pengaturan Undangan (User), Backend Service, & Frontend Player Undangan          |
+| **Arsitektur**        | **Per-Invitation Music Management, Dynamic Audio Source Selection, Local Storage Handler** |
 
 ---
 
 ## 1. DESKRIPSI & OBJECTIVE
 
-Fitur WhatsApp Gateway ini ditempatkan secara terisolasi pada **Halaman Data Tamu (Scope Per-Undangan)**. Hal ini bertujuan untuk memberikan fleksibilitas tinggi bagi pengguna/mempelai yang memiliki beberapa proyek undangan, sehingga tiap undangan dapat menggunakan nomor WhatsApp pengirim yang berbeda-beda.
+Fitur ini bertujuan untuk memberikan fleksibilitas penuh kepada pengguna dalam menentukan musik latar (_background music_) pada undangan digital mereka:
 
-Untuk menjaga pengalaman pengguna tetap mudah (_zero-friction_), pengguna **hanya perlu memasukkan nomor WhatsApp pengirim** pada halaman Data Tamu dari undangan yang bersangkutan. Administrator kemudian akan memverifikasi dan memasukkan **API Token Fonnte** khusus untuk undangan tersebut melalui Admin Panel[cite: 3].
+1. **Default State (_Zero Setup_):** Secara otomatis, undangan baru akan memutar file musik bawaan dari **Tema** yang dipilih.
+2. **Custom Audio Upload:** Jika pengguna ingin memakai lagu kenangan sendiri, pengguna **cukup mengunggah (_upload_) file MP3/audio dari perangkat lokal mereka** tanpa perlu memilih dari daftar dropdown.
+3. **Switch Back Option:** Pengguna dapat kembali menggunakan lagu bawaan tema kapan saja hanya dengan memilih tombol pilihan (radio button).
 
 ---
 
-## 2. ALUR INTEGRASI & SPESIFIKASI PENGGUNA (USER JOURNEY)
+## 2. ALUR KERJA & LOGIKA PENGGUNAAN (USER JOURNEY)
 
 ```text
-[Halaman Data Tamu Undangan]       [Admin Panel]               [Fonnte API Engine]
- Input No. HP Pengirim WA  -----> Daftar Pengajuan WA -----> Register Device / Token
-       |                               |                              |
- Status: PENDING               Admin Input Token            Device Created/Paired
-       |                               |                              |
- Tampil QR Code di Tamu   <----- Verifikasi Status   <----- Status: CONNECTED
-  (Tinggal Scan)
+[Undangan Baru Dibuat]
+       │
+       ├──► (Default) use_custom_music = false ──► Player memutar lagu bawaan TEMA
+       │
+       └──► User memilih "Gunakan Lagu Sendiri" & Upload MP3
+                  │
+                  ▼
+            Simpan File ke Storage (`/storage/invitation-musics/`)
+            Update `custom_music` & Set `use_custom_music = true`
+                  │
+                  ▼
+            Player memutar lagu CUSTOM LOKAL milik user
 ```
