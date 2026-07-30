@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendWhatsappMessage;
 use App\Models\Guest;
 use App\Models\Invitation;
-use App\Models\WhatsappGatewaySetting;
 use App\Models\WhatsappLog;
-use App\Services\WhatsAppNotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
@@ -34,15 +33,13 @@ class WhatsAppBlastController extends Controller
             return back()->with('error', 'Tidak ada tamu dengan nomor telepon yang dipilih.');
         }
 
-        $gateway = WhatsappGatewaySetting::active()->first();
+        $waSetting = $invitation->waSetting ?? $invitation->user?->waSetting;
 
-        if (!$gateway) {
-            return back()->with('error', 'Tidak ada gateway WhatsApp aktif. Konfigurasi di admin terlebih dahulu.');
+        if (! $waSetting || ! $waSetting->isConnected()) {
+            return back()->with('error', 'WhatsApp Gateway belum terhubung. Pastikan nomor WA Anda sudah diverifikasi admin dan berstatus CONNECTED.');
         }
 
-        $service = app(WhatsAppNotificationService::class);
-        $sent = 0;
-        $failed = 0;
+        $queuedCount = 0;
 
         foreach ($guests as $guest) {
             $message = $invitation->parseWhatsappTemplate($guest);
@@ -54,51 +51,31 @@ class WhatsAppBlastController extends Controller
                 'status' => 'pending',
             ]);
 
-            try {
-                $service->sendViaGateway($guest->whatsapp_number ?? $guest->phone, $message, $gateway);
-
-                $log->update([
-                    'status' => 'sent',
-                    'sent_at' => now(),
-                ]);
-                $sent++;
-            } catch (\Throwable $e) {
-                $log->update([
-                    'status' => 'failed',
-                    'error_message' => $e->getMessage(),
-                ]);
-                $failed++;
-            }
-
-            if (count($guests) > 1) {
-                usleep(300000);
-            }
+            SendWhatsappMessage::dispatch($log, $invitation, $guest, $message);
+            $queuedCount++;
         }
 
-        $msg = "{$sent} pesan berhasil dikirim.";
-        if ($failed > 0) {
-            $msg .= " {$failed} pesan gagal.";
-        }
-
-        return back()->with('success', $msg);
+        return back()->with('success', "{$queuedCount} pesan WhatsApp berhasil dimasukkan ke dalam antrean pengiriman.");
     }
 
     public function sendSingle(Request $request, Invitation $invitation, Guest $guest)
     {
         Gate::authorize('update', $invitation);
 
-        if (!$guest->whatsapp_number && !$guest->phone) {
+        $phone = $guest->whatsapp_number ?? $guest->phone;
+
+        if (! $phone) {
             return back()->with('error', 'Tamu ini tidak memiliki nomor telepon.');
         }
 
-        if (!$guest->relationLoaded('invitation')) {
+        if (! $guest->relationLoaded('invitation')) {
             $guest->load('invitation');
         }
 
-        $gateway = WhatsappGatewaySetting::active()->first();
+        $waSetting = $invitation->waSetting ?? $invitation->user?->waSetting;
 
-        if (!$gateway) {
-            return back()->with('error', 'Tidak ada gateway WhatsApp aktif. Konfigurasi di admin terlebih dahulu.');
+        if (! $waSetting || ! $waSetting->isConnected()) {
+            return back()->with('error', 'WhatsApp Gateway belum terhubung. Pastikan nomor WA Anda sudah diverifikasi admin dan berstatus CONNECTED.');
         }
 
         $message = $invitation->parseWhatsappTemplate($guest);
@@ -110,24 +87,9 @@ class WhatsAppBlastController extends Controller
             'status' => 'pending',
         ]);
 
-        try {
-            app(WhatsAppNotificationService::class)
-                ->sendViaGateway($guest->whatsapp_number ?? $guest->phone, $message, $gateway);
+        SendWhatsappMessage::dispatch($log, $invitation, $guest, $message);
 
-            $log->update([
-                'status' => 'sent',
-                'sent_at' => now(),
-            ]);
-
-            return back()->with('success', "Pesan WA untuk {$guest->name} berhasil dikirim.");
-        } catch (\Throwable $e) {
-            $log->update([
-                'status' => 'failed',
-                'error_message' => $e->getMessage(),
-            ]);
-
-            return back()->with('error', "Gagal: {$e->getMessage()}");
-        }
+        return back()->with('success', "Pesan WA untuk {$guest->name} berhasil dimasukkan ke antrean.");
     }
 
     public function logs(Request $request, Invitation $invitation)

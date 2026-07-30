@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Order;
+use App\Models\WaSetting;
 use App\Models\WhatsappGatewaySetting;
 use Illuminate\Support\Facades\Http;
 
@@ -61,6 +62,51 @@ class WhatsAppNotificationService
         }
     }
 
+    public function sendViaUserGateway(string $phoneNumber, string $message, WaSetting $waSetting, int $delaySeconds = 0): bool
+    {
+        if (empty($waSetting->fonnte_token)) {
+            throw new \RuntimeException('Fonnte API Token user belum dikonfigurasi.');
+        }
+
+        try {
+            $payload = [
+                'target' => preg_replace('/[^0-9]/', '', $phoneNumber),
+                'message' => $message,
+                'countryCode' => '62',
+            ];
+
+            if ($delaySeconds > 0) {
+                $payload['delay'] = $delaySeconds;
+            }
+
+            $response = Http::withHeaders([
+                'Authorization' => $waSetting->fonnte_token,
+            ])->asForm()->post('https://api.fonnte.com/send', $payload);
+
+            $body = $response->body();
+            $json = $response->json();
+
+            $success = $response->successful()
+                && (! isset($json['status']) || $json['status'] === true);
+
+            if (! $success) {
+                $reason = $json['reason'] ?? $body;
+                logger()->warning('User Fonnte WhatsApp API request failed', [
+                    'user_id' => $waSetting->user_id,
+                    'status' => $response->status(),
+                    'response' => $body,
+                ]);
+                throw new \RuntimeException("Fonnte API returned status {$response->status()}: {$reason}");
+            }
+
+            return true;
+        } catch (\Throwable $e) {
+            report($e);
+
+            throw $e;
+        }
+    }
+
     public function sendViaGateway(string $phoneNumber, string $message, WhatsappGatewaySetting $gateway): bool
     {
         try {
@@ -85,7 +131,7 @@ class WhatsAppNotificationService
             } else {
                 $payload['phone'] = $this->normalizePhone($phoneNumber);
                 $headers = [
-                    'Authorization' => 'Bearer ' . $gateway->api_token,
+                    'Authorization' => 'Bearer '.$gateway->api_token,
                     'Content-Type' => 'application/json',
                 ];
 
@@ -103,9 +149,9 @@ class WhatsAppNotificationService
             $json = $response->json();
 
             $success = $response->successful()
-                && (!isset($json['status']) || $json['status'] === true);
+                && (! isset($json['status']) || $json['status'] === true);
 
-            if (!$success) {
+            if (! $success) {
                 logger()->warning('WhatsApp API request failed', [
                     'provider' => $gateway->provider_name,
                     'url' => $gateway->api_url,
@@ -132,7 +178,7 @@ class WhatsAppNotificationService
         }
 
         if (strlen($phone) > 0 && $phone[0] === '0') {
-            return '62' . substr($phone, 1);
+            return '62'.substr($phone, 1);
         }
 
         return $phone;
@@ -144,7 +190,7 @@ class WhatsAppNotificationService
 
         $url = rtrim($url, '/');
 
-        if ($gateway->provider_name === 'fonnte' && !str_contains($url, '/send')) {
+        if ($gateway->provider_name === 'fonnte' && ! str_contains($url, '/send')) {
             $url .= '/send';
         }
 

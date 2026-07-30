@@ -38,6 +38,10 @@
                                 Buku Tamu (Scanner)
                             </a>
                         @endif
+                        <a href="{{ route('dashboard.whatsapp.setting', $invitation) }}"
+                           class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-teal-700 dark:text-teal-300 border border-teal-300/80 dark:border-teal-700/50 rounded-xl hover:bg-teal-50 dark:hover:bg-teal-900/20 transition-all bg-white/70 dark:bg-secondary-800/50 backdrop-blur-sm">
+                            <span>📱</span> Pengirim WA
+                        </a>
                         <a href="{{ route('dashboard.invitations.whatsapp.logs', $invitation) }}"
                            class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-emerald-700 dark:text-emerald-300 border border-emerald-300/80 dark:border-emerald-700/50 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-all bg-white/70 dark:bg-secondary-800/50 backdrop-blur-sm">
                             <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -53,6 +57,42 @@
                             Kembali
                         </a>
                     </div>
+                </div>
+
+                {{-- WA Status Bar Scoped Per Invitation --}}
+                @php
+                    $waSet = $invitation->waSetting;
+                    $waStatus = $waSet?->status ?? 'PENDING_VERIFICATION';
+                @endphp
+                <div class="mt-4 p-3.5 rounded-xl border flex items-center justify-between gap-3 text-xs
+                    {{ $waStatus === 'CONNECTED' ? 'bg-emerald-50 border-emerald-200 text-emerald-800 dark:bg-emerald-900/20 dark:border-emerald-700 dark:text-emerald-300' : '' }}
+                    {{ $waStatus === 'READY_TO_PAIR' ? 'bg-blue-50 border-blue-200 text-blue-800 dark:bg-blue-900/20 dark:border-blue-700 dark:text-blue-300' : '' }}
+                    {{ in_array($waStatus, ['PENDING_VERIFICATION', 'PAIRING']) ? 'bg-amber-50 border-amber-200 text-amber-800 dark:bg-amber-900/20 dark:border-amber-700 dark:text-amber-300' : '' }}
+                    {{ $waStatus === 'REJECTED' ? 'bg-red-50 border-red-200 text-red-800 dark:bg-red-900/20 dark:border-red-700 dark:text-red-300' : '' }}">
+                    <div class="flex items-center gap-2">
+                        <span>📱</span>
+                        <span>
+                            <strong>WA Pengirim Undangan Ini:</strong>
+                            @if($waStatus === 'CONNECTED')
+                                Terhubung ({{ $waSet->phone_number ? '+'.$waSet->phone_number : 'Valid' }})
+                            @elseif($waStatus === 'READY_TO_PAIR')
+                                Siap Pairing — Silakan scan QR Code
+                            @elseif($waStatus === 'PAIRING')
+                                Sedang Pairing (Menunggu Scan)
+                            @elseif($waStatus === 'REJECTED')
+                                Ditolak Admin {{ $waSet->admin_notes ? '('.$waSet->admin_notes.')' : '' }}
+                            @else
+                                Belum Terhubung / Menunggu Verifikasi Admin
+                            @endif
+                        </span>
+                    </div>
+                    <a href="{{ route('dashboard.whatsapp.setting', $invitation) }}" class="underline font-semibold shrink-0 hover:opacity-80">
+                        @if(in_array($waStatus, ['READY_TO_PAIR', 'PAIRING']))
+                            Scan QR Now →
+                        @else
+                            Atur Pengirim →
+                        @endif
+                    </a>
                 </div>
 
                 {{-- Stat Strip --}}

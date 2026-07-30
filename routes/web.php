@@ -13,6 +13,7 @@ use App\Http\Controllers\Dashboard\GuestbookController;
 use App\Http\Controllers\Dashboard\GuestCategoryController;
 use App\Http\Controllers\Dashboard\GuestController;
 use App\Http\Controllers\Dashboard\InvitationController;
+use App\Http\Controllers\Dashboard\WaSettingController;
 use App\Http\Controllers\Dashboard\WhatsAppBlastController;
 use App\Http\Controllers\Dashboard\WhatsAppDiagnosticController;
 use App\Http\Controllers\Dashboard\WhatsAppPaymentController;
@@ -114,6 +115,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         // WhatsApp Diagnostic
         Route::get('/whatsapp-diagnostic', [WhatsAppDiagnosticController::class, 'check'])->name('whatsapp.diagnostic');
+
+        // WhatsApp Setting (Per-Invitation Scope)
+        Route::get('/invitations/{invitation}/whatsapp-setting', [WaSettingController::class, 'index'])->name('whatsapp.setting');
+        Route::post('/invitations/{invitation}/whatsapp-setting/phone', [WaSettingController::class, 'updatePhone'])->name('whatsapp.setting.update-phone');
+        Route::post('/invitations/{invitation}/whatsapp-setting/qr', [WaSettingController::class, 'getQr'])->name('whatsapp.setting.get-qr');
+        Route::get('/invitations/{invitation}/whatsapp-setting/status', [WaSettingController::class, 'checkStatus'])->name('whatsapp.setting.check-status');
+        Route::post('/invitations/{invitation}/whatsapp-setting/disconnect', [WaSettingController::class, 'disconnect'])->name('whatsapp.setting.disconnect');
 
         // WhatsApp Blast
         Route::post('/invitations/{invitation}/whatsapp/send', [WhatsAppBlastController::class, 'send'])->name('invitations.whatsapp.send');

@@ -181,6 +181,11 @@ class Invitation extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function waSetting(): HasOne
+    {
+        return $this->hasOne(WaSetting::class);
+    }
+
     public function pricingTier(): BelongsTo
     {
         return $this->belongsTo(Package::class, 'pricing_tier_id');
