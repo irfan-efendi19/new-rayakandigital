@@ -42,6 +42,67 @@
             </div>
         </div>
 
+        {{-- ─── STICKY SECTION NAV (8 STEPS) ─── --}}
+        <div x-data="{
+            activeSection: 'sec-1',
+            sections: [
+                { id: 'sec-1', num: 1, name: 'Mempelai' },
+                { id: 'sec-2', num: 2, name: 'Waktu & Tempat' },
+                { id: 'sec-3', num: 3, name: 'Visual & Tema' },
+                { id: 'sec-4', num: 4, name: 'Konten' },
+                { id: 'sec-5', num: 5, name: 'Keuangan' },
+                { id: 'sec-6', num: 6, name: 'RSVP' },
+                { id: 'sec-7', num: 7, name: 'Kategori Tamu' },
+                { id: 'sec-8', num: 8, name: 'Visibilitas' }
+            ],
+            scrollTo(id) {
+                const el = document.getElementById(id);
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+                const navEl = document.getElementById('nav-item-' + id);
+                if (navEl) navEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            }
+        }" x-init="() => {
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        activeSection = entry.target.id;
+                        const navEl = document.getElementById('nav-item-' + entry.target.id);
+                        if (navEl) navEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                    }
+                });
+            }, { rootMargin: '-100px 0px -50% 0px' });
+            document.querySelectorAll('[id^=sec-]').forEach(el => observer.observe(el));
+        }" class="sticky top-[64px] z-30 bg-white/95 dark:bg-secondary-900/95 backdrop-blur-md border-b border-neutral-200/80 dark:border-secondary-700/60 py-2.5 shadow-sm">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+
+                {{-- Mobile Active Step Bar (Compact Header) --}}
+                <div class="flex sm:hidden items-center justify-between gap-2 mb-2 pb-2 border-b border-neutral-100 dark:border-secondary-800">
+                    <div class="flex items-center gap-2">
+                        <span class="w-6 h-6 rounded-full bg-primary text-white text-xs font-bold flex items-center justify-center"
+                            x-text="sections.find(s => s.id === activeSection)?.num || 1">1</span>
+                        <span class="text-xs font-bold text-secondary-800 dark:text-neutral-100"
+                            x-text="sections.find(s => s.id === activeSection)?.name || 'Mempelai'">Mempelai</span>
+                    </div>
+                    <span class="text-[11px] font-semibold text-neutral-400 dark:text-neutral-500"
+                        x-text="(sections.findIndex(s => s.id === activeSection) + 1) + ' dari ' + sections.length">1 dari 8</span>
+                </div>
+
+                {{-- Horizontal Nav Items --}}
+                <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5" id="sticky-nav-container">
+                    <template x-for="sec in sections" :key="sec.id">
+                        <a :id="'nav-item-' + sec.id" :href="'#' + sec.id" @click.prevent="scrollTo(sec.id)"
+                            :class="activeSection === sec.id ? 'bg-primary-50 dark:bg-primary-900/40 text-primary dark:text-primary-300 ring-1 ring-primary/30' : 'text-neutral-600 dark:text-neutral-400 hover:text-secondary-800 dark:hover:text-neutral-200 bg-neutral-100/60 dark:bg-secondary-800/60'"
+                            class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 whitespace-nowrap shrink-0">
+                            <span :class="activeSection === sec.id ? 'bg-primary text-white' : 'bg-neutral-200 dark:bg-secondary-700 text-neutral-600 dark:text-neutral-300'"
+                                class="w-5 h-5 rounded-full text-[11px] flex items-center justify-center font-bold"
+                                x-text="sec.num"></span>
+                            <span x-text="sec.name"></span>
+                        </a>
+                    </template>
+                </div>
+            </div>
+        </div>
+
         <style>
         #crop-container {
             width: 100%;
@@ -64,12 +125,20 @@
         }
 
         .scrollbar-thin::-webkit-scrollbar-thumb {
-            background-color: rgb(226, 232, 240);
+            background-color: #E4E4E7;
             border-radius: 10px;
         }
 
         .dark .scrollbar-thin::-webkit-scrollbar-thumb {
-            background-color: rgb(51, 65, 85);
+            background-color: #27272A;
+        }
+
+        .photo-upload-zone {
+            transition: border-color 0.2s, background-color 0.2s;
+        }
+
+        .theme-card {
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
 
         [x-cloak] {
@@ -175,7 +244,7 @@
                                 </div>
                                 @if(!$isExpired && $tierCode === 'free')
                                     <a href="{{ route('dashboard.checkout', ['invitation_id' => $invitation->id]) }}"
-                                        class="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-primary to-primary-600 rounded-xl hover:shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all flex-shrink-0">
+                                        class="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-2 text-sm font-semibold text-white bg-primary rounded-xl hover:bg-primary-600 focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-all flex-shrink-0">
                                         Upgrade
                                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -189,16 +258,17 @@
                             {{-- Section 1: Informasi Dasar & Identitas --}}
                             {{-- ======================================== --}}
                             <div class="border-b border-neutral-200 dark:border-secondary-700 pb-8" data-tour="mempelai-info">
-                                <div class="flex items-center gap-3 mb-1">
-                                    <span
-                                        class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 text-sm font-bold">1</span>
-                                    <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">
-                                        Informasi Dasar & Identitas</h3>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <div class="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary font-bold text-sm">
+                                        1
+                                    </div>
+                                    <div>
+                                        <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">
+                                            Informasi Dasar & Identitas <span class="text-sm font-normal text-neutral-400 dark:text-neutral-500">(Profil)</span>
+                                        </h3>
+                                    </div>
                                 </div>
-                                <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-6">
-                                    Data lengkap kedua
-                                    mempelai untuk ditampilkan di
-                                    undangan.</p>
+                                <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-6">Data lengkap kedua mempelai untuk ditampilkan di undangan.</p>
 
                                 <div x-data="{
                                     order: '{{ $invitation->bride_groom_order ?? 'male_first' }}',
@@ -210,39 +280,35 @@
                                     {{-- Swap Button --}}
                                     <div class="flex justify-center -mb-2">
                                         <button @click="toggleOrder" type="button"
-                                            class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-xl text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/50 hover:bg-primary-100 dark:hover:bg-primary-900/70 transition">
+                                            class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-xl text-primary dark:text-primary-300 bg-primary-50 dark:bg-primary-900/40 border border-primary-200/60 dark:border-primary-800/40 hover:bg-primary-100 dark:hover:bg-primary-900/70 transition">
                                             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
                                             </svg>
-                                            Tukar Posisi
+                                            Tukar Urutan Posisi
                                         </button>
                                     </div>
 
                                     {{-- Bride --}}
                                     <div :style="order === 'female_first' ? { order: 1 } : { order: 2 }"
-                                        class="bg-neutral-50 dark:bg-secondary-700 p-5 rounded-2xl border border-neutral-200 dark:border-secondary-700 space-y-4">
+                                        class="bg-neutral-50 dark:bg-secondary-700/50 p-5 rounded-2xl border border-neutral-200 dark:border-secondary-700 space-y-4">
                                         <div class="flex items-center gap-3">
                                             <div
-                                                class="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary dark:text-primary-400">
-                                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24"
-                                                    stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="2"
-                                                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                                class="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary dark:text-primary-400 font-semibold text-sm">
+                                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                                 </svg>
                                             </div>
-                                            <h4 class="font-semibold text-sm text-primary-700 dark:text-primary-300">
-                                                Mempelai Wanita</h4>
+                                            <div>
+                                                <h4 class="font-bold text-sm text-secondary-800 dark:text-neutral-100">Mempelai Wanita</h4>
+                                            </div>
                                         </div>
                                         <div class="grid grid-cols-1 gap-y-5 gap-x-4 sm:grid-cols-6">
                                             <div class="sm:col-span-3">
                                                 <label for="bride_name"
-                                                    class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Nama
-                                                    Lengkap Mempelai
-                                                    Wanita</label>
+                                                    class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wide mb-1.5">Nama Lengkap <span class="text-red-500">*</span></label>
                                                 <input type="text" name="bride_name" id="bride_name"
                                                     value="{{ old('bride_name', $invitation->bride_name) }}"
-                                                    class="mt-1 block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
+                                                    class="block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary focus:ring-primary sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
                                                     required>
                                                 @error('bride_name')
                                                     <span
@@ -251,11 +317,10 @@
                                             </div>
                                             <div class="sm:col-span-3">
                                                 <label for="bride_nickname"
-                                                    class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Nama
-                                                    Panggilan</label>
+                                                    class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wide mb-1.5">Nama Panggilan</label>
                                                 <input type="text" name="bride_nickname" id="bride_nickname"
                                                     value="{{ old('bride_nickname', $invitation->bride_nickname) }}"
-                                                    class="mt-1 block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-secondary-700 dark:text-neutral-200">
+                                                    class="block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary focus:ring-primary sm:text-sm dark:bg-secondary-700 dark:text-neutral-200">
                                                 @error('bride_nickname')
                                                     <span
                                                         class="text-red-500 dark:text-red-400 text-xs mt-1">{{ $message }}</span>
@@ -263,11 +328,10 @@
                                             </div>
                                             <div class="sm:col-span-3">
                                                 <label for="bride_father_name"
-                                                    class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Nama
-                                                    Ayah</label>
+                                                    class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wide mb-1.5">Nama Ayah</label>
                                                 <input type="text" name="bride_father_name" id="bride_father_name"
                                                     value="{{ old('bride_father_name', $invitation->bride_father_name) }}"
-                                                    class="mt-1 block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
+                                                    class="block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary focus:ring-primary sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
                                                     placeholder="Nama Ayah Mempelai Wanita">
                                                 @error('bride_father_name')
                                                     <span
@@ -276,11 +340,10 @@
                                             </div>
                                             <div class="sm:col-span-3">
                                                 <label for="bride_mother_name"
-                                                    class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Nama
-                                                    Ibu</label>
+                                                    class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wide mb-1.5">Nama Ibu</label>
                                                 <input type="text" name="bride_mother_name" id="bride_mother_name"
                                                     value="{{ old('bride_mother_name', $invitation->bride_mother_name) }}"
-                                                    class="mt-1 block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
+                                                    class="block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary focus:ring-primary sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
                                                     placeholder="Nama Ibu Mempelai Wanita">
                                                 @error('bride_mother_name')
                                                     <span
@@ -288,42 +351,35 @@
                                                 @enderror
                                             </div>
                                             <div class="sm:col-span-6">
-                                                <label
-                                                    class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Foto
-                                                    Mempelai
-                                                    Wanita</label>
-                                                <div class="mt-2 flex items-center gap-4">
-                                                    <div class="relative flex-shrink-0">
-                                                        <img id="bride-preview"
-                                                            src="{{ $invitation->bride_photo ? asset('storage/' . $invitation->bride_photo) : '' }}"
-                                                            alt="Bride photo"
-                                                            class="w-16 h-16 object-cover rounded-full border-2 border-neutral-200 dark:border-neutral-600 {{ $invitation->bride_photo ? '' : 'hidden' }}">
-                                                        <div id="bride-preview-placeholder"
-                                                            class="w-16 h-16 bg-neutral-200 dark:bg-secondary-700 rounded-full flex items-center justify-center text-neutral-500 dark:text-neutral-400 text-xs font-semibold {{ $invitation->bride_photo ? 'hidden' : '' }}">
-                                                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24"
-                                                                stroke="currentColor">
-                                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                                    stroke-width="1.5"
-                                                                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                                            </svg>
+                                                <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wide mb-2">Foto Mempelai Wanita</label>
+                                                <div class="photo-upload-zone relative border-2 border-dashed border-neutral-200 dark:border-secondary-600 rounded-2xl p-4 bg-white dark:bg-secondary-800 hover:border-primary cursor-pointer group"
+                                                    onclick="document.querySelector('[data-crop-target=bride_photo_input]').click()">
+                                                    <div class="flex items-center gap-4">
+                                                        <div class="relative flex-shrink-0">
+                                                            <img id="bride-preview"
+                                                                src="{{ $invitation->bride_photo ? asset('storage/' . $invitation->bride_photo) : '' }}"
+                                                                alt="Bride photo"
+                                                                class="w-16 h-16 object-cover rounded-xl border border-neutral-200 dark:border-secondary-600 {{ $invitation->bride_photo ? '' : 'hidden' }}">
+                                                            <div id="bride-preview-placeholder"
+                                                                class="w-16 h-16 bg-neutral-100 dark:bg-secondary-700 rounded-xl flex items-center justify-center text-neutral-400 dark:text-neutral-500 {{ $invitation->bride_photo ? 'hidden' : '' }}">
+                                                                <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                                                </svg>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div>
-                                                        <input type="file" name="bride_photo" id="bride_photo_input"
-                                                            class="crop-file-input hidden" accept="image/*"
-                                                            data-preview="bride-preview">
-                                                        <button type="button" data-crop-target="bride_photo_input"
-                                                            class="px-4 py-2 bg-primary-50 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 rounded-xl text-sm font-semibold hover:bg-primary-100 dark:hover:bg-primary-900/70 transition">
-                                                            Pilih & Crop
-                                                            Foto
-                                                        </button>
-                                                        <p class="text-xs text-neutral-400 dark:text-neutral-500 mt-1">
-                                                            Format
-                                                            gambar apa
-                                                            pun. Hasil
-                                                            potongan
-                                                            berbentuk
-                                                            persegi.</p>
+                                                        <div class="flex-1 min-w-0">
+                                                            <p class="text-sm font-semibold text-neutral-700 dark:text-neutral-200 group-hover:text-primary transition-colors">Unggah Foto</p>
+                                                            <p class="text-xs text-neutral-400 dark:text-neutral-500 mt-0.5">Klik untuk memilih foto (Format 1:1)</p>
+                                                            <input type="file" name="bride_photo" id="bride_photo_input"
+                                                                class="crop-file-input hidden" accept="image/*"
+                                                                data-preview="bride-preview">
+                                                            <button type="button" data-crop-target="bride_photo_input"
+                                                                onclick="event.stopPropagation()"
+                                                                class="mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 bg-neutral-100 dark:bg-secondary-700 text-neutral-700 dark:text-neutral-300 rounded-lg text-xs font-semibold hover:bg-primary-50 hover:text-primary dark:hover:bg-primary-900/40 transition">
+                                                                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                                                                Pilih & Crop Foto
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 @error('bride_photo')
@@ -336,29 +392,25 @@
 
                                     {{-- Groom --}}
                                     <div :style="order === 'male_first' ? { order: 1 } : { order: 2 }"
-                                        class="bg-neutral-50 dark:bg-secondary-700 p-5 rounded-2xl border border-neutral-200 dark:border-secondary-700 space-y-4">
+                                        class="bg-neutral-50 dark:bg-secondary-700/50 p-5 rounded-2xl border border-neutral-200 dark:border-secondary-700 space-y-4">
                                         <div class="flex items-center gap-3">
                                             <div
-                                                class="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary dark:text-primary-400">
-                                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24"
-                                                    stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="2"
-                                                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                                class="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary dark:text-primary-400 font-semibold text-sm">
+                                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                                 </svg>
                                             </div>
-                                            <h4 class="font-semibold text-sm text-primary-700 dark:text-primary-300">
-                                                Mempelai Pria</h4>
+                                            <div>
+                                                <h4 class="font-bold text-sm text-secondary-800 dark:text-neutral-100">Mempelai Pria</h4>
+                                            </div>
                                         </div>
                                         <div class="grid grid-cols-1 gap-y-5 gap-x-4 sm:grid-cols-6">
                                             <div class="sm:col-span-3">
                                                 <label for="groom_name"
-                                                    class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Nama
-                                                    Lengkap Mempelai
-                                                    Pria</label>
+                                                    class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wide mb-1.5">Nama Lengkap <span class="text-red-500">*</span></label>
                                                 <input type="text" name="groom_name" id="groom_name"
                                                     value="{{ old('groom_name', $invitation->groom_name) }}"
-                                                    class="mt-1 block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
+                                                    class="block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary focus:ring-primary sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
                                                     required>
                                                 @error('groom_name')
                                                     <span
@@ -367,11 +419,10 @@
                                             </div>
                                             <div class="sm:col-span-3">
                                                 <label for="groom_nickname"
-                                                    class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Nama
-                                                    Panggilan</label>
+                                                    class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wide mb-1.5">Nama Panggilan</label>
                                                 <input type="text" name="groom_nickname" id="groom_nickname"
                                                     value="{{ old('groom_nickname', $invitation->groom_nickname) }}"
-                                                    class="mt-1 block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-secondary-700 dark:text-neutral-200">
+                                                    class="block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary focus:ring-primary sm:text-sm dark:bg-secondary-700 dark:text-neutral-200">
                                                 @error('groom_nickname')
                                                     <span
                                                         class="text-red-500 dark:text-red-400 text-xs mt-1">{{ $message }}</span>
@@ -379,11 +430,10 @@
                                             </div>
                                             <div class="sm:col-span-3">
                                                 <label for="groom_father_name"
-                                                    class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Nama
-                                                    Ayah</label>
+                                                    class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wide mb-1.5">Nama Ayah</label>
                                                 <input type="text" name="groom_father_name" id="groom_father_name"
                                                     value="{{ old('groom_father_name', $invitation->groom_father_name) }}"
-                                                    class="mt-1 block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
+                                                    class="block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary focus:ring-primary sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
                                                     placeholder="Nama Ayah Mempelai Pria">
                                                 @error('groom_father_name')
                                                     <span
@@ -392,11 +442,10 @@
                                             </div>
                                             <div class="sm:col-span-3">
                                                 <label for="groom_mother_name"
-                                                    class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Nama
-                                                    Ibu</label>
+                                                    class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wide mb-1.5">Nama Ibu</label>
                                                 <input type="text" name="groom_mother_name" id="groom_mother_name"
                                                     value="{{ old('groom_mother_name', $invitation->groom_mother_name) }}"
-                                                    class="mt-1 block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
+                                                    class="block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary focus:ring-primary sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
                                                     placeholder="Nama Ibu Mempelai Pria">
                                                 @error('groom_mother_name')
                                                     <span
@@ -404,42 +453,35 @@
                                                 @enderror
                                             </div>
                                             <div class="sm:col-span-6">
-                                                <label
-                                                    class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Foto
-                                                    Mempelai
-                                                    Pria</label>
-                                                <div class="mt-2 flex items-center gap-4">
-                                                    <div class="relative flex-shrink-0">
-                                                        <img id="groom-preview"
-                                                            src="{{ $invitation->groom_photo ? asset('storage/' . $invitation->groom_photo) : '' }}"
-                                                            alt="Groom photo"
-                                                            class="w-16 h-16 object-cover rounded-full border-2 border-neutral-200 dark:border-neutral-600 {{ $invitation->groom_photo ? '' : 'hidden' }}">
-                                                        <div id="groom-preview-placeholder"
-                                                            class="w-16 h-16 bg-neutral-200 dark:bg-secondary-700 rounded-full flex items-center justify-center text-neutral-500 dark:text-neutral-400 text-xs font-semibold {{ $invitation->groom_photo ? 'hidden' : '' }}">
-                                                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24"
-                                                                stroke="currentColor">
-                                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                                    stroke-width="1.5"
-                                                                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                                            </svg>
+                                                <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wide mb-2">Foto Mempelai Pria</label>
+                                                <div class="photo-upload-zone relative border-2 border-dashed border-neutral-200 dark:border-secondary-600 rounded-2xl p-4 bg-white dark:bg-secondary-800 hover:border-primary cursor-pointer group"
+                                                    onclick="document.querySelector('[data-crop-target=groom_photo_input]').click()">
+                                                    <div class="flex items-center gap-4">
+                                                        <div class="relative flex-shrink-0">
+                                                            <img id="groom-preview"
+                                                                src="{{ $invitation->groom_photo ? asset('storage/' . $invitation->groom_photo) : '' }}"
+                                                                alt="Groom photo"
+                                                                class="w-16 h-16 object-cover rounded-xl border border-neutral-200 dark:border-secondary-600 {{ $invitation->groom_photo ? '' : 'hidden' }}">
+                                                            <div id="groom-preview-placeholder"
+                                                                class="w-16 h-16 bg-neutral-100 dark:bg-secondary-700 rounded-xl flex items-center justify-center text-neutral-400 dark:text-neutral-500 {{ $invitation->groom_photo ? 'hidden' : '' }}">
+                                                                <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                                                </svg>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div>
-                                                        <input type="file" name="groom_photo" id="groom_photo_input"
-                                                            class="crop-file-input hidden" accept="image/*"
-                                                            data-preview="groom-preview">
-                                                        <button type="button" data-crop-target="groom_photo_input"
-                                                            class="px-4 py-2 bg-primary-50 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 rounded-xl text-sm font-semibold hover:bg-primary-100 dark:hover:bg-primary-900/70 transition">
-                                                            Pilih & Crop
-                                                            Foto
-                                                        </button>
-                                                        <p class="text-xs text-neutral-400 dark:text-neutral-500 mt-1">
-                                                            Format
-                                                            gambar apa
-                                                            pun. Hasil
-                                                            potongan
-                                                            berbentuk
-                                                            persegi.</p>
+                                                        <div class="flex-1 min-w-0">
+                                                            <p class="text-sm font-semibold text-neutral-700 dark:text-neutral-200 group-hover:text-primary transition-colors">Unggah Foto</p>
+                                                            <p class="text-xs text-neutral-400 dark:text-neutral-500 mt-0.5">Klik untuk memilih foto (Format 1:1)</p>
+                                                            <input type="file" name="groom_photo" id="groom_photo_input"
+                                                                class="crop-file-input hidden" accept="image/*"
+                                                                data-preview="groom-preview">
+                                                            <button type="button" data-crop-target="groom_photo_input"
+                                                                onclick="event.stopPropagation()"
+                                                                class="mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 bg-neutral-100 dark:bg-secondary-700 text-neutral-700 dark:text-neutral-300 rounded-lg text-xs font-semibold hover:bg-primary-50 hover:text-primary dark:hover:bg-primary-900/40 transition">
+                                                                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                                                                Pilih & Crop Foto
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 @error('groom_photo')
@@ -455,17 +497,18 @@
                             {{-- ======================================== --}}
                             {{-- Section 2: Waktu Tempat & Akses Undangan --}}
                             {{-- ======================================== --}}
-                            <div class="border-b border-neutral-200 dark:border-secondary-700 pb-8" data-tour="event-schedule">
-                                <div class="flex items-center gap-3 mb-1">
-                                    <span
-                                        class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 text-sm font-bold">2</span>
-                                    <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">
-                                        Waktu Tempat & Akses Undangan
-                                    </h3>
+                            <div id="sec-2" class="border-b border-neutral-200 dark:border-secondary-700 pb-8" data-tour="event-schedule">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <div class="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary font-bold text-sm">
+                                        2
+                                    </div>
+                                    <div>
+                                        <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">
+                                            Waktu, Tempat & Akses Undangan <span class="text-sm font-normal text-neutral-400 dark:text-neutral-500">(Detail Acara)</span>
+                                        </h3>
+                                    </div>
                                 </div>
-                                <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-6">
-                                    Atur jadwal acara,
-                                    lokasi, dan tautan undangan.</p>
+                                <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-6">Atur jadwal acara dan lokasi tempat pelaksanaan acara.</p>
 
                                 {{-- Event Details --}}
                                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
@@ -493,7 +536,7 @@
                                             }
                                         @endphp
                                         <div
-                                            class="event-card bg-neutral-50 dark:bg-secondary-700 p-5 rounded-2xl border border-neutral-200 dark:border-secondary-700">
+                                            class="event-card overflow-hidden bg-neutral-50 dark:bg-secondary-700/50 p-5 rounded-2xl border border-neutral-200 dark:border-secondary-700 shadow-sm">
                                             <input type="hidden" name="events[{{ $eventIdx }}][id]"
                                                 value="{{ $event->id ?? '' }}">
                                             <div class="flex items-center justify-between flex-wrap gap-2 mb-4">
@@ -552,7 +595,7 @@
                                                     <input type="text" name="events[{{ $eventIdx }}][event_title]"
                                                         value="{{ old('events.' . $eventIdx . '.event_title', $event->event_title ?? '') }}"
                                                         list="event-titles-{{ $eventIdx }}"
-                                                        class="mt-1 block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
+                                                        class="mt-1 block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary focus:ring-primary sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
                                                         placeholder="Pilih atau ketik nama acara" required>
                                                     <datalist id="event-titles-{{ $eventIdx }}">
                                                         <option value="Akad Nikah">
@@ -880,12 +923,16 @@
                             {{-- ======================================== --}}
                             {{-- Section 3: Visual & Estetika --}}
                             {{-- ======================================== --}}
-                            <div class="border-b border-neutral-200 dark:border-secondary-700 pb-8" data-tour="layar-sapa-config">
-                                <div class="flex items-center gap-3 mb-1">
-                                    <span
-                                        class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 text-sm font-bold">3</span>
-                                    <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">
-                                        Visual & Estetika</h3>
+                            <div id="sec-3" class="border-b border-neutral-200 dark:border-secondary-700 pb-8" data-tour="layar-sapa-config">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <div class="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary font-bold text-sm">
+                                        3
+                                    </div>
+                                    <div>
+                                        <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">
+                                            Visual & Estetika <span class="text-sm font-normal text-neutral-400 dark:text-neutral-500">(Foto & Tema)</span>
+                                        </h3>
+                                    </div>
                                 </div>
                                 <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-6">
                                     Atur tampilan visual
@@ -1250,10 +1297,10 @@
                                                 $tema->view_path
                                             ); @endphp
                                             <div @click="selectedTheme = '{{ $themeKey }}'" :class="{
-                                                                                                                             'border-primary ring-2 ring-primary/20 shadow-md bg-primary-50 dark:bg-primary-900/20': selectedTheme === '{{ $themeKey }}',
-                                                                                                                             'border-neutral-200 dark:border-neutral-600 hover:border-neutral-300 dark:hover:border-neutral-500 bg-white dark:bg-secondary-800': selectedTheme !== '{{ $themeKey }}'
-                                                                                                                         }"
-                                                class="w-40 sm:w-48 flex-shrink-0 border rounded-2xl p-2.5 transition-all duration-200 cursor-pointer snap-start relative flex flex-col justify-between select-none">
+                                                    'border-primary ring-2 ring-primary/30 shadow-md bg-primary-50 dark:bg-primary-900/20': selectedTheme === '{{ $themeKey }}',
+                                                    'border-neutral-200 dark:border-neutral-600 hover:border-primary-300 dark:hover:border-primary-800 bg-white dark:bg-secondary-800': selectedTheme !== '{{ $themeKey }}'
+                                                }"
+                                                class="theme-card w-36 sm:w-44 flex-shrink-0 border rounded-2xl p-2.5 cursor-pointer snap-start relative flex flex-col justify-between select-none">
                                                 <div x-show="selectedTheme === '{{ $themeKey }}'"
                                                     class="absolute top-4 right-4 bg-primary text-white rounded-full p-1 z-10 shadow-sm"
                                                     x-cloak>
@@ -1302,13 +1349,16 @@
                             {{-- ======================================== --}}
                             {{-- Section 4: Konten Tambahan & Personalisasi --}}
                             {{-- ======================================== --}}
-                            <div class="border-b border-neutral-200 dark:border-secondary-700 pb-8">
-                                <div class="flex items-center gap-3 mb-1">
-                                    <span
-                                        class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 text-sm font-bold">4</span>
-                                    <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">
-                                        Konten Tambahan & Personalisasi
-                                    </h3>
+                            <div id="sec-4" class="border-b border-neutral-200 dark:border-secondary-700 pb-8">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <div class="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary font-bold text-sm">
+                                        4
+                                    </div>
+                                    <div>
+                                        <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">
+                                            Konten Tambahan <span class="text-sm font-normal text-neutral-400 dark:text-neutral-500">(Cerita Cinta & Kutipan)</span>
+                                        </h3>
+                                    </div>
                                 </div>
                                 <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-6">
                                     Personalisasi undangan
@@ -1510,12 +1560,19 @@
                                 </div>
                             </div>
 
-                            <div class="border-b border-neutral-200 dark:border-secondary-700 pb-8">
-                                <div class="flex items-center gap-3 mb-1">
-                                    <span
-                                        class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 text-sm font-bold">5</span>
-                                    <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">
-                                        Keuangan</h3>
+                            {{-- ======================================== --}}
+                            {{-- Section 5: Keuangan & Kado Digital --}}
+                            {{-- ======================================== --}}
+                            <div id="sec-5" class="border-b border-neutral-200 dark:border-secondary-700 pb-8">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <div class="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary font-bold text-sm">
+                                        5
+                                    </div>
+                                    <div>
+                                        <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">
+                                            Keuangan & Kado Digital <span class="text-sm font-normal text-neutral-400 dark:text-neutral-500">(Bank & QRIS)</span>
+                                        </h3>
+                                    </div>
                                 </div>
                                 <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-6">
                                     Atur kado digital</p>
@@ -2078,12 +2135,16 @@
                         {{-- ======================================== --}}
                         {{-- Section 6: Kontrol RSVP --}}
                         {{-- ======================================== --}}
-                        <div class="border-b border-neutral-200 dark:border-secondary-700 pb-8">
-                            <div class="flex items-center gap-3 mb-1">
-                                <span
-                                    class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 text-sm font-bold">6</span>
-                                <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">
-                                    Kontrol RSVP</h3>
+                        <div id="sec-6" class="border-b border-neutral-200 dark:border-secondary-700 pb-8">
+                            <div class="flex items-center gap-3 mb-2">
+                                <div class="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary font-bold text-sm">
+                                    6
+                                </div>
+                                <div>
+                                    <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">
+                                        Kontrol RSVP <span class="text-sm font-normal text-neutral-400 dark:text-neutral-500">(Batasan Kuota)</span>
+                                    </h3>
+                                </div>
                             </div>
                             <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-6">
                                 Atur batasan kuota kehadiran tamu undangan.</p>
@@ -2172,12 +2233,16 @@
                         {{-- ======================================== --}}
                         {{-- Section 7: Kategori Tamu (Guest Categories) --}}
                         {{-- ======================================== --}}
-                        <div class="border-b border-neutral-200 dark:border-secondary-700 pb-8" data-tour="guest-management">
-                            <div class="flex items-center gap-3 mb-1">
-                                <span
-                                    class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 text-sm font-bold">7</span>
-                                <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">
-                                    Kategori Tamu</h3>
+                        <div id="sec-7" class="border-b border-neutral-200 dark:border-secondary-700 pb-8" data-tour="guest-management">
+                            <div class="flex items-center gap-3 mb-2">
+                                <div class="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary font-bold text-sm">
+                                    7
+                                </div>
+                                <div>
+                                    <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">
+                                        Kategori Tamu <span class="text-sm font-normal text-neutral-400 dark:text-neutral-500">(VIP, Keluarga, dll)</span>
+                                    </h3>
+                                </div>
                             </div>
                             <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-6">
                                 Kelola label kategori untuk mengelompokkan tamu (misal: VIP, Keluarga, Teman Kantor).
@@ -2256,13 +2321,16 @@
                         {{-- ======================================== --}}
                         {{-- Section 8: Kontrol Visibilitas & Finalisasi --}}
                         {{-- ======================================== --}}
-                        <div class="border-b border-neutral-200 dark:border-secondary-700 pb-8">
-                            <div class="flex items-center gap-3 mb-1">
-                                <span
-                                    class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 text-sm font-bold">8</span>
-                                <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">
-                                    Kontrol Visibilitas & Finalisasi
-                                </h3>
+                        <div id="sec-8" class="border-b border-neutral-200 dark:border-secondary-700 pb-8">
+                            <div class="flex items-center gap-3 mb-2">
+                                <div class="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary font-bold text-sm">
+                                    8
+                                </div>
+                                <div>
+                                    <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">
+                                        Kontrol Visibilitas & Finalisasi <span class="text-sm font-normal text-neutral-400 dark:text-neutral-500">(Fitur Publik)</span>
+                                    </h3>
+                                </div>
                             </div>
                             <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-6">
                                 Atur visibilitas dan

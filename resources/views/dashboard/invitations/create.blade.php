@@ -45,32 +45,45 @@
             });
         }, { rootMargin: '-120px 0px -60% 0px' });
         document.querySelectorAll('[data-step]').forEach(el => observer.observe(el));
-    }" class="sticky top-[64px] z-30 bg-white/90 dark:bg-secondary-900/90 backdrop-blur-md border-b border-neutral-200/80 dark:border-secondary-700/60 py-3 shadow-xs">
+    }" class="sticky top-[64px] z-30 bg-white/95 dark:bg-secondary-900/95 backdrop-blur-md border-b border-neutral-200/80 dark:border-secondary-700/60 py-3 shadow-sm">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center gap-1 sm:gap-2 overflow-x-auto no-scrollbar text-xs">
+            <div class="flex items-center gap-0 overflow-x-auto no-scrollbar">
+                {{-- Step 1 --}}
                 <a href="#step-1" @click.prevent="document.getElementById('step-1').scrollIntoView({ behavior: 'smooth' })"
-                    :class="activeStep === 1 ? 'bg-primary-50 dark:bg-primary-900/40 text-primary dark:text-primary-300' : 'text-neutral-500 hover:text-secondary-800 dark:hover:text-neutral-200'"
-                    class="flex flex-1 items-center justify-center gap-1.5 px-2 py-1.5 rounded-xl font-semibold transition-all sm:flex-none sm:px-3 whitespace-nowrap">
-                    <span :class="activeStep === 1 ? 'bg-primary text-white' : 'bg-neutral-200 dark:bg-secondary-700 text-neutral-600 dark:text-neutral-300'"
-                        class="w-5 h-5 rounded-full text-[11px] flex items-center justify-center font-bold transition-all">1</span>
+                    :class="activeStep === 1 ? 'text-primary dark:text-primary-300' : 'text-neutral-400 dark:text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300'"
+                    class="flex items-center gap-2 px-3 py-1.5 rounded-xl font-semibold transition-all duration-200 text-xs whitespace-nowrap">
+                    <span :class="activeStep === 1 ? 'bg-primary text-white shadow-md shadow-primary/30' : (activeStep > 1 ? 'bg-primary/20 text-primary dark:text-primary-300' : 'bg-neutral-100 dark:bg-secondary-700 text-neutral-500 dark:text-neutral-400')"
+                        class="w-6 h-6 rounded-full text-[11px] flex items-center justify-center font-bold transition-all duration-200 flex-shrink-0">
+                        <template x-if="activeStep > 1"><svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></template>
+                        <template x-if="activeStep <= 1"><span>1</span></template>
+                    </span>
                     <span class="hidden sm:inline">Konsep & Tema</span>
                     <span class="sm:hidden">Tema</span>
                 </a>
-                <div class="h-px bg-neutral-200 dark:bg-secondary-700 w-3 shrink-0 sm:w-auto sm:flex-1 sm:min-w-[12px]"></div>
+                {{-- Connector 1→2 --}}
+                <div class="flex-1 min-w-[20px] h-0.5 mx-1 rounded-full transition-all duration-500"
+                    :class="activeStep >= 2 ? 'bg-primary/40' : 'bg-neutral-200 dark:bg-secondary-700'"></div>
+                {{-- Step 2 --}}
                 <a href="#step-2" @click.prevent="document.getElementById('step-2').scrollIntoView({ behavior: 'smooth' })"
-                    :class="activeStep === 2 ? 'bg-primary-50 dark:bg-primary-900/40 text-primary dark:text-primary-300' : 'text-neutral-500 hover:text-secondary-800 dark:hover:text-neutral-200'"
-                    class="flex flex-1 items-center justify-center gap-1.5 px-2 py-1.5 rounded-xl font-semibold transition-all sm:flex-none sm:px-3 whitespace-nowrap">
-                    <span :class="activeStep === 2 ? 'bg-primary text-white' : 'bg-neutral-200 dark:bg-secondary-700 text-neutral-600 dark:text-neutral-300'"
-                        class="w-5 h-5 rounded-full text-[11px] flex items-center justify-center font-bold transition-all">2</span>
+                    :class="activeStep === 2 ? 'text-primary dark:text-primary-300' : 'text-neutral-400 dark:text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300'"
+                    class="flex items-center gap-2 px-3 py-1.5 rounded-xl font-semibold transition-all duration-200 text-xs whitespace-nowrap">
+                    <span :class="activeStep === 2 ? 'bg-primary text-white shadow-md shadow-primary/30' : (activeStep > 2 ? 'bg-primary/20 text-primary dark:text-primary-300' : 'bg-neutral-100 dark:bg-secondary-700 text-neutral-500 dark:text-neutral-400')"
+                        class="w-6 h-6 rounded-full text-[11px] flex items-center justify-center font-bold transition-all duration-200 flex-shrink-0">
+                        <template x-if="activeStep > 2"><svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></template>
+                        <template x-if="activeStep <= 2"><span>2</span></template>
+                    </span>
                     <span class="hidden sm:inline">Mempelai</span>
                     <span class="sm:hidden">Mempelai</span>
                 </a>
-                <div class="h-px bg-neutral-200 dark:bg-secondary-700 w-3 shrink-0 sm:w-auto sm:flex-1 sm:min-w-[12px]"></div>
+                {{-- Connector 2→3 --}}
+                <div class="flex-1 min-w-[20px] h-0.5 mx-1 rounded-full transition-all duration-500"
+                    :class="activeStep >= 3 ? 'bg-primary/40' : 'bg-neutral-200 dark:bg-secondary-700'"></div>
+                {{-- Step 3 --}}
                 <a href="#step-3" @click.prevent="document.getElementById('step-3').scrollIntoView({ behavior: 'smooth' })"
-                    :class="activeStep === 3 ? 'bg-primary-50 dark:bg-primary-900/40 text-primary dark:text-primary-300' : 'text-neutral-500 hover:text-secondary-800 dark:hover:text-neutral-200'"
-                    class="flex flex-1 items-center justify-center gap-1.5 px-2 py-1.5 rounded-xl font-semibold transition-all sm:flex-none sm:px-3 whitespace-nowrap">
-                    <span :class="activeStep === 3 ? 'bg-primary text-white' : 'bg-neutral-200 dark:bg-secondary-700 text-neutral-600 dark:text-neutral-300'"
-                        class="w-5 h-5 rounded-full text-[11px] flex items-center justify-center font-bold transition-all">3</span>
+                    :class="activeStep === 3 ? 'text-primary dark:text-primary-300' : 'text-neutral-400 dark:text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300'"
+                    class="flex items-center gap-2 px-3 py-1.5 rounded-xl font-semibold transition-all duration-200 text-xs whitespace-nowrap">
+                    <span :class="activeStep === 3 ? 'bg-primary text-white shadow-md shadow-primary/30' : 'bg-neutral-100 dark:bg-secondary-700 text-neutral-500 dark:text-neutral-400'"
+                        class="w-6 h-6 rounded-full text-[11px] flex items-center justify-center font-bold transition-all duration-200 flex-shrink-0">3</span>
                     <span class="hidden sm:inline">Waktu & Tempat</span>
                     <span class="sm:hidden">Waktu</span>
                 </a>
@@ -104,19 +117,27 @@
         }
 
         .scrollbar-thin::-webkit-scrollbar-thumb {
-            background-color: rgb(226, 232, 240);
+            background-color: #E4E4E7;
             border-radius: 10px;
         }
 
         .dark .scrollbar-thin::-webkit-scrollbar-thumb {
-            background-color: rgb(51, 65, 85);
+            background-color: #27272A;
+        }
+
+        .photo-upload-zone {
+            transition: border-color 0.2s, background-color 0.2s;
+        }
+
+        .theme-card {
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
     </style>
 
     <div class="py-8">
         <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
             <div
-                class="bg-white dark:bg-secondary-800 rounded-2xl shadow-soft border border-neutral-100 dark:border-secondary-700 overflow-hidden">
+                class="bg-white dark:bg-secondary-800 rounded-2xl shadow-soft border border-neutral-100 dark:border-secondary-700/60 overflow-hidden">
                 <div class="p-6 md:p-8">
                     <form action="{{ route('dashboard.invitations.store') }}" method="POST"
                         enctype="multipart/form-data">
@@ -127,16 +148,17 @@
                             {{-- STEP 1: Konsep & Tema (Inisiasi) --}}
                             {{-- ======================================== --}}
                             <div id="step-1" data-step="1" class="border-b border-neutral-200 dark:border-secondary-700 pb-8">
-                                <div class="flex items-center gap-3 mb-1">
-                                    <span
-                                        class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 text-sm font-bold">1</span>
-                                    <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">
-                                        Konsep & Tema <span
-                                            class="text-sm font-normal text-neutral-400 dark:text-neutral-500">(Inisiasi)</span>
-                                    </h3>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <div class="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary font-bold text-sm">
+                                        1
+                                    </div>
+                                    <div>
+                                        <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">
+                                            Konsep & Tema <span class="text-sm font-normal text-neutral-400 dark:text-neutral-500">(Inisiasi)</span>
+                                        </h3>
+                                    </div>
                                 </div>
-                                <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-6">Bagian awal untuk
-                                    menentukan identitas proyek dan visual dasar.</p>
+                                <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-6">Tentukan identitas proyek dan tampilan visual dasar undangan Anda.</p>
 
                                 {{-- Title (auto-generated from bride & groom names) --}}
                                 <input type="hidden" name="title" id="title" value="{{ old('title') }}" required>
@@ -273,13 +295,13 @@
                                             <div
                                                 class="flex gap-4 overflow-x-auto py-3 px-1 scrollbar-thin scrollbar-thumb-neutral-200 dark:scrollbar-thumb-neutral-700 snap-x items-stretch">
 
-                                                @foreach($themes as $tema)
+                                                 @foreach($themes as $tema)
                                                     @php $themeKey = str_replace('themes.', '', $tema->view_path); @endphp
                                                     <div @click="selectedTheme = '{{ $themeKey }}'" :class="{
-                                                                            'border-primary ring-2 ring-primary/20 shadow-md bg-primary-50 dark:bg-primary-900/20': selectedTheme === '{{ $themeKey }}',
-                                                                            'border-neutral-200 dark:border-neutral-600 hover:border-neutral-300 dark:hover:border-neutral-500 bg-white dark:bg-secondary-800': selectedTheme !== '{{ $themeKey }}'
+                                                                            'border-primary ring-2 ring-primary/30 shadow-lg bg-primary-50 dark:bg-primary-900/20': selectedTheme === '{{ $themeKey }}',
+                                                                            'border-neutral-200 dark:border-neutral-600 hover:border-primary-300 dark:hover:border-primary-800 bg-white dark:bg-secondary-800': selectedTheme !== '{{ $themeKey }}'
                                                                         }"
-                                                        class="w-36 sm:w-48 flex-shrink-0 border rounded-2xl p-2.5 transition-all duration-200 cursor-pointer snap-start relative flex flex-col justify-between select-none">
+                                                        class="theme-card w-36 sm:w-44 flex-shrink-0 border rounded-2xl p-2.5 cursor-pointer snap-start relative flex flex-col justify-between select-none">
                                                         <div x-show="selectedTheme === '{{ $themeKey }}'"
                                                             class="absolute top-4 right-4 bg-primary text-white rounded-full p-1 z-10 shadow-sm"
                                                             x-cloak>
@@ -333,16 +355,17 @@
                             {{-- STEP 2: Informasi Mempelai (Profil) --}}
                             {{-- ======================================== --}}
                             <div id="step-2" data-step="2" class="border-b border-neutral-200 dark:border-secondary-700 pb-8" data-tour="mempelai-info">
-                                <div class="flex items-center gap-3 mb-1">
-                                    <span
-                                        class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 text-sm font-bold">2</span>
-                                    <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">
-                                        Informasi Mempelai <span
-                                            class="text-sm font-normal text-neutral-400 dark:text-neutral-500">(Profil)</span>
-                                    </h3>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <div class="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary font-bold text-sm">
+                                        2
+                                    </div>
+                                    <div>
+                                        <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">
+                                            Informasi Mempelai <span class="text-sm font-normal text-neutral-400 dark:text-neutral-500">(Profil)</span>
+                                        </h3>
+                                    </div>
                                 </div>
-                                <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-6">Data lengkap kedua
-                                    mempelai yang akan dipasang di halaman utama.</p>
+                                <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-6">Data lengkap kedua mempelai yang akan tampil di halaman utama.</p>
 
                                 <div x-data="{
                                                                                                     order: '{{ old('bride_groom_order', 'male_first') }}',
@@ -355,39 +378,36 @@
                                     {{-- Swap Button --}}
                                     <div class="flex justify-center -mb-2">
                                         <button @click="toggleOrder" type="button"
-                                            class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-xl text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/50 hover:bg-primary-100 dark:hover:bg-primary-900/70 transition">
+                                            class="inline-flex items-center gap-2 px-5 py-2 text-sm font-semibold rounded-xl text-primary dark:text-primary-300 bg-primary-50 dark:bg-primary-900/40 border border-primary-200/60 dark:border-primary-800/40 hover:bg-primary-100 dark:hover:bg-primary-900/70 hover:shadow-sm transition-all duration-200">
                                             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                     d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
                                             </svg>
-                                            Tukar Posisi
+                                            Tukar Urutan Posisi
                                         </button>
                                     </div>
 
                                     {{-- Bride --}}
                                     <div :style="order === 'female_first' ? { order: 1 } : { order: 2 }"
-                                        class="bg-neutral-50 dark:bg-secondary-700 p-5 rounded-2xl border border-neutral-200 dark:border-secondary-700 space-y-4">
+                                        class="bg-neutral-50 dark:bg-secondary-700/50 p-5 rounded-2xl border border-neutral-200 dark:border-secondary-700 space-y-4">
                                         <div class="flex items-center gap-3">
                                             <div
-                                                class="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary dark:text-primary-400">
-                                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24"
-                                                    stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="2"
-                                                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                                class="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary dark:text-primary-400 font-semibold text-sm">
+                                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                                 </svg>
                                             </div>
-                                            <h4 class="font-semibold text-sm text-primary-700 dark:text-primary-300">
-                                                Mempelai Wanita</h4>
+                                            <div>
+                                                <h4 class="font-bold text-sm text-secondary-800 dark:text-neutral-100">Mempelai Wanita</h4>
+                                            </div>
                                         </div>
                                         <div class="grid grid-cols-1 gap-y-5 gap-x-4 sm:grid-cols-6">
                                             <div class="sm:col-span-3">
                                                 <label for="bride_name"
-                                                    class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Nama
-                                                    Lengkap Mempelai Wanita <span class="text-red-500">*</span></label>
+                                                    class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wide mb-1.5">Nama Lengkap <span class="text-red-500">*</span></label>
                                                 <input type="text" name="bride_name" id="bride_name"
                                                     value="{{ old('bride_name') }}"
-                                                    class="mt-1 block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
+                                                    class="block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary focus:ring-primary sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
                                                     required placeholder="Ani Suryani">
                                                 @error('bride_name') <span
                                                     class="text-red-500 dark:text-red-400 text-xs mt-1">{{ $message }}</span>
@@ -395,11 +415,10 @@
                                             </div>
                                             <div class="sm:col-span-3">
                                                 <label for="bride_nickname"
-                                                    class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Nama
-                                                    Panggilan</label>
+                                                    class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wide mb-1.5">Nama Panggilan</label>
                                                 <input type="text" name="bride_nickname" id="bride_nickname"
                                                     value="{{ old('bride_nickname') }}"
-                                                    class="mt-1 block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
+                                                    class="block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary focus:ring-primary sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
                                                     placeholder="Ani">
                                                 @error('bride_nickname') <span
                                                     class="text-red-500 dark:text-red-400 text-xs mt-1">{{ $message }}</span>
@@ -407,11 +426,10 @@
                                             </div>
                                             <div class="sm:col-span-3">
                                                 <label for="bride_father_name"
-                                                    class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Nama
-                                                    Ayah</label>
+                                                    class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wide mb-1.5">Nama Ayah</label>
                                                 <input type="text" name="bride_father_name" id="bride_father_name"
                                                     value="{{ old('bride_father_name') }}"
-                                                    class="mt-1 block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
+                                                    class="block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary focus:ring-primary sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
                                                     placeholder="Nama Ayah Mempelai Wanita">
                                                 @error('bride_father_name') <span
                                                     class="text-red-500 dark:text-red-400 text-xs mt-1">{{ $message }}</span>
@@ -419,45 +437,43 @@
                                             </div>
                                             <div class="sm:col-span-3">
                                                 <label for="bride_mother_name"
-                                                    class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Nama
-                                                    Ibu</label>
+                                                    class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wide mb-1.5">Nama Ibu</label>
                                                 <input type="text" name="bride_mother_name" id="bride_mother_name"
                                                     value="{{ old('bride_mother_name') }}"
-                                                    class="mt-1 block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
+                                                    class="block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary focus:ring-primary sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
                                                     placeholder="Nama Ibu Mempelai Wanita">
                                                 @error('bride_mother_name') <span
                                                     class="text-red-500 dark:text-red-400 text-xs mt-1">{{ $message }}</span>
                                                 @enderror
                                             </div>
                                             <div class="sm:col-span-6">
-                                                <label
-                                                    class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Foto
-                                                    Mempelai Wanita</label>
-                                                <div class="mt-2 flex items-center gap-4">
-                                                    <div class="relative flex-shrink-0">
-                                                        <img id="bride-preview" src="" alt="Bride photo"
-                                                            class="w-16 h-16 object-cover rounded-full border-2 border-neutral-200 dark:border-neutral-600 hidden">
-                                                        <div id="bride-preview-placeholder"
-                                                            class="w-16 h-16 bg-neutral-200 dark:bg-secondary-700 rounded-full flex items-center justify-center text-neutral-500 dark:text-neutral-400 text-xs font-semibold">
-                                                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24"
-                                                                stroke="currentColor">
-                                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                                    stroke-width="1.5"
-                                                                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                                            </svg>
+                                                <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wide mb-2">Foto Mempelai Wanita</label>
+                                                <div class="photo-upload-zone relative border-2 border-dashed border-neutral-200 dark:border-secondary-600 rounded-2xl p-4 bg-white dark:bg-secondary-800 hover:border-primary cursor-pointer group"
+                                                    onclick="document.querySelector('[data-crop-target=bride_photo_input]').click()">
+                                                    <div class="flex items-center gap-4">
+                                                        <div class="relative flex-shrink-0">
+                                                            <img id="bride-preview" src="" alt="Bride photo"
+                                                                class="w-16 h-16 object-cover rounded-xl border border-neutral-200 dark:border-secondary-600 hidden">
+                                                            <div id="bride-preview-placeholder"
+                                                                class="w-16 h-16 bg-neutral-100 dark:bg-secondary-700 rounded-xl flex items-center justify-center text-neutral-400 dark:text-neutral-500">
+                                                                <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                                                </svg>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div>
-                                                        <input type="file" name="bride_photo" id="bride_photo_input"
-                                                            class="crop-file-input hidden" accept="image/*"
-                                                            data-preview="bride-preview">
-                                                        <button type="button" data-crop-target="bride_photo_input"
-                                                            class="px-4 py-2 bg-primary-50 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 rounded-xl text-sm font-semibold hover:bg-primary-100 dark:hover:bg-primary-900/70 transition">
-                                                            Pilih & Crop Foto
-                                                        </button>
-                                                        <p class="text-xs text-neutral-400 dark:text-neutral-500 mt-1">
-                                                            Format gambar apa pun. Hasil potongan berbentuk persegi
-                                                            (1:1).</p>
+                                                        <div class="flex-1 min-w-0">
+                                                            <p class="text-sm font-semibold text-neutral-700 dark:text-neutral-200 group-hover:text-primary transition-colors">Unggah Foto</p>
+                                                            <p class="text-xs text-neutral-400 dark:text-neutral-500 mt-0.5">Klik untuk memilih foto (Format 1:1)</p>
+                                                            <input type="file" name="bride_photo" id="bride_photo_input"
+                                                                class="crop-file-input hidden" accept="image/*"
+                                                                data-preview="bride-preview">
+                                                            <button type="button" data-crop-target="bride_photo_input"
+                                                                onclick="event.stopPropagation()"
+                                                                class="mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 bg-neutral-100 dark:bg-secondary-700 text-neutral-700 dark:text-neutral-300 rounded-lg text-xs font-semibold hover:bg-primary-50 hover:text-primary dark:hover:bg-primary-900/40 transition">
+                                                                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                                                                Pilih & Crop Foto
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 @error('bride_photo') <span
@@ -469,28 +485,25 @@
 
                                     {{-- Groom --}}
                                     <div :style="order === 'male_first' ? { order: 1 } : { order: 2 }"
-                                        class="bg-neutral-50 dark:bg-secondary-700 p-5 rounded-2xl border border-neutral-200 dark:border-secondary-700 space-y-4">
+                                        class="bg-neutral-50 dark:bg-secondary-700/50 p-5 rounded-2xl border border-neutral-200 dark:border-secondary-700 space-y-4">
                                         <div class="flex items-center gap-3">
                                             <div
-                                                class="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary dark:text-primary-400">
-                                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24"
-                                                    stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="2"
-                                                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                                class="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary dark:text-primary-400 font-semibold text-sm">
+                                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                                 </svg>
                                             </div>
-                                            <h4 class="font-semibold text-sm text-primary-700 dark:text-primary-300">
-                                                Mempelai Pria</h4>
+                                            <div>
+                                                <h4 class="font-bold text-sm text-secondary-800 dark:text-neutral-100">Mempelai Pria</h4>
+                                            </div>
                                         </div>
                                         <div class="grid grid-cols-1 gap-y-5 gap-x-4 sm:grid-cols-6">
                                             <div class="sm:col-span-3">
                                                 <label for="groom_name"
-                                                    class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Nama
-                                                    Lengkap Mempelai Pria <span class="text-red-500">*</span></label>
+                                                    class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wide mb-1.5">Nama Lengkap <span class="text-red-500">*</span></label>
                                                 <input type="text" name="groom_name" id="groom_name"
                                                     value="{{ old('groom_name') }}"
-                                                    class="mt-1 block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
+                                                    class="block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary focus:ring-primary sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
                                                     required placeholder="Budi Santoso">
                                                 @error('groom_name') <span
                                                     class="text-red-500 dark:text-red-400 text-xs mt-1">{{ $message }}</span>
@@ -498,11 +511,10 @@
                                             </div>
                                             <div class="sm:col-span-3">
                                                 <label for="groom_nickname"
-                                                    class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Nama
-                                                    Panggilan</label>
+                                                    class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wide mb-1.5">Nama Panggilan</label>
                                                 <input type="text" name="groom_nickname" id="groom_nickname"
                                                     value="{{ old('groom_nickname') }}"
-                                                    class="mt-1 block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
+                                                    class="block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary focus:ring-primary sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
                                                     placeholder="Budi">
                                                 @error('groom_nickname') <span
                                                     class="text-red-500 dark:text-red-400 text-xs mt-1">{{ $message }}</span>
@@ -510,11 +522,10 @@
                                             </div>
                                             <div class="sm:col-span-3">
                                                 <label for="groom_father_name"
-                                                    class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Nama
-                                                    Ayah</label>
+                                                    class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wide mb-1.5">Nama Ayah</label>
                                                 <input type="text" name="groom_father_name" id="groom_father_name"
                                                     value="{{ old('groom_father_name') }}"
-                                                    class="mt-1 block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
+                                                    class="block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary focus:ring-primary sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
                                                     placeholder="Nama Ayah Mempelai Pria">
                                                 @error('groom_father_name') <span
                                                     class="text-red-500 dark:text-red-400 text-xs mt-1">{{ $message }}</span>
@@ -522,45 +533,43 @@
                                             </div>
                                             <div class="sm:col-span-3">
                                                 <label for="groom_mother_name"
-                                                    class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Nama
-                                                    Ibu</label>
+                                                    class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wide mb-1.5">Nama Ibu</label>
                                                 <input type="text" name="groom_mother_name" id="groom_mother_name"
                                                     value="{{ old('groom_mother_name') }}"
-                                                    class="mt-1 block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
+                                                    class="block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary focus:ring-primary sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
                                                     placeholder="Nama Ibu Mempelai Pria">
                                                 @error('groom_mother_name') <span
                                                     class="text-red-500 dark:text-red-400 text-xs mt-1">{{ $message }}</span>
                                                 @enderror
                                             </div>
                                             <div class="sm:col-span-6">
-                                                <label
-                                                    class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Foto
-                                                    Mempelai Pria</label>
-                                                <div class="mt-2 flex items-center gap-4">
-                                                    <div class="relative flex-shrink-0">
-                                                        <img id="groom-preview" src="" alt="Groom photo"
-                                                            class="w-16 h-16 object-cover rounded-full border-2 border-neutral-200 dark:border-neutral-600 hidden">
-                                                        <div id="groom-preview-placeholder"
-                                                            class="w-16 h-16 bg-neutral-200 dark:bg-secondary-700 rounded-full flex items-center justify-center text-neutral-500 dark:text-neutral-400 text-xs font-semibold">
-                                                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24"
-                                                                stroke="currentColor">
-                                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                                    stroke-width="1.5"
-                                                                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                                            </svg>
+                                                <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wide mb-2">Foto Mempelai Pria</label>
+                                                <div class="photo-upload-zone relative border-2 border-dashed border-neutral-200 dark:border-secondary-600 rounded-2xl p-4 bg-white dark:bg-secondary-800 hover:border-primary cursor-pointer group"
+                                                    onclick="document.querySelector('[data-crop-target=groom_photo_input]').click()">
+                                                    <div class="flex items-center gap-4">
+                                                        <div class="relative flex-shrink-0">
+                                                            <img id="groom-preview" src="" alt="Groom photo"
+                                                                class="w-16 h-16 object-cover rounded-xl border border-neutral-200 dark:border-secondary-600 hidden">
+                                                            <div id="groom-preview-placeholder"
+                                                                class="w-16 h-16 bg-neutral-100 dark:bg-secondary-700 rounded-xl flex items-center justify-center text-neutral-400 dark:text-neutral-500">
+                                                                <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                                                </svg>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div>
-                                                        <input type="file" name="groom_photo" id="groom_photo_input"
-                                                            class="crop-file-input hidden" accept="image/*"
-                                                            data-preview="groom-preview">
-                                                        <button type="button" data-crop-target="groom_photo_input"
-                                                            class="px-4 py-2 bg-primary-50 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 rounded-xl text-sm font-semibold hover:bg-primary-100 dark:hover:bg-primary-900/70 transition">
-                                                            Pilih & Crop Foto
-                                                        </button>
-                                                        <p class="text-xs text-neutral-400 dark:text-neutral-500 mt-1">
-                                                            Format gambar apa pun. Hasil potongan berbentuk persegi
-                                                            (1:1).</p>
+                                                        <div class="flex-1 min-w-0">
+                                                            <p class="text-sm font-semibold text-neutral-700 dark:text-neutral-200 group-hover:text-primary transition-colors">Unggah Foto</p>
+                                                            <p class="text-xs text-neutral-400 dark:text-neutral-500 mt-0.5">Klik untuk memilih foto (Format 1:1)</p>
+                                                            <input type="file" name="groom_photo" id="groom_photo_input"
+                                                                class="crop-file-input hidden" accept="image/*"
+                                                                data-preview="groom-preview">
+                                                            <button type="button" data-crop-target="groom_photo_input"
+                                                                onclick="event.stopPropagation()"
+                                                                class="mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 bg-neutral-100 dark:bg-secondary-700 text-neutral-700 dark:text-neutral-300 rounded-lg text-xs font-semibold hover:bg-primary-50 hover:text-primary dark:hover:bg-primary-900/40 transition">
+                                                                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                                                                Pilih & Crop Foto
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 @error('groom_photo') <span
@@ -576,24 +585,24 @@
                             {{-- STEP 3: Waktu & Tempat (Detail Acara) --}}
                             {{-- ======================================== --}}
                             <div id="step-3" data-step="3" class="border-b border-neutral-200 dark:border-secondary-700 pb-8" data-tour="event-schedule">
-                                <div class="flex items-center gap-3 mb-1">
-                                    <span
-                                        class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 text-sm font-bold">3</span>
-                                    <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">
-                                        Waktu & Tempat <span
-                                            class="text-sm font-normal text-neutral-400 dark:text-neutral-500">(Detail
-                                            Acara)</span></h3>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <div class="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary font-bold text-sm">
+                                        3
+                                    </div>
+                                    <div>
+                                        <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">
+                                            Waktu & Tempat <span class="text-sm font-normal text-neutral-400 dark:text-neutral-500">(Detail Acara)</span>
+                                        </h3>
+                                    </div>
                                 </div>
-                                <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-6">Informasi krusial
-                                    mengenai kapan dan di mana acara berlangsung.</p>
+                                <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-6">Informasi krusial mengenai kapan dan di mana acara berlangsung.</p>
 
                                 {{-- Timezone --}}
-                                <div>
+                                <div class="mt-6">
                                     <label for="timezone"
-                                        class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Zona
-                                        Waktu</label>
+                                        class="block text-xs font-semibold text-neutral-600 dark:text-neutral-400 uppercase tracking-wide mb-1.5">Zona Waktu</label>
                                     <select name="timezone" id="timezone"
-                                        class="mt-1 block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-secondary-700 dark:text-neutral-200">
+                                        class="block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-secondary-700 dark:text-neutral-200">
                                         <option value="Asia/Jakarta" {{ old('timezone', 'Asia/Jakarta') == 'Asia/Jakarta' ? 'selected' : '' }}>WIB (Waktu Indonesia Barat)</option>
                                         <option value="Asia/Makassar" {{ old('timezone') == 'Asia/Makassar' ? 'selected' : '' }}>WITA (Waktu Indonesia Tengah)</option>
                                         <option value="Asia/Jayapura" {{ old('timezone') == 'Asia/Jayapura' ? 'selected' : '' }}>WIT (Waktu Indonesia Timur)</option>
@@ -605,13 +614,12 @@
 
                                 {{-- Events management --}}
                                 <div class="mt-6">
-                                    <div class="flex items-center justify-between mb-4">
-                                        <h4
-                                            class="font-heading text-base font-bold text-secondary-800 dark:text-neutral-100">
-                                            Manajemen Acara</h4>
+                                    <div class="flex items-center justify-between mb-3">
+                                        <div>
+                                            <h4 class="font-bold text-base text-secondary-800 dark:text-neutral-100">Daftar Acara</h4>
+                                            <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">Tambah beberapa acara sekaligus — Akad Nikah, Resepsi, Unduh Mantu, dll.</p>
+                                        </div>
                                     </div>
-                                    <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-4">Pengguna bisa
-                                        menambah beberapa acara sekaligus (misal: Akad Nikah, Resepsi, Unduh Mantu).</p>
 
                                     @error('events') <span
                                         class="text-red-500 dark:text-red-400 text-xs block mb-3">{{ $message }}</span>
@@ -625,7 +633,7 @@
                                         @if(old('events'))
                                             @foreach(old('events') as $ei => $ev)
                                                 <div
-                                                    class="event-card bg-neutral-50 dark:bg-secondary-700 p-5 rounded-2xl border border-neutral-200 dark:border-secondary-700">
+                                                    class="event-card overflow-hidden bg-neutral-50 dark:bg-secondary-700 p-5 rounded-2xl border border-neutral-200 dark:border-secondary-700 shadow-sm">
                                                     <input type="hidden" name="events[{{ $ei }}][id]" value="">
                                                     <div class="flex items-center justify-between mb-4">
                                                         <div class="flex items-center gap-2">
@@ -759,7 +767,7 @@
                                             @endforeach
                                         @else
                                             <div
-                                                class="event-card bg-neutral-50 dark:bg-secondary-700 p-5 rounded-2xl border border-neutral-200 dark:border-secondary-700">
+                                                class="event-card overflow-hidden bg-neutral-50 dark:bg-secondary-700 p-5 rounded-2xl border border-neutral-200 dark:border-secondary-700 shadow-sm">
                                                 <input type="hidden" name="events[0][id]" value="">
                                                 <div class="flex items-center justify-between mb-4">
                                                     <div class="flex items-center gap-2">
@@ -886,18 +894,18 @@
                                     </div>
 
                                     <button type="button" id="add-event-btn"
-                                        class="inline-flex items-center gap-1.5 px-4 py-2 mt-5 text-sm font-semibold rounded-xl text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/50 hover:bg-primary-100 dark:hover:bg-primary-900/70 transition">
+                                        class="inline-flex items-center gap-2 px-5 py-2.5 mt-5 text-sm font-semibold rounded-xl text-primary dark:text-primary-300 bg-primary-50 dark:bg-primary-900/40 border border-primary-200/60 dark:border-primary-800/40 hover:bg-primary-100 dark:hover:bg-primary-900/70 hover:shadow-sm transition-all duration-200">
                                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M12 4v16m8-8H4" />
                                         </svg>
-                                        Tambah Acara
+                                        Tambah Acara Lain
                                     </button>
 
                                     {{-- Template for new event card --}}
                                     <template id="event-card-template">
                                         <div
-                                            class="event-card bg-neutral-50 dark:bg-secondary-700 p-5 rounded-2xl border border-neutral-200 dark:border-secondary-700">
+                                            class="event-card overflow-hidden bg-neutral-50 dark:bg-secondary-700 p-5 rounded-2xl border border-neutral-200 dark:border-secondary-700 shadow-sm">
                                             <input type="hidden" name="events[__INDEX__][id]" value="">
                                             <div class="flex items-center justify-between mb-4">
                                                 <div class="flex items-center gap-2">
@@ -1046,26 +1054,26 @@
                             </div>
 
                             {{-- Required fields note --}}
-                            <div class="text-xs text-neutral-500 dark:text-neutral-400 flex items-center gap-1">
-                                <span class="text-red-500 font-bold">*</span> Kolom yang bertanda wajib diisi
+                            <div class="flex items-center gap-1.5 text-xs text-neutral-400 dark:text-neutral-500 pt-2 border-t border-neutral-100 dark:border-secondary-700">
+                                <span class="inline-flex items-center justify-center w-4 h-4 rounded-full bg-red-50 dark:bg-red-900/30 text-red-500 font-bold text-[10px]">*</span>
+                                Kolom bertanda bintang wajib diisi sebelum menyimpan
                             </div>
 
                             {{-- Actions --}}
-                            <div class="flex items-center justify-between pt-2">
+                            <div class="flex items-center justify-between pt-4">
                                 <a href="{{ route('dashboard') }}"
-                                    class="inline-flex items-center px-5 py-2.5 bg-white dark:bg-secondary-800 border border-neutral-300 dark:border-secondary-600 rounded-xl shadow-sm text-sm font-semibold text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-secondary-700 hover:border-primary-300 transition-all">
-                                    <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    class="inline-flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-secondary-800 border border-neutral-200 dark:border-secondary-600 rounded-xl text-sm font-semibold text-neutral-600 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-secondary-700 hover:border-neutral-300 hover:text-neutral-800 dark:hover:text-neutral-100 transition-all duration-200">
+                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                                     </svg>
                                     Batal
                                 </a>
                                 <button type="button" id="submit-btn" data-tour="publish-btn"
-                                    class="inline-flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-primary to-primary-600 rounded-xl shadow-sm text-sm font-semibold text-white hover:shadow-md hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-all">
+                                    class="inline-flex items-center gap-2 px-6 py-2.5 bg-primary text-white rounded-xl shadow-sm text-sm font-semibold hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-all">
                                     Simpan & Lanjutkan
                                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                                     </svg>
                                 </button>
                             </div>
