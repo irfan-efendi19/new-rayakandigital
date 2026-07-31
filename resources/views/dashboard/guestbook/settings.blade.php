@@ -1,52 +1,68 @@
 <x-app-layout>
-    <x-slot name="header">
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <div>
-                <h2 class="font-heading text-2xl font-bold text-secondary-800 dark:text-neutral-100">
-                    Pengaturan Layar Sapa
-                </h2>
-                <p class="text-sm text-neutral-500 mt-0.5">{{ $invitation->title }}</p>
-            </div>
-            <div class="flex gap-2">
-                <a href="{{ route('dashboard.welcome-screen.index', $invitation) }}" target="_blank"
-                    class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary to-primary-600 text-white rounded-xl text-sm font-semibold shadow-soft hover:shadow-md transition-all">
-                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                    Buka Layar Sapa
-                </a>
-                <a href="{{ route('dashboard.invitations.guestbook', $invitation) }}"
-                    class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-neutral-300 rounded-xl text-sm font-semibold text-neutral-700 hover:bg-neutral-50 hover:border-primary-300 transition-all">
-                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                    </svg>
-                    Kembali ke Buku Tamu
-                </a>
+    <div class="min-h-screen">
+
+        {{-- ─── HERO ─── --}}
+        <div class="hero-mesh grain-overlay border-b border-neutral-200/60 dark:border-secondary-700/40">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-7 sm:py-8">
+
+                {{-- Breadcrumb --}}
+                <nav class="flex items-center gap-1.5 text-xs text-neutral-400 dark:text-neutral-500 mb-4">
+                    <a href="{{ route('dashboard') }}" class="hover:text-primary dark:hover:text-primary-400 transition-colors">Dashboard</a>
+                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                    <a href="{{ route('dashboard.invitations.show', $invitation) }}" class="hover:text-primary dark:hover:text-primary-400 transition-colors truncate max-w-[150px]">{{ $invitation->title }}</a>
+                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                    <a href="{{ route('dashboard.invitations.guestbook', $invitation) }}" class="hover:text-primary dark:hover:text-primary-400 transition-colors">Buku Tamu</a>
+                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                    <span class="text-neutral-600 dark:text-neutral-400 font-medium">Pengaturan Layar Sapa</span>
+                </nav>
+
+                <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+                    <div class="flex items-start gap-3 min-w-0">
+                        <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-primary to-primary-600 flex items-center justify-center text-white shadow-lg shadow-primary/20 shrink-0">
+                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                        </div>
+                        <div class="min-w-0">
+                            <h1 class="font-heading text-2xl sm:text-3xl font-bold text-secondary-800 dark:text-neutral-50 leading-tight truncate">
+                                Pengaturan Layar Sapa
+                            </h1>
+                            <p class="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
+                                Kustomisasi layar proyektor undangan <strong class="text-secondary-700 dark:text-neutral-300">"{{ $invitation->title }}"</strong>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-2 flex-shrink-0">
+                        <a href="{{ route('dashboard.welcome-screen.index', $invitation) }}" target="_blank"
+                            class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-gradient-to-br from-primary to-primary-600 rounded-xl shadow-sm shadow-primary/25 hover:shadow-md hover:shadow-primary/30 hover:-translate-y-0.5 transition-all">
+                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                            Buka Layar Sapa
+                        </a>
+                        <a href="{{ route('dashboard.invitations.guestbook', $invitation) }}"
+                            class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-secondary-700 dark:text-neutral-300 border border-neutral-300/80 dark:border-secondary-600 rounded-xl hover:bg-white dark:hover:bg-secondary-700 transition-all bg-white/70 dark:bg-secondary-800/50 backdrop-blur-sm">
+                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                            Kembali ke Buku Tamu
+                        </a>
+                    </div>
+                </div>
+
             </div>
         </div>
-    </x-slot>
 
-    <div class="py-8">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+        {{-- ─── MAIN CONTENT ─── --}}
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-7 sm:py-8">
 
-            <div
-                class="bg-white dark:bg-secondary-800 rounded-2xl shadow-soft border border-neutral-100 dark:border-secondary-700 overflow-hidden">
-                <div class="p-6 sm:p-8">
-                    <div class="flex items-center gap-3 mb-1">
-                        <span
-                            class="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-primary-100 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300">
-                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                            </svg>
-                        </span>
-                        <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">Pengaturan
-                            Layar Sapa</h3>
+            {{-- Flash Messages --}}
+            @if(session('success'))
+                <div class="mb-5 p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-700/60 flex items-center gap-3 shadow-sm">
+                    <div class="w-8 h-8 rounded-xl bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center shrink-0">
+                        <svg class="w-4 h-4 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
                     </div>
-                    <p class="text-sm text-neutral-500 dark:text-neutral-400 ml-11 mb-6">Kustomisasi tampilan layar sapa
-                        proyektor di venue pernikahan Anda.</p>
+                    <span class="text-sm font-medium text-emerald-800 dark:text-emerald-300">{{ session('success') }}</span>
+                </div>
+            @endif
+
+            <div class="bg-white dark:bg-secondary-800 rounded-2xl border border-neutral-200/80 dark:border-secondary-700/60 overflow-hidden">
+                <div class="p-6 sm:p-8">
 
                     <form action="{{ route('dashboard.welcome-screen.settings.update', $invitation) }}" method="POST"
                         enctype="multipart/form-data">
@@ -54,18 +70,18 @@
 
                         <div class="space-y-6">
                             {{-- Theme Selection --}}
-                            <div
-                                class="bg-neutral-50 dark:bg-secondary-700 p-5 rounded-2xl border border-neutral-200 dark:border-secondary-700 space-y-4">
+                            <div class="bg-neutral-50 dark:bg-secondary-700 p-5 rounded-2xl border border-neutral-200 dark:border-secondary-700 space-y-4">
                                 <div class="flex items-center gap-3">
-                                    <div
-                                        class="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary dark:text-primary-400">
+                                    <div class="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary dark:text-primary-400">
                                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
                                         </svg>
                                     </div>
-                                    <h4 class="font-semibold text-sm text-primary-700 dark:text-primary-300">Pilih
-                                        Preset Tema Layar Sapa</h4>
+                                    <div>
+                                        <h4 class="font-semibold text-sm text-secondary-800 dark:text-neutral-100">Pilih Preset Tema Layar Sapa</h4>
+                                        <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">Tentukan tampilan layar sapa proyektor Anda</p>
+                                    </div>
                                 </div>
                                 @php
                                     $currentTheme = old('selected_theme', $screen->selected_theme ?? ($presets->first()?->slug ?? 'minimal-clean'));
@@ -117,27 +133,24 @@
                             </div>
 
                             {{-- Custom Title & Wishes Wall --}}
-                            <div
-                                class="bg-neutral-50 dark:bg-secondary-700 p-5 rounded-2xl border border-neutral-200 dark:border-secondary-700 space-y-4">
+                            <div class="bg-neutral-50 dark:bg-secondary-700 p-5 rounded-2xl border border-neutral-200 dark:border-secondary-700 space-y-4">
                                 <div class="flex items-center gap-3">
-                                    <div
-                                        class="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary dark:text-primary-400">
+                                    <div class="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary dark:text-primary-400">
                                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                         </svg>
                                     </div>
-                                    <h4 class="font-semibold text-sm text-primary-700 dark:text-primary-300">Judul &
-                                        Dinding Ucapan</h4>
+                                    <div>
+                                        <h4 class="font-semibold text-sm text-secondary-800 dark:text-neutral-100">Judul & Dinding Ucapan</h4>
+                                        <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">Kustomisasi teks sambutan dan running text doa dari tamu</p>
+                                    </div>
                                 </div>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
                                         <label for="custom_title"
-                                            class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Judul
-                                            Kustom Layar Sapa</label>
-                                        <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-2">Ubah teks
-                                            sambutan utama di layar (contoh: "Selamat Datang di Pernikahan Kami").
-                                            Kosongkan untuk menggunakan judul default.</p>
+                                            class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Judul Kustom Layar Sapa</label>
+                                        <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-2">Ubah teks sambutan utama di layar (contoh: "Selamat Datang di Pernikahan Kami"). Kosongkan untuk menggunakan judul default.</p>
                                         <input type="text" name="custom_title" id="custom_title"
                                             value="{{ old('custom_title', $screen->custom_title) }}"
                                             placeholder="Selamat Datang"
@@ -156,36 +169,32 @@
                                             </div>
                                             <div class="ml-3 text-sm">
                                                 <label for="show_wishes_wall"
-                                                    class="font-medium text-neutral-700 dark:text-neutral-300">Tampilkan
-                                                    Dinding Ucapan (Live Wish Wall)</label>
-                                                <p class="text-xs text-neutral-500 dark:text-neutral-400">Aktifkan untuk
-                                                    menampilkan running text / gulungan doa dari tamu secara real-time
-                                                    di layar.</p>
+                                                    class="font-medium text-neutral-700 dark:text-neutral-300">Tampilkan Dinding Ucapan (Live Wish Wall)</label>
+                                                <p class="text-xs text-neutral-500 dark:text-neutral-400">Aktifkan untuk menampilkan running text / gulungan doa dari tamu secara real-time di layar.</p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
                             {{-- Custom Bride Names --}}
-                            <div
-                                class="bg-neutral-50 dark:bg-secondary-700 p-5 rounded-2xl border border-neutral-200 dark:border-secondary-700 space-y-4">
+                            <div class="bg-neutral-50 dark:bg-secondary-700 p-5 rounded-2xl border border-neutral-200 dark:border-secondary-700 space-y-4">
                                 <div class="flex items-center gap-3">
-                                    <div
-                                        class="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary dark:text-primary-400">
+                                    <div class="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary dark:text-primary-400">
                                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                                         </svg>
                                     </div>
-                                    <h4 class="font-semibold text-sm text-primary-700 dark:text-primary-300">Nama
-                                        Pengantin di Layar</h4>
+                                    <div>
+                                        <h4 class="font-semibold text-sm text-secondary-800 dark:text-neutral-100">Nama Pengantin di Layar</h4>
+                                        <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">Nama panggilan yang ditampilkan di layar proyektor</p>
+                                    </div>
                                 </div>
                                 <div>
                                     <label for="screen_bride_names"
-                                        class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Nama
-                                        Pajangan Pengantin</label>
-                                    <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-2">Tulis nama panggilan
-                                        khusus untuk layar proyektor. Kosongkan untuk menggunakan nama default.</p>
+                                        class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Nama Pajangan Pengantin</label>
+                                    <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-2">Tulis nama panggilan khusus untuk layar proyektor. Kosongkan untuk menggunakan nama default.</p>
                                     <input type="text" name="screen_bride_names" id="screen_bride_names"
                                         value="{{ old('screen_bride_names', $invitation->screen_bride_names) }}"
                                         placeholder="{{ $invitation->couple_nickname }}"
@@ -197,18 +206,18 @@
                             </div>
 
                             {{-- Background Image --}}
-                            <div
-                                class="bg-neutral-50 dark:bg-secondary-700 p-5 rounded-2xl border border-neutral-200 dark:border-secondary-700 space-y-4">
+                            <div class="bg-neutral-50 dark:bg-secondary-700 p-5 rounded-2xl border border-neutral-200 dark:border-secondary-700 space-y-4">
                                 <div class="flex items-center gap-3">
-                                    <div
-                                        class="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary dark:text-primary-400">
+                                    <div class="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary dark:text-primary-400">
                                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                         </svg>
                                     </div>
-                                    <h4 class="font-semibold text-sm text-primary-700 dark:text-primary-300">Latar
-                                        Belakang</h4>
+                                    <div>
+                                        <h4 class="font-semibold text-sm text-secondary-800 dark:text-neutral-100">Latar Belakang</h4>
+                                        <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">Gambar latar belakang untuk layar sapa</p>
+                                    </div>
                                 </div>
 
                                 @if($invitation->screen_background_image)
@@ -239,8 +248,7 @@
                                             file:text-primary-700 dark:file:text-primary-300
                                             hover:file:bg-primary-100 dark:hover:file:bg-primary-900/50
                                             transition">
-                                    <p class="text-xs text-neutral-400 dark:text-neutral-500 mt-1">Otomatis dikompresi
-                                        ke format .webp. Maksimal 10 MB.</p>
+                                    <p class="text-xs text-neutral-400 dark:text-neutral-500 mt-1">Otomatis dikompresi ke format .webp. Maksimal 10 MB.</p>
                                     @error('screen_background_image') <span
                                         class="text-red-500 dark:text-red-400 text-xs mt-1">{{ $message }}</span>
                                     @enderror
@@ -248,21 +256,20 @@
                             </div>
 
                             {{-- Screen Gallery --}}
-                            <div
-                                class="bg-neutral-50 dark:bg-secondary-700 p-5 rounded-2xl border border-neutral-200 dark:border-secondary-700 space-y-4">
+                            <div class="bg-neutral-50 dark:bg-secondary-700 p-5 rounded-2xl border border-neutral-200 dark:border-secondary-700 space-y-4">
                                 <div class="flex items-center gap-3">
-                                    <div
-                                        class="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary dark:text-primary-400">
+                                    <div class="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary dark:text-primary-400">
                                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                                         </svg>
                                     </div>
-                                    <h4 class="font-semibold text-sm text-primary-700 dark:text-primary-300">Galeri
-                                        Slideshow (Idle Mode)</h4>
+                                    <div>
+                                        <h4 class="font-semibold text-sm text-secondary-800 dark:text-neutral-100">Galeri Slideshow (Idle Mode)</h4>
+                                        <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">Foto akan berputar otomatis saat tidak ada tamu check-in</p>
+                                    </div>
                                 </div>
-                                <p class="text-xs text-neutral-500 dark:text-neutral-400">Foto-foto ini akan berputar
-                                    otomatis saat tidak ada tamu yang check-in (setelah 30 detik idle).</p>
+                                <p class="text-xs text-neutral-500 dark:text-neutral-400">Foto-foto ini akan berputar otomatis saat tidak ada tamu yang check-in (setelah 30 detik idle).</p>
 
                                 {{-- Existing gallery photos --}}
                                 @if($screenGalleries->count() > 0)
@@ -301,16 +308,14 @@
                                 {{-- Gallery Upload --}}
                                 <div class="pt-4 border-t border-neutral-200 dark:border-secondary-600">
                                     <label
-                                        class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">Upload
-                                        Foto Galeri Baru</label>
+                                        class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">Upload Foto Galeri Baru</label>
                                     <input type="file" name="screen_gallery_photos[]" multiple accept="image/*" class="block w-full text-sm text-neutral-500 dark:text-neutral-400
                                             file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0
                                             file:text-sm file:font-semibold file:bg-primary-50 dark:file:bg-primary-900/30
                                             file:text-primary-700 dark:file:text-primary-300
                                             hover:file:bg-primary-100 dark:hover:file:bg-primary-900/50
                                             transition">
-                                    <p class="text-xs text-neutral-400 dark:text-neutral-500 mt-1">Pilih beberapa foto
-                                        sekaligus. Otomatis dikompresi ke .webp.</p>
+                                    <p class="text-xs text-neutral-400 dark:text-neutral-500 mt-1">Pilih beberapa foto sekaligus. Otomatis dikompresi ke .webp.</p>
                                     @error('screen_gallery_photos.*') <span
                                         class="text-red-500 dark:text-red-400 text-xs mt-1">{{ $message }}</span>
                                     @enderror

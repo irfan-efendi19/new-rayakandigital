@@ -1,92 +1,95 @@
 <x-app-layout>
-    <x-slot name="header">
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <div>
-                <h2 class="font-heading text-2xl font-bold text-secondary-800 dark:text-neutral-100">
-                    Buku Tamu
-                </h2>
-                <p class="text-sm text-neutral-500 mt-0.5">{{ $invitation->title }}</p>
-            </div>
-            <div class="flex flex-wrap gap-2">
-                @if($invitation->hasFeature('personal_link'))
-                <a href="{{ route('dashboard.invitations.guests.index', $invitation) }}"
-                    class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-neutral-300 rounded-xl text-sm font-semibold text-neutral-700 hover:bg-neutral-50 hover:border-primary-300 transition-all">
-                    <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                    <span class="hidden sm:inline">Daftar Tamu</span>
-                    <span class="sm:hidden">Tamu</span>
-                </a>
-                @endif
-                <a href="{{ route('dashboard.welcome-screen.index', $invitation) }}" target="_blank"
-                    class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary to-primary-600 text-white rounded-xl text-sm font-semibold shadow-soft hover:shadow-md transition-all">
-                    <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                    <span class="hidden sm:inline">Layar Sapa</span>
-                    <span class="sm:hidden">Sapa</span>
-                </a>
-                <a href="{{ route('dashboard.invitations.guestbook.settings', $invitation) }}"
-                    class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-neutral-300 rounded-xl text-sm font-semibold text-neutral-700 hover:bg-neutral-50 hover:border-primary-300 transition-all">
-                    <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                    <span class="hidden sm:inline">Pengaturan</span>
-                    <span class="sm:hidden">Atur</span>
-                </a>
-                <a href="{{ route('dashboard.invitations.show', $invitation) }}"
-                    class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-neutral-300 rounded-xl text-sm font-semibold text-neutral-700 hover:bg-neutral-50 hover:border-primary-300 transition-all">
-                    <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                    </svg>
-                    <span class="hidden sm:inline">Kembali</span>
-                    <span class="sm:hidden">Back</span>
-                </a>
+    <div class="min-h-screen">
+
+        {{-- ─── HERO ─── --}}
+        <div class="hero-mesh grain-overlay border-b border-neutral-200/60 dark:border-secondary-700/40">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-7 sm:py-8">
+
+                {{-- Breadcrumb --}}
+                <nav class="flex items-center gap-1.5 text-xs text-neutral-400 dark:text-neutral-500 mb-4">
+                    <a href="{{ route('dashboard') }}" class="hover:text-primary dark:hover:text-primary-400 transition-colors">Dashboard</a>
+                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                    <a href="{{ route('dashboard.invitations.show', $invitation) }}" class="hover:text-primary dark:hover:text-primary-400 transition-colors truncate max-w-[150px]">{{ $invitation->title }}</a>
+                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                    <span class="text-neutral-600 dark:text-neutral-400 font-medium">Buku Tamu</span>
+                </nav>
+
+                <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+                    <div class="flex items-start gap-3 min-w-0">
+                        <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-primary to-primary-600 flex items-center justify-center text-white shadow-lg shadow-primary/20 shrink-0">
+                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9zM15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                        </div>
+                        <div class="min-w-0">
+                            <h1 class="font-heading text-2xl sm:text-3xl font-bold text-secondary-800 dark:text-neutral-50 leading-tight truncate">
+                                Buku Tamu
+                            </h1>
+                            <p class="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
+                                Scan QR Code tamu untuk check-in undangan <strong class="text-secondary-700 dark:text-neutral-300">"{{ $invitation->title }}"</strong>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-2 flex-shrink-0">
+                        @if($invitation->hasFeature('personal_link'))
+                            <a href="{{ route('dashboard.invitations.guests.index', $invitation) }}"
+                                class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-secondary-700 dark:text-neutral-300 border border-neutral-300/80 dark:border-secondary-600 rounded-xl hover:bg-white dark:hover:bg-secondary-700 transition-all bg-white/70 dark:bg-secondary-800/50 backdrop-blur-sm">
+                                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                Daftar Tamu
+                            </a>
+                        @endif
+                        <a href="{{ route('dashboard.welcome-screen.index', $invitation) }}" target="_blank"
+                            class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-primary dark:text-primary-400 border border-primary/30 dark:border-primary-700/50 rounded-xl hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all bg-white/70 dark:bg-secondary-800/50 backdrop-blur-sm">
+                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                            Layar Sapa
+                        </a>
+                        <a href="{{ route('dashboard.invitations.guestbook.settings', $invitation) }}"
+                            class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-emerald-700 dark:text-emerald-300 border border-emerald-300/80 dark:border-emerald-700/50 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-all bg-white/70 dark:bg-secondary-800/50 backdrop-blur-sm">
+                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065zM15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                            Pengaturan
+                        </a>
+                        <a href="{{ route('dashboard.invitations.show', $invitation) }}"
+                            class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-secondary-700 dark:text-neutral-300 border border-neutral-300/80 dark:border-secondary-600 rounded-xl hover:bg-white dark:hover:bg-secondary-700 transition-all bg-white/70 dark:bg-secondary-800/50 backdrop-blur-sm">
+                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                            Kembali
+                        </a>
+                    </div>
+                </div>
+
+                {{-- Stat Strip --}}
+                <div class="mt-6 grid grid-cols-3 gap-px bg-neutral-200/70 dark:bg-secondary-700/50 rounded-2xl overflow-hidden border border-neutral-200/80 dark:border-secondary-700/50">
+                    <div class="bg-white/80 dark:bg-secondary-800/70 px-3 sm:px-5 py-4 flex flex-col items-center sm:items-start text-center sm:text-left backdrop-blur-sm">
+                        <span class="stat-value text-xl sm:text-2xl font-bold text-secondary-800 dark:text-neutral-100 tabular-nums" id="stat-total">{{ $stats['total'] }}</span>
+                        <span class="text-[10px] sm:text-xs text-neutral-500 dark:text-neutral-400 font-medium mt-0.5">Total Tamu</span>
+                    </div>
+                    <div class="bg-white/80 dark:bg-secondary-800/70 px-3 sm:px-5 py-4 flex flex-col items-center sm:items-start text-center sm:text-left backdrop-blur-sm">
+                        <span class="stat-value text-xl sm:text-2xl font-bold text-emerald-600 dark:text-emerald-400 tabular-nums" id="stat-hadir">{{ $stats['hadir'] }}</span>
+                        <span class="text-[10px] sm:text-xs text-neutral-500 dark:text-neutral-400 font-medium mt-0.5">Hadir</span>
+                    </div>
+                    <div class="bg-white/80 dark:bg-secondary-800/70 px-3 sm:px-5 py-4 flex flex-col items-center sm:items-start text-center sm:text-left backdrop-blur-sm">
+                        <span class="stat-value text-xl sm:text-2xl font-bold text-amber-600 dark:text-amber-400 tabular-nums" id="stat-pending">{{ $stats['pending'] }}</span>
+                        <span class="text-[10px] sm:text-xs text-neutral-500 dark:text-neutral-400 font-medium mt-0.5">Pending</span>
+                    </div>
+                </div>
+
             </div>
         </div>
-    </x-slot>
 
-    <div class="py-8">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-
-            {{-- Stats --}}
-            <div class="grid grid-cols-3 gap-3 sm:gap-4">
-                <div class="bg-white dark:bg-secondary-800 rounded-2xl shadow-soft p-3 sm:p-5 border border-neutral-100 dark:border-secondary-700 text-center">
-                    <p class="text-xl sm:text-3xl font-bold text-secondary-800 dark:text-neutral-100" id="stat-total">{{ $stats['total'] }}</p>
-                    <div class="flex items-center justify-center gap-1.5 mt-1">
-                        <div class="w-2 h-2 rounded-full bg-primary"></div>
-                        <p class="text-[10px] sm:text-xs text-neutral-500 dark:text-neutral-400 uppercase tracking-wide font-semibold">Total</p>
-                    </div>
-                </div>
-                <div class="bg-white dark:bg-secondary-800 rounded-2xl shadow-soft p-3 sm:p-5 border-2 border-emerald-200 dark:border-emerald-800 text-center">
-                    <p class="text-xl sm:text-3xl font-bold text-emerald-600 dark:text-emerald-400" id="stat-hadir">{{ $stats['hadir'] }}</p>
-                    <div class="flex items-center justify-center gap-1.5 mt-1">
-                        <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
-                        <p class="text-[10px] sm:text-xs text-neutral-500 dark:text-neutral-400 uppercase tracking-wide font-semibold">Hadir</p>
-                    </div>
-                </div>
-                <div class="bg-white dark:bg-secondary-800 rounded-2xl shadow-soft p-3 sm:p-5 border-2 border-amber-200 dark:border-amber-800 text-center">
-                    <p class="text-xl sm:text-3xl font-bold text-amber-600 dark:text-amber-400" id="stat-pending">{{ $stats['pending'] }}</p>
-                    <div class="flex items-center justify-center gap-1.5 mt-1">
-                        <div class="w-2 h-2 rounded-full bg-amber-500"></div>
-                        <p class="text-[10px] sm:text-xs text-neutral-500 dark:text-neutral-400 uppercase tracking-wide font-semibold">Pending</p>
-                    </div>
-                </div>
-            </div>
+        {{-- ─── MAIN CONTENT ─── --}}
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-7 sm:py-8 space-y-5">
 
             {{-- Scanner --}}
-            <div class="bg-white dark:bg-secondary-800 rounded-2xl shadow-soft border border-neutral-100 dark:border-secondary-700 overflow-hidden">
-                <div class="p-4 sm:p-6">
-                    <div class="flex items-center gap-3 mb-6">
-                        <div class="w-9 h-9 rounded-xl bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary dark:text-primary-400">
-                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
-                            </svg>
-                        </div>
-                        <h3 class="font-heading text-base sm:text-lg font-bold text-secondary-800 dark:text-neutral-100">Scan QR Code Tamu</h3>
+            <div class="bg-white dark:bg-secondary-800 rounded-2xl border border-neutral-200/80 dark:border-secondary-700/60 overflow-hidden">
+                <div class="px-5 sm:px-6 py-4 border-b border-neutral-100 dark:border-secondary-700/60 flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-lg bg-primary-50 dark:bg-primary-900/30 flex items-center justify-center text-primary dark:text-primary-400 flex-shrink-0">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
                     </div>
+                    <div>
+                        <h2 class="font-semibold text-sm text-secondary-800 dark:text-neutral-100">Scan QR Code Tamu</h2>
+                        <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">Arahkan kamera ke QR Code tamu saat hari H</p>
+                    </div>
+                </div>
 
+                <div class="p-5 sm:p-6">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <div id="qr-reader" class="rounded-2xl overflow-hidden border-2 border-dashed border-neutral-300 dark:border-secondary-600 bg-neutral-50 dark:bg-secondary-900" style="width: 100%;"></div>
@@ -139,10 +142,25 @@
             </div>
 
             {{-- Checked-in Table --}}
-            <div class="bg-white dark:bg-secondary-800 rounded-2xl shadow-soft border border-neutral-100 dark:border-secondary-700 overflow-hidden">
-                <div class="p-4 sm:p-6">
-                    <h3 class="font-heading text-base sm:text-lg font-bold text-secondary-800 dark:text-neutral-100 mb-4">Tamu Yang Sudah Hadir</h3>
-                    <div class="overflow-x-auto border border-neutral-200 dark:border-secondary-700 rounded-2xl">
+            <div class="bg-white dark:bg-secondary-800 rounded-2xl border border-neutral-200/80 dark:border-secondary-700/60 overflow-hidden">
+                <div class="px-5 sm:px-6 py-4 border-b border-neutral-100 dark:border-secondary-700/60 flex items-center justify-between">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400 flex-shrink-0">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        </div>
+                        <div>
+                            <h2 class="font-semibold text-sm text-secondary-800 dark:text-neutral-100">Tamu Yang Sudah Hadir</h2>
+                            <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">{{ $recentCheckins->count() }} check-in terbaru</p>
+                        </div>
+                    </div>
+                    <a href="{{ route('dashboard.invitations.guests.index', $invitation) }}"
+                        class="text-xs font-semibold text-primary dark:text-primary-400 hover:text-primary-600 dark:hover:text-primary-300 transition-colors whitespace-nowrap">
+                        Lihat semua →
+                    </a>
+                </div>
+
+                <div class="p-5 sm:p-6">
+                    <div class="overflow-x-auto border border-neutral-200/70 dark:border-secondary-600/50 rounded-xl">
                         <table class="min-w-full divide-y divide-neutral-200 dark:divide-secondary-700">
                             <thead class="bg-neutral-50 dark:bg-secondary-900">
                                 <tr>
@@ -325,8 +343,10 @@
         function updateStats(increment) {
             const hadirEl = document.getElementById('stat-hadir');
             const pendingEl = document.getElementById('stat-pending');
+            const totalEl = document.getElementById('stat-total');
             hadirEl.textContent = parseInt(hadirEl.textContent) + increment;
             pendingEl.textContent = Math.max(0, parseInt(pendingEl.textContent) - increment);
+            totalEl.textContent = parseInt(totalEl.textContent) + increment;
         }
 
         function addToCheckinTable(guest, ticketUrl) {
@@ -334,16 +354,15 @@
             const emptyRow = document.getElementById('empty-row');
             if (emptyRow) emptyRow.remove();
 
-            const currentRows = tbody.querySelectorAll('tr').length;
             const row = document.createElement('tr');
             row.className = 'animate-pulse bg-emerald-50 dark:bg-emerald-900/30';
             row.innerHTML = `
-                <td class="px-4 py-3 whitespace-nowrap text-sm text-neutral-500">${guest.checkin_order}</td>
-                <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-secondary-800">${guest.name}</td>
-                <td class="px-4 py-3 whitespace-nowrap text-sm text-neutral-500">${guest.phone || '-'}</td>
-                <td class="px-4 py-3 whitespace-nowrap text-sm text-neutral-500">${guest.checked_in_at}</td>
-                <td class="px-4 py-3 whitespace-nowrap text-right text-sm">
-                    <a href="${ticketUrl}" target="_blank" class="inline-flex items-center gap-1.5 text-primary-600 hover:text-primary-700 text-xs font-semibold">
+                <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400">${guest.checkin_order}</td>
+                <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-secondary-800 dark:text-neutral-200">${guest.name}</td>
+                <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400">${guest.phone || '-'}</td>
+                <td class="px-4 py-3 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400">${guest.checked_in_at}</td>
+                <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-right text-sm">
+                    <a href="${ticketUrl}" target="_blank" class="inline-flex items-center gap-1.5 text-primary-600 dark:text-primary-400 hover:text-primary-700 text-xs font-semibold">
                         <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg>
                         Cetak Tiket
                     </a>
