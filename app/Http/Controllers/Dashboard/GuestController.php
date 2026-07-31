@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use App\Exports\GuestTemplateExport;
 use App\Http\Controllers\Controller;
 use App\Models\Guest;
 use App\Models\Invitation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
-use Maatwebsite\Excel\Facades\Excel;
 
 class GuestController extends Controller
 {
@@ -176,13 +174,6 @@ class GuestController extends Controller
 
         return redirect()->route('dashboard.invitations.guests.index', $invitation)
             ->with('success', "Semua {$deleted} tamu berhasil dihapus.");
-    }
-
-    public function downloadTemplate(Invitation $invitation)
-    {
-        $this->authorizePersonalLink($invitation);
-
-        return Excel::download(new GuestTemplateExport, 'template-import-tamu.xlsx');
     }
 
     public function import(Request $request, Invitation $invitation, \App\Services\GuestImportService $importService)
