@@ -47,29 +47,32 @@
         document.querySelectorAll('[data-step]').forEach(el => observer.observe(el));
     }" class="sticky top-[64px] z-30 bg-white/90 dark:bg-secondary-900/90 backdrop-blur-md border-b border-neutral-200/80 dark:border-secondary-700/60 py-3 shadow-xs">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between gap-2 overflow-x-auto py-1 no-scrollbar text-xs">
+            <div class="flex items-center gap-1 sm:gap-2 overflow-x-auto no-scrollbar text-xs">
                 <a href="#step-1" @click.prevent="document.getElementById('step-1').scrollIntoView({ behavior: 'smooth' })"
                     :class="activeStep === 1 ? 'bg-primary-50 dark:bg-primary-900/40 text-primary dark:text-primary-300' : 'text-neutral-500 hover:text-secondary-800 dark:hover:text-neutral-200'"
-                    class="flex items-center gap-2 px-3 py-1.5 rounded-xl font-semibold transition-all flex-shrink-0">
+                    class="flex flex-1 items-center justify-center gap-1.5 px-2 py-1.5 rounded-xl font-semibold transition-all sm:flex-none sm:px-3 whitespace-nowrap">
                     <span :class="activeStep === 1 ? 'bg-primary text-white' : 'bg-neutral-200 dark:bg-secondary-700 text-neutral-600 dark:text-neutral-300'"
                         class="w-5 h-5 rounded-full text-[11px] flex items-center justify-center font-bold transition-all">1</span>
-                    <span>Konsep & Tema</span>
+                    <span class="hidden sm:inline">Konsep & Tema</span>
+                    <span class="sm:hidden">Tema</span>
                 </a>
-                <div class="h-px bg-neutral-200 dark:bg-secondary-700 flex-1 min-w-[12px]"></div>
+                <div class="h-px bg-neutral-200 dark:bg-secondary-700 w-3 shrink-0 sm:w-auto sm:flex-1 sm:min-w-[12px]"></div>
                 <a href="#step-2" @click.prevent="document.getElementById('step-2').scrollIntoView({ behavior: 'smooth' })"
                     :class="activeStep === 2 ? 'bg-primary-50 dark:bg-primary-900/40 text-primary dark:text-primary-300' : 'text-neutral-500 hover:text-secondary-800 dark:hover:text-neutral-200'"
-                    class="flex items-center gap-2 px-3 py-1.5 rounded-xl font-semibold transition-all flex-shrink-0">
+                    class="flex flex-1 items-center justify-center gap-1.5 px-2 py-1.5 rounded-xl font-semibold transition-all sm:flex-none sm:px-3 whitespace-nowrap">
                     <span :class="activeStep === 2 ? 'bg-primary text-white' : 'bg-neutral-200 dark:bg-secondary-700 text-neutral-600 dark:text-neutral-300'"
                         class="w-5 h-5 rounded-full text-[11px] flex items-center justify-center font-bold transition-all">2</span>
-                    <span>Mempelai</span>
+                    <span class="hidden sm:inline">Mempelai</span>
+                    <span class="sm:hidden">Mempelai</span>
                 </a>
-                <div class="h-px bg-neutral-200 dark:bg-secondary-700 flex-1 min-w-[12px]"></div>
+                <div class="h-px bg-neutral-200 dark:bg-secondary-700 w-3 shrink-0 sm:w-auto sm:flex-1 sm:min-w-[12px]"></div>
                 <a href="#step-3" @click.prevent="document.getElementById('step-3').scrollIntoView({ behavior: 'smooth' })"
                     :class="activeStep === 3 ? 'bg-primary-50 dark:bg-primary-900/40 text-primary dark:text-primary-300' : 'text-neutral-500 hover:text-secondary-800 dark:hover:text-neutral-200'"
-                    class="flex items-center gap-2 px-3 py-1.5 rounded-xl font-semibold transition-all flex-shrink-0">
+                    class="flex flex-1 items-center justify-center gap-1.5 px-2 py-1.5 rounded-xl font-semibold transition-all sm:flex-none sm:px-3 whitespace-nowrap">
                     <span :class="activeStep === 3 ? 'bg-primary text-white' : 'bg-neutral-200 dark:bg-secondary-700 text-neutral-600 dark:text-neutral-300'"
                         class="w-5 h-5 rounded-full text-[11px] flex items-center justify-center font-bold transition-all">3</span>
-                    <span>Waktu & Tempat</span>
+                    <span class="hidden sm:inline">Waktu & Tempat</span>
+                    <span class="sm:hidden">Waktu</span>
                 </a>
             </div>
         </div>
