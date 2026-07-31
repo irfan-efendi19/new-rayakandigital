@@ -43,23 +43,15 @@ class GuestsImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnFa
 
         $name = trim($row['nama_tamu']);
 
-        $guest = Guest::updateOrCreate(
-            [
-                'invitation_id' => $this->invitationId,
-                'name' => $name,
-                'whatsapp_number' => $whatsapp,
-            ],
-            [
-                'guest_category_id' => $categoryId,
-                'phone' => $whatsapp,
-            ]
-        );
+        $guest = Guest::create([
+            'invitation_id' => $this->invitationId,
+            'name' => $name,
+            'whatsapp_number' => $whatsapp,
+            'phone' => $whatsapp,
+            'guest_category_id' => $categoryId,
+        ]);
 
-        if ($guest->wasRecentlyCreated) {
-            $this->imported++;
-        } else {
-            $this->skipped++;
-        }
+        $this->imported++;
 
         // Sync event assignments
         if (! empty(trim($row['acara'] ?? ''))) {
