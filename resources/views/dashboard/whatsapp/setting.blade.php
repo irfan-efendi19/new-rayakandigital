@@ -154,6 +154,51 @@
                     </div>
                 @endif
 
+                {{-- ── KUOTA WA BLAST ── --}}
+                @php
+                    $hasWaQuota = $invitation->hasWaQuotaLimit();
+                    $waQuotaLimit = $invitation->waQuotaLimit();
+                    $waSent = $invitation->waSentCount();
+                    $waRemaining = $invitation->remainingWaQuota();
+                    $waUsedPct = $waQuotaLimit > 0 ? min(100, round(($waSent / $waQuotaLimit) * 100)) : 0;
+                @endphp
+                <div class="bg-white/80 dark:bg-secondary-800/80 backdrop-blur-xl rounded-2xl p-6 border border-neutral-200/80 dark:border-secondary-700/80 shadow-sm">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-xl bg-primary-100 dark:bg-primary-900/40 text-primary dark:text-primary-400 flex items-center justify-center shrink-0">
+                            <svg class="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="text-sm font-bold text-secondary-800 dark:text-neutral-100">Kuota WA Blast</h2>
+                            <p class="text-[11px] text-neutral-500 dark:text-neutral-400">
+                                @if($hasWaQuota)
+                                    {{ $waSent }} dari {{ $waQuotaLimit }} pesan telah dipakai untuk undangan ini.
+                                @else
+                                    Kuota WA Blast undangan ini tidak terbatas.
+                                @endif
+                            </p>
+                        </div>
+                    </div>
+                    @if($hasWaQuota)
+                        <div class="mt-4">
+                            <div class="h-2.5 rounded-full bg-neutral-200 dark:bg-secondary-700 overflow-hidden">
+                                <div class="h-full rounded-full transition-all {{ $waRemaining <= 0 ? 'bg-red-500' : ($waRemaining <= 5 ? 'bg-amber-500' : 'bg-emerald-500') }}" style="width: {{ $waUsedPct }}%"></div>
+                            </div>
+                            <div class="mt-2 flex items-center justify-between text-xs">
+                                <span class="font-semibold {{ $waRemaining <= 0 ? 'text-red-600 dark:text-red-400' : 'text-emerald-600 dark:text-emerald-400' }}">
+                                    @if($waRemaining <= 0)
+                                        Kuota Habis — Hubungi Admin untuk menambah kuota.
+                                    @else
+                                        Sisa kuota: {{ $waRemaining }} pesan
+                                    @endif
+                                </span>
+                                <span class="text-neutral-400 dark:text-neutral-500 tabular-nums">{{ $waUsedPct }}%</span>
+                            </div>
+                        </div>
+                    @endif
+                </div>
+
                 {{-- ── ALUR PROSES ── --}}
                 <div class="bg-white/80 dark:bg-secondary-800/80 backdrop-blur-xl rounded-2xl p-6 border border-neutral-200/80 dark:border-secondary-700/80 shadow-sm">
                     <h2 class="text-xs font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-widest mb-5">Panduan Aktivasi</h2>

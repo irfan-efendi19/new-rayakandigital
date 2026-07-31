@@ -27,6 +27,17 @@ class SystemConfigForm
                             ->default(30)
                             ->minValue(0),
                     ]),
+                Section::make('Kuota WA Blast (Global)')
+                    ->description('Batas maksimum pesan WhatsApp blast per undangan. Berlaku untuk semua undangan sekaligus.')
+                    ->schema([
+                        TextInput::make('wa_blast_quota_limit')
+                            ->label('Kuota WA Blast Global')
+                            ->integer()
+                            ->minValue(0)
+                            ->placeholder('Kosongkan untuk tidak terbatas')
+                            ->helperText('Maksimum jumlah pesan blast yang boleh dikirim setiap undangan. Kosongkan agar unlimited.')
+                            ->nullable(),
+                    ]),
                 Section::make('WhatsApp & Bank (Verifikasi Manual)')
                     ->schema([
                         TextInput::make('whatsapp_number')

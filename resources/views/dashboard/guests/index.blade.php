@@ -100,6 +100,41 @@
                     </a>
                 </div>
 
+                {{-- WA Blast Quota Card --}}
+                @if($invitation->hasWaQuotaLimit())
+                    @php
+                        $waQuotaLimit = $invitation->waQuotaLimit();
+                        $waSent = $invitation->waSentCount();
+                        $waRemaining = $invitation->remainingWaQuota();
+                        $waUsedPct = $waQuotaLimit > 0 ? min(100, round(($waSent / $waQuotaLimit) * 100)) : 0;
+                    @endphp
+                    <div class="mt-3 p-3.5 rounded-xl border border-neutral-200/80 dark:border-secondary-700/60 bg-white/70 dark:bg-secondary-800/50 backdrop-blur-sm flex flex-col sm:flex-row sm:items-center gap-3">
+                        <div class="flex items-center gap-2 shrink-0">
+                            <span class="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/40 text-primary dark:text-primary-400 flex items-center justify-center">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                </svg>
+                            </span>
+                            <div>
+                                <p class="text-xs font-bold text-secondary-800 dark:text-neutral-100">Kuota WA Blast</p>
+                                <p class="text-[11px] text-neutral-500 dark:text-neutral-400">{{ $waSent }} dari {{ $waQuotaLimit }} pesan terpakai</p>
+                            </div>
+                        </div>
+                        <div class="flex-1">
+                            <div class="h-2 rounded-full bg-neutral-200 dark:bg-secondary-700 overflow-hidden">
+                                <div class="h-full rounded-full transition-all {{ $waRemaining <= 0 ? 'bg-red-500' : ($waRemaining <= 5 ? 'bg-amber-500' : 'bg-emerald-500') }}" style="width: {{ $waUsedPct }}%"></div>
+                            </div>
+                        </div>
+                        <span class="text-xs font-bold shrink-0 {{ $waRemaining <= 0 ? 'text-red-600 dark:text-red-400' : 'text-emerald-600 dark:text-emerald-400' }}">
+                            @if($waRemaining <= 0)
+                                Kuota Habis — Hubungi Admin
+                            @else
+                                Sisa {{ $waRemaining }} pesan
+                            @endif
+                        </span>
+                    </div>
+                @endif
+
                 {{-- Stat Strip --}}
                 <div class="mt-6 grid grid-cols-4 gap-px bg-neutral-200/70 dark:bg-secondary-700/50 rounded-2xl overflow-hidden border border-neutral-200/80 dark:border-secondary-700/50">
                     <div class="bg-white/80 dark:bg-secondary-800/70 px-3 sm:px-5 py-4 flex flex-col items-center sm:items-start text-center sm:text-left backdrop-blur-sm">

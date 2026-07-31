@@ -12,6 +12,7 @@ class SystemConfig extends Model
     protected $fillable = [
         'demo_duration_days',
         'demo_grace_period_days',
+        'wa_blast_quota_limit',
         'whatsapp_number',
         'bank_name',
         'bank_account_number',
@@ -21,5 +22,6 @@ class SystemConfig extends Model
     protected $casts = [
         'demo_duration_days' => 'integer',
         'demo_grace_period_days' => 'integer',
+        'wa_blast_quota_limit' => 'integer',
     ];
 }

@@ -8,6 +8,7 @@ use App\Models\Guest;
 use App\Models\Invitation;
 use App\Models\WhatsappLog;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
 class WhatsAppBlastController extends Controller
@@ -39,9 +40,34 @@ class WhatsAppBlastController extends Controller
             return back()->with('error', 'WhatsApp Gateway belum terhubung. Pastikan nomor WA Anda sudah diverifikasi admin dan berstatus CONNECTED.');
         }
 
+        $reservation = DB::transaction(function () use ($invitation, $guests) {
+            $locked = Invitation::whereKey($invitation->id)->lockForUpdate()->first();
+
+            if ($locked->isWaQuotaExhausted()) {
+                return null;
+            }
+
+            $dispatchable = $guests;
+            $skippedCount = 0;
+            $remaining = $locked->remainingWaQuota();
+
+            if ($remaining !== null && $guests->count() > $remaining) {
+                $skippedCount = $guests->count() - $remaining;
+                $dispatchable = $guests->take($remaining);
+            }
+
+            $locked->increment('wa_sent_count', $dispatchable->count());
+
+            return compact('dispatchable', 'skippedCount');
+        });
+
+        if ($reservation === null) {
+            return back()->with('error', 'Kuota WA Blast Habis. Hubungi admin untuk menambah kuota WA Blast Anda.');
+        }
+
         $queuedCount = 0;
 
-        foreach ($guests as $guest) {
+        foreach ($reservation['dispatchable'] as $guest) {
             $message = $invitation->parseWhatsappTemplate($guest);
 
             $log = WhatsappLog::create([
@@ -55,7 +81,19 @@ class WhatsAppBlastController extends Controller
             $queuedCount++;
         }
 
-        return back()->with('success', "{$queuedCount} pesan WhatsApp berhasil dimasukkan ke dalam antrean pengiriman.");
+        $invitation->refresh();
+
+        $message = "{$queuedCount} pesan WhatsApp berhasil dimasukkan ke dalam antrean pengiriman.";
+
+        if ($reservation['skippedCount'] > 0) {
+            $message .= " {$reservation['skippedCount']} tamu dilewati karena kuota tidak mencukupi.";
+        }
+
+        $message .= $invitation->hasWaQuotaLimit()
+            ? " Sisa kuota: {$invitation->remainingWaQuota()} dari {$invitation->waQuotaLimit()}."
+            : ' Kuota WA Blast Anda tidak terbatas.';
+
+        return back()->with('success', $message);
     }
 
     public function sendSingle(Request $request, Invitation $invitation, Guest $guest)
@@ -76,6 +114,22 @@ class WhatsAppBlastController extends Controller
 
         if (! $waSetting || ! $waSetting->isConnected()) {
             return back()->with('error', 'WhatsApp Gateway belum terhubung. Pastikan nomor WA Anda sudah diverifikasi admin dan berstatus CONNECTED.');
+        }
+
+        $reservation = DB::transaction(function () use ($invitation) {
+            $locked = Invitation::whereKey($invitation->id)->lockForUpdate()->first();
+
+            if ($locked->isWaQuotaExhausted()) {
+                return null;
+            }
+
+            $locked->increment('wa_sent_count');
+
+            return $locked;
+        });
+
+        if ($reservation === null) {
+            return back()->with('error', 'Kuota WA Blast Habis. Hubungi admin untuk menambah kuota WA Blast Anda.');
         }
 
         $message = $invitation->parseWhatsappTemplate($guest);

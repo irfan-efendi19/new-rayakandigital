@@ -1,40 +1,42 @@
 # Product Requirement Document (PRD)
 
-## MODUL: PENGATURAN MUSIK BACKGROUND UNDANGAN (DEFAULT TEMA VS UPLOAD MP3 LOKAL)
+## MODUL: PEMBATASAN KUOTA WA BLAST (FILAMENT ADMIN)
 
-| Atribut               | Detail                                                                                     |
-| :-------------------- | :----------------------------------------------------------------------------------------- |
-| **Status**            | Approved                                                                                   |
-| **Penulis**           | Mochammad Irfan Efendi                                                                     |
-| **Tanggal Pembuatan** | 31 Juli 2026                                                                               |
-| **Target Komponen**   | Dashboard Pengaturan Undangan (User), Backend Service, & Frontend Player Undangan          |
-| **Arsitektur**        | **Per-Invitation Music Management, Dynamic Audio Source Selection, Local Storage Handler** |
+| Atribut               | Detail                                                                                          |
+| :-------------------- | :---------------------------------------------------------------------------------------------- |
+| **Status**            | Approved                                                                                        |
+| **Penulis**           | Mochammad Irfan Efendi                                                                          |
+| **Tanggal Pembuatan** | 31 Juli 2026                                                                                    |
+| **Target Komponen**   | Filament Admin Panel, Backend Service, Queue Worker, & User Dashboard                           |
+| **Arsitektur**        | **Per-Invitation Quota Rate-Limiting, Admin-Driven Capacity Control, Shared-Hosting Optimized** |
 
 ---
 
 ## 1. DESKRIPSI & OBJECTIVE
 
-Fitur ini bertujuan untuk memberikan fleksibilitas penuh kepada pengguna dalam menentukan musik latar (_background music_) pada undangan digital mereka:
+Fitur ini dirancang untuk memberikan kontrol penuh kepada Administrator dalam mengelola dan membatasi jumlah pesan WhatsApp blast yang dapat dikirim oleh setiap undangan:
 
-1. **Default State (_Zero Setup_):** Secara otomatis, undangan baru akan memutar file musik bawaan dari **Tema** yang dipilih.
-2. **Custom Audio Upload:** Jika pengguna ingin memakai lagu kenangan sendiri, pengguna **cukup mengunggah (_upload_) file MP3/audio dari perangkat lokal mereka** tanpa perlu memilih dari daftar dropdown.
-3. **Switch Back Option:** Pengguna dapat kembali menggunakan lagu bawaan tema kapan saja hanya dengan memilih tombol pilihan (radio button).
+1. **Aturan Kuota Berbasis Undangan (_Per-Invitation Limit_):** Setiap undangan (`invitation_id`) memiliki batas maksimum pengiriman pesan (`wa_quota_limit`) yang dikendalikan dari Filament Admin.
+2. **Pencegahan Penyalahgunaan & Over-sending:** Memastikan pengguna tidak dapat melakukan blast melebihi kapasitas/paket yang dibeli.
+3. **Pemberitahuan Transparan:** Memberikan feedback yang jelas pada antarmuka pengguna mengenai sisa kuota yang dimiliki sebelum atau sesudah mengeksekusi blast.
 
 ---
 
 ## 2. ALUR KERJA & LOGIKA PENGGUNAAN (USER JOURNEY)
 
 ```text
-[Undangan Baru Dibuat]
-       │
-       ├──► (Default) use_custom_music = false ──► Player memutar lagu bawaan TEMA
-       │
-       └──► User memilih "Gunakan Lagu Sendiri" & Upload MP3
-                  │
-                  ▼
-            Simpan File ke Storage (`/storage/invitation-musics/`)
-            Update `custom_music` & Set `use_custom_music = true`
-                  │
-                  ▼
-            Player memutar lagu CUSTOM LOKAL milik user
+[User Klik "Kirim WA Blast"]
+          │
+          ▼
+   Cek Kuota: (wa_sent_count < wa_quota_limit) ?
+          │
+          ├──► (TIDAK) ──► Hentikan Proses & Tampilkan Alert: "Kuota WA Blast Habis"
+          │
+          └──► (YA) ─────► Hitung Sisa Kuota (Remaining = Limit - Sent)
+                                 │
+                                 ▼
+                     Ambil Daftar Tamu s.d. Sisa Kuota
+                                 │
+                                 ▼
+                   Dispatch Queue Job & Increment `wa_sent_count`
 ```

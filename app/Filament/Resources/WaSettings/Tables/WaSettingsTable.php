@@ -31,6 +31,25 @@ class WaSettingsTable
                     ->label('Nomor WhatsApp')
                     ->searchable(),
 
+                TextColumn::make('invitation.wa_sent_count')
+                    ->label('Pesan Terpakai')
+                    ->placeholder('0')
+                    ->sortable(),
+
+                TextColumn::make('invitation_remaining_wa_quota')
+                    ->label('Sisa Kuota')
+                    ->getStateUsing(function ($record) {
+                        $invitation = $record?->invitation;
+
+                        if (! $invitation) {
+                            return '-';
+                        }
+
+                        return $invitation->hasWaQuotaLimit()
+                            ? $invitation->remainingWaQuota()
+                            : 'Unlimited';
+                    }),
+
                 BadgeColumn::make('status')
                     ->label('Status')
                     ->colors([

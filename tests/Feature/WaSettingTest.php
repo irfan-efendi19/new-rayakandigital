@@ -3,6 +3,7 @@
 use App\Jobs\SendWhatsappMessage;
 use App\Models\Guest;
 use App\Models\Invitation;
+use App\Models\SystemConfig;
 use App\Models\User;
 use App\Models\WhatsappLog;
 use App\Services\FonnteService;
@@ -202,4 +203,185 @@ test('send whatsapp message job uses fonnte service and admin token from invitat
             && $request->hasHeader('Authorization', 'admin_injected_token_123')
             && $request['target'] === '081234567890';
     });
+});
+
+test('whatsapp blast is blocked when global quota is exhausted', function () {
+    Queue::fake();
+
+    SystemConfig::create(['wa_blast_quota_limit' => 1]);
+
+    $user = User::factory()->create();
+    $invitation = Invitation::factory()->create([
+        'user_id' => $user->id,
+        'wa_sent_count' => 1,
+    ]);
+    $invitation->waSetting()->create([
+        'user_id' => $user->id,
+        'fonnte_token' => 'user_token_123',
+        'status' => 'CONNECTED',
+    ]);
+
+    $guest1 = Guest::factory()->create(['invitation_id' => $invitation->id, 'whatsapp_number' => '081234567890']);
+    $guest2 = Guest::factory()->create(['invitation_id' => $invitation->id, 'whatsapp_number' => '089876543210']);
+
+    $response = $this->actingAs($user)->post(route('dashboard.invitations.whatsapp.send', $invitation), [
+        'guest_ids' => [$guest1->id, $guest2->id],
+    ]);
+
+    $response->assertRedirect();
+    $response->assertSessionHas('error');
+
+    Queue::assertNotPushed(SendWhatsappMessage::class);
+
+    $this->assertDatabaseHas('invitations', [
+        'id' => $invitation->id,
+        'wa_sent_count' => 1,
+    ]);
+});
+
+test('whatsapp blast only queues up to remaining global quota and increments sent count', function () {
+    Queue::fake();
+
+    SystemConfig::create(['wa_blast_quota_limit' => 3]);
+
+    $user = User::factory()->create();
+    $invitation = Invitation::factory()->create([
+        'user_id' => $user->id,
+        'wa_sent_count' => 1,
+    ]);
+    $invitation->waSetting()->create([
+        'user_id' => $user->id,
+        'fonnte_token' => 'user_token_123',
+        'status' => 'CONNECTED',
+    ]);
+
+    $guests = Guest::factory()->count(4)->create([
+        'invitation_id' => $invitation->id,
+        'whatsapp_number' => '081234567890',
+    ]);
+
+    $response = $this->actingAs($user)->post(route('dashboard.invitations.whatsapp.send', $invitation), [
+        'guest_ids' => $guests->pluck('id')->all(),
+    ]);
+
+    $response->assertRedirect();
+    $response->assertSessionHas('success');
+
+    Queue::assertPushed(SendWhatsappMessage::class, 2);
+
+    $this->assertDatabaseHas('invitations', [
+        'id' => $invitation->id,
+        'wa_sent_count' => 3,
+    ]);
+});
+
+test('whatsapp blast without global quota limit dispatches all selected guests', function () {
+    Queue::fake();
+
+    $user = User::factory()->create();
+    $invitation = Invitation::factory()->create([
+        'user_id' => $user->id,
+        'wa_sent_count' => 0,
+    ]);
+    $invitation->waSetting()->create([
+        'user_id' => $user->id,
+        'fonnte_token' => 'user_token_123',
+        'status' => 'CONNECTED',
+    ]);
+
+    $guests = Guest::factory()->count(3)->create([
+        'invitation_id' => $invitation->id,
+        'whatsapp_number' => '081234567890',
+    ]);
+
+    $response = $this->actingAs($user)->post(route('dashboard.invitations.whatsapp.send', $invitation), [
+        'guest_ids' => $guests->pluck('id')->all(),
+    ]);
+
+    $response->assertRedirect();
+    $response->assertSessionHas('success');
+
+    Queue::assertPushed(SendWhatsappMessage::class, 3);
+
+    $this->assertDatabaseHas('invitations', [
+        'id' => $invitation->id,
+        'wa_sent_count' => 3,
+    ]);
+});
+
+test('whatsapp single send is blocked when global quota is exhausted', function () {
+    Queue::fake();
+
+    SystemConfig::create(['wa_blast_quota_limit' => 2]);
+
+    $user = User::factory()->create();
+    $invitation = Invitation::factory()->create([
+        'user_id' => $user->id,
+        'wa_sent_count' => 2,
+    ]);
+    $invitation->waSetting()->create([
+        'user_id' => $user->id,
+        'fonnte_token' => 'user_token_123',
+        'status' => 'CONNECTED',
+    ]);
+
+    $guest = Guest::factory()->create(['invitation_id' => $invitation->id, 'whatsapp_number' => '081234567890']);
+
+    $response = $this->actingAs($user)->post(route('dashboard.invitations.whatsapp.send-single', [$invitation, $guest]));
+
+    $response->assertRedirect();
+    $response->assertSessionHas('error');
+
+    Queue::assertNotPushed(SendWhatsappMessage::class);
+});
+
+test('whatsapp single send increments sent count when global quota is available', function () {
+    Queue::fake();
+
+    SystemConfig::create(['wa_blast_quota_limit' => 10]);
+
+    $user = User::factory()->create();
+    $invitation = Invitation::factory()->create([
+        'user_id' => $user->id,
+        'wa_sent_count' => 1,
+    ]);
+    $invitation->waSetting()->create([
+        'user_id' => $user->id,
+        'fonnte_token' => 'user_token_123',
+        'status' => 'CONNECTED',
+    ]);
+
+    $guest = Guest::factory()->create(['invitation_id' => $invitation->id, 'whatsapp_number' => '081234567890']);
+
+    $response = $this->actingAs($user)->post(route('dashboard.invitations.whatsapp.send-single', [$invitation, $guest]));
+
+    $response->assertRedirect();
+    $response->assertSessionHas('success');
+
+    Queue::assertPushed(SendWhatsappMessage::class, 1);
+
+    $this->assertDatabaseHas('invitations', [
+        'id' => $invitation->id,
+        'wa_sent_count' => 2,
+    ]);
+});
+
+test('invitation quota helpers return correct values from global config', function () {
+    $unlimited = Invitation::factory()->create(['wa_sent_count' => 0]);
+    expect($unlimited->hasWaQuotaLimit())->toBeFalse();
+    expect($unlimited->waQuotaLimit())->toBeNull();
+    expect($unlimited->remainingWaQuota())->toBeNull();
+    expect($unlimited->isWaQuotaExhausted())->toBeFalse();
+
+    SystemConfig::create(['wa_blast_quota_limit' => 5]);
+
+    $limited = Invitation::factory()->create(['wa_sent_count' => 2]);
+    expect($limited->hasWaQuotaLimit())->toBeTrue();
+    expect($limited->waQuotaLimit())->toBe(5);
+    expect($limited->remainingWaQuota())->toBe(3);
+    expect($limited->isWaQuotaExhausted())->toBeFalse();
+
+    $exhausted = Invitation::factory()->create(['wa_sent_count' => 5]);
+    expect($exhausted->remainingWaQuota())->toBe(0);
+    expect($exhausted->isWaQuotaExhausted())->toBeTrue();
 });

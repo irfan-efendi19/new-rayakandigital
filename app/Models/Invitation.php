@@ -148,6 +148,7 @@ class Invitation extends Model
         'bride_groom_order',
         'use_custom_music',
         'custom_music',
+        'wa_sent_count',
     ];
 
     protected function casts(): array
@@ -176,6 +177,7 @@ class Invitation extends Model
             'show_video' => 'boolean',
             'slug_change_count' => 'integer',
             'use_custom_music' => 'boolean',
+            'wa_sent_count' => 'integer',
         ];
     }
 
@@ -267,6 +269,39 @@ class Invitation extends Model
         }
 
         return $this->remainingGlobalQuota() <= 0;
+    }
+
+    public function waQuotaLimit(): ?int
+    {
+        return SystemConfig::first()?->wa_blast_quota_limit;
+    }
+
+    public function hasWaQuotaLimit(): bool
+    {
+        return $this->waQuotaLimit() !== null;
+    }
+
+    public function waSentCount(): int
+    {
+        return (int) $this->wa_sent_count;
+    }
+
+    public function remainingWaQuota(): ?int
+    {
+        if (! $this->hasWaQuotaLimit()) {
+            return null;
+        }
+
+        return max(0, $this->waQuotaLimit() - $this->waSentCount());
+    }
+
+    public function isWaQuotaExhausted(): bool
+    {
+        if (! $this->hasWaQuotaLimit()) {
+            return false;
+        }
+
+        return $this->remainingWaQuota() <= 0;
     }
 
     public function themeLabel(): string

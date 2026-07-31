@@ -18,6 +18,10 @@ class SystemConfigsTable
                 TextColumn::make('demo_grace_period_days')
                     ->label('Masa Tenggang (Hari)')
                     ->sortable(),
+                TextColumn::make('wa_blast_quota_limit')
+                    ->label('Kuota WA Blast Global')
+                    ->placeholder('Unlimited')
+                    ->sortable(),
                 TextColumn::make('whatsapp_number')
                     ->label('No. WhatsApp')
                     ->searchable(),
