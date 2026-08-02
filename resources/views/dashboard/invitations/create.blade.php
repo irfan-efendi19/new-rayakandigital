@@ -88,6 +88,11 @@
                     <span class="sm:hidden">Waktu</span>
                 </a>
             </div>
+
+            <div class="mt-2.5 h-1 rounded-full bg-neutral-200 dark:bg-secondary-700 overflow-hidden">
+                <div class="h-full bg-gradient-to-r from-primary to-primary-400 rounded-full transition-all duration-500"
+                    :style="'width: ' + Math.min((activeStep / 3) * 100, 100) + '%'"></div>
+            </div>
         </div>
     </div>
 
@@ -132,6 +137,15 @@
         .theme-card {
             transition: border-color 0.2s, box-shadow 0.2s;
         }
+
+        .field-invalid {
+            border-color: #f87171 !important;
+            box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.12) !important;
+        }
+
+        .dark .field-invalid {
+            border-color: #f87171 !important;
+        }
     </style>
 
     <div class="py-8">
@@ -147,7 +161,7 @@
                             {{-- ======================================== --}}
                             {{-- STEP 1: Konsep & Tema (Inisiasi) --}}
                             {{-- ======================================== --}}
-                            <div id="step-1" data-step="1" class="border-b border-neutral-200 dark:border-secondary-700 pb-8">
+                            <div id="step-1" data-step="1" class="border-b border-neutral-200 dark:border-secondary-700 pb-8 scroll-mt-28">
                                 <div class="flex items-center gap-3 mb-2">
                                     <div class="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary font-bold text-sm">
                                         1
@@ -202,8 +216,8 @@
                                             </div>
                                             <div id="slug-indicator"
                                                 class="mt-1.5 text-xs flex items-center gap-1.5 text-neutral-400 dark:text-neutral-500">
-                                                <span class="slug-icon">🔗</span>
-                                                <span class="slug-text">Masukkan tautan kustom</span>
+                                                <span id="slug-icon" class="slug-icon flex items-center text-[13px] leading-none">🔗</span>
+                                                <span id="slug-text" class="slug-text">Masukkan tautan kustom</span>
                                             </div>
                                             @error('slug')
                                                 <span
@@ -354,7 +368,7 @@
                             {{-- ======================================== --}}
                             {{-- STEP 2: Informasi Mempelai (Profil) --}}
                             {{-- ======================================== --}}
-                            <div id="step-2" data-step="2" class="border-b border-neutral-200 dark:border-secondary-700 pb-8" data-tour="mempelai-info">
+                            <div id="step-2" data-step="2" class="border-b border-neutral-200 dark:border-secondary-700 pb-8 scroll-mt-28" data-tour="mempelai-info">
                                 <div class="flex items-center gap-3 mb-2">
                                     <div class="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary font-bold text-sm">
                                         2
@@ -368,9 +382,9 @@
                                 <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-6">Data lengkap kedua mempelai yang akan tampil di halaman utama.</p>
 
                                 <div x-data="{
-                                                                                                    order: '{{ old('bride_groom_order', 'male_first') }}',
-                                                                                                    toggleOrder() { this.order = this.order === 'male_first' ? 'female_first' : 'male_first'; }
-                                                                                                }"
+                                    order: '{{ old('bride_groom_order', 'male_first') }}',
+                                    toggleOrder() { this.order = this.order === 'male_first' ? 'female_first' : 'male_first'; }
+                                }"
                                     class="flex flex-col gap-6">
 
                                     <input type="hidden" name="bride_groom_order" :value="order">
@@ -426,22 +440,22 @@
                                             </div>
                                             <div class="sm:col-span-3">
                                                 <label for="bride_father_name"
-                                                    class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wide mb-1.5">Nama Ayah</label>
+                                                    class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wide mb-1.5">Nama Ayah <span class="text-red-500">*</span></label>
                                                 <input type="text" name="bride_father_name" id="bride_father_name"
                                                     value="{{ old('bride_father_name') }}"
                                                     class="block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary focus:ring-primary sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
-                                                    placeholder="Nama Ayah Mempelai Wanita">
+                                                    placeholder="Nama Ayah Mempelai Wanita" required>
                                                 @error('bride_father_name') <span
                                                     class="text-red-500 dark:text-red-400 text-xs mt-1">{{ $message }}</span>
                                                 @enderror
                                             </div>
                                             <div class="sm:col-span-3">
                                                 <label for="bride_mother_name"
-                                                    class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wide mb-1.5">Nama Ibu</label>
+                                                    class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wide mb-1.5">Nama Ibu <span class="text-red-500">*</span></label>
                                                 <input type="text" name="bride_mother_name" id="bride_mother_name"
                                                     value="{{ old('bride_mother_name') }}"
                                                     class="block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary focus:ring-primary sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
-                                                    placeholder="Nama Ibu Mempelai Wanita">
+                                                    placeholder="Nama Ibu Mempelai Wanita" required>
                                                 @error('bride_mother_name') <span
                                                     class="text-red-500 dark:text-red-400 text-xs mt-1">{{ $message }}</span>
                                                 @enderror
@@ -522,22 +536,22 @@
                                             </div>
                                             <div class="sm:col-span-3">
                                                 <label for="groom_father_name"
-                                                    class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wide mb-1.5">Nama Ayah</label>
+                                                    class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wide mb-1.5">Nama Ayah <span class="text-red-500">*</span></label>
                                                 <input type="text" name="groom_father_name" id="groom_father_name"
                                                     value="{{ old('groom_father_name') }}"
                                                     class="block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary focus:ring-primary sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
-                                                    placeholder="Nama Ayah Mempelai Pria">
+                                                    placeholder="Nama Ayah Mempelai Pria" required>
                                                 @error('groom_father_name') <span
                                                     class="text-red-500 dark:text-red-400 text-xs mt-1">{{ $message }}</span>
                                                 @enderror
                                             </div>
                                             <div class="sm:col-span-3">
                                                 <label for="groom_mother_name"
-                                                    class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wide mb-1.5">Nama Ibu</label>
+                                                    class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wide mb-1.5">Nama Ibu <span class="text-red-500">*</span></label>
                                                 <input type="text" name="groom_mother_name" id="groom_mother_name"
                                                     value="{{ old('groom_mother_name') }}"
                                                     class="block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary focus:ring-primary sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
-                                                    placeholder="Nama Ibu Mempelai Pria">
+                                                    placeholder="Nama Ibu Mempelai Pria" required>
                                                 @error('groom_mother_name') <span
                                                     class="text-red-500 dark:text-red-400 text-xs mt-1">{{ $message }}</span>
                                                 @enderror
@@ -584,7 +598,7 @@
                             {{-- ======================================== --}}
                             {{-- STEP 3: Waktu & Tempat (Detail Acara) --}}
                             {{-- ======================================== --}}
-                            <div id="step-3" data-step="3" class="border-b border-neutral-200 dark:border-secondary-700 pb-8" data-tour="event-schedule">
+                            <div id="step-3" data-step="3" class="border-b border-neutral-200 dark:border-secondary-700 pb-8 scroll-mt-28" data-tour="event-schedule">
                                 <div class="flex items-center gap-3 mb-2">
                                     <div class="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary font-bold text-sm">
                                         3
@@ -1240,6 +1254,9 @@
                 eventIndex++;
                 bindCardEvents(card);
                 reindexEvents();
+                card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                const firstField = card.querySelector('input');
+                if (firstField) firstField.focus({ preventScroll: true });
             }
 
             function removeEventCard(btn) {
@@ -1311,8 +1328,22 @@
                 return field.getAttribute('name') || 'Field';
             }
 
+            function markInvalid(field) {
+                if (!field) return;
+                field.classList.add('field-invalid');
+                ['input', 'change'].forEach(function (evt) {
+                    field.addEventListener(evt, function clear() {
+                        field.classList.remove('field-invalid');
+                        field.removeEventListener('input', clear);
+                        field.removeEventListener('change', clear);
+                    });
+                });
+            }
+
             function validateForm() {
-                const emptyFields = [];
+                form.querySelectorAll('.field-invalid').forEach(function (f) { f.classList.remove('field-invalid'); });
+
+                const invalidFields = [];
                 const checkedNames = new Set();
 
                 form.querySelectorAll('input[required], select[required], textarea[required]').forEach(function (field) {
@@ -1326,16 +1357,17 @@
 
                     const value = field.value.trim();
                     if (!value) {
-                        emptyFields.push(getFieldLabel(field));
+                        invalidFields.push(field);
+                        markInvalid(field);
                     }
                 });
 
                 const themeInput = form.querySelector('input[name="theme"]');
                 if (themeInput && !themeInput.value.trim()) {
-                    emptyFields.push('Pilih Tema Undangan');
+                    invalidFields.push(themeInput);
                 }
 
-                return emptyFields;
+                return invalidFields;
             }
 
             const submitBtn = document.getElementById('submit-btn');
@@ -1343,9 +1375,17 @@
             if (submitBtn && form) {
                 submitBtn.addEventListener('click', function (e) {
                     e.preventDefault();
-                    const emptyFields = validateForm();
-                    if (emptyFields.length > 0) {
-                        const list = emptyFields.map(function (f) { return '<li>' + f + '</li>'; }).join('');
+                    const invalidFields = validateForm();
+                    if (invalidFields.length > 0) {
+                        const list = invalidFields.map(function (f) {
+                            return '<li>' + (f.getAttribute('name') === 'theme' ? 'Pilih Tema Undangan' : getFieldLabel(f)) + '</li>';
+                        }).join('');
+                        const firstVisible = invalidFields.find(function (f) {
+                            return !(f.closest('.event-card') && !f.closest('.event-card').offsetParent);
+                        }) || invalidFields[0];
+                        if (firstVisible && firstVisible.type !== 'hidden') {
+                            firstVisible.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
                         Swal.fire({
                             title: '<span class="text-lg">Form Belum Lengkap!</span>',
                             html: '<div class="text-left">' +
@@ -1370,6 +1410,9 @@
                         cancelButtonText: 'Cek Lagi',
                     }).then((result) => {
                         if (result.isConfirmed) {
+                            submitBtn.disabled = true;
+                            submitBtn.classList.add('opacity-70', 'cursor-not-allowed', 'pointer-events-none');
+                            submitBtn.innerHTML = '<svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v3m6.366-.366l-2.12 2.12M21 12h-3m.366 6.366l-2.12-2.12M12 21v-3m-6.366.366l2.12-2.12M3 12h3m-.366-6.366l2.12 2.12"/></svg> Menyimpan Undangan...';
                             form.requestSubmit();
                         }
                     });
@@ -1392,9 +1435,138 @@
                     titleInput.value = '';
                 }
             }
-            brideNameInput?.addEventListener('input', autoGenerateTitle);
-            groomNameInput?.addEventListener('input', autoGenerateTitle);
+
+            // ---- Live slug check & auto-suggestion ----
+            const slugInput = document.getElementById('slug-input');
+            const slugIconEl = document.getElementById('slug-icon');
+            const slugTextEl = document.getElementById('slug-text');
+            const slugPreviewText = document.getElementById('slug-preview-text');
+            const slugPreviewBox = document.getElementById('slug-preview-box');
+            let slugTouched = {{ old('slug') ? 'true' : 'false' }};
+            let slugCheckTimer = null;
+            const slugCheckUrl = @json(route('dashboard.invitations.check-slug'));
+
+            const SLUG_ICONS = {
+                neutral: '🔗',
+                loading: '<svg class="w-3.5 h-3.5 animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 3v3m6.366-.366l-2.12 2.12M21 12h-3m.366 6.366l-2.12-2.12M12 21v-3m-6.366.366l2.12-2.12M3 12h3m-.366-6.366l2.12 2.12"/></svg>',
+                success: '<svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>',
+                error: '<svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>',
+            };
+
+            function setSlugStatus(kind, text) {
+                const indicator = document.getElementById('slug-indicator');
+                if (!indicator) return;
+                slugIconEl.innerHTML = SLUG_ICONS[kind] || SLUG_ICONS.neutral;
+                slugTextEl.textContent = text;
+                indicator.classList.remove(
+                    'text-neutral-400', 'dark:text-neutral-500',
+                    'text-green-600', 'dark:text-green-400',
+                    'text-red-500', 'dark:text-red-400',
+                    'text-amber-500', 'dark:text-amber-400'
+                );
+                const colorMap = {
+                    neutral: ['text-neutral-400', 'dark:text-neutral-500'],
+                    success: ['text-green-600', 'dark:text-green-400'],
+                    error: ['text-red-500', 'dark:text-red-400'],
+                    loading: ['text-amber-500', 'dark:text-amber-400'],
+                };
+                indicator.classList.add(...(colorMap[kind] || colorMap.neutral));
+            }
+
+            function slugify(value) {
+                return String(value || '')
+                    .toLowerCase()
+                    .replace(/['"]/g, '')
+                    .replace(/[^a-z0-9]+/g, '-')
+                    .replace(/^-+|-+$/g, '')
+                    .replace(/-{2,}/g, '-');
+            }
+
+            function firstNameOf(name) {
+                const parts = String(name || '').trim().split(/\s+/);
+                return parts[0] || '';
+            }
+
+            function updateSlugPreview() {
+                const value = slugInput.value.trim();
+                if (value) {
+                    slugPreviewText.textContent = value;
+                    slugPreviewBox.style.display = 'block';
+                } else {
+                    slugPreviewBox.style.display = 'none';
+                }
+            }
+
+            function suggestSlug() {
+                if (slugTouched) return;
+                const groom = slugify(firstNameOf(groomNameInput?.value));
+                const bride = slugify(firstNameOf(brideNameInput?.value));
+                const parts = [groom, bride].filter(Boolean);
+                if (parts.length >= 2 && !slugInput.value.trim()) {
+                    slugInput.value = parts.join('-');
+                    updateSlugPreview();
+                    checkSlugAvailability();
+                }
+            }
+
+            function checkSlugAvailability() {
+                const value = slugInput.value.trim();
+                if (!value) {
+                    setSlugStatus('neutral', 'Masukkan tautan kustom');
+                    return;
+                }
+                if (!/^[a-z0-9\-]+$/.test(value)) {
+                    setSlugStatus('error', 'Hanya huruf kecil (a-z), angka, dan tanda hubung (-)');
+                    return;
+                }
+                setSlugStatus('loading', 'Memeriksa ketersediaan...');
+                fetch(slugCheckUrl + '?slug=' + encodeURIComponent(value), {
+                    headers: { 'Accept': 'application/json' },
+                    credentials: 'same-origin',
+                })
+                    .then(function (res) { return res.json(); })
+                    .then(function (data) {
+                        if (data.available) {
+                            setSlugStatus('success', 'Tautan tersedia!');
+                        } else {
+                            setSlugStatus('error', data.message || 'Tautan sudah digunakan oleh undangan lain.');
+                        }
+                    })
+                    .catch(function () {
+                        setSlugStatus('neutral', 'Masukkan tautan kustom');
+                    });
+            }
+
+            function scheduleSlugCheck() {
+                clearTimeout(slugCheckTimer);
+                slugCheckTimer = setTimeout(checkSlugAvailability, 350);
+            }
+
+            if (slugInput) {
+                slugInput.addEventListener('input', function () {
+                    slugTouched = true;
+                    updateSlugPreview();
+                    scheduleSlugCheck();
+                });
+                slugInput.addEventListener('blur', checkSlugAvailability);
+                updateSlugPreview();
+            }
+
+            brideNameInput?.addEventListener('input', function () { autoGenerateTitle(); suggestSlug(); });
+            groomNameInput?.addEventListener('input', function () { autoGenerateTitle(); suggestSlug(); });
             autoGenerateTitle();
+
+            // Mark server-side validation errors & scroll to the first one
+            form.querySelectorAll('input, select, textarea').forEach(function (field) {
+                const parent = field.parentElement;
+                if (parent && parent.querySelector('span.text-red-500')) {
+                    markInvalid(field);
+                }
+            });
+            const firstServerInvalid = form.querySelector('.field-invalid:not([type="hidden"]):not([type="file"])');
+            if (firstServerInvalid) {
+                firstServerInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
         });
     </script>
 </x-app-layout>

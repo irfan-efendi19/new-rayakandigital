@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/alpinejs@3.4.2/dist/cdn.min.js" defer></script>
+<style>
+  body { font-family: sans-serif; padding: 40px; }
+  .sticky-nav { position: sticky; top: 0; z-index: 30; background: white; border-bottom: 1px solid #e4e4e7; padding: 12px 0; }
+</style>
+</head>
+<body>
+<div class="sticky-nav" x-data="{
+    activeSection: 'sec-3',
+    sections: [
+        { id: 'sec-1', num: 1, name: 'Mempelai' },
+        { id: 'sec-2', num: 2, name: 'Waktu &amp; Tempat' },
+        { id: 'sec-3', num: 3, name: 'Visual &amp; Tema' },
+        { id: 'sec-4', num: 4, name: 'Konten' },
+        { id: 'sec-5', num: 5, name: 'Keuangan' },
+        { id: 'sec-6', num: 6, name: 'RSVP' },
+        { id: 'sec-7', num: 7, name: 'Kategori Tamu' },
+        { id: 'sec-8', num: 8, name: 'Visibilitas' }
+    ]
+}">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <div class="hidden sm:flex" id="sticky-nav-container">
+            <template x-for="(sec, i) in sections" :key="sec.id">
+                <div class="flex flex-1 min-w-0 last:flex-none">
+                    <button type="button" :id="'nav-item-' + sec.id" class="group flex flex-col items-center shrink-0 px-2 sm:px-3 focus:outline-none cursor-pointer">
+                        <span class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold border transition-all duration-200"
+                            :class="sec.id === activeSection
+                                ? 'bg-primary text-white border-primary shadow-sm ring-4 ring-primary/15'
+                                : (i < sections.findIndex(s => s.id === activeSection)
+                                    ? 'bg-primary-50 dark:bg-primary-900/30 text-primary dark:text-primary-300 border-primary/40'
+                                    : 'bg-white dark:bg-secondary-800 text-neutral-400 dark:text-neutral-500 border-neutral-200 dark:border-secondary-700 group-hover:border-primary/50 group-hover:text-primary dark:group-hover:text-primary-300')"
+                            x-text="sec.num"></span>
+                        <span class="mt-1.5 hidden md:block text-[11px] font-medium leading-tight whitespace-nowrap transition-colors duration-200"
+                            :class="sec.id === activeSection ? 'text-primary dark:text-primary-300 font-semibold' : 'text-neutral-400 dark:text-neutral-500'"
+                            x-text="sec.name"></span>
+                    </button>
+                    <div :class="i < sections.length - 1 ? 'flex-1 h-8 self-start flex items-center' : 'hidden'">
+                        <div class="w-full h-0.5 rounded-full transition-colors duration-300"
+                            :class="i < sections.findIndex(s => s.id === activeSection) ? 'bg-primary' : 'bg-neutral-200 dark:bg-secondary-700'"></div>
+                    </div>
+                </div>
+            </template>
+        </div>
+
+    </div>
+</div>
+
+<div style="height: 100px"></div>
+<p>Test stepper. Active = sec-3. Lines between 1-2 and 2-3 should be primary (orange), others gray.</p>
+</body>
+</html>

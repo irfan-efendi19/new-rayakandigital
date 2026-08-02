@@ -56,10 +56,11 @@
                 { id: 'sec-8', num: 8, name: 'Visibilitas' }
             ],
             scrollTo(id) {
+                activeSection = id;
                 const el = document.getElementById(id);
                 if (el) el.scrollIntoView({ behavior: 'smooth' });
                 const navEl = document.getElementById('nav-item-' + id);
-                if (navEl) navEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                if (navEl && navEl.offsetParent !== null) navEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
             }
         }" x-init="() => {
             const observer = new IntersectionObserver(entries => {
@@ -67,37 +68,62 @@
                     if (entry.isIntersecting) {
                         activeSection = entry.target.id;
                         const navEl = document.getElementById('nav-item-' + entry.target.id);
-                        if (navEl) navEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                        if (navEl && navEl.offsetParent !== null) navEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
                     }
                 });
             }, { rootMargin: '-100px 0px -50% 0px' });
             document.querySelectorAll('[id^=sec-]').forEach(el => observer.observe(el));
-        }" class="sticky top-[64px] z-30 bg-white/95 dark:bg-secondary-900/95 backdrop-blur-md border-b border-neutral-200/80 dark:border-secondary-700/60 py-2.5 shadow-sm">
+        }" class="sticky top-[64px] z-30 bg-white/95 dark:bg-secondary-900/95 backdrop-blur-md border-b border-neutral-200/80 dark:border-secondary-700/60 py-3 shadow-sm">
             <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
 
-                {{-- Mobile Active Step Bar (Compact Header) --}}
-                <div class="flex sm:hidden items-center justify-between gap-2 mb-2 pb-2 border-b border-neutral-100 dark:border-secondary-800">
-                    <div class="flex items-center gap-2">
-                        <span class="w-6 h-6 rounded-full bg-primary text-white text-xs font-bold flex items-center justify-center"
-                            x-text="sections.find(s => s.id === activeSection)?.num || 1">1</span>
-                        <span class="text-xs font-bold text-secondary-800 dark:text-neutral-100"
-                            x-text="sections.find(s => s.id === activeSection)?.name || 'Mempelai'">Mempelai</span>
+                {{-- Mobile: active step + progress bar --}}
+                <div class="sm:hidden">
+                    <div class="flex items-center justify-between gap-2">
+                        <div class="flex items-center gap-2 min-w-0">
+                            <span class="w-6 h-6 rounded-full bg-primary text-white text-xs font-bold flex items-center justify-center shrink-0"
+                                x-text="sections.find(s => s.id === activeSection)?.num || 1"></span>
+                            <span class="text-xs font-bold text-secondary-800 dark:text-neutral-100 truncate"
+                                x-text="sections.find(s => s.id === activeSection)?.name || 'Mempelai'"></span>
+                        </div>
+                        <span class="text-[11px] font-semibold text-neutral-400 dark:text-neutral-500"
+                            x-text="(sections.findIndex(s => s.id === activeSection) + 1) + ' / ' + sections.length"></span>
                     </div>
-                    <span class="text-[11px] font-semibold text-neutral-400 dark:text-neutral-500"
-                        x-text="(sections.findIndex(s => s.id === activeSection) + 1) + ' dari ' + sections.length">1 dari 8</span>
+                    <div class="mt-2 h-1 bg-neutral-100 dark:bg-secondary-700/60 rounded-full overflow-hidden">
+                        <div class="h-full bg-primary rounded-full transition-all duration-300"
+                            :style="'width:' + ((sections.findIndex(s => s.id === activeSection) + 1) / sections.length * 100) + '%'"></div>
+                    </div>
                 </div>
 
-                {{-- Horizontal Nav Items --}}
-                <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5" id="sticky-nav-container">
-                    <template x-for="sec in sections" :key="sec.id">
-                        <a :id="'nav-item-' + sec.id" :href="'#' + sec.id" @click.prevent="scrollTo(sec.id)"
-                            :class="activeSection === sec.id ? 'bg-primary-50 dark:bg-primary-900/40 text-primary dark:text-primary-300 ring-1 ring-primary/30' : 'text-neutral-600 dark:text-neutral-400 hover:text-secondary-800 dark:hover:text-neutral-200 bg-neutral-100/60 dark:bg-secondary-800/60'"
-                            class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 whitespace-nowrap shrink-0">
-                            <span :class="activeSection === sec.id ? 'bg-primary text-white' : 'bg-neutral-200 dark:bg-secondary-700 text-neutral-600 dark:text-neutral-300'"
-                                class="w-5 h-5 rounded-full text-[11px] flex items-center justify-center font-bold"
-                                x-text="sec.num"></span>
-                            <span x-text="sec.name"></span>
-                        </a>
+                {{-- Desktop: segmented stepper --}}
+                <div class="hidden sm:flex items-start justify-center" id="sticky-nav-container">
+                    <template x-for="(sec, i) in sections" :key="sec.id">
+                        <div class="relative flex flex-col items-center shrink-0">
+                            <div class="flex items-center">
+                                <div :class="i > 0 ? 'w-6 md:w-7 flex items-center' : 'w-6 md:w-7 flex items-center invisible'">
+                                    <div class="w-full h-0.5 rounded-full transition-colors duration-300"
+                                        :class="i <= sections.findIndex(s => s.id === activeSection) ? 'bg-primary' : 'bg-neutral-200 dark:bg-secondary-700'"></div>
+                                </div>
+                                <button type="button" :id="'nav-item-' + sec.id" @click.prevent="scrollTo(sec.id)"
+                                    class="group flex flex-col items-center focus:outline-none cursor-pointer">
+                                    <span
+                                        class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold border transition-all duration-200"
+                                        :class="sec.id === activeSection
+                                            ? 'bg-primary text-white border-primary shadow-sm ring-4 ring-primary/15'
+                                            : (i < sections.findIndex(s => s.id === activeSection)
+                                                ? 'bg-primary-50 dark:bg-primary-900/30 text-primary dark:text-primary-300 border-primary/40'
+                                                : 'bg-white dark:bg-secondary-800 text-neutral-400 dark:text-neutral-500 border-neutral-200 dark:border-secondary-700 group-hover:border-primary/50 group-hover:text-primary dark:group-hover:text-primary-300')"
+                                        x-text="sec.num"></span>
+                                </button>
+                                <div :class="i < sections.length - 1 ? 'w-6 md:w-7 flex items-center' : 'w-6 md:w-7 flex items-center invisible'">
+                                    <div class="w-full h-0.5 rounded-full transition-colors duration-300"
+                                        :class="i < sections.findIndex(s => s.id === activeSection) ? 'bg-primary' : 'bg-neutral-200 dark:bg-secondary-700'"></div>
+                                </div>
+                            </div>
+                            <span
+                                class="mt-1.5 hidden lg:block text-[11px] font-medium leading-tight whitespace-nowrap transition-colors duration-200"
+                                :class="sec.id === activeSection ? 'text-primary dark:text-primary-300 font-semibold' : 'text-neutral-400 dark:text-neutral-500'"
+                                x-text="sec.name"></span>
+                        </div>
                     </template>
                 </div>
             </div>
@@ -257,16 +283,11 @@
                             {{-- ======================================== --}}
                             {{-- Section 1: Informasi Dasar & Identitas --}}
                             {{-- ======================================== --}}
-                            <div class="border-b border-neutral-200 dark:border-secondary-700 pb-8" data-tour="mempelai-info">
-                                <div class="flex items-center gap-3 mb-2">
-                                    <div class="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary font-bold text-sm">
-                                        1
-                                    </div>
-                                    <div>
-                                        <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">
-                                            Informasi Dasar & Identitas <span class="text-sm font-normal text-neutral-400 dark:text-neutral-500">(Profil)</span>
-                                        </h3>
-                                    </div>
+                            <div id="sec-1" class="border-b border-neutral-200 dark:border-secondary-700 pb-8 scroll-mt-32" data-tour="mempelai-info">
+                                <div class="mb-3">
+                                    <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">
+                                        Informasi Dasar & Identitas <span class="text-sm font-normal text-neutral-400 dark:text-neutral-500">(Profil)</span>
+                                    </h3>
                                 </div>
                                 <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-6">Data lengkap kedua mempelai untuk ditampilkan di undangan.</p>
 
@@ -497,16 +518,11 @@
                             {{-- ======================================== --}}
                             {{-- Section 2: Waktu Tempat & Akses Undangan --}}
                             {{-- ======================================== --}}
-                            <div id="sec-2" class="border-b border-neutral-200 dark:border-secondary-700 pb-8" data-tour="event-schedule">
-                                <div class="flex items-center gap-3 mb-2">
-                                    <div class="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary font-bold text-sm">
-                                        2
-                                    </div>
-                                    <div>
-                                        <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">
-                                            Waktu, Tempat & Akses Undangan <span class="text-sm font-normal text-neutral-400 dark:text-neutral-500">(Detail Acara)</span>
-                                        </h3>
-                                    </div>
+                            <div id="sec-2" class="border-b border-neutral-200 dark:border-secondary-700 pb-8 scroll-mt-32" data-tour="event-schedule">
+                                <div class="mb-3">
+                                    <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">
+                                        Waktu, Tempat & Akses Undangan <span class="text-sm font-normal text-neutral-400 dark:text-neutral-500">(Detail Acara)</span>
+                                    </h3>
                                 </div>
                                 <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-6">Atur jadwal acara dan lokasi tempat pelaksanaan acara.</p>
 
@@ -865,7 +881,9 @@
                                             </div>
                                             <div id="slug-indicator"
                                                 class="mt-1.5 text-xs flex items-center gap-1.5 text-neutral-400 dark:text-neutral-500">
-                                                <span class="slug-icon text-base">🔗</span>
+                                                <span class="slug-icon flex items-center">
+                                                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+                                                </span>
                                                 <span class="slug-text">Masukkan
                                                     tautan
                                                     kustom</span>
@@ -883,8 +901,9 @@
                                         <div
                                             class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl p-4">
                                             <div class="flex items-start gap-3">
-                                                <span
-                                                    class="text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5">⚠</span>
+                                                <span class="text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5">
+                                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
+                                                </span>
                                                 <div>
                                                     <p class="text-xs font-semibold text-amber-800 dark:text-amber-300">
                                                         Perhatian</p>
@@ -923,16 +942,11 @@
                             {{-- ======================================== --}}
                             {{-- Section 3: Visual & Estetika --}}
                             {{-- ======================================== --}}
-                            <div id="sec-3" class="border-b border-neutral-200 dark:border-secondary-700 pb-8" data-tour="layar-sapa-config">
-                                <div class="flex items-center gap-3 mb-2">
-                                    <div class="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary font-bold text-sm">
-                                        3
-                                    </div>
-                                    <div>
-                                        <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">
-                                            Visual & Estetika <span class="text-sm font-normal text-neutral-400 dark:text-neutral-500">(Foto & Tema)</span>
-                                        </h3>
-                                    </div>
+                            <div id="sec-3" class="border-b border-neutral-200 dark:border-secondary-700 pb-8 scroll-mt-32" data-tour="layar-sapa-config">
+                                <div class="mb-3">
+                                    <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">
+                                        Visual & Estetika <span class="text-sm font-normal text-neutral-400 dark:text-neutral-500">(Foto & Tema)</span>
+                                    </h3>
                                 </div>
                                 <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-6">
                                     Atur tampilan visual
@@ -1041,7 +1055,9 @@
                                         @if($invitation->youtube_video_id)
                                             <div
                                                 class="bg-primary-50 dark:bg-primary-900/50 border border-primary-100 dark:border-primary-800/50 rounded-xl p-3 flex items-center gap-3">
-                                                <span class="text-primary text-lg">▶</span>
+                                                <span class="text-primary flex-shrink-0">
+                                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                                                </span>
                                                 <div>
                                                     <p class="text-xs font-semibold text-primary-700 dark:text-primary-300">
                                                         Video Terdeteksi</p>
@@ -1056,7 +1072,9 @@
                                 @else
                                      <div
                                          class="mt-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center gap-3">
-                                         <span class="text-xl flex-shrink-0">✨</span>
+                                         <span class="text-amber-500 flex-shrink-0">
+                                             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                                         </span>
                                          <div>
                                              <p class="text-sm font-semibold text-amber-800 dark:text-amber-300">
                                                  Fitur Video
@@ -1147,7 +1165,7 @@
                                                     <span id="dropzone-error"
                                                         class="text-xs text-red-500 dark:text-red-400 hidden"></span>
                                                     <button type="button" id="gallery-submit-btn"
-                                                        class="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-primary to-primary-600 text-white rounded-xl text-sm font-semibold shadow-sm hover:shadow-md transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+                                                        class="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-white rounded-xl text-sm font-semibold shadow-sm hover:shadow-md transition-all disabled:opacity-50 disabled:cursor-not-allowed">
                                                         Unggah <span id="upload-count"></span>
                                                     </button>
                                                 </div>
@@ -1253,7 +1271,9 @@
                                     @else
                                         <div
                                             class="mt-2 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center gap-3">
-                                            <span class="text-xl flex-shrink-0">✨</span>
+                                            <span class="text-amber-500 flex-shrink-0">
+                                             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                                         </span>
                                             <div>
                                                 <p class="text-sm font-semibold text-amber-800 dark:text-amber-300">
                                                     Fitur Kustom Musik Terkunci</p>
@@ -1349,16 +1369,11 @@
                             {{-- ======================================== --}}
                             {{-- Section 4: Konten Tambahan & Personalisasi --}}
                             {{-- ======================================== --}}
-                            <div id="sec-4" class="border-b border-neutral-200 dark:border-secondary-700 pb-8">
-                                <div class="flex items-center gap-3 mb-2">
-                                    <div class="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary font-bold text-sm">
-                                        4
-                                    </div>
-                                    <div>
-                                        <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">
-                                            Konten Tambahan <span class="text-sm font-normal text-neutral-400 dark:text-neutral-500">(Cerita Cinta & Kutipan)</span>
-                                        </h3>
-                                    </div>
+                            <div id="sec-4" class="border-b border-neutral-200 dark:border-secondary-700 pb-8 scroll-mt-32">
+                                <div class="mb-3">
+                                    <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">
+                                        Konten Tambahan <span class="text-sm font-normal text-neutral-400 dark:text-neutral-500">(Cerita Cinta & Kutipan)</span>
+                                    </h3>
                                 </div>
                                 <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-6">
                                     Personalisasi undangan
@@ -1563,19 +1578,14 @@
                             {{-- ======================================== --}}
                             {{-- Section 5: Keuangan & Kado Digital --}}
                             {{-- ======================================== --}}
-                            <div id="sec-5" class="border-b border-neutral-200 dark:border-secondary-700 pb-8">
-                                <div class="flex items-center gap-3 mb-2">
-                                    <div class="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary font-bold text-sm">
-                                        5
-                                    </div>
-                                    <div>
-                                        <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">
-                                            Keuangan & Kado Digital <span class="text-sm font-normal text-neutral-400 dark:text-neutral-500">(Bank & QRIS)</span>
-                                        </h3>
-                                    </div>
+                            <div id="sec-5" class="border-b border-neutral-200 dark:border-secondary-700 pb-8 scroll-mt-32">
+                                <div class="mb-3">
+                                    <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">
+                                        Keuangan & Kado Digital <span class="text-sm font-normal text-neutral-400 dark:text-neutral-500">(Bank & QRIS)</span>
+                                    </h3>
                                 </div>
                                 <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-6">
-                                    Atur kado digital</p>
+                                    Atur rekening bank, dompet digital, dan QRIS untuk menerima kado dari tamu.</p>
 
 
 
@@ -1793,7 +1803,7 @@
 
                                             <div class="pt-2 flex justify-end">
                                                 <button type="button" id="gift-save-btn"
-                                                    class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary to-primary-600 text-white rounded-xl text-xs font-semibold shadow-sm hover:shadow-md transition-all">
+                                                    class="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-xl text-xs font-semibold shadow-sm hover:shadow-md transition-all">
                                                     <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24"
                                                         stroke="currentColor">
                                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -2135,16 +2145,11 @@
                         {{-- ======================================== --}}
                         {{-- Section 6: Kontrol RSVP --}}
                         {{-- ======================================== --}}
-                        <div id="sec-6" class="border-b border-neutral-200 dark:border-secondary-700 pb-8">
-                            <div class="flex items-center gap-3 mb-2">
-                                <div class="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary font-bold text-sm">
-                                    6
-                                </div>
-                                <div>
-                                    <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">
-                                        Kontrol RSVP <span class="text-sm font-normal text-neutral-400 dark:text-neutral-500">(Batasan Kuota)</span>
-                                    </h3>
-                                </div>
+                        <div id="sec-6" class="border-b border-neutral-200 dark:border-secondary-700 pb-8 scroll-mt-32">
+                            <div class="mb-3">
+                                <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">
+                                    Kontrol RSVP <span class="text-sm font-normal text-neutral-400 dark:text-neutral-500">(Batasan Kuota)</span>
+                                </h3>
                             </div>
                             <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-6">
                                 Atur batasan kuota kehadiran tamu undangan.</p>
@@ -2233,16 +2238,11 @@
                         {{-- ======================================== --}}
                         {{-- Section 7: Kategori Tamu (Guest Categories) --}}
                         {{-- ======================================== --}}
-                        <div id="sec-7" class="border-b border-neutral-200 dark:border-secondary-700 pb-8" data-tour="guest-management">
-                            <div class="flex items-center gap-3 mb-2">
-                                <div class="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary font-bold text-sm">
-                                    7
-                                </div>
-                                <div>
-                                    <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">
-                                        Kategori Tamu <span class="text-sm font-normal text-neutral-400 dark:text-neutral-500">(VIP, Keluarga, dll)</span>
-                                    </h3>
-                                </div>
+                        <div id="sec-7" class="border-b border-neutral-200 dark:border-secondary-700 pb-8 scroll-mt-32" data-tour="guest-management">
+                            <div class="mb-3">
+                                <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">
+                                    Kategori Tamu <span class="text-sm font-normal text-neutral-400 dark:text-neutral-500">(VIP, Keluarga, dll)</span>
+                                </h3>
                             </div>
                             <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-6">
                                 Kelola label kategori untuk mengelompokkan tamu (misal: VIP, Keluarga, Teman Kantor).
@@ -2296,7 +2296,7 @@
                                         </div>
                                         <div class="flex gap-2">
                                             <button type="button" @click="saveCategory"
-                                                class="inline-flex items-center gap-1.5 bg-gradient-to-r from-primary to-primary-600 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:shadow-lg transition-all whitespace-nowrap">
+                                                class="inline-flex items-center gap-1.5 bg-primary text-white px-4 py-2 rounded-xl text-sm font-semibold hover:shadow-lg transition-all whitespace-nowrap">
                                                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24"
                                                     stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -2321,16 +2321,11 @@
                         {{-- ======================================== --}}
                         {{-- Section 8: Kontrol Visibilitas & Finalisasi --}}
                         {{-- ======================================== --}}
-                        <div id="sec-8" class="border-b border-neutral-200 dark:border-secondary-700 pb-8">
-                            <div class="flex items-center gap-3 mb-2">
-                                <div class="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary font-bold text-sm">
-                                    8
-                                </div>
-                                <div>
-                                    <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">
-                                        Kontrol Visibilitas & Finalisasi <span class="text-sm font-normal text-neutral-400 dark:text-neutral-500">(Fitur Publik)</span>
-                                    </h3>
-                                </div>
+                        <div id="sec-8" class="border-b border-neutral-200 dark:border-secondary-700 pb-8 scroll-mt-32">
+                            <div class="mb-3">
+                                <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">
+                                    Kontrol Visibilitas & Finalisasi <span class="text-sm font-normal text-neutral-400 dark:text-neutral-500">(Fitur Publik)</span>
+                                </h3>
                             </div>
                             <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-6">
                                 Atur visibilitas dan
@@ -2510,7 +2505,7 @@
                     Batal
                 </a>
                 <button type="button" id="save-invitation-btn" data-tour="publish-btn"
-                    class="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-2.5 bg-gradient-to-r from-primary to-primary-600 rounded-xl shadow-sm text-sm font-semibold text-white hover:shadow-md hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-all">
+                    class="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-2.5 bg-primary rounded-xl shadow-sm text-sm font-semibold text-white hover:shadow-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-all">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                     </svg>
@@ -2572,7 +2567,7 @@
                         Batal
                     </button>
                     <button type="button" id="crop-save"
-                        class="flex-1 px-4 py-2.5 bg-gradient-to-r from-primary to-primary-600 text-white rounded-xl text-sm font-semibold hover:shadow-md transition-all">
+                        class="flex-1 px-4 py-2.5 bg-primary text-white rounded-xl text-sm font-semibold hover:shadow-md transition-all">
                         Simpan
                     </button>
                 </div>
@@ -2849,6 +2844,19 @@
     </script>
 
     <script>
+    @php
+        $categoryIdPlaceholder = 'CATEGORY_ID';
+        $guestCategoryUpdateUrl = str_replace(
+            $categoryIdPlaceholder,
+            '',
+            route('dashboard.invitations.guest-categories.update', [$invitation, $categoryIdPlaceholder])
+        );
+        $guestCategoryDestroyUrl = str_replace(
+            $categoryIdPlaceholder,
+            '',
+            route('dashboard.invitations.guest-categories.destroy', [$invitation, $categoryIdPlaceholder])
+        );
+    @endphp
     // Guest Categories Alpine Component (defined before DOMContentLoaded so Alpine can find it)
     window.guestCategories = function() {
         return {
@@ -2864,11 +2872,7 @@
                 if (!this.form.name.trim()) return;
                 const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
                 const url = this.editing ?
-                    '{{ route("dashboard.invitations.guest-categories.update", [
-    $invitation,
-    '
-                CATEGORY_ID '
-]) }}'.replace('CATEGORY_ID', this.form.id):
+                    '{{ $guestCategoryUpdateUrl }}' + this.form.id :
                     '{{ route("dashboard.invitations.guest-categories.store", $invitation) }}';
                 const method = this.editing ? 'PUT' : 'POST';
 
@@ -2932,11 +2936,7 @@
                 }).then((result) => {
                     if (!result.isConfirmed) return;
                     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
-                    fetch('{{ route("dashboard.invitations.guest-categories.destroy", [
-    $invitation,
-    '
-                            CATEGORY_ID '
-]) }}'.replace('CATEGORY_ID', category.id), {
+                    fetch('{{ $guestCategoryDestroyUrl }}' + category.id, {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json',
