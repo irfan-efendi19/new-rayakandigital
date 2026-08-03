@@ -298,7 +298,7 @@
                                             <div class="flex flex-col">
                                                 <label
                                                     class="text-xs font-bold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">
-                                                    Pilih Tema Undangan
+                                                    Pilih Tema Undangan <span class="text-red-500">*</span>
                                                 </label>
                                                 <span class="text-[11px] text-neutral-400 mt-0.5">
                                                     Geser horizontal untuk melihat koleksi desain premium. Klik pada kartu
@@ -1556,17 +1556,13 @@
             groomNameInput?.addEventListener('input', function () { autoGenerateTitle(); suggestSlug(); });
             autoGenerateTitle();
 
-            // Mark server-side validation errors & scroll to the first one
+            // Mark server-side validation errors (without auto-scrolling)
             form.querySelectorAll('input, select, textarea').forEach(function (field) {
                 const parent = field.parentElement;
                 if (parent && parent.querySelector('span.text-red-500')) {
                     markInvalid(field);
                 }
             });
-            const firstServerInvalid = form.querySelector('.field-invalid:not([type="hidden"]):not([type="file"])');
-            if (firstServerInvalid) {
-                firstServerInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
         });
     </script>
 </x-app-layout>
