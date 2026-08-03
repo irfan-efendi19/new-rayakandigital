@@ -15,7 +15,7 @@
                 </div>
 
                 {{-- Desktop Nav Links --}}
-                <div class="hidden space-x-1 sm:-my-px sm:ms-8 sm:flex sm:items-center h-16">
+                <div class="hidden space-x-1 lg:-my-px lg:ms-8 lg:flex lg:items-center h-16">
                     @php
                         $navLinks = [
                             ['url' => route('dashboard'), 'route' => 'dashboard', 'label' => 'Dashboard', 'icon' => 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6'],
@@ -39,7 +39,7 @@
             </div>
 
             {{-- Settings Dropdown & Search --}}
-            <div class="hidden sm:flex sm:items-center sm:ms-6 gap-3">
+            <div class="hidden lg:flex lg:items-center lg:ms-6 gap-3">
 
                 {{-- Dark Mode Toggle --}}
                 <button type="button"
@@ -169,7 +169,7 @@
             </div>
 
             {{-- Mobile Actions --}}
-            <div class="-me-2 flex items-center sm:hidden">
+            <div class="-me-2 flex items-center lg:hidden">
 
                 {{-- Dark Mode Toggle (Mobile) --}}
                 <button type="button"
@@ -198,7 +198,7 @@
     </div>
 
     {{-- Responsive Navigation Menu (Mobile) --}}
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden bg-white/95 dark:bg-secondary-900/95 border-b border-neutral-200 dark:border-secondary-700">
+    <div :class="{'block': open, 'hidden': ! open}" class="hidden lg:hidden bg-white/95 dark:bg-secondary-900/95 border-b border-neutral-200 dark:border-secondary-700">
         <div class="pt-2 pb-3 space-y-1 px-3">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 <div class="flex items-center gap-3">
