@@ -89,8 +89,8 @@
                         @endif
                         @if(!$isExpired && ($tierCode === 'free' || $isTrial))
                             <a href="{{ route('dashboard.checkout', ['invitation_id' => $invitation->id]) }}"
-                                class="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 sm:py-2 text-xs font-semibold text-white bg-gradient-to-r from-primary to-primary-600 shadow-sm shadow-primary/25 hover:shadow-md hover:shadow-primary/30 hover:-translate-y-0.5 transition-all w-full sm:w-auto">
-                                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 10l7-7m0 0l7-7m0 0l7 7m-7-7v18"/></svg>
+                                class="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 sm:py-2 text-xs font-semibold text-white bg-gradient-to-r from-primary to-primary-600 rounded-xl shadow-sm shadow-primary/25 hover:shadow-md hover:shadow-primary/30 hover:-translate-y-0.5 transition-all w-full sm:w-auto">
+                                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
                                 Upgrade Paket
                             </a>
                         @endif
