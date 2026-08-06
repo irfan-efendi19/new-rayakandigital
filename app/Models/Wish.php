@@ -19,6 +19,10 @@ class Wish extends Model
         'is_hidden',
     ];
 
+    protected $attributes = [
+        'is_hidden' => false,
+    ];
+
     public function invitation(): BelongsTo
     {
         return $this->belongsTo(Invitation::class);

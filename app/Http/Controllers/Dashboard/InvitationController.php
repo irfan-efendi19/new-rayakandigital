@@ -276,6 +276,40 @@ class InvitationController extends Controller
         return view('dashboard.invitations.qr-rsvp', compact('invitation', 'qrCodeData', 'rsvpUrl', 'report'));
     }
 
+    public function qrCodes(Invitation $invitation)
+    {
+        Gate::authorize('view', $invitation);
+
+        $qrWebsiteUrl = route('invitation.show', $invitation->slug);
+        $qrWebsiteCodeData = app(QrWithLogoService::class)->generate($qrWebsiteUrl)['data'];
+
+        $qrKadoUrl = route('qr-kado', $invitation->slug);
+        $qrKadoCodeData = app(QrWithLogoService::class)->generate($qrKadoUrl)['data'];
+
+        $qrUcapanUrl = route('qr-ucapan', $invitation->slug);
+        $qrUcapanCodeData = app(QrWithLogoService::class)->generate($qrUcapanUrl)['data'];
+
+        $qrHubUrl = route('qr-hub', $invitation->slug);
+        $qrHubCodeData = app(QrWithLogoService::class)->generate($qrHubUrl)['data'];
+
+        if ($invitation->hasFeature('qr_rsvp_universal')) {
+            $rsvpUrl = url('/').'/'.$invitation->slug.'?mode=scan_qr';
+            $qrRsvpCodeData = app(QrWithLogoService::class)->generate($rsvpUrl)['data'];
+        } else {
+            $rsvpUrl = null;
+            $qrRsvpCodeData = null;
+        }
+
+        return view('dashboard.invitations.qr-codes', compact(
+            'invitation',
+            'qrWebsiteCodeData', 'qrWebsiteUrl',
+            'qrKadoCodeData', 'qrKadoUrl',
+            'qrUcapanCodeData', 'qrUcapanUrl',
+            'qrHubCodeData', 'qrHubUrl',
+            'qrRsvpCodeData', 'rsvpUrl'
+        ));
+    }
+
     public function checkSlug(Request $request)
     {
         $slug = $request->query('slug');

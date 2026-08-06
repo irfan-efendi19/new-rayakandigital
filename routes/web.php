@@ -25,6 +25,7 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QRGatewayController;
+use App\Http\Controllers\QRHubController;
 use App\Http\Controllers\RsvpController;
 use App\Http\Controllers\ScreenDisplayController;
 use App\Http\Controllers\SitemapController;
@@ -134,6 +135,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // QR RSVP Universal
         Route::get('/invitations/{invitation}/qr-rsvp', [InvitationController::class, 'qrRsvp'])->name('invitations.qr-rsvp');
 
+        // Dedicated QR Codes Management Page
+        Route::get('/invitations/{invitation}/qr-codes', [InvitationController::class, 'qrCodes'])->name('invitations.qr-codes');
+
         // Wishes
         Route::get('/invitations/{invitation}/wishes', [InvitationController::class, 'wishesList'])->name('invitations.wishes-list');
         Route::delete('/invitations/{invitation}/wishes/{wish}', [WishController::class, 'destroy'])->name('invitations.wishes.destroy');
@@ -183,4 +187,10 @@ Route::post('/invitations/{invitation}/wish', [WishController::class, 'store'])-
 
 // QR Gateway RSVP Universal
 Route::get('/{slug}/rsvp', [QRGatewayController::class, 'show'])->name('qr-gateway');
+
+// QR Action Hub & Dedicated Features
+Route::get('/{slug}/qr', [QRHubController::class, 'show'])->name('qr-hub');
+Route::get('/{slug}/kado', [QRHubController::class, 'showKado'])->name('qr-kado');
+Route::get('/{slug}/ucapan', [QRHubController::class, 'showUcapan'])->name('qr-ucapan');
+
 Route::get('/{slug}', [InvitationRenderController::class, 'show'])->name('invitation.show');

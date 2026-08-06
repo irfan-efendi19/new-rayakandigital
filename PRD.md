@@ -1,42 +1,45 @@
 # Product Requirement Document (PRD)
 
-## MODUL: PEMBATASAN KUOTA WA BLAST (FILAMENT ADMIN)
+## MODUL: INTEGRASI QR CODE INTERAKTIF (UCAPAN PERNIKAHAN, UNDANGAN, & KADO DIGITAL)
 
-| Atribut               | Detail                                                                                          |
-| :-------------------- | :---------------------------------------------------------------------------------------------- |
-| **Status**            | Approved                                                                                        |
-| **Penulis**           | Mochammad Irfan Efendi                                                                          |
-| **Tanggal Pembuatan** | 31 Juli 2026                                                                                    |
-| **Target Komponen**   | Filament Admin Panel, Backend Service, Queue Worker, & User Dashboard                           |
-| **Arsitektur**        | **Per-Invitation Quota Rate-Limiting, Admin-Driven Capacity Control, Shared-Hosting Optimized** |
+| Atribut               | Detail                                                                                  |
+| :-------------------- | :-------------------------------------------------------------------------------------- |
+| **Status**            | Approved                                                                                |
+| **Penulis**           | Mochammad Irfan Efendi                                                                  |
+| **Tanggal Pembuatan** | 7 Agustus 2026                                                                          |
+| **Target Komponen**   | Frontend Hub Page, Dashboard User (Config Kado), Admin Panel, & Payment Handler         |
+| **Arsitektur**        | **Dynamic Dashboard-Driven Gift Accounts, Dynamic QR Routing, Cashless Angpao Handler** |
 
 ---
 
 ## 1. DESKRIPSI & OBJECTIVE
 
-Fitur ini dirancang untuk memberikan kontrol penuh kepada Administrator dalam mengelola dan membatasi jumlah pesan WhatsApp blast yang dapat dikirim oleh setiap undangan:
+Fitur **QR Code Interaktif** bertindak sebagai gerbang tunggal (_hub page_) bagi tamu undangan untuk mengakses 3 fungsi utama sekaligus, di mana seluruh data rekening/pembayaran dikelola penuh melalui Dashboard User:
 
-1. **Aturan Kuota Berbasis Undangan (_Per-Invitation Limit_):** Setiap undangan (`invitation_id`) memiliki batas maksimum pengiriman pesan (`wa_quota_limit`) yang dikendalikan dari Filament Admin.
-2. **Pencegahan Penyalahgunaan & Over-sending:** Memastikan pengguna tidak dapat melakukan blast melebihi kapasitas/paket yang dibeli.
-3. **Pemberitahuan Transparan:** Memberikan feedback yang jelas pada antarmuka pengguna mengenai sisa kuota yang dimiliki sebelum atau sesudah mengeksekusi blast.
+1. **Konfigurasi Kado Mandiri dari Dashboard:** Penyelenggara dapat menginput daftar rekening bank, e-wallet, dan mengunggah QRIS dari Dashboard Pengguna.
+2. **Akses Cepat Undangan:** Membuka landing page undangan digital secara instan saat QR di-scan.
+3. **Kado Digital & Angpao (Dynamic Display):** Menampilkan opsi pembayaran sesuai data aktif yang telah diatur oleh penyelenggara di dashboard.
+4. **Buku Tamu & Ucapan Digital:** Memfasilitasi tamu untuk mengirimkan ucapan, doa, serta upload media secara _real-time_.
 
 ---
 
-## 2. ALUR KERJA & LOGIKA PENGGUNAAN (USER JOURNEY)
+## 2. USER JOURNEY & ALUR SISTEM
 
 ```text
-[User Klik "Kirim WA Blast"]
-          │
-          ▼
-   Cek Kuota: (wa_sent_count < wa_quota_limit) ?
-          │
-          ├──► (TIDAK) ──► Hentikan Proses & Tampilkan Alert: "Kuota WA Blast Habis"
-          │
-          └──► (YA) ─────► Hitung Sisa Kuota (Remaining = Limit - Sent)
-                                 │
-                                 ▼
-                     Ambil Daftar Tamu s.d. Sisa Kuota
-                                 │
-                                 ▼
-                   Dispatch Queue Job & Increment `wa_sent_count`
+[User Input Data Kado di Dashboard]
+                 │
+                 ▼
+      [Simpan ke `gift_settings`]
+                 │
+                 ▼
+        [Tamu Scan QR Code] ──► [Akses QR Action Hub]
+                                       │
+                                       ▼
+                             [Klik "Kirim Kado"]
+                                       │
+                                       ▼
+                     [Fetch Data Kado Aktif dari DB]
+                                       │
+                                       ▼
+                       Tampilkan Rekening/E-Wallet/QRIS
 ```

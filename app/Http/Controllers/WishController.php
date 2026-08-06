@@ -10,10 +10,19 @@ class WishController extends Controller
 {
     public function store(Request $request, Invitation $invitation)
     {
+        if ($request->has('sender_name') && ! $request->has('guest_name')) {
+            $request->merge(['guest_name' => $request->input('sender_name')]);
+        }
+        if ($request->has('content') && ! $request->has('message')) {
+            $request->merge(['message' => $request->input('content')]);
+        }
+
         $validated = $request->validate([
             'guest_name' => 'required|string|max:255',
             'message' => 'required|string|max:1000',
         ]);
+
+        $validated['is_hidden'] = false;
 
         $wish = $invitation->wishes()->create($validated);
 

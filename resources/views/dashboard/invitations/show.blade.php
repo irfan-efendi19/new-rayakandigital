@@ -213,162 +213,28 @@
                 </a>
             </div>
 
-            {{-- ── QR RSVP Universal ── --}}
-            <div class="bg-white dark:bg-secondary-800 rounded-2xl border overflow-hidden
-                {{ $invitation->hasFeature('qr_rsvp_universal') ? 'border-neutral-200/80 dark:border-secondary-700/60' : 'border-amber-200/60 dark:border-amber-800/40' }}">
-
-                <div class="px-5 sm:px-6 py-4 border-b border-neutral-100 dark:border-secondary-700/60 flex items-center justify-between">
-                    <div class="flex items-center gap-2.5">
-                        <div class="w-8 h-8 rounded-lg {{ $invitation->hasFeature('qr_rsvp_universal') ? 'bg-primary-50 dark:bg-primary-900/30 text-primary dark:text-primary-400' : 'bg-amber-100 dark:bg-amber-900/30 text-amber-500' }} flex items-center justify-center flex-shrink-0">
-                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
-                        </div>
-                        <div>
-                            <h2 class="font-semibold text-sm text-secondary-800 dark:text-neutral-100 flex items-center gap-2">
-                                QR RSVP Universal
-                                @if(!$invitation->hasFeature('qr_rsvp_universal'))
-                                    <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-bold bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300 uppercase tracking-wider">Gold</span>
-                                @endif
-                            </h2>
-                            <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">Satu QR Code untuk semua tamu — cetak di kartu fisik</p>
-                        </div>
-                    </div>
-                    @if($invitation->hasFeature('qr_rsvp_universal'))
-                        <a href="{{ route('dashboard.invitations.qr-rsvp', $invitation) }}"
-                            class="text-xs font-semibold text-primary dark:text-primary-400 hover:text-primary-600 dark:hover:text-primary-300 transition-colors whitespace-nowrap">
-                            Laporan lengkap →
-                        </a>
-                    @endif
+            {{-- ── Fitur QR Code Interaktif (Pusat QR Code) ── --}}
+            <div class="bg-gradient-to-r from-primary-600 via-primary-700 to-secondary-900 text-white rounded-3xl p-6 sm:p-7 shadow-lg shadow-primary-500/15 relative overflow-hidden">
+                <div class="absolute -right-8 -bottom-10 opacity-10 pointer-events-none">
+                    <svg class="w-64 h-64 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
                 </div>
-
-                <div class="p-5">
-                    @if($invitation->hasFeature('qr_rsvp_universal'))
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            {{-- QR Code --}}
-                            <div class="flex flex-col items-center gap-3">
-                                <div class="bg-white p-3 rounded-xl shadow-sm border border-neutral-200 dark:border-neutral-600 inline-block">
-                                    <div class="w-32 h-32 flex items-center justify-center">
-                                        <img src="{{ $qrCodeData }}" alt="QR Code" class="w-full h-full">
-                                    </div>
-                                </div>
-                                <div class="flex gap-2 w-full max-w-[160px]">
-                                    <a href="{{ $qrCodeData }}" download="qrcode-{{ $invitation->slug }}.png"
-                                        class="flex-1 text-center px-2.5 py-1.5 text-xs font-semibold text-white bg-gradient-to-r from-primary to-primary-600 rounded-lg hover:shadow-md transition">
-                                        Download
-                                    </a>
-                                    <a href="{{ route('dashboard.invitations.qr-rsvp', $invitation) }}"
-                                        class="flex-1 text-center px-2.5 py-1.5 text-xs font-semibold text-primary dark:text-primary-300 bg-primary-50 dark:bg-primary-900/40 rounded-lg hover:bg-primary-100 transition">
-                                        Laporan
-                                    </a>
-                                </div>
-                            </div>
-
-                            {{-- QR Stats --}}
-                            <div class="md:col-span-2 grid grid-cols-2 gap-2.5">
-                                @php
-                                    $qrStatItems = [
-                                        ['label' => 'Total PAX Hadir', 'value' => $qrStats['total_pax_hadir'], 'color' => 'text-emerald-600 dark:text-emerald-400'],
-                                        ['label' => 'Tamu Respon',     'value' => $qrStats['total_tamu_respon'], 'color' => 'text-secondary-800 dark:text-neutral-100'],
-                                        ['label' => 'Hadir',           'value' => $qrStats['tamu_hadir'],  'color' => 'text-green-600 dark:text-green-400'],
-                                        ['label' => 'Tidak Hadir',     'value' => $qrStats['tamu_absen'],  'color' => 'text-red-500 dark:text-red-400'],
-                                    ];
-                                @endphp
-                                @foreach($qrStatItems as $qs)
-                                    <div class="bg-neutral-50 dark:bg-secondary-700/50 rounded-xl border border-neutral-200/70 dark:border-secondary-600/50 p-3.5">
-                                        <p class="text-[10px] sm:text-xs text-neutral-500 dark:text-neutral-400 font-medium">{{ $qs['label'] }}</p>
-                                        <p class="text-xl sm:text-2xl font-bold {{ $qs['color'] }} mt-0.5 tabular-nums">{{ $qs['value'] }}</p>
-                                    </div>
-                                @endforeach
-                                @if($qrStats['tamu_ragu'] > 0)
-                                    <div class="bg-neutral-50 dark:bg-secondary-700/50 rounded-xl border border-neutral-200/70 dark:border-secondary-600/50 p-3.5">
-                                        <p class="text-[10px] sm:text-xs text-neutral-500 dark:text-neutral-400 font-medium">Ragu-Ragu</p>
-                                        <p class="text-xl sm:text-2xl font-bold text-amber-600 dark:text-amber-400 mt-0.5 tabular-nums">{{ $qrStats['tamu_ragu'] }}</p>
-                                    </div>
-                                @endif
-                            </div>
+                <div class="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5">
+                    <div class="space-y-1.5 min-w-0">
+                        <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-white/20 backdrop-blur-md text-white uppercase tracking-wider">
+                            <svg class="w-3 h-3 text-amber-300" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                            Fitur QR Code Lengkap
                         </div>
-
-                        {{-- RSVP Terbaru link --}}
-                        <a href="{{ route('dashboard.invitations.rsvp-list', $invitation) }}"
-                            class="group mt-4 flex items-center justify-between p-3.5 bg-neutral-50 dark:bg-secondary-700/40 rounded-xl border border-neutral-200/60 dark:border-secondary-600/40 hover:bg-primary-50/50 dark:hover:bg-primary-900/10 hover:border-primary-200/50 dark:hover:border-primary-800/30 transition-all">
-                            <div class="flex items-center gap-2.5">
-                                <div class="w-8 h-8 rounded-lg bg-primary-50 dark:bg-primary-900/40 flex items-center justify-center text-primary dark:text-primary-400">
-                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                </div>
-                                <div>
-                                    <p class="text-xs font-semibold text-secondary-800 dark:text-neutral-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">Lihat Semua RSVP</p>
-                                    <p class="text-[10px] text-neutral-500 dark:text-neutral-400">{{ $invitation->rsvps->count() }} konfirmasi kehadiran</p>
-                                </div>
-                            </div>
-                            <svg class="w-4 h-4 text-neutral-300 group-hover:text-primary group-hover:translate-x-1 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-                        </a>
-                    @else
-                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                            <p class="text-sm text-neutral-500 dark:text-neutral-400">Upgrade ke paket <strong>Gold</strong> untuk menggunakan fitur ini.</p>
-                            <a href="{{ route('dashboard.checkout', ['invitation_id' => $invitation->id]) }}"
-                                class="self-start inline-flex items-center gap-2 px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-sm font-semibold shadow-sm transition-all">
-                                Upgrade ke Gold
-                            </a>
-                        </div>
-                    @endif
-                </div>
-            </div>
-
-            {{-- ── QR Check-In Scanner ── --}}
-            <div class="bg-white dark:bg-secondary-800 rounded-2xl border overflow-hidden
-                {{ $invitation->hasFeature('qr_checkin') ? 'border-emerald-200/60 dark:border-emerald-800/40' : 'border-amber-200/60 dark:border-amber-800/40' }}">
-
-                <div class="px-5 sm:px-6 py-4 border-b border-neutral-100 dark:border-secondary-700/60 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                    <div class="flex items-center gap-2.5">
-                        <div class="w-8 h-8 rounded-lg {{ $invitation->hasFeature('qr_checkin') ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400' : 'bg-amber-100 dark:bg-amber-900/30 text-amber-500' }} flex items-center justify-center flex-shrink-0">
-                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                        </div>
-                        <div>
-                            <h2 class="font-semibold text-sm text-secondary-800 dark:text-neutral-100 flex items-center gap-2">
-                                Scanner Kehadiran (QR Check-In)
-                                @if(!$invitation->hasFeature('qr_checkin'))
-                                    <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-bold bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300 uppercase tracking-wider">Platinum</span>
-                                @endif
-                            </h2>
-                            <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
-                                @if($invitation->hasFeature('qr_checkin'))
-                                    @php
-                                        $checkedIn   = $invitation->guests()->where('attendance_status', 'hadir')->count();
-                                        $totalGuests = $invitation->guests()->count();
-                                    @endphp
-                                    <span class="font-semibold text-emerald-600 dark:text-emerald-400">{{ $checkedIn }}</span> / {{ $totalGuests }} tamu sudah check-in
-                                @else
-                                    Scan QR Code tamu saat hari H dan cetak tiket kehadiran
-                                @endif
-                            </p>
-                        </div>
+                        <h2 class="font-heading text-xl sm:text-2xl font-bold leading-snug">Pusat Kelola & Unduh QR Code</h2>
+                        <p class="text-xs sm:text-sm text-white/80 max-w-xl leading-relaxed">
+                            Unduh QR Code Website Undangan, QR Kado Digital & QRIS, QR Kirim Ucapan, serta QR RSVP Universal secara mudah di halaman khusus.
+                        </p>
                     </div>
-                    @if($invitation->hasFeature('qr_checkin'))
-                        <a href="{{ route('dashboard.invitations.guestbook', $invitation) }}"
-                            class="self-start sm:self-auto inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold shadow-sm transition-all whitespace-nowrap">
-                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                            Buka Scanner
-                        </a>
-                    @else
-                        <a href="{{ route('dashboard.checkout', ['invitation_id' => $invitation->id]) }}"
-                            class="self-start sm:self-auto inline-flex items-center gap-1.5 px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-xs font-semibold shadow-sm transition-all whitespace-nowrap">
-                            Upgrade ke Platinum
-                        </a>
-                    @endif
+                    <a href="{{ route('dashboard.invitations.qr-codes', $invitation) }}"
+                        class="inline-flex items-center justify-center gap-2 px-5 py-3 bg-white hover:bg-neutral-100 text-secondary-900 rounded-2xl text-xs font-bold shadow-lg shadow-black/10 hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all whitespace-nowrap shrink-0">
+                        <svg class="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
+                        Buka Pusat QR Code →
+                    </a>
                 </div>
-
-                @if($invitation->hasFeature('qr_checkin') && $totalGuests > 0)
-                    <div class="px-5 sm:px-6 py-4">
-                        <div class="flex items-center justify-between text-xs text-neutral-500 dark:text-neutral-400 mb-2">
-                            <span>Progress check-in</span>
-                            <span class="font-semibold tabular-nums">{{ $totalGuests > 0 ? round(($checkedIn / $totalGuests) * 100) : 0 }}%</span>
-                        </div>
-                        <div class="w-full bg-neutral-100 dark:bg-secondary-700 rounded-full h-2">
-                            <div class="bg-emerald-500 dark:bg-emerald-400 h-2 rounded-full transition-all duration-700"
-                                style="width: {{ $totalGuests > 0 ? round(($checkedIn / $totalGuests) * 100) : 0 }}%">
-                            </div>
-                        </div>
-                    </div>
-                @endif
             </div>
 
             {{-- ── RSVP PAX Quota (if limited) ── --}}
