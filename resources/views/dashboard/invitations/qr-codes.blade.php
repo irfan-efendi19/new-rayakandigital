@@ -89,8 +89,7 @@
                             class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100 flex items-center gap-2">
                             QR Code Untuk Tamu
                         </h2>
-                        <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">Masing-masing QR disiapkan
-                            khusus untuk satu fungsi agar tidak membingungkan tamu saat di-scan.</p>
+                        <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">QR yang diperuntukkan untuk dicetak.</p>
                     </div>
                 </div>
 

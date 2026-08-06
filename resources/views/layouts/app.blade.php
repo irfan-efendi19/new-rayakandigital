@@ -79,10 +79,10 @@
     @if((request()->is('dashboard') || request()->is('dashboard/*')) && !request()->is('*/edit*') && !request()->is('*/create*'))
         <a href="https://wa.me/{{ config('app.whatsapp_number', '62895349823366') }}?text={{ urlencode('Halo, saya ingin bertanya terkait layanan undangan digital.') }}"
             target="_blank" rel="noopener noreferrer"
-            class="fixed bottom-5 right-5 z-50 group inline-flex items-center gap-0 overflow-hidden rounded-full bg-emerald-500 hover:bg-emerald-600 px-4 py-3 text-white shadow-lg shadow-emerald-500/30 transition-all duration-300 hover:gap-2 hover:pr-5">
+            class="fixed bottom-5 right-5 z-50 group inline-flex items-center gap-2 overflow-hidden rounded-full bg-emerald-500 sm:hover:bg-emerald-600 sm:active:bg-emerald-600 px-4 py-3 text-white shadow-lg shadow-emerald-500/30 transition-all duration-300 sm:gap-0 sm:hover:gap-2 sm:active:gap-2 sm:pr-5">
             <i class="fa-brands fa-whatsapp text-xl flex-shrink-0"></i>
             <span
-                class="max-w-0 overflow-hidden whitespace-nowrap text-sm font-semibold transition-all duration-300 group-hover:max-w-xs">Butuh
+                class="whitespace-nowrap text-sm font-semibold sm:max-w-0 sm:overflow-hidden sm:group-hover:max-w-xs sm:group-active:max-w-xs sm:transition-all sm:duration-300">Butuh
                 Bantuan?</span>
         </a>
     @endif
