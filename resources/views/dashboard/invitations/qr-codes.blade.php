@@ -70,9 +70,9 @@
                         <p class="text-sm font-semibold text-primary-700 dark:text-primary-300">Cara pakai: unduh QR
                             code lalu taruh di tempat yang tepat</p>
                         <p class="text-xs text-primary-600/80 dark:text-primary-400/80 mt-0.5 leading-relaxed">
-                            <strong class="font-semibold">QR Untuk Tamu</strong> (Undangan, Kado, Ucapan) → cetak /
+                            <strong class="font-semibold">QR Untuk Tamu</strong> (Undangan, Kado, Ucapan, RSVP) → cetak /
                             bagikan agar tamu bisa scan sendiri.
-                            <strong class="font-semibold">QR Untuk Panitia</strong> (RSVP Kartu, Scanner) → digunakan
+                            <strong class="font-semibold">QR Untuk Panitia</strong> (Scanner) → digunakan
                             kamu & tim saat acara berlangsung.
                         </p>
                     </div>
@@ -94,7 +94,7 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
 
                     {{-- Card 1: QR Website Undangan --}}
                     <div
@@ -133,7 +133,7 @@
                             </a>
                             <a href="{{ $qrWebsiteUrl }}" target="_blank"
                                 class="flex-1 text-center px-3 py-2 text-xs font-semibold text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/30 rounded-xl hover:bg-primary-100 transition border border-primary-200/60 dark:border-primary-800/40">
-                                Cek halaman tujuan ↗
+                                Cek halaman tujuan →
                             </a>
                         </div>
                     </div>
@@ -174,7 +174,7 @@
                             </a>
                             <a href="{{ $qrKadoUrl }}" target="_blank"
                                 class="flex-1 text-center px-3 py-2 text-xs font-semibold text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/30 rounded-xl hover:bg-primary-100 transition border border-primary-200/60 dark:border-primary-800/40">
-                                Cek halaman tujuan ↗
+                                Cek halaman tujuan →
                             </a>
                         </div>
                     </div>
@@ -214,66 +214,80 @@
                             </a>
                             <a href="{{ $qrUcapanUrl }}" target="_blank"
                                 class="flex-1 text-center px-3 py-2 text-xs font-semibold text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/30 rounded-xl hover:bg-primary-100 transition border border-primary-200/60 dark:border-primary-800/40">
-                                Cek halaman tujuan ↗
+                                Cek halaman tujuan →
                             </a>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            {{-- ── SECTION 2: QR CODE UNTUK PANITIA (KARTU CETAK & PRESENSI) ── --}}
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
-                <div class="md:col-span-2 -mb-2">
-                    <div class="flex items-center gap-2">
-                        <span
-                            class="w-7 h-7 rounded-lg bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold text-sm shrink-0">2</span>
-                        <div>
-                            <h2 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">QR Code
-                                Untuk Panitia & Alat Acara</h2>
-                            <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">Digunakan oleh kamu & tim
-                                saat hari-H: kartu fisik RSVP dan pemindai tiket tamu.</p>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- QR RSVP Universal (Kartu Cetak Fisik) --}}
-                <div
-                    class="bg-white dark:bg-secondary-800 rounded-2xl border border-neutral-200/80 dark:border-secondary-700/60 p-6 flex flex-col sm:flex-row items-center gap-5">
-                    @if($qrRsvpCodeData)
+                    {{-- Card 4: QR RSVP --}}
+                    <div
+                        class="bg-white dark:bg-secondary-800 rounded-2xl border border-neutral-200/80 dark:border-secondary-700/60 p-6 flex flex-col items-center text-center shadow-sm hover:shadow-md transition-all">
                         <div
-                            class="bg-white p-2.5 rounded-2xl shadow-sm border border-neutral-200 dark:border-neutral-600 shrink-0">
-                            <img src="{{ $qrRsvpCodeData }}" alt="QR RSVP Universal" class="w-32 h-32 object-contain">
+                            class="w-12 h-12 rounded-2xl bg-primary-100 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300 flex items-center justify-center mb-3">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                            </svg>
                         </div>
-                    @endif
-                    <div class="min-w-0 flex-1 text-center sm:text-left">
-                        <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2 mb-1">
+                        <div class="flex flex-wrap items-center justify-center gap-2 mb-1">
                             <h3 class="font-bold text-base text-secondary-800 dark:text-neutral-100">QR RSVP</h3>
                             @if(!$invitation->hasFeature('qr_rsvp_universal'))
                                 <span
                                     class="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-bold bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300 uppercase">Gold</span>
                             @endif
                         </div>
-                        <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-4">QR khusus untuk dicetak pada
-                            kartu fisik / souvenir. Tamu scan → konfirmasi kehadiran (RSVP). Hasilnya bisa dilihat lewat
-                            link Laporan RSVP.</p>
+                        <span
+                            class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-[10px] font-semibold mt-1.5 mb-2 border border-primary-100 dark:border-primary-800/50">Untuk
+                            tamu · konfirmasi kehadiran</span>
+                        <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-3 min-h-[36px]">Tamu scan → konfirmasi
+                            kehadiran (RSVP). Cocok dicetak pada kartu fisik / souvenir. Hasilnya bisa dilihat di Laporan
+                            RSVP.</p>
 
-                        @if($invitation->hasFeature('qr_rsvp_universal'))
-                            <div class="flex flex-wrap gap-2 justify-center sm:justify-start">
+                        @if($qrRsvpCodeData)
+                            <div
+                                class="bg-white p-3 rounded-2xl shadow-sm border border-neutral-200 dark:border-neutral-600 mb-5">
+                                <img src="{{ $qrRsvpCodeData }}" alt="QR RSVP" class="w-36 h-36 object-contain">
+                            </div>
+                        @endif
+
+                        <div class="flex flex-col gap-2 w-full mt-auto">
+                            @if($invitation->hasFeature('qr_rsvp_universal'))
                                 <a href="{{ $qrRsvpCodeData }}" download="qrcode-{{ $invitation->slug }}.png"
-                                    class="px-3 py-1.5 text-xs font-semibold text-white bg-gradient-to-r from-primary to-primary-600 rounded-xl hover:shadow transition">
-                                    Unduh QR
+                                    class="flex-1 text-center px-3 py-2 text-xs font-semibold text-white bg-gradient-to-r from-primary to-primary-600 rounded-xl hover:shadow transition">
+                                    <svg class="w-3.5 h-3.5 inline-block mr-1.5 -mt-0.5" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                    </svg>
+                                    Unduh QR Code
                                 </a>
                                 <a href="{{ route('dashboard.invitations.qr-rsvp', $invitation) }}"
-                                    class="px-3 py-1.5 text-xs font-semibold text-primary dark:text-primary-300 bg-primary-50 dark:bg-primary-900/40 rounded-xl hover:bg-primary-100 transition">
+                                    class="flex-1 text-center px-3 py-2 text-xs font-semibold text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/30 rounded-xl hover:bg-primary-100 transition border border-primary-200/60 dark:border-primary-800/40">
                                     Lihat Laporan RSVP →
                                 </a>
-                            </div>
-                        @else
-                            <a href="{{ route('dashboard.checkout', ['invitation_id' => $invitation->id]) }}"
-                                class="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-600 dark:text-amber-400 hover:underline">
-                                Upgrade Paket Gold →
-                            </a>
-                        @endif
+                            @else
+                                <a href="{{ route('dashboard.checkout', ['invitation_id' => $invitation->id]) }}"
+                                    class="flex-1 text-center px-3 py-2 text-xs font-semibold text-white bg-gradient-to-r from-amber-500 to-amber-600 rounded-xl hover:shadow transition">
+                                    Upgrade Paket Gold →
+                                </a>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- ── SECTION 2: QR CODE UNTUK ALAT ACARA ── --}}
+            <div class="pt-4">
+                <div class="mb-4">
+                    <div class="flex items-center gap-2">
+                        <span
+                            class="w-7 h-7 rounded-lg bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold text-sm shrink-0">2</span>
+                        <div>
+                            <h2 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">QR Code
+                                Untuk Panitia</h2>
+                            <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">Digunakan oleh kamu & tim
+                                saat hari-H untuk memindai tiket tamu.</p>
+                        </div>
                     </div>
                 </div>
 

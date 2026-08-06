@@ -63,34 +63,34 @@
                         <p class="text-sm text-neutral-500 dark:text-neutral-400 mt-1">{{ $invitation->couple_name }}</p>
                     </div>
 
-                    {{-- CTA Buttons --}}
-                    <div class="flex flex-wrap items-center gap-2 flex-shrink-0">
+{{-- CTA Buttons --}}
+                    <div class="grid grid-cols-2 sm:flex sm:flex-row sm:flex-wrap sm:items-center gap-2 flex-shrink-0 w-full sm:w-auto sm:justify-end">
                         <a href="{{ route('invitation.show', $invitation->slug) }}" target="_blank"
-                            class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-primary dark:text-primary-400 border border-primary/30 dark:border-primary-700/50 rounded-xl hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all bg-white/70 dark:bg-secondary-800/50 backdrop-blur-sm">
+                            class="inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 sm:py-2 text-xs font-semibold text-primary dark:text-primary-400 border border-primary/30 dark:border-primary-700/50 rounded-xl hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all bg-white/70 dark:bg-secondary-800/50 backdrop-blur-sm w-full sm:w-auto">
                             <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
                             Lihat Website
                         </a>
                         <a href="{{ route('dashboard.invitations.edit', $invitation) }}"
-                            class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-secondary-700 dark:text-neutral-300 border border-neutral-300/80 dark:border-secondary-600 rounded-xl hover:bg-white dark:hover:bg-secondary-700 transition-all bg-white/70 dark:bg-secondary-800/50 backdrop-blur-sm">
+                            class="inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 sm:py-2 text-xs font-semibold text-secondary-700 dark:text-neutral-300 border border-neutral-300/80 dark:border-secondary-600 rounded-xl hover:bg-white dark:hover:bg-secondary-700 transition-all bg-white/70 dark:bg-secondary-800/50 backdrop-blur-sm w-full sm:w-auto">
                             <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                             Edit Detail
                         </a>
                         <a href="{{ route('dashboard.invitations.invoice-pdf', $invitation) }}"
-                            class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-emerald-700 dark:text-emerald-300 border border-emerald-300/80 dark:border-emerald-700/50 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-all bg-white/70 dark:bg-secondary-800/50 backdrop-blur-sm">
+                            class="inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 sm:py-2 text-xs font-semibold text-emerald-700 dark:text-emerald-300 border border-emerald-300/80 dark:border-emerald-700/50 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-all bg-white/70 dark:bg-secondary-800/50 backdrop-blur-sm w-full sm:w-auto">
                             <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                             Invoice PDF
                         </a>
                          @if($invitation->canUseWhatsappGateway())
                          <a href="{{ route('dashboard.whatsapp.setting', $invitation) }}"
-                            class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-teal-700 dark:text-teal-300 border border-teal-300/80 dark:border-teal-700/50 rounded-xl hover:bg-teal-50 dark:hover:bg-teal-900/20 transition-all bg-white/70 dark:bg-secondary-800/50 backdrop-blur-sm">
+                            class="inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 sm:py-2 text-xs font-semibold text-teal-700 dark:text-teal-300 border border-teal-300/80 dark:border-teal-700/50 rounded-xl hover:bg-teal-50 dark:hover:bg-teal-900/20 transition-all bg-white/70 dark:bg-secondary-800/50 backdrop-blur-sm w-full sm:w-auto">
                             <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
                             Pengaturan WA
                         </a>
                         @endif
                         @if(!$isExpired && ($tierCode === 'free' || $isTrial))
                             <a href="{{ route('dashboard.checkout', ['invitation_id' => $invitation->id]) }}"
-                                class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-gradient-to-br from-primary to-primary-600 rounded-xl shadow-sm shadow-primary/25 hover:shadow-md hover:shadow-primary/30 hover:-translate-y-0.5 transition-all">
-                                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
+                                class="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 sm:py-2 text-xs font-semibold text-white bg-gradient-to-r from-primary to-primary-600 shadow-sm shadow-primary/25 hover:shadow-md hover:shadow-primary/30 hover:-translate-y-0.5 transition-all w-full sm:w-auto">
+                                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 10l7-7m0 0l7-7m0 0l7 7m-7-7v18"/></svg>
                                 Upgrade Paket
                             </a>
                         @endif
@@ -220,10 +220,6 @@
                 </div>
                 <div class="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5">
                     <div class="space-y-1.5 min-w-0">
-                        <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-white/20 backdrop-blur-md text-white uppercase tracking-wider">
-                            <svg class="w-3 h-3 text-amber-300" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                            Fitur QR Code Lengkap
-                        </div>
                         <h2 class="font-heading text-xl sm:text-2xl font-bold leading-snug">Pusat Kelola & Unduh QR Code</h2>
                         <p class="text-xs sm:text-sm text-white/80 max-w-xl leading-relaxed">
                             Unduh QR Code Website Undangan, QR Kado Digital & QRIS, QR Kirim Ucapan, serta QR RSVP Universal secara mudah di halaman khusus.
