@@ -153,30 +153,43 @@
                         <span
                             class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-[10px] font-semibold mt-1.5 mb-2 border border-primary-100 dark:border-primary-800/50">Untuk
                             tamu · fitur kado</span>
+                        @if(!in_array($invitation->currentTier(), ['gold', 'platinum']))
+                            <span
+                                class="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-bold bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300 uppercase mb-2">Gold</span>
+                        @endif
                         <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-3 min-h-[36px]">Tamu scan → melihat
-                            nomor rekening bank, e-wallet, & QRIS. Letakkan di bagian kado. Tersedia jika fitur kado
-                            diaktifkan.</p>
+                            nomor rekening bank, e-wallet, & QRIS. Letakkan di bagian kado. Tersedia untuk paket Gold ke
+                            atas.</p>
 
-                        <div
-                            class="bg-white p-3 rounded-2xl shadow-sm border border-neutral-200 dark:border-neutral-600 mb-5">
-                            <img src="{{ $qrKadoCodeData }}" alt="QR Kado Digital" class="w-36 h-36 object-contain">
-                        </div>
+                        @if(in_array($invitation->currentTier(), ['gold', 'platinum']))
+                            <div
+                                class="bg-white p-3 rounded-2xl shadow-sm border border-neutral-200 dark:border-neutral-600 mb-5">
+                                <img src="{{ $qrKadoCodeData }}" alt="QR Kado Digital" class="w-36 h-36 object-contain">
+                            </div>
 
-                        <div class="flex flex-col gap-2 w-full mt-auto">
-                            <a href="{{ $qrKadoCodeData }}" download="qr-kado-{{ $invitation->slug }}.png"
-                                class="flex-1 text-center px-3 py-2 text-xs font-semibold text-white bg-gradient-to-r from-primary to-primary-600 rounded-xl hover:shadow transition">
-                                <svg class="w-3.5 h-3.5 inline-block mr-1.5 -mt-0.5" fill="none" viewBox="0 0 24 24"
-                                    stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                                </svg>
-                                Unduh QR Code
-                            </a>
-                            <a href="{{ $qrKadoUrl }}" target="_blank"
-                                class="flex-1 text-center px-3 py-2 text-xs font-semibold text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/30 rounded-xl hover:bg-primary-100 transition border border-primary-200/60 dark:border-primary-800/40">
-                                Cek halaman tujuan →
-                            </a>
-                        </div>
+                            <div class="flex flex-col gap-2 w-full mt-auto">
+                                <a href="{{ $qrKadoCodeData }}" download="qr-kado-{{ $invitation->slug }}.png"
+                                    class="flex-1 text-center px-3 py-2 text-xs font-semibold text-white bg-gradient-to-r from-primary to-primary-600 rounded-xl hover:shadow transition">
+                                    <svg class="w-3.5 h-3.5 inline-block mr-1.5 -mt-0.5" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                    </svg>
+                                    Unduh QR Code
+                                </a>
+                                <a href="{{ $qrKadoUrl }}" target="_blank"
+                                    class="flex-1 text-center px-3 py-2 text-xs font-semibold text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/30 rounded-xl hover:bg-primary-100 transition border border-primary-200/60 dark:border-primary-800/40">
+                                    Cek halaman tujuan →
+                                </a>
+                            </div>
+                        @else
+                            <div class="flex flex-col w-full mt-auto">
+                                <a href="{{ route('dashboard.checkout', ['invitation_id' => $invitation->id]) }}"
+                                    class="flex-1 text-center px-3 py-2 text-xs font-semibold text-white bg-gradient-to-r from-amber-500 to-amber-600 rounded-xl hover:shadow transition">
+                                    Upgrade ke Gold →
+                                </a>
+                            </div>
+                        @endif
                     </div>
 
                     {{-- Card 3: QR Kirim Ucapan & Doa --}}
@@ -194,29 +207,43 @@
                         <span
                             class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-[10px] font-semibold mt-1.5 mb-2 border border-primary-100 dark:border-primary-800/50">Untuk
                             tamu · fitur ucapan</span>
+                        @if(!in_array($invitation->currentTier(), ['gold', 'platinum']))
+                            <span
+                                class="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-bold bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300 uppercase mb-2">Gold</span>
+                        @endif
                         <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-3 min-h-[36px]">Tamu scan → mengirim
-                            pesan ucapan & doa restu secara real-time ke buku tamu kamu.</p>
+                            pesan ucapan & doa restu secara real-time ke buku tamu kamu. Tersedia untuk paket Gold ke
+                            atas.</p>
 
-                        <div
-                            class="bg-white p-3 rounded-2xl shadow-sm border border-neutral-200 dark:border-neutral-600 mb-5">
-                            <img src="{{ $qrUcapanCodeData }}" alt="QR Ucapan & Doa" class="w-36 h-36 object-contain">
-                        </div>
+                        @if(in_array($invitation->currentTier(), ['gold', 'platinum']))
+                            <div
+                                class="bg-white p-3 rounded-2xl shadow-sm border border-neutral-200 dark:border-neutral-600 mb-5">
+                                <img src="{{ $qrUcapanCodeData }}" alt="QR Ucapan & Doa" class="w-36 h-36 object-contain">
+                            </div>
 
-                        <div class="flex flex-col gap-2 w-full mt-auto">
-                            <a href="{{ $qrUcapanCodeData }}" download="qr-ucapan-{{ $invitation->slug }}.png"
-                                class="flex-1 text-center px-3 py-2 text-xs font-semibold text-white bg-gradient-to-r from-primary to-primary-600 rounded-xl hover:shadow transition">
-                                <svg class="w-3.5 h-3.5 inline-block mr-1.5 -mt-0.5" fill="none" viewBox="0 0 24 24"
-                                    stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                                </svg>
-                                Unduh QR Code
-                            </a>
-                            <a href="{{ $qrUcapanUrl }}" target="_blank"
-                                class="flex-1 text-center px-3 py-2 text-xs font-semibold text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/30 rounded-xl hover:bg-primary-100 transition border border-primary-200/60 dark:border-primary-800/40">
-                                Cek halaman tujuan →
-                            </a>
-                        </div>
+                            <div class="flex flex-col gap-2 w-full mt-auto">
+                                <a href="{{ $qrUcapanCodeData }}" download="qr-ucapan-{{ $invitation->slug }}.png"
+                                    class="flex-1 text-center px-3 py-2 text-xs font-semibold text-white bg-gradient-to-r from-primary to-primary-600 rounded-xl hover:shadow transition">
+                                    <svg class="w-3.5 h-3.5 inline-block mr-1.5 -mt-0.5" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                    </svg>
+                                    Unduh QR Code
+                                </a>
+                                <a href="{{ $qrUcapanUrl }}" target="_blank"
+                                    class="flex-1 text-center px-3 py-2 text-xs font-semibold text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/30 rounded-xl hover:bg-primary-100 transition border border-primary-200/60 dark:border-primary-800/40">
+                                    Cek halaman tujuan →
+                                </a>
+                            </div>
+                        @else
+                            <div class="flex flex-col w-full mt-auto">
+                                <a href="{{ route('dashboard.checkout', ['invitation_id' => $invitation->id]) }}"
+                                    class="flex-1 text-center px-3 py-2 text-xs font-semibold text-white bg-gradient-to-r from-amber-500 to-amber-600 rounded-xl hover:shadow transition">
+                                    Upgrade ke Gold →
+                                </a>
+                            </div>
+                        @endif
                     </div>
 
                     {{-- Card 4: QR RSVP --}}
