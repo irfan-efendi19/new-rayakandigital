@@ -58,8 +58,10 @@ test('user flow 4 langkah pernikahan platform', function () {
         'groom_name' => 'John Doe',
         'bride_nickname' => 'Jane',
         'groom_nickname' => 'John',
-        'bride_parents' => 'Bapak Jane & Ibu Jane',
-        'groom_parents' => 'Bapak John & Ibu John',
+        'bride_father_name' => 'Bapak Jane',
+        'bride_mother_name' => 'Ibu Jane',
+        'groom_father_name' => 'Bapak John',
+        'groom_mother_name' => 'Ibu John',
         'theme' => 'elegant',
     ];
 

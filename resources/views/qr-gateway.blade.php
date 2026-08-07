@@ -378,7 +378,7 @@
                                     <i class="fa-solid fa-minus text-xs"></i>
                                 </button>
                                 <div class="relative">
-                                    <input type="number" name="pax" id="pax" value="1" min="1" max="50" readonly
+                                    <input type="number" name="pax" id="pax" value="1" min="1" max="{{ $invitation->is_rsvp_pax_limited ? ($invitation->max_pax_per_guest ?? 2) : 50 }}" readonly
                                         class="w-[60px] text-center text-xl font-bold rounded-2xl border-2 border-neutral-200 dark:border-secondary-600 bg-neutral-50 dark:bg-secondary-700/60 shadow-sm text-secondary-800 dark:text-neutral-100 py-2.5 transition-all"
                                         style="transition: transform 0.15s cubic-bezier(0.22, 0.61, 0.36, 1);">
                                     <div class="absolute inset-x-0 bottom-0 h-1 bg-primary-500 rounded-full scale-x-0 transition-transform duration-200"
@@ -560,14 +560,16 @@
 
             togglePaxField();
 
+            const maxPax = {{ ($invitation->is_rsvp_pax_limited ?? false) ? ($invitation->max_pax_per_guest ?? 2) : 50 }};
+
             function updatePaxButtons() {
                 const val = parseInt(paxInput.value) || 1;
                 paxMinus.disabled = val <= 1;
-                paxPlus.disabled = val >= 50;
+                paxPlus.disabled = val >= maxPax;
 
                 if (paxIndicator) {
-                    const percentage = ((val - 1) / 49) * 100;
-                    paxIndicator.style.transform = `scaleX(${percentage / 100})`;
+                    const percentage = ((val - 1) / (maxPax - 1)) * 100;
+                    paxIndicator.style.transform = `scaleX(${Math.min(percentage, 100) / 100})`;
                 }
             }
 
@@ -585,7 +587,7 @@
 
             paxPlus.addEventListener('click', function () {
                 let val = parseInt(paxInput.value) || 1;
-                if (val < 50) {
+                if (val < maxPax) {
                     paxInput.value = val + 1;
                     paxInput.style.transform = 'scale(1.1)';
                     setTimeout(() => {

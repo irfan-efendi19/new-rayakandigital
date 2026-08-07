@@ -1,5 +1,53 @@
 <x-app-layout>
-    <div class="min-h-screen">
+    <div class="min-h-screen"
+        x-data="{
+            activeSection: 'sec-1',
+            sections: [
+                { id: 'sec-1', num: 1, name: 'Mempelai' },
+                { id: 'sec-2', num: 2, name: 'Waktu & Tempat' },
+                { id: 'sec-3', num: 3, name: 'Visual & Tema' },
+                { id: 'sec-4', num: 4, name: 'Konten' },
+                { id: 'sec-5', num: 5, name: 'Keuangan' },
+                { id: 'sec-6', num: 6, name: 'RSVP' },
+                { id: 'sec-7', num: 7, name: 'Kategori Tamu' },
+                { id: 'sec-8', num: 8, name: 'Visibilitas' }
+            ],
+            init() {
+                // Temukan error validasi pertama jika ada, dan arahkan ke section tersebut
+                const firstErrorEl = document.querySelector('.text-red-500, .border-red-500');
+                if (firstErrorEl) {
+                    const section = firstErrorEl.closest('[id^=sec-]');
+                    if (section) {
+                        this.activeSection = section.id;
+                    }
+                }
+            },
+            scrollTo(id) {
+                this.activeSection = id;
+                const formEl = document.getElementById('invitation-form');
+                if (formEl) {
+                    formEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+                const navEl = document.getElementById('nav-item-' + id);
+                if (navEl && navEl.offsetParent !== null) {
+                    navEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                }
+            },
+            nextStep() {
+                const idx = this.sections.findIndex(s => s.id === this.activeSection);
+                if (idx < this.sections.length - 1) {
+                    this.scrollTo(this.sections[idx + 1].id);
+                }
+            },
+            prevStep() {
+                const idx = this.sections.findIndex(s => s.id === this.activeSection);
+                if (idx > 0) {
+                    this.scrollTo(this.sections[idx - 1].id);
+                }
+            }
+        }"
+        @set-active-section.window="scrollTo($event.detail)"
+    >
 
         {{-- ─── HERO ─── --}}
         <div class="hero-mesh grain-overlay border-b border-neutral-200/60 dark:border-secondary-700/40">
@@ -43,37 +91,7 @@
         </div>
 
         {{-- ─── STICKY SECTION NAV (8 STEPS) ─── --}}
-        <div x-data="{
-            activeSection: 'sec-1',
-            sections: [
-                { id: 'sec-1', num: 1, name: 'Mempelai' },
-                { id: 'sec-2', num: 2, name: 'Waktu & Tempat' },
-                { id: 'sec-3', num: 3, name: 'Visual & Tema' },
-                { id: 'sec-4', num: 4, name: 'Konten' },
-                { id: 'sec-5', num: 5, name: 'Keuangan' },
-                { id: 'sec-6', num: 6, name: 'RSVP' },
-                { id: 'sec-7', num: 7, name: 'Kategori Tamu' },
-                { id: 'sec-8', num: 8, name: 'Visibilitas' }
-            ],
-            scrollTo(id) {
-                activeSection = id;
-                const el = document.getElementById(id);
-                if (el) el.scrollIntoView({ behavior: 'smooth' });
-                const navEl = document.getElementById('nav-item-' + id);
-                if (navEl && navEl.offsetParent !== null) navEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-            }
-        }" x-init="() => {
-            const observer = new IntersectionObserver(entries => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        activeSection = entry.target.id;
-                        const navEl = document.getElementById('nav-item-' + entry.target.id);
-                        if (navEl && navEl.offsetParent !== null) navEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-                    }
-                });
-            }, { rootMargin: '-100px 0px -50% 0px' });
-            document.querySelectorAll('[id^=sec-]').forEach(el => observer.observe(el));
-        }" class="sticky top-[64px] z-30 bg-white/95 dark:bg-secondary-900/95 backdrop-blur-md border-b border-neutral-200/80 dark:border-secondary-700/60 py-3 shadow-sm">
+        <div class="sticky top-[64px] z-30 bg-white/95 dark:bg-secondary-900/95 backdrop-blur-md border-b border-neutral-200/80 dark:border-secondary-700/60 py-3 shadow-sm">
             <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
 
                 {{-- Mobile: active step + progress bar --}}
@@ -167,22 +185,80 @@
             transition: border-color 0.2s, box-shadow 0.2s;
         }
 
+        .scrollbar-none::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-none {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
         [x-cloak] {
             display: none !important;
         }
         </style>
 
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-7 sm:py-8">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-7 sm:py-8 relative">
+            {{-- Decorative soft background glows --}}
+            <div class="absolute -top-10 -left-10 w-72 h-72 bg-primary/10 dark:bg-primary/5 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-10 -right-10 w-72 h-72 bg-indigo-500/10 dark:bg-indigo-500/5 rounded-full blur-3xl pointer-events-none"></div>
+
             <div
-                class="bg-white dark:bg-secondary-800 rounded-2xl border border-neutral-200/80 dark:border-secondary-700/60 overflow-hidden">
-                <div class="p-6 md:p-8">
+                class="relative bg-white/95 dark:bg-secondary-800/95 backdrop-blur-sm rounded-3xl border border-neutral-200/50 dark:border-secondary-700/40 shadow-[0_15px_50px_-15px_rgba(0,0,0,0.06)] dark:shadow-[0_25px_60px_-15px_rgba(0,0,0,0.3)] overflow-hidden">
+                {{-- Premium top accent gradient --}}
+                <div class="h-1.5 w-full bg-gradient-to-r from-primary via-indigo-500 to-purple-600"></div>
+                <div class="p-6 sm:p-8 md:p-10">
                     <form id="invitation-form" action="{{ route('dashboard.invitations.update', $invitation) }}"
                         method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <input type="hidden" name="title" value="{{ old('title', $invitation->title) }}">
 
-                        <div class="space-y-8">
+                        {{-- Step Header Indicator inside the Form Card --}}
+                        <div class="mb-8 pb-5 border-b border-neutral-100 dark:border-secondary-700/50 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-2xl bg-primary/10 dark:bg-primary-900/30 flex items-center justify-center text-primary dark:text-primary-300 shadow-sm border border-primary/20 shrink-0">
+                                    {{-- SVGs corresponding to activeSection --}}
+                                    <template x-if="activeSection === 'sec-1'">
+                                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                                    </template>
+                                    <template x-if="activeSection === 'sec-2'">
+                                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                                    </template>
+                                    <template x-if="activeSection === 'sec-3'">
+                                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" /></svg>
+                                    </template>
+                                    <template x-if="activeSection === 'sec-4'">
+                                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
+                                    </template>
+                                    <template x-if="activeSection === 'sec-5'">
+                                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
+                                    </template>
+                                    <template x-if="activeSection === 'sec-6'">
+                                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                                    </template>
+                                    <template x-if="activeSection === 'sec-7'">
+                                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2zM9 16h6m-6-4h6m-6-4h6" /></svg>
+                                    </template>
+                                    <template x-if="activeSection === 'sec-8'">
+                                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                                    </template>
+                                </div>
+                                <div>
+                                    <span class="text-xs font-semibold text-primary uppercase tracking-wider block" x-text="'Langkah ' + (sections.findIndex(s => s.id === activeSection) + 1) + ' dari 8'"></span>
+                                    <h2 class="text-xl font-bold text-secondary-900 dark:text-neutral-50 mt-0.5" x-text="sections.find(s => s.id === activeSection)?.name"></h2>
+                                </div>
+                            </div>
+                            <div class="flex flex-col items-end gap-1.5 min-w-[120px]">
+                                <span class="text-xs font-semibold text-neutral-400 dark:text-neutral-500" x-text="'Progress: ' + Math.round((sections.findIndex(s => s.id === activeSection) + 1) / sections.length * 100) + '%'"></span>
+                                <div class="w-28 h-1.5 bg-neutral-100 dark:bg-secondary-700/60 rounded-full overflow-hidden">
+                                    <div class="h-full bg-gradient-to-r from-primary to-indigo-500 rounded-full transition-all duration-300"
+                                        :style="'width:' + ((sections.findIndex(s => s.id === activeSection) + 1) / sections.length * 100) + '%'"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col gap-6">
 
                             {{-- Package Status --}}
                             @php
@@ -283,7 +359,14 @@
                             {{-- ======================================== --}}
                             {{-- Section 1: Informasi Dasar & Identitas --}}
                             {{-- ======================================== --}}
-                            <div id="sec-1" class="border-b border-neutral-200 dark:border-secondary-700 pb-8 scroll-mt-32" data-tour="mempelai-info">
+                            <div id="sec-1"
+                                x-show="activeSection === 'sec-1'"
+                                x-transition:enter="transition ease-out duration-300"
+                                x-transition:enter-start="opacity-0 translate-x-4"
+                                x-transition:enter-end="opacity-100 translate-x-0"
+                                class="scroll-mt-32"
+                                data-tour="mempelai-info"
+                                x-cloak>
                                 <div class="mb-3">
                                     <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">
                                         Informasi Dasar & Identitas <span class="text-sm font-normal text-neutral-400 dark:text-neutral-500">(Profil)</span>
@@ -518,7 +601,14 @@
                             {{-- ======================================== --}}
                             {{-- Section 2: Waktu Tempat & Akses Undangan --}}
                             {{-- ======================================== --}}
-                            <div id="sec-2" class="border-b border-neutral-200 dark:border-secondary-700 pb-8 scroll-mt-32" data-tour="event-schedule">
+                            <div id="sec-2"
+                                x-show="activeSection === 'sec-2'"
+                                x-transition:enter="transition ease-out duration-300"
+                                x-transition:enter-start="opacity-0 translate-x-4"
+                                x-transition:enter-end="opacity-100 translate-x-0"
+                                class="scroll-mt-32"
+                                data-tour="event-schedule"
+                                x-cloak>
                                 <div class="mb-3">
                                     <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">
                                         Waktu, Tempat & Akses Undangan <span class="text-sm font-normal text-neutral-400 dark:text-neutral-500">(Detail Acara)</span>
@@ -942,7 +1032,14 @@
                             {{-- ======================================== --}}
                             {{-- Section 3: Visual & Estetika --}}
                             {{-- ======================================== --}}
-                            <div id="sec-3" class="border-b border-neutral-200 dark:border-secondary-700 pb-8 scroll-mt-32" data-tour="layar-sapa-config">
+                            <div id="sec-3"
+                                x-show="activeSection === 'sec-3'"
+                                x-transition:enter="transition ease-out duration-300"
+                                x-transition:enter-start="opacity-0 translate-x-4"
+                                x-transition:enter-end="opacity-100 translate-x-0"
+                                class="scroll-mt-32"
+                                data-tour="layar-sapa-config"
+                                x-cloak>
                                 <div class="mb-3">
                                     <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">
                                         Visual & Estetika <span class="text-sm font-normal text-neutral-400 dark:text-neutral-500">(Foto & Tema)</span>
@@ -1369,7 +1466,13 @@
                             {{-- ======================================== --}}
                             {{-- Section 4: Konten Tambahan & Personalisasi --}}
                             {{-- ======================================== --}}
-                            <div id="sec-4" class="border-b border-neutral-200 dark:border-secondary-700 pb-8 scroll-mt-32">
+                            <div id="sec-4"
+                                x-show="activeSection === 'sec-4'"
+                                x-transition:enter="transition ease-out duration-300"
+                                x-transition:enter-start="opacity-0 translate-x-4"
+                                x-transition:enter-end="opacity-100 translate-x-0"
+                                class="scroll-mt-32"
+                                x-cloak>
                                 <div class="mb-3">
                                     <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">
                                         Konten Tambahan <span class="text-sm font-normal text-neutral-400 dark:text-neutral-500">(Cerita Cinta & Kutipan)</span>
@@ -1578,7 +1681,13 @@
                             {{-- ======================================== --}}
                             {{-- Section 5: Keuangan & Kado Digital --}}
                             {{-- ======================================== --}}
-                            <div id="sec-5" class="border-b border-neutral-200 dark:border-secondary-700 pb-8 scroll-mt-32">
+                            <div id="sec-5"
+                                x-show="activeSection === 'sec-5'"
+                                x-transition:enter="transition ease-out duration-300"
+                                x-transition:enter-start="opacity-0 translate-x-4"
+                                x-transition:enter-end="opacity-100 translate-x-0"
+                                class="scroll-mt-32"
+                                x-cloak>
                                 <div class="mb-3">
                                     <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">
                                         Keuangan & Kado Digital <span class="text-sm font-normal text-neutral-400 dark:text-neutral-500">(Bank & QRIS)</span>
@@ -2145,7 +2254,13 @@
                         {{-- ======================================== --}}
                         {{-- Section 6: Kontrol RSVP --}}
                         {{-- ======================================== --}}
-                        <div id="sec-6" class="border-b border-neutral-200 dark:border-secondary-700 pb-8 scroll-mt-32">
+                        <div id="sec-6"
+                            x-show="activeSection === 'sec-6'"
+                            x-transition:enter="transition ease-out duration-300"
+                            x-transition:enter-start="opacity-0 translate-x-4"
+                            x-transition:enter-end="opacity-100 translate-x-0"
+                            class="scroll-mt-32"
+                            x-cloak>
                             <div class="mb-3">
                                 <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">
                                     Kontrol RSVP <span class="text-sm font-normal text-neutral-400 dark:text-neutral-500">(Batasan Kuota)</span>
@@ -2238,7 +2353,14 @@
                         {{-- ======================================== --}}
                         {{-- Section 7: Kategori Tamu (Guest Categories) --}}
                         {{-- ======================================== --}}
-                        <div id="sec-7" class="border-b border-neutral-200 dark:border-secondary-700 pb-8 scroll-mt-32" data-tour="guest-management">
+                        <div id="sec-7"
+                            x-show="activeSection === 'sec-7'"
+                            x-transition:enter="transition ease-out duration-300"
+                            x-transition:enter-start="opacity-0 translate-x-4"
+                            x-transition:enter-end="opacity-100 translate-x-0"
+                            class="scroll-mt-32"
+                            data-tour="guest-management"
+                            x-cloak>
                             <div class="mb-3">
                                 <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">
                                     Kategori Tamu <span class="text-sm font-normal text-neutral-400 dark:text-neutral-500">(VIP, Keluarga, dll)</span>
@@ -2321,7 +2443,13 @@
                         {{-- ======================================== --}}
                         {{-- Section 8: Kontrol Visibilitas & Finalisasi --}}
                         {{-- ======================================== --}}
-                        <div id="sec-8" class="border-b border-neutral-200 dark:border-secondary-700 pb-8 scroll-mt-32">
+                        <div id="sec-8"
+                            x-show="activeSection === 'sec-8'"
+                            x-transition:enter="transition ease-out duration-300"
+                            x-transition:enter-start="opacity-0 translate-x-4"
+                            x-transition:enter-end="opacity-100 translate-x-0"
+                            class="scroll-mt-32"
+                            x-cloak>
                             <div class="mb-3">
                                 <h3 class="font-heading text-lg font-bold text-secondary-800 dark:text-neutral-100">
                                     Kontrol Visibilitas & Finalisasi <span class="text-sm font-normal text-neutral-400 dark:text-neutral-500">(Fitur Publik)</span>
@@ -2499,18 +2627,50 @@
         {{-- Fixed bottom bar --}}
         <div
             class="fixed bottom-0 left-0 right-0 bg-white/95 dark:bg-secondary-800/95 backdrop-blur-sm border-t border-neutral-200 dark:border-secondary-700 shadow-soft z-40">
-            <div class="max-w-4xl mx-auto px-6 py-3.5 flex flex-col-reverse sm:flex-row justify-end items-center gap-2">
-                <a href="{{ route('dashboard.invitations.show', $invitation) }}"
-                    class="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-5 py-2.5 bg-white dark:bg-secondary-800 border border-neutral-300 dark:border-neutral-600 rounded-xl shadow-sm text-sm font-semibold text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-secondary-700 hover:border-primary-300 transition-all">
-                    Batal
-                </a>
-                <button type="button" id="save-invitation-btn" data-tour="publish-btn"
-                    class="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-2.5 bg-primary rounded-xl shadow-sm text-sm font-semibold text-white hover:shadow-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-all">
-                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                    </svg>
-                    Simpan Perubahan
-                </button>
+            <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between gap-2">
+                {{-- Left: Prev / Batal --}}
+                <div class="flex items-center gap-2">
+                    <button type="button" @click="prevStep()" x-show="activeSection !== 'sec-1'" x-cloak
+                        class="inline-flex items-center justify-center gap-1.5 px-3 sm:px-5 py-2.5 bg-white dark:bg-secondary-800 border border-neutral-300 dark:border-neutral-600 rounded-xl shadow-sm text-sm font-semibold text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-secondary-700 hover:border-primary-300 transition-all">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                        </svg>
+                        <span class="hidden sm:inline">Sebelumnya</span>
+                    </button>
+                    <a href="{{ route('dashboard.invitations.show', $invitation) }}" x-show="activeSection === 'sec-1'" x-cloak
+                        class="inline-flex items-center justify-center gap-1.5 px-3 sm:px-5 py-2.5 bg-white dark:bg-secondary-800 border border-neutral-300 dark:border-neutral-600 rounded-xl shadow-sm text-sm font-semibold text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-secondary-700 hover:border-primary-300 transition-all">
+                        <span class="hidden sm:inline">Batal</span>
+                        <span class="sm:hidden">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </span>
+                    </a>
+                </div>
+
+                {{-- Right: Navigation & Save --}}
+                <div class="flex items-center gap-2">
+                    <a href="{{ route('dashboard.invitations.show', $invitation) }}" x-show="activeSection !== 'sec-1'" x-cloak
+                        class="hidden sm:inline-flex items-center justify-center px-4 py-2.5 bg-white dark:bg-secondary-800 border border-neutral-300 dark:border-neutral-600 rounded-xl shadow-sm text-sm font-semibold text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-secondary-700 hover:border-primary-300 transition-all">
+                        Batal
+                    </a>
+
+                    <button type="button" @click="nextStep()" x-show="activeSection !== 'sec-8'" x-cloak
+                        class="inline-flex items-center justify-center gap-1.5 px-3 sm:px-5 py-2.5 bg-primary/10 dark:bg-primary-900/30 text-primary dark:text-primary-300 border border-primary/20 dark:border-primary-800/85 rounded-xl shadow-sm text-sm font-semibold hover:bg-primary/20 transition-all">
+                        <span>Selanjutnya</span>
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </button>
+
+                    <button type="button" id="save-invitation-btn" data-tour="publish-btn"
+                        class="inline-flex items-center justify-center gap-1.5 px-4 sm:px-6 py-2.5 bg-primary rounded-xl shadow-sm text-sm font-semibold text-white hover:bg-primary-600 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-all">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span>Simpan</span>
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -3134,10 +3294,30 @@
             deactivateBtn.addEventListener('click', function() { setActiveState(false); });
         }
 
-        // Save confirmation
+        // Save confirmation with smart section validation
         const saveBtn = document.getElementById('save-invitation-btn');
         if (saveBtn) {
             saveBtn.addEventListener('click', function(e) {
+                const form = document.getElementById('invitation-form');
+                if (!form.checkValidity()) {
+                    // Temukan input pertama yang tidak valid
+                    const invalidEl = form.querySelector(':invalid');
+                    if (invalidEl) {
+                        const section = invalidEl.closest('[id^=sec-]');
+                        if (section) {
+                            // Pindahkan section aktif via event global
+                            window.dispatchEvent(new CustomEvent('set-active-section', { detail: section.id }));
+                        }
+                        // Tampilkan tooltip validasi bawaan browser
+                        setTimeout(() => {
+                            form.reportValidity();
+                        }, 100);
+                    } else {
+                        form.reportValidity();
+                    }
+                    return;
+                }
+
                 Swal.fire({
                     title: 'Simpan Perubahan?',
                     text: 'Pastikan semua data sudah diisi dengan benar.',
@@ -3149,7 +3329,7 @@
                     cancelButtonText: 'Batal',
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        document.getElementById('invitation-form').submit();
+                        form.submit();
                     }
                 });
             });
