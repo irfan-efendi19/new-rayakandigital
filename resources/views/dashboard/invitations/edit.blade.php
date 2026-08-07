@@ -123,7 +123,7 @@
 
                     {{-- Progress bar --}}
                     <div class="mt-2 h-1 bg-neutral-100 dark:bg-secondary-700/60 rounded-full overflow-hidden">
-                        <div class="h-full bg-gradient-to-r from-primary to-indigo-500 rounded-full transition-all duration-500"
+                        <div class="h-full bg-gradient-to-r from-primary-500 to-primary-700 rounded-full transition-all duration-500"
                             :style="'width:' + ((sections.findIndex(s => s.id === activeSection) + 1) / sections.length * 100) + '%'"></div>
                     </div>
 
@@ -274,7 +274,7 @@
             <div
                 class="relative bg-white/95 dark:bg-secondary-800/95 backdrop-blur-sm rounded-3xl border border-neutral-200/50 dark:border-secondary-700/40 shadow-[0_15px_50px_-15px_rgba(0,0,0,0.06)] dark:shadow-[0_25px_60px_-15px_rgba(0,0,0,0.3)] overflow-hidden">
                 {{-- Premium top accent gradient --}}
-                <div class="h-1.5 w-full bg-gradient-to-r from-primary via-indigo-500 to-purple-600"></div>
+                <div class="h-1.5 w-full bg-gradient-to-r from-primary-500 via-primary-600 to-primary-700"></div>
                 <div class="p-6 sm:p-8 md:p-10">
                     <form id="invitation-form" action="{{ route('dashboard.invitations.update', $invitation) }}"
                         method="POST" enctype="multipart/form-data">
@@ -320,7 +320,7 @@
                             <div class="flex flex-col items-end gap-1.5 min-w-[120px]">
                                 <span class="text-xs font-semibold text-neutral-400 dark:text-neutral-500" x-text="'Progress: ' + Math.round((sections.findIndex(s => s.id === activeSection) + 1) / sections.length * 100) + '%'"></span>
                                 <div class="w-28 h-1.5 bg-neutral-100 dark:bg-secondary-700/60 rounded-full overflow-hidden">
-                                    <div class="h-full bg-gradient-to-r from-primary to-indigo-500 rounded-full transition-all duration-300"
+                                    <div class="h-full bg-gradient-to-r from-primary-500 to-primary-700 rounded-full transition-all duration-300"
                                         :style="'width:' + ((sections.findIndex(s => s.id === activeSection) + 1) / sections.length * 100) + '%'"></div>
                                 </div>
                             </div>
