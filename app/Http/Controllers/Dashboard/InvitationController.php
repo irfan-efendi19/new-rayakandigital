@@ -461,13 +461,18 @@ class InvitationController extends Controller
             unset($validated['slug']);
         }
 
-        // Handle YouTube URL & auto-extract video ID
         if ($request->filled('youtube_url')) {
             $validated['youtube_url'] = $request->youtube_url;
             $validated['youtube_video_id'] = Invitation::extractYoutubeId($request->youtube_url);
         } else {
             $validated['youtube_url'] = null;
             $validated['youtube_video_id'] = null;
+        }
+
+        if ($request->has('is_active')) {
+            $validated['is_active'] = $request->boolean('is_active');
+        } else {
+            $validated['is_active'] = $invitation->is_active ?? true;
         }
 
         $invitation->update($validated);

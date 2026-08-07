@@ -58,7 +58,7 @@ class InvitationRenderController extends Controller
     {
         $ip = $request->ip();
         $ua = $request->userAgent();
-        $visitorId = md5($ip . ($ua ?? ''));
+        $visitorId = md5($ip.($ua ?? ''));
 
         $exists = PageView::where('invitation_id', $invitation->id)
             ->where('visitor_id', $visitorId)

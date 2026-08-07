@@ -28,7 +28,7 @@
 </head>
 
 <body class="font-sans antialiased bg-neutral-50 dark:bg-secondary-900 text-secondary-800 dark:text-neutral-200">
-    <div class="min-h-screen flex flex-col">
+    <div class="min-h-screen flex flex-col overflow-x-hidden">
         @include('layouts.navigation')
 
         @isset($header)

@@ -1,6 +1,42 @@
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
 
+/**
+ * Helper: switch the Alpine multi-step form to a specific section ID.
+ * We dispatch a custom window event that the root x-data listens to.
+ * Returns a Promise that resolves after the section has been rendered
+ * (we wait one animation frame so Alpine/x-show has time to show the element).
+ */
+function switchToSection(sectionId) {
+    return new Promise((resolve) => {
+        window.dispatchEvent(
+            new CustomEvent("set-active-section", { detail: sectionId })
+        );
+        // Wait for the next frame so Alpine finishes showing the section
+        requestAnimationFrame(() => requestAnimationFrame(resolve));
+    });
+}
+
+/**
+ * Map each data-tour attribute to the section it lives in.
+ * Used by the tour driver to auto-switch before highlighting.
+ */
+const tourSectionMap = {
+    "mempelai-info":    "sec-1",
+    "invitation-link": "sec-1",
+    "event-schedule":  "sec-2",
+    "layar-sapa-config": "sec-3",
+    "cover-photo":     "sec-3",
+    "youtube-video":   "sec-3",
+    "gallery-photos":  "sec-3",
+    "music-background":"sec-3",
+    "select-theme":    "sec-3",
+    "love-story":      "sec-4",
+    "gift-digital":    "sec-5",
+    "guest-management":"sec-7",
+    "publish-btn":     null, // always visible (fixed bottom bar)
+};
+
 document.addEventListener("DOMContentLoaded", () => {
     const isEditMode = document.querySelector('#slug-input[data-original]');
 
@@ -61,29 +97,39 @@ document.addEventListener("DOMContentLoaded", () => {
         {
             element: '[data-tour="mempelai-info"]',
             popover: {
-                title: "💍 Informasi Pasangan",
+                title: "💍 Langkah 1 — Informasi Pasangan",
                 description:
-                    "Perbarui nama lengkap, nama panggilan, serta foto calon mempelai pria dan wanita jika diperlukan.",
-                side: "right",
-                align: "center",
-            },
-        },
-        {
-            element: '[data-tour="event-schedule"]',
-            popover: {
-                title: "📅 Tanggal & Waktu Acara",
-                description:
-                    "Sesuaikan sesi acara, waktu pelaksanaan, serta tautan Google Maps untuk navigasi tamu.",
+                    "Perbarui nama lengkap, nama panggilan, urutan pasangan, serta foto mempelai pria dan wanita.",
                 side: "bottom",
-                align: "center",
+                align: "start",
             },
         },
         {
             element: '[data-tour="invitation-link"]',
             popover: {
-                title: "🔗 Tautan Undangan",
+                title: "🔗 Langkah 2 — Tautan Undangan Kustom",
                 description:
-                    "Sesuaikan tautan undangan unik yang akan dibagikan kepada tamu.",
+                    "Sesuaikan tautan undangan unik yang akan dibagikan kepada tamu. Pastikan belum digunakan orang lain.",
+                side: "bottom",
+                align: "start",
+            },
+        },
+        {
+            element: '[data-tour="event-schedule"]',
+            popover: {
+                title: "📅 Langkah 3 — Jadwal & Lokasi Acara",
+                description:
+                    "Sesuaikan sesi acara, waktu, lokasi, dan tautan Google Maps agar tamu bisa navigasi dengan mudah.",
+                side: "bottom",
+                align: "center",
+            },
+        },
+        {
+            element: '[data-tour="cover-photo"]',
+            popover: {
+                title: "📸 Langkah 4 — Foto Sampul",
+                description:
+                    "Unggah foto sampul yang akan menjadi kesan pertama tamu saat membuka undangan.",
                 side: "bottom",
                 align: "start",
             },
@@ -91,9 +137,9 @@ document.addEventListener("DOMContentLoaded", () => {
         {
             element: '[data-tour="youtube-video"]',
             popover: {
-                title: "▶️ Video YouTube & Live",
+                title: "▶️ Langkah 5 — Video YouTube",
                 description:
-                    "Sematkan video YouTube atau siaran langsung ke dalam undangan.",
+                    "Sematkan video YouTube atau siaran langsung ke dalam undangan untuk pengalaman lebih berkesan.",
                 side: "bottom",
                 align: "center",
             },
@@ -101,9 +147,9 @@ document.addEventListener("DOMContentLoaded", () => {
         {
             element: '[data-tour="gallery-photos"]',
             popover: {
-                title: "🖼️ Galeri Foto",
+                title: "🖼️ Langkah 6 — Galeri Foto",
                 description:
-                    "Unggah koleksi foto untuk mempercantik tampilan undangan.",
+                    "Unggah koleksi foto kenangan untuk mempercantik tampilan undangan Anda.",
                 side: "bottom",
                 align: "center",
             },
@@ -111,9 +157,9 @@ document.addEventListener("DOMContentLoaded", () => {
         {
             element: '[data-tour="music-background"]',
             popover: {
-                title: "🎵 Musik Latar",
+                title: "🎵 Langkah 7 — Musik Latar",
                 description:
-                    "Tambahkan musik latar favorit agar undangan lebih hidup.",
+                    "Tambahkan musik latar favorit agar undangan terasa lebih hidup saat dibuka.",
                 side: "top",
                 align: "center",
             },
@@ -121,7 +167,7 @@ document.addEventListener("DOMContentLoaded", () => {
         {
             element: '[data-tour="select-theme"]',
             popover: {
-                title: "🎨 Ganti Tema Undangan",
+                title: "🎨 Langkah 8 — Ganti Tema Undangan",
                 description:
                     "Ganti preset tema visual undangan kapan saja sesuai konsep acara Anda.",
                 side: "bottom",
@@ -129,21 +175,11 @@ document.addEventListener("DOMContentLoaded", () => {
             },
         },
         {
-            element: '[data-tour="cover-photo"]',
-            popover: {
-                title: "📸 Foto Sampul Undangan",
-                description:
-                    "Unggah foto sampul untuk mempercantik tampilan undangan Anda.",
-                side: "bottom",
-                align: "start",
-            },
-        },
-        {
             element: '[data-tour="love-story"]',
             popover: {
-                title: "💕 Cerita Cinta",
+                title: "💕 Langkah 9 — Cerita Cinta & Kutipan",
                 description:
-                    "Bagikan momen-momen spesial perjalanan cinta Anda kepada para tamu.",
+                    "Bagikan perjalanan cinta Anda dan tambahkan kutipan inspiratif sebagai pembuka undangan.",
                 side: "bottom",
                 align: "center",
             },
@@ -151,9 +187,9 @@ document.addEventListener("DOMContentLoaded", () => {
         {
             element: '[data-tour="gift-digital"]',
             popover: {
-                title: "🎁 Kado Digital",
+                title: "🎁 Langkah 10 — Kado Digital",
                 description:
-                    "Atur rekening bank atau e-wallet untuk tamu yang ingin mengirim kado secara digital.",
+                    "Atur rekening bank, e-wallet, atau QRIS agar tamu dapat mengirim kado secara digital.",
                 side: "bottom",
                 align: "center",
             },
@@ -161,20 +197,20 @@ document.addEventListener("DOMContentLoaded", () => {
         {
             element: '[data-tour="guest-management"]',
             popover: {
-                title: "👥 Manajemen Tamu & RSVP",
+                title: "👥 Langkah 11 — Kategori Tamu",
                 description:
-                    "Kelola daftar tamu, buat tautan kustom per tamu, dan pantau konfirmasi kehadiran.",
-                side: "right",
+                    "Buat kategori tamu (VIP, Keluarga, Rekan Kerja, dll.) untuk mengatur undangan dengan lebih rapi.",
+                side: "bottom",
                 align: "center",
             },
         },
         {
             element: '[data-tour="publish-btn"]',
             popover: {
-                title: "💾 Simpan Perubahan",
+                title: "💾 Simpan Semua Perubahan",
                 description:
-                    "Simpan semua perubahan yang telah Anda buat pada undangan.",
-                side: "left",
+                    "Klik tombol ini kapan saja untuk menyimpan semua perubahan yang telah Anda buat. Tombol ini selalu tersedia di setiap langkah.",
+                side: "top",
                 align: "center",
             },
         },
@@ -189,6 +225,18 @@ document.addEventListener("DOMContentLoaded", () => {
         prevBtnText: "← Kembali",
         progressText: "Langkah {{current}} dari {{total}}",
         popoverClass: "rayakan-spotlight-popover",
+
+        /**
+         * Before each step is highlighted, switch to the section that
+         * contains the target element so it is visible (not hidden by x-show).
+         */
+        onHighlightStarted: async (element, step) => {
+            const tourAttr = step?.element?.replace('[data-tour="', '').replace('"]', '');
+            const sectionId = tourAttr ? tourSectionMap[tourAttr] : null;
+            if (sectionId) {
+                await switchToSection(sectionId);
+            }
+        },
 
         onDestroyed: () => {
             localStorage.setItem("editor_tour_completed", "true");

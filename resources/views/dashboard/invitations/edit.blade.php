@@ -91,24 +91,92 @@
         </div>
 
         {{-- ─── STICKY SECTION NAV (8 STEPS) ─── --}}
-        <div class="sticky top-[64px] z-30 bg-white/95 dark:bg-secondary-900/95 backdrop-blur-md border-b border-neutral-200/80 dark:border-secondary-700/60 py-3 shadow-sm">
+        <div class="sticky top-[64px] z-30 bg-white/95 dark:bg-secondary-900/95 backdrop-blur-md border-b border-neutral-200/80 dark:border-secondary-700/60 py-2.5 sm:py-3 shadow-sm">
             <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
 
-                {{-- Mobile: active step + progress bar --}}
-                <div class="sm:hidden">
-                    <div class="flex items-center justify-between gap-2">
-                        <div class="flex items-center gap-2 min-w-0">
-                            <span class="w-6 h-6 rounded-full bg-primary text-white text-xs font-bold flex items-center justify-center shrink-0"
-                                x-text="sections.find(s => s.id === activeSection)?.num || 1"></span>
-                            <span class="text-xs font-bold text-secondary-800 dark:text-neutral-100 truncate"
-                                x-text="sections.find(s => s.id === activeSection)?.name || 'Mempelai'"></span>
-                        </div>
-                        <span class="text-[11px] font-semibold text-neutral-400 dark:text-neutral-500"
+                {{-- Mobile: modern custom step dropdown --}}
+                <div class="sm:hidden relative" x-data="{ open: false }">
+                    {{-- Trigger Button --}}
+                    <button type="button" @click="open = !open"
+                        class="w-full flex items-center gap-3 bg-white dark:bg-secondary-800 border border-neutral-200/90 dark:border-secondary-700/80 rounded-2xl p-2.5 shadow-sm transition-all duration-200 select-none"
+                        :class="open ? 'ring-2 ring-primary/30 border-primary/50' : 'hover:border-neutral-300 dark:hover:border-secondary-600'">
+
+                        {{-- Active step badge --}}
+                        <span class="w-8 h-8 rounded-xl bg-primary text-white text-xs font-bold flex items-center justify-center shrink-0 shadow-sm"
+                            x-text="sections.find(s => s.id === activeSection)?.num || 1"></span>
+
+                        {{-- Active step name --}}
+                        <span class="flex-1 text-left text-sm font-bold text-secondary-800 dark:text-neutral-100 truncate"
+                            x-text="sections.find(s => s.id === activeSection)?.name || 'Mempelai'"></span>
+
+                        {{-- Step counter --}}
+                        <span class="text-[11px] font-semibold text-neutral-400 dark:text-neutral-500 shrink-0 px-1"
                             x-text="(sections.findIndex(s => s.id === activeSection) + 1) + ' / ' + sections.length"></span>
-                    </div>
+
+                        {{-- Animated chevron --}}
+                        <svg class="w-4 h-4 text-neutral-400 dark:text-neutral-500 shrink-0 transition-transform duration-200"
+                            :class="open ? 'rotate-180 text-primary' : ''"
+                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+
+                    {{-- Progress bar --}}
                     <div class="mt-2 h-1 bg-neutral-100 dark:bg-secondary-700/60 rounded-full overflow-hidden">
-                        <div class="h-full bg-primary rounded-full transition-all duration-300"
+                        <div class="h-full bg-gradient-to-r from-primary to-indigo-500 rounded-full transition-all duration-500"
                             :style="'width:' + ((sections.findIndex(s => s.id === activeSection) + 1) / sections.length * 100) + '%'"></div>
+                    </div>
+
+                    {{-- Dropdown Panel --}}
+                    <div x-show="open"
+                        x-cloak
+                        x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 -translate-y-2 scale-95"
+                        x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+                        x-transition:leave="transition ease-in duration-150"
+                        x-transition:leave-start="opacity-100 translate-y-0 scale-100"
+                        x-transition:leave-end="opacity-0 -translate-y-2 scale-95"
+                        @click.outside="open = false"
+                        class="absolute left-0 right-0 top-full mt-2.5 z-50 rounded-2xl border border-neutral-200/90 dark:border-secondary-700/80 bg-white/95 dark:bg-secondary-800/95 backdrop-blur-md shadow-2xl overflow-hidden origin-top">
+
+                        <div class="py-1.5 max-h-[60vh] overflow-y-auto divide-y divide-neutral-100 dark:divide-secondary-750">
+                            <template x-for="(sec, i) in sections" :key="sec.id">
+                                <button type="button"
+                                    @click="scrollTo(sec.id); open = false"
+                                    class="w-full flex items-center gap-3 px-3.5 py-2.5 text-left transition-all duration-150"
+                                    :class="sec.id === activeSection
+                                        ? 'bg-primary/8 dark:bg-primary/15'
+                                        : 'hover:bg-neutral-50 dark:hover:bg-secondary-750/70'">
+
+                                    {{-- Circle indicator --}}
+                                    <span class="w-7 h-7 rounded-xl flex items-center justify-center text-xs font-bold shrink-0 border transition-all duration-150"
+                                        :class="sec.id === activeSection
+                                            ? 'bg-primary text-white border-primary shadow-sm ring-2 ring-primary/20'
+                                            : (i < sections.findIndex(s => s.id === activeSection)
+                                                ? 'bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary-300 border-primary/30'
+                                                : 'bg-neutral-100 dark:bg-secondary-700 text-neutral-400 dark:text-neutral-500 border-neutral-200 dark:border-secondary-600')"
+                                        x-text="sec.num"></span>
+
+                                    {{-- Step name --}}
+                                    <span class="flex-1 text-xs sm:text-sm font-semibold truncate transition-colors duration-150"
+                                        :class="sec.id === activeSection
+                                            ? 'text-primary dark:text-primary-300'
+                                            : 'text-secondary-800 dark:text-neutral-200'"
+                                        x-text="sec.name"></span>
+
+                                    {{-- Checkmark for completed steps --}}
+                                    <svg x-show="i < sections.findIndex(s => s.id === activeSection)"
+                                        class="w-4 h-4 text-primary/70 dark:text-primary-400/80 shrink-0"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                                    </svg>
+
+                                    {{-- Active dot --}}
+                                    <span x-show="sec.id === activeSection"
+                                        class="w-2 h-2 rounded-full bg-primary shrink-0 shadow-sm ring-2 ring-primary/30"></span>
+                                </button>
+                            </template>
+                        </div>
                     </div>
                 </div>
 
@@ -198,10 +266,10 @@
         }
         </style>
 
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-7 sm:py-8 relative">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-7 sm:py-8 relative overflow-hidden">
             {{-- Decorative soft background glows --}}
-            <div class="absolute -top-10 -left-10 w-72 h-72 bg-primary/10 dark:bg-primary/5 rounded-full blur-3xl pointer-events-none"></div>
-            <div class="absolute -bottom-10 -right-10 w-72 h-72 bg-indigo-500/10 dark:bg-indigo-500/5 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -top-10 left-0 w-72 h-72 bg-primary/10 dark:bg-primary/5 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-10 right-0 w-72 h-72 bg-indigo-500/10 dark:bg-indigo-500/5 rounded-full blur-3xl pointer-events-none"></div>
 
             <div
                 class="relative bg-white/95 dark:bg-secondary-800/95 backdrop-blur-sm rounded-3xl border border-neutral-200/50 dark:border-secondary-700/40 shadow-[0_15px_50px_-15px_rgba(0,0,0,0.06)] dark:shadow-[0_25px_60px_-15px_rgba(0,0,0,0.3)] overflow-hidden">
@@ -596,6 +664,91 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                {{-- Custom URL / Slug --}}
+                                <div data-tour="invitation-link" class="mt-6">
+                                    <h4
+                                        class="font-heading text-base font-bold text-secondary-800 dark:text-neutral-100 mb-1">
+                                        Tautan Undangan</h4>
+                                    <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-4">
+                                        Sesuaikan tautan
+                                        undangan Anda.</p>
+
+                                    <div
+                                        class="bg-neutral-50 dark:bg-secondary-700 p-5 rounded-2xl border border-neutral-200 dark:border-secondary-700 space-y-4">
+                                        <div>
+                                            <label for="slug-input"
+                                                class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Tautan
+                                                Kustom</label>
+                                            <div class="mt-1.5 flex flex-col sm:flex-row items-stretch gap-2 sm:gap-0">
+                                                <span
+                                                    class="inline-flex items-center px-3 py-2 sm:py-0 rounded-xl sm:rounded-r-none border border-neutral-300 dark:border-neutral-600 bg-neutral-100 dark:bg-secondary-800 text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 whitespace-nowrap font-mono w-full sm:w-auto justify-center sm:justify-start sm:border-r-0">{{ parse_url(config('app.url'), PHP_URL_HOST) }}/</span>
+                                                <input type="text" name="slug" id="slug-input"
+                                                    value="{{ old('slug', $invitation->slug) }}"
+                                                    data-original="{{ $invitation->slug }}"
+                                                    data-id="{{ $invitation->id }}"
+                                                    class="block w-full flex-1 rounded-xl sm:rounded-l-none border border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 text-sm font-mono dark:bg-secondary-700 dark:text-neutral-200 py-2.5 px-3"
+                                                    placeholder="nama-undangan-anda" maxlength="100"
+                                                    pattern="^[a-z0-9\-]+$">
+                                            </div>
+                                            <div id="slug-indicator"
+                                                class="mt-1.5 text-xs flex items-center gap-1.5 text-neutral-400 dark:text-neutral-500">
+                                                <span class="slug-icon flex items-center">
+                                                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+                                                </span>
+                                                <span class="slug-text">Masukkan
+                                                    tautan
+                                                    kustom</span>
+                                            </div>
+                                            @error('slug') <span
+                                                class="text-red-500 dark:text-red-400 text-xs mt-1">{{ $message }}</span>
+                                            @enderror
+                                            <p class="mt-1.5 text-xs text-neutral-400 dark:text-neutral-500">
+                                                Huruf
+                                                kecil,
+                                                angka, dan tanda hubung
+                                                (-)</p>
+                                        </div>
+
+                                        <div
+                                            class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl p-4">
+                                            <div class="flex items-start gap-3">
+                                                <span class="text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5">
+                                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
+                                                </span>
+                                                <div>
+                                                    <p class="text-xs font-semibold text-amber-800 dark:text-amber-300">
+                                                        Perhatian</p>
+                                                    <p class="text-xs text-amber-700 dark:text-amber-400 mt-0.5">
+                                                        Mengubah
+                                                        tautan akan
+                                                        membuat tautan
+                                                        lama tidak
+                                                        bisa diakses.
+                                                        Pastikan
+                                                        Anda
+                                                        belum
+                                                        menyebarkan
+                                                        tautan lama ke
+                                                        tamu
+                                                        undangan.</p>
+                                                    @if(
+                                                            $invitation->slug_change_count
+                                                            > 0
+                                                        )
+                                                        <p class="text-xs text-amber-700 dark:text-amber-400 mt-1">
+                                                            Tautan
+                                                            telah
+                                                            diubah
+                                                            {{ $invitation->slug_change_count }}
+                                                            kali.
+                                                        </p>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             {{-- ======================================== --}}
@@ -938,94 +1091,6 @@
                                             WIT (Waktu Indonesia Timur)
                                         </option>
                                     </select>
-                                    @error('timezone') <span
-                                        class="text-red-500 dark:text-red-400 text-xs mt-1">{{ $message }}</span>
-                                    @enderror
-                                </div>
-
-                                {{-- Custom URL / Slug --}}
-                                <div data-tour="invitation-link" class="mt-6">
-                                    <h4
-                                        class="font-heading text-base font-bold text-secondary-800 dark:text-neutral-100 mb-1">
-                                        Tautan Undangan</h4>
-                                    <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-4">
-                                        Sesuaikan tautan
-                                        undangan Anda.</p>
-
-                                    <div
-                                        class="bg-neutral-50 dark:bg-secondary-700 p-5 rounded-2xl border border-neutral-200 dark:border-secondary-700 space-y-4">
-                                        <div>
-                                            <label for="slug-input"
-                                                class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Tautan
-                                                Kustom</label>
-                                            <div class="mt-1.5 flex flex-col sm:flex-row items-stretch gap-2 sm:gap-0">
-                                                <span
-                                                    class="inline-flex items-center px-3 py-2 sm:py-0 rounded-xl sm:rounded-r-none border border-neutral-300 dark:border-neutral-600 bg-neutral-100 dark:bg-secondary-800 text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 whitespace-nowrap font-mono w-full sm:w-auto justify-center sm:justify-start sm:border-r-0">{{ parse_url(config('app.url'), PHP_URL_HOST) }}/</span>
-                                                <input type="text" name="slug" id="slug-input"
-                                                    value="{{ old('slug', $invitation->slug) }}"
-                                                    data-original="{{ $invitation->slug }}"
-                                                    data-id="{{ $invitation->id }}"
-                                                    class="block w-full flex-1 rounded-xl sm:rounded-l-none border border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 text-sm font-mono dark:bg-secondary-700 dark:text-neutral-200 py-2.5 px-3"
-                                                    placeholder="nama-undangan-anda" maxlength="100"
-                                                    pattern="^[a-z0-9\-]+$">
-                                            </div>
-                                            <div id="slug-indicator"
-                                                class="mt-1.5 text-xs flex items-center gap-1.5 text-neutral-400 dark:text-neutral-500">
-                                                <span class="slug-icon flex items-center">
-                                                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
-                                                </span>
-                                                <span class="slug-text">Masukkan
-                                                    tautan
-                                                    kustom</span>
-                                            </div>
-                                            @error('slug') <span
-                                                class="text-red-500 dark:text-red-400 text-xs mt-1">{{ $message }}</span>
-                                            @enderror
-                                            <p class="mt-1.5 text-xs text-neutral-400 dark:text-neutral-500">
-                                                Huruf
-                                                kecil,
-                                                angka, dan tanda hubung
-                                                (-)</p>
-                                        </div>
-
-                                        <div
-                                            class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl p-4">
-                                            <div class="flex items-start gap-3">
-                                                <span class="text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5">
-                                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
-                                                </span>
-                                                <div>
-                                                    <p class="text-xs font-semibold text-amber-800 dark:text-amber-300">
-                                                        Perhatian</p>
-                                                    <p class="text-xs text-amber-700 dark:text-amber-400 mt-0.5">
-                                                        Mengubah
-                                                        tautan akan
-                                                        membuat tautan
-                                                        lama tidak
-                                                        bisa diakses.
-                                                        Pastikan
-                                                        Anda
-                                                        belum
-                                                        menyebarkan
-                                                        tautan lama ke
-                                                        tamu
-                                                        undangan.</p>
-                                                    @if(
-                                                            $invitation->slug_change_count
-                                                            > 0
-                                                        )
-                                                        <p class="text-xs text-amber-700 dark:text-amber-400 mt-1">
-                                                            Tautan
-                                                            telah
-                                                            diubah
-                                                            {{ $invitation->slug_change_count }}
-                                                            kali.
-                                                        </p>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
 
@@ -2675,7 +2740,7 @@
         </div>
 
     {{-- Spacer for fixed bottom bar --}}
-    <div class="h-16"></div>
+    <div class="h-28 sm:h-24"></div>
 
     {{-- Crop Modal --}}
     <div id="crop-modal" class="hidden fixed inset-0 z-50 bg-black/60 items-center justify-center p-4 overflow-y-auto">
