@@ -87,7 +87,7 @@ class DokuService
         $customer = $transaction->invitation?->user;
 
         $customerName = $customer ? substr(preg_replace('/[^A-Za-z0-9 ]/', '', $customer->name), 0, 50) : 'Customer';
-        $customerEmail = $customer?->email ?? 'customer@rayakandigital.com';
+        $customerEmail = $customer?->email ?? 'customer@rayakandigital.id';
 
         return $this->requestCheckoutUrl(
             invoiceNumber: $transaction->reference_order_id,

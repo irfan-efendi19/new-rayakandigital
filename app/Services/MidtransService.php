@@ -80,7 +80,7 @@ class MidtransService
             'amount' => $price,
         ]);
 
-        $email = filter_var($user->email, FILTER_VALIDATE_EMAIL) ? $user->email : 'user-'.$user->id.'@rayakandigital.com';
+        $email = filter_var($user->email, FILTER_VALIDATE_EMAIL) ? $user->email : 'user-'.$user->id.'@rayakandigital.id';
 
         $params = [
             'transaction_details' => [

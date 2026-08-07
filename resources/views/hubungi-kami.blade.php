@@ -95,7 +95,7 @@
                             </div>
                             <div>
                                 <h3 class="font-bold text-secondary-800 dark:text-neutral-200 mb-1">Email</h3>
-                                <p class="text-neutral-600 dark:text-neutral-300 text-sm">admin@rayakandigital.com</p>
+                                <p class="text-neutral-600 dark:text-neutral-300 text-sm">support@rayakandigital.id</p>
                             </div>
                         </div>
                     </div>
@@ -124,7 +124,8 @@
                         <div class="flex items-center gap-3">
                             <div
                                 class="flex-shrink-0 w-10 h-10 bg-primary-600 rounded-full flex items-center justify-center text-white text-lg">
-                                <i class="fa-solid fa-bolt"></i></div>
+                                <i class="fa-solid fa-bolt"></i>
+                            </div>
                             <div>
                                 <p class="font-bold text-secondary-800 dark:text-neutral-200 text-sm">Butuh Respon
                                     Cepat?</p>

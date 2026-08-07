@@ -71,7 +71,7 @@ class AddonController extends Controller
         if ($paymentMethod === 'midtrans') {
             $email = filter_var($request->user()->email, FILTER_VALIDATE_EMAIL)
                 ? $request->user()->email
-                : 'user-' . $request->user()->id . '@rayakandigital.com';
+                : 'user-' . $request->user()->id . '@rayakandigital.id';
 
             $params = [
                 'transaction_details' => [

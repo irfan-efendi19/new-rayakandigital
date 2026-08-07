@@ -146,8 +146,8 @@
                     <h2 class="font-heading text-2xl font-bold text-secondary-800 dark:text-neutral-200 mb-3">10. Hubungi Kami</h2>
                     <p class="text-neutral-600 dark:text-neutral-300 leading-relaxed">
                         Jika Anda memiliki pertanyaan mengenai syarat dan ketentuan ini, silakan hubungi kami melalui
-                        email di <a href="mailto:support@rayakandigital.com"
-                            class="text-primary hover:text-primary-600 underline">support@rayakandigital.com</a>.
+                        email di <a href="mailto:support@rayakandigital.id"
+                            class="text-primary hover:text-primary-600 underline">support@rayakandigital.id</a>.
                     </p>
                 </section>
             </div>
