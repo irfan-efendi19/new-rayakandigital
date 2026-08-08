@@ -293,7 +293,9 @@ class InvitationController extends Controller
         $qrMapsCodeData = app(QrWithLogoService::class)->generate($qrMapsUrl)['data'];
 
         $qrGalleryUrl = route('qr-shared-gallery', $invitation->slug);
-        $qrGalleryCodeData = app(QrWithLogoService::class)->generate($qrGalleryUrl)['data'];
+        $qrGalleryCodeData = $invitation->canUseSharedGallery()
+            ? app(QrWithLogoService::class)->generate($qrGalleryUrl)['data']
+            : null;
 
         $qrHubUrl = route('qr-hub', $invitation->slug);
         $qrHubCodeData = app(QrWithLogoService::class)->generate($qrHubUrl)['data'];
@@ -354,6 +356,10 @@ class InvitationController extends Controller
     {
         Gate::authorize('view', $invitation);
 
+        if (! $invitation->canUseSharedGallery()) {
+            abort(403, 'Fitur QR Galeri Foto Bersama hanya tersedia untuk paket Gold dan Platinum.');
+        }
+
         $invitation->load(['sharedPhotos' => fn ($q) => $q->latest()]);
         $photos = $invitation->sharedPhotos;
 
@@ -372,6 +378,10 @@ class InvitationController extends Controller
     {
         Gate::authorize('update', $invitation);
 
+        if (! $invitation->canUseSharedGallery()) {
+            abort(403, 'Fitur QR Galeri Foto Bersama hanya tersedia untuk paket Gold dan Platinum.');
+        }
+
         $validated = $request->validate([
             'photographer_drive_url' => 'nullable|url',
         ]);
@@ -384,6 +394,10 @@ class InvitationController extends Controller
     public function destroySharedPhoto(Invitation $invitation, \App\Models\EventSharedPhoto $photo)
     {
         Gate::authorize('update', $invitation);
+
+        if (! $invitation->canUseSharedGallery()) {
+            abort(403, 'Fitur QR Galeri Foto Bersama hanya tersedia untuk paket Gold dan Platinum.');
+        }
 
         if ($photo->invitation_id !== $invitation->id) {
             abort(403);

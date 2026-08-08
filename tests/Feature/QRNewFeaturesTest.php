@@ -2,6 +2,7 @@
 
 use App\Models\EventSharedPhoto;
 use App\Models\Invitation;
+use App\Models\Package;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
@@ -30,7 +31,7 @@ test('qr maps page can be accessed and displays navigation links and parking gui
     $response->assertSee('Parkir VIP di Basement 1. Gunakan Lift Lobby Selatan.');
 });
 
-test('qr shared gallery page can be accessed and handles photo uploads', function () {
+test('qr shared gallery requires gold tier to be accessed and handles photo uploads', function () {
     Storage::fake('public');
 
     $user = User::factory()->create();
@@ -38,8 +39,17 @@ test('qr shared gallery page can be accessed and handles photo uploads', functio
         'user_id' => $user->id,
         'slug' => 'test-gallery-slug',
         'is_active' => true,
+        'tier' => 'gold',
         'shared_drive_url' => 'https://drive.google.com/drive/folders/test12345',
     ]);
+
+    $package = Package::create([
+        'package_name' => 'Gold',
+        'package_code' => 'gold',
+        'price' => 150000,
+        'duration_days' => 365,
+    ]);
+    $invitation->update(['pricing_tier_id' => $package->id]);
 
     // 1. Visit shared gallery page
     $response = $this->get('/test-gallery-slug/galeri-bersama');
@@ -69,13 +79,37 @@ test('qr shared gallery page can be accessed and handles photo uploads', functio
     Storage::disk('public')->assertExists($savedPhoto->photo_path);
 });
 
+test('qr shared gallery blocks free tier invitations', function () {
+    $user = User::factory()->create();
+    $invitation = Invitation::factory()->create([
+        'user_id' => $user->id,
+        'slug' => 'test-gallery-free-slug',
+        'is_active' => true,
+        'tier' => 'free',
+    ]);
+
+    $this->get('/test-gallery-free-slug/galeri-bersama')->assertStatus(403);
+    $this->post('/test-gallery-free-slug/galeri-bersama/upload', [
+        'photo' => UploadedFile::fake()->image('blocked.jpg'),
+    ])->assertStatus(403);
+});
+
 test('dashboard qr codes page displays maps and shared gallery qr cards', function () {
     $user = User::factory()->create();
     $invitation = Invitation::factory()->create([
         'user_id' => $user->id,
         'slug' => 'test-dashboard-qr',
         'is_active' => true,
+        'tier' => 'gold',
     ]);
+
+    $package = Package::create([
+        'package_name' => 'Gold',
+        'package_code' => 'gold',
+        'price' => 150000,
+        'duration_days' => 365,
+    ]);
+    $invitation->update(['pricing_tier_id' => $package->id]);
 
     $response = $this->actingAs($user)->get(route('dashboard.invitations.qr-codes', $invitation));
 

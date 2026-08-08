@@ -399,6 +399,11 @@ class Invitation extends Model
         return $this->hasFeature('whatsapp_gateway') || in_array($this->currentTier(), ['gold', 'platinum']);
     }
 
+    public function canUseSharedGallery(): bool
+    {
+        return in_array($this->currentTier(), ['gold', 'platinum']);
+    }
+
     public function canUseGift(): bool
     {
         return $this->hasFeature('digital_gift') || $this->hasAddon('addon-digital-gift');

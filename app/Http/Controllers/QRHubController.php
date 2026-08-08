@@ -81,6 +81,10 @@ class QRHubController extends Controller
             return response()->view('invitations.expired', compact('invitation'));
         }
 
+        if (! $invitation->canUseSharedGallery()) {
+            abort(403, 'Fitur QR Galeri Foto Bersama hanya tersedia untuk paket Gold dan Platinum.');
+        }
+
         $photos = $invitation->sharedPhotos;
 
         return view('qr-shared-gallery', compact('invitation', 'photos'));
@@ -94,6 +98,10 @@ class QRHubController extends Controller
 
         if ($invitation->isExpired()) {
             return response()->json(['message' => 'Undangan sudah kadaluarsa.'], 403);
+        }
+
+        if (! $invitation->canUseSharedGallery()) {
+            return response()->json(['message' => 'Fitur Galeri Foto Bersama hanya tersedia untuk paket Gold dan Platinum.'], 403);
         }
 
         $request->validate([
