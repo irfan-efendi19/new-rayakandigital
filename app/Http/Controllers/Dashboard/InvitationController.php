@@ -289,6 +289,12 @@ class InvitationController extends Controller
         $qrUcapanUrl = route('qr-ucapan', $invitation->slug);
         $qrUcapanCodeData = app(QrWithLogoService::class)->generate($qrUcapanUrl)['data'];
 
+        $qrMapsUrl = route('qr-maps', $invitation->slug);
+        $qrMapsCodeData = app(QrWithLogoService::class)->generate($qrMapsUrl)['data'];
+
+        $qrGalleryUrl = route('qr-shared-gallery', $invitation->slug);
+        $qrGalleryCodeData = app(QrWithLogoService::class)->generate($qrGalleryUrl)['data'];
+
         $qrHubUrl = route('qr-hub', $invitation->slug);
         $qrHubCodeData = app(QrWithLogoService::class)->generate($qrHubUrl)['data'];
 
@@ -305,9 +311,88 @@ class InvitationController extends Controller
             'qrWebsiteCodeData', 'qrWebsiteUrl',
             'qrKadoCodeData', 'qrKadoUrl',
             'qrUcapanCodeData', 'qrUcapanUrl',
+            'qrMapsCodeData', 'qrMapsUrl',
+            'qrGalleryCodeData', 'qrGalleryUrl',
             'qrHubCodeData', 'qrHubUrl',
             'qrRsvpCodeData', 'rsvpUrl'
         ));
+    }
+
+    public function qrMapsDetail(Invitation $invitation)
+    {
+        Gate::authorize('view', $invitation);
+
+        $invitation->load('events');
+
+        $qrMapsUrl = route('qr-maps', $invitation->slug);
+        $qrMapsCodeData = app(QrWithLogoService::class)->generate($qrMapsUrl)['data'];
+
+        return view('dashboard.invitations.qr-maps-detail', compact(
+            'invitation',
+            'qrMapsCodeData',
+            'qrMapsUrl'
+        ));
+    }
+
+    public function qrMapsUpdate(Request $request, Invitation $invitation)
+    {
+        Gate::authorize('update', $invitation);
+
+        $validated = $request->validate([
+            'venue_name' => 'nullable|string|max:255',
+            'venue_address' => 'nullable|string',
+            'venue_maps_url' => 'nullable|url',
+            'venue_parking_info' => 'nullable|string',
+        ]);
+
+        $invitation->update($validated);
+
+        return back()->with('success', 'Data lokasi dan petunjuk arah berhasil disimpan.');
+    }
+
+    public function qrGalleryDetail(Invitation $invitation)
+    {
+        Gate::authorize('view', $invitation);
+
+        $invitation->load(['sharedPhotos' => fn ($q) => $q->latest()]);
+        $photos = $invitation->sharedPhotos;
+
+        $qrGalleryUrl = route('qr-shared-gallery', $invitation->slug);
+        $qrGalleryCodeData = app(QrWithLogoService::class)->generate($qrGalleryUrl)['data'];
+
+        return view('dashboard.invitations.qr-gallery-detail', compact(
+            'invitation',
+            'qrGalleryCodeData',
+            'qrGalleryUrl',
+            'photos'
+        ));
+    }
+
+    public function qrGalleryUpdate(Request $request, Invitation $invitation)
+    {
+        Gate::authorize('update', $invitation);
+
+        $validated = $request->validate([
+            'photographer_drive_url' => 'nullable|url',
+        ]);
+
+        $invitation->update($validated);
+
+        return back()->with('success', 'Pengaturan Drive Dokumentasi Fotografer berhasil disimpan.');
+    }
+
+    public function destroySharedPhoto(Invitation $invitation, \App\Models\EventSharedPhoto $photo)
+    {
+        Gate::authorize('update', $invitation);
+
+        if ($photo->invitation_id !== $invitation->id) {
+            abort(403);
+        }
+
+        \Illuminate\Support\Facades\Storage::disk('public')->delete($photo->photo_path);
+        $photo->delete();
+
+        return back()->with('success', 'Foto berhasil dihapus.');
     }
 
     public function checkSlug(Request $request)
@@ -353,6 +438,8 @@ class InvitationController extends Controller
                 'venue_name' => 'nullable|string|max:255',
                 'venue_address' => 'nullable|string',
                 'venue_maps_url' => 'nullable|url',
+                'venue_parking_info' => 'nullable|string',
+                'shared_drive_url' => 'nullable|url',
                 'love_story' => 'nullable|string',
                 'timezone' => 'nullable|string|max:50',
                 'theme' => 'required|string',

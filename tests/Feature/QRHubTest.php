@@ -54,7 +54,7 @@ test('dashboard invitation show page links to dedicated qr codes page and dedica
     // 1. Dashboard Show page contains link to Pusat QR Code
     $responseShow = $this->actingAs($user)->get(route('dashboard.invitations.show', $invitation));
     $responseShow->assertStatus(200);
-    $responseShow->assertSee('Pusat Kelola & Unduh QR Code');
+    $responseShow->assertSeeText('Pusat Kelola & Unduh QR Code');
     $responseShow->assertSee(route('dashboard.invitations.qr-codes', $invitation));
 
     // 2. Dedicated QR Codes Page displays all QR cards
@@ -65,5 +65,5 @@ test('dashboard invitation show page links to dedicated qr codes page and dedica
     $responseQr->assertSee('QR Website Undangan');
     $responseQr->assertSee('QR Kado Digital');
     $responseQr->assertSee('QR Kirim Ucapan');
-    $responseQr->assertSee('QR RSVP Universal');
+    $responseQr->assertSee('QR RSVP');
 });

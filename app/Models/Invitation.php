@@ -107,6 +107,9 @@ class Invitation extends Model
         'venue_name',
         'venue_address',
         'venue_maps_url',
+        'venue_parking_info',
+        'shared_drive_url',
+        'photographer_drive_url',
         'cover_photo',
         'love_story',
         'theme',
@@ -234,6 +237,11 @@ class Invitation extends Model
     public function wishes(): HasMany
     {
         return $this->hasMany(Wish::class)->latest();
+    }
+
+    public function sharedPhotos(): HasMany
+    {
+        return $this->hasMany(EventSharedPhoto::class)->latest();
     }
 
     public function isExpired(): bool

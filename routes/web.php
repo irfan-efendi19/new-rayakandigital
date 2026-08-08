@@ -138,6 +138,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Dedicated QR Codes Management Page
         Route::get('/invitations/{invitation}/qr-codes', [InvitationController::class, 'qrCodes'])->name('invitations.qr-codes');
 
+        // QR Maps Detail & Config
+        Route::get('/invitations/{invitation}/qr-maps', [InvitationController::class, 'qrMapsDetail'])->name('invitations.qr-maps');
+        Route::patch('/invitations/{invitation}/qr-maps', [InvitationController::class, 'qrMapsUpdate'])->name('invitations.qr-maps.update');
+
+        // QR Gallery Detail & Config
+        Route::get('/invitations/{invitation}/qr-gallery', [InvitationController::class, 'qrGalleryDetail'])->name('invitations.qr-gallery');
+        Route::patch('/invitations/{invitation}/qr-gallery', [InvitationController::class, 'qrGalleryUpdate'])->name('invitations.qr-gallery.update');
+        Route::delete('/invitations/{invitation}/qr-gallery/{photo}', [InvitationController::class, 'destroySharedPhoto'])->name('invitations.qr-gallery.photo.destroy');
+
         // Wishes
         Route::get('/invitations/{invitation}/wishes', [InvitationController::class, 'wishesList'])->name('invitations.wishes-list');
         Route::delete('/invitations/{invitation}/wishes/{wish}', [WishController::class, 'destroy'])->name('invitations.wishes.destroy');
@@ -192,5 +201,8 @@ Route::get('/{slug}/rsvp', [QRGatewayController::class, 'show'])->name('qr-gatew
 Route::get('/{slug}/qr', [QRHubController::class, 'show'])->name('qr-hub');
 Route::get('/{slug}/kado', [QRHubController::class, 'showKado'])->name('qr-kado');
 Route::get('/{slug}/ucapan', [QRHubController::class, 'showUcapan'])->name('qr-ucapan');
+Route::get('/{slug}/maps', [QRHubController::class, 'showMaps'])->name('qr-maps');
+Route::get('/{slug}/galeri-bersama', [QRHubController::class, 'showSharedGallery'])->name('qr-shared-gallery');
+Route::post('/{slug}/galeri-bersama/upload', [QRHubController::class, 'uploadSharedPhoto'])->name('qr-shared-gallery.upload');
 
 Route::get('/{slug}', [InvitationRenderController::class, 'show'])->name('invitation.show');

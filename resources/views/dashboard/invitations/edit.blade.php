@@ -370,7 +370,7 @@
                                             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                     d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
-                                            </svg>
+                            </svg>
                                         @else
                                             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -1091,6 +1091,18 @@
                                             WIT (Waktu Indonesia Timur)
                                         </option>
                                     </select>
+                                    {{-- Petunjuk Titik Parkir & Akses Masuk (QR Maps) --}}
+                                 <div class="mt-6 p-4 bg-emerald-50/60 dark:bg-emerald-950/20 rounded-2xl border border-emerald-200/60 dark:border-emerald-800/40 space-y-2">
+                                     <label class="block text-sm font-semibold text-emerald-800 dark:text-emerald-300">
+                                         <i class="fa-solid fa-square-parking text-emerald-600 me-1"></i> Petunjuk Titik Parkir & Akses Masuk (QR Maps)
+                                     </label>
+                                     <p class="text-xs text-emerald-700/80 dark:text-emerald-300/80">
+                                         Tuliskan instruksi titik parkir, gerbang masuk, atau petunjuk khusus yang akan ditampilkan saat tamu men-scan <strong>QR Maps & Petunjuk Arah</strong>.
+                                     </p>
+                                     <textarea name="venue_parking_info" rows="3"
+                                         class="mt-1 block w-full rounded-xl border-emerald-300 dark:border-emerald-700/60 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm dark:bg-secondary-800 dark:text-neutral-200"
+                                         placeholder="Misal: Parkir mobil VIP di Area Basement 1. Pintu masuk utama melalui Lobby Selatan.">{{ old('venue_parking_info', $invitation->venue_parking_info ?? '') }}</textarea>
+                                 </div>
                                 </div>
                             </div>
 
@@ -1381,6 +1393,20 @@
                                                 foto.</p>
                                         </div>
                                     @endif
+
+                                     {{-- Link Cloud Drive / Google Drive Foto Bersama --}}
+                                     <div class="pt-4 border-t border-neutral-200 dark:border-secondary-600 space-y-2">
+                                         <label class="block text-sm font-semibold text-neutral-700 dark:text-neutral-300">
+                                             <i class="fa-brands fa-google-drive text-purple-500 me-1"></i> Link Cloud Drive / Album Google Photos (Opsional)
+                                         </label>
+                                         <p class="text-xs text-neutral-500 dark:text-neutral-400">
+                                             Tautan ini akan muncul di halaman <strong>QR Galeri Foto Bersama</strong> agar tamu bisa langsung membuka album Google Drive / Google Photos dari Anda.
+                                         </p>
+                                         <input type="url" name="shared_drive_url"
+                                             value="{{ old('shared_drive_url', $invitation->shared_drive_url ?? '') }}"
+                                             class="mt-1 block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
+                                             placeholder="https://drive.google.com/drive/folders/...">
+                                     </div>
                                 </div>
 
                                 {{-- Music --}}
