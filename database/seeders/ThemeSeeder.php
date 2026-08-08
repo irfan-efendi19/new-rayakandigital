@@ -25,6 +25,11 @@ class ThemeSeeder extends Seeder
             ['name' => 'Jawa', 'thumbnail_portrait' => '/images/themes/jawa-thumb.svg', 'is_premium' => true, 'is_active' => true]
         );
 
+        $sakura = Theme::updateOrCreate(
+            ['view_path' => 'themes.sakura'],
+            ['name' => 'Sakura', 'thumbnail_portrait' => '/images/themes/sakura-thumb.svg', 'is_premium' => true, 'is_active' => true]
+        );
+
         $themes = [
             $elegant->id => [
                 'title' => 'Pernikahan Raisa & Hamish',
@@ -212,6 +217,66 @@ class ThemeSeeder extends Seeder
                         'place_name' => 'Taman Bunga Nusantara',
                         'place_address' => 'Jl. Raya Puncak No. 1, Cipanas, Cianjur 43253',
                         'google_maps_url' => 'https://maps.google.com/?q=-6.7333,107.0386',
+                    ],
+                ],
+            ],
+            $sakura->id => [
+                'title' => 'Pernikahan Sakura & Kenji',
+                'groom_full_name' => 'Kenji Pratama',
+                'groom_short_name' => 'Kenji',
+                'groom_father_name' => 'Pratama',
+                'groom_mother_name' => 'Widya',
+                'bride_full_name' => 'Sakura Hanako',
+                'bride_short_name' => 'Sakura',
+                'bride_father_name' => 'Hanako',
+                'bride_mother_name' => 'Larasati',
+                'timezone' => 'Asia/Jakarta',
+                'event_date_offset_days' => 45,
+                'event_time' => '09:00',
+                'event_time_end' => '14:00',
+                'venue_name' => 'Grand Sakura Ballroom',
+                'venue_address' => 'Jl. Boulevard Utama No. 88, Jakarta',
+                'venue_maps_url' => 'https://maps.google.com/?q=-6.2000,106.8166',
+                'quote_content' => 'Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu isteri-isteri dari jenismu sendiri, supaya kamu cenderung dan merasa tenteram kepadanya, dan dijadikan-Nya diantaramu rasa kasih dan sayang.',
+                'quote_source' => 'QS. Ar-Rum: 21',
+                'love_story' => 'Kisah manis kami bermula saat musim mekarnya bunga sakura. Sebuah momen indah yang membawa kami melangkah bersama menuju pernikahan.',
+                'stories' => [
+                    ['story_date' => 'Maret 2022', 'story_title' => 'Awal Mula Bertemu', 'story_description' => 'Pertemuan pertama kami di bawah rindangnya pepohonan saat musim semi.'],
+                    ['story_date' => 'Desember 2024', 'story_title' => 'Momen Lamaran', 'story_description' => 'Kenji memberikan kejutan romantis dan meminta Sakura untuk menemani hidupnya selamanya.'],
+                ],
+                'gallery_photos' => [
+                    'https://picsum.photos/seed/sakura1/800/1200',
+                    'https://picsum.photos/seed/sakura2/1200/800',
+                    'https://picsum.photos/seed/sakura3/800/1200',
+                    'https://picsum.photos/seed/sakura4/1200/800',
+                ],
+                'gift_banks' => [
+                    ['bank_name' => 'Bank BCA', 'account_number' => '8830123456', 'account_holder' => 'Sakura Hanako'],
+                    ['bank_name' => 'Bank Mandiri', 'account_number' => '1370009876543', 'account_holder' => 'Kenji Pratama'],
+                ],
+                'gift_ewallets' => [
+                    ['wallet_name' => 'GoPay', 'wallet_number' => '081299887766'],
+                ],
+                'events' => [
+                    [
+                        'event_title' => 'Akad Nikah',
+                        'date_offset_days' => 0,
+                        'start_time' => '09:00',
+                        'end_time' => '11:00',
+                        'is_until_finished' => false,
+                        'place_name' => 'Grand Sakura Ballroom',
+                        'place_address' => 'Jl. Boulevard Utama No. 88, Jakarta',
+                        'google_maps_url' => 'https://maps.google.com/?q=-6.2000,106.8166',
+                    ],
+                    [
+                        'event_title' => 'Resepsi Pernikahan',
+                        'date_offset_days' => 0,
+                        'start_time' => '11:30',
+                        'end_time' => '14:00',
+                        'is_until_finished' => false,
+                        'place_name' => 'Grand Sakura Ballroom',
+                        'place_address' => 'Jl. Boulevard Utama No. 88, Jakarta',
+                        'google_maps_url' => 'https://maps.google.com/?q=-6.2000,106.8166',
                     ],
                 ],
             ],

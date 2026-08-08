@@ -1791,18 +1791,22 @@
 
                                 {{-- Kado Digital --}}
                                 <div data-tour="gift-digital"
-                                    class="mt-6 bg-neutral-50 dark:bg-secondary-700 p-5 rounded-2xl border border-neutral-200 dark:border-secondary-700 space-y-4 pb-8">
-                                    <div class="flex items-center gap-3">
+                                    class="mt-6 bg-neutral-50 dark:bg-secondary-700 p-5 rounded-2xl border border-neutral-200 dark:border-secondary-700">
+                                    <div class="flex items-start gap-3">
                                         <div
-                                            class="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary">
+                                            class="w-9 h-9 shrink-0 rounded-xl bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary dark:text-primary-300">
                                             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                                                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                                             </svg>
                                         </div>
-                                        <h4 class="font-semibold text-sm text-primary-700 dark:text-primary-300">
-                                            Kado
-                                            Digital</h4>
+                                        <div class="flex-1">
+                                            <h4 class="font-semibold text-sm text-primary-700 dark:text-primary-300">
+                                                Kado
+                                                Digital</h4>
+                                            <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">Terima kado
+                                                berupa transfer bank, dompet digital, atau QRIS dari tamu Anda.</p>
+                                        </div>
                                     </div>
 
                                     @if($invitation->canUseGift())
@@ -1850,32 +1854,66 @@
                                                 ];
                                             }
                                         @endphp
-                                        <div id="gift-form" class="space-y-4">
-                                            <div class="flex items-center justify-between flex-wrap gap-1">
+
+                                        <div class="mt-4 flex items-start gap-2.5 bg-white dark:bg-secondary-800 border border-neutral-200 dark:border-secondary-600 rounded-xl px-3.5 py-2.5">
+                                            <svg class="w-4 h-4 text-primary dark:text-primary-300 shrink-0 mt-0.5" fill="none"
+                                                viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <p class="text-xs text-neutral-600 dark:text-neutral-300 leading-relaxed">
+                                                Data di bagian ini ikut tersimpan saat Anda menekan tombol
+                                                <strong>Simpan</strong> di bagian bawah halaman.
+                                            </p>
+                                        </div>
+
+                                        <div id="gift-form" class="mt-5 space-y-6">
+                                            <div class="flex items-center justify-between gap-2 flex-wrap">
                                                 <span
-                                                    class="text-xs text-neutral-500 dark:text-neutral-400 font-semibold">Maksimal
-                                                    {{ $maxGift }}
-                                                    akun</span>
+                                                    class="text-xs text-neutral-500 dark:text-neutral-400 font-semibold">Kuota
+                                                    Akun Kado
+                                                    (Bank + E-Wallet)</span>
                                                 <span id="gift-account-count"
-                                                    class="text-xs text-neutral-400 dark:text-neutral-500">0
+                                                    class="text-xs font-bold text-primary-600 dark:text-primary-400">0
                                                     /
                                                     {{ $maxGift }}</span>
+                                            </div>
+                                            @error('gift_accounts')
+                                                <span
+                                                    class="block text-red-500 dark:text-red-400 text-xs">{{ $message }}</span>
+                                            @enderror
+
+                                            <div id="gift-empty-hint"
+                                                class="text-center py-4 border border-dashed border-neutral-200 dark:border-secondary-600 rounded-xl">
+                                                <p class="text-xs text-neutral-400 dark:text-neutral-500">Belum ada akun
+                                                    kado. Gunakan tombol di bawah untuk menambahkan rekening bank atau
+                                                    dompet digital.</p>
                                             </div>
 
                                             <div id="gift-banks-container" class="space-y-3">
                                                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                                                    <label
-                                                        class="text-xs font-semibold text-neutral-700 dark:text-neutral-300">Transfer
-                                                        Bank</label>
+                                                    <div>
+                                                        <label
+                                                            class="block text-sm font-semibold text-neutral-700 dark:text-neutral-300">Transfer
+                                                            Bank</label>
+                                                        <p class="text-xs text-neutral-400 dark:text-neutral-500 mt-0.5">Rekening
+                                                            yang ditampilkan untuk tamu kirim transfer</p>
+                                                    </div>
                                                     <button type="button" id="add-bank-btn"
-                                                        class="text-xs text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-semibold">+
-                                                        Tambah Bank</button>
+                                                        class="inline-flex items-center justify-center gap-1 px-3 py-1.5 rounded-xl border border-primary/30 dark:border-primary-700/60 text-xs font-semibold text-primary-600 dark:text-primary-300 bg-white dark:bg-secondary-800 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all whitespace-nowrap">
+                                                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24"
+                                                            stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2.5" d="M12 4v16m8-8H4" />
+                                                        </svg>
+                                                        Tambah Bank
+                                                    </button>
                                                 </div>
                                                 @foreach($oldBanks as $bankIdx => $bank)
                                                     @php $bank = (object) $bank;
                                                     @endphp
                                                     <div
-                                                        class="gift-bank-card bg-neutral-50 dark:bg-secondary-700 p-3 rounded-xl border border-neutral-200 dark:border-secondary-700 space-y-2">
+                                                        class="gift-bank-card bg-white dark:bg-secondary-800 p-3 rounded-xl border border-neutral-200 dark:border-secondary-600 space-y-2">
                                                         <div class="flex items-center justify-between flex-wrap gap-1">
                                                             <span
                                                                 class="text-xs font-semibold text-neutral-500 dark:text-neutral-400">Bank
@@ -1888,7 +1926,7 @@
                                                                 <input type="text" name="gift_banks[{{ $bankIdx }}][bank_name]"
                                                                     value="{{ old('gift_banks.' . $bankIdx . '.bank_name', $bank->bank_name ?? '') }}"
                                                                     class="block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 text-xs dark:bg-secondary-700 dark:text-neutral-200"
-                                                                    placeholder="Nama Bank">
+                                                                    placeholder="Nama Bank (contoh: BCA)">
                                                                 @error('gift_banks.'
                                                                         . $bankIdx .
                                                                     '.bank_name')
@@ -1929,19 +1967,29 @@
 
                                             <div id="gift-ewallets-container" class="space-y-3">
                                                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                                                    <label
-                                                        class="text-xs font-semibold text-neutral-700 dark:text-neutral-300">Dompet
-                                                        Digital</label>
+                                                    <div>
+                                                        <label
+                                                            class="block text-sm font-semibold text-neutral-700 dark:text-neutral-300">Dompet
+                                                            Digital</label>
+                                                        <p class="text-xs text-neutral-400 dark:text-neutral-500 mt-0.5">E-wallet
+                                                            yang ditampilkan untuk tamu kirim kado</p>
+                                                    </div>
                                                     <button type="button" id="add-ewallet-btn"
-                                                        class="text-xs text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-semibold">+
+                                                        class="inline-flex items-center justify-center gap-1 px-3 py-1.5 rounded-xl border border-primary/30 dark:border-primary-700/60 text-xs font-semibold text-primary-600 dark:text-primary-300 bg-white dark:bg-secondary-800 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all whitespace-nowrap">
+                                                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24"
+                                                            stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2.5" d="M12 4v16m8-8H4" />
+                                                        </svg>
                                                         Tambah
-                                                        E-Wallet</button>
+                                                        E-Wallet
+                                                    </button>
                                                 </div>
                                                 @foreach($oldEwallets as $ewalletIdx => $ewallet)
                                                     @php $ewallet = (object) 
                                                     $ewallet; @endphp
                                                     <div
-                                                        class="gift-ewallet-card bg-neutral-50 dark:bg-secondary-700 p-3 rounded-xl border border-neutral-200 dark:border-secondary-700 space-y-2">
+                                                        class="gift-ewallet-card bg-white dark:bg-secondary-800 p-3 rounded-xl border border-neutral-200 dark:border-secondary-600 space-y-2">
                                                         <div class="flex items-center justify-between flex-wrap gap-1">
                                                             <span
                                                                 class="text-xs font-semibold text-neutral-500 dark:text-neutral-400">E-Wallet
@@ -1955,7 +2003,7 @@
                                                                     name="gift_ewallets[{{ $ewalletIdx }}][wallet_name]"
                                                                     value="{{ old('gift_ewallets.' . $ewalletIdx . '.wallet_name', $ewallet->wallet_name ?? '') }}"
                                                                     class="block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 text-xs dark:bg-secondary-700 dark:text-neutral-200"
-                                                                    placeholder="Nama E-Wallet">
+                                                                    placeholder="Nama E-Wallet (contoh: GoPay)">
                                                                 @error('gift_ewallets.'
                                                                         . $ewalletIdx .
                                                                     '.wallet_name')
@@ -1981,17 +2029,19 @@
                                                 @endforeach
                                             </div>
 
-                                            <hr class="border-neutral-100 dark:border-secondary-700">
+                                            <hr class="border-neutral-200/70 dark:border-secondary-700">
 
                                             <div>
                                                 <label
-                                                    class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">Barcode
+                                                    class="block text-sm font-semibold text-neutral-700 dark:text-neutral-300">Kode
                                                     QRIS</label>
-                                                <div class="mt-1 flex items-center gap-4">
+                                                <p class="text-xs text-neutral-400 dark:text-neutral-500 mt-0.5">Unggah gambar
+                                                    QRIS dari aplikasi e-wallet atau m-banking Anda.</p>
+                                                <div class="mt-2 flex items-center gap-4">
                                                     @if($invitation->gift_qris_image)
                                                         <img src="{{ asset('storage/' . $invitation->gift_qris_image) }}"
                                                             alt="QRIS"
-                                                            class="w-16 h-16 object-contain border border-neutral-200 dark:border-secondary-700 rounded-xl">
+                                                            class="w-16 h-16 object-contain border border-neutral-200 dark:border-secondary-600 rounded-xl">
                                                     @endif
                                                     <input type="file" name="gift_qris_image" id="gift_qris_image"
                                                         class="text-xs text-neutral-500 dark:text-neutral-400 file:mr-4 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-primary-50 dark:file:bg-primary-900/50 file:text-primary-700 dark:file:text-primary-300 hover:file:bg-primary-100 dark:hover:file:bg-primary-900/80">
@@ -1999,18 +2049,6 @@
                                                 @error('gift_qris_image')
                                                     <span class="text-red-500 dark:text-red-400 text-xs">{{ $message }}</span>
                                                 @enderror
-                                            </div>
-
-                                            <div class="pt-2 flex justify-end">
-                                                <button type="button" id="gift-save-btn"
-                                                    class="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-xl text-xs font-semibold shadow-sm hover:shadow-md transition-all">
-                                                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24"
-                                                        stroke="currentColor">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2" d="M5 13l4 4L19 7" />
-                                                    </svg>
-                                                    Simpan Kado Digital
-                                                </button>
                                             </div>
                                         </div>
 
@@ -2061,6 +2099,17 @@
                                                         .textContent =
                                                         total + ' / ' +
                                                         maxAccounts;
+                                                    const emptyHintEl =
+                                                        document
+                                                        .getElementById(
+                                                            'gift-empty-hint'
+                                                        );
+                                                    if (emptyHintEl) {
+                                                        emptyHintEl.style
+                                                            .display =
+                                                            total > 0 ?
+                                                            'none' : '';
+                                                    }
                                                     document
                                                         .getElementById(
                                                             'add-bank-btn'
@@ -2268,7 +2317,7 @@
 
                                         <template id="gift-bank-template">
                                             <div
-                                                class="gift-bank-card bg-neutral-50 dark:bg-secondary-700 p-3 rounded-xl border border-neutral-200 dark:border-secondary-700 space-y-2">
+                                                class="gift-bank-card bg-white dark:bg-secondary-800 p-3 rounded-xl border border-neutral-200 dark:border-secondary-600 space-y-2">
                                                 <div class="flex items-center justify-between flex-wrap gap-1">
                                                     <span
                                                         class="text-xs font-semibold text-neutral-500 dark:text-neutral-400">Bank
@@ -2280,7 +2329,7 @@
                                                     <div>
                                                         <input type="text" name="gift_banks[999][bank_name]"
                                                             class="block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 text-xs dark:bg-secondary-700 dark:text-neutral-200"
-                                                            placeholder="Nama Bank">
+                                                            placeholder="Nama Bank (contoh: BCA)">
                                                     </div>
                                                     <div>
                                                         <input type="text" name="gift_banks[999][account_number]"
@@ -2298,7 +2347,7 @@
 
                                         <template id="gift-ewallet-template">
                                             <div
-                                                class="gift-ewallet-card bg-neutral-50 dark:bg-secondary-700 p-3 rounded-xl border border-neutral-200 dark:border-secondary-700 space-y-2">
+                                                class="gift-ewallet-card bg-white dark:bg-secondary-800 p-3 rounded-xl border border-neutral-200 dark:border-secondary-600 space-y-2">
                                                 <div class="flex items-center justify-between flex-wrap gap-1">
                                                     <span
                                                         class="text-xs font-semibold text-neutral-500 dark:text-neutral-400">E-Wallet
@@ -2310,7 +2359,7 @@
                                                     <div>
                                                         <input type="text" name="gift_ewallets[999][wallet_name]"
                                                             class="block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 text-xs dark:bg-secondary-700 dark:text-neutral-200"
-                                                            placeholder="Nama E-Wallet">
+                                                            placeholder="Nama E-Wallet (contoh: GoPay)">
                                                     </div>
                                                     <div>
                                                         <input type="text" name="gift_ewallets[999][wallet_number]"
@@ -3303,37 +3352,6 @@
                 });
             });
         });
-
-        // Gift save
-        const giftBtn = document.getElementById('gift-save-btn');
-        if (giftBtn) {
-            giftBtn.addEventListener('click', function() {
-                const form = document.getElementById('gift-form');
-                const formData = new FormData();
-                formData.append('_token', csrfToken);
-
-                const inputs = form.querySelectorAll('input, select, textarea');
-                inputs.forEach(function(input) {
-                    if (input.type === 'file') {
-                        if (input.files.length) {
-                            formData.append(input.name, input.files[0]);
-                        }
-                    } else if (input.name) {
-                        formData.append(input.name, input.value);
-                    }
-                });
-
-                fetch('{{ route("dashboard.invitations.gift.update", $invitation) }}', {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'Accept': 'application/json'
-                    },
-                }).then(() => {
-                    window.location.reload();
-                });
-            });
-        }
 
         // RSVP Pax Limit toggle
         const rsvpPaxToggle = document.getElementById('is_rsvp_pax_limited');

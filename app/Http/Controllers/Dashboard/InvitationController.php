@@ -478,6 +478,14 @@ class InvitationController extends Controller
                 'screen_bride_names' => 'nullable|string|max:255',
                 'bride_groom_order' => 'nullable|in:male_first,female_first',
                 'use_custom_music' => 'nullable|in:0,1',
+                'gift_banks' => 'nullable|array',
+                'gift_banks.*.bank_name' => 'required|string|max:255',
+                'gift_banks.*.account_number' => 'required|string|max:50',
+                'gift_banks.*.account_holder' => 'nullable|string|max:255',
+                'gift_ewallets' => 'nullable|array',
+                'gift_ewallets.*.wallet_name' => 'required|string|max:255',
+                'gift_ewallets.*.wallet_number' => 'required|string|max:50',
+                'gift_qris_image' => 'nullable|image',
             ]);
         } catch (ValidationException $e) {
             throw $e;
@@ -574,6 +582,30 @@ class InvitationController extends Controller
             $validated['is_active'] = $request->boolean('is_active');
         } else {
             $validated['is_active'] = $invitation->is_active ?? true;
+        }
+
+        // Handle gift digital data (bank, e-wallet, QRIS)
+        if ($invitation->canUseGift()) {
+            if ($request->has('gift_banks')) {
+                $validated['gift_banks'] = $request->input('gift_banks', []);
+            }
+
+            if ($request->has('gift_ewallets')) {
+                $validated['gift_ewallets'] = $request->input('gift_ewallets', []);
+            }
+
+            $totalGiftAccounts = count($validated['gift_banks'] ?? []) + count($validated['gift_ewallets'] ?? []);
+
+            if ($totalGiftAccounts > $invitation->maxGiftAccounts()) {
+                return back()->withErrors(['gift_accounts' => 'Maksimal '.$invitation->maxGiftAccounts().' akun kado digital untuk paket Anda.'])->withInput();
+            }
+
+            if ($request->hasFile('gift_qris_image')) {
+                $validated['gift_qris_image'] = $compressor->compress(
+                    $request->file('gift_qris_image'),
+                    'qris/'.$invitation->id
+                );
+            }
         }
 
         $invitation->update($validated);
