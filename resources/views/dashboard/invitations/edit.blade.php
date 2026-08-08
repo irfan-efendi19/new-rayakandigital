@@ -13,6 +13,13 @@
                 { id: 'sec-8', num: 8, name: 'Visibilitas' }
             ],
             init() {
+                // Pertahankan section aktif saat halaman di-reload (mis. setelah unggah/hapus foto)
+                const savedSection = sessionStorage.getItem('invitation-edit-section');
+                if (savedSection && this.sections.some(s => s.id === savedSection)) {
+                    this.activeSection = savedSection;
+                    sessionStorage.removeItem('invitation-edit-section');
+                    return;
+                }
                 // Temukan error validasi pertama jika ada, dan arahkan ke section tersebut
                 const firstErrorEl = document.querySelector('.text-red-500, .border-red-500');
                 if (firstErrorEl) {
@@ -1309,6 +1316,18 @@
                                                             Akan dikonversi
                                                             ke WebP
                                                             otomatis.</p>
+                                                        <p
+                                                            class="inline-flex items-center gap-1.5 text-xs font-medium text-primary-600 dark:text-primary-400">
+                                                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24"
+                                                                stroke="currentColor">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2"
+                                                                    d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+                                                            </svg>
+                                                            Foto terunggah
+                                                            otomatis
+                                                            setelah
+                                                            dipilih.</p>
                                                     </div>
                                                     <div id="dropzone-preview" class="hidden space-y-3">
                                                         <div id="preview-thumbnails"
@@ -1317,19 +1336,23 @@
                                                         <div
                                                             class="flex items-center justify-center gap-2 text-sm text-neutral-500 dark:text-neutral-400">
                                                             <span id="file-count"></span>
-                                                            <button type="button" id="gallery-change-files"
-                                                                class="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 underline text-xs">Ganti
-                                                                pilihan</button>
+                                                        </div>
+                                                        <div id="upload-status"
+                                                            class="hidden items-center justify-center gap-2 text-sm font-medium text-primary-600 dark:text-primary-400">
+                                                            <svg class="w-4 h-4 animate-spin" fill="none"
+                                                                viewBox="0 0 24 24">
+                                                                <circle class="opacity-25" cx="12" cy="12" r="10"
+                                                                    stroke="currentColor" stroke-width="4"></circle>
+                                                                <path class="opacity-75" fill="currentColor"
+                                                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                                            </svg>
+                                                            <span>Mengunggah foto...</span>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="flex items-center justify-end gap-3">
                                                     <span id="dropzone-error"
                                                         class="text-xs text-red-500 dark:text-red-400 hidden"></span>
-                                                    <button type="button" id="gallery-submit-btn"
-                                                        class="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-white rounded-xl text-sm font-semibold shadow-sm hover:shadow-md transition-all disabled:opacity-50 disabled:cursor-not-allowed">
-                                                        Unggah <span id="upload-count"></span>
-                                                    </button>
                                                 </div>
                                             </div>
 
@@ -3242,26 +3265,34 @@
     document.addEventListener('DOMContentLoaded', function() {
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
 
-        // Gallery upload
-        const galleryBtn = document.getElementById('gallery-submit-btn');
+        // Gallery upload (auto-upload saat foto dipilih)
         const galleryFileInput = document.getElementById('gallery-file-input');
-        const uploadCount = document.getElementById('upload-count');
+        const galleryDropzone = document.getElementById('gallery-dropzone');
+        const uploadStatus = document.getElementById('upload-status');
+        const dropzoneError = document.getElementById('dropzone-error');
 
         if (galleryFileInput) {
-            galleryFileInput.addEventListener('change', function() {
-                const count = this.files.length;
-                if (uploadCount) uploadCount.textContent = count ? '(' + count + ')' : '';
-                if (galleryBtn) galleryBtn.disabled = !count;
-            });
-        }
+            let uploading = false;
 
-        if (galleryBtn && galleryFileInput) {
-            galleryBtn.addEventListener('click', function() {
-                const files = galleryFileInput.files;
-                if (!files.length) return;
+            function saveActiveSectionBeforeReload() {
+                const sections = document.querySelectorAll('[id^="sec-"]');
+                for (const s of sections) {
+                    if (window.getComputedStyle(s).display !== 'none') {
+                        sessionStorage.setItem('invitation-edit-section', s.id);
+                        break;
+                    }
+                }
+            }
 
-                galleryBtn.disabled = true;
-                galleryBtn.textContent = 'Mengunggah...';
+            function uploadGalleryFiles(files) {
+                if (!files.length || uploading) return;
+
+                uploading = true;
+                if (galleryDropzone) {
+                    galleryDropzone.classList.add('pointer-events-none', 'opacity-70');
+                }
+                if (uploadStatus) uploadStatus.classList.remove('hidden');
+                if (dropzoneError) dropzoneError.classList.add('hidden');
 
                 const formData = new FormData();
                 for (const file of files) {
@@ -3275,23 +3306,48 @@
                     headers: {
                         'Accept': 'application/json'
                     },
-                }).then(() => {
+                }).then(response => {
+                    if (!response.ok) throw new Error('Upload failed');
+                    saveActiveSectionBeforeReload();
                     window.location.reload();
                 }).catch(() => {
-                    galleryBtn.disabled = false;
-                    galleryBtn.textContent = 'Unggah';
+                    uploading = false;
+                    if (galleryDropzone) {
+                        galleryDropzone.classList.remove('pointer-events-none', 'opacity-70');
+                    }
+                    if (uploadStatus) uploadStatus.classList.add('hidden');
+                    if (dropzoneError) {
+                        dropzoneError.textContent = 'Gagal mengunggah foto. Silakan coba lagi.';
+                        dropzoneError.classList.remove('hidden');
+                    }
                 });
-            });
-        }
+            }
 
-        // Click on dropzone to open file picker
-        const dropzone = document.getElementById('gallery-dropzone');
-        if (dropzone && galleryFileInput) {
-            dropzone.addEventListener('click', function(e) {
-                if (e.target === dropzone || e.target.closest('#dropzone-empty')) {
-                    galleryFileInput.click();
-                }
+            galleryFileInput.addEventListener('change', function() {
+                uploadGalleryFiles(this.files);
+                this.value = '';
             });
+
+            // Click on dropzone to open file picker
+            if (galleryDropzone) {
+                galleryDropzone.addEventListener('click', function(e) {
+                    if (e.target === galleryDropzone || e.target.closest('#dropzone-empty')) {
+                        galleryFileInput.click();
+                    }
+                });
+                galleryDropzone.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.classList.add('border-primary-500', 'bg-primary-100/50');
+                });
+                galleryDropzone.addEventListener('dragleave', function() {
+                    this.classList.remove('border-primary-500', 'bg-primary-100/50');
+                });
+                galleryDropzone.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('border-primary-500', 'bg-primary-100/50');
+                    uploadGalleryFiles(Array.from(e.dataTransfer.files));
+                });
+            }
         }
 
         // Gallery photo delete
@@ -3322,6 +3378,7 @@
                             'Accept': 'application/json'
                         },
                     }).then(() => {
+                        saveActiveSectionBeforeReload();
                         window.location.reload();
                     });
                 });
