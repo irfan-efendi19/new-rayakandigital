@@ -37,6 +37,14 @@ class SlugEditor {
             return;
         }
 
+        // The create page manages its own slug logic inline and has no original
+        // slug to compare against. Only intercept submission when editing an
+        // existing invitation to avoid blocking/stuck submits on create.
+        if (!this.slugOriginal) {
+            console.log('ℹ️ SlugEditor: create page detected, skipping submit interception.');
+            return;
+        }
+
         this.setupAutoSanitize();
         this.setupFormSubmit();
         
