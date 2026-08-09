@@ -887,7 +887,7 @@
                                                         </svg>
                                                     </div>
                                                     <h4
-                                                        class="font-semibold text-sm text-primary-700 dark:text-primary-300">
+                                                        class="event-card-title font-semibold text-sm text-primary-700 dark:text-primary-300">
                                                         Acara
                                                         #{{ $loop->iteration }}
                                                     </h4>
@@ -1036,8 +1036,8 @@
                                                     </svg>
                                                 </div>
                                                 <h4
-                                                    class="font-semibold text-sm text-primary-700 dark:text-primary-300">
-                                                    Acara Baru</h4>
+                                                    class="event-card-title font-semibold text-sm text-primary-700 dark:text-primary-300">
+                                                    Acara #__INDEX__</h4>
                                             </div>
                                             <div class="flex items-center gap-1">
                                                 <button type="button"
@@ -3088,7 +3088,7 @@
                         idx);
                 });
                 const title = card.querySelector(
-                    'h4.font-semibold');
+                    'h4.event-card-title');
                 if (title) {
                     title.textContent = 'Acara #' + (
                         idx + 1);

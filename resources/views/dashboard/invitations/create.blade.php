@@ -662,7 +662,7 @@
                                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                                                 </svg>
                                                             </div>
-                                                            <h4 class="font-bold text-sm text-primary-700 dark:text-primary-300">
+                                                            <h4 class="event-card-title font-bold text-sm text-primary-700 dark:text-primary-300">
                                                                 Acara #{{ $loop->iteration }}</h4>
                                                         </div>
                                                         <div class="flex items-center gap-1">
@@ -766,7 +766,7 @@
                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                                             </svg>
                                                         </div>
-                                                        <h4 class="font-bold text-sm text-primary-700 dark:text-primary-300">
+                                                        <h4 class="event-card-title font-bold text-sm text-primary-700 dark:text-primary-300">
                                                             Acara #1</h4>
                                                     </div>
                                                     <div class="flex items-center gap-1">
@@ -873,8 +873,8 @@
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                                         </svg>
                                                     </div>
-                                                    <h4 class="font-bold text-sm text-primary-700 dark:text-primary-300">
-                                                        Acara Baru</h4>
+                                                    <h4 class="event-card-title font-bold text-sm text-primary-700 dark:text-primary-300">
+                                                        Acara #__INDEX__</h4>
                                                 </div>
                                                 <div class="flex items-center gap-1">
                                                     <button type="button"
@@ -1200,7 +1200,7 @@
                     inputsWithList.forEach(function (inp) {
                         inp.setAttribute('list', 'event-titles-' + idx);
                     });
-                    const title = card.querySelector('h4.font-semibold');
+                    const title = card.querySelector('h4.event-card-title');
                     if (title) {
                         title.textContent = 'Acara #' + (idx + 1);
                     }
