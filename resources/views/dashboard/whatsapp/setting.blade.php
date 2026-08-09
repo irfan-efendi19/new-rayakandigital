@@ -19,7 +19,7 @@
                     <span class="text-neutral-600 dark:text-neutral-400 font-medium">WA Gateway</span>
                 </nav>
 
-                <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+                <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4" x-data="{ showFonnteInfo: false }">
                     <div class="flex items-start gap-3">
                         <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white shadow-lg shadow-emerald-500/20 shrink-0">
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -34,6 +34,13 @@
                                 Pengirim pesan untuk undangan <strong class="text-secondary-700 dark:text-neutral-300">"{{ $invitation->title }}"</strong>
                             </p>
                         </div>
+                        <button type="button" @click="showFonnteInfo = true"
+                                class="mt-0.5 inline-flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200/70 dark:border-emerald-800/50 rounded-xl hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition-all cursor-pointer shrink-0">
+                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Info Layanan
+                        </button>
                     </div>
                     <a href="{{ route('dashboard.invitations.guests.index', $invitation) }}"
                        class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-secondary-700 dark:text-neutral-300 border border-neutral-300/80 dark:border-secondary-600 rounded-xl hover:bg-white dark:hover:bg-secondary-700 transition-all bg-white/70 dark:bg-secondary-800/50 backdrop-blur-sm shrink-0">
@@ -42,6 +49,108 @@
                         </svg>
                         Kembali
                     </a>
+
+                    {{-- ── MODAL INFO LAYANAN (FONNTE) ── --}}
+                    <div x-show="showFonnteInfo" x-cloak
+                         class="fixed inset-0 z-[60] flex items-center justify-center p-4 sm:p-6"
+                         x-transition.opacity>
+                        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" @click="showFonnteInfo = false"></div>
+                        <div class="relative bg-white dark:bg-secondary-800 rounded-3xl w-full max-w-2xl max-h-[85vh] overflow-y-auto shadow-2xl"
+                             @keydown.escape.window="showFonnteInfo = false">
+                            <div class="p-6 sm:p-8">
+                                {{-- Header --}}
+                                <div class="flex items-start justify-between gap-4">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white shadow-md shadow-emerald-500/20 shrink-0">
+                                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h2 class="text-sm font-bold text-secondary-800 dark:text-neutral-100">WA Blast Ditenagai oleh Fonnte</h2>
+                                            <p class="text-[11px] text-neutral-500 dark:text-neutral-400">
+                                                Gateway WhatsApp yang sudah dipercaya ribuan bisnis di Indonesia —
+                                                <a href="https://fonnte.com/" target="_blank" rel="noopener"
+                                                   class="text-emerald-600 dark:text-emerald-400 font-semibold underline underline-offset-2 hover:no-underline inline-flex items-center gap-0.5">
+                                                    fonnte.com
+                                                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                                    </svg>
+                                                </a>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <button type="button" @click="showFonnteInfo = false"
+                                            class="w-8 h-8 rounded-xl bg-neutral-100 dark:bg-secondary-700 hover:bg-neutral-200 dark:hover:bg-secondary-600 flex items-center justify-center text-neutral-500 dark:text-neutral-300 transition-colors cursor-pointer shrink-0">
+                                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </div>
+
+                                {{-- Keunggulan --}}
+                                <div class="mt-5 grid sm:grid-cols-2 gap-4">
+                                    <div class="flex items-start gap-3 p-4 rounded-xl bg-emerald-50/70 dark:bg-emerald-900/20 border border-emerald-100 dark:border-emerald-800/40">
+                                        <div class="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
+                                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs font-semibold text-emerald-800 dark:text-emerald-300">Aman &amp; Terenkripsi</p>
+                                            <p class="text-[11px] text-emerald-700/80 dark:text-emerald-400/70 mt-1 leading-relaxed">Koneksi lewat QR Code seperti WhatsApp Web. Nomormu dipakai hanya untuk kirim undangan ke tamumu, tidak untuk kepentingan lain.</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-start gap-3 p-4 rounded-xl bg-blue-50/70 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800/40">
+                                        <div class="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
+                                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs font-semibold text-blue-800 dark:text-blue-300">Nomor Asli, Bukan Nomor Baru</p>
+                                            <p class="text-[11px] text-blue-700/80 dark:text-blue-400/70 mt-1 leading-relaxed">Tamu menerima pesan dari nomor WhatsApp yang kamu kenal, bukan dari nomor acak. Lebih personal dan terpercaya.</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-start gap-3 p-4 rounded-xl bg-amber-50/70 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-800/40">
+                                        <div class="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0">
+                                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs font-semibold text-amber-800 dark:text-amber-300">Diverifikasi Admin</p>
+                                            <p class="text-[11px] text-amber-700/80 dark:text-amber-400/70 mt-1 leading-relaxed">Setiap nomor melalui proses verifikasi admin demi keamanan. Kamu akan dibantu jika ada kendala.</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-start gap-3 p-4 rounded-xl bg-purple-50/70 dark:bg-purple-900/20 border border-purple-100 dark:border-purple-800/40">
+                                        <div class="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-900/40 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0">
+                                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs font-semibold text-purple-800 dark:text-purple-300">Transparan &amp; Terpantau</p>
+                                            <p class="text-[11px] text-purple-700/80 dark:text-purple-400/70 mt-1 leading-relaxed">Semua pesan yang terkirim tercatat di halaman Log Pesan, jadi kamu bisa pantau status pengiriman ke setiap tamu.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {{-- Alur singkat --}}
+                                <div class="mt-4 flex items-center gap-2.5 px-4 py-3 rounded-xl bg-neutral-50 dark:bg-secondary-900/50 border border-neutral-100 dark:border-secondary-700/50">
+                                    <svg class="w-4 h-4 text-neutral-400 dark:text-neutral-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <p class="text-[11px] text-neutral-500 dark:text-neutral-400 leading-relaxed">
+                                        Berikutnya kamu hanya perlu: <strong class="text-neutral-700 dark:text-neutral-300">daftarkan nomor</strong> → <strong class="text-neutral-700 dark:text-neutral-300">tunggu persetujuan admin</strong> → <strong class="text-neutral-700 dark:text-neutral-300">pindai QR</strong> → WA Blast siap digunakan.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -72,6 +181,27 @@
                     <span class="text-sm font-medium text-red-800 dark:text-red-300">{{ session('error') }}</span>
                 </div>
             @endif
+
+            {{-- ── PERINGATAN RISIKO BANNED ── --}}
+            <div class="bg-red-50/80 dark:bg-red-900/15 backdrop-blur-xl rounded-2xl p-4 sm:p-5 border border-red-200/80 dark:border-red-800/50 shadow-sm">
+                <div class="flex items-start gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-red-100 dark:bg-red-900/40 flex items-center justify-center text-red-600 dark:text-red-400 shrink-0 mt-0.5">
+                        <svg class="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-sm font-bold text-red-800 dark:text-red-300">Peringatan: Ada Risiko Terkena Banned WhatsApp</p>
+                        <p class="text-xs text-red-700/90 dark:text-red-400/80 mt-1 leading-relaxed">
+                            Layanan ini menghubungkan nomor WhatsApp pribadi melalui QR Code. Mengirim pesan dalam jumlah besar sekaligus ke banyak nomor — terutama yang belum pernah berinteraksi denganmu — <strong>berisiko membuat nomormu diblokir (banned) oleh WhatsApp</strong>.
+                        </p>
+                        <p class="text-xs text-red-700/90 dark:text-red-400/80 mt-2 leading-relaxed">
+                            <span class="font-semibold text-red-800 dark:text-red-300">Tips:</span>
+                            hindari blast ke nomor yang tidak kamu kenal atau tidak mengundangmu.
+                        </p>
+                    </div>
+                </div>
+            </div>
 
             <div x-data="waSettingManager({
                 status: '{{ $status }}',
