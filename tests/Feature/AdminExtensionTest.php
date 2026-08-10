@@ -113,22 +113,23 @@ test('addons bypass tier restrictions for premium features', function () {
 });
 
 test('cleanup command deletes expired invitations after grace period', function () {
-    $user = User::factory()->create(['role' => 'user']);
-
+    $userWithinGrace = User::factory()->create(['role' => 'user']);
     $invitationWithinGrace = Invitation::factory()->create([
-        'user_id' => $user->id,
+        'user_id' => $userWithinGrace->id,
         'slug' => 'within-grace',
         'expires_at' => now()->subDays(5),
     ]);
 
+    $userPastGrace = User::factory()->create(['role' => 'user']);
     $invitationPastGrace = Invitation::factory()->create([
-        'user_id' => $user->id,
+        'user_id' => $userPastGrace->id,
         'slug' => 'past-grace',
         'expires_at' => now()->subDays(12),
     ]);
 
+    $userActive = User::factory()->create(['role' => 'user']);
     $activeInvitation = Invitation::factory()->create([
-        'user_id' => $user->id,
+        'user_id' => $userActive->id,
         'slug' => 'active-inv',
         'expires_at' => now()->addDays(3),
     ]);

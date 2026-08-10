@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\EnsureHasNoInvitation;
 use App\Http\Middleware\EnsureTierAccess;
 use App\Http\Middleware\Impersonate;
 use App\Http\Middleware\IsAdmin;
@@ -20,6 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'admin' => IsAdmin::class,
             'ensure_tier' => EnsureTierAccess::class,
+            'no.invitation' => EnsureHasNoInvitation::class,
         ]);
 
         $middleware->web(append: [

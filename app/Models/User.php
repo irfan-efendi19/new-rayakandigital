@@ -62,6 +62,16 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasMany(Invitation::class);
     }
 
+    public function invitation(): HasOne
+    {
+        return $this->hasOne(Invitation::class);
+    }
+
+    public function hasInvitation(): bool
+    {
+        return $this->invitation()->exists();
+    }
+
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class);

@@ -76,6 +76,16 @@ Route::prefix('auth/google')->name('google.')->group(function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+    // Strict 1 User = 1 Invitation (PRD)
+    Route::get('/invitation/create', [InvitationController::class, 'create'])
+        ->middleware('no.invitation')
+        ->name('invitation.create');
+    Route::post('/invitation', [InvitationController::class, 'store'])
+        ->middleware('no.invitation')
+        ->name('invitation.store');
+    Route::get('/invitation', [InvitationController::class, 'dashboard'])
+        ->name('invitation.dashboard');
+
     Route::prefix('dashboard')->name('dashboard.')->group(function () {
         // Checkout & Packages
         Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');

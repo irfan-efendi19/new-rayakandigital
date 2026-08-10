@@ -93,12 +93,13 @@ test('non-owner cannot access guestbook dashboard', function () {
 });
 
 test('owner cannot access guestbook if invitation is not platinum (no qr_checkin feature)', function () {
+    $goldUser = User::factory()->create(['role' => 'user']);
     $goldInvitation = Invitation::factory()->create([
-        'user_id' => $this->user->id,
+        'user_id' => $goldUser->id,
         'tier' => 'gold',
     ]);
 
-    $response = $this->actingAs($this->user)
+    $response = $this->actingAs($goldUser)
         ->get(route('dashboard.invitations.guestbook', $goldInvitation));
 
     $response->assertForbidden();

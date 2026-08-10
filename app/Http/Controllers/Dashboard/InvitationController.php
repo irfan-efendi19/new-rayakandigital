@@ -10,7 +10,9 @@ use App\Models\SystemConfig;
 use App\Models\Theme;
 use App\Services\ImageCompressionService;
 use App\Services\QrWithLogoService;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
@@ -35,6 +37,10 @@ class InvitationController extends Controller
 
     public function create(Request $request)
     {
+        if ($request->user()->hasInvitation()) {
+            return redirect()->route('invitation.dashboard');
+        }
+
         $hasPredefinedTheme = $request->has('theme');
         $selectedTheme = $request->query('theme', '');
         $themes = Theme::where('is_active', true)->with('themeCategory')->get();
@@ -42,128 +48,165 @@ class InvitationController extends Controller
         return view('dashboard.invitations.create', compact('selectedTheme', 'themes', 'hasPredefinedTheme'));
     }
 
+    public function dashboard()
+    {
+        $invitation = auth()->user()->invitation;
+
+        if (! $invitation) {
+            return redirect()->route('invitation.create');
+        }
+
+        return redirect()->route('dashboard.invitations.show', $invitation);
+    }
+
     public function store(Request $request, ImageCompressionService $compressor)
     {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'slug' => 'nullable|string|max:100|regex:/^[a-z0-9\-]+$/',
-            'bride_name' => 'required|string|max:255',
-            'groom_name' => 'required|string|max:255',
-            'bride_nickname' => 'nullable|string|max:100',
-            'groom_nickname' => 'nullable|string|max:100',
-            'bride_father_name' => 'required|string|max:255',
-            'bride_mother_name' => 'required|string|max:255',
-            'groom_father_name' => 'required|string|max:255',
-            'groom_mother_name' => 'required|string|max:255',
-            'theme' => 'required|string',
-            'timezone' => 'nullable|string|max:50',
-            'bride_groom_order' => 'nullable|in:male_first,female_first',
-            'events' => 'nullable|array',
-            'events.*.event_title' => 'required_with:events|string|max:100',
-            'events.*.event_date' => 'required_with:events|date',
-            'events.*.start_time' => 'required_with:events',
-            'events.*.end_time' => 'nullable',
-            'events.*.is_until_finished' => 'nullable|boolean',
-            'events.*.place_name' => 'required_with:events|string|max:150',
-            'events.*.place_address' => 'required_with:events|string',
-            'events.*.google_maps_url' => 'nullable|url',
-        ]);
+        if ($request->user()->hasInvitation()) {
+            return redirect()->route('invitation.dashboard');
+        }
 
-        // Handle slug
-        $newSlug = $request->filled('slug') ? trim($request->slug) : null;
-        if ($newSlug) {
-            if (in_array($newSlug, self::RESERVED_SLUGS)) {
-                return back()->withErrors(['slug' => 'Tautan "'.$newSlug.'" tidak tersedia. Silakan gunakan tautan kustom lain.'])->withInput();
+        try {
+            return DB::transaction(function () use ($request, $compressor) {
+                $validated = $request->validate([
+                    'title' => 'required|string|max:255',
+                    'slug' => 'nullable|string|max:100|regex:/^[a-z0-9\-]+$/',
+                    'bride_name' => 'required|string|max:255',
+                    'groom_name' => 'required|string|max:255',
+                    'bride_nickname' => 'nullable|string|max:100',
+                    'groom_nickname' => 'nullable|string|max:100',
+                    'bride_father_name' => 'required|string|max:255',
+                    'bride_mother_name' => 'required|string|max:255',
+                    'groom_father_name' => 'required|string|max:255',
+                    'groom_mother_name' => 'required|string|max:255',
+                    'theme' => 'required|string',
+                    'timezone' => 'nullable|string|max:50',
+                    'bride_groom_order' => 'nullable|in:male_first,female_first',
+                    'events' => 'nullable|array',
+                    'events.*.event_title' => 'required_with:events|string|max:100',
+                    'events.*.event_date' => 'required_with:events|date',
+                    'events.*.start_time' => 'required_with:events',
+                    'events.*.end_time' => 'nullable',
+                    'events.*.is_until_finished' => 'nullable|boolean',
+                    'events.*.place_name' => 'required_with:events|string|max:150',
+                    'events.*.place_address' => 'required_with:events|string',
+                    'events.*.google_maps_url' => 'nullable|url',
+                ]);
+
+                // Handle slug
+                $newSlug = $request->filled('slug') ? trim($request->slug) : null;
+                if ($newSlug) {
+                    if (in_array($newSlug, self::RESERVED_SLUGS)) {
+                        return back()->withErrors(['slug' => 'Tautan "'.$newSlug.'" tidak tersedia. Silakan gunakan tautan kustom lain.'])->withInput();
+                    }
+                    $exists = Invitation::where('slug', $newSlug)->exists();
+                    if ($exists) {
+                        return back()->withErrors(['slug' => 'Tautan sudah digunakan oleh undangan lain.'])->withInput();
+                    }
+                    $validated['slug'] = $newSlug;
+                } else {
+                    $validated['slug'] = Str::slug($validated['title'].'-'.Str::random(5));
+                }
+
+                $demoDays = SystemConfig::first()?->demo_duration_days ?? 3;
+                $extraData = [
+                    'trial_started_at' => now(),
+                    'expires_at' => now()->addDays($demoDays),
+                    'is_active' => true,
+                ];
+
+                $invitation = $request->user()->invitation()->create(array_merge($validated, $extraData));
+
+                // Handle bride photo
+                if ($request->hasFile('bride_photo')) {
+                    $invitation->update([
+                        'bride_photo' => $compressor->compress(
+                            $request->file('bride_photo'),
+                            'profiles/'.$invitation->id
+                        ),
+                    ]);
+                }
+
+                // Handle groom photo
+                if ($request->hasFile('groom_photo')) {
+                    $invitation->update([
+                        'groom_photo' => $compressor->compress(
+                            $request->file('groom_photo'),
+                            'profiles/'.$invitation->id
+                        ),
+                    ]);
+                }
+
+                // Handle cover photo
+                if ($request->hasFile('cover_photo')) {
+                    $invitation->update([
+                        'cover_photo' => $compressor->compress(
+                            $request->file('cover_photo'),
+                            'cover/'.$invitation->id
+                        ),
+                    ]);
+                }
+
+                // Handle events
+                if ($request->has('events')) {
+                    foreach (array_values($request->input('events', [])) as $index => $eventData) {
+                        $eventData['sort_order'] = $index;
+                        $eventData['is_until_finished'] = $eventData['is_until_finished'] ?? false;
+                        $invitation->events()->create($eventData);
+                    }
+                }
+
+                // Handle gallery photos
+                if ($request->hasFile('photos')) {
+                    $uploaded = [];
+                    foreach ($request->file('photos') as $photo) {
+                        $uploaded[] = $compressor->compress($photo, 'gallery/'.$invitation->id);
+                    }
+                    if (! empty($uploaded)) {
+                        $existing = $invitation->gallery_photos ?? [];
+                        $invitation->update(['gallery_photos' => array_merge($existing, $uploaded)]);
+                    }
+                }
+
+                // Handle music upload
+                $musicUpdate = [];
+                if ($request->hasFile('music_file')) {
+                    $request->validate(['music_file' => 'file|mimes:mp3,wav,ogg|max:10240']);
+                    $musicPath = $request->file('music_file')
+                        ->store('music/'.$invitation->id, 'public');
+                    $musicUpdate['custom_music'] = $musicPath;
+                    $musicUpdate['use_custom_music'] = true;
+                    $musicUpdate['music_url'] = $musicPath;
+                } elseif ($request->has('use_custom_music') && ! $request->boolean('use_custom_music')) {
+                    $musicUpdate['use_custom_music'] = false;
+                    $musicUpdate['music_url'] = null;
+                }
+
+                if (! empty($musicUpdate)) {
+                    $invitation->update($musicUpdate);
+                }
+
+                return redirect()->route('dashboard.invitations.show', $invitation)
+                    ->with('success', 'Undangan berhasil dibuat! Selanjutnya, lengkapi detail acara Anda.');
+            });
+        } catch (QueryException $e) {
+            if ($this->isUniqueUserIdViolation($e)) {
+                return redirect()->route('invitation.dashboard')
+                    ->with('error', 'Anda sudah memiliki undangan. Setiap pengguna hanya dapat membuat satu undangan.');
             }
-            $exists = Invitation::where('slug', $newSlug)->exists();
-            if ($exists) {
-                return back()->withErrors(['slug' => 'Tautan sudah digunakan oleh undangan lain.'])->withInput();
-            }
-            $validated['slug'] = $newSlug;
-        } else {
-            $validated['slug'] = Str::slug($validated['title'].'-'.Str::random(5));
+
+            throw $e;
+        }
+    }
+
+    protected function isUniqueUserIdViolation(QueryException $e): bool
+    {
+        $code = $e->errorInfo[1] ?? null;
+
+        if (in_array($code, [1062, 19, 1555, 1569, 2067], true)) {
+            return true;
         }
 
-        $demoDays = SystemConfig::first()?->demo_duration_days ?? 3;
-        $extraData = [
-            'trial_started_at' => now(),
-            'expires_at' => now()->addDays($demoDays),
-            'is_active' => true,
-        ];
-
-        $invitation = $request->user()->invitations()->create(array_merge($validated, $extraData));
-
-        // Handle bride photo
-        if ($request->hasFile('bride_photo')) {
-            $invitation->update([
-                'bride_photo' => $compressor->compress(
-                    $request->file('bride_photo'),
-                    'profiles/'.$invitation->id
-                ),
-            ]);
-        }
-
-        // Handle groom photo
-        if ($request->hasFile('groom_photo')) {
-            $invitation->update([
-                'groom_photo' => $compressor->compress(
-                    $request->file('groom_photo'),
-                    'profiles/'.$invitation->id
-                ),
-            ]);
-        }
-
-        // Handle cover photo
-        if ($request->hasFile('cover_photo')) {
-            $invitation->update([
-                'cover_photo' => $compressor->compress(
-                    $request->file('cover_photo'),
-                    'cover/'.$invitation->id
-                ),
-            ]);
-        }
-
-        // Handle events
-        if ($request->has('events')) {
-            foreach (array_values($request->input('events', [])) as $index => $eventData) {
-                $eventData['sort_order'] = $index;
-                $eventData['is_until_finished'] = $eventData['is_until_finished'] ?? false;
-                $invitation->events()->create($eventData);
-            }
-        }
-
-        // Handle gallery photos
-        if ($request->hasFile('photos')) {
-            $uploaded = [];
-            foreach ($request->file('photos') as $photo) {
-                $uploaded[] = $compressor->compress($photo, 'gallery/'.$invitation->id);
-            }
-            if (! empty($uploaded)) {
-                $existing = $invitation->gallery_photos ?? [];
-                $invitation->update(['gallery_photos' => array_merge($existing, $uploaded)]);
-            }
-        }
-
-        // Handle music upload
-        $musicUpdate = [];
-        if ($request->hasFile('music_file')) {
-            $request->validate(['music_file' => 'file|mimes:mp3,wav,ogg|max:10240']);
-            $musicPath = $request->file('music_file')
-                ->store('music/'.$invitation->id, 'public');
-            $musicUpdate['custom_music'] = $musicPath;
-            $musicUpdate['use_custom_music'] = true;
-            $musicUpdate['music_url'] = $musicPath;
-        } elseif ($request->has('use_custom_music') && ! $request->boolean('use_custom_music')) {
-            $musicUpdate['use_custom_music'] = false;
-            $musicUpdate['music_url'] = null;
-        }
-
-        if (! empty($musicUpdate)) {
-            $invitation->update($musicUpdate);
-        }
-
-        return redirect()->route('dashboard.invitations.show', $invitation)
-            ->with('success', 'Undangan berhasil dibuat! Selanjutnya, lengkapi detail acara Anda.');
+        return str_contains(strtolower($e->getMessage()), 'unique constraint failed');
     }
 
     public function show(Invitation $invitation)
@@ -195,6 +238,11 @@ class InvitationController extends Controller
             ->whereNotNull('visitor_id')
             ->selectRaw('COUNT(DISTINCT visitor_id) as count')
             ->value('count') ?? 0;
+
+        $pendingOrders = $invitation->orders()
+            ->whereIn('payment_status', ['pending', 'verifying'])
+            ->latest()
+            ->get();
 
         $rsvpData = $invitation->rsvps->map(fn ($rsvp) => [
             'id' => $rsvp->id,
@@ -236,7 +284,7 @@ class InvitationController extends Controller
         ])->values();
 
         return view('dashboard.invitations.show', compact(
-            'invitation', 'chartLabels', 'chartTotals', 'chartUniques', 'totalViews', 'totalUniques', 'rsvpData', 'qrCodeData', 'rsvpUrl', 'qrStats', 'guestsData'
+            'invitation', 'chartLabels', 'chartTotals', 'chartUniques', 'totalViews', 'totalUniques', 'rsvpData', 'qrCodeData', 'rsvpUrl', 'qrStats', 'guestsData', 'pendingOrders'
         ));
     }
 
