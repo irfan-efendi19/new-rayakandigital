@@ -3,6 +3,7 @@
 use App\Http\Controllers\AddonPaymentController;
 use App\Http\Controllers\Admin\ImpersonationController;
 use App\Http\Controllers\Auth\SocialiteController;
+use App\Http\Controllers\ChecklistController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Dashboard\AddonController;
 use App\Http\Controllers\Dashboard\CheckoutController;
@@ -31,6 +32,7 @@ use App\Http\Controllers\ScreenDisplayController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\ThemeController;
 use App\Http\Controllers\ThemePreviewController;
+use App\Http\Controllers\WeddingPlannerController;
 use App\Http\Controllers\WelcomeScreenController;
 use App\Http\Controllers\WishController;
 use App\Models\Package;
@@ -151,6 +153,22 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // QR Maps Detail & Config
         Route::get('/invitations/{invitation}/qr-maps', [InvitationController::class, 'qrMapsDetail'])->name('invitations.qr-maps');
         Route::patch('/invitations/{invitation}/qr-maps', [InvitationController::class, 'qrMapsUpdate'])->name('invitations.qr-maps.update');
+
+        // Wedding Planner (8 Pilar)
+        Route::get('/planner', [WeddingPlannerController::class, 'index'])->name('planner.index');
+        Route::get('/planner/export-pdf', [WeddingPlannerController::class, 'exportPdf'])->name('planner.export-pdf');
+        Route::post('/planner/items', [WeddingPlannerController::class, 'storeItem'])->name('planner.items.store');
+        Route::patch('/planner/items/{item}', [WeddingPlannerController::class, 'updateItem'])->name('planner.items.update');
+        Route::delete('/planner/items/{item}', [WeddingPlannerController::class, 'destroyItem'])->name('planner.items.destroy');
+        Route::post('/planner/rundowns', [WeddingPlannerController::class, 'storeRundown'])->name('planner.rundowns.store');
+        Route::patch('/planner/rundowns/{rundown}', [WeddingPlannerController::class, 'updateRundown'])->name('planner.rundowns.update');
+        Route::delete('/planner/rundowns/{rundown}', [WeddingPlannerController::class, 'destroyRundown'])->name('planner.rundowns.destroy');
+
+        // Checklist Interaktif (Interactive Wedding Checklist Planner)
+        Route::post('/planner/checklists', [ChecklistController::class, 'store'])->name('planner.checklists.store');
+        Route::patch('/planner/checklists/{checklist}', [ChecklistController::class, 'update'])->name('planner.checklists.update');
+        Route::delete('/planner/checklists/{checklist}', [ChecklistController::class, 'destroy'])->name('planner.checklists.destroy');
+        Route::patch('/planner/checklists/{checklist}/toggle', [ChecklistController::class, 'toggle'])->name('planner.checklists.toggle');
 
         // QR Gallery Detail & Config
         Route::get('/invitations/{invitation}/qr-gallery', [InvitationController::class, 'qrGalleryDetail'])->name('invitations.qr-gallery');

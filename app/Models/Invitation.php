@@ -243,6 +243,11 @@ class Invitation extends Model
         return $this->hasMany(EventSharedPhoto::class)->latest();
     }
 
+    public function checklists(): HasMany
+    {
+        return $this->hasMany(WeddingChecklist::class);
+    }
+
     public function isExpired(): bool
     {
         return $this->expires_at !== null && $this->expires_at->isPast();

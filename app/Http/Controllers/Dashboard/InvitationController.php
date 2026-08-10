@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Models\EventSharedPhoto;
 use App\Models\Invitation;
 use App\Models\InvitationEvent;
 use App\Models\InvitationStory;
 use App\Models\SystemConfig;
 use App\Models\Theme;
+use App\Models\WeddingChecklist;
 use App\Services\ImageCompressionService;
 use App\Services\QrWithLogoService;
 use Illuminate\Database\QueryException;
@@ -115,6 +117,8 @@ class InvitationController extends Controller
                 ];
 
                 $invitation = $request->user()->invitation()->create(array_merge($validated, $extraData));
+
+                WeddingChecklist::initializePresets($invitation);
 
                 // Handle bride photo
                 if ($request->hasFile('bride_photo')) {
@@ -439,7 +443,7 @@ class InvitationController extends Controller
         return back()->with('success', 'Pengaturan Drive Dokumentasi Fotografer berhasil disimpan.');
     }
 
-    public function destroySharedPhoto(Invitation $invitation, \App\Models\EventSharedPhoto $photo)
+    public function destroySharedPhoto(Invitation $invitation, EventSharedPhoto $photo)
     {
         Gate::authorize('update', $invitation);
 
@@ -451,7 +455,7 @@ class InvitationController extends Controller
             abort(403);
         }
 
-        \Illuminate\Support\Facades\Storage::disk('public')->delete($photo->photo_path);
+        Storage::disk('public')->delete($photo->photo_path);
         $photo->delete();
 
         return back()->with('success', 'Foto berhasil dihapus.');

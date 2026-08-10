@@ -88,6 +88,8 @@
     @endif
 
     <x-sweet-alert />
+
+    @stack('scripts')
 </body>
 
 </html>

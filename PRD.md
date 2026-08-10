@@ -1,295 +1,1030 @@
 # Product Requirement Document (PRD)
 
-## SYSTEM SPECIFICATION: WEDDING PLANNER & ORGANIZER SYSTEM
+## FEATURE SPECIFICATION: INTERACTIVE WEDDING CHECKLIST PLANNER
 
-| Atribut               | Detail                                                                |
-| :-------------------- | :-------------------------------------------------------------------- |
-| **Status**            | Approved / Living Document                                            |
-| **Penulis**           | Mochammad Irfan Efendi                                                |
-| **Tanggal Pembuatan** | 10 Agustus 2026                                                       |
-| **Target Komponen**   | Dashboard User (Pengantin/WO), Database Schema, PDF Export Engine     |
-| **Arsitektur Utama**  | **8-Pillar Wedding Planner, Financial Tracker, Event Rundown Engine** |
-
----
-
-## 1. DESKRIPSI & OBJECTIVE SYSTEM
-
-Sistem ini dirancang khusus sebagai platform perencanaan dan manajemen pernikahan (_wedding planner & organizer_) mandiri bagi calon pengantin maupun Wedding Organizer (WO).
-
-Sistem memfasilitasi pengorganisasian seluruh alur kerja persiapan pernikahan dari H-12 bulan hingga Hari H yang terbagi ke dalam **8 Pilar Utama**:
-
-1. **Calendar:** Management lini masa dan jadwal agenda penting.
-2. **Checklist:** _To-do list_ persiapan berdasarkan periode waktu.
-3. **Engagement:** Perencanaan acara lamaran dan daftar keluarga.
-4. **Pre-Wedding:** Konsep, lokasi, jadwal, dan perlengkapan _pre-wedding_.
-5. **Seserahan:** Inventarisasi boks hantaran dan status pembelian barang.
-6. **Administrasi:** Tracking berkas nikah KUA / Catatan Sipil & kesehatan (suntik TT).
-7. **Budget:** Manajemen kalkulasi estimasi vs realisasi pengeluaran dan status pelunasan.
-8. **Vendor:** Direktori kontak vendor, nomor kontrak, DP, dan jadwal pelunasan.
+| Atribut               | Detail                                                                                            |
+| :-------------------- | :------------------------------------------------------------------------------------------------ |
+| **Status**            | Approved / Living Document                                                                        |
+| **Penulis**           | Mochammad Irfan Efendi                                                                            |
+| **Tanggal Pembuatan** | 10 Agustus 2026                                                                                   |
+| **Target Komponen**   | Checklist Dashboard, Dynamic Progress Engine, Category Grouping UI, Checklist Management          |
+| **Fokus Utama**       | **40 Preset Checklist Items, 9 Categories, Live Progress Tracking, Dynamic Checklist Management** |
+| **Parent System**     | Wedding Planner & Organizer                                                                       |
+| **Ownership Policy**  | **1 User = 1 Invitation**                                                                         |
 
 ---
 
-## 2. USER JOURNEY & ALUR SISTEM
+# 1. DESKRIPSI & OBJECTIVE FITUR
+
+**Interactive Wedding Checklist Planner** merupakan fitur yang digunakan untuk membantu pengguna mengelola dan memantau seluruh tugas persiapan pernikahan melalui checklist yang terstruktur berdasarkan kategori.
+
+Fitur dirancang agar pengguna dapat:
+
+- Melihat seluruh checklist persiapan pernikahan.
+- Mengelola checklist berdasarkan kategori.
+- Menandai tugas sebagai selesai atau belum selesai.
+- Melihat progress persiapan secara langsung.
+- Menambahkan checklist custom.
+- Menghapus atau mengubah checklist custom.
+- Memantau jumlah tugas selesai dan total tugas.
+- Mengakses checklist hanya dari invitation miliknya.
+
+Fitur ini menggunakan konsep:
 
 ```text
-                     ┌──────────────────────────────────────────────┐
-                     │          DASHBOARD USER / PENGANTIN          │
-                     └──────────────────────┬───────────────────────┘
-                                            │
-           ┌────────────────────────────────┴────────────────────────┐
-           ▼                                                         ▼
-┌────────────────────────────┐                             ┌───────────────────┐
-│     Manajemen 8 Modul      │                             │   Rundown Hari H  │
-│ (Calendar, Budget, etc.)   │                             │  (Time Schedule)  │
-└──────────┬─────────────────┘                             └─────────┬─────────┘
-           │                                                         │
-           └────────────────────────────────┬────────────────────────┘
-                                            │
-                                            ▼
-                               ┌─────────────────────────┐
-                               │   Export PDF & Cetak    │
-                               │   (Rundown & Budget)    │
-                               └─────────────────────────┘
+1 User
+   ↓
+1 Invitation
+   ↓
+40 Preset Checklist Items
+   ↓
+9 Categories
+   ↓
+Dynamic Checklist Management
+   ↓
+Live Progress Tracking
 ```
 
 ---
 
-## 3. SPESIFIKASI SKEMA DATABASE
+# 2. OBJECTIVE
 
-### 3.1 Master Planner Items
+## 2.1 Primary Objective
+
+Menyediakan sistem checklist persiapan pernikahan yang sederhana, interaktif, dan mudah dipantau oleh calon pengantin.
+
+## 2.2 Secondary Objectives
+
+1. Mengurangi kebutuhan pengguna untuk membuat checklist dari nol.
+2. Memberikan struktur persiapan berdasarkan kategori.
+3. Memberikan gambaran kesiapan pernikahan melalui persentase progress.
+4. Memungkinkan pengguna menyesuaikan checklist dengan kebutuhan pribadi.
+5. Memastikan seluruh data checklist terisolasi berdasarkan invitation.
+
+---
+
+# 3. CORE FEATURES
+
+| No  | Fitur                    | Deskripsi                                                   |
+| :-: | :----------------------- | :---------------------------------------------------------- |
+|  1  | **Preset Checklist**     | Sistem menyediakan 40 item checklist bawaan.                |
+|  2  | **9 Categories**         | Checklist dikelompokkan ke dalam 9 kategori.                |
+|  3  | **Checkbox Toggle**      | User dapat menandai item sebagai selesai/belum selesai.     |
+|  4  | **Live Progress**        | Persentase progress dihitung berdasarkan item yang selesai. |
+|  5  | **Category Grouping**    | Item ditampilkan berdasarkan kategori.                      |
+|  6  | **Custom Item**          | User dapat menambahkan item sendiri.                        |
+|  7  | **Edit Item**            | User dapat mengubah checklist custom.                       |
+|  8  | **Delete Item**          | User dapat menghapus checklist custom.                      |
+|  9  | **Ownership Validation** | User hanya dapat mengakses checklist invitation miliknya.   |
+| 10  | **Responsive UI**        | Checklist dapat digunakan pada desktop maupun mobile.       |
+
+---
+
+# 4. PRESET CHECKLIST
+
+Sistem menyediakan **40 preset checklist items** yang terbagi ke dalam **9 kategori**.
+
+## 4.1 Administrasi & Legal
+
+**Total: 2 item**
+
+1. Daftar pernikahan ke KUA
+2. Izin cuti menikah
+
+---
+
+## 4.2 Attire & Rias Pengantin
+
+**Total: 8 item**
+
+1. Rias pengantin
+2. Nail art
+3. Henna wedding
+4. Rias orang tua dan besan
+5. Baju pengantin akad
+6. Baju pengantin resepsi
+7. Baju orang tua dan besan
+8. Baju pendamping (pagar ayu)
+
+---
+
+## 4.3 Mahar & Seserahan
+
+**Total: 5 item**
+
+1. Mahar
+2. Cincin nikah
+3. Kotak cincin
+4. Seserahan
+5. Kotak seserahan
+
+---
+
+## 4.4 Venue & Dekorasi
+
+**Total: 2 item**
+
+1. Dekorasi
+2. Tenda
+
+---
+
+## 4.5 Dokumentasi & Media
+
+**Total: 5 item**
+
+1. Prewedding
+2. Fotografer
+3. Videografer
+4. Wedding Content Creator
+5. Photobooth
+
+---
+
+## 4.6 Pengisi Acara & Entertainment
+
+**Total: 4 item**
+
+1. MC
+2. Tilawah
+3. Sambutan
+4. Hiburan
+
+---
+
+## 4.7 Konsumsi & Catering
+
+**Total: 2 item**
+
+1. Catering
+2. Snack
+
+---
+
+## 4.8 Undangan & Logistik Tamu
+
+**Total: 5 item**
+
+1. Daftar tamu undangan
+2. Undangan digital
+3. Undangan cetak
+4. Buku tamu
+5. Souvenir
+
+---
+
+## 4.9 Koordinasi Tim & Operasional
+
+**Total: 7 item**
+
+1. WO
+2. Rundown acara
+3. Susunan panitia
+4. Briefing vendor
+5. Briefing keluarga
+6. Bridesmaid
+7. Transport
+
+---
+
+# 5. VALIDASI TOTAL PRESET ITEM
+
+```text
+Administrasi & Legal                  2
+Attire & Rias Pengantin               8
+Mahar & Seserahan                     5
+Venue & Dekorasi                      2
+Dokumentasi & Media                   5
+Pengisi Acara & Entertainment         4
+Konsumsi & Catering                   2
+Undangan & Logistik Tamu              5
+Koordinasi Tim & Operasional          7
+                                      ──
+TOTAL                                 40
+```
+
+Requirement:
+
+> Sistem **WAJIB** menghasilkan tepat **40 preset checklist items** ketika invitation baru dibuat.
+
+---
+
+# 6. CHECKLIST STATUS
+
+Setiap checklist menggunakan status berikut:
+
+| Status      | Label         | Deskripsi                |
+| :---------- | :------------ | :----------------------- |
+| `PENDING`   | Belum Selesai | Item belum dikerjakan.   |
+| `COMPLETED` | Selesai       | Item telah diselesaikan. |
+
+Untuk fitur checklist sederhana, sistem cukup menggunakan dua status utama.
+
+```text
+PENDING
+   ↕
+COMPLETED
+```
+
+Ketika user melakukan toggle:
+
+```text
+☐ PENDING
+     ↓
+☑ COMPLETED
+```
+
+dan sebaliknya:
+
+```text
+☑ COMPLETED
+     ↓
+☐ PENDING
+```
+
+---
+
+# 7. LIVE PROGRESS TRACKING
+
+## 7.1 Formula
+
+Progress dihitung berdasarkan:
+
+```text
+Progress Percentage =
+(COMPLETED ITEMS / TOTAL ACTIVE ITEMS) × 100
+```
+
+Contoh awal:
+
+```text
+Completed : 0
+Total     : 40
+Progress  : 0%
+```
+
+Setelah 10 item selesai:
+
+```text
+Completed : 10
+Total     : 40
+Progress  : 25%
+```
+
+Setelah seluruh item selesai:
+
+```text
+Completed : 40
+Total     : 40
+Progress  : 100%
+```
+
+---
+
+# 8. PROGRESS UI
+
+Dashboard menampilkan informasi:
+
+```text
+┌──────────────────────────────────────────┐
+│ CHECKLIST WEDDING PLAN                   │
+│                                          │
+│ Yuk mulai ceklis!                       │
+│ 20/40 selesai · 9 kategori               │
+│                                          │
+│ ███████████████░░░░░░░░░░░  50%         │
+└──────────────────────────────────────────┘
+```
+
+Jika seluruh checklist selesai:
+
+```text
+┌──────────────────────────────────────────┐
+│ 🎉 Semua Ceklis Selesai!                │
+│                                          │
+│ 40/40 selesai · 9 kategori               │
+│                                          │
+│ ███████████████████████████  100%        │
+└──────────────────────────────────────────┘
+```
+
+---
+
+# 9. CATEGORY GROUPING
+
+Checklist harus dikelompokkan berdasarkan kategori.
+
+Contoh:
+
+```text
+ATTIRE & RIAS PENGANTIN
+
+6 / 8 selesai
+
+☑ Rias pengantin
+☑ Nail art
+☑ Henna wedding
+☑ Rias orang tua dan besan
+☑ Baju pengantin akad
+☑ Baju pengantin resepsi
+☐ Baju orang tua dan besan
+☐ Baju pendamping (pagar ayu)
+```
+
+Setiap kategori minimal menampilkan:
+
+- Nama kategori.
+- Jumlah item.
+- Jumlah item selesai.
+- Daftar checklist.
+- Status checklist.
+- Action untuk item custom.
+
+---
+
+# 10. DYNAMIC CHECKLIST MANAGEMENT
+
+User dapat menambahkan checklist tambahan selain 40 preset item.
+
+Contoh:
+
+```text
+Preset:
+- Catering
+- Dekorasi
+- Fotografer
+
+Custom:
+- Sewa mobil pengantin
+- Pesan kamar hotel keluarga
+- Cetak label souvenir
+```
+
+## 10.1 Custom Item
+
+Custom item memiliki:
+
+```text
+is_preset = false
+```
+
+Sedangkan item bawaan sistem:
+
+```text
+is_preset = true
+```
+
+---
+
+# 11. CUSTOM ITEM REQUIREMENTS
+
+Ketika user menambahkan checklist custom, form minimal harus memiliki:
+
+| Field         | Required | Keterangan          |
+| :------------ | :------: | :------------------ |
+| `category`    |   Yes    | Kategori checklist. |
+| `title`       |   Yes    | Nama tugas.         |
+| `description` |    No    | Detail tambahan.    |
+| `status`      |    No    | Default `PENDING`.  |
+
+Contoh:
+
+```text
+Kategori:
+Koordinasi Tim & Operasional
+
+Nama:
+Sewa mobil pengantin
+
+Status:
+PENDING
+```
+
+---
+
+# 12. DATABASE SCHEMA
+
+Karena sistem menggunakan kebijakan:
+
+> **1 User = 1 Invitation**
+
+Checklist sebaiknya **tidak langsung menggunakan `user_id`**.
+
+Ownership chain:
+
+```text
+users
+  ↓
+invitations
+  ↓
+wedding_checklists
+```
+
+## 12.1 Invitations
 
 ```sql
--- ==========================================
--- MODUL WEDDING PLANNER (8 PILAR UTAMA)
--- ==========================================
-
-CREATE TABLE wedding_planner_items (
+CREATE TABLE invitations (
     id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    user_id BIGINT UNSIGNED NOT NULL,
-    category ENUM(
-        'CALENDAR',
-        'CHECKLIST',
-        'ENGAGEMENT',
-        'PRE_WEDDING',
-        'SESERAHAN',
-        'ADMINISTRATION',
-        'BUDGET',
-        'VENDOR'
-    ) NOT NULL,
+
+    user_id BIGINT UNSIGNED NOT NULL UNIQUE,
+
+    title VARCHAR(255) NOT NULL,
+    slug VARCHAR(255) NOT NULL UNIQUE,
+    wedding_date DATE NOT NULL,
+
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL,
+
+    CONSTRAINT fk_invitations_user
+        FOREIGN KEY (user_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE
+);
+```
+
+Constraint:
+
+```sql
+UNIQUE (user_id)
+```
+
+memastikan:
+
+```text
+1 User = maksimal 1 Invitation
+```
+
+---
+
+# 13. WEDDING CHECKLIST TABLE
+
+```sql
+CREATE TABLE wedding_checklists (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+
+    invitation_id BIGINT UNSIGNED NOT NULL,
+
+    category_code VARCHAR(50) NOT NULL,
+    category_name VARCHAR(100) NOT NULL,
+
     title VARCHAR(255) NOT NULL,
     description TEXT NULL,
 
-    -- Finance & Vendor Attributes (Khusus BUDGET & VENDOR)
-    estimated_cost DECIMAL(12,2) DEFAULT 0,
-    actual_cost DECIMAL(12,2) DEFAULT 0,
-    paid_amount DECIMAL(12,2) DEFAULT 0,
-    vendor_contact VARCHAR(100) NULL,
-
-    -- Status & Schedule Attributes
-    event_date DATETIME NULL,
-    status ENUM(
-        'PENDING',
-        'IN_PROGRESS',
-        'COMPLETED',
-        'CANCELLED'
-    ) DEFAULT 'PENDING',
+    is_completed BOOLEAN NOT NULL DEFAULT FALSE,
+    is_preset BOOLEAN NOT NULL DEFAULT TRUE,
 
     created_at TIMESTAMP NULL,
     updated_at TIMESTAMP NULL,
 
-    FOREIGN KEY (user_id)
-        REFERENCES users(id)
-        ON DELETE CASCADE
-);
-```
+    CONSTRAINT fk_wedding_checklists_invitation
+        FOREIGN KEY (invitation_id)
+        REFERENCES invitations(id)
+        ON DELETE CASCADE,
 
-### 3.2 Rundown Acara Hari H
+    INDEX idx_checklists_invitation (
+        invitation_id
+    ),
 
-```sql
-CREATE TABLE wedding_rundowns (
-    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    user_id BIGINT UNSIGNED NOT NULL,
-    time_start TIME NOT NULL,
-    time_end TIME NULL,
-    activity_name VARCHAR(255) NOT NULL,
-    person_in_charge VARCHAR(100) NULL,
-    notes TEXT NULL,
-
-    created_at TIMESTAMP NULL,
-    updated_at TIMESTAMP NULL,
-
-    FOREIGN KEY (user_id)
-        REFERENCES users(id)
-        ON DELETE CASCADE
+    INDEX idx_checklists_category (
+        invitation_id,
+        category_code
+    )
 );
 ```
 
 ---
 
-## 4. IMPLEMENTASI BACKEND & FRONTEND
+# 14. CATEGORY CODE
 
-### 4.1 Dashboard Controller
+Untuk menjaga konsistensi data, sistem menggunakan `category_code`.
 
-**File:** `app/Http/Controllers/WeddingPlannerController.php`
+| Code              | Category                      |
+| :---------------- | :---------------------------- |
+| `ADMINISTRATION`  | Administrasi & Legal          |
+| `ATTIRE_BEAUTY`   | Attire & Rias Pengantin       |
+| `MAHAR_SESERAHAN` | Mahar & Seserahan             |
+| `VENUE_DECOR`     | Venue & Dekorasi              |
+| `DOCUMENTATION`   | Dokumentasi & Media           |
+| `ENTERTAINMENT`   | Pengisi Acara & Entertainment |
+| `CATERING`        | Konsumsi & Catering           |
+| `GUEST_LOGISTICS` | Undangan & Logistik Tamu      |
+| `OPERATIONS`      | Koordinasi Tim & Operasional  |
+
+`category_name` digunakan sebagai label yang ditampilkan kepada user.
+
+`category_code` digunakan sebagai identifier internal.
+
+---
+
+# 15. INITIALIZATION FLOW
+
+Ketika user berhasil membuat invitation:
+
+```text
+CREATE INVITATION
+       │
+       ▼
+VALIDATE USER OWNERSHIP
+       │
+       ▼
+CREATE 40 PRESET ITEMS
+       │
+       ▼
+SET is_preset = TRUE
+       │
+       ▼
+SET is_completed = FALSE
+       │
+       ▼
+CHECKLIST READY
+```
+
+Semua proses harus menggunakan database transaction.
+
+---
+
+# 16. BACKEND CONTROLLER
+
+## 16.1 Checklist Index
+
+**`app/Http/Controllers/ChecklistController.php`**
 
 ```php
 <?php
 
 namespace App\Http\Controllers;
 
-use App\Models\WeddingPlannerItem;
-use App\Models\WeddingRundown;
-use Illuminate\Http\Request;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 
-class WeddingPlannerController extends Controller
+class ChecklistController extends Controller
 {
     public function index()
     {
-        $userId = Auth::id();
+        $user = Auth::user();
 
-        // Fetch seluruh item planner milik user
-        $plannerItems = WeddingPlannerItem::where('user_id', $userId)->get();
+        $invitation = $user->invitation;
 
-        $rundowns = WeddingRundown::where('user_id', $userId)
-            ->orderBy('time_start', 'asc')
+        if (!$invitation) {
+            return redirect()
+                ->route('invitation.create');
+        }
+
+        $checklists = $invitation
+            ->checklists()
+            ->orderBy('category_code')
+            ->orderBy('id')
             ->get();
 
-        // Ringkasan Finansial Modul Budget & Vendor
-        $budgets = $plannerItems->whereIn('category', ['BUDGET', 'VENDOR']);
+        $totalItems = $checklists->count();
 
-        $totalEstimated = $budgets->sum('estimated_cost');
-        $totalActual = $budgets->sum('actual_cost');
-        $totalPaid = $budgets->sum('paid_amount');
+        $completedItems = $checklists
+            ->where('is_completed', true)
+            ->count();
 
-        return view('dashboard.planner.index', compact(
-            'plannerItems',
-            'rundowns',
-            'totalEstimated',
-            'totalActual',
-            'totalPaid'
-        ));
+        $progressPercent = $totalItems > 0
+            ? round(
+                ($completedItems / $totalItems) * 100
+            )
+            : 0;
+
+        $groupedChecklists = $checklists
+            ->groupBy('category_code');
+
+        return view(
+            'dashboard.checklist.index',
+            compact(
+                'invitation',
+                'groupedChecklists',
+                'totalItems',
+                'completedItems',
+                'progressPercent'
+            )
+        );
     }
 }
 ```
 
-### 4.2 Tampilan Dashboard Planner
+---
 
-**File:** `resources/views/dashboard/planner/index.blade.php`
+# 17. TOGGLE CHECKLIST
 
-```blade
-<div class="max-w-7xl mx-auto p-6 space-y-6">
+Toggle harus memvalidasi bahwa item memang milik invitation user yang sedang login.
 
-    <div class="flex justify-between items-center">
-        <h2 class="text-2xl font-bold text-gray-800">
-            💍 Wedding Planner & Organizer
-        </h2>
+```php
+public function toggle($id)
+{
+    $invitation = Auth::user()->invitation;
 
-        <a href="{{ route('planner.export-pdf') }}"
-           class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-red-700">
-            📄 Export PDF Rundown & Budget
-        </a>
-    </div>
+    if (!$invitation) {
+        abort(403);
+    }
 
-    <!-- Financial Overview Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    $item = $invitation
+        ->checklists()
+        ->findOrFail($id);
 
-        <div class="p-4 bg-blue-50 border border-blue-200 rounded-xl">
-            <p class="text-xs text-blue-600 font-semibold uppercase">
-                Total Estimasi Anggaran
-            </p>
-            <p class="text-2xl font-bold text-blue-900">
-                Rp {{ number_format($totalEstimated, 0, ',', '.') }}
-            </p>
-        </div>
+    $item->is_completed = !$item->is_completed;
 
-        <div class="p-4 bg-emerald-50 border border-emerald-200 rounded-xl">
-            <p class="text-xs text-emerald-600 font-semibold uppercase">
-                Total Terbayar (DP/Lunas)
-            </p>
-            <p class="text-2xl font-bold text-emerald-900">
-                Rp {{ number_format($totalPaid, 0, ',', '.') }}
-            </p>
-        </div>
+    $item->save();
 
-        <div class="p-4 bg-amber-50 border border-amber-200 rounded-xl">
-            <p class="text-xs text-amber-600 font-semibold uppercase">
-                Sisa Tagihan Vendor
-            </p>
-            <p class="text-2xl font-bold text-amber-900">
-                Rp {{ number_format($totalActual - $totalPaid, 0, ',', '.') }}
-            </p>
-        </div>
+    $totalItems = $invitation
+        ->checklists()
+        ->count();
 
-    </div>
+    $completedItems = $invitation
+        ->checklists()
+        ->where('is_completed', true)
+        ->count();
 
-    <!-- Navigation Tabs untuk 8 Pilar Modul -->
-    <div class="flex overflow-x-auto space-x-2 border-b pb-2 text-sm font-medium">
+    $progressPercent = $totalItems > 0
+        ? round(
+            ($completedItems / $totalItems) * 100
+        )
+        : 0;
 
-        <button class="px-4 py-2 bg-primary text-white rounded-lg">
-            📅 Calendar
-        </button>
-
-        <button class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">
-            📋 Checklist
-        </button>
-
-        <button class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">
-            💍 Engagement
-        </button>
-
-        <button class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">
-            📸 Pre-Wedding
-        </button>
-
-        <button class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">
-            🎁 Seserahan
-        </button>
-
-        <button class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">
-            📜 Administrasi
-        </button>
-
-        <button class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">
-            💰 Budget
-        </button>
-
-        <button class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">
-            🤝 Vendor
-        </button>
-
-    </div>
-
-</div>
+    return response()->json([
+        'success' => true,
+        'is_completed' => $item->is_completed,
+        'total_items' => $totalItems,
+        'completed_items' => $completedItems,
+        'progress_percent' => $progressPercent,
+    ]);
+}
 ```
 
 ---
 
-## 5. QA & TESTING MATRICES
+# 18. LIVE UPDATE REQUIREMENT
 
-| Test ID      | Skenario Testing            | Expected Result                                                                                                 | Status   |
-| :----------- | :-------------------------- | :-------------------------------------------------------------------------------------------------------------- | :------- |
-| **QA-WP-01** | Input Item Modul Planner    | Item berhasil disimpan ke kategori terkait (misal: Administrasi/Seserahan) dan status diperbarui.               | **PASS** |
-| **QA-WP-02** | Pengelolaan Budget & DP     | Nominal `estimated_cost`, `actual_cost`, dan `paid_amount` terakumulasi secara otomatis di ringkasan finansial. | **PASS** |
-| **QA-WP-03** | Penyusunan Rundown Acara    | Menginput rentang waktu, nama kegiatan, dan PIC; urutan waktu dirender secara kronologis.                       | **PASS** |
-| **QA-WP-04** | Export PDF Rundown & Budget | Sistem memproses file PDF yang siap dicetak untuk kebutuhan panitia/WO di lokasi acara.                         | **PASS** |
+Toggle checklist harus menggunakan AJAX/fetch sehingga:
+
+> **Tidak diperlukan full page reload.**
+
+Flow:
+
+```text
+USER CLICK CHECKBOX
+        │
+        ▼
+JAVASCRIPT FETCH
+        │
+        ▼
+PATCH / TOGGLE
+        │
+        ▼
+SERVER VALIDATION
+        │
+        ▼
+UPDATE DATABASE
+        │
+        ▼
+RETURN JSON
+        │
+        ▼
+UPDATE UI
+        │
+        ├── Checkbox
+        ├── Text Style
+        ├── Completed Count
+        └── Progress Bar
+```
+
+Response minimal:
+
+```json
+{
+    "success": true,
+    "is_completed": true,
+    "total_items": 40,
+    "completed_items": 15,
+    "progress_percent": 38
+}
+```
 
 ---
 
-## 6. RINGKASAN KOMPONEN
+# 19. FRONTEND REQUIREMENTS
 
-| Komponen                  | Fungsi                                                         |
-| :------------------------ | :------------------------------------------------------------- |
-| **Wedding Planner Items** | Menyimpan seluruh data dari 8 pilar utama.                     |
-| **Wedding Rundowns**      | Menyimpan jadwal dan kegiatan Hari H.                          |
-| **Financial Tracker**     | Menghitung estimasi, realisasi, pembayaran, dan sisa tagihan.  |
-| **Dashboard**             | Menampilkan ringkasan dan akses ke seluruh modul.              |
-| **PDF Export Engine**     | Menghasilkan dokumen PDF Rundown dan Budget yang siap dicetak. |
+## 19.1 Header
+
+```text
+Checklist Wedding Plan
+Item persiapan per kategori.
+
+[ + Tambah Data ]
+```
+
+## 19.2 Progress Card
+
+Menampilkan:
+
+- Headline status.
+- Completed item.
+- Total item.
+- Total kategori.
+- Progress percentage.
+- Progress indicator.
+
+Contoh:
+
+```text
+Yuk mulai ceklis!
+
+15/40 selesai · 9 kategori
+
+██████████░░░░░░░░░░░░░░░░░░ 38%
+```
 
 ---
 
-## 7. STATUS DOKUMEN
+# 20. CHECKLIST ITEM UI
+
+Setiap item minimal terdiri dari:
+
+```text
+☐ Nama Checklist
+```
+
+Ketika selesai:
+
+```text
+☑ Nama Checklist
+```
+
+Text berubah menjadi:
+
+```css
+text-decoration: line-through;
+```
+
+dan menggunakan visual state yang membedakan item selesai dari item aktif.
+
+---
+
+# 21. CATEGORY PROGRESS
+
+Selain progress global, setiap kategori sebaiknya memiliki progress sendiri.
+
+Contoh:
+
+```text
+Administrasi & Legal
+
+1 / 2 selesai
+
+██████████████░░░░░░ 50%
+```
+
+Formula:
+
+```text
+Category Progress =
+(Category Completed / Category Total) × 100
+```
+
+---
+
+# 22. EMPTY STATE
+
+Apabila checklist belum tersedia:
+
+```text
+Belum ada checklist.
+
+Checklist persiapan pernikahan akan tersedia
+setelah invitation dibuat.
+```
+
+Apabila seluruh item selesai:
+
+```text
+🎉 Semua checklist selesai!
+
+Persiapan checklist pernikahanmu sudah mencapai 100%.
+```
+
+---
+
+# 23. DELETE & EDIT REQUIREMENT
+
+## 23.1 Preset Item
+
+Preset item:
+
+- Dapat diubah statusnya.
+- Dapat memiliki perubahan data jika sistem mengizinkan.
+- Tidak boleh dihapus secara permanen dari template global.
+
+## 23.2 Custom Item
+
+Custom item:
+
+- Dapat diedit.
+- Dapat dihapus.
+- Memiliki `is_preset = false`.
+
+---
+
+# 24. SECURITY REQUIREMENTS
+
+### SEC-01 — Authentication
+
+Checklist hanya dapat diakses oleh authenticated user.
+
+### SEC-02 — Invitation Ownership
+
+Checklist harus diakses melalui invitation milik user.
+
+### SEC-03 — IDOR Protection
+
+User tidak boleh mengakses checklist user lain hanya dengan mengganti ID.
+
+Tidak diperbolehkan:
+
+```php
+WeddingChecklist::findOrFail($id);
+```
+
+tanpa ownership validation.
+
+Gunakan:
+
+```php
+$invitation
+    ->checklists()
+    ->findOrFail($id);
+```
+
+### SEC-04 — User ID Protection
+
+`user_id` tidak boleh dikirim dari form.
+
+User ID harus berasal dari authenticated session.
+
+### SEC-05 — Database Constraint
+
+`invitations.user_id` harus memiliki `UNIQUE`.
+
+### SEC-06 — CSRF
+
+Semua mutation request harus menggunakan CSRF protection.
+
+---
+
+# 25. PERFORMANCE REQUIREMENTS
+
+Untuk checklist normal:
+
+- Query checklist maksimal berdasarkan satu invitation.
+- Gunakan eager loading jika relasi tambahan diperlukan.
+- Progress dapat dihitung menggunakan database aggregate untuk dataset besar.
+- Toggle hanya melakukan update terhadap satu item.
+- Response AJAX harus mengembalikan data progress terbaru.
+
+Untuk 40 item, query sederhana menggunakan Eloquent Collection masih diperbolehkan.
+
+---
+
+# 26. QA & TESTING MATRIX
+
+| Test ID       | Skenario Testing              | Expected Result                                        | Status |
+| :------------ | :---------------------------- | :----------------------------------------------------- | :----- |
+| **QA-CHK-01** | User baru membuat invitation  | Invitation berhasil dibuat.                            | PASS   |
+| **QA-CHK-02** | Inisialisasi checklist        | Tepat 40 preset item dibuat.                           | PASS   |
+| **QA-CHK-03** | Validasi kategori             | 40 item terbagi dalam 9 kategori.                      | PASS   |
+| **QA-CHK-04** | Initial state                 | Seluruh item memiliki `is_completed = false`.          | PASS   |
+| **QA-CHK-05** | Toggle checkbox               | Status item berubah tanpa reload halaman.              | PASS   |
+| **QA-CHK-06** | Progress update               | Progress berubah sesuai item yang selesai.             | PASS   |
+| **QA-CHK-07** | Semua item selesai            | Progress mencapai 100%.                                | PASS   |
+| **QA-CHK-08** | Tambah custom item            | Item baru berhasil dibuat dengan `is_preset = false`.  | PASS   |
+| **QA-CHK-09** | Edit custom item              | Data custom item berhasil diperbarui.                  | PASS   |
+| **QA-CHK-10** | Delete custom item            | Custom item berhasil dihapus.                          | PASS   |
+| **QA-CHK-11** | Category grouping             | Item tampil pada kategori yang benar.                  | PASS   |
+| **QA-CHK-12** | Category progress             | Progress masing-masing kategori dihitung dengan benar. | PASS   |
+| **QA-SEC-01** | Akses checklist user lain     | Sistem menolak akses.                                  | PASS   |
+| **QA-SEC-02** | Manipulasi ID checklist       | Sistem tetap memvalidasi ownership.                    | PASS   |
+| **QA-LMT-01** | User membuat invitation kedua | Sistem menolak request.                                | PASS   |
+
+---
+
+# 27. ACCEPTANCE CRITERIA
+
+Fitur dianggap selesai apabila:
+
+- [x] Sistem menyediakan 40 preset checklist.
+- [x] Checklist terbagi menjadi 9 kategori.
+- [x] Semua preset memiliki `is_preset = true`.
+- [x] Semua preset awal memiliki status belum selesai.
+- [x] User dapat melakukan toggle checklist.
+- [x] Toggle tidak membutuhkan full page reload.
+- [x] Progress global diperbarui secara langsung.
+- [x] Progress kategori dapat dihitung.
+- [x] User dapat menambahkan custom checklist.
+- [x] Custom checklist memiliki `is_preset = false`.
+- [x] User dapat mengedit custom checklist.
+- [x] User dapat menghapus custom checklist.
+- [x] Checklist hanya dapat diakses oleh pemilik invitation.
+- [x] User tidak dapat mengakses checklist invitation lain.
+- [x] Sistem menggunakan relasi `User → Invitation → Checklist`.
+- [x] Sistem tetap mengikuti kebijakan **1 User = 1 Invitation**.
+- [x] Tidak terdapat penggunaan `user_id` langsung pada checklist untuk menentukan ownership.
+
+---
+
+# 28. FINAL FEATURE ARCHITECTURE
+
+```text
+                         USER
+                           │
+                           │ 1 : 1
+                           ▼
+                      INVITATION
+                           │
+                           │ 1 : N
+                           ▼
+                WEDDING CHECKLIST
+                           │
+          ┌────────────────┼────────────────┐
+          │                │                │
+          ▼                ▼                ▼
+     40 PRESET        CUSTOM ITEMS      9 CATEGORIES
+          │                │                │
+          └────────────────┼────────────────┘
+                           ▼
+                  CHECKLIST STATUS
+                           │
+                           ▼
+                 LIVE PROGRESS ENGINE
+                           │
+              ┌────────────┴────────────┐
+              ▼                         ▼
+       GLOBAL PROGRESS          CATEGORY PROGRESS
+              │                         │
+              └────────────┬────────────┘
+                           ▼
+                    INTERACTIVE UI
+```
+
+---
+
+# 29. FINAL BUSINESS RULE
+
+## **1 USER = 1 INVITATION**
+
+Checklist bukan dimiliki langsung oleh user.
+
+Struktur ownership yang digunakan:
+
+```text
+User
+ │
+ └── Invitation
+       │
+       └── Wedding Checklist
+```
+
+Dengan pendekatan ini:
+
+1. Satu user hanya memiliki satu invitation.
+2. Satu invitation memiliki banyak checklist.
+3. Checklist tidak dapat dipindahkan ke user lain.
+4. Data checklist otomatis terhapus ketika invitation dihapus.
+5. Ownership dapat divalidasi melalui relasi invitation.
+6. Sistem terlindungi dari akses checklist milik user lain.
+
+---
+
+# 30. SUMMARY
+
+**Interactive Wedding Checklist Planner** menyediakan:
+
+```text
+40 PRESET ITEMS
+       │
+       ▼
+9 CATEGORIES
+       │
+       ▼
+CHECKLIST MANAGEMENT
+       │
+       ├── Toggle
+       ├── Add
+       ├── Edit
+       └── Delete
+       │
+       ▼
+LIVE PROGRESS TRACKING
+       │
+       ├── Global Progress
+       └── Category Progress
+       │
+       ▼
+OWNERSHIP PROTECTION
+       │
+       ▼
+1 USER = 1 INVITATION
+```
 
 **Status:** Approved / Living Document
 
-Dokumen ini menjadi acuan utama untuk pengembangan modul **Wedding Planner & Organizer System**, termasuk struktur database, dashboard user, financial tracker, event rundown, serta mekanisme export PDF.
+**Feature Scope:** Interactive Wedding Checklist Planner

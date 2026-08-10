@@ -339,6 +339,19 @@
                 </a>
             </div>
 
+            {{-- ── Wedding Planner Link ── --}}
+            <a href="{{ route('dashboard.planner.index') }}"
+                class="group flex items-center gap-4 p-4 bg-white dark:bg-secondary-800 rounded-2xl border border-neutral-200/80 dark:border-secondary-700/60 hover:border-primary-200 dark:hover:border-primary-800/40 hover:shadow-md hover:-translate-y-0.5 transition-all">
+                <div class="w-10 h-10 rounded-xl bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center text-violet-600 dark:text-violet-400 flex-shrink-0 group-hover:bg-violet-200 dark:group-hover:bg-violet-900/50 transition-colors">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3M3 11h18M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                </div>
+                <div class="min-w-0">
+                    <p class="text-sm font-semibold text-secondary-800 dark:text-neutral-100">Wedding Planner</p>
+                    <p class="text-xs text-neutral-500 dark:text-neutral-400">8 pilar persiapan, budget & rundown Hari H</p>
+                </div>
+                <svg class="w-4 h-4 text-neutral-300 dark:text-neutral-600 ml-auto group-hover:text-primary dark:group-hover:text-primary-400 group-hover:translate-x-0.5 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </a>
+
             {{-- ── Fitur QR Code Interaktif (Pusat QR Code) ── --}}
             <div class="bg-gradient-to-r from-primary-600 via-primary-700 to-secondary-900 text-white rounded-3xl p-6 sm:p-7 shadow-lg shadow-primary-500/15 relative overflow-hidden">
                 <div class="absolute -right-8 -bottom-10 opacity-10 pointer-events-none">
