@@ -61,34 +61,43 @@
         }
     }
 
-    /* Scrollable Wrapper for Matrix/Log Data (mobile fade indicator) */
-    @media (max-width: 767px) {
-        .table-scrollable-wrapper {
-            position: relative;
-            width: 100%;
-            overflow: hidden;
-        }
-        .table-scrollable-wrapper .overflow-x-auto {
-            position: relative;
-            overflow-x: auto;
-            white-space: nowrap;
-            -webkit-overflow-scrolling: touch;
-        }
-        /* Visual fade shadow indicator on the right edge */
-        .table-scrollable-wrapper::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            width: 2rem;
-            pointer-events: none;
-            background: linear-gradient(to left, white, transparent);
-        }
-        :is(.dark .table-scrollable-wrapper::after) {
-            background: linear-gradient(to left, #1A1A1A, transparent);
-        }
+/* Scrollable Wrapper for Matrix/Log Data (mobile fade indicator) */
+@media (max-width: 767px) {
+    .table-scrollable-wrapper {
+        position: relative;
+        width: 100%;
+        overflow: hidden;
     }
+    .table-scrollable-wrapper .overflow-x-auto {
+        position: relative;
+        overflow-x: auto;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+    }
+    /* Visual fade shadow indicator on the right edge */
+    .table-scrollable-wrapper::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 2rem;
+        pointer-events: none;
+        background: linear-gradient(to left, white, transparent);
+    }
+    :is(.dark .table-scrollable-wrapper::after) {
+        background: linear-gradient(to left, #1A1A1A, transparent);
+    }
+}
+
+/* Hide scrollbar for tabs */
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
 
     /* Craftsmanship Form & Input Styling (No AI Slop) */
     .form-input-crafted {

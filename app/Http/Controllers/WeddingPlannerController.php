@@ -25,11 +25,15 @@ class WeddingPlannerController extends Controller
             ->orderBy('time_start')
             ->get();
 
-        $budgets = $plannerItems->whereIn('category', ['BUDGET', 'VENDOR']);
+        $budgets = $plannerItems->whereIn('category', ['BUDGET', 'VENDOR', 'SESERAHAN', 'ENGAGEMENT', 'PRE_WEDDING']);
 
-        $totalEstimated = $budgets->sum('estimated_cost');
-        $totalActual = $budgets->sum('actual_cost');
+        $totalEstimated = $budgets->sum('estimated_cost') + $budgets->sum('cost_pria') + $budgets->sum('cost_wanita');
         $totalPaid = $budgets->sum('paid_amount');
+
+        $vendorItems = $plannerItems->where('category', 'VENDOR');
+        $vendorTotalEstimated = $vendorItems->sum('estimated_cost');
+        $vendorTotalPaid = $vendorItems->sum('paid_amount');
+        $vendorTotalRemaining = max(0, $vendorTotalEstimated - $vendorTotalPaid);
 
         $itemsByCategory = collect(WeddingPlannerItem::CATEGORIES)->mapWithKeys(
             fn (string $category) => [$category => $plannerItems->where('category', $category)->values()]
@@ -76,8 +80,8 @@ class WeddingPlannerController extends Controller
             'firstEvent',
             'weddingDate',
             'totalEstimated',
-            'totalActual',
             'totalPaid',
+            'vendorTotalRemaining',
             'checklists',
             'checklistTotalItems',
             'checklistCompletedItems',

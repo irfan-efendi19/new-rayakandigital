@@ -187,7 +187,7 @@ class WeddingPlannerItem extends Model
 
     public function isFinancialCategory(): bool
     {
-        return in_array($this->category, ['BUDGET', 'VENDOR']);
+        return in_array($this->category, ['BUDGET', 'VENDOR', 'PRE_WEDDING']);
     }
 
     public function getRemainingBalanceAttribute(): float
