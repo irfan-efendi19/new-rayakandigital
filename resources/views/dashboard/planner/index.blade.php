@@ -628,13 +628,17 @@
                                 $engTotalPria = (float) $engItems->sum('cost_pria');
                                 $engTotalWanita = (float) $engItems->sum('cost_wanita');
                                 $engTotal = $engTotalPria + $engTotalWanita;
+                                $engGroups = collect(\App\Models\WeddingPlannerItem::ENGAGEMENT_ITEMS)
+                                    ->map(fn ($titles, $code) => [
+                                        'label' => \App\Models\WeddingPlannerItem::ENGAGEMENT_GROUP_LABELS[$code],
+                                        'items' => $engItems->where('subcategory', $code)->values(),
+                                    ])
+                                    ->reject(fn ($group) => $group['items']->isEmpty());
                             @endphp
                             <div class="flex items-center justify-between gap-3 mb-4">
                                 <div>
                                     <h3 class="font-semibold text-secondary-800 dark:text-neutral-100">Rencana Pertunangan</h3>
-                                    <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
-                                        {{ $engItems->count() }} item di {{ count(\App\Models\WeddingPlannerItem::ENGAGEMENT_ITEMS) }} kategori
-                                    </p>
+                                    <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">Kelola rencana dan anggaran pertunangan per kategori.</p>
                                 </div>
                                 <button type="button" x-data
                                     @click="activeTab = 'ENGAGEMENT'; $dispatch('open-modal', 'add-item-ENGAGEMENT')"
@@ -664,70 +668,79 @@
                                     Belum ada rencana pertunangan. Tambahkan data untuk mulai merencanakan.
                                 </div>
                             @else
-                                @foreach(\App\Models\WeddingPlannerItem::ENGAGEMENT_ITEMS as $groupCode => $groupTitles)
-                                    @php
-                                        $groupItems = $engItems->where('subcategory', $groupCode)->values();
-                                        $groupPria = (float) $groupItems->sum('cost_pria');
-                                        $groupWanita = (float) $groupItems->sum('cost_wanita');
-                                        $groupTotal = $groupPria + $groupWanita;
-                                    @endphp
-                                    @if($groupItems->isNotEmpty())
-                                        <div class="space-y-2.5">
-                                            @foreach($groupItems as $item)
-                                                <div class="flex items-start gap-3 p-3.5 rounded-xl border border-neutral-200/70 dark:border-secondary-700/50 bg-neutral-50/60 dark:bg-secondary-700/30">
-                                                    <span class="flex-shrink-0 w-7 h-7 flex items-center justify-center rounded-lg text-xs font-bold text-white bg-pink-500">{{ $loop->iteration }}</span>
-                                                    <div class="min-w-0 flex-1">
-                                                        <div class="flex items-center gap-2 flex-wrap">
-                                                            <p class="text-sm font-semibold text-secondary-800 dark:text-neutral-100">{{ $item->title }}</p>
-                                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold {{ $statusStyles[$item->status] ?? $statusStyles['PENDING'] }}">
-                                                                {{ $statusLabels[$item->status] ?? $item->status }}
-                                                            </span>
-                                                        </div>
-                                                        <div class="mt-2 grid grid-cols-2 gap-2 text-[11px]">
-                                                            <div class="px-2 py-1.5 rounded-lg bg-white dark:bg-secondary-700/50 border border-neutral-200/60 dark:border-secondary-600/40">
-                                                                <span class="text-neutral-400 dark:text-neutral-500">Pria</span>
-                                                                <p class="font-semibold text-blue-600 dark:text-blue-400 tabular-nums">Rp {{ number_format($item->cost_pria, 0, ',', '.') }}</p>
-                                                            </div>
-                                                            <div class="px-2 py-1.5 rounded-lg bg-white dark:bg-secondary-700/50 border border-neutral-200/60 dark:border-secondary-600/40">
-                                                                <span class="text-neutral-400 dark:text-neutral-500">Wanita</span>
-                                                                <p class="font-semibold text-pink-600 dark:text-pink-400 tabular-nums">Rp {{ number_format($item->cost_wanita, 0, ',', '.') }}</p>
+                                <div class="space-y-4">
+                                    @foreach($engGroups as $groupCode => $group)
+                                        @php
+                                            $groupPria = (float) $group['items']->sum('cost_pria');
+                                            $groupWanita = (float) $group['items']->sum('cost_wanita');
+                                            $groupTotal = $groupPria + $groupWanita;
+                                        @endphp
+                                        <div class="rounded-xl border border-neutral-200/80 dark:border-secondary-700/60 overflow-hidden">
+                                            <div class="px-4 py-3 bg-neutral-50 dark:bg-secondary-700/40 border-b border-neutral-200/80 dark:border-secondary-700/60 flex items-center justify-between gap-3">
+                                                <h4 class="text-sm font-semibold text-secondary-800 dark:text-neutral-100">{{ $group['label'] }}</h4>
+                                                <span class="text-[11px] font-semibold text-neutral-500 dark:text-neutral-400 tabular-nums">
+                                                    {{ $group['items']->count() }} item
+                                                </span>
+                                            </div>
+                                            <ul class="divide-y divide-neutral-100 dark:divide-secondary-700/50">
+                                                @foreach($group['items'] as $item)
+                                                    <li class="px-4 py-2.5 flex items-center gap-3 hover:bg-neutral-50 dark:hover:bg-secondary-700/30 transition-colors">
+                                                        <div class="min-w-0 flex-1">
+                                                            <div class="flex items-center gap-2 flex-wrap">
+                                                                <p class="text-sm font-medium text-secondary-800 dark:text-neutral-100">{{ $item->title }}</p>
+                                                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold {{ $statusStyles[$item->status] ?? $statusStyles['PENDING'] }}">
+                                                                    {{ $statusLabels[$item->status] ?? $item->status }}
+                                                                </span>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="flex-shrink-0 flex items-center gap-1">
-                                                        <button type="button" x-data @click="$dispatch('open-modal', 'edit-item-{{ $item->id }}')"
-                                                            class="inline-flex items-center px-2.5 py-1.5 rounded-lg text-[11px] font-semibold text-primary dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors">
-                                                            Edit
-                                                        </button>
-                                                        <form action="{{ route('dashboard.planner.items.destroy', $item) }}" method="POST"
-                                                            onsubmit="return confirm('Hapus item ini?')">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" class="inline-flex items-center px-2.5 py-1.5 rounded-lg text-[11px] font-semibold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
-                                                                Hapus
+                                                        <div class="flex-shrink-0 flex items-center gap-3 text-[11px] tabular-nums">
+                                                            <span class="text-blue-600 dark:text-blue-400 font-semibold">Pria: Rp {{ number_format($item->cost_pria, 0, ',', '.') }}</span>
+                                                            <span class="text-pink-600 dark:text-pink-400 font-semibold">Wanita: Rp {{ number_format($item->cost_wanita, 0, ',', '.') }}</span>
+                                                        </div>
+                                                        <div class="flex-shrink-0 flex items-center gap-1">
+                                                            <button type="button" x-data @click="$dispatch('open-modal', 'edit-item-{{ $item->id }}')"
+                                                                class="inline-flex items-center px-2.5 py-1.5 rounded-lg text-[11px] font-semibold text-primary dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors">
+                                                                Edit
                                                             </button>
-                                                        </form>
-                                                    </div>
+                                                            <form action="{{ route('dashboard.planner.items.destroy', $item) }}" method="POST" class="inline"
+                                                                onsubmit="return confirm('Hapus item ini?')">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit" class="inline-flex items-center px-2.5 py-1.5 rounded-lg text-[11px] font-semibold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+                                                                    Hapus
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                            <div class="px-4 py-2.5 border-t border-neutral-100 dark:border-secondary-700/50 flex items-center justify-between gap-3 bg-neutral-50/60 dark:bg-secondary-700/20">
+                                                <span class="text-[10px] font-semibold text-neutral-400 dark:text-neutral-500 uppercase">Subtotal</span>
+                                                <div class="flex items-center gap-3 text-[10px] tabular-nums font-semibold">
+                                                    <span class="text-blue-600 dark:text-blue-400">Pria: Rp {{ number_format($groupPria, 0, ',', '.') }}</span>
+                                                    <span class="text-pink-600 dark:text-pink-400">Wanita: Rp {{ number_format($groupWanita, 0, ',', '.') }}</span>
+                                                    <span class="text-secondary-800 dark:text-neutral-100">= Rp {{ number_format($groupTotal, 0, ',', '.') }}</span>
                                                 </div>
-                                            @endforeach
-
-                                            <div class="flex items-center justify-between gap-3 p-3.5 rounded-xl bg-pink-50 dark:bg-pink-900/20 border border-pink-200/60 dark:border-pink-700/40">
-                                                <div>
-                                                    <p class="text-xs font-bold text-secondary-800 dark:text-neutral-100">Subtotal {{ \App\Models\WeddingPlannerItem::ENGAGEMENT_GROUP_LABELS[$groupCode] }}</p>
-                                                    <p class="text-[11px] text-neutral-500 dark:text-neutral-400 mt-0.5">Pria Rp {{ number_format($groupPria, 0, ',', '.') }} · Wanita Rp {{ number_format($groupWanita, 0, ',', '.') }}</p>
-                                                </div>
-                                                <p class="text-base font-bold text-pink-700 dark:text-pink-300 tabular-nums">Rp {{ number_format($groupTotal, 0, ',', '.') }}</p>
                                             </div>
                                         </div>
-                                    @endif
-                                @endforeach
+                                    @endforeach
+                                </div>
 
                                 <div class="mt-4 p-4 rounded-xl bg-pink-50 dark:bg-pink-900/20 border border-pink-200/60 dark:border-pink-700/40">
                                     <p class="text-sm font-bold text-secondary-800 dark:text-neutral-100">Total Pengeluaran</p>
-                                    <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1">Pria Rp {{ number_format($engTotalPria, 0, ',', '.') }} · Wanita Rp {{ number_format($engTotalWanita, 0, ',', '.') }}</p>
-                                    <div class="mt-1.5 flex items-baseline gap-2">
-                                        <p class="text-xl font-bold text-pink-700 dark:text-pink-300 tabular-nums">Rp {{ number_format($engTotal, 0, ',', '.') }}</p>
-                                        <span class="text-[10px] text-neutral-400 dark:text-neutral-500">total pengeluaran</span>
+                                    <div class="mt-2 grid grid-cols-3 gap-3 text-[11px]">
+                                        <div>
+                                            <span class="text-neutral-400 dark:text-neutral-500">Pria (CPP)</span>
+                                            <p class="font-bold text-blue-600 dark:text-blue-400 tabular-nums">Rp {{ number_format($engTotalPria, 0, ',', '.') }}</p>
+                                        </div>
+                                        <div>
+                                            <span class="text-neutral-400 dark:text-neutral-500">Wanita (CPW)</span>
+                                            <p class="font-bold text-pink-600 dark:text-pink-400 tabular-nums">Rp {{ number_format($engTotalWanita, 0, ',', '.') }}</p>
+                                        </div>
+                                        <div>
+                                            <span class="text-neutral-400 dark:text-neutral-500">Total</span>
+                                            <p class="font-bold text-pink-700 dark:text-pink-300 tabular-nums">Rp {{ number_format($engTotal, 0, ',', '.') }}</p>
+                                        </div>
                                     </div>
                                 </div>
                             @endif
@@ -937,6 +950,135 @@
                                 </div>
                             @endif
 
+                        @elseif($pillar['key'] === 'BUDGET')
+                            @php
+                                $budgetItems = $itemsByCategory['BUDGET'];
+                                $budgetTotalEstimated = (float) $budgetItems->sum('estimated_cost');
+                                $budgetTotalActual = (float) $budgetItems->sum('actual_cost');
+                                $budgetTotalPaid = (float) $budgetItems->sum('paid_amount');
+                                $budgetTotalRemaining = max(0, $budgetTotalActual - $budgetTotalPaid);
+                                $budgetGroups = collect(\App\Models\WeddingPlannerItem::BUDGET_CATEGORIES)
+                                    ->map(fn ($config, $code) => [
+                                        'label' => $config['label'],
+                                        'items' => $budgetItems->where('subcategory', $code)->values(),
+                                    ])
+                                    ->reject(fn ($group) => $group['items']->isEmpty());
+                            @endphp
+                            <div class="flex items-center justify-between gap-3 mb-4">
+                                <div>
+                                    <h3 class="font-semibold text-secondary-800 dark:text-neutral-100">Anggaran Pernikahan</h3>
+                                    <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">Kelola anggaran per kategori persiapan.</p>
+                                </div>
+                                <button type="button" x-data
+                                    @click="activeTab = 'BUDGET'; $dispatch('open-modal', 'add-item-BUDGET')"
+                                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-primary hover:bg-primary-600 text-white text-xs font-semibold transition-all">
+                                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                                    Tambah Item
+                                </button>
+                            </div>
+
+                            {{-- Ringkasan Anggaran --}}
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
+                                <div class="p-3.5 rounded-xl border border-neutral-200/70 dark:border-secondary-700/50 bg-neutral-50/60 dark:bg-secondary-700/30">
+                                    <span class="text-[11px] text-neutral-400 dark:text-neutral-500">Estimasi Total</span>
+                                    <p class="text-lg font-bold text-secondary-800 dark:text-neutral-100 tabular-nums mt-0.5">Rp {{ number_format($budgetTotalEstimated, 0, ',', '.') }}</p>
+                                </div>
+                                <div class="p-3.5 rounded-xl border border-neutral-200/70 dark:border-secondary-700/50 bg-neutral-50/60 dark:bg-secondary-700/30">
+                                    <span class="text-[11px] text-neutral-400 dark:text-neutral-500">Realisasi</span>
+                                    <p class="text-lg font-bold text-blue-600 dark:text-blue-400 tabular-nums mt-0.5">Rp {{ number_format($budgetTotalActual, 0, ',', '.') }}</p>
+                                </div>
+                                <div class="p-3.5 rounded-xl border border-neutral-200/70 dark:border-secondary-700/50 bg-neutral-50/60 dark:bg-secondary-700/30">
+                                    <span class="text-[11px] text-neutral-400 dark:text-neutral-500">Terbayar</span>
+                                    <p class="text-lg font-bold text-emerald-600 dark:text-emerald-400 tabular-nums mt-0.5">Rp {{ number_format($budgetTotalPaid, 0, ',', '.') }}</p>
+                                </div>
+                                <div class="p-3.5 rounded-xl border border-neutral-200/70 dark:border-secondary-700/50 bg-neutral-50/60 dark:bg-secondary-700/30">
+                                    <span class="text-[11px] text-neutral-400 dark:text-neutral-500">Sisa Tagihan</span>
+                                    <p class="text-lg font-bold text-amber-600 dark:text-amber-400 tabular-nums mt-0.5">Rp {{ number_format($budgetTotalRemaining, 0, ',', '.') }}</p>
+                                </div>
+                            </div>
+
+                            @if($budgetItems->isEmpty())
+                                <div class="px-5 py-10 text-center text-sm text-neutral-400 dark:text-neutral-500 border border-dashed border-neutral-200 dark:border-secondary-600 rounded-xl">
+                                    Belum ada anggaran. Tambahkan item untuk mulai mengelola budget.
+                                </div>
+                            @else
+                                <div class="space-y-4">
+                                    @foreach($budgetGroups as $groupCode => $group)
+                                        @php
+                                            $groupEstimated = (float) $group['items']->sum('estimated_cost');
+                                            $groupActual = (float) $group['items']->sum('actual_cost');
+                                            $groupPaid = (float) $group['items']->sum('paid_amount');
+                                        @endphp
+                                        <div class="rounded-xl border border-neutral-200/80 dark:border-secondary-700/60 overflow-hidden">
+                                            <div class="px-4 py-3 bg-neutral-50 dark:bg-secondary-700/40 border-b border-neutral-200/80 dark:border-secondary-700/60 flex items-center justify-between gap-3">
+                                                <h4 class="text-sm font-semibold text-secondary-800 dark:text-neutral-100">{{ $group['label'] }}</h4>
+                                                <span class="text-[11px] font-semibold text-neutral-500 dark:text-neutral-400 tabular-nums">
+                                                    {{ $group['items']->count() }} item
+                                                </span>
+                                            </div>
+                                            <ul class="divide-y divide-neutral-100 dark:divide-secondary-700/50">
+                                                @foreach($group['items'] as $item)
+                                                    <li class="px-4 py-2.5 flex items-center gap-3 hover:bg-neutral-50 dark:hover:bg-secondary-700/30 transition-colors">
+                                                        <div class="min-w-0 flex-1">
+                                                            <p class="text-sm font-medium text-secondary-800 dark:text-neutral-100">{{ $item->title }}</p>
+                                                        </div>
+                                                        <div class="flex-shrink-0 flex items-center gap-3 text-[11px] tabular-nums">
+                                                            <span class="text-neutral-400 dark:text-neutral-500">Est: Rp {{ number_format($item->estimated_cost, 0, ',', '.') }}</span>
+                                                            <span class="text-blue-600 dark:text-blue-400">Real: Rp {{ number_format($item->actual_cost, 0, ',', '.') }}</span>
+                                                            <span class="text-emerald-600 dark:text-emerald-400">Bayar: Rp {{ number_format($item->paid_amount, 0, ',', '.') }}</span>
+                                                        </div>
+                                                        <div class="flex-shrink-0 flex items-center gap-1">
+                                                            <button type="button" x-data @click="$dispatch('open-modal', 'edit-item-{{ $item->id }}')"
+                                                                class="inline-flex items-center px-2.5 py-1.5 rounded-lg text-[11px] font-semibold text-primary dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors">
+                                                                Edit
+                                                            </button>
+                                                            <form action="{{ route('dashboard.planner.items.destroy', $item) }}" method="POST" class="inline"
+                                                                onsubmit="return confirm('Hapus item ini?')">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit" class="inline-flex items-center px-2.5 py-1.5 rounded-lg text-[11px] font-semibold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+                                                                    Hapus
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                            <div class="px-4 py-2.5 border-t border-neutral-100 dark:border-secondary-700/50 flex items-center justify-between gap-3 bg-neutral-50/60 dark:bg-secondary-700/20">
+                                                <span class="text-[10px] font-semibold text-neutral-400 dark:text-neutral-500 uppercase">Subtotal</span>
+                                                <div class="flex items-center gap-3 text-[10px] tabular-nums font-semibold">
+                                                    <span class="text-neutral-400 dark:text-neutral-500">Rp {{ number_format($groupEstimated, 0, ',', '.') }}</span>
+                                                    <span class="text-blue-600 dark:text-blue-400">Rp {{ number_format($groupActual, 0, ',', '.') }}</span>
+                                                    <span class="text-emerald-600 dark:text-emerald-400">Rp {{ number_format($groupPaid, 0, ',', '.') }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+
+                                <div class="mt-4 p-4 rounded-xl bg-green-50 dark:bg-green-900/20 border border-green-200/60 dark:border-green-700/40">
+                                    <p class="text-sm font-bold text-secondary-800 dark:text-neutral-100">Total Anggaran</p>
+                                    <div class="mt-2 grid grid-cols-2 sm:grid-cols-4 gap-3 text-[11px]">
+                                        <div>
+                                            <span class="text-neutral-400 dark:text-neutral-500">Estimasi</span>
+                                            <p class="font-bold text-secondary-700 dark:text-neutral-200 tabular-nums">Rp {{ number_format($budgetTotalEstimated, 0, ',', '.') }}</p>
+                                        </div>
+                                        <div>
+                                            <span class="text-neutral-400 dark:text-neutral-500">Realisasi</span>
+                                            <p class="font-bold text-blue-600 dark:text-blue-400 tabular-nums">Rp {{ number_format($budgetTotalActual, 0, ',', '.') }}</p>
+                                        </div>
+                                        <div>
+                                            <span class="text-neutral-400 dark:text-neutral-500">Terbayar</span>
+                                            <p class="font-bold text-emerald-600 dark:text-emerald-400 tabular-nums">Rp {{ number_format($budgetTotalPaid, 0, ',', '.') }}</p>
+                                        </div>
+                                        <div>
+                                            <span class="text-neutral-400 dark:text-neutral-500">Sisa</span>
+                                            <p class="font-bold text-amber-600 dark:text-amber-400 tabular-nums">Rp {{ number_format($budgetTotalRemaining, 0, ',', '.') }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+
                         @else
                         <div class="flex items-center justify-between gap-3 mb-4">
                             <div>
@@ -1070,7 +1212,15 @@
                         </div>
                     </div>
 
-                    @if(in_array($pillar['key'], ['BUDGET', 'VENDOR']))
+                    @if($pillar['key'] === 'BUDGET')
+                        <div>
+                            <x-input-label for="add-budget-group" value="Kategori Anggaran" />
+                            <select id="add-budget-group" name="subcategory" class="mt-1 block w-full border-neutral-300 dark:border-neutral-600 dark:bg-secondary-700 dark:text-neutral-200 focus:border-primary-500 focus:ring-primary-500 rounded-xl shadow-sm" required>
+                                @foreach(\App\Models\WeddingPlannerItem::BUDGET_CATEGORIES as $code => $config)
+                                    <option value="{{ $code }}">{{ $config['label'] }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                             <div>
                                 <x-input-label for="add-est-{{ $pillar['key'] }}" value="Estimasi (Rp)" />
@@ -1085,11 +1235,26 @@
                                 <x-text-input id="add-paid-{{ $pillar['key'] }}" name="paid_amount" type="number" min="0" step="0.01" value="0" class="mt-1 block w-full" />
                             </div>
                         </div>
+                    @elseif($pillar['key'] === 'VENDOR')
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                             <div>
-                                <x-input-label for="add-contact-{{ $pillar['key'] }}" value="Kontak Vendor" />
-                                <x-text-input id="add-contact-{{ $pillar['key'] }}" name="vendor_contact" class="mt-1 block w-full" placeholder="cth: 0812-3456-7890" />
+                                <x-input-label for="add-est-{{ $pillar['key'] }}" value="Estimasi (Rp)" />
+                                <x-text-input id="add-est-{{ $pillar['key'] }}" name="estimated_cost" type="number" min="0" step="0.01" value="0" class="mt-1 block w-full" />
                             </div>
-                        @endif
+                            <div>
+                                <x-input-label for="add-act-{{ $pillar['key'] }}" value="Realisasi (Rp)" />
+                                <x-text-input id="add-act-{{ $pillar['key'] }}" name="actual_cost" type="number" min="0" step="0.01" value="0" class="mt-1 block w-full" />
+                            </div>
+                            <div>
+                                <x-input-label for="add-paid-{{ $pillar['key'] }}" value="Terbayar (Rp)" />
+                                <x-text-input id="add-paid-{{ $pillar['key'] }}" name="paid_amount" type="number" min="0" step="0.01" value="0" class="mt-1 block w-full" />
+                            </div>
+                        </div>
+                        <div>
+                            <x-input-label for="add-contact-{{ $pillar['key'] }}" value="Kontak Vendor" />
+                            <x-text-input id="add-contact-{{ $pillar['key'] }}" name="vendor_contact" class="mt-1 block w-full" placeholder="cth: 0812-3456-7890" />
+                        </div>
+                    @endif
 
                         @if($pillar['key'] === 'ENGAGEMENT')
                             <div class="grid grid-cols-2 gap-4">

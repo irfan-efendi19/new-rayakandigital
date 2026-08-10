@@ -110,6 +110,46 @@ class WeddingPlannerItem extends Model
         'WANITA' => 'Seserahan Wanita',
     ];
 
+    /**
+     * Preset kategori anggaran pernikahan.
+     *
+     * @var array<string, array<string, mixed>>
+     */
+    public const BUDGET_CATEGORIES = [
+        'VENUE' => [
+            'label' => 'Venue & Akomodasi',
+            'items' => ['Sewa tempat', 'Dekorasi', 'Tenda', 'Akomodasi tamu'],
+        ],
+        'CATERING' => [
+            'label' => 'Konsumsi',
+            'items' => ['Catering', 'Snack', 'Kue pengantin', 'Minuman'],
+        ],
+        'ATTIRE' => [
+            'label' => 'Pakaian & Rias',
+            'items' => ['Baju pengantin', 'Rias pengantin', 'Baju orang tua', 'Sewa jas', 'Aksesoris'],
+        ],
+        'DOCUMENTATION' => [
+            'label' => 'Dokumentasi',
+            'items' => ['Fotografer', 'Videografer', 'Album', 'Cetak foto'],
+        ],
+        'ENTERTAINMENT' => [
+            'label' => 'Hiburan',
+            'items' => ['MC', 'Musik / Band', 'Dangdut / Orgen', 'Sound system'],
+        ],
+        'LOGISTICS' => [
+            'label' => 'Logistik & Undangan',
+            'items' => ['Undangan cetak', 'Undangan digital', 'Souvenir', 'Buku tamu', 'Transport'],
+        ],
+        'CEREMONY' => [
+            'label' => 'Upacara & Adat',
+            'items' => ['Mahar', 'Seserahan', 'Busana adat', 'Dukun / Pemandu'],
+        ],
+        'OTHER' => [
+            'label' => 'Lain-lain',
+            'items' => ['Biaya tak terduga', 'Tips vendor', 'Dokumentasi admin'],
+        ],
+    ];
+
     protected $fillable = [
         'user_id',
         'category',
@@ -227,6 +267,22 @@ class WeddingPlannerItem extends Model
                         'title' => $title,
                         'status' => 'PENDING',
                     ]);
+                }
+            }
+
+            // Seed preset anggaran pernikahan. Hanya di-seed bila belum ada
+            // item budget sama sekali.
+            if (! self::where('user_id', $user->id)->where('category', 'BUDGET')->exists()) {
+                foreach (self::BUDGET_CATEGORIES as $group => $config) {
+                    foreach ($config['items'] as $title) {
+                        self::create([
+                            'user_id' => $user->id,
+                            'category' => 'BUDGET',
+                            'subcategory' => $group,
+                            'title' => $title,
+                            'status' => 'PENDING',
+                        ]);
+                    }
                 }
             }
         });
