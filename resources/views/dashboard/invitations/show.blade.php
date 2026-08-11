@@ -353,24 +353,20 @@
             </a>
 
             {{-- ── Fitur QR Code Interaktif (Pusat QR Code) ── --}}
-            <div class="bg-gradient-to-r from-primary-600 via-primary-700 to-secondary-900 text-white rounded-3xl p-6 sm:p-7 shadow-lg shadow-primary-500/15 relative overflow-hidden">
-                <div class="absolute -right-8 -bottom-10 opacity-10 pointer-events-none">
-                    <svg class="w-64 h-64 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
-                </div>
-                <div class="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5">
-                    <div class="space-y-1.5 min-w-0">
-                        <h2 class="font-heading text-xl sm:text-2xl font-bold leading-snug">Pusat Kelola & Unduh QR Code</h2>
-                        <p class="text-xs sm:text-sm text-white/80 max-w-xl leading-relaxed">
-                            Unduh QR Code Website Undangan, QR Kado Digital & QRIS, QR Kirim Ucapan, serta QR RSVP Universal secara mudah di halaman khusus.
+            <a href="{{ route('dashboard.invitations.qr-codes', $invitation) }}" class="block bg-white dark:bg-secondary-800 rounded-2xl border border-neutral-200/80 dark:border-secondary-700/60 px-5 sm:px-6 py-4 hover:border-primary/40 dark:hover:border-primary/40 hover:shadow-md transition-all duration-200 group">
+                <div class="flex items-start gap-3 min-w-0">
+                    <div class="w-10 h-10 rounded-xl bg-primary-50 dark:bg-primary-900/30 flex items-center justify-center flex-shrink-0 group-hover:bg-primary-100 dark:group-hover:bg-primary-900/50 transition-colors">
+                        <svg class="w-5 h-5 text-primary dark:text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                        <h2 class="font-semibold text-sm text-secondary-800 dark:text-neutral-100">Pusat Kelola & Unduh QR Code</h2>
+                        <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5 leading-relaxed">
+                            Unduh QR Code Website Undangan, QR Kado Digital & QRIS, QR Kirim Ucapan, serta QR RSVP Universal.
                         </p>
                     </div>
-                    <a href="{{ route('dashboard.invitations.qr-codes', $invitation) }}"
-                        class="inline-flex items-center justify-center gap-2 px-5 py-3 bg-white hover:bg-neutral-100 text-secondary-900 rounded-2xl text-xs font-bold shadow-lg shadow-black/10 hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all whitespace-nowrap shrink-0">
-                        <svg class="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
-                        Buka Pusat QR Code →
-                    </a>
+                    <svg class="w-4 h-4 text-neutral-300 dark:text-neutral-600 ml-auto group-hover:text-primary dark:group-hover:text-primary-400 group-hover:translate-x-0.5 transition-all flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                 </div>
-            </div>
+            </a>
 
             {{-- ── RSVP PAX Quota (if limited) ── --}}
             @if($invitation->isRsvpPaxLimited())
@@ -396,24 +392,18 @@
             @endif
 
             {{-- ── Add-On & Fitur Tambahan ── --}}
-            <div class="bg-white dark:bg-secondary-800 rounded-2xl border border-neutral-200/80 dark:border-secondary-700/60 overflow-hidden">
-                <div class="px-5 sm:px-6 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                    <div class="flex items-center gap-2.5">
-                        <div class="w-8 h-8 rounded-lg bg-primary-50 dark:bg-primary-900/30 flex items-center justify-center text-primary dark:text-primary-400">
-                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"/></svg>
-                        </div>
-                        <div>
-                            <h2 class="font-semibold text-sm text-secondary-800 dark:text-neutral-100">Add-On & Fitur Tambahan</h2>
-                            <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">{{ $invitation->addons->count() }} add-on terpasang</p>
-                        </div>
+            <a href="{{ route('dashboard.invitations.addons.index', $invitation) }}" class="block bg-white dark:bg-secondary-800 rounded-2xl border border-neutral-200/80 dark:border-secondary-700/60 px-5 sm:px-6 py-4 hover:border-primary/40 dark:hover:border-primary/40 hover:shadow-md transition-all duration-200 group">
+                <div class="flex items-start gap-3 min-w-0">
+                    <div class="w-10 h-10 rounded-xl bg-primary-50 dark:bg-primary-900/30 flex items-center justify-center flex-shrink-0 group-hover:bg-primary-100 dark:group-hover:bg-primary-900/50 transition-colors">
+                        <svg class="w-5 h-5 text-primary dark:text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"/></svg>
                     </div>
-                    <a href="{{ route('dashboard.invitations.addons.index', $invitation) }}"
-                        class="self-start sm:self-auto inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-primary dark:text-primary-400 border border-primary/30 dark:border-primary-700/50 rounded-xl hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all">
-                        Kelola Add-On
-                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-                    </a>
+                    <div class="min-w-0 flex-1">
+                        <h2 class="font-semibold text-sm text-secondary-800 dark:text-neutral-100">Add-On & Fitur Tambahan</h2>
+                        <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">{{ $invitation->addons->count() }} add-on terpasang</p>
+                    </div>
+                    <svg class="w-4 h-4 text-neutral-300 dark:text-neutral-600 ml-auto group-hover:text-primary dark:group-hover:text-primary-400 group-hover:translate-x-0.5 transition-all flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                 </div>
-            </div>
+            </a>
 
             {{-- ── Gallery Upload ── --}}
             {{-- NOTE: Gallery dropzone HTML and JS are preserved exactly from original --}}

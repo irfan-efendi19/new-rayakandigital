@@ -819,25 +819,20 @@
                                                 <ul class="divide-y divide-neutral-100 dark:divide-secondary-700/50">
                                                     @foreach($adminDocumentItems as $item)
                                                         <li
-                                                            class="flex items-center gap-3 px-4 py-3.5 transition-all duration-200 hover:bg-cyan-50/60 dark:hover:bg-secondary-700/30">
-                                                            <div class="min-w-0 flex-1">
-                                                                <p class="text-sm font-medium text-secondary-800 dark:text-neutral-100"
-                                                                    :class="items[{{ $item->id }}].pria && items[{{ $item->id }}].wanita ? 'line-through text-neutral-400 dark:text-neutral-500' : ''">
-                                                                    {{ $item->title }}
-                                                                </p>
-                                                                <p class="mt-1 text-[11px] text-neutral-400 dark:text-neutral-500">
-                                                                    Tandai untuk pihak Pria atau Wanita
-                                                                </p>
-                                                            </div>
-                                                            <div class="flex flex-shrink-0 items-center gap-2">
+                                                            class="px-4 py-3.5 transition-all duration-200 hover:bg-cyan-50/60 dark:hover:bg-secondary-700/30">
+                                                            <p class="text-sm font-medium text-secondary-800 dark:text-neutral-100"
+                                                                :class="items[{{ $item->id }}].pria && items[{{ $item->id }}].wanita ? 'line-through text-neutral-400 dark:text-neutral-500' : ''">
+                                                                {{ $item->title }}
+                                                            </p>
+                                                            <div class="mt-2 flex items-center gap-2">
                                                                 <label
-                                                                    class="inline-flex items-center gap-1.5 cursor-pointer select-none rounded-full border border-neutral-200 bg-white/80 px-2.5 py-1.5 text-neutral-600 transition-all dark:border-secondary-600/60 dark:bg-secondary-700/40 dark:text-neutral-300"
+                                                                    class="inline-flex items-center gap-1.5 cursor-pointer select-none rounded-full border border-neutral-200 bg-white/80 px-3 py-1.5 text-neutral-600 transition-all dark:border-secondary-600/60 dark:bg-secondary-700/40 dark:text-neutral-300"
                                                                     :class="items[{{ $item->id }}].pria ? 'border-blue-300 bg-blue-50 text-blue-700 dark:border-blue-600/50 dark:bg-blue-900/20 dark:text-blue-300' : ''">
                                                                     <input type="checkbox" :checked="items[{{ $item->id }}].pria"
                                                                         data-toggle-url="{{ route('dashboard.planner.checklists.toggle', $item) }}"
                                                                         data-party="pria" @change="toggleItem({{ $item->id }}, $event)"
                                                                         class="h-3.5 w-3.5 cursor-pointer rounded border-neutral-300 text-primary focus:ring-primary-500 dark:border-neutral-600">
-                                                                    <span class="flex items-center gap-1 text-[11px] font-semibold">
+                                                                    <span class="flex items-center gap-1 text-xs font-semibold">
                                                                         <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none"
                                                                             stroke="currentColor" stroke-width="1.8">
                                                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -851,13 +846,13 @@
                                                                     </span>
                                                                 </label>
                                                                 <label
-                                                                    class="inline-flex items-center gap-1.5 cursor-pointer select-none rounded-full border border-neutral-200 bg-white/80 px-2.5 py-1.5 text-neutral-600 transition-all dark:border-secondary-600/60 dark:bg-secondary-700/40 dark:text-neutral-300"
+                                                                    class="inline-flex items-center gap-1.5 cursor-pointer select-none rounded-full border border-neutral-200 bg-white/80 px-3 py-1.5 text-neutral-600 transition-all dark:border-secondary-600/60 dark:bg-secondary-700/40 dark:text-neutral-300"
                                                                     :class="items[{{ $item->id }}].wanita ? 'border-pink-300 bg-pink-50 text-pink-700 dark:border-pink-600/50 dark:bg-pink-900/20 dark:text-pink-300' : ''">
                                                                     <input type="checkbox" :checked="items[{{ $item->id }}].wanita"
                                                                         data-toggle-url="{{ route('dashboard.planner.checklists.toggle', $item) }}"
                                                                         data-party="wanita" @change="toggleItem({{ $item->id }}, $event)"
                                                                         class="h-3.5 w-3.5 cursor-pointer rounded border-neutral-300 text-primary focus:ring-primary-500 dark:border-neutral-600">
-                                                                    <span class="flex items-center gap-1 text-[11px] font-semibold">
+                                                                    <span class="flex items-center gap-1 text-xs font-semibold">
                                                                         <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none"
                                                                             stroke="currentColor" stroke-width="1.8">
                                                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -1060,17 +1055,17 @@
                                     $engTotalWanita = (float) $engItems->sum('cost_wanita');
                                     $engTotal = $engTotalPria + $engTotalWanita;
                                 @endphp
-                                <div class="mb-4 flex items-center justify-between gap-3">
+                                <div class="mb-5 flex items-center justify-between gap-3">
                                     <div>
-                                        <h3 class="font-semibold text-secondary-800 dark:text-neutral-100">Rencana Pertunangan
-                                        </h3>
-                                        <p class="mt-0.5 text-xs text-neutral-500 dark:text-neutral-400">
+                                        <h3 class="text-sm font-semibold text-secondary-800 dark:text-neutral-100 sm:text-base">
+                                            Rencana Pertunangan</h3>
+                                        <p class="mt-0.5 text-[11px] text-neutral-500 dark:text-neutral-400 sm:text-xs">
                                             {{ $engItems->count() }} item
                                         </p>
                                     </div>
                                     <button type="button" x-data
                                         @click="activeTab = 'ENGAGEMENT'; $dispatch('open-modal', 'add-item-ENGAGEMENT')"
-                                        class="inline-flex items-center gap-1.5 rounded-xl bg-primary px-3 py-1.5 text-xs font-semibold text-white transition-all hover:bg-primary-600">
+                                        class="inline-flex items-center gap-1.5 rounded-xl bg-primary px-2.5 py-1.5 text-[11px] font-semibold text-white transition-all hover:bg-primary-600 sm:px-3 sm:text-xs">
                                         <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M12 4v16m8-8H4" />
@@ -1080,35 +1075,43 @@
                                 </div>
 
                                 {{-- Summary --}}
-                                <div class="mb-4 grid grid-cols-3 gap-2">
+                                <div class="mb-5 grid grid-cols-3 gap-2 sm:gap-3">
                                     <div
-                                        class="rounded-2xl border border-neutral-200/70 bg-neutral-50/70 p-3 text-center dark:border-secondary-700/50 dark:bg-secondary-700/40">
-                                        <p class="text-[10px] text-neutral-500 dark:text-neutral-400">Total</p>
-                                        <p class="mt-1 text-sm font-bold text-secondary-800 dark:text-neutral-100 tabular-nums">
-                                            Rp
-                                            {{ number_format($engTotal, 0, ',', '.') }}
+                                        class="rounded-2xl border border-neutral-200/70 bg-neutral-50/70 p-2.5 text-center dark:border-secondary-700/50 dark:bg-secondary-700/40 sm:p-3.5">
+                                        <p class="text-[10px] text-neutral-500 dark:text-neutral-400 sm:text-[11px]">Total</p>
+                                        <p class="mt-1 text-sm font-bold text-secondary-800 dark:text-neutral-100 tabular-nums sm:text-lg">
+                                            Rp {{ number_format($engTotal, 0, ',', '.') }}
                                         </p>
                                     </div>
                                     <div
-                                        class="rounded-2xl border border-blue-200/70 bg-blue-50/70 p-3 text-center dark:border-blue-800/50 dark:bg-blue-900/20">
-                                        <p class="text-[10px] text-blue-500 dark:text-blue-400">Pria</p>
-                                        <p class="mt-1 text-sm font-bold text-blue-600 dark:text-blue-400 tabular-nums">Rp
-                                            {{ number_format($engTotalPria, 0, ',', '.') }}
+                                        class="rounded-2xl border border-blue-200/70 bg-blue-50/70 p-2.5 text-center dark:border-blue-800/50 dark:bg-blue-900/20 sm:p-3.5">
+                                        <p class="text-[10px] text-blue-500 dark:text-blue-400 sm:text-[11px]">Pria</p>
+                                        <p class="mt-1 text-sm font-bold text-blue-600 dark:text-blue-400 tabular-nums sm:text-lg">
+                                            Rp {{ number_format($engTotalPria, 0, ',', '.') }}
                                         </p>
                                     </div>
                                     <div
-                                        class="rounded-2xl border border-pink-200/70 bg-pink-50/70 p-3 text-center dark:border-pink-800/50 dark:bg-pink-900/20">
-                                        <p class="text-[10px] text-pink-500 dark:text-pink-400">Wanita</p>
-                                        <p class="mt-1 text-sm font-bold text-pink-600 dark:text-pink-400 tabular-nums">Rp
-                                            {{ number_format($engTotalWanita, 0, ',', '.') }}
+                                        class="rounded-2xl border border-pink-200/70 bg-pink-50/70 p-2.5 text-center dark:border-pink-800/50 dark:bg-pink-900/20 sm:p-3.5">
+                                        <p class="text-[10px] text-pink-500 dark:text-pink-400 sm:text-[11px]">Wanita</p>
+                                        <p class="mt-1 text-sm font-bold text-pink-600 dark:text-pink-400 tabular-nums sm:text-lg">
+                                            Rp {{ number_format($engTotalWanita, 0, ',', '.') }}
                                         </p>
                                     </div>
                                 </div>
 
                                 @if($engItems->isEmpty())
                                     <div
-                                        class="rounded-2xl border border-dashed border-neutral-200 px-5 py-10 text-center text-sm text-neutral-400 dark:border-secondary-600 dark:text-neutral-500">
-                                        Belum ada data pertunangan.
+                                        class="rounded-2xl border border-dashed border-pink-200/70 bg-pink-50/50 px-5 py-10 text-center text-sm text-pink-700/80 dark:border-pink-800/40 dark:bg-pink-950/20 dark:text-pink-300">
+                                        <div
+                                            class="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-white/80 shadow-sm dark:bg-secondary-800/70">
+                                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                            </svg>
+                                        </div>
+                                        <p class="mt-3 font-semibold">Belum ada data pertunangan.</p>
+                                        <p class="mt-1 text-xs text-pink-700/70 dark:text-pink-300/70">Tambahkan item untuk mulai
+                                            merencanakan acara pertunangan.</p>
                                     </div>
                                 @else
                                     <div class="space-y-2.5">
@@ -1118,54 +1121,76 @@
                                             @endphp
                                             <div
                                                 class="group relative rounded-2xl border border-neutral-200/80 bg-white shadow-sm transition-all duration-200 hover:border-pink-300 dark:border-secondary-600/50 dark:bg-secondary-800/80 dark:hover:border-pink-700/50">
-                                                <div class="px-4 py-3">
-                                                    <div class="flex items-center justify-between gap-2">
-                                                        <div class="flex items-center gap-2 min-w-0">
-                                                            <span class="w-1.5 h-1.5 rounded-full bg-pink-500 shrink-0"></span>
-                                                            <p
-                                                                class="text-sm font-medium text-secondary-800 dark:text-neutral-100 truncate">
-                                                                {{ $item->title }}
-                                                            </p>
-                                                            <span
-                                                                class="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-bold {{ $statusStyles[$item->status] ?? $statusStyles['PENDING'] }} shrink-0">
-                                                                {{ $statusLabels[$item->status] ?? $item->status }}
-                                                            </span>
-                                                        </div>
-                                                        <div class="flex items-center gap-3 shrink-0">
-                                                            <div class="flex items-center gap-2 text-[11px]">
-                                                                <span class="text-blue-600 dark:text-blue-400 tabular-nums">P: Rp
-                                                                    {{ number_format($item->cost_pria, 0, ',', '.') }}</span>
-                                                                <span class="text-neutral-300 dark:text-secondary-600">|</span>
-                                                                <span class="text-pink-600 dark:text-pink-400 tabular-nums">W: Rp
-                                                                    {{ number_format($item->cost_wanita, 0, ',', '.') }}</span>
+                                                <div class="p-4">
+                                                    <div class="flex items-start justify-between gap-2">
+                                                        <div class="min-w-0 flex-1">
+                                                            <div class="flex items-center gap-2 flex-wrap">
+                                                                <span class="w-1.5 h-1.5 rounded-full bg-pink-500 shrink-0"></span>
+                                                                <p
+                                                                    class="text-sm font-semibold text-secondary-800 dark:text-neutral-100 truncate">
+                                                                    {{ $item->title }}
+                                                                </p>
+                                                                <span
+                                                                    class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold {{ $statusStyles[$item->status] ?? $statusStyles['PENDING'] }}">
+                                                                    {{ $statusLabels[$item->status] ?? $item->status }}
+                                                                </span>
                                                             </div>
-                                                            <div
-                                                                class="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                                <button type="button" x-data
-                                                                    @click="$dispatch('open-modal', 'edit-item-{{ $item->id }}')"
-                                                                    class="p-1.5 rounded-lg text-neutral-400 hover:text-primary hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors">
+                                                            <div class="mt-2.5 grid grid-cols-2 gap-2">
+                                                                <div
+                                                                    class="rounded-xl border border-blue-100 bg-blue-50/70 px-3 py-2 dark:border-blue-800/40 dark:bg-blue-900/20">
+                                                                    <p class="text-[10px] text-blue-500 dark:text-blue-400">Pria
+                                                                    </p>
+                                                                    <p
+                                                                        class="mt-0.5 text-xs font-bold text-blue-600 dark:text-blue-400 tabular-nums">
+                                                                        Rp {{ number_format($item->cost_pria, 0, ',', '.') }}
+                                                                    </p>
+                                                                </div>
+                                                                <div
+                                                                    class="rounded-xl border border-pink-100 bg-pink-50/70 px-3 py-2 dark:border-pink-800/40 dark:bg-pink-900/20">
+                                                                    <p class="text-[10px] text-pink-500 dark:text-pink-400">Wanita
+                                                                    </p>
+                                                                    <p
+                                                                        class="mt-0.5 text-xs font-bold text-pink-600 dark:text-pink-400 tabular-nums">
+                                                                        Rp {{ number_format($item->cost_wanita, 0, ',', '.') }}
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                            @if($itemTotal > 0)
+                                                                <div class="mt-2 flex items-center gap-1.5">
+                                                                    <span
+                                                                        class="text-[10px] text-neutral-400 dark:text-neutral-500">Total:</span>
+                                                                    <span
+                                                                        class="text-xs font-bold text-secondary-700 dark:text-neutral-200 tabular-nums">Rp
+                                                                        {{ number_format($itemTotal, 0, ',', '.') }}</span>
+                                                                </div>
+                                                            @endif
+                                                        </div>
+                                                        <div
+                                                            class="flex items-center gap-0.5 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
+                                                            <button type="button" x-data
+                                                                @click="$dispatch('open-modal', 'edit-item-{{ $item->id }}')"
+                                                                class="p-1.5 rounded-lg text-neutral-400 hover:text-primary dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors">
+                                                                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24"
+                                                                    stroke="currentColor">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                                        stroke-width="2"
+                                                                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                                                </svg>
+                                                            </button>
+                                                            <form action="{{ route('dashboard.planner.items.destroy', $item) }}"
+                                                                method="POST" onsubmit="return confirm('Hapus item ini?')">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit"
+                                                                    class="p-1.5 rounded-lg text-neutral-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
                                                                     <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24"
                                                                         stroke="currentColor">
                                                                         <path stroke-linecap="round" stroke-linejoin="round"
                                                                             stroke-width="2"
-                                                                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                                                     </svg>
                                                                 </button>
-                                                                <form action="{{ route('dashboard.planner.items.destroy', $item) }}"
-                                                                    method="POST" onsubmit="return confirm('Hapus item ini?')">
-                                                                    @csrf
-                                                                    @method('DELETE')
-                                                                    <button type="submit"
-                                                                        class="p-1.5 rounded-lg text-neutral-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
-                                                                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24"
-                                                                            stroke="currentColor">
-                                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                                stroke-width="2"
-                                                                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                                                        </svg>
-                                                                    </button>
-                                                                </form>
-                                                            </div>
+                                                            </form>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -2016,12 +2041,19 @@
         @endif
         <x-modal name="add-item-{{ $pillar['key'] }}">
             <div class="p-6">
-                <h3 class="text-lg font-bold text-secondary-800 dark:text-neutral-100 mb-1">Tambah Item
-                    {{ $pillar['label'] }}
-                </h3>
-                <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-5">Simpan item baru ke pilar
-                    {{ $pillar['label'] }}.
-                </p>
+                <div class="flex items-start justify-between gap-4 mb-5">
+                    <div>
+                        <h3 class="text-lg font-bold text-secondary-800 dark:text-neutral-100">Tambah Item
+                            {{ $pillar['label'] }}
+                        </h3>
+                        <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1">Simpan item baru ke pilar
+                            {{ $pillar['label'] }}.
+                        </p>
+                    </div>
+                    <button type="button" x-on:click="show = false" class="shrink-0 p-2 -m-2 text-neutral-400 hover:text-secondary-600 dark:hover:text-neutral-300 rounded-xl hover:bg-neutral-100 dark:hover:bg-secondary-700 transition-colors">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
+                </div>
 
                 <form action="{{ route('dashboard.planner.items.store') }}" method="POST" class="space-y-4">
                     @csrf
@@ -2122,12 +2154,12 @@
                     @if($pillar['key'] === 'ENGAGEMENT')
                         <div class="grid grid-cols-2 gap-4">
                             <div>
-                                <x-input-label for="add-pria-{{ $pillar['key'] }}" value="Biaya Pria (CPP) (Rp)" />
+                                <x-input-label for="add-pria-{{ $pillar['key'] }}" value="Biaya Pria (Rp)" />
                                 <x-text-input id="add-pria-{{ $pillar['key'] }}" name="cost_pria" type="number" min="0"
                                     step="0.01" value="0" class="mt-1 block w-full" />
                             </div>
                             <div>
-                                <x-input-label for="add-wanita-{{ $pillar['key'] }}" value="Biaya Wanita (CPW) (Rp)" />
+                                <x-input-label for="add-wanita-{{ $pillar['key'] }}" value="Biaya Wanita (Rp)" />
                                 <x-text-input id="add-wanita-{{ $pillar['key'] }}" name="cost_wanita" type="number" min="0"
                                     step="0.01" value="0" class="mt-1 block w-full" />
                             </div>
@@ -2141,8 +2173,8 @@
                                 <select id="add-party-{{ $pillar['key'] }}" name="subcategory"
                                     class="mt-1 block w-full border-neutral-300 dark:border-neutral-600 dark:bg-secondary-700 dark:text-neutral-200 focus:border-primary-500 focus:ring-primary-500 rounded-xl shadow-sm"
                                     required>
-                                    <option value="PRIA">Pria (CPP)</option>
-                                    <option value="WANITA">Wanita (CPW)</option>
+                                    <option value="PRIA">Pria</option>
+                                    <option value="WANITA">Wanita</option>
                                 </select>
                             </div>
                             <div>
@@ -2153,7 +2185,7 @@
                         </div>
                     @endif
 
-                    <div class="flex justify-end gap-2 pt-2">
+                    <div class="flex items-center justify-end gap-3 pt-4 mt-4 border-t border-neutral-100 dark:border-secondary-700">
                         <x-secondary-button type="button" x-on:click="show = false">Batal</x-secondary-button>
                         <x-primary-button type="submit">Simpan Item</x-primary-button>
                     </div>
@@ -2166,8 +2198,15 @@
     @foreach($plannerItems as $item)
         <x-modal name="edit-item-{{ $item->id }}">
             <div class="p-6">
-                <h3 class="text-lg font-bold text-secondary-800 dark:text-neutral-100 mb-1">Edit Item</h3>
-                <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-5">{{ $item->title }}</p>
+                <div class="flex items-start justify-between gap-4 mb-5">
+                    <div>
+                        <h3 class="text-lg font-bold text-secondary-800 dark:text-neutral-100">Edit Item</h3>
+                        <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1">{{ $item->title }}</p>
+                    </div>
+                    <button type="button" x-on:click="show = false" class="shrink-0 p-2 -m-2 text-neutral-400 hover:text-secondary-600 dark:hover:text-neutral-300 rounded-xl hover:bg-neutral-100 dark:hover:bg-secondary-700 transition-colors">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
+                </div>
 
                 <form action="{{ route('dashboard.planner.items.update', $item) }}" method="POST" class="space-y-4">
                     @csrf
@@ -2197,12 +2236,12 @@
                     @if($item->category === 'ENGAGEMENT')
                         <div class="grid grid-cols-2 gap-4">
                             <div>
-                                <x-input-label for="edit-pria-{{ $item->id }}" value="Biaya Pria (CPP) (Rp)" />
+                                <x-input-label for="edit-pria-{{ $item->id }}" value="Biaya Pria (Rp)" />
                                 <x-text-input id="edit-pria-{{ $item->id }}" name="cost_pria" type="number" min="0" step="0.01"
                                     value="{{ old('cost_pria', (float) $item->cost_pria) }}" class="mt-1 block w-full" />
                             </div>
                             <div>
-                                <x-input-label for="edit-wanita-{{ $item->id }}" value="Biaya Wanita (CPW) (Rp)" />
+                                <x-input-label for="edit-wanita-{{ $item->id }}" value="Biaya Wanita (Rp)" />
                                 <x-text-input id="edit-wanita-{{ $item->id }}" name="cost_wanita" type="number" min="0"
                                     step="0.01" value="{{ old('cost_wanita', (float) $item->cost_wanita) }}"
                                     class="mt-1 block w-full" />
@@ -2217,8 +2256,8 @@
                                 <select id="edit-party-{{ $item->id }}" name="subcategory"
                                     class="mt-1 block w-full border-neutral-300 dark:border-neutral-600 dark:bg-secondary-700 dark:text-neutral-200 focus:border-primary-500 focus:ring-primary-500 rounded-xl shadow-sm"
                                     required>
-                                    <option value="PRIA" @selected($item->subcategory === 'PRIA')>Pria (CPP)</option>
-                                    <option value="WANITA" @selected($item->subcategory === 'WANITA')>Wanita (CPW)</option>
+                                    <option value="PRIA" @selected($item->subcategory === 'PRIA')>Pria</option>
+                                    <option value="WANITA" @selected($item->subcategory === 'WANITA')>Wanita</option>
                                 </select>
                             </div>
                             <div>
@@ -2283,7 +2322,7 @@
                         @endif
                     @endif
 
-                    <div class="flex justify-end gap-2 pt-2">
+                    <div class="flex items-center justify-end gap-3 pt-4 mt-4 border-t border-neutral-100 dark:border-secondary-700">
                         <x-secondary-button type="button" x-on:click="show = false">Batal</x-secondary-button>
                         <x-primary-button type="submit">Perbarui Item</x-primary-button>
                     </div>
@@ -2295,9 +2334,15 @@
     {{-- ─── Modals: Add Checklist ─── --}}
     <x-modal name="add-checklist">
         <div class="p-6">
-            <h3 class="text-lg font-bold text-secondary-800 dark:text-neutral-100 mb-1">Tambah Checklist</h3>
-            <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-5">Tambahkan checklist custom sesuai kebutuhan.
-            </p>
+            <div class="flex items-start justify-between gap-4 mb-5">
+                <div>
+                    <h3 class="text-lg font-bold text-secondary-800 dark:text-neutral-100">Tambah Checklist</h3>
+                    <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1">Tambahkan checklist custom sesuai kebutuhan.</p>
+                </div>
+                <button type="button" x-on:click="show = false" class="shrink-0 p-2 -m-2 text-neutral-400 hover:text-secondary-600 dark:hover:text-neutral-300 rounded-xl hover:bg-neutral-100 dark:hover:bg-secondary-700 transition-colors">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
 
             <form action="{{ route('dashboard.planner.checklists.store') }}" method="POST" class="space-y-4">
                 @csrf
@@ -2317,7 +2362,7 @@
                         placeholder="cth: Sewa mobil pengantin" required />
                     <x-input-error :messages="$errors->get('title')" class="mt-2" />
                 </div>
-                <div class="flex justify-end gap-2 pt-2">
+                <div class="flex items-center justify-end gap-3 pt-4 mt-4 border-t border-neutral-100 dark:border-secondary-700">
                     <x-secondary-button type="button" x-on:click="show = false">Batal</x-secondary-button>
                     <x-primary-button type="submit">Simpan Checklist</x-primary-button>
                 </div>
@@ -2328,8 +2373,15 @@
     {{-- ─── Modals: Add Vendor ─── --}}
     <x-modal name="add-vendor">
         <div class="p-6" x-data="{ vendorType: 'VENUE' }" x-on:set-vendor-type.window="vendorType = $event.detail.type">
-            <h3 class="text-lg font-bold text-secondary-800 dark:text-neutral-100 mb-1">Tambah Vendor</h3>
-            <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-5">Simpan vendor baru ke kategori persiapan.</p>
+            <div class="flex items-start justify-between gap-4 mb-5">
+                <div>
+                    <h3 class="text-lg font-bold text-secondary-800 dark:text-neutral-100">Tambah Vendor</h3>
+                    <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1">Simpan vendor baru ke kategori persiapan.</p>
+                </div>
+                <button type="button" x-on:click="show = false" class="shrink-0 p-2 -m-2 text-neutral-400 hover:text-secondary-600 dark:hover:text-neutral-300 rounded-xl hover:bg-neutral-100 dark:hover:bg-secondary-700 transition-colors">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
 
             <form action="{{ route('dashboard.planner.items.store') }}" method="POST" class="space-y-4">
                 @csrf
@@ -2384,7 +2436,7 @@
                     </div>
                 </div>
 
-                <div class="flex justify-end gap-2 pt-2">
+                <div class="flex items-center justify-end gap-3 pt-4 mt-4 border-t border-neutral-100 dark:border-secondary-700">
                     <x-secondary-button type="button" x-on:click="show = false">Batal</x-secondary-button>
                     <x-primary-button type="submit">Simpan Vendor</x-primary-button>
                 </div>
@@ -2399,8 +2451,15 @@
         @endif
         <x-modal name="edit-checklist-{{ $item->id }}">
             <div class="p-6">
-                <h3 class="text-lg font-bold text-secondary-800 dark:text-neutral-100 mb-1">Edit Checklist</h3>
-                <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-5">{{ $item->title }}</p>
+                <div class="flex items-start justify-between gap-4 mb-5">
+                    <div>
+                        <h3 class="text-lg font-bold text-secondary-800 dark:text-neutral-100">Edit Checklist</h3>
+                        <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1">{{ $item->title }}</p>
+                    </div>
+                    <button type="button" x-on:click="show = false" class="shrink-0 p-2 -m-2 text-neutral-400 hover:text-secondary-600 dark:hover:text-neutral-300 rounded-xl hover:bg-neutral-100 dark:hover:bg-secondary-700 transition-colors">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
+                </div>
 
                 <form action="{{ route('dashboard.planner.checklists.update', $item) }}" method="POST" class="space-y-4">
                     @csrf
@@ -2425,7 +2484,7 @@
                         <textarea id="edit-checklist-desc-{{ $item->id }}" name="description" rows="2"
                             class="mt-1 block w-full border-neutral-300 dark:border-neutral-600 dark:bg-secondary-700 dark:text-neutral-200 focus:border-primary-500 focus:ring-primary-500 rounded-xl shadow-sm">{{ old('description', $item->description) }}</textarea>
                     </div>
-                    <div class="flex justify-end gap-2 pt-2">
+                    <div class="flex items-center justify-end gap-3 pt-4 mt-4 border-t border-neutral-100 dark:border-secondary-700">
                         <x-secondary-button type="button" x-on:click="show = false">Batal</x-secondary-button>
                         <x-primary-button type="submit">Perbarui Checklist</x-primary-button>
                     </div>
@@ -2437,14 +2496,15 @@
     {{-- ─── Modals: Add Calendar Event ─── --}}
     <div x-data="{ show: false, selectedDate: '' }"
         x-init="$watch('show', val => { if(val && window.__selectedCalendarDate) { selectedDate = window.__selectedCalendarDate; window.__selectedCalendarDate = null; } })"
-        @open-calendar-modal.window="show = true">
+        @open-calendar-modal.window="show = true"
+        x-cloak>
         <div x-show="show" @click.away="show = false" @keydown.escape.window="show = false"
             class="fixed inset-0 z-50 overflow-y-auto px-4 py-6 sm:px-0">
             <div x-show="show" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0"
                 x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200"
                 x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
                 class="fixed inset-0 transform transition-all" @click="show = false">
-                <div class="absolute inset-0 bg-neutral-500 dark:bg-neutral-900 opacity-75 dark:opacity-90"></div>
+                <div class="absolute inset-0 bg-secondary-900/60 backdrop-blur-sm dark:bg-secondary-950/80"></div>
             </div>
             <div x-show="show" x-transition:enter="ease-out duration-300"
                 x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
@@ -2452,11 +2512,18 @@
                 x-transition:leave="ease-in duration-200"
                 x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
                 x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                class="mb-6 bg-white dark:bg-secondary-800 rounded-2xl overflow-hidden shadow-xl transform transition-all sm:w-full sm:max-w-2xl sm:mx-auto">
+                class="mb-6 bg-white dark:bg-secondary-800 rounded-2xl overflow-hidden shadow-2xl ring-1 ring-black/5 dark:ring-white/10 transform transition-all sm:w-full sm:max-w-2xl sm:mx-auto">
                 <div class="p-6">
-                    <h3 class="text-lg font-bold text-secondary-800 dark:text-neutral-100 mb-1">Tambah Event</h3>
-                    <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-5">Tambahkan jadwal atau catatan ke
-                        kalender.</p>
+                    <div class="flex items-start justify-between gap-4 mb-5">
+                        <div>
+                            <h3 class="text-lg font-bold text-secondary-800 dark:text-neutral-100">Tambah Event</h3>
+                            <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1">Tambahkan jadwal atau catatan ke
+                                kalender.</p>
+                        </div>
+                        <button type="button" @click="show = false" class="shrink-0 p-2 -m-2 text-neutral-400 hover:text-secondary-600 dark:hover:text-neutral-300 rounded-xl hover:bg-neutral-100 dark:hover:bg-secondary-700 transition-colors">
+                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                        </button>
+                    </div>
 
                     <form action="{{ route('dashboard.planner.items.store') }}" method="POST" class="space-y-4">
                         @csrf
@@ -2476,7 +2543,7 @@
                                 placeholder="cth: Konfirmasi vendor terlebih dahulu"></textarea>
                         </div>
 
-                        <div class="flex justify-end gap-2 pt-2">
+                        <div class="flex items-center justify-end gap-3 pt-4 mt-4 border-t border-neutral-100 dark:border-secondary-700">
                             <x-secondary-button type="button" @click="show = false">Batal</x-secondary-button>
                             <x-primary-button type="submit">Simpan Event</x-primary-button>
                         </div>
@@ -2489,8 +2556,15 @@
     {{-- ─── Modals: Add Rundown ─── --}}
     <x-modal name="add-rundown">
         <div class="p-6">
-            <h3 class="text-lg font-bold text-secondary-800 dark:text-neutral-100 mb-1">Tambah Rundown</h3>
-            <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-5">Tambahkan jadwal kegiatan Hari H.</p>
+            <div class="flex items-start justify-between gap-4 mb-5">
+                <div>
+                    <h3 class="text-lg font-bold text-secondary-800 dark:text-neutral-100">Tambah Rundown</h3>
+                    <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1">Tambahkan jadwal kegiatan Hari H.</p>
+                </div>
+                <button type="button" x-on:click="show = false" class="shrink-0 p-2 -m-2 text-neutral-400 hover:text-secondary-600 dark:hover:text-neutral-300 rounded-xl hover:bg-neutral-100 dark:hover:bg-secondary-700 transition-colors">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
 
             <form action="{{ route('dashboard.planner.rundowns.store') }}" method="POST" class="space-y-4">
                 @csrf
@@ -2524,7 +2598,7 @@
                         class="mt-1 block w-full border-neutral-300 dark:border-neutral-600 dark:bg-secondary-700 dark:text-neutral-200 focus:border-primary-500 focus:ring-primary-500 rounded-xl shadow-sm"></textarea>
                 </div>
 
-                <div class="flex justify-end gap-2 pt-2">
+                <div class="flex items-center justify-end gap-3 pt-4 mt-4 border-t border-neutral-100 dark:border-secondary-700">
                     <x-secondary-button type="button" x-on:click="show = false">Batal</x-secondary-button>
                     <x-primary-button type="submit">Simpan Rundown</x-primary-button>
                 </div>
@@ -2536,8 +2610,15 @@
     @foreach($rundowns as $rundown)
         <x-modal name="edit-rundown-{{ $rundown->id }}">
             <div class="p-6">
-                <h3 class="text-lg font-bold text-secondary-800 dark:text-neutral-100 mb-1">Edit Rundown</h3>
-                <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-5">{{ $rundown->activity_name }}</p>
+                <div class="flex items-start justify-between gap-4 mb-5">
+                    <div>
+                        <h3 class="text-lg font-bold text-secondary-800 dark:text-neutral-100">Edit Rundown</h3>
+                        <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1">{{ $rundown->activity_name }}</p>
+                    </div>
+                    <button type="button" x-on:click="show = false" class="shrink-0 p-2 -m-2 text-neutral-400 hover:text-secondary-600 dark:hover:text-neutral-300 rounded-xl hover:bg-neutral-100 dark:hover:bg-secondary-700 transition-colors">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
+                </div>
 
                 <form action="{{ route('dashboard.planner.rundowns.update', $rundown) }}" method="POST" class="space-y-4">
                     @csrf
@@ -2574,7 +2655,7 @@
                             class="mt-1 block w-full border-neutral-300 dark:border-neutral-600 dark:bg-secondary-700 dark:text-neutral-200 focus:border-primary-500 focus:ring-primary-500 rounded-xl shadow-sm">{{ old('notes', $rundown->notes) }}</textarea>
                     </div>
 
-                    <div class="flex justify-end gap-2 pt-2">
+                    <div class="flex items-center justify-end gap-3 pt-4 mt-4 border-t border-neutral-100 dark:border-secondary-700">
                         <x-secondary-button type="button" x-on:click="show = false">Batal</x-secondary-button>
                         <x-primary-button type="submit">Perbarui Rundown</x-primary-button>
                     </div>
