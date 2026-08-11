@@ -1539,10 +1539,17 @@
                                                         @else
                                                             <div class="p-3 space-y-2">
                                                                 @foreach($partyItems as $item)
+                                                                    @php
+                                                                        $hoverBorder = $partyCode === 'PRIA' ? 'hover:border-blue-300' : 'hover:border-pink-300';
+                                                                        $hoverBg = $partyCode === 'PRIA' ? 'hover:bg-blue-50/30' : 'hover:bg-pink-50/30';
+                                                                        $darkHoverBorder = $partyCode === 'PRIA' ? 'dark:hover:border-blue-700/50' : 'dark:hover:border-pink-700/50';
+                                                                        $darkHoverBg = $partyCode === 'PRIA' ? 'dark:hover:bg-blue-900/10' : 'dark:hover:bg-pink-900/10';
+                                                                        $bgLeft = $partyCode === 'PRIA' ? 'bg-blue-50/50 dark:bg-blue-900/20' : 'bg-pink-50/50 dark:bg-pink-900/20';
+                                                                    @endphp
                                                                     <div
-                                                                        class="group relative flex items-stretch rounded-2xl border border-neutral-200/80 bg-neutral-50/70 shadow-sm transition-all duration-200 hover:border-{{ $partyCode === 'PRIA' ? 'blue' : 'pink' }}-300 hover:bg-{{ $partyCode === 'PRIA' ? 'blue' : 'pink' }}-50/30 dark:border-secondary-600/50 dark:bg-secondary-700/30 dark:hover:border-{{ $partyCode === 'PRIA' ? 'blue' : 'pink' }}-700/50 dark:hover:bg-{{ $partyCode === 'PRIA' ? 'blue' : 'pink' }}-900/10">
+                                                                        class="group relative flex items-stretch rounded-2xl border border-neutral-200/80 bg-neutral-50/70 shadow-sm transition-all duration-200 {{ $hoverBorder }} {{ $hoverBg }} dark:border-secondary-600/50 dark:bg-secondary-700/30 {{ $darkHoverBorder }} {{ $darkHoverBg }}">
                                                                         <div
-                                                                            class="flex items-center justify-center w-12 shrink-0 border-r border-neutral-150 dark:border-secondary-600/50 bg-{{ $partyCode === 'PRIA' ? 'blue' : 'pink' }}-50/50 dark:bg-{{ $partyCode === 'PRIA' ? 'blue' : 'pink' }}-900/20 rounded-l-xl">
+                                                                            class="flex items-center justify-center w-12 shrink-0 border-r border-neutral-150 dark:border-secondary-600/50 {{ $bgLeft }} rounded-l-xl">
                                                                             <span
                                                                                 class="w-6 h-6 flex items-center justify-center rounded-lg text-[10px] font-bold text-white {{ $partyStyle['badge'] }}">{{ $loop->iteration }}</span>
                                                                         </div>
@@ -2085,13 +2092,37 @@
                         @endif
                         <div
                             class="{{ in_array($pillar['key'], ['PRE_WEDDING', 'SESERAHAN', 'ENGAGEMENT', 'BUDGET']) ? 'col-span-2' : '' }}">
-                            <x-input-label for="add-status-{{ $pillar['key'] }}" value="Status" />
-                            <select id="add-status-{{ $pillar['key'] }}" name="status"
-                                class="mt-1 block w-full border-neutral-300 dark:border-neutral-600 dark:bg-secondary-700 dark:text-neutral-200 focus:border-primary-500 focus:ring-primary-500 rounded-xl shadow-sm">
-                                @foreach($statusOptions as $status)
-                                    <option value="{{ $status }}">{{ $statusLabels[$status] }}</option>
-                                @endforeach
-                            </select>
+                            <x-input-label value="Status" />
+                            <div class="mt-2 grid grid-cols-2 sm:grid-cols-4 gap-2" x-data="{ selected: '' }">
+                                <label class="relative flex items-center gap-2.5 cursor-pointer rounded-xl border-2 px-3 py-2.5 transition-all duration-200" :class="selected === 'PENDING' ? 'border-neutral-500 dark:border-neutral-400 bg-neutral-100 dark:bg-secondary-600 shadow-md' : 'border-neutral-200 dark:border-secondary-600 hover:border-neutral-300 dark:hover:border-secondary-500'">
+                                    <input type="radio" name="status" value="PENDING" x-model="selected" class="peer sr-only">
+                                    <span class="flex-shrink-0 transition-colors duration-200" :class="selected === 'PENDING' ? 'text-neutral-800 dark:text-neutral-100' : 'text-neutral-400 dark:text-neutral-500'">
+                                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="4" fill="currentColor"/></svg>
+                                    </span>
+                                    <span class="text-sm font-medium transition-colors duration-200" :class="selected === 'PENDING' ? 'text-neutral-800 dark:text-neutral-100' : 'text-neutral-500 dark:text-neutral-400'">{{ $statusLabels['PENDING'] }}</span>
+                                </label>
+                                <label class="relative flex items-center gap-2.5 cursor-pointer rounded-xl border-2 px-3 py-2.5 transition-all duration-200" :class="selected === 'IN_PROGRESS' ? 'border-blue-500 dark:border-blue-400 bg-blue-100 dark:bg-blue-900/50 shadow-md' : 'border-neutral-200 dark:border-secondary-600 hover:border-neutral-300 dark:hover:border-secondary-500'">
+                                    <input type="radio" name="status" value="IN_PROGRESS" x-model="selected" class="peer sr-only">
+                                    <span class="flex-shrink-0 transition-colors duration-200" :class="selected === 'IN_PROGRESS' ? 'text-blue-600 dark:text-blue-400' : 'text-neutral-400 dark:text-neutral-500'">
+                                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                    </span>
+                                    <span class="text-sm font-medium transition-colors duration-200" :class="selected === 'IN_PROGRESS' ? 'text-blue-700 dark:text-blue-200' : 'text-neutral-500 dark:text-neutral-400'">{{ $statusLabels['IN_PROGRESS'] }}</span>
+                                </label>
+                                <label class="relative flex items-center gap-2.5 cursor-pointer rounded-xl border-2 px-3 py-2.5 transition-all duration-200" :class="selected === 'COMPLETED' ? 'border-emerald-500 dark:border-emerald-400 bg-emerald-100 dark:bg-emerald-900/50 shadow-md' : 'border-neutral-200 dark:border-secondary-600 hover:border-neutral-300 dark:hover:border-secondary-500'">
+                                    <input type="radio" name="status" value="COMPLETED" x-model="selected" class="peer sr-only">
+                                    <span class="flex-shrink-0 transition-colors duration-200" :class="selected === 'COMPLETED' ? 'text-emerald-600 dark:text-emerald-400' : 'text-neutral-400 dark:text-neutral-500'">
+                                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                    </span>
+                                    <span class="text-sm font-medium transition-colors duration-200" :class="selected === 'COMPLETED' ? 'text-emerald-700 dark:text-emerald-200' : 'text-neutral-500 dark:text-neutral-400'">{{ $statusLabels['COMPLETED'] }}</span>
+                                </label>
+                                <label class="relative flex items-center gap-2.5 cursor-pointer rounded-xl border-2 px-3 py-2.5 transition-all duration-200" :class="selected === 'CANCELLED' ? 'border-red-500 dark:border-red-400 bg-red-100 dark:bg-red-900/50 shadow-md' : 'border-neutral-200 dark:border-secondary-600 hover:border-neutral-300 dark:hover:border-secondary-500'">
+                                    <input type="radio" name="status" value="CANCELLED" x-model="selected" class="peer sr-only">
+                                    <span class="flex-shrink-0 transition-colors duration-200" :class="selected === 'CANCELLED' ? 'text-red-600 dark:text-red-400' : 'text-neutral-400 dark:text-neutral-500'">
+                                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                    </span>
+                                    <span class="text-sm font-medium transition-colors duration-200" :class="selected === 'CANCELLED' ? 'text-red-700 dark:text-red-200' : 'text-neutral-500 dark:text-neutral-400'">{{ $statusLabels['CANCELLED'] }}</span>
+                                </label>
+                            </div>
                         </div>
                     </div>
 
@@ -2285,15 +2316,37 @@
                     @endif
 
                     <div>
-                        <x-input-label for="edit-status-{{ $item->id }}" value="Status" />
-                        <select id="edit-status-{{ $item->id }}" name="status"
-                            class="mt-1 block w-full border-neutral-300 dark:border-neutral-600 dark:bg-secondary-700 dark:text-neutral-200 focus:border-primary-500 focus:ring-primary-500 rounded-xl shadow-sm">
-                            @foreach($statusOptions as $status)
-                                <option value="{{ $status }}" @selected($item->status === $status)>
-                                    {{ $statusLabels[$status] }}
-                                </option>
-                            @endforeach
-                        </select>
+                        <x-input-label value="Status" />
+                        <div class="mt-2 grid grid-cols-2 sm:grid-cols-4 gap-2" x-data="{ selected: '{{ $item->status }}' }">
+                            <label class="relative flex items-center gap-2.5 cursor-pointer rounded-xl border-2 px-3 py-2.5 transition-all duration-200" :class="selected === 'PENDING' ? 'border-neutral-500 dark:border-neutral-400 bg-neutral-100 dark:bg-secondary-600 shadow-md' : 'border-neutral-200 dark:border-secondary-600 hover:border-neutral-300 dark:hover:border-secondary-500'">
+                                <input type="radio" name="status" value="PENDING" x-model="selected" class="peer sr-only">
+                                <span class="flex-shrink-0 transition-colors duration-200" :class="selected === 'PENDING' ? 'text-neutral-800 dark:text-neutral-100' : 'text-neutral-400 dark:text-neutral-500'">
+                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="4" fill="currentColor"/></svg>
+                                </span>
+                                <span class="text-sm font-medium transition-colors duration-200" :class="selected === 'PENDING' ? 'text-neutral-800 dark:text-neutral-100' : 'text-neutral-500 dark:text-neutral-400'">{{ $statusLabels['PENDING'] }}</span>
+                            </label>
+                            <label class="relative flex items-center gap-2.5 cursor-pointer rounded-xl border-2 px-3 py-2.5 transition-all duration-200" :class="selected === 'IN_PROGRESS' ? 'border-blue-500 dark:border-blue-400 bg-blue-100 dark:bg-blue-900/50 shadow-md' : 'border-neutral-200 dark:border-secondary-600 hover:border-neutral-300 dark:hover:border-secondary-500'">
+                                <input type="radio" name="status" value="IN_PROGRESS" x-model="selected" class="peer sr-only">
+                                <span class="flex-shrink-0 transition-colors duration-200" :class="selected === 'IN_PROGRESS' ? 'text-blue-600 dark:text-blue-400' : 'text-neutral-400 dark:text-neutral-500'">
+                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                </span>
+                                <span class="text-sm font-medium transition-colors duration-200" :class="selected === 'IN_PROGRESS' ? 'text-blue-700 dark:text-blue-200' : 'text-neutral-500 dark:text-neutral-400'">{{ $statusLabels['IN_PROGRESS'] }}</span>
+                            </label>
+                            <label class="relative flex items-center gap-2.5 cursor-pointer rounded-xl border-2 px-3 py-2.5 transition-all duration-200" :class="selected === 'COMPLETED' ? 'border-emerald-500 dark:border-emerald-400 bg-emerald-100 dark:bg-emerald-900/50 shadow-md' : 'border-neutral-200 dark:border-secondary-600 hover:border-neutral-300 dark:hover:border-secondary-500'">
+                                <input type="radio" name="status" value="COMPLETED" x-model="selected" class="peer sr-only">
+                                <span class="flex-shrink-0 transition-colors duration-200" :class="selected === 'COMPLETED' ? 'text-emerald-600 dark:text-emerald-400' : 'text-neutral-400 dark:text-neutral-500'">
+                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                </span>
+                                <span class="text-sm font-medium transition-colors duration-200" :class="selected === 'COMPLETED' ? 'text-emerald-700 dark:text-emerald-200' : 'text-neutral-500 dark:text-neutral-400'">{{ $statusLabels['COMPLETED'] }}</span>
+                            </label>
+                            <label class="relative flex items-center gap-2.5 cursor-pointer rounded-xl border-2 px-3 py-2.5 transition-all duration-200" :class="selected === 'CANCELLED' ? 'border-red-500 dark:border-red-400 bg-red-100 dark:bg-red-900/50 shadow-md' : 'border-neutral-200 dark:border-secondary-600 hover:border-neutral-300 dark:hover:border-secondary-500'">
+                                <input type="radio" name="status" value="CANCELLED" x-model="selected" class="peer sr-only">
+                                <span class="flex-shrink-0 transition-colors duration-200" :class="selected === 'CANCELLED' ? 'text-red-600 dark:text-red-400' : 'text-neutral-400 dark:text-neutral-500'">
+                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                </span>
+                                <span class="text-sm font-medium transition-colors duration-200" :class="selected === 'CANCELLED' ? 'text-red-700 dark:text-red-200' : 'text-neutral-500 dark:text-neutral-400'">{{ $statusLabels['CANCELLED'] }}</span>
+                            </label>
+                        </div>
                     </div>
 
                     @if($item->isFinancialCategory())
@@ -2426,13 +2479,37 @@
                             placeholder="cth: 0812-3456-7890" />
                     </div>
                     <div>
-                        <x-input-label for="add-vendor-status" value="Status" />
-                        <select id="add-vendor-status" name="status"
-                            class="mt-1 block w-full border-neutral-300 dark:border-neutral-600 dark:bg-secondary-700 dark:text-neutral-200 focus:border-primary-500 focus:ring-primary-500 rounded-xl shadow-sm">
-                            @foreach($statusOptions as $status)
-                                <option value="{{ $status }}">{{ $statusLabels[$status] }}</option>
-                            @endforeach
-                        </select>
+                        <x-input-label value="Status" />
+                        <div class="mt-2 grid grid-cols-2 sm:grid-cols-4 gap-2" x-data="{ selected: '' }">
+                            <label class="relative flex items-center gap-2.5 cursor-pointer rounded-xl border-2 px-3 py-2.5 transition-all duration-200" :class="selected === 'PENDING' ? 'border-neutral-500 dark:border-neutral-400 bg-neutral-100 dark:bg-secondary-600 shadow-md' : 'border-neutral-200 dark:border-secondary-600 hover:border-neutral-300 dark:hover:border-secondary-500'">
+                                <input type="radio" name="status" value="PENDING" x-model="selected" class="peer sr-only">
+                                <span class="flex-shrink-0 transition-colors duration-200" :class="selected === 'PENDING' ? 'text-neutral-800 dark:text-neutral-100' : 'text-neutral-400 dark:text-neutral-500'">
+                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="4" fill="currentColor"/></svg>
+                                </span>
+                                <span class="text-sm font-medium transition-colors duration-200" :class="selected === 'PENDING' ? 'text-neutral-800 dark:text-neutral-100' : 'text-neutral-500 dark:text-neutral-400'">{{ $statusLabels['PENDING'] }}</span>
+                            </label>
+                            <label class="relative flex items-center gap-2.5 cursor-pointer rounded-xl border-2 px-3 py-2.5 transition-all duration-200" :class="selected === 'IN_PROGRESS' ? 'border-blue-500 dark:border-blue-400 bg-blue-100 dark:bg-blue-900/50 shadow-md' : 'border-neutral-200 dark:border-secondary-600 hover:border-neutral-300 dark:hover:border-secondary-500'">
+                                <input type="radio" name="status" value="IN_PROGRESS" x-model="selected" class="peer sr-only">
+                                <span class="flex-shrink-0 transition-colors duration-200" :class="selected === 'IN_PROGRESS' ? 'text-blue-600 dark:text-blue-400' : 'text-neutral-400 dark:text-neutral-500'">
+                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                </span>
+                                <span class="text-sm font-medium transition-colors duration-200" :class="selected === 'IN_PROGRESS' ? 'text-blue-700 dark:text-blue-200' : 'text-neutral-500 dark:text-neutral-400'">{{ $statusLabels['IN_PROGRESS'] }}</span>
+                            </label>
+                            <label class="relative flex items-center gap-2.5 cursor-pointer rounded-xl border-2 px-3 py-2.5 transition-all duration-200" :class="selected === 'COMPLETED' ? 'border-emerald-500 dark:border-emerald-400 bg-emerald-100 dark:bg-emerald-900/50 shadow-md' : 'border-neutral-200 dark:border-secondary-600 hover:border-neutral-300 dark:hover:border-secondary-500'">
+                                <input type="radio" name="status" value="COMPLETED" x-model="selected" class="peer sr-only">
+                                <span class="flex-shrink-0 transition-colors duration-200" :class="selected === 'COMPLETED' ? 'text-emerald-600 dark:text-emerald-400' : 'text-neutral-400 dark:text-neutral-500'">
+                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                </span>
+                                <span class="text-sm font-medium transition-colors duration-200" :class="selected === 'COMPLETED' ? 'text-emerald-700 dark:text-emerald-200' : 'text-neutral-500 dark:text-neutral-400'">{{ $statusLabels['COMPLETED'] }}</span>
+                            </label>
+                            <label class="relative flex items-center gap-2.5 cursor-pointer rounded-xl border-2 px-3 py-2.5 transition-all duration-200" :class="selected === 'CANCELLED' ? 'border-red-500 dark:border-red-400 bg-red-100 dark:bg-red-900/50 shadow-md' : 'border-neutral-200 dark:border-secondary-600 hover:border-neutral-300 dark:hover:border-secondary-500'">
+                                <input type="radio" name="status" value="CANCELLED" x-model="selected" class="peer sr-only">
+                                <span class="flex-shrink-0 transition-colors duration-200" :class="selected === 'CANCELLED' ? 'text-red-600 dark:text-red-400' : 'text-neutral-400 dark:text-neutral-500'">
+                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                </span>
+                                <span class="text-sm font-medium transition-colors duration-200" :class="selected === 'CANCELLED' ? 'text-red-700 dark:text-red-200' : 'text-neutral-500 dark:text-neutral-400'">{{ $statusLabels['CANCELLED'] }}</span>
+                            </label>
+                        </div>
                     </div>
                 </div>
 
