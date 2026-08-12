@@ -2159,26 +2159,26 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <x-input-label for="add-est-{{ $pillar['key'] }}" value="Budget (Rp)" />
-                                <x-text-input id="add-est-{{ $pillar['key'] }}" name="estimated_cost" type="number" min="0"
-                                    step="0.01" value="0" class="mt-1 block w-full" />
+                                <x-text-input id="add-est-{{ $pillar['key'] }}" name="estimated_cost" type="text" inputmode="numeric"
+                                    data-rupiah value="0" class="mt-1 block w-full" />
                             </div>
                             <div>
                                 <x-input-label for="add-paid-{{ $pillar['key'] }}" value="Bayar (Rp)" />
-                                <x-text-input id="add-paid-{{ $pillar['key'] }}" name="paid_amount" type="number" min="0"
-                                    step="0.01" value="0" class="mt-1 block w-full" />
+                                <x-text-input id="add-paid-{{ $pillar['key'] }}" name="paid_amount" type="text" inputmode="numeric"
+                                    data-rupiah value="0" class="mt-1 block w-full" />
                             </div>
                         </div>
                     @elseif($pillar['key'] === 'VENDOR')
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <x-input-label for="add-est-{{ $pillar['key'] }}" value="Estimasi (Rp)" />
-                                <x-text-input id="add-est-{{ $pillar['key'] }}" name="estimated_cost" type="number" min="0"
-                                    step="0.01" value="0" class="mt-1 block w-full" />
+                                <x-text-input id="add-est-{{ $pillar['key'] }}" name="estimated_cost" type="text" inputmode="numeric"
+                                    data-rupiah value="0" class="mt-1 block w-full" />
                             </div>
                             <div>
                                 <x-input-label for="add-paid-{{ $pillar['key'] }}" value="Bayar (Rp)" />
-                                <x-text-input id="add-paid-{{ $pillar['key'] }}" name="paid_amount" type="number" min="0"
-                                    step="0.01" value="0" class="mt-1 block w-full" />
+                                <x-text-input id="add-paid-{{ $pillar['key'] }}" name="paid_amount" type="text" inputmode="numeric"
+                                    data-rupiah value="0" class="mt-1 block w-full" />
                             </div>
                         </div>
                         <div>
@@ -2190,13 +2190,13 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <x-input-label for="add-est-{{ $pillar['key'] }}" value="Budget (Rp)" />
-                                <x-text-input id="add-est-{{ $pillar['key'] }}" name="estimated_cost" type="number" min="0"
-                                    step="0.01" value="0" class="mt-1 block w-full" />
+                                <x-text-input id="add-est-{{ $pillar['key'] }}" name="estimated_cost" type="text" inputmode="numeric"
+                                    data-rupiah value="0" class="mt-1 block w-full" />
                             </div>
                             <div>
                                 <x-input-label for="add-paid-{{ $pillar['key'] }}" value="Bayar (Rp)" />
-                                <x-text-input id="add-paid-{{ $pillar['key'] }}" name="paid_amount" type="number" min="0"
-                                    step="0.01" value="0" class="mt-1 block w-full" />
+                                <x-text-input id="add-paid-{{ $pillar['key'] }}" name="paid_amount" type="text" inputmode="numeric"
+                                    data-rupiah value="0" class="mt-1 block w-full" />
                             </div>
                         </div>
                     @endif
@@ -2205,13 +2205,13 @@
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <x-input-label for="add-pria-{{ $pillar['key'] }}" value="Biaya Pria (Rp)" />
-                                <x-text-input id="add-pria-{{ $pillar['key'] }}" name="cost_pria" type="number" min="0"
-                                    step="0.01" value="0" class="mt-1 block w-full" />
+<x-text-input id="add-pria-{{ $pillar['key'] }}" name="cost_pria" type="text" inputmode="numeric"
+                                        data-rupiah value="0" class="mt-1 block w-full" />
                             </div>
                             <div>
                                 <x-input-label for="add-wanita-{{ $pillar['key'] }}" value="Biaya Wanita (Rp)" />
-                                <x-text-input id="add-wanita-{{ $pillar['key'] }}" name="cost_wanita" type="number" min="0"
-                                    step="0.01" value="0" class="mt-1 block w-full" />
+<x-text-input id="add-wanita-{{ $pillar['key'] }}" name="cost_wanita" type="text" inputmode="numeric"
+                                        data-rupiah value="0" class="mt-1 block w-full" />
                             </div>
                         </div>
                     @endif
@@ -2229,8 +2229,8 @@
                             </div>
                             <div>
                                 <x-input-label for="add-est-{{ $pillar['key'] }}" value="Biaya (Rp)" />
-                                <x-text-input id="add-est-{{ $pillar['key'] }}" name="estimated_cost" type="number" min="0"
-                                    step="0.01" value="0" class="mt-1 block w-full" />
+                                <x-text-input id="add-est-{{ $pillar['key'] }}" name="estimated_cost" type="text" inputmode="numeric"
+                                    data-rupiah value="0" class="mt-1 block w-full" />
                             </div>
                         </div>
                     @endif
@@ -2287,14 +2287,16 @@
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <x-input-label for="edit-pria-{{ $item->id }}" value="Biaya Pria (Rp)" />
-                                <x-text-input id="edit-pria-{{ $item->id }}" name="cost_pria" type="number" min="0" step="0.01"
-                                    value="{{ old('cost_pria', (float) $item->cost_pria) }}" class="mt-1 block w-full" />
+<x-text-input id="edit-pria-{{ $item->id }}" name="cost_pria" type="text" inputmode="numeric"
+                                        data-rupiah
+                                        value="{{ old('cost_pria', (float) $item->cost_pria) }}" class="mt-1 block w-full" />
                             </div>
                             <div>
                                 <x-input-label for="edit-wanita-{{ $item->id }}" value="Biaya Wanita (Rp)" />
-                                <x-text-input id="edit-wanita-{{ $item->id }}" name="cost_wanita" type="number" min="0"
-                                    step="0.01" value="{{ old('cost_wanita', (float) $item->cost_wanita) }}"
-                                    class="mt-1 block w-full" />
+<x-text-input id="edit-wanita-{{ $item->id }}" name="cost_wanita" type="text" inputmode="numeric"
+                                        data-rupiah
+                                        value="{{ old('cost_wanita', (float) $item->cost_wanita) }}"
+                                        class="mt-1 block w-full" />
                             </div>
                         </div>
                     @endif
@@ -2312,8 +2314,8 @@
                             </div>
                             <div>
                                 <x-input-label for="edit-est-{{ $item->id }}" value="Biaya (Rp)" />
-                                <x-text-input id="edit-est-{{ $item->id }}" name="estimated_cost" type="number" min="0"
-                                    step="0.01" class="mt-1 block w-full"
+                                <x-text-input id="edit-est-{{ $item->id }}" name="estimated_cost" type="text" inputmode="numeric"
+                                    data-rupiah class="mt-1 block w-full"
                                     value="{{ old('estimated_cost', $item->estimated_cost) }}" />
                             </div>
                         </div>
@@ -2373,15 +2375,15 @@
                             <div>
                                 <x-input-label for="edit-est-{{ $item->id }}"
                                     value="{{ $item->category === 'PRE_WEDDING' ? 'Budget' : 'Estimasi' }} (Rp)" />
-                                <x-text-input id="edit-est-{{ $item->id }}" name="estimated_cost" type="number" min="0"
-                                    step="0.01" class="mt-1 block w-full"
+                                <x-text-input id="edit-est-{{ $item->id }}" name="estimated_cost" type="text" inputmode="numeric"
+                                    data-rupiah class="mt-1 block w-full"
                                     value="{{ old('estimated_cost', $item->estimated_cost) }}" />
                             </div>
                             <div>
                                 <x-input-label for="edit-paid-{{ $item->id }}"
                                     value="{{ $item->category === 'PRE_WEDDING' ? 'Bayar' : 'Terbayar' }} (Rp)" />
-                                <x-text-input id="edit-paid-{{ $item->id }}" name="paid_amount" type="number" min="0"
-                                    step="0.01" class="mt-1 block w-full"
+                                <x-text-input id="edit-paid-{{ $item->id }}" name="paid_amount" type="text" inputmode="numeric"
+                                    data-rupiah class="mt-1 block w-full"
                                     value="{{ old('paid_amount', $item->paid_amount) }}" />
                             </div>
                         </div>
@@ -2481,13 +2483,13 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <x-input-label for="add-vendor-est" value="Estimasi (Rp)" />
-                        <x-text-input id="add-vendor-est" name="estimated_cost" type="number" min="0" step="0.01"
-                            value="0" class="mt-1 block w-full" />
+                        <x-text-input id="add-vendor-est" name="estimated_cost" type="text" inputmode="numeric"
+                            data-rupiah value="0" class="mt-1 block w-full" />
                     </div>
                     <div>
                         <x-input-label for="add-vendor-paid" value="Bayar (Rp)" />
-                        <x-text-input id="add-vendor-paid" name="paid_amount" type="number" min="0" step="0.01"
-                            value="0" class="mt-1 block w-full" />
+                        <x-text-input id="add-vendor-paid" name="paid_amount" type="text" inputmode="numeric"
+                            data-rupiah value="0" class="mt-1 block w-full" />
                     </div>
                 </div>
 
@@ -2772,6 +2774,32 @@
             ])->all();
         @endphp
         <script>
+            function formatRupiahValue(value) {
+                const digits = value.replace(/[^\d]/g, '');
+                return digits ? Number(digits).toLocaleString('id-ID') : '';
+            }
+
+            function initRupiahInputs() {
+                document.querySelectorAll('[data-rupiah]').forEach(function (input) {
+                    input.value = formatRupiahValue(input.value);
+                });
+            }
+
+            document.addEventListener('input', function (e) {
+                if (e.target.matches && e.target.matches('[data-rupiah]')) {
+                    e.target.value = formatRupiahValue(e.target.value);
+                }
+            });
+
+            document.addEventListener('submit', function (e) {
+                (e.target.querySelectorAll ? e.target.querySelectorAll('[data-rupiah]') : []).forEach(function (input) {
+                    input.value = formatRupiahValue(input.value).replace(/\./g, '');
+                });
+            }, true);
+
+            document.addEventListener('DOMContentLoaded', initRupiahInputs);
+            window.addEventListener('pageshow', initRupiahInputs);
+
             function plannerCalendar() {
                 return {
                     year: new Date().getFullYear(),
