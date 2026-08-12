@@ -263,7 +263,7 @@
                             <div
                                 class="group relative flex items-stretch rounded-2xl border border-neutral-200/80 bg-neutral-50/70 shadow-sm transition-all duration-200 hover:border-primary/40 hover:bg-primary-50/30 dark:border-secondary-600/50 dark:bg-secondary-700/30 dark:hover:border-primary/40 dark:hover:bg-primary-900/10">
                                 <div
-                                    class="flex min-w-[84px] items-center justify-center rounded-l-2xl border-r border-neutral-200/80 bg-white/80 px-3 py-3 text-center dark:border-secondary-600/50 dark:bg-secondary-800/70 sm:min-w-[96px]">
+                                    class="flex min-w-[72px] items-center justify-center rounded-l-2xl border-r border-neutral-200/80 bg-white/80 px-2.5 py-3 text-center dark:border-secondary-600/50 dark:bg-secondary-800/70 sm:min-w-[96px] sm:px-3">
                                     <div>
                                         <p
                                             class="text-sm font-bold text-secondary-800 dark:text-neutral-100 tabular-nums leading-tight">
@@ -309,7 +309,7 @@
                                             </div>
                                         </div>
                                         <div
-                                            class="flex items-center gap-1 shrink-0 opacity-0 transition-opacity duration-150 group-hover:opacity-100">
+                                            class="flex items-center gap-1 shrink-0 sm:opacity-0 sm:group-hover:opacity-100 sm:focus-within:opacity-100 transition-opacity duration-150">
                                             <button type="button" x-data
                                                 @click="$dispatch('open-modal', 'edit-rundown-{{ $rundown->id }}')"
                                                 class="rounded-lg p-1.5 text-neutral-400 transition-colors hover:bg-primary-50 hover:text-primary dark:hover:bg-primary-900/20 dark:hover:text-primary-400">
@@ -336,7 +336,7 @@
                                 </div>
 
                                 <div
-                                    class="absolute left-20 sm:left-24 top-1/2 -translate-y-1/2 -translate-x-1/2 h-2.5 w-2.5 rounded-full border-2 border-white bg-primary opacity-0 transition-opacity duration-200 group-hover:opacity-100 dark:border-secondary-800">
+                                    class="absolute left-[68px] sm:left-24 top-1/2 -translate-y-1/2 -translate-x-1/2 h-2.5 w-2.5 rounded-full border-2 border-white bg-primary opacity-0 transition-opacity duration-200 group-hover:opacity-100 dark:border-secondary-800">
                                 </div>
                             </div>
                         @endforeach
@@ -347,9 +347,9 @@
             {{-- ── 8 Pilar Modul Tabs ── --}}
             @php
                 $pillars = [
-                    ['key' => 'CALENDAR', 'label' => 'Calendar', 'color' => 'text-blue-600 dark:text-blue-400', 'bg' => 'bg-blue-100 dark:bg-blue-900/40'],
+                    ['key' => 'CALENDAR', 'label' => 'Jadwal', 'color' => 'text-blue-600 dark:text-blue-400', 'bg' => 'bg-blue-100 dark:bg-blue-900/40'],
                     ['key' => 'CHECKLIST', 'label' => 'Checklist', 'color' => 'text-emerald-600 dark:text-emerald-400', 'bg' => 'bg-emerald-100 dark:bg-emerald-900/40'],
-                    ['key' => 'ENGAGEMENT', 'label' => 'Engagement', 'color' => 'text-pink-600 dark:text-pink-400', 'bg' => 'bg-pink-100 dark:bg-pink-900/40'],
+                    ['key' => 'ENGAGEMENT', 'label' => 'Lamaran', 'color' => 'text-pink-600 dark:text-pink-400', 'bg' => 'bg-pink-100 dark:bg-pink-900/40'],
                     ['key' => 'PRE_WEDDING', 'label' => 'Pre-Wedding', 'color' => 'text-violet-600 dark:text-violet-400', 'bg' => 'bg-violet-100 dark:bg-violet-900/40'],
                     ['key' => 'SESERAHAN', 'label' => 'Seserahan', 'color' => 'text-amber-600 dark:text-amber-400', 'bg' => 'bg-amber-100 dark:bg-amber-900/40'],
                     ['key' => 'ADMINISTRATION', 'label' => 'Administrasi', 'color' => 'text-cyan-600 dark:text-cyan-400', 'bg' => 'bg-cyan-100 dark:bg-cyan-900/40'],
@@ -383,13 +383,35 @@
                 $adminCompletedItems = $adminChecklists->sum(fn($item) => $item->completedCheckboxCount());
             @endphp
 
-            <div x-data="{ activeTab: '{{ $pillars[0]['key'] }}' }"
+            <div x-data="{
+                activeTab: localStorage.getItem('plannerActiveTab') || '{{ $pillars[0]['key'] }}',
+                init() {
+                    this.$nextTick(() => this.scrollTabIntoView(this.activeTab, false));
+                },
+                setActiveTab(key) {
+                    this.activeTab = key;
+                    localStorage.setItem('plannerActiveTab', key);
+                    this.$nextTick(() => this.scrollTabIntoView(key, true));
+                },
+                scrollTabIntoView(key, smooth) {
+                    const container = this.$refs.tabs;
+                    if (!container || container.scrollWidth <= container.clientWidth) return;
+                    const btn = Array.from(container.children).find((el) => el.dataset.tab === key);
+                    if (btn) {
+                        container.scrollTo({
+                            left: Math.max(0, btn.offsetLeft - (container.clientWidth / 2) + (btn.offsetWidth / 2)),
+                            behavior: smooth ? 'smooth' : 'auto',
+                        });
+                    }
+                }
+            }"
                 class="overflow-hidden rounded-3xl border border-neutral-200/80 bg-white shadow-[0_16px_40px_-24px_rgba(15,23,42,0.25)] dark:border-secondary-700/70 dark:bg-secondary-800">
                 {{-- Tabs --}}
-                <div
+                <div x-ref="tabs"
                     class="flex overflow-x-auto gap-1.5 border-b border-neutral-200/80 bg-neutral-50/70 px-2 py-2 scrollbar-hide dark:border-secondary-700/60 dark:bg-secondary-700/40">
                     @foreach($pillars as $pillar)
-                        <button type="button" @click="activeTab = '{{ $pillar['key'] }}'"
+                        <button type="button" @click="setActiveTab('{{ $pillar['key'] }}')"
+                            data-tab="{{ $pillar['key'] }}"
                             class="flex-shrink-0 whitespace-nowrap rounded-xl border px-3 py-2.5 text-xs font-medium transition-all sm:px-4 sm:text-sm"
                             :class="activeTab === '{{ $pillar['key'] }}'
                                                                                                 ? 'border-primary/20 bg-white text-primary shadow-sm dark:border-primary-400/30 dark:bg-secondary-800 dark:text-primary-300'
@@ -537,7 +559,7 @@
                                                         {{ $statusLabels[$event->status] ?? $event->status }}
                                                     </span>
                                                     <div
-                                                        class="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
+                                                        class="flex items-center gap-0.5 shrink-0 sm:opacity-0 sm:group-hover:opacity-100 sm:focus-within:opacity-100 transition-opacity duration-150">
                                                         <button type="button" x-data
                                                             @click="$dispatch('open-modal', 'edit-item-{{ $event->id }}')"
                                                             class="p-1.5 rounded-lg text-neutral-400 hover:text-primary hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors">
@@ -1064,7 +1086,7 @@
                                         </p>
                                     </div>
                                     <button type="button" x-data
-                                        @click="activeTab = 'ENGAGEMENT'; $dispatch('open-modal', 'add-item-ENGAGEMENT')"
+                                        @click="setActiveTab('ENGAGEMENT'); $dispatch('open-modal', 'add-item-ENGAGEMENT')"
                                         class="inline-flex items-center gap-1.5 rounded-xl bg-primary px-2.5 py-1.5 text-[11px] font-semibold text-white transition-all hover:bg-primary-600 sm:px-3 sm:text-xs">
                                         <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -1120,53 +1142,22 @@
                                                 $itemTotal = $item->cost_pria + $item->cost_wanita;
                                             @endphp
                                             <div
-                                                class="group relative rounded-2xl border border-neutral-200/80 bg-white shadow-sm transition-all duration-200 hover:border-pink-300 dark:border-secondary-600/50 dark:bg-secondary-800/80 dark:hover:border-pink-700/50">
+                                                class="group relative rounded-2xl border border-neutral-200/80 bg-white shadow-sm transition-all duration-200 hover:border-pink-300 hover:shadow-md dark:border-secondary-600/50 dark:bg-secondary-800/80 dark:hover:border-pink-700/50">
                                                 <div class="p-4">
-                                                    <div class="flex items-start justify-between gap-2">
-                                                        <div class="min-w-0 flex-1">
-                                                            <div class="flex items-center gap-2 flex-wrap">
-                                                                <span class="w-1.5 h-1.5 rounded-full bg-pink-500 shrink-0"></span>
-                                                                <p
-                                                                    class="text-sm font-semibold text-secondary-800 dark:text-neutral-100 truncate">
-                                                                    {{ $item->title }}
-                                                                </p>
-                                                                <span
-                                                                    class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold {{ $statusStyles[$item->status] ?? $statusStyles['PENDING'] }}">
-                                                                    {{ $statusLabels[$item->status] ?? $item->status }}
-                                                                </span>
-                                                            </div>
-                                                            <div class="mt-2.5 grid grid-cols-2 gap-2">
-                                                                <div
-                                                                    class="rounded-xl border border-blue-100 bg-blue-50/70 px-3 py-2 dark:border-blue-800/40 dark:bg-blue-900/20">
-                                                                    <p class="text-[10px] text-blue-500 dark:text-blue-400">Pria
-                                                                    </p>
-                                                                    <p
-                                                                        class="mt-0.5 text-xs font-bold text-blue-600 dark:text-blue-400 tabular-nums">
-                                                                        Rp {{ number_format($item->cost_pria, 0, ',', '.') }}
-                                                                    </p>
-                                                                </div>
-                                                                <div
-                                                                    class="rounded-xl border border-pink-100 bg-pink-50/70 px-3 py-2 dark:border-pink-800/40 dark:bg-pink-900/20">
-                                                                    <p class="text-[10px] text-pink-500 dark:text-pink-400">Wanita
-                                                                    </p>
-                                                                    <p
-                                                                        class="mt-0.5 text-xs font-bold text-pink-600 dark:text-pink-400 tabular-nums">
-                                                                        Rp {{ number_format($item->cost_wanita, 0, ',', '.') }}
-                                                                    </p>
-                                                                </div>
-                                                            </div>
-                                                            @if($itemTotal > 0)
-                                                                <div class="mt-2 flex items-center gap-1.5">
-                                                                    <span
-                                                                        class="text-[10px] text-neutral-400 dark:text-neutral-500">Total:</span>
-                                                                    <span
-                                                                        class="text-xs font-bold text-secondary-700 dark:text-neutral-200 tabular-nums">Rp
-                                                                        {{ number_format($itemTotal, 0, ',', '.') }}</span>
-                                                                </div>
-                                                            @endif
+                                                    <div class="flex items-start justify-between gap-3">
+                                                        <div class="flex items-center gap-2 min-w-0">
+                                                            <span class="w-1.5 h-1.5 rounded-full bg-pink-500 shrink-0"></span>
+                                                            <p
+                                                                class="text-sm font-semibold text-secondary-800 dark:text-neutral-100 truncate">
+                                                                {{ $item->title }}
+                                                            </p>
+                                                            <span
+                                                                class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold {{ $statusStyles[$item->status] ?? $statusStyles['PENDING'] }} shrink-0">
+                                                                {{ $statusLabels[$item->status] ?? $item->status }}
+                                                            </span>
                                                         </div>
                                                         <div
-                                                            class="flex items-center gap-0.5 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
+                                                            class="flex items-center gap-0.5 shrink-0 sm:opacity-0 sm:group-hover:opacity-100 sm:focus-within:opacity-100 transition-opacity duration-150">
                                                             <button type="button" x-data
                                                                 @click="$dispatch('open-modal', 'edit-item-{{ $item->id }}')"
                                                                 class="p-1.5 rounded-lg text-neutral-400 hover:text-primary dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors">
@@ -1193,6 +1184,34 @@
                                                             </form>
                                                         </div>
                                                     </div>
+                                                    <div
+                                                        class="mt-3 grid grid-cols-3 divide-x divide-neutral-200/80 overflow-hidden rounded-xl border border-neutral-100 bg-neutral-50/80 dark:divide-secondary-600/60 dark:border-secondary-600/50 dark:bg-secondary-700/40">
+                                                        <div class="min-w-0 px-3 py-2.5">
+                                                            <p class="text-[10px] font-medium text-blue-500 dark:text-blue-400">
+                                                                Pria</p>
+                                                            <p
+                                                                class="mt-0.5 truncate text-xs font-bold text-blue-600 tabular-nums dark:text-blue-400 sm:text-sm">
+                                                                Rp {{ number_format($item->cost_pria, 0, ',', '.') }}
+                                                            </p>
+                                                        </div>
+                                                        <div class="min-w-0 px-3 py-2.5">
+                                                            <p class="text-[10px] font-medium text-pink-500 dark:text-pink-400">
+                                                                Wanita</p>
+                                                            <p
+                                                                class="mt-0.5 truncate text-xs font-bold text-pink-600 tabular-nums dark:text-pink-400 sm:text-sm">
+                                                                Rp {{ number_format($item->cost_wanita, 0, ',', '.') }}
+                                                            </p>
+                                                        </div>
+                                                        <div class="min-w-0 px-3 py-2.5">
+                                                            <p
+                                                                class="text-[10px] font-medium text-neutral-400 dark:text-neutral-500">
+                                                                Total</p>
+                                                            <p
+                                                                class="mt-0.5 truncate text-xs font-bold text-secondary-800 tabular-nums dark:text-neutral-100 sm:text-sm">
+                                                                Rp {{ number_format($itemTotal, 0, ',', '.') }}
+                                                            </p>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         @endforeach
@@ -1216,7 +1235,7 @@
                                         </p>
                                     </div>
                                     <button type="button" x-data
-                                        @click="activeTab = 'PRE_WEDDING'; $dispatch('open-modal', 'add-item-PRE_WEDDING')"
+                                        @click="setActiveTab('PRE_WEDDING'); $dispatch('open-modal', 'add-item-PRE_WEDDING')"
                                         class="inline-flex items-center gap-1.5 rounded-xl bg-primary px-2.5 py-1.5 text-[11px] font-semibold text-white transition-all hover:bg-primary-600 sm:px-3 sm:text-xs">
                                         <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -1335,7 +1354,7 @@
                                                             </div>
                                                         </div>
                                                         <div
-                                                            class="flex items-center gap-1 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
+                                                            class="flex items-center gap-1 shrink-0 sm:opacity-0 sm:group-hover:opacity-100 sm:focus-within:opacity-100 transition-opacity duration-150">
                                                             <button type="button" x-data
                                                                 @click="$dispatch('open-modal', 'edit-item-{{ $item->id }}')"
                                                                 class="p-1.5 rounded-lg text-neutral-400 hover:text-primary dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors">
@@ -1388,7 +1407,7 @@
                                             </p>
                                         </div>
                                         <button type="button" x-data
-                                            @click="activeTab = 'SESERAHAN'; $dispatch('open-modal', 'add-item-SESERAHAN')"
+                                            @click="setActiveTab('SESERAHAN'); $dispatch('open-modal', 'add-item-SESERAHAN')"
                                             class="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-primary hover:bg-primary-600 text-white text-[11px] sm:text-xs font-semibold transition-all">
                                             <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -1400,38 +1419,43 @@
 
                                     {{-- Toggle Filter --}}
                                     <div
-                                        class="mb-5 flex items-center gap-1 rounded-2xl bg-neutral-100 p-1 dark:bg-secondary-700/50">
+                                        class="mb-5 grid grid-cols-3 gap-1 rounded-2xl bg-neutral-100 p-1 dark:bg-secondary-700/50">
                                         <button type="button" @click="sesFilter = 'ALL'"
                                             :class="sesFilter === 'ALL' ? 'bg-white dark:bg-secondary-800 text-secondary-800 dark:text-neutral-100 shadow-sm' : 'text-neutral-500 dark:text-neutral-400 hover:text-secondary-700 dark:hover:text-neutral-300'"
-                                            class="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-200">
-                                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            class="flex items-center justify-center gap-1 px-1.5 sm:gap-1.5 sm:px-3 py-2 min-w-0 rounded-lg text-xs font-semibold transition-all duration-200">
+                                            <svg class="w-3.5 h-3.5 hidden sm:block flex-shrink-0" fill="none"
+                                                viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                     d="M4 6h16M4 10h16M4 14h16M4 18h16" />
                                             </svg>
-                                            Semua
+                                            <span class="truncate">Semua</span>
                                             <span
-                                                class="text-[10px] px-1.5 py-0.5 rounded-full bg-neutral-200 dark:bg-secondary-600 text-neutral-600 dark:text-neutral-300">{{ $sesItems->count() }}</span>
+                                                class="flex-shrink-0 text-[10px] px-1.5 py-0.5 rounded-full bg-neutral-200 dark:bg-secondary-600 text-neutral-600 dark:text-neutral-300">{{ $sesItems->count() }}</span>
                                         </button>
                                         <button type="button" @click="sesFilter = 'PRIA'"
                                             :class="sesFilter === 'PRIA' ? 'bg-blue-500 text-white shadow-sm' : 'text-neutral-500 dark:text-neutral-400 hover:text-blue-600 dark:hover:text-blue-400'"
-                                            class="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-200">
-                                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            class="flex items-center justify-center gap-1 px-1.5 sm:gap-1.5 sm:px-3 py-2 min-w-0 rounded-lg text-xs font-semibold transition-all duration-200">
+                                            <svg class="w-3.5 h-3.5 hidden sm:block flex-shrink-0" fill="none"
+                                                viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                     d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                             </svg>
-                                            Pria
-                                            <span class="text-[10px] px-1.5 py-0.5 rounded-full"
+                                            <span class="truncate">Pria</span>
+                                            <span
+                                                class="flex-shrink-0 text-[10px] px-1.5 py-0.5 rounded-full min-w-[18px] text-center"
                                                 :class="sesFilter === 'PRIA' ? 'bg-blue-400 text-white' : 'bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400'">{{ $sesPriaItems->count() }}</span>
                                         </button>
                                         <button type="button" @click="sesFilter = 'WANITA'"
                                             :class="sesFilter === 'WANITA' ? 'bg-pink-500 text-white shadow-sm' : 'text-neutral-500 dark:text-neutral-400 hover:text-pink-600 dark:hover:text-pink-400'"
-                                            class="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-200">
-                                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            class="flex items-center justify-center gap-1 px-1.5 sm:gap-1.5 sm:px-3 py-2 min-w-0 rounded-lg text-xs font-semibold transition-all duration-200">
+                                            <svg class="w-3.5 h-3.5 hidden sm:block flex-shrink-0" fill="none"
+                                                viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                     d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                             </svg>
-                                            Wanita
-                                            <span class="text-[10px] px-1.5 py-0.5 rounded-full"
+                                            <span class="truncate">Wanita</span>
+                                            <span
+                                                class="flex-shrink-0 text-[10px] px-1.5 py-0.5 rounded-full min-w-[18px] text-center"
                                                 :class="sesFilter === 'WANITA' ? 'bg-pink-400 text-white' : 'bg-pink-100 dark:bg-pink-900/40 text-pink-600 dark:text-pink-400'">{{ $sesWanitaItems->count() }}</span>
                                         </button>
                                     </div>
@@ -1573,7 +1597,7 @@
                                                                                     </p>
                                                                                 </div>
                                                                                 <div
-                                                                                    class="flex items-center gap-1 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
+                                                                                    class="flex items-center gap-1 shrink-0 sm:opacity-0 sm:group-hover:opacity-100 sm:focus-within:opacity-100 transition-opacity duration-150">
                                                                                     <button type="button" x-data
                                                                                         @click="$dispatch('open-modal', 'edit-item-{{ $item->id }}')"
                                                                                         class="p-1.5 rounded-lg text-neutral-400 hover:text-primary dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors">
@@ -1680,7 +1704,7 @@
                                                 kategori.</p>
                                         </div>
                                         <button type="button" x-data
-                                            @click="activeTab = 'BUDGET'; $dispatch('open-modal', 'add-item-BUDGET')"
+                                            @click="setActiveTab('BUDGET'); $dispatch('open-modal', 'add-item-BUDGET')"
                                             class="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-primary hover:bg-primary-600 text-white text-[11px] sm:text-xs font-semibold transition-all">
                                             <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -1821,53 +1845,23 @@
                                                                 $itemPaidPercent = $item->estimated_cost > 0 ? round(($item->paid_amount / $item->estimated_cost) * 100) : 0;
                                                             @endphp
                                                             <div
-                                                                class="group relative flex items-stretch rounded-xl border border-neutral-150 dark:border-secondary-600/50 bg-neutral-50/50 dark:bg-secondary-700/30 hover:border-emerald-300 dark:hover:border-emerald-700/50 hover:bg-emerald-50/30 dark:hover:bg-emerald-900/10 transition-all duration-200">
-                                                                <div
-                                                                    class="flex items-center justify-center w-12 shrink-0 border-r border-neutral-150 dark:border-secondary-600/50 bg-emerald-50/50 dark:bg-emerald-900/20 rounded-l-xl">
-                                                                    <span
-                                                                        class="w-6 h-6 flex items-center justify-center rounded-lg text-[10px] font-bold text-white bg-emerald-500">{{ $loop->iteration }}</span>
-                                                                </div>
-                                                                <div class="flex-1 px-4 py-3 min-w-0">
-                                                                    <div class="flex items-start justify-between gap-2">
-                                                                        <div class="min-w-0">
-                                                                            <div class="flex items-center gap-2 flex-wrap">
-                                                                                <p
-                                                                                    class="text-sm font-semibold text-secondary-800 dark:text-neutral-100 truncate">
-                                                                                    {{ $item->title }}
-                                                                                </p>
-                                                                                <span
-                                                                                    class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold {{ $statusStyles[$item->status] ?? $statusStyles['PENDING'] }}">
-                                                                                    {{ $statusLabels[$item->status] ?? $item->status }}
-                                                                                </span>
-                                                                            </div>
-                                                                            <div class="flex items-center gap-3 mt-2 flex-wrap">
-                                                                                <div class="flex items-center gap-1.5">
-                                                                                    <span
-                                                                                        class="text-[10px] text-neutral-400 dark:text-neutral-500">Budget:</span>
-                                                                                    <span
-                                                                                        class="text-xs font-semibold text-secondary-700 dark:text-neutral-200 tabular-nums">Rp
-                                                                                        {{ number_format($item->estimated_cost, 0, ',', '.') }}</span>
-                                                                                </div>
-                                                                                <div class="flex items-center gap-1.5">
-                                                                                    <span
-                                                                                        class="text-[10px] text-emerald-400 dark:text-emerald-500">Bayar:</span>
-                                                                                    <span
-                                                                                        class="text-xs font-semibold text-emerald-600 dark:text-emerald-400 tabular-nums">Rp
-                                                                                        {{ number_format($item->paid_amount, 0, ',', '.') }}</span>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="mt-2 flex items-center gap-2">
-                                                                                <div
-                                                                                    class="flex-1 h-1.5 bg-neutral-200 dark:bg-secondary-600 rounded-full overflow-hidden">
-                                                                                    <div class="h-full bg-emerald-500 rounded-full"
-                                                                                        style="width: {{ $itemPaidPercent }}%"></div>
-                                                                                </div>
-                                                                                <span
-                                                                                    class="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 tabular-nums">{{ $itemPaidPercent }}%</span>
-                                                                            </div>
+                                                                class="group relative rounded-xl border border-neutral-150 dark:border-secondary-600/50 bg-neutral-50/50 dark:bg-secondary-700/30 hover:border-emerald-300 dark:hover:border-emerald-700/50 hover:bg-emerald-50/30 dark:hover:bg-emerald-900/10 transition-all duration-200">
+                                                                <div class="p-3 sm:p-4">
+                                                                    <div class="flex items-start justify-between gap-3">
+                                                                        <div class="flex items-center gap-2 min-w-0">
+                                                                            <span
+                                                                                class="w-6 h-6 flex items-center justify-center rounded-lg text-[10px] font-bold text-white bg-emerald-500 shrink-0">{{ $loop->iteration }}</span>
+                                                                            <p
+                                                                                class="text-sm font-semibold text-secondary-800 dark:text-neutral-100 truncate">
+                                                                                {{ $item->title }}
+                                                                            </p>
+                                                                            <span
+                                                                                class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold {{ $statusStyles[$item->status] ?? $statusStyles['PENDING'] }} shrink-0">
+                                                                                {{ $statusLabels[$item->status] ?? $item->status }}
+                                                                            </span>
                                                                         </div>
                                                                         <div
-                                                                            class="flex items-center gap-1 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
+                                                                            class="flex items-center gap-1 shrink-0 sm:opacity-0 sm:group-hover:opacity-100 sm:focus-within:opacity-100 transition-opacity duration-150">
                                                                             <button type="button" x-data
                                                                                 @click="$dispatch('open-modal', 'edit-item-{{ $item->id }}')"
                                                                                 class="p-1.5 rounded-lg text-neutral-400 hover:text-primary dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors">
@@ -1885,15 +1879,40 @@
                                                                                 @method('DELETE')
                                                                                 <button type="submit"
                                                                                     class="p-1.5 rounded-lg text-neutral-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
-                                                                                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24"
-                                                                                        stroke="currentColor">
-                                                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                                                            stroke-width="2"
+                                                                                    <svg class="w-3.5 h-3.5" fill="none"
+                                                                                        viewBox="0 0 24 24" stroke="currentColor">
+                                                                                        <path stroke-linecap="round"
+                                                                                            stroke-linejoin="round" stroke-width="2"
                                                                                             d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                                                                     </svg>
                                                                                 </button>
                                                                             </form>
                                                                         </div>
+                                                                    </div>
+                                                                    <div class="mt-3 flex items-center gap-3 flex-wrap">
+                                                                        <div class="flex items-center gap-1.5">
+                                                                            <span
+                                                                                class="text-[10px] text-neutral-400 dark:text-neutral-500">Budget:</span>
+                                                                            <span
+                                                                                class="text-xs font-semibold text-secondary-700 dark:text-neutral-200 tabular-nums">Rp
+                                                                                {{ number_format($item->estimated_cost, 0, ',', '.') }}</span>
+                                                                        </div>
+                                                                        <span
+                                                                            class="hidden sm:block w-px h-3.5 bg-neutral-200 dark:bg-secondary-600"></span>
+                                                                        <div class="flex items-center gap-1.5">
+                                                                            <span
+                                                                                class="text-[10px] text-emerald-400 dark:text-emerald-500">Bayar:</span>
+                                                                            <span
+                                                                                class="text-xs font-semibold text-emerald-600 dark:text-emerald-400 tabular-nums">Rp
+                                                                                {{ number_format($item->paid_amount, 0, ',', '.') }}</span>
+                                                                        </div>
+                                                                        <span
+                                                                            class="ml-auto text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 tabular-nums">{{ $itemPaidPercent }}%</span>
+                                                                    </div>
+                                                                    <div
+                                                                        class="mt-2 h-1.5 bg-neutral-200 dark:bg-secondary-600 rounded-full overflow-hidden">
+                                                                        <div class="h-full bg-emerald-500 rounded-full transition-all duration-500"
+                                                                            style="width: {{ $itemPaidPercent }}%"></div>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -1934,7 +1953,7 @@
                                         </p>
                                     </div>
                                     <button type="button" x-data
-                                        @click="activeTab = '{{ $pillar['key'] }}'; $dispatch('open-modal', 'add-item-{{ $pillar['key'] }}')"
+                                        @click="setActiveTab('{{ $pillar['key'] }}'); $dispatch('open-modal', 'add-item-{{ $pillar['key'] }}')"
                                         class="inline-flex items-center gap-1.5 rounded-xl bg-primary px-3 py-1.5 text-xs font-semibold text-white transition-all hover:bg-primary-600">
                                         <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -2472,44 +2491,43 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <x-input-label for="add-vendor-contact" value="Kontak Vendor" />
-                        <x-text-input id="add-vendor-contact" name="vendor_contact" class="mt-1 block w-full"
-                            placeholder="cth: 0812-3456-7890" />
-                    </div>
-                    <div>
-                        <x-input-label value="Status" />
-                        <div class="mt-2 grid grid-cols-2 sm:grid-cols-4 gap-2" x-data="{ selected: '' }">
-                            <label class="relative flex items-center gap-2.5 cursor-pointer rounded-xl border-2 px-3 py-2.5 transition-all duration-200" :class="selected === 'PENDING' ? 'border-neutral-500 dark:border-neutral-400 bg-neutral-100 dark:bg-secondary-600 shadow-md' : 'border-neutral-200 dark:border-secondary-600 hover:border-neutral-300 dark:hover:border-secondary-500'">
-                                <input type="radio" name="status" value="PENDING" x-model="selected" class="peer sr-only">
-                                <span class="flex-shrink-0 transition-colors duration-200" :class="selected === 'PENDING' ? 'text-neutral-800 dark:text-neutral-100' : 'text-neutral-400 dark:text-neutral-500'">
-                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="4" fill="currentColor"/></svg>
-                                </span>
-                                <span class="text-sm font-medium transition-colors duration-200" :class="selected === 'PENDING' ? 'text-neutral-800 dark:text-neutral-100' : 'text-neutral-500 dark:text-neutral-400'">{{ $statusLabels['PENDING'] }}</span>
-                            </label>
-                            <label class="relative flex items-center gap-2.5 cursor-pointer rounded-xl border-2 px-3 py-2.5 transition-all duration-200" :class="selected === 'IN_PROGRESS' ? 'border-blue-500 dark:border-blue-400 bg-blue-100 dark:bg-blue-900/50 shadow-md' : 'border-neutral-200 dark:border-secondary-600 hover:border-neutral-300 dark:hover:border-secondary-500'">
-                                <input type="radio" name="status" value="IN_PROGRESS" x-model="selected" class="peer sr-only">
-                                <span class="flex-shrink-0 transition-colors duration-200" :class="selected === 'IN_PROGRESS' ? 'text-blue-600 dark:text-blue-400' : 'text-neutral-400 dark:text-neutral-500'">
-                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                </span>
-                                <span class="text-sm font-medium transition-colors duration-200" :class="selected === 'IN_PROGRESS' ? 'text-blue-700 dark:text-blue-200' : 'text-neutral-500 dark:text-neutral-400'">{{ $statusLabels['IN_PROGRESS'] }}</span>
-                            </label>
-                            <label class="relative flex items-center gap-2.5 cursor-pointer rounded-xl border-2 px-3 py-2.5 transition-all duration-200" :class="selected === 'COMPLETED' ? 'border-emerald-500 dark:border-emerald-400 bg-emerald-100 dark:bg-emerald-900/50 shadow-md' : 'border-neutral-200 dark:border-secondary-600 hover:border-neutral-300 dark:hover:border-secondary-500'">
-                                <input type="radio" name="status" value="COMPLETED" x-model="selected" class="peer sr-only">
-                                <span class="flex-shrink-0 transition-colors duration-200" :class="selected === 'COMPLETED' ? 'text-emerald-600 dark:text-emerald-400' : 'text-neutral-400 dark:text-neutral-500'">
-                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                                </span>
-                                <span class="text-sm font-medium transition-colors duration-200" :class="selected === 'COMPLETED' ? 'text-emerald-700 dark:text-emerald-200' : 'text-neutral-500 dark:text-neutral-400'">{{ $statusLabels['COMPLETED'] }}</span>
-                            </label>
-                            <label class="relative flex items-center gap-2.5 cursor-pointer rounded-xl border-2 px-3 py-2.5 transition-all duration-200" :class="selected === 'CANCELLED' ? 'border-red-500 dark:border-red-400 bg-red-100 dark:bg-red-900/50 shadow-md' : 'border-neutral-200 dark:border-secondary-600 hover:border-neutral-300 dark:hover:border-secondary-500'">
-                                <input type="radio" name="status" value="CANCELLED" x-model="selected" class="peer sr-only">
-                                <span class="flex-shrink-0 transition-colors duration-200" :class="selected === 'CANCELLED' ? 'text-red-600 dark:text-red-400' : 'text-neutral-400 dark:text-neutral-500'">
-                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-                                </span>
-                                <span class="text-sm font-medium transition-colors duration-200" :class="selected === 'CANCELLED' ? 'text-red-700 dark:text-red-200' : 'text-neutral-500 dark:text-neutral-400'">{{ $statusLabels['CANCELLED'] }}</span>
-                            </label>
-                        </div>
+                <div>
+                    <x-input-label for="add-vendor-contact" value="Kontak Vendor" />
+                    <x-text-input id="add-vendor-contact" name="vendor_contact" class="mt-1 block w-full"
+                        placeholder="cth: 0812-3456-7890" />
+                </div>
+
+                <div>
+                    <x-input-label value="Status" />
+                    <div class="mt-2 grid grid-cols-2 sm:grid-cols-4 gap-2" x-data="{ selected: '' }">
+                        <label class="relative flex items-center gap-2.5 cursor-pointer rounded-xl border-2 px-3 py-2.5 transition-all duration-200" :class="selected === 'PENDING' ? 'border-neutral-500 dark:border-neutral-400 bg-neutral-100 dark:bg-secondary-600 shadow-md' : 'border-neutral-200 dark:border-secondary-600 hover:border-neutral-300 dark:hover:border-secondary-500'">
+                            <input type="radio" name="status" value="PENDING" x-model="selected" class="peer sr-only">
+                            <span class="flex-shrink-0 transition-colors duration-200" :class="selected === 'PENDING' ? 'text-neutral-800 dark:text-neutral-100' : 'text-neutral-400 dark:text-neutral-500'">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="4" fill="currentColor"/></svg>
+                            </span>
+                            <span class="text-sm font-medium transition-colors duration-200" :class="selected === 'PENDING' ? 'text-neutral-800 dark:text-neutral-100' : 'text-neutral-500 dark:text-neutral-400'">{{ $statusLabels['PENDING'] }}</span>
+                        </label>
+                        <label class="relative flex items-center gap-2.5 cursor-pointer rounded-xl border-2 px-3 py-2.5 transition-all duration-200" :class="selected === 'IN_PROGRESS' ? 'border-blue-500 dark:border-blue-400 bg-blue-100 dark:bg-blue-900/50 shadow-md' : 'border-neutral-200 dark:border-secondary-600 hover:border-neutral-300 dark:hover:border-secondary-500'">
+                            <input type="radio" name="status" value="IN_PROGRESS" x-model="selected" class="peer sr-only">
+                            <span class="flex-shrink-0 transition-colors duration-200" :class="selected === 'IN_PROGRESS' ? 'text-blue-600 dark:text-blue-400' : 'text-neutral-400 dark:text-neutral-500'">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            </span>
+                            <span class="text-sm font-medium transition-colors duration-200" :class="selected === 'IN_PROGRESS' ? 'text-blue-700 dark:text-blue-200' : 'text-neutral-500 dark:text-neutral-400'">{{ $statusLabels['IN_PROGRESS'] }}</span>
+                        </label>
+                        <label class="relative flex items-center gap-2.5 cursor-pointer rounded-xl border-2 px-3 py-2.5 transition-all duration-200" :class="selected === 'COMPLETED' ? 'border-emerald-500 dark:border-emerald-400 bg-emerald-100 dark:bg-emerald-900/50 shadow-md' : 'border-neutral-200 dark:border-secondary-600 hover:border-neutral-300 dark:hover:border-secondary-500'">
+                            <input type="radio" name="status" value="COMPLETED" x-model="selected" class="peer sr-only">
+                            <span class="flex-shrink-0 transition-colors duration-200" :class="selected === 'COMPLETED' ? 'text-emerald-600 dark:text-emerald-400' : 'text-neutral-400 dark:text-neutral-500'">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            </span>
+                            <span class="text-sm font-medium transition-colors duration-200" :class="selected === 'COMPLETED' ? 'text-emerald-700 dark:text-emerald-200' : 'text-neutral-500 dark:text-neutral-400'">{{ $statusLabels['COMPLETED'] }}</span>
+                        </label>
+                        <label class="relative flex items-center gap-2.5 cursor-pointer rounded-xl border-2 px-3 py-2.5 transition-all duration-200" :class="selected === 'CANCELLED' ? 'border-red-500 dark:border-red-400 bg-red-100 dark:bg-red-900/50 shadow-md' : 'border-neutral-200 dark:border-secondary-600 hover:border-neutral-300 dark:hover:border-secondary-500'">
+                            <input type="radio" name="status" value="CANCELLED" x-model="selected" class="peer sr-only">
+                            <span class="flex-shrink-0 transition-colors duration-200" :class="selected === 'CANCELLED' ? 'text-red-600 dark:text-red-400' : 'text-neutral-400 dark:text-neutral-500'">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                            </span>
+                            <span class="text-sm font-medium transition-colors duration-200" :class="selected === 'CANCELLED' ? 'text-red-700 dark:text-red-200' : 'text-neutral-500 dark:text-neutral-400'">{{ $statusLabels['CANCELLED'] }}</span>
+                        </label>
                     </div>
                 </div>
 
