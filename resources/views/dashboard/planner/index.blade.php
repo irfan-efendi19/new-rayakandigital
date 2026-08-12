@@ -1666,6 +1666,8 @@
 
                                     $budgetTotalEstimated = (float) $budgetItems->sum('estimated_cost');
                                     $budgetTotalPaid = (float) $budgetItems->sum('paid_amount');
+                                    $budgetTotalRemaining = max(0, $budgetTotalEstimated - $budgetTotalPaid);
+                                    $budgetPaidPercent = $budgetTotalEstimated > 0 ? round(($budgetTotalPaid / $budgetTotalEstimated) * 100) : 0;
 
                                     $vendorTotalEstimated = (float) $vendorItems->sum('estimated_cost');
                                     $vendorTotalPaid = (float) $vendorItems->sum('paid_amount');
@@ -1722,7 +1724,7 @@
                                                 class="text-[10px] text-neutral-400 dark:text-neutral-500 sm:text-[11px]">Estimasi</span>
                                             <p
                                                 class="mt-0.5 text-sm font-bold text-secondary-800 dark:text-neutral-100 tabular-nums sm:text-lg">
-                                                Rp {{ number_format($grandTotalEstimated, 0, ',', '.') }}</p>
+                                                Rp {{ number_format($budgetTotalEstimated, 0, ',', '.') }}</p>
                                         </div>
                                         <div
                                             class="rounded-2xl border border-emerald-200/70 bg-emerald-50/70 p-2.5 dark:border-emerald-800/50 dark:bg-emerald-900/20 sm:p-3.5">
@@ -1730,7 +1732,7 @@
                                                 class="text-[10px] sm:text-[11px] text-emerald-500 dark:text-emerald-400">Terbayar</span>
                                             <p
                                                 class="text-sm sm:text-lg font-bold text-emerald-600 dark:text-emerald-400 tabular-nums mt-0.5">
-                                                Rp {{ number_format($grandTotalPaid, 0, ',', '.') }}</p>
+                                                Rp {{ number_format($budgetTotalPaid, 0, ',', '.') }}</p>
                                         </div>
                                         <div
                                             class="rounded-2xl border border-amber-200/70 bg-amber-50/70 p-2.5 dark:border-amber-800/50 dark:bg-amber-900/20 sm:p-3.5">
@@ -1750,18 +1752,18 @@
                                                 class="text-[11px] sm:text-xs font-semibold text-secondary-800 dark:text-neutral-100">Progres
                                                 Pembayaran</span>
                                             <span
-                                                class="text-[11px] sm:text-xs font-bold text-emerald-600 dark:text-emerald-400 tabular-nums">{{ $grandPaidPercent }}%</span>
+                                                class="text-[11px] sm:text-xs font-bold text-emerald-600 dark:text-emerald-400 tabular-nums">{{ $budgetPaidPercent }}%</span>
                                         </div>
                                         <div
                                             class="w-full h-2 sm:h-2.5 bg-neutral-200 dark:bg-secondary-600 rounded-full overflow-hidden">
                                             <div class="h-full bg-emerald-500 rounded-full transition-all duration-500"
-                                                style="width: {{ $grandPaidPercent }}%"></div>
+                                                style="width: {{ $budgetPaidPercent }}%"></div>
                                         </div>
                                         <div class="flex items-center justify-between mt-1.5">
                                             <span class="text-[10px] text-neutral-400 dark:text-neutral-500">Rp
-                                                {{ number_format($grandTotalPaid, 0, ',', '.') }} terbayar</span>
+                                                {{ number_format($budgetTotalPaid, 0, ',', '.') }} terbayar</span>
                                             <span class="text-[10px] text-neutral-400 dark:text-neutral-500">Rp
-                                                {{ number_format($grandTotalEstimated, 0, ',', '.') }} total</span>
+                                                {{ number_format($budgetTotalEstimated, 0, ',', '.') }} total</span>
                                         </div>
                                     </div>
 
