@@ -3,6 +3,7 @@
 use App\Models\PreviewData;
 use App\Models\Theme;
 use App\Models\ThemePreviewData;
+use Database\Seeders\ThemeSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
@@ -107,4 +108,54 @@ test('resolved preview data merges parents from theme-specific data', function (
 
     expect($resolved->groom_parents)->toBe('Putra dari Bapak Ahmad & Ibu Siti')
         ->and($resolved->bride_parents)->toBe('Putri dari Bapak Bambang & Ibu Rina');
+});
+
+test('netflix theme preview renders successfully with expected elements', function () {
+    $this->seed(ThemeSeeder::class);
+
+    $this->get(route('theme.preview', 'netflix'))
+        ->assertSuccessful()
+        ->assertSee('RAYAFLIX')
+        ->assertSee('Siapa yang menonton?')
+        ->assertSee('Putar Undangan')
+        ->assertSee('Pemeran Utama')
+        ->assertSee('Dian Sastrowardoyo')
+        ->assertSee('Nicholas Saputra');
+});
+
+test('youtube theme preview renders successfully with expected elements', function () {
+    $this->seed(ThemeSeeder::class);
+
+    $this->get(route('theme.preview', 'youtube'))
+        ->assertSuccessful()
+        ->assertSee('RayaTube')
+        ->assertSee('VLOG PERNIKAHAN')
+        ->assertSee('Kreator Utama')
+        ->assertSee('Nagita Slavina')
+        ->assertSee('Raffi Ahmad')
+        ->assertSee('SUBSCRIBE');
+});
+
+test('spotify theme preview renders successfully with expected elements', function () {
+    $this->seed(ThemeSeeder::class);
+
+    $this->get(route('theme.preview', 'spotify'))
+        ->assertSuccessful()
+        ->assertSee('RayaFy')
+        ->assertSee('Putar Lagu Undangan')
+        ->assertSee('Featured Artists')
+        ->assertSee('Isyana Sarasvati')
+        ->assertSee('Afgansyah Reza')
+        ->assertSee('Tracklist');
+});
+
+test('whatsapp theme preview renders successfully with expected elements', function () {
+    $this->seed(ThemeSeeder::class);
+
+    $this->get(route('theme.preview', 'whatsapp'))
+        ->assertSuccessful()
+        ->assertSee('WhatsApp')
+        ->assertSee('Buka Undangan')
+        ->assertSee('Budi Santoso')
+        ->assertSee('Rina Wati');
 });
