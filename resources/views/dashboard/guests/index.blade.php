@@ -521,11 +521,35 @@
                                             <input type="checkbox" id="selectAll"
                                                 class="rounded-lg border-neutral-300 dark:border-secondary-600 dark:bg-secondary-900 text-primary focus:ring-primary-500 shadow-sm">
                                         </th>
-                                        <th scope="col" class="px-6 py-3.5 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Nama Tamu</th>
+                                        <th scope="col" class="px-6 py-3.5 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                                            @php
+                                                $sortUrl = fn ($field) => request()->fullUrlWithQuery([
+                                                    'sort' => $field,
+                                                    'direction' => (request('sort') === $field && request('direction', 'desc') === 'asc') ? 'desc' : 'asc',
+                                                ]);
+                                                $sortIcon = function ($field) {
+                                                    if (request('sort') !== $field) {
+                                                        return '<svg class="w-3 h-3 text-neutral-300 dark:text-neutral-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/></svg>';
+                                                    }
+                                                    return request('direction', 'desc') === 'asc'
+                                                        ? '<svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/></svg>'
+                                                        : '<svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>';
+                                                };
+                                            @endphp
+                                            <a href="{{ $sortUrl('name') }}"
+                                               class="inline-flex items-center gap-1 hover:text-secondary-800 dark:hover:text-neutral-200 transition-colors {{ request('sort') === 'name' ? 'text-primary dark:text-primary-400' : '' }}">
+                                                Nama Tamu {!! $sortIcon('name') !!}
+                                            </a>
+                                        </th>
                                         <th scope="col" class="px-6 py-3.5 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Kategori</th>
                                         <th scope="col" class="px-6 py-3.5 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Acara</th>
                                         <th scope="col" class="px-6 py-3.5 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">No HP</th>
-                                        <th scope="col" class="px-6 py-3.5 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Status WA</th>
+                                        <th scope="col" class="px-6 py-3.5 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                                            <a href="{{ $sortUrl('wa_status') }}"
+                                               class="inline-flex items-center gap-1 hover:text-secondary-800 dark:hover:text-neutral-200 transition-colors {{ request('sort') === 'wa_status' ? 'text-primary dark:text-primary-400' : '' }}">
+                                                Status WA {!! $sortIcon('wa_status') !!}
+                                            </a>
+                                        </th>
                                         <th scope="col" class="px-6 py-3.5 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Kehadiran</th>
                                         <th scope="col" class="px-6 py-3.5 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Link Personal</th>
                                         <th scope="col" class="px-6 py-3.5 text-right text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Aksi</th>

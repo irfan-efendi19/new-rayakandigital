@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\Guest;
 use App\Models\Invitation;
+use App\Models\WhatsappLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
@@ -28,6 +29,9 @@ class GuestController extends Controller
 
         $perPage = in_array($perPage, [10, 20, 50, 100, 'all']) ? $perPage : 20;
 
+        $sort = $request->input('sort', 'created_at');
+        $direction = strtolower($request->input('direction', 'desc')) === 'asc' ? 'asc' : 'desc';
+
         $query = $invitation->guests()
             ->with(['whatsappLogs' => fn ($q) => $q->latest(), 'guestCategory', 'events', 'invitation']);
 
@@ -40,9 +44,23 @@ class GuestController extends Controller
             });
         }
 
+        if ($sort === 'name') {
+            $query->orderBy('name', $direction);
+        } elseif ($sort === 'wa_status') {
+            $query->orderBy(
+                WhatsappLog::select('status')
+                    ->whereColumn('whatsapp_logs.guest_id', 'guests.id')
+                    ->latest('id')
+                    ->limit(1),
+                $direction
+            );
+        } else {
+            $query->latest();
+        }
+
         $guests = $perPage === 'all'
-            ? $query->latest()->get()
-            : $query->latest()->paginate((int) $perPage);
+            ? $query->get()
+            : $query->paginate((int) $perPage);
 
         $categories = $invitation->guestCategories()->get();
 
