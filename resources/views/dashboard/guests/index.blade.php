@@ -1,6 +1,6 @@
 <x-app-layout>
     @php
-        $guestCount = $guests->total();
+        $guestCount = method_exists($guests, 'total') ? $guests->total() : $guests->count();
         $hadirCount = $invitation->guests()->where('attendance_status', 'hadir')->count();
         $absenCount = $invitation->guests()->where('attendance_status', 'absen')->count();
         $pendingCount = $invitation->guests()->whereNull('attendance_status')->count();

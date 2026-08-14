@@ -1574,45 +1574,45 @@
                                                 $tema->view_path
                                             ); @endphp
                                             <div @click="selectedTheme = '{{ $themeKey }}'" :class="{
-                                                    'border-primary ring-2 ring-primary/30 shadow-md bg-primary-50 dark:bg-primary-900/20': selectedTheme === '{{ $themeKey }}',
-                                                    'border-neutral-200 dark:border-neutral-600 hover:border-primary-300 dark:hover:border-primary-800 bg-white dark:bg-secondary-800': selectedTheme !== '{{ $themeKey }}'
-                                                }"
-                                                class="theme-card w-36 sm:w-44 flex-shrink-0 border rounded-2xl p-2.5 cursor-pointer snap-start relative flex flex-col justify-between select-none">
-                                                <div x-show="selectedTheme === '{{ $themeKey }}'"
-                                                    class="absolute top-4 right-4 bg-primary text-white rounded-full p-1 z-10 shadow-sm"
-                                                    x-cloak>
-                                                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24"
-                                                        stroke="currentColor" stroke-width="3">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            d="M5 13l4 4L19 7" />
-                                                    </svg>
-                                                </div>
+                                    'border-primary-500 ring-2 ring-primary-500/20 shadow-md bg-primary-50/40 dark:bg-primary-950/30': selectedTheme === '{{ $themeKey }}',
+                                    'border-neutral-200/90 dark:border-secondary-700 hover:border-primary-300 dark:hover:border-primary-700 bg-white dark:bg-secondary-800/90': selectedTheme !== '{{ $themeKey }}'
+                                }"
+                                class="theme-card w-36 sm:w-44 flex-shrink-0 border rounded-2xl p-3 cursor-pointer snap-start relative flex flex-col justify-between select-none group transition-all duration-200">
+                                <div x-show="selectedTheme === '{{ $themeKey }}'"
+                                    class="absolute top-4 right-4 bg-primary-500 text-white rounded-full p-1 z-10 shadow-sm ring-2 ring-white dark:ring-secondary-800"
+                                    x-cloak>
+                                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor" stroke-width="3">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M5 13l4 4L19 7" />
+                                    </svg>
+                                </div>
 
-                                                <div
-                                                    class="w-full aspect-[9/16] rounded-xl overflow-hidden bg-neutral-100 dark:bg-secondary-900 relative">
-                                                    @if($tema->thumbnail_portrait)
-                                                        <img src="{{ asset('storage/' . $tema->thumbnail_portrait) }}"
-                                                            class="w-full h-full object-cover"
-                                                            alt="Pratinjau {{ $tema->name }}">
-                                                    @else
-                                                        <div
-                                                            class="w-full h-full flex items-center justify-center text-neutral-400 text-xs">
-                                                            No Preview</div>
-                                                    @endif
-                                                </div>
+                                <div
+                                    class="w-full aspect-[9/16] rounded-xl overflow-hidden bg-neutral-100 dark:bg-secondary-900 relative border border-neutral-100 dark:border-secondary-700/50">
+                                    @if($tema->thumbnail_portrait)
+                                        <img src="{{ asset('storage/' . $tema->thumbnail_portrait) }}"
+                                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                            alt="Pratinjau {{ $tema->name }}">
+                                    @else
+                                        <div
+                                            class="w-full h-full flex items-center justify-center text-neutral-400 text-xs font-medium">
+                                            No Preview</div>
+                                    @endif
+                                </div>
 
-                                                <div class="mt-3 space-y-1">
-                                                    <span
-                                                        class="inline-block text-[9px] font-bold uppercase tracking-wider bg-neutral-100 dark:bg-neutral-700 text-neutral-500 dark:text-neutral-400 px-1.5 py-0.5 rounded-md">
-                                                        {{ $tema->themeCategory?->name ?? 'Umum' }}
-                                                    </span>
+                                <div class="mt-3 space-y-1">
+                                    <span
+                                        class="inline-block text-[9px] font-bold uppercase tracking-wider bg-neutral-100 dark:bg-secondary-700 text-neutral-600 dark:text-neutral-300 px-2 py-0.5 rounded-md">
+                                        {{ $tema->themeCategory?->name ?? 'Umum' }}
+                                    </span>
 
-                                                    <h4
-                                                        class="text-xs font-bold text-neutral-800 dark:text-neutral-100 truncate block">
-                                                        {{ $tema->name }}
-                                                    </h4>
-                                                </div>
-                                            </div>
+                                    <h4
+                                        class="text-xs font-bold text-neutral-800 dark:text-neutral-100 truncate block">
+                                        {{ $tema->name }}
+                                    </h4>
+                                </div>
+                            </div>
                                         @endforeach
 
                                     </div>
@@ -1793,47 +1793,58 @@
                                     @endphp
 
                                     <div class="sm:col-span-6">
-                                        <label for="quote_content"
-                                            class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Kutipan
-                                            / Ayat Suci</label>
+                                        <div class="form-section-card space-y-5">
+                                            {{-- Card Header --}}
+                                            <div class="flex items-center gap-3">
+                                                <div class="w-8 h-8 shrink-0 rounded-xl bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary-600 dark:text-primary-300">
+                                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+                                                    </svg>
+                                                </div>
+                                                <h4 class="text-sm font-semibold text-neutral-800 dark:text-neutral-100">Kutipan / Ayat Suci</h4>
+                                            </div>
 
-                                        <div class="mt-2 mb-3 flex flex-wrap gap-1.5">
-                                            @foreach($quoteTemplates as $qt)
-                                                <button type="button" data-quote-content="{{ e($qt->content) }}"
-                                                    data-quote-source="{{ e($qt->source) }}"
-                                                    class="quote-template-btn px-2.5 py-1 rounded-lg border border-neutral-200 dark:border-neutral-600 text-xs font-medium text-neutral-600 dark:text-neutral-400 bg-white dark:bg-secondary-700 hover:bg-primary-50 dark:hover:bg-primary-900/30 hover:border-primary-300 dark:hover:border-primary-600 hover:text-primary-700 dark:hover:text-primary-300 transition-all active:scale-95">
-                                                    {{ $qt->label }}
-                                                </button>
-                                            @endforeach
+                                            {{-- Quick-pick Templates --}}
+                                            @if($quoteTemplates->isNotEmpty())
+                                                <div>
+                                                    <p class="form-label-crafted">Pilih Template Cepat</p>
+                                                    <div class="flex flex-wrap gap-1.5">
+                                                        @foreach($quoteTemplates as $qt)
+                                                            <button type="button"
+                                                                data-quote-content="{{ e($qt->content) }}"
+                                                                data-quote-source="{{ e($qt->source) }}"
+                                                                class="quote-template-btn px-2.5 py-1 rounded-lg border border-neutral-200 dark:border-neutral-600 text-xs font-medium text-neutral-600 dark:text-neutral-400 bg-white dark:bg-secondary-800 hover:bg-primary-50 dark:hover:bg-primary-900/30 hover:border-primary-300 dark:hover:border-primary-600 hover:text-primary-700 dark:hover:text-primary-300 transition-all duration-150 active:scale-95">
+                                                                {{ $qt->label }}
+                                                            </button>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                            @endif
+
+                                            {{-- Quote Content --}}
+                                            <div>
+                                                <textarea name="quote_content" id="quote_content" rows="4"
+                                                    class="block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
+                                                    placeholder="Tulis kutipan ayat suci atau kutipan romantis...">{{ old('quote_content', $invitation->quote_content) }}</textarea>
+                                                <p class="text-xs text-neutral-400 dark:text-neutral-500 mt-1">Isi kutipan, ayat suci, atau pesan romantis yang ingin ditampilkan.</p>
+                                                @error('quote_content')
+                                                    <span class="text-red-500 dark:text-red-400 text-xs mt-1 block">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+
+                                            {{-- Quote Source --}}
+                                            <div>
+                                                <label for="quote_source" class="form-label-crafted">Sumber Kutipan</label>
+                                                <input type="text" name="quote_source" id="quote_source"
+                                                    value="{{ old('quote_source', $invitation->quote_source) }}"
+                                                    class="block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
+                                                    placeholder="Contoh: Ar-Rum: 21, Kahlil Gibran, QS. Al-Baqarah: 45">
+                                                <p class="text-xs text-neutral-400 dark:text-neutral-500 mt-1">Nama tokoh, buku, atau pasal ayat sebagai sumber kutipan.</p>
+                                                @error('quote_source')
+                                                    <span class="text-red-500 dark:text-red-400 text-xs mt-1 block">{{ $message }}</span>
+                                                @enderror
+                                            </div>
                                         </div>
-
-                                        <textarea name="quote_content" id="quote_content" rows="4"
-                                            class="mt-1 block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
-                                            placeholder="Tulis kutipan ayat suci atau kutipan romantis...">{{ old('quote_content', $invitation->quote_content) }}</textarea>
-                                        <p class="text-xs text-neutral-400 dark:text-neutral-500 mt-1">
-                                            Isi kutipan, ayat
-                                            suci, atau pesan romantis.
-                                        </p>
-                                        @error('quote_content') <span
-                                            class="text-red-500 dark:text-red-400 text-xs mt-1">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-
-                                    <div class="sm:col-span-6">
-                                        <label for="quote_source"
-                                            class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Sumber
-                                            Kutipan</label>
-                                        <input type="text" name="quote_source" id="quote_source"
-                                            value="{{ old('quote_source', $invitation->quote_source) }}"
-                                            class="mt-1 block w-full rounded-xl border-neutral-300 dark:border-neutral-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-secondary-700 dark:text-neutral-200"
-                                            placeholder="Contoh: Ar-Rum: 21, Kahlil Gibran, QS. Al-Baqarah: 45">
-                                        <p class="text-xs text-neutral-400 dark:text-neutral-500 mt-1">
-                                            Nama tokoh, buku,
-                                            atau pasal ayat sebagai
-                                            sumber kutipan.</p>
-                                        @error('quote_source') <span
-                                            class="text-red-500 dark:text-red-400 text-xs mt-1">{{ $message }}</span>
-                                        @enderror
                                     </div>
                                 </div>
                             </div>

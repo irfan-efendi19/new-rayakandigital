@@ -55,6 +55,11 @@ class ThemeSeeder extends Seeder
             ['name' => 'Spotify Music', 'thumbnail_portrait' => '/images/themes/spotify-thumb.svg', 'is_premium' => true, 'is_active' => true]
         );
 
+        $tiktok = Theme::updateOrCreate(
+            ['view_path' => 'themes.tiktok'],
+            ['name' => 'TikTok FYP', 'thumbnail_portrait' => '/images/themes/tiktok-thumb.svg', 'is_premium' => true, 'is_active' => true]
+        );
+
         $themes = [
             $elegant->id => [
                 'title' => 'Pernikahan Raisa & Hamish',
@@ -615,6 +620,69 @@ class ThemeSeeder extends Seeder
                         'place_name' => 'Fairmont Jakarta Grand Ballroom',
                         'place_address' => 'Jl. Asia Afrika No. 8, Jakarta Pusat',
                         'google_maps_url' => 'https://maps.google.com/?q=-6.2215,106.7995',
+                    ],
+                ],
+            ],
+            $tiktok->id => [
+                'title' => 'TikTok Wedding: Thariq & Aaliyah #HalalGoals',
+                'groom_full_name' => 'Thariq Halilintar',
+                'groom_short_name' => 'Thariq',
+                'groom_father_name' => 'Halilintar',
+                'groom_mother_name' => 'Lenggogeni',
+                'bride_full_name' => 'Aaliyah Massaid',
+                'bride_short_name' => 'Aaliyah',
+                'bride_father_name' => 'Adjie',
+                'bride_mother_name' => 'Reza',
+                'timezone' => 'Asia/Jakarta',
+                'event_date_offset_days' => 20,
+                'event_time' => '09:00',
+                'event_time_end' => '16:00',
+                'venue_name' => 'Hotel Raffles Jakarta Grand Ballroom',
+                'venue_address' => 'Ciputra World 1, Jl. Prof. DR. Satrio No. 3-5, Karet Kuningan, Jakarta Selatan',
+                'venue_maps_url' => 'https://maps.google.com/?q=-6.2243,106.8229',
+                'quote_content' => 'Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu pasangan-pasangan dari jenismu sendiri, supaya kamu merasa tenteram kepadanya.',
+                'quote_source' => 'QS. Ar-Rum: 21',
+                'love_story' => 'Dari FYP TikTok dan trending topic, hingga janji suci di pelaminan yang viral di hati kita berdua selamanya.',
+                'stories' => [
+                    ['story_date' => 'TikTok Post #1', 'story_title' => 'First Stitch & Duet 📱', 'story_description' => 'Pertama kali berinteraksi lewat video viral dan saling follow akun media sosial.'],
+                    ['story_date' => 'TikTok Post #2', 'story_title' => 'Official Dating Content 💕', 'story_description' => 'Memulai perjalanan romantis bersama dan saling mendukung impian masing-masing.'],
+                    ['story_date' => 'TikTok Post #3', 'story_title' => 'She Said YES (Viral Proposal) 💍', 'story_description' => 'Momen lamaran paling manis di tengah hamparan bunga lavender yang abadi.'],
+                ],
+                'gallery_photos' => [
+                    'https://picsum.photos/seed/tt1/800/1200',
+                    'https://picsum.photos/seed/tt2/800/1200',
+                    'https://picsum.photos/seed/tt3/800/1200',
+                    'https://picsum.photos/seed/tt4/800/1200',
+                    'https://picsum.photos/seed/tt5/800/1200',
+                ],
+                'gift_banks' => [
+                    ['bank_name' => 'Bank BCA', 'account_number' => '5544332211', 'account_holder' => 'Aaliyah Massaid'],
+                    ['bank_name' => 'Bank Mandiri', 'account_number' => '1370009988776', 'account_holder' => 'Thariq Halilintar'],
+                ],
+                'gift_ewallets' => [
+                    ['wallet_name' => 'GoPay', 'wallet_number' => '081255443322'],
+                    ['wallet_name' => 'OVO', 'wallet_number' => '081255443311'],
+                ],
+                'events' => [
+                    [
+                        'event_title' => 'Akad Nikah / Ijab Qabul',
+                        'date_offset_days' => 0,
+                        'start_time' => '09:00',
+                        'end_time' => '11:00',
+                        'is_until_finished' => false,
+                        'place_name' => 'Hotel Raffles Jakarta Grand Ballroom',
+                        'place_address' => 'Jl. Prof. DR. Satrio No. 3-5, Jakarta Selatan',
+                        'google_maps_url' => 'https://maps.google.com/?q=-6.2243,106.8229',
+                    ],
+                    [
+                        'event_title' => 'Grand Wedding Reception',
+                        'date_offset_days' => 0,
+                        'start_time' => '12:30',
+                        'end_time' => '16:00',
+                        'is_until_finished' => false,
+                        'place_name' => 'Hotel Raffles Jakarta Grand Ballroom',
+                        'place_address' => 'Jl. Prof. DR. Satrio No. 3-5, Jakarta Selatan',
+                        'google_maps_url' => 'https://maps.google.com/?q=-6.2243,106.8229',
                     ],
                 ],
             ],
