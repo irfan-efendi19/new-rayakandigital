@@ -40,23 +40,6 @@
             z-index: 0;
         }
 
-        /* ── Filter pills ── */
-        .filter-pill {
-            position: relative;
-            transition: all 0.2s cubic-bezier(.4,0,.2,1);
-        }
-        .filter-pill.active {
-            color: #fff;
-        }
-        .filter-pill.active::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: #FF7A00;
-            border-radius: inherit;
-            z-index: -1;
-        }
-
         /* ── Theme card ── */
         .theme-card {
             transition: transform 0.35s cubic-bezier(.4,0,.2,1), box-shadow 0.35s cubic-bezier(.4,0,.2,1);
@@ -120,6 +103,22 @@
             50%      { transform: translateY(-12px); }
         }
         .float-anim { animation: float 3.5s ease-in-out infinite; }
+
+        /* ── Pagination ── */
+        .pagination-link {
+            transition: all 0.2s ease;
+        }
+        .pagination-link.active {
+            background-color: #FF7A00;
+            color: #fff;
+            border-color: #FF7A00;
+            box-shadow: 0 2px 8px rgba(255,122,0,0.3);
+        }
+        .pagination-link:not(.active):hover {
+            border-color: #FF7A00;
+            color: #FF7A00;
+            background-color: rgba(255,122,0,0.05);
+        }
     </style>
 </head>
 
@@ -127,13 +126,7 @@
     <x-public-navbar />
     <div class="h-16"></div>
 
-    <div x-data="{
-        filter: 'all',
-        search: '',
-        get activeLabel() {
-            return this.filter === 'all' ? 'Semua' : document.querySelector('[data-cat-name][data-cat-id=\'' + this.filter + '\']')?.dataset.catName ?? ''
-        }
-    }" class="min-h-screen">
+    <div class="min-h-screen">
 
         {{-- ═══════════════════════════════════════
              PAGE HEADER — Editorial
@@ -152,7 +145,7 @@
                     <div class="relative">
                         {{-- Giant decorative number --}}
                         <div class="absolute -top-6 -left-4 pointer-events-none select-none hidden lg:block">
-                            <span class="hero-number">{{ $themes->count() }}</span>
+                            <span class="hero-number">{{ $themes->total() }}</span>
                         </div>
 
                         <div class="relative z-10 lg:pl-2">
@@ -179,20 +172,32 @@
                     {{-- Right: Search + stats --}}
                     <div class="flex flex-col gap-4 lg:items-end">
                         {{-- Search --}}
-                        <div class="relative w-full lg:w-72">
-                            <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400 text-sm pointer-events-none"></i>
-                            <input
-                                id="theme-search"
-                                type="text"
-                                x-model="search"
-                                placeholder="Cari nama tema..."
-                                class="w-full pl-10 pr-4 py-3 rounded-2xl border border-neutral-200 dark:border-secondary-700 bg-white dark:bg-secondary-800 text-sm text-secondary-800 dark:text-neutral-200 placeholder-neutral-400 transition-all duration-200">
-                        </div>
+                        <form action="{{ route('themes.index') }}" method="GET" class="w-full lg:w-72">
+                            @if(request('category'))
+                                <input type="hidden" name="category" value="{{ request('category') }}">
+                            @endif
+                            <div class="relative">
+                                <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400 text-sm pointer-events-none"></i>
+                                <input
+                                    id="theme-search"
+                                    type="text"
+                                    name="search"
+                                    value="{{ request('search') }}"
+                                    placeholder="Cari nama tema..."
+                                    class="w-full pl-10 pr-10 py-3 rounded-2xl border border-neutral-200 dark:border-secondary-700 bg-white dark:bg-secondary-800 text-sm text-secondary-800 dark:text-neutral-200 placeholder-neutral-400 transition-all duration-200">
+                                @if(request('search'))
+                                    <a href="{{ route('themes.index', array_merge(request()->except('search', 'page'))) }}"
+                                        class="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300">
+                                        <i class="fas fa-times text-xs"></i>
+                                    </a>
+                                @endif
+                            </div>
+                        </form>
 
                         {{-- Stats row --}}
                         <div class="flex items-center gap-5 text-xs text-neutral-400">
                             <div class="flex items-center gap-1.5">
-                                <span class="font-bold text-secondary-800 dark:text-neutral-200 text-lg">{{ $themes->count() }}</span>
+                                <span class="font-bold text-secondary-800 dark:text-neutral-200 text-lg">{{ $themes->total() }}</span>
                                 <span>Tema Tersedia</span>
                             </div>
                             <span class="w-px h-5 bg-neutral-200 dark:bg-secondary-700"></span>
@@ -225,36 +230,26 @@
                     </span>
 
                     {{-- All button --}}
-                    <button @click="filter = 'all'"
-                        :class="filter === 'all'
-                            ? 'bg-primary-500 text-white border-primary-500 shadow-md shadow-primary-200/50'
-                            : 'bg-white dark:bg-secondary-800 text-neutral-600 dark:text-neutral-400 border-neutral-200 dark:border-secondary-700 hover:border-primary-300 hover:text-primary-600'"
-                        class="flex-shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-semibold border transition-all duration-200">
+                    <a href="{{ route('themes.index', array_merge(request()->except('category', 'page'))) }}"
+                        class="flex-shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-semibold border transition-all duration-200 {{ !request('category') ? 'bg-primary-500 text-white border-primary-500 shadow-md shadow-primary-200/50' : 'bg-white dark:bg-secondary-800 text-neutral-600 dark:text-neutral-400 border-neutral-200 dark:border-secondary-700 hover:border-primary-300 hover:text-primary-600' }}">
                         <i class="fas fa-th-large text-[10px]"></i>
                         Semua
-                        <span :class="filter === 'all' ? 'bg-white/25 text-white' : 'bg-neutral-100 dark:bg-secondary-700 text-neutral-500'"
-                            class="inline-flex items-center justify-center w-5 h-5 rounded-full text-[10px] font-bold">
-                            {{ $themes->count() }}
+                        <span class="inline-flex items-center justify-center w-5 h-5 rounded-full text-[10px] font-bold {{ !request('category') ? 'bg-white/25 text-white' : 'bg-neutral-100 dark:bg-secondary-700 text-neutral-500' }}">
+                            {{ $themes->total() }}
                         </span>
-                    </button>
+                    </a>
 
                     @if($categories->isNotEmpty())
                         <div class="w-px h-5 bg-neutral-200 dark:bg-secondary-700 flex-shrink-0 mx-1"></div>
                         @foreach($categories as $category)
-                            <button @click="filter = '{{ $category->id }}'"
-                                data-cat-id="{{ $category->id }}"
-                                data-cat-name="{{ $category->name }}"
-                                :class="filter === '{{ $category->id }}'
-                                    ? 'bg-primary-500 text-white border-primary-500 shadow-md shadow-primary-200/50'
-                                    : 'bg-white dark:bg-secondary-800 text-neutral-600 dark:text-neutral-400 border-neutral-200 dark:border-secondary-700 hover:border-primary-300 hover:text-primary-600'"
-                                class="flex-shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-semibold border transition-all duration-200">
+                            <a href="{{ route('themes.index', array_merge(request()->except('page'), ['category' => $category->id])) }}"
+                                class="flex-shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-semibold border transition-all duration-200 {{ request('category') == $category->id ? 'bg-primary-500 text-white border-primary-500 shadow-md shadow-primary-200/50' : 'bg-white dark:bg-secondary-800 text-neutral-600 dark:text-neutral-400 border-neutral-200 dark:border-secondary-700 hover:border-primary-300 hover:text-primary-600' }}">
                                 <i class="fas {{ $category->icon ?? 'fa-folder' }} text-[10px]"></i>
                                 {{ $category->name }}
-                                <span :class="filter === '{{ $category->id }}' ? 'bg-white/25 text-white' : 'bg-neutral-100 dark:bg-secondary-700 text-neutral-500'"
-                                    class="inline-flex items-center justify-center w-5 h-5 rounded-full text-[10px] font-bold">
+                                <span class="inline-flex items-center justify-center w-5 h-5 rounded-full text-[10px] font-bold {{ request('category') == $category->id ? 'bg-white/25 text-white' : 'bg-neutral-100 dark:bg-secondary-700 text-neutral-500' }}">
                                     {{ $category->themes_count }}
                                 </span>
-                            </button>
+                            </a>
                         @endforeach
                     @endif
                 </div>
@@ -269,10 +264,16 @@
             {{-- Result count --}}
             <div class="flex items-center justify-between mb-8">
                 <p class="text-xs text-neutral-400">
-                    Menampilkan <span class="font-semibold text-secondary-800 dark:text-neutral-200">{{ $themes->count() }}</span> tema
-                    <span x-show="filter !== 'all'" class="text-primary-500">
-                        — <span x-text="activeLabel"></span>
-                    </span>
+                    Menampilkan <span class="font-semibold text-secondary-800 dark:text-neutral-200">{{ $themes->count() }}</span> dari <span class="font-semibold text-secondary-800 dark:text-neutral-200">{{ $themes->total() }}</span> tema
+                    @if(request('category'))
+                        @php $activeCat = $categories->firstWhere('id', request('category')); @endphp
+                        @if($activeCat)
+                            <span class="text-primary-500"> — {{ $activeCat->name }}</span>
+                        @endif
+                    @endif
+                    @if(request('search'))
+                        <span class="text-primary-500"> — "{{ request('search') }}"</span>
+                    @endif
                 </p>
                 <p class="text-xs text-neutral-400 hidden sm:block">
                     Klik thumbnail untuk pratinjau langsung
@@ -281,18 +282,7 @@
 
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 lg:gap-5">
                 @forelse($themes as $theme)
-                    <div
-                        x-show="
-                            (filter === 'all' || filter === '{{ $theme->theme_category_id ?? '0' }}') &&
-                            (search === '' || '{{ strtolower($theme->name) }}'.includes(search.toLowerCase()))
-                        "
-                        x-transition:enter="transition ease-out duration-300"
-                        x-transition:enter-start="opacity-0 scale-95"
-                        x-transition:enter-end="opacity-100 scale-100"
-                        x-transition:leave="transition ease-in duration-150"
-                        x-transition:leave-start="opacity-100 scale-100"
-                        x-transition:leave-end="opacity-0 scale-95"
-                        class="theme-card rounded-2xl overflow-hidden shadow-[0_2px_16px_rgba(0,0,0,0.07)] dark:shadow-[0_2px_16px_rgba(0,0,0,0.3)] border border-neutral-100 dark:border-secondary-700 bg-white dark:bg-secondary-800">
+                    <div class="theme-card rounded-2xl overflow-hidden shadow-[0_2px_16px_rgba(0,0,0,0.07)] dark:shadow-[0_2px_16px_rgba(0,0,0,0.3)] border border-neutral-100 dark:border-secondary-700 bg-white dark:bg-secondary-800">
 
                         {{-- ── Thumbnail zone ── --}}
                         <div class="relative aspect-[3/4] overflow-hidden bg-neutral-100 dark:bg-secondary-700">
@@ -403,25 +393,94 @@
                             </div>
                         </div>
                         <h3 class="font-heading text-2xl font-bold text-secondary-800 dark:text-neutral-200 mb-2">
-                            Belum ada tema tersedia
+                            @if(request('search') || request('category'))
+                                Tidak ada tema yang cocok
+                            @else
+                                Belum ada tema tersedia
+                            @endif
                         </h3>
                         <p class="text-neutral-400 text-sm max-w-xs leading-relaxed mb-6">
-                            Tim kami sedang menyiapkan desain-desain baru yang akan membuatmu terpesona.
+                            @if(request('search') || request('category'))
+                                Coba ubah filter atau kata kunci pencarian Anda.
+                            @else
+                                Tim kami sedang menyiapkan desain-desain baru yang akan membuatmu terpesona.
+                            @endif
                         </p>
-                        <a href="https://wa.me/62895349823366"
-                            class="inline-flex items-center gap-2 px-6 py-3 bg-secondary-900 dark:bg-secondary-700 text-white text-sm font-bold rounded-2xl hover:bg-secondary-800 transition-colors duration-200">
-                            <i class="fab fa-whatsapp text-green-400"></i>
-                            Hubungi Admin
-                        </a>
+                        @if(request('search') || request('category'))
+                            <a href="{{ route('themes.index') }}"
+                                class="inline-flex items-center gap-2 px-6 py-3 bg-primary-500 hover:bg-primary-600 text-white text-sm font-bold rounded-2xl transition-colors duration-200">
+                                <i class="fas fa-times"></i>
+                                Hapus Filter
+                            </a>
+                        @else
+                            <a href="https://wa.me/62895349823366"
+                                class="inline-flex items-center gap-2 px-6 py-3 bg-secondary-900 dark:bg-secondary-700 text-white text-sm font-bold rounded-2xl hover:bg-secondary-800 transition-colors duration-200">
+                                <i class="fab fa-whatsapp text-green-400"></i>
+                                Hubungi Admin
+                            </a>
+                        @endif
                     </div>
                 @endforelse
             </div>
 
-            {{-- ── No search results ── --}}
-            <div x-show="search !== '' && {{ $themes->count() }} > 0"
-                x-cloak
-                class="hidden" {{-- Fallback — Alpine handles visibility --}}>
-            </div>
+            {{-- ═══════════════════════════════════════
+                 PAGINATION
+            ═══════════════════════════════════════ --}}
+            @if($themes->hasPages())
+                <div class="mt-12 flex items-center justify-center">
+                    <nav class="flex items-center gap-1.5">
+                        {{-- Previous --}}
+                        @if($themes->onFirstPage())
+                            <span class="flex items-center justify-center w-10 h-10 rounded-xl border border-neutral-200 dark:border-secondary-700 text-neutral-300 dark:text-neutral-600 cursor-not-allowed">
+                                <i class="fas fa-chevron-left text-xs"></i>
+                            </span>
+                        @else
+                            <a href="{{ $themes->previousPageUrl() }}"
+                                class="pagination-link flex items-center justify-center w-10 h-10 rounded-xl border border-neutral-200 dark:border-secondary-700 text-neutral-500 dark:text-neutral-400 hover:border-primary-400 hover:text-primary-500 transition-all duration-200">
+                                <i class="fas fa-chevron-left text-xs"></i>
+                            </a>
+                        @endif
+
+                        {{-- Page numbers --}}
+                        @foreach($themes->getUrlRange(max(1, $themes->currentPage() - 2), min($themes->lastPage(), $themes->currentPage() + 2)) as $page => $url)
+                            <a href="{{ $url }}"
+                                class="pagination-link flex items-center justify-center w-10 h-10 rounded-xl border text-xs font-semibold transition-all duration-200 {{ $page == $themes->currentPage() ? 'active' : 'border-neutral-200 dark:border-secondary-700 text-neutral-500 dark:text-neutral-400' }}">
+                                {{ $page }}
+                            </a>
+                        @endforeach
+
+                        {{-- Ellipsis --}}
+                        @if($themes->currentPage() + 2 < $themes->lastPage())
+                            <span class="flex items-center justify-center w-10 h-10 text-neutral-300 dark:text-neutral-600">
+                                ...
+                            </span>
+                            <a href="{{ $themes->url($themes->lastPage()) }}"
+                                class="pagination-link flex items-center justify-center w-10 h-10 rounded-xl border border-neutral-200 dark:border-secondary-700 text-neutral-500 dark:text-neutral-400 text-xs font-semibold transition-all duration-200">
+                                {{ $themes->lastPage() }}
+                            </a>
+                        @endif
+
+                        {{-- Next --}}
+                        @if($themes->hasMorePages())
+                            <a href="{{ $themes->nextPageUrl() }}"
+                                class="pagination-link flex items-center justify-center w-10 h-10 rounded-xl border border-neutral-200 dark:border-secondary-700 text-neutral-500 dark:text-neutral-400 hover:border-primary-400 hover:text-primary-500 transition-all duration-200">
+                                <i class="fas fa-chevron-right text-xs"></i>
+                            </a>
+                        @else
+                            <span class="flex items-center justify-center w-10 h-10 rounded-xl border border-neutral-200 dark:border-secondary-700 text-neutral-300 dark:text-neutral-600 cursor-not-allowed">
+                                <i class="fas fa-chevron-right text-xs"></i>
+                            </span>
+                        @endif
+                    </nav>
+                </div>
+
+                {{-- Page info --}}
+                <div class="mt-4 text-center">
+                    <p class="text-xs text-neutral-400">
+                        Halaman {{ $themes->currentPage() }} dari {{ $themes->lastPage() }}
+                    </p>
+                </div>
+            @endif
 
         </main>
 
@@ -454,7 +513,7 @@
             </div>
         </div>
 
-    </div>{{-- end x-data --}}
+    </div>
 
     <x-public-footer />
     <script src="{{ asset('js/landingpage.js') }}"></script>
