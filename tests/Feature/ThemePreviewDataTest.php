@@ -311,18 +311,71 @@ test('ojek online and delivery order theme preview renders successfully with exp
     $this->get(route('theme.preview', 'ojek-online'))
         ->assertSuccessful()
         ->assertSee('GoNikah')
-        ->assertSee('PESAN SEKARANG')
+        ->assertSee('Order Now')
         ->assertSee('Dimas Anggara')
         ->assertSee('Sarah Amanda');
 
     $this->get(route('theme.preview', 'gofood'))
         ->assertSuccessful()
         ->assertSee('GoNikah')
-        ->assertSee('PESAN SEKARANG')
+        ->assertSee('Order Now')
         ->assertSee('Dimas Anggara')
         ->assertSee('Sarah Amanda');
 });
 
+test('buku nikah and dokumen negara kua theme preview renders successfully with expected elements', function () {
+    $this->seed(ThemeSeeder::class);
 
+    $this->get(route('theme.preview', 'buku-nikah'))
+        ->assertSuccessful()
+        ->assertSee('KEMENTERIAN AGAMA')
+        ->assertSee('BUKU NIKAH')
+        ->assertSee('Fadhil Pratama')
+        ->assertSee('Nabila Putri');
 
+    $this->get(route('theme.preview', 'kua'))
+        ->assertSuccessful()
+        ->assertSee('KEMENTERIAN AGAMA')
+        ->assertSee('BUKU NIKAH')
+        ->assertSee('Fadhil Pratama')
+        ->assertSee('Nabila Putri');
+});
+
+test('scoreboard and papan skor arena theme preview renders successfully with expected elements', function () {
+    $this->seed(ThemeSeeder::class);
+
+    $this->get(route('theme.preview', 'scoreboard'))
+        ->assertSuccessful()
+        ->assertSee('MATCH DAY')
+        ->assertSee('Rizky FC')
+        ->assertSee('United Nabila')
+        ->assertSee('MASUK KE STADION');
+
+    $this->get(route('theme.preview', 'papan-skor'))
+        ->assertSuccessful()
+        ->assertSee('MATCH DAY')
+        ->assertSee('Rizky FC')
+        ->assertSee('United Nabila')
+        ->assertSee('MASUK KE STADION');
+});
+
+test('surat cinta dan kertas buku bergaris theme preview renders successfully with expected elements', function () {
+    $this->seed(ThemeSeeder::class);
+
+    $this->get(route('theme.preview', 'surat-cinta'))
+        ->assertSuccessful()
+        ->assertSee('Sepucuk Surat Cinta')
+        ->assertSee('Titip salam')
+        ->assertSee('Gilang')
+        ->assertSee('Dinda')
+        ->assertSee('BALAS SURAT');
+
+    $this->get(route('theme.preview', 'love-letter'))
+        ->assertSuccessful()
+        ->assertSee('Sepucuk Surat Cinta')
+        ->assertSee('Titip salam')
+        ->assertSee('Gilang')
+        ->assertSee('Dinda')
+        ->assertSee('BALAS SURAT');
+});
 

@@ -120,6 +120,21 @@ class ThemeSeeder extends Seeder
             ['name' => 'Ojek Online & Delivery Order', 'thumbnail_portrait' => '/images/themes/ojek-online-thumb.svg', 'is_premium' => true, 'is_active' => true]
         );
 
+        $buku_nikah = Theme::updateOrCreate(
+            ['view_path' => 'themes.buku_nikah'],
+            ['name' => 'Buku Nikah & Dokumen Negara', 'thumbnail_portrait' => '/images/themes/buku-nikah-thumb.svg', 'is_premium' => true, 'is_active' => true]
+        );
+
+        $scoreboard = Theme::updateOrCreate(
+            ['view_path' => 'themes.scoreboard'],
+            ['name' => 'Papan Skor Stadion & Scoreboard Arena', 'thumbnail_portrait' => '/images/themes/scoreboard-thumb.svg', 'is_premium' => true, 'is_active' => true]
+        );
+
+        $surat_cinta = Theme::updateOrCreate(
+            ['view_path' => 'themes.surat_cinta'],
+            ['name' => 'Surat Cinta Zaman Dulu & Kertas Bergaris', 'thumbnail_portrait' => '/images/themes/surat-cinta-thumb.svg', 'is_premium' => true, 'is_active' => true]
+        );
+
         $themes = [
             $elegant->id => [
                 'title' => 'Pernikahan Raisa & Hamish',
@@ -1490,6 +1505,192 @@ class ThemeSeeder extends Seeder
                         'place_name' => 'Gedung Pelaminan Raya Ballroom',
                         'place_address' => 'Jl. HR Rasuna Said Blok X-5 No. 13, Kuningan, Jakarta Selatan',
                         'google_maps_url' => 'https://maps.google.com/?q=-6.2234,106.8312',
+                    ],
+                ],
+            ],
+            $buku_nikah->id => [
+                'title' => 'Kutipan Akta Nikah Resmi: No. 0815/042/VIII/2026 (Kementerian Agama RI)',
+                'groom_full_name' => 'Fadhil Pratama Putra, S.Kom.',
+                'groom_short_name' => 'Fadhil',
+                'groom_father_name' => 'H. Ir. Bambang Pratama',
+                'groom_mother_name' => 'Hj. Siti Aminah',
+                'bride_full_name' => 'Nabila Putri Larasati, S.M.',
+                'bride_short_name' => 'Nabila',
+                'bride_father_name' => 'Drs. H. Mulyadi Nugroho',
+                'bride_mother_name' => 'Hj. Dewi Sartika',
+                'timezone' => 'Asia/Jakarta',
+                'event_date_offset_days' => 40,
+                'event_time' => '08:30',
+                'event_time_end' => '17:00',
+                'venue_name' => 'Balai Sudirman Grand Ballroom (KUA Kecamatan Gambir)',
+                'venue_address' => 'Jl. Dr. Saharjo No. 268, Menteng Dalam, Tebet, Jakarta Selatan',
+                'venue_maps_url' => 'https://maps.google.com/?q=-6.2241,106.8452',
+                'quote_content' => 'Dan di antara tanda-tanda kebesaran-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu merasa tenteram kepadanya, dan dijadikan-Nya di antaramu rasa kasih dan sayang.',
+                'quote_source' => 'QS. Ar-Rum: 21 · Lembaran Berita Acara Perkawinan Kemenag RI',
+                'love_story' => 'Risalah Resmi Perjalanan Asmara: Dari pertemuan tanpa sengaja di bangku kuliah, masa pengenalan berkas perkara cinta, hingga ikrar suci pernikahan yang disahkan di hadapan penghulu, saksi, dan negara.',
+                'stories' => [
+                    ['story_date' => 'BERKAS #01 · 2020', 'story_title' => 'Pemeriksaan Awal: Pertemuan di Kampus 🎓', 'story_description' => 'Fadhil dan Nabila pertama kali bertemu di sebuah forum organisasi mahasiswa. Kesamaan visi dan canda tawa menjadi berkas awal pembuka asmara.'],
+                    ['story_date' => 'BERKAS #02 · 2023', 'story_title' => 'Verifikasi Lapangan: Ujian Jarak & Waktu ✈️', 'story_description' => 'Melewati masa karir yang padat dan komitmen saling menjaga, kedua calon mempelai dinyatakan lolos uji kelayakan pasangan seumur hidup.'],
+                    ['story_date' => 'BERKAS #03 · 2025', 'story_title' => 'Keputusan Pleno: Cincin Lamaran Resmi Terpasang 💍', 'story_description' => 'Di hadapan kedua keluarga besar, sidang pleno pertunangan menetapkan bahwa Fadhil dan Nabila resmi melangkah ke jenjang pelaminan.'],
+                ],
+                'gallery_photos' => [
+                    'https://picsum.photos/seed/kua1/800/1200',
+                    'https://picsum.photos/seed/kua2/1200/800',
+                    'https://picsum.photos/seed/kua3/800/1200',
+                    'https://picsum.photos/seed/kua4/1200/800',
+                ],
+                'gift_banks' => [
+                    ['bank_name' => 'Bank Syariah Indonesia (Kas Rumah Tangga)', 'account_number' => '7140889922', 'account_holder' => 'Fadhil Pratama Putra'],
+                    ['bank_name' => 'Bank Mandiri (Sumbangan Kasih)', 'account_number' => '1370007890123', 'account_holder' => 'Nabila Putri Larasati'],
+                ],
+                'gift_ewallets' => [
+                    ['wallet_name' => 'GoPay', 'wallet_number' => '081277889900'],
+                    ['wallet_name' => 'OVO', 'wallet_number' => '081277889911'],
+                ],
+                'events' => [
+                    [
+                        'event_title' => 'Majelis I: Ijab Qabul (Akad Nikah Resmi Kemenag)',
+                        'date_offset_days' => 0,
+                        'start_time' => '08:30',
+                        'end_time' => '11:00',
+                        'is_until_finished' => false,
+                        'place_name' => 'Balai Sudirman Grand Ballroom',
+                        'place_address' => 'Jl. Dr. Saharjo No. 268, Menteng Dalam, Tebet, Jakarta Selatan',
+                        'google_maps_url' => 'https://maps.google.com/?q=-6.2241,106.8452',
+                    ],
+                    [
+                        'event_title' => 'Majelis II: Walimatul \'Ursy (Resepsi Pernikahan)',
+                        'date_offset_days' => 0,
+                        'start_time' => '13:00',
+                        'end_time' => '17:00',
+                        'is_until_finished' => false,
+                        'place_name' => 'Balai Sudirman Grand Ballroom',
+                        'place_address' => 'Jl. Dr. Saharjo No. 268, Menteng Dalam, Tebet, Jakarta Selatan',
+                        'google_maps_url' => 'https://maps.google.com/?q=-6.2241,106.8452',
+                    ],
+                ],
+            ],
+            $scoreboard->id => [
+                'title' => 'MATCH DAY: Rizky FC vs United Nabila (The Grand Wedding Final 2026)',
+                'groom_full_name' => 'Rizky Alamsyah (Captain Home)',
+                'groom_short_name' => 'Rizky FC',
+                'groom_father_name' => 'Kurniawan Alamsyah',
+                'groom_mother_name' => 'Yuliana Alamsyah',
+                'bride_full_name' => 'Nabila Putri Cahyani (Captain Away)',
+                'bride_short_name' => 'United Nabila',
+                'bride_father_name' => 'H. Wahyu Pratama',
+                'bride_mother_name' => 'Hj. Ratna Pratama',
+                'timezone' => 'Asia/Jakarta',
+                'event_date_offset_days' => 45,
+                'event_time' => '08:00',
+                'event_time_end' => '16:30',
+                'venue_name' => 'Stadion Utama Gelora Asmara Grand Arena',
+                'venue_address' => 'Jl. Pintu Satu Senayan, Gelora, Tanah Abang, Jakarta Pusat',
+                'venue_maps_url' => 'https://maps.google.com/?q=-6.2185,106.8026',
+                'quote_content' => 'Dan di antara tanda-tanda kebesaran-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu merasa tenteram kepadanya, dan dijadikan-Nya di antaramu rasa kasih dan sayang.',
+                'quote_source' => 'QS. Ar-Rum: 21 · Official Match Day Bulletin',
+                'love_story' => 'Perjalanan 90 Menit Asmara: Dari peluit kick-off pertemuan pertama di arena kampus, strategi melewati babak LDR, hingga gol penentu kemenangan di pelaminan.',
+                'stories' => [
+                    ['story_date' => '⚽ 15\' KICK-OFF', 'story_title' => 'Pertemuan Pertama di Arena Futsal ⚽', 'story_description' => 'Rizky dan Nabila pertama kali bertatap mata saat turnamen olahraga kampus. Operan bola yang tak sengaja berbuah obrolan manis di pinggir lapangan.'],
+                    ['story_date' => '🟡 45\' BABAK PERTAMA', 'story_title' => 'Ujian Taktik: Melewati Rintangan Jarak ✈️', 'story_description' => 'Menghadapi kesibukan karir dan pertandingan jarak jauh (LDR), kedua kapten tim saling menjaga koordinasi dan komunikasi tanpa cela.'],
+                    ['story_date' => '🏆 90\' GOL KEMENANGAN', 'story_title' => 'Gol Penentu: Cincin Lamaran Resmi Terpasang! 💍', 'story_description' => 'Di menit akhir babak perpanjangan waktu, Rizky mengeksekusi lamaran dengan indah di hadapan seluruh suporter keluarga besar.'],
+                ],
+                'gallery_photos' => [
+                    'https://picsum.photos/seed/sport1/800/1200',
+                    'https://picsum.photos/seed/sport2/1200/800',
+                    'https://picsum.photos/seed/sport3/800/1200',
+                    'https://picsum.photos/seed/sport4/1200/800',
+                ],
+                'gift_banks' => [
+                    ['bank_name' => 'Bank BCA (Transfer Fee Rizky FC)', 'account_number' => '5020993311', 'account_holder' => 'Rizky Alamsyah'],
+                    ['bank_name' => 'Bank Mandiri (Club Sponsorship Nabila)', 'account_number' => '1370008899221', 'account_holder' => 'Nabila Putri Cahyani'],
+                ],
+                'gift_ewallets' => [
+                    ['wallet_name' => 'GoPay', 'wallet_number' => '081288990011'],
+                    ['wallet_name' => 'OVO', 'wallet_number' => '081288990022'],
+                ],
+                'events' => [
+                    [
+                        'event_title' => 'First Half: Akad Nikah (Ijab Qabul Match)',
+                        'date_offset_days' => 0,
+                        'start_time' => '08:00',
+                        'end_time' => '11:00',
+                        'is_until_finished' => false,
+                        'place_name' => 'Stadion Utama Gelora Asmara Grand Arena',
+                        'place_address' => 'Jl. Pintu Satu Senayan, Gelora, Tanah Abang, Jakarta Pusat',
+                        'google_maps_url' => 'https://maps.google.com/?q=-6.2185,106.8026',
+                    ],
+                    [
+                        'event_title' => 'Second Half: Grand Victory Wedding Reception',
+                        'date_offset_days' => 0,
+                        'start_time' => '12:30',
+                        'end_time' => '16:30',
+                        'is_until_finished' => false,
+                        'place_name' => 'Stadion Utama Gelora Asmara Grand Arena',
+                        'place_address' => 'Jl. Pintu Satu Senayan, Gelora, Tanah Abang, Jakarta Pusat',
+                        'google_maps_url' => 'https://maps.google.com/?q=-6.2185,106.8026',
+                    ],
+                ],
+            ],
+            $surat_cinta->id => [
+                'title' => 'Sepucuk Surat Cinta: Gilang & Dinda (Buku Catatan Kenangan)',
+                'groom_full_name' => 'Gilang Ramadhan',
+                'groom_short_name' => 'Gilang',
+                'groom_father_name' => 'Bambang Sudiro',
+                'groom_mother_name' => 'Endang Lestari',
+                'bride_full_name' => 'Adinda Saraswati',
+                'bride_short_name' => 'Dinda',
+                'bride_father_name' => 'Hartono Wijaya',
+                'bride_mother_name' => 'Sri Rahayu',
+                'timezone' => 'Asia/Jakarta',
+                'event_date_offset_days' => 35,
+                'event_time' => '09:00',
+                'event_time_end' => '17:00',
+                'venue_name' => 'Omah Kenangan Joglo Heritage Garden',
+                'venue_address' => 'Jl. Taman Siswa No. 12, Wirogunan, Mergangsan, Yogyakarta',
+                'venue_maps_url' => 'https://maps.google.com/?q=-7.8052,110.3752',
+                'quote_content' => 'Dan di antara tanda-tanda kebesaran-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu merasa tenteram kepadanya, dan dijadikan-Nya di antaramu rasa kasih dan sayang.',
+                'quote_source' => 'QS. Ar-Rum: 21 · Catatan Kecil di Sudut Buku',
+                'love_story' => 'Titip salam, jangan lupa datang ya... Sepenggal coretan tangan di lembaran buku catatan yang kini berujung pada janji suci seumur hidup.',
+                'stories' => [
+                    ['story_date' => 'HALAMAN 1 · 2018', 'story_title' => 'Secarik Kertas Sobekan di Bawah Meja 💌', 'story_description' => '"Hai, boleh pinjam catatan kimia kemarin?" Pertanyaan sederhana di atas kertas bergaris yang menjadi awal mula obrolan panjang sepulang sekolah.'],
+                    ['story_date' => 'HALAMAN 2 · 2021', 'story_title' => 'Kotak Surat & Kiriman Pos Jarak Jauh 📮', 'story_description' => 'Masa kuliah di kota berbeda kami lalui dengan saling bertukar kartu pos dan surat tulisan tangan yang selalu dinanti setiap akhir bulan.'],
+                    ['story_date' => 'HALAMAN 3 · 2025', 'story_title' => 'Surat Terakhir: "Maukah Menua Bersamaku?" 💍', 'story_description' => 'Di tempat pertama kali kami bertukar surat, Gilang menyerahkan selembar surat terakhir yang berisi cincin lamaran dan pertanyaan terindah.'],
+                ],
+                'gallery_photos' => [
+                    'https://picsum.photos/seed/loveletter1/800/1200',
+                    'https://picsum.photos/seed/loveletter2/1200/800',
+                    'https://picsum.photos/seed/loveletter3/800/1200',
+                    'https://picsum.photos/seed/loveletter4/1200/800',
+                ],
+                'gift_banks' => [
+                    ['bank_name' => 'Bank BCA (Amplop Gilang)', 'account_number' => '8030112233', 'account_holder' => 'Gilang Ramadhan'],
+                    ['bank_name' => 'Bank Mandiri (Celengan Dinda)', 'account_number' => '1370009988112', 'account_holder' => 'Adinda Saraswati'],
+                ],
+                'gift_ewallets' => [
+                    ['wallet_name' => 'GoPay', 'wallet_number' => '081233445566'],
+                    ['wallet_name' => 'ShopeePay', 'wallet_number' => '081233445577'],
+                ],
+                'events' => [
+                    [
+                        'event_title' => 'Akad Nikah (Janji Suci di Balik Buku)',
+                        'date_offset_days' => 0,
+                        'start_time' => '09:00',
+                        'end_time' => '11:30',
+                        'is_until_finished' => false,
+                        'place_name' => 'Omah Kenangan Joglo Heritage Garden',
+                        'place_address' => 'Jl. Taman Siswa No. 12, Wirogunan, Mergangsan, Yogyakarta',
+                        'google_maps_url' => 'https://maps.google.com/?q=-7.8052,110.3752',
+                    ],
+                    [
+                        'event_title' => 'Resepsi Hangat & Temu Sahabat Lama',
+                        'date_offset_days' => 0,
+                        'start_time' => '13:00',
+                        'end_time' => '17:00',
+                        'is_until_finished' => false,
+                        'place_name' => 'Omah Kenangan Joglo Heritage Garden',
+                        'place_address' => 'Jl. Taman Siswa No. 12, Wirogunan, Mergangsan, Yogyakarta',
+                        'google_maps_url' => 'https://maps.google.com/?q=-7.8052,110.3752',
                     ],
                 ],
             ],
