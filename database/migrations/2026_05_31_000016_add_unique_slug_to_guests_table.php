@@ -48,10 +48,11 @@ return new class extends Migration
             foreach ($guests as $guest) {
                 if ($counter === 1) {
                     $counter++;
+
                     continue;
                 }
 
-                $newSlug = $dup->slug . '-' . $counter;
+                $newSlug = $dup->slug.'-'.$counter;
                 $guest->slug = $newSlug;
                 $guest->saveQuietly();
                 $counter++;

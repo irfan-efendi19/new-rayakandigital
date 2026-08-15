@@ -60,7 +60,7 @@ class DokuWebhookController extends Controller
             $order = Order::where('order_id', $invoiceNumber)->first();
         }
 
-        if (!$order && $addonReferenceId) {
+        if (! $order && $addonReferenceId) {
             $addonTransaction = AddonTransaction::where('reference_order_id', $addonReferenceId)->first();
         }
 

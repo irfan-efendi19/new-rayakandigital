@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        if (Schema::hasTable('invitations') && !Schema::hasColumn('invitations', 'pricing_tier_id')) {
+        if (Schema::hasTable('invitations') && ! Schema::hasColumn('invitations', 'pricing_tier_id')) {
             Schema::table('invitations', function (Blueprint $table) {
                 $table->foreignId('pricing_tier_id')
                     ->nullable()
@@ -28,7 +28,7 @@ return new class extends Migration
 
     public function down(): void
     {
-        if (Schema::hasTable('users') && !Schema::hasColumn('users', 'pricing_tier_id')) {
+        if (Schema::hasTable('users') && ! Schema::hasColumn('users', 'pricing_tier_id')) {
             Schema::table('users', function (Blueprint $table) {
                 $table->foreignId('pricing_tier_id')->nullable()->constrained('packages');
             });

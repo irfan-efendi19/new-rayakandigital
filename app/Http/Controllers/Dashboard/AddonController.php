@@ -13,6 +13,7 @@ use App\Services\PaymentRoutingService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
+use Midtrans\Snap;
 
 class AddonController extends Controller
 {
@@ -35,7 +36,7 @@ class AddonController extends Controller
 
         try {
             $methodConfig = PaymentMethodConfig::getActive();
-            if ($methodConfig && $methodConfig->isMidtrans() && !empty($methodConfig->midtrans_client_key)) {
+            if ($methodConfig && $methodConfig->isMidtrans() && ! empty($methodConfig->midtrans_client_key)) {
                 $clientKey = $methodConfig->midtrans_client_key;
             }
         } catch (\Throwable $e) {
@@ -54,7 +55,7 @@ class AddonController extends Controller
             return back()->with('error', 'Add-on sudah dimiliki undangan ini.');
         }
 
-        $referenceOrderId = 'RD-' . now()->format('Ymd') . '-' . $invitation->id . '-' . strtoupper(Str::random(4));
+        $referenceOrderId = 'RD-'.now()->format('Ymd').'-'.$invitation->id.'-'.strtoupper(Str::random(4));
         $price = (int) $addon->price;
 
         $paymentMethod = $routing->activeMethod();
@@ -71,7 +72,7 @@ class AddonController extends Controller
         if ($paymentMethod === 'midtrans') {
             $email = filter_var($request->user()->email, FILTER_VALIDATE_EMAIL)
                 ? $request->user()->email
-                : 'user-' . $request->user()->id . '@rayakandigital.id';
+                : 'user-'.$request->user()->id.'@rayakandigital.id';
 
             $params = [
                 'transaction_details' => [
@@ -84,25 +85,25 @@ class AddonController extends Controller
                 ],
                 'item_details' => [
                     [
-                        'id' => 'RD-ADDON-' . $addon->id,
+                        'id' => 'RD-ADDON-'.$addon->id,
                         'price' => $price,
                         'quantity' => 1,
-                        'name' => $addon->name . ' - Rayakan Digital',
+                        'name' => $addon->name.' - Rayakan Digital',
                     ],
                 ],
             ];
 
             $snapToken = null;
-            if (!$midtransService->isSimulationMode()) {
+            if (! $midtransService->isSimulationMode()) {
                 try {
-                    $snapToken = \Midtrans\Snap::getSnapToken($params);
+                    $snapToken = Snap::getSnapToken($params);
                 } catch (\Throwable $e) {
-                    logger()->error('Gagal buat Snap token untuk addon: ' . $e->getMessage());
+                    logger()->error('Gagal buat Snap token untuk addon: '.$e->getMessage());
                 }
             }
 
-            if (!$snapToken) {
-                $snapToken = 'SIMULATION_TOKEN_' . $referenceOrderId;
+            if (! $snapToken) {
+                $snapToken = 'SIMULATION_TOKEN_'.$referenceOrderId;
             }
 
             $transaction->update(['snap_token' => $snapToken]);
@@ -147,7 +148,7 @@ class AddonController extends Controller
             abort(404);
         }
 
-        if (!in_array($transaction->payment_status, ['pending', 'verifying'])) {
+        if (! in_array($transaction->payment_status, ['pending', 'verifying'])) {
             return redirect()->route('dashboard.invitations.addons.index', $invitation)
                 ->with('info', 'Transaksi ini sudah tidak dalam status pending.');
         }
@@ -184,7 +185,7 @@ class AddonController extends Controller
             number_format((int) $transaction->amount, 0, ',', '.')
         );
 
-        $waUrl = 'https://api.whatsapp.com/send?phone=' . $phone . '&text=' . urlencode($message);
+        $waUrl = 'https://api.whatsapp.com/send?phone='.$phone.'&text='.urlencode($message);
 
         return redirect()->away($waUrl);
     }
@@ -195,7 +196,7 @@ class AddonController extends Controller
 
         $pivot = $invitation->addons()->where('addon_id', $addon->id)->first();
 
-        if (!$pivot) {
+        if (! $pivot) {
             return back()->with('error', 'Add-on belum dimiliki. Silakan lakukan pembelian terlebih dahulu.');
         }
 

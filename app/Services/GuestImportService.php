@@ -6,6 +6,7 @@ use App\Imports\GuestsImport;
 use App\Models\Invitation;
 use Illuminate\Http\UploadedFile;
 use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Validators\ValidationException;
 
 class GuestImportService
 {
@@ -15,10 +16,10 @@ class GuestImportService
 
         try {
             Excel::import($import, $file);
-        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+        } catch (ValidationException $e) {
             $errors = [];
             foreach ($e->failures() as $failure) {
-                $errors[] = "Baris {$failure->row()}: " . implode(', ', $failure->errors());
+                $errors[] = "Baris {$failure->row()}: ".implode(', ', $failure->errors());
             }
 
             return [
@@ -36,7 +37,7 @@ class GuestImportService
 
         $errors = [];
         foreach ($import->failures() as $failure) {
-            $errors[] = "Baris {$failure->row()}, kolom {$failure->attribute()}: " . implode(', ', $failure->errors());
+            $errors[] = "Baris {$failure->row()}, kolom {$failure->attribute()}: ".implode(', ', $failure->errors());
         }
 
         $imported = $import->getImportedCount();

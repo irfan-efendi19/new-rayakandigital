@@ -5,7 +5,9 @@ namespace App\Filament\Resources\Subscriptions\Tables;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\PaginationMode;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
 class SubscriptionsTable
@@ -14,16 +16,16 @@ class SubscriptionsTable
     {
         return $table
             ->columns([
-                \Filament\Tables\Columns\TextColumn::make('user.name')
+                TextColumn::make('user.name')
                     ->searchable()
                     ->sortable(),
-                \Filament\Tables\Columns\TextColumn::make('midtrans_order_id')
+                TextColumn::make('midtrans_order_id')
                     ->label('Order ID')
                     ->searchable(),
-                \Filament\Tables\Columns\TextColumn::make('amount')
+                TextColumn::make('amount')
                     ->money('IDR')
                     ->sortable(),
-                \Filament\Tables\Columns\TextColumn::make('payment_status')
+                TextColumn::make('payment_status')
                     ->badge()
                     ->colors([
                         'success' => 'settlement',
@@ -31,12 +33,12 @@ class SubscriptionsTable
                         'danger' => fn ($state) => in_array($state, ['expire', 'cancel']),
                     ])
                     ->sortable(),
-                \Filament\Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable(),
             ])
             ->filters([
-                \Filament\Tables\Filters\SelectFilter::make('payment_status')
+                SelectFilter::make('payment_status')
                     ->label('Status Pembayaran')
                     ->options([
                         'pending' => 'Pending',
@@ -44,7 +46,7 @@ class SubscriptionsTable
                         'expire' => 'Expire',
                         'cancel' => 'Cancel',
                     ]),
-                \Filament\Tables\Filters\SelectFilter::make('tier')
+                SelectFilter::make('tier')
                     ->label('Tier')
                     ->options([
                         'free' => 'Free',

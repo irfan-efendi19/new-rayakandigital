@@ -3,8 +3,9 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
 
 class ResetPassword extends Notification implements ShouldQueue
 {
@@ -22,16 +23,16 @@ class ResetPassword extends Notification implements ShouldQueue
         return ['mail'];
     }
 
-    public function toMail(object $notifiable): \Illuminate\Notifications\Messages\MailMessage
+    public function toMail(object $notifiable): MailMessage
     {
         $url = url(route('password.reset', [
             'token' => $this->token,
             'email' => $notifiable->getEmailForPasswordReset(),
         ], false));
 
-        $expire = config('auth.passwords.' . config('auth.defaults.passwords') . '.expire');
+        $expire = config('auth.passwords.'.config('auth.defaults.passwords').'.expire');
 
-        return (new \Illuminate\Notifications\Messages\MailMessage)
+        return (new MailMessage)
             ->subject('Reset Kata Sandi - Rayakan Digital')
             ->view('emails.forgot-password', [
                 'resetUrl' => $url,

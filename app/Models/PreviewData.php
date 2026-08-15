@@ -12,29 +12,29 @@ class PreviewData extends Model
     protected static function booted(): void
     {
         static::saving(function (self $preview) {
-            if ($preview->isDirty(['bride_father_name', 'bride_mother_name']) || !$preview->bride_parents) {
+            if ($preview->isDirty(['bride_father_name', 'bride_mother_name']) || ! $preview->bride_parents) {
                 $parts = [];
                 if ($preview->bride_father_name) {
-                    $parts[] = 'Bapak ' . $preview->bride_father_name;
+                    $parts[] = 'Bapak '.$preview->bride_father_name;
                 }
                 if ($preview->bride_mother_name) {
-                    $parts[] = 'Ibu ' . $preview->bride_mother_name;
+                    $parts[] = 'Ibu '.$preview->bride_mother_name;
                 }
-                if (!empty($parts)) {
-                    $preview->bride_parents = 'Putri dari ' . implode(' & ', $parts);
+                if (! empty($parts)) {
+                    $preview->bride_parents = 'Putri dari '.implode(' & ', $parts);
                 }
             }
 
-            if ($preview->isDirty(['groom_father_name', 'groom_mother_name']) || !$preview->groom_parents) {
+            if ($preview->isDirty(['groom_father_name', 'groom_mother_name']) || ! $preview->groom_parents) {
                 $parts = [];
                 if ($preview->groom_father_name) {
-                    $parts[] = 'Bapak ' . $preview->groom_father_name;
+                    $parts[] = 'Bapak '.$preview->groom_father_name;
                 }
                 if ($preview->groom_mother_name) {
-                    $parts[] = 'Ibu ' . $preview->groom_mother_name;
+                    $parts[] = 'Ibu '.$preview->groom_mother_name;
                 }
-                if (!empty($parts)) {
-                    $preview->groom_parents = 'Putra dari ' . implode(' & ', $parts);
+                if (! empty($parts)) {
+                    $preview->groom_parents = 'Putra dari '.implode(' & ', $parts);
                 }
             }
         });
@@ -129,6 +129,7 @@ class PreviewData extends Model
 
         return array_map(function ($event, $index) use ($baseDate) {
             $offset = $event['date_offset_days'] ?? 0;
+
             return [
                 'event_title' => $event['event_title'] ?? 'Acara',
                 'event_date' => $baseDate->copy()->addDays($offset)->format('Y-m-d'),

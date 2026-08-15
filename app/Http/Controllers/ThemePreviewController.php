@@ -13,8 +13,42 @@ class ThemePreviewController extends Controller
 {
     public function show(string $themeSlug)
     {
+        $aliases = [
+            'webtoon' => 'manga',
+            'comic' => 'manga',
+            'komik' => 'manga',
+            'library-card' => 'library_card',
+            'vintage-book' => 'library_card',
+            'vintage_book' => 'library_card',
+            'novel' => 'library_card',
+            'buku' => 'library_card',
+            'perpustakaan' => 'library_card',
+            'newspaper' => 'newspaper',
+            'koran' => 'newspaper',
+            'breaking-news' => 'newspaper',
+            'breaking_news' => 'newspaper',
+            'news' => 'newspaper',
+            'berita' => 'newspaper',
+            'ojek-online' => 'ojek_online',
+            'ojek_online' => 'ojek_online',
+            'gofood' => 'ojek_online',
+            'gojek' => 'ojek_online',
+            'grab' => 'ojek_online',
+            'delivery-order' => 'ojek_online',
+            'delivery_order' => 'ojek_online',
+            'ojol' => 'ojek_online',
+        ];
+
+        $effectiveSlug = $aliases[$themeSlug] ?? $themeSlug;
+        $themeSlugUnderscore = str_replace('-', '_', $effectiveSlug);
+        $themeSlugDash = str_replace('_', '-', $effectiveSlug);
+
         $theme = Theme::with('previewData')
-            ->where('view_path', 'themes.'.$themeSlug)
+            ->where(function ($query) use ($effectiveSlug, $themeSlugUnderscore, $themeSlugDash) {
+                $query->where('view_path', 'themes.'.$effectiveSlug)
+                    ->orWhere('view_path', 'themes.'.$themeSlugUnderscore)
+                    ->orWhere('view_path', 'themes.'.$themeSlugDash);
+            })
             ->where('is_active', true)
             ->firstOrFail();
 

@@ -14,7 +14,7 @@ class EnsureTierAccess
      * Middleware ini memvalidasi akses berdasarkan tier invitation (bukan user).
      * Pastikan route memiliki parameter invitation agar dapat diperiksa.
      *
-     * @param  \Closure(Request): Response  $next
+     * @param  Closure(Request): Response  $next
      * @param  string  ...$tiers  Allowed tiers (e.g., 'silver', 'gold', 'platinum')
      */
     public function handle(Request $request, Closure $next, string ...$tiers): Response

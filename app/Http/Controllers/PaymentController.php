@@ -30,7 +30,7 @@ class PaymentController extends Controller
 
             if ($subscription && $subscription->payment_status === 'settlement') {
                 return redirect()->route('dashboard')
-                    ->with('success', 'Pembayaran berhasil! Paket ' . ucfirst($subscription->tier) . ' Anda sudah aktif.');
+                    ->with('success', 'Pembayaran berhasil! Paket '.ucfirst($subscription->tier).' Anda sudah aktif.');
             }
 
             if ($subscription && $subscription->payment_status === 'pending') {
@@ -38,7 +38,7 @@ class PaymentController extends Controller
 
                 if ($updated && $updated->payment_status === 'settlement') {
                     return redirect()->route('dashboard')
-                        ->with('success', 'Pembayaran berhasil! Paket ' . ucfirst($updated->tier) . ' Anda sudah aktif.');
+                        ->with('success', 'Pembayaran berhasil! Paket '.ucfirst($updated->tier).' Anda sudah aktif.');
                 }
             }
         }

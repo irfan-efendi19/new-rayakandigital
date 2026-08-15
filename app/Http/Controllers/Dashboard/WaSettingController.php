@@ -54,9 +54,9 @@ class WaSettingController extends Controller
         $cleanPhone = preg_replace('/[^0-9]/', '', $validated['phone_number']);
 
         if (str_starts_with($cleanPhone, '0')) {
-            $cleanPhone = '62' . substr($cleanPhone, 1);
-        } elseif (!str_starts_with($cleanPhone, '62')) {
-            $cleanPhone = '62' . $cleanPhone;
+            $cleanPhone = '62'.substr($cleanPhone, 1);
+        } elseif (! str_starts_with($cleanPhone, '62')) {
+            $cleanPhone = '62'.$cleanPhone;
         }
 
         if (strlen($cleanPhone) < 11 || strlen($cleanPhone) > 15) {

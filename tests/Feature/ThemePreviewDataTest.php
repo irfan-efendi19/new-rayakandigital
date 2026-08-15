@@ -159,3 +159,170 @@ test('whatsapp theme preview renders successfully with expected elements', funct
         ->assertSee('Budi Santoso')
         ->assertSee('Rina Wati');
 });
+
+test('tiktok theme preview renders successfully with expected elements', function () {
+    $this->seed(ThemeSeeder::class);
+
+    $this->get(route('theme.preview', 'tiktok'))
+        ->assertSuccessful()
+        ->assertSee('TikTok')
+        ->assertSee('Buka FYP Undangan')
+        ->assertSee('Aaliyah Massaid')
+        ->assertSee('Thariq Halilintar');
+});
+
+test('x theme preview renders successfully with expected elements', function () {
+    $this->seed(ThemeSeeder::class);
+
+    $this->get(route('theme.preview', 'x'))
+        ->assertSuccessful()
+        ->assertSee('Buka Feed Undangan')
+        ->assertSee('Sheila Dara Aisha')
+        ->assertSee('Oxavia Aldiano');
+});
+
+test('instagram theme preview renders successfully with expected elements', function () {
+    $this->seed(ThemeSeeder::class);
+
+    $this->get(route('theme.preview', 'instagram'))
+        ->assertSuccessful()
+        ->assertSee('Buka Feed Instagram')
+        ->assertSee('Mahalini Raharja')
+        ->assertSee('Rizky Febian');
+});
+
+test('spotify wrapped theme preview renders successfully with expected elements', function () {
+    $this->seed(ThemeSeeder::class);
+
+    $this->get(route('theme.preview', 'spotify-wrapped'))
+        ->assertSuccessful()
+        ->assertSee('Start My Wrapped')
+        ->assertSee('Kevin Aprilio')
+        ->assertSee('Vicy Melanie');
+});
+
+test('threads theme preview renders successfully with expected elements', function () {
+    $this->seed(ThemeSeeder::class);
+
+    $this->get(route('theme.preview', 'threads'))
+        ->assertSuccessful()
+        ->assertSee('Buka Thread Undangan')
+        ->assertSee('Angga Yunanda')
+        ->assertSee('Shenina Cinnamon');
+});
+
+test('excel theme preview renders successfully with expected elements', function () {
+    $this->seed(ThemeSeeder::class);
+
+    $this->get(route('theme.preview', 'excel'))
+        ->assertSuccessful()
+        ->assertSee('Buka Workbook Undangan')
+        ->assertSee('Ryan Nugraha')
+        ->assertSee('Sheila Maharani');
+});
+
+test('boarding pass theme preview renders successfully with expected elements', function () {
+    $this->seed(ThemeSeeder::class);
+
+    $this->get(route('theme.preview', 'boarding-pass'))
+        ->assertSuccessful()
+        ->assertSee('Buka Paspor Undangan')
+        ->assertSee('Dion Wiyoko')
+        ->assertSee('Vanya Alodia');
+});
+
+test('retro game theme preview renders successfully with expected elements', function () {
+    $this->seed(ThemeSeeder::class);
+
+    $this->get(route('theme.preview', 'retro-game'))
+        ->assertSuccessful()
+        ->assertSee('PRESS START TO PLAY')
+        ->assertSee('Genta Pratama')
+        ->assertSee('Kirana Larasati');
+});
+
+test('board game theme preview renders successfully with expected elements', function () {
+    $this->seed(ThemeSeeder::class);
+
+    $this->get(route('theme.preview', 'board-game'))
+        ->assertSuccessful()
+        ->assertSee('Buka Papan Permainan')
+        ->assertSee('Kevin Sanjaya')
+        ->assertSee('Valencia Amanda');
+});
+
+test('manga and webtoon theme preview renders successfully with expected elements', function () {
+    $this->seed(ThemeSeeder::class);
+
+    $this->get(route('theme.preview', 'manga'))
+        ->assertSuccessful()
+        ->assertSee('WEBTOON ORIGINAL')
+        ->assertSee('BACA WEBTOON SEKARANG')
+        ->assertSee('Kenzo Pratama')
+        ->assertSee('Aiko Larasati');
+
+    $this->get(route('theme.preview', 'webtoon'))
+        ->assertSuccessful()
+        ->assertSee('WEBTOON ORIGINAL')
+        ->assertSee('BACA WEBTOON SEKARANG')
+        ->assertSee('Kenzo Pratama')
+        ->assertSee('Aiko Larasati');
+});
+
+test('library card and vintage book theme preview renders successfully with expected elements', function () {
+    $this->seed(ThemeSeeder::class);
+
+    $this->get(route('theme.preview', 'library-card'))
+        ->assertSuccessful()
+        ->assertSee('DEWEY DECIMAL')
+        ->assertSee('BUKA HALAMAN PERTAMA')
+        ->assertSee('Julian Arthur')
+        ->assertSee('Clarissa Roseline');
+
+    $this->get(route('theme.preview', 'vintage-book'))
+        ->assertSuccessful()
+        ->assertSee('DEWEY DECIMAL')
+        ->assertSee('BUKA HALAMAN PERTAMA')
+        ->assertSee('Julian Arthur')
+        ->assertSee('Clarissa Roseline');
+});
+
+test('newspaper and breaking news theme preview renders successfully with expected elements', function () {
+    $this->seed(ThemeSeeder::class);
+
+    $this->get(route('theme.preview', 'newspaper'))
+        ->assertSuccessful()
+        ->assertSee('THE DAILY GAZETTE')
+        ->assertSee('BREAKING NEWS')
+        ->assertSee('Bramantyo Wicaksono')
+        ->assertSee('Anya Praditya');
+
+    $this->get(route('theme.preview', 'breaking-news'))
+        ->assertSuccessful()
+        ->assertSee('THE DAILY GAZETTE')
+        ->assertSee('BREAKING NEWS')
+        ->assertSee('Bramantyo Wicaksono')
+        ->assertSee('Anya Praditya');
+});
+
+test('ojek online and delivery order theme preview renders successfully with expected elements', function () {
+    $this->seed(ThemeSeeder::class);
+
+    $this->get(route('theme.preview', 'ojek-online'))
+        ->assertSuccessful()
+        ->assertSee('GoNikah')
+        ->assertSee('PESAN SEKARANG')
+        ->assertSee('Dimas Anggara')
+        ->assertSee('Sarah Amanda');
+
+    $this->get(route('theme.preview', 'gofood'))
+        ->assertSuccessful()
+        ->assertSee('GoNikah')
+        ->assertSee('PESAN SEKARANG')
+        ->assertSee('Dimas Anggara')
+        ->assertSee('Sarah Amanda');
+});
+
+
+
+

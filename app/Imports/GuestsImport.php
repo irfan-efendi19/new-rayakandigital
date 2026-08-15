@@ -5,20 +5,23 @@ namespace App\Imports;
 use App\Models\Guest;
 use App\Models\GuestCategory;
 use App\Models\InvitationEvent;
+use Maatwebsite\Excel\Concerns\Importable;
+use Maatwebsite\Excel\Concerns\SkipsFailures;
+use Maatwebsite\Excel\Concerns\SkipsOnFailure;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
-use Maatwebsite\Excel\Concerns\Importable;
-use Maatwebsite\Excel\Concerns\SkipsOnFailure;
-use Maatwebsite\Excel\Concerns\SkipsFailures;
 
-class GuestsImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnFailure
+class GuestsImport implements SkipsOnFailure, ToModel, WithHeadingRow, WithValidation
 {
     use Importable, SkipsFailures;
 
     protected $invitationId;
+
     protected $events;
+
     protected $imported = 0;
+
     protected $skipped = 0;
 
     public function __construct(int $invitationId)
@@ -103,11 +106,11 @@ class GuestsImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnFa
         $number = preg_replace('/[^0-9]/', '', $number);
 
         if (str_starts_with($number, '08')) {
-            return '628' . substr($number, 2);
+            return '628'.substr($number, 2);
         }
 
         if (str_starts_with($number, '8')) {
-            return '628' . substr($number, 1);
+            return '628'.substr($number, 1);
         }
 
         return $number;

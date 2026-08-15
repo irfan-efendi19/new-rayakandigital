@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Guest;
 use App\Models\Invitation;
 use App\Models\WhatsappLog;
+use App\Services\GuestImportService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
@@ -15,7 +16,7 @@ class GuestController extends Controller
     {
         Gate::authorize('view', $invitation);
 
-        if (!$invitation->hasFeature('personal_link')) {
+        if (! $invitation->hasFeature('personal_link')) {
             abort(403, 'Fitur manajemen tamu tidak tersedia pada paket Anda.');
         }
     }
@@ -38,9 +39,9 @@ class GuestController extends Controller
         if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('phone', 'like', "%{$search}%")
-                  ->orWhere('whatsapp_number', 'like', "%{$search}%")
-                  ->orWhereHas('guestCategory', fn ($cq) => $cq->where('name', 'like', "%{$search}%"));
+                    ->orWhere('phone', 'like', "%{$search}%")
+                    ->orWhere('whatsapp_number', 'like', "%{$search}%")
+                    ->orWhereHas('guestCategory', fn ($cq) => $cq->where('name', 'like', "%{$search}%"));
             });
         }
 
@@ -194,12 +195,12 @@ class GuestController extends Controller
             ->with('success', "Semua {$deleted} tamu berhasil dihapus.");
     }
 
-    public function import(Request $request, Invitation $invitation, \App\Services\GuestImportService $importService)
+    public function import(Request $request, Invitation $invitation, GuestImportService $importService)
     {
         $this->authorizePersonalLink($invitation);
         Gate::authorize('update', $invitation);
 
-        if (!$invitation->hasFeature('guest_import')) {
+        if (! $invitation->hasFeature('guest_import')) {
             abort(403, 'Fitur import tamu tidak tersedia pada paket Anda.');
         }
 

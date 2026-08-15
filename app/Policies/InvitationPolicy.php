@@ -4,11 +4,10 @@ namespace App\Policies;
 
 use App\Models\Invitation;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class InvitationPolicy
 {
-    public function before(User $user, string $ability): bool|null
+    public function before(User $user, string $ability): ?bool
     {
         if ($user->isSuperAdmin()) {
             return true;

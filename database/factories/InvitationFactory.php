@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Invitation;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,7 +19,7 @@ class InvitationFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => \App\Models\User::factory(),
+            'user_id' => User::factory(),
             'slug' => $this->faker->unique()->slug(),
             'title' => $this->faker->sentence(3),
             'bride_name' => $this->faker->name('female'),

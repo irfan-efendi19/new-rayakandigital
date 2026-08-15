@@ -11,7 +11,7 @@ class WhatsAppPaymentController extends Controller
 {
     public function showInvoice(Request $request, Order $order, PaymentRoutingService $routing)
     {
-        if ($order->user_id !== $request->user()->id && !$request->user()->isAdmin()) {
+        if ($order->user_id !== $request->user()->id && ! $request->user()->isAdmin()) {
             abort(403);
         }
 
@@ -20,7 +20,7 @@ class WhatsAppPaymentController extends Controller
 
     public function sendWhatsApp(Request $request, Order $order, PaymentRoutingService $routing)
     {
-        if ($order->user_id !== $request->user()->id && !$request->user()->isAdmin()) {
+        if ($order->user_id !== $request->user()->id && ! $request->user()->isAdmin()) {
             abort(403);
         }
 
@@ -46,7 +46,7 @@ class WhatsAppPaymentController extends Controller
             $order->total_with_code
         );
 
-        $waUrl = 'https://api.whatsapp.com/send?phone=' . $phone . '&text=' . urlencode($message);
+        $waUrl = 'https://api.whatsapp.com/send?phone='.$phone.'&text='.urlencode($message);
 
         return redirect()->away($waUrl);
     }

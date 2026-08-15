@@ -16,7 +16,7 @@ class FeatureGateService
 
     public function isLocked(Invitation $invitation, string $featureKey): bool
     {
-        return !$this->canAccess($invitation, $featureKey);
+        return ! $this->canAccess($invitation, $featureKey);
     }
 
     public function lockedState(Invitation $invitation, string $featureKey): array
@@ -36,7 +36,7 @@ class FeatureGateService
         return [
             'locked' => true,
             'message' => $requiredTier
-                ? 'Fitur ini memerlukan paket ' . $requiredTier->package_name . '. Silakan upgrade paket Anda.'
+                ? 'Fitur ini memerlukan paket '.$requiredTier->package_name.'. Silakan upgrade paket Anda.'
                 : 'Fitur ini tidak tersedia pada paket Anda.',
             'required_tier' => $requiredTier?->package_name ?? null,
             'required_tier_code' => $requiredTier?->package_code ?? null,
@@ -47,7 +47,7 @@ class FeatureGateService
     {
         $feature = PlatformFeature::where('feature_key', $featureKey)->first();
 
-        if (!$feature) {
+        if (! $feature) {
             return null;
         }
 

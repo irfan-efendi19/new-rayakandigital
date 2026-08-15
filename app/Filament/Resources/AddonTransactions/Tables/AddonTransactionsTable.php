@@ -2,13 +2,14 @@
 
 namespace App\Filament\Resources\AddonTransactions\Tables;
 
+use App\Filament\Resources\AddonTransactions\AddonTransactionActions;
 use App\Filament\Resources\AddonTransactions\AddonTransactionResource;
 use App\Models\AddonTransaction;
+use Filament\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\PaginationMode;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
-use Filament\Actions\Action;
 
 class AddonTransactionsTable
 {
@@ -102,16 +103,14 @@ class AddonTransactionsTable
                     ->label('Konfirmasi & Aktifkan')
                     ->icon('heroicon-o-check-circle')
                     ->color('success')
-                    ->visible(fn (AddonTransaction $record): bool =>
-                        $record->payment_status === 'verifying' && $record->payment_method === 'manual_bank'
+                    ->visible(fn (AddonTransaction $record): bool => $record->payment_status === 'verifying' && $record->payment_method === 'manual_bank'
                     )
                     ->action(function (AddonTransaction $record) {
-                        \App\Filament\Resources\AddonTransactions\AddonTransactionActions::confirmAndActivate($record);
+                        AddonTransactionActions::confirmAndActivate($record);
                     })
                     ->requiresConfirmation()
                     ->modalHeading('Konfirmasi Pembayaran Add-On')
-                    ->modalDescription(fn (AddonTransaction $record): string =>
-                        'Pastikan dana Rp' . number_format((int) $record->amount, 0, ',', '.') . ' sudah masuk ke rekening. Add-on akan langsung aktif untuk undangan ini.'
+                    ->modalDescription(fn (AddonTransaction $record): string => 'Pastikan dana Rp'.number_format((int) $record->amount, 0, ',', '.').' sudah masuk ke rekening. Add-on akan langsung aktif untuk undangan ini.'
                     )
                     ->modalSubmitActionLabel('Ya, Konfirmasi & Aktifkan'),
                 Action::make('view')

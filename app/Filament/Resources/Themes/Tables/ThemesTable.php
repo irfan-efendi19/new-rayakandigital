@@ -5,6 +5,9 @@ namespace App\Filament\Resources\Themes\Tables;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
 class ThemesTable
@@ -13,31 +16,31 @@ class ThemesTable
     {
         return $table
             ->columns([
-                \Filament\Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
-                \Filament\Tables\Columns\TextColumn::make('themeCategory.name')
+                TextColumn::make('themeCategory.name')
                     ->label('Category')
                     ->searchable()
                     ->sortable()
                     ->badge(),
-                \Filament\Tables\Columns\TextColumn::make('view_path')
+                TextColumn::make('view_path')
                     ->searchable(),
-                \Filament\Tables\Columns\IconColumn::make('is_premium')
+                IconColumn::make('is_premium')
                     ->boolean()
                     ->sortable(),
-                \Filament\Tables\Columns\IconColumn::make('is_active')
+                IconColumn::make('is_active')
                     ->boolean()
                     ->sortable(),
             ])
             ->filters([
-                \Filament\Tables\Filters\SelectFilter::make('is_premium')
+                SelectFilter::make('is_premium')
                     ->label('Tipe')
                     ->options([
                         true => 'Premium',
                         false => 'Reguler',
                     ]),
-                \Filament\Tables\Filters\SelectFilter::make('is_active')
+                SelectFilter::make('is_active')
                     ->label('Status')
                     ->options([
                         true => 'Aktif',

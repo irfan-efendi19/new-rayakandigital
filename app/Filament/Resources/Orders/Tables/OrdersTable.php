@@ -2,13 +2,14 @@
 
 namespace App\Filament\Resources\Orders\Tables;
 
+use App\Filament\Resources\Orders\OrderActions;
 use App\Filament\Resources\Orders\OrderResource;
 use App\Models\Order;
+use Filament\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\PaginationMode;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
-use Filament\Actions\Action;
 
 class OrdersTable
 {
@@ -112,16 +113,14 @@ class OrdersTable
                     ->label('Setujui & Aktifkan')
                     ->icon('heroicon-o-check-circle')
                     ->color('success')
-                    ->visible(fn (Order $record): bool =>
-                        $record->payment_status === 'verifying' && $record->payment_method_used === 'manual_bank'
+                    ->visible(fn (Order $record): bool => $record->payment_status === 'verifying' && $record->payment_method_used === 'manual_bank'
                     )
                     ->action(function (Order $record) {
-                        \App\Filament\Resources\Orders\OrderActions::activate($record);
+                        OrderActions::activate($record);
                     })
                     ->requiresConfirmation()
                     ->modalHeading('Setujui & Aktifkan Pesanan')
-                    ->modalDescription(fn (Order $record): string =>
-                        'Pastikan dana dengan kode unik ' . $record->unique_code . ' sudah masuk ke rekening sebelum mengaktifkan.'
+                    ->modalDescription(fn (Order $record): string => 'Pastikan dana dengan kode unik '.$record->unique_code.' sudah masuk ke rekening sebelum mengaktifkan.'
                     )
                     ->modalSubmitActionLabel('Ya, Setujui & Aktifkan'),
                 Action::make('view')
@@ -132,4 +131,3 @@ class OrdersTable
             ->bulkActions([]);
     }
 }
-

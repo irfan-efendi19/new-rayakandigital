@@ -38,6 +38,7 @@ class CleanupExpiredInvitations extends Command
 
         if ($count === 0) {
             $this->info('No expired invitations to clean up.');
+
             return Command::SUCCESS;
         }
 
@@ -45,7 +46,7 @@ class CleanupExpiredInvitations extends Command
 
         foreach ($expiredInvitations as $invitation) {
             // Delete invitation (this cascade deletes guests, rsvps, wishes if migration configured it)
-            // Wait, invitation model doesn't automatically delete files from disk if not hooked, 
+            // Wait, invitation model doesn't automatically delete files from disk if not hooked,
             // but standard Eloquent delete is sufficient as per the schema setup.
             $invitation->delete();
         }

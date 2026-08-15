@@ -33,7 +33,7 @@ class AddonTransactionActions
 
             Notification::make()
                 ->title('Gagal mengkonfirmasi transaksi!')
-                ->body('Terjadi kesalahan: ' . $e->getMessage())
+                ->body('Terjadi kesalahan: '.$e->getMessage())
                 ->danger()
                 ->send();
 
@@ -42,7 +42,7 @@ class AddonTransactionActions
 
         Notification::make()
             ->title('Transaksi berhasil dikonfirmasi!')
-            ->body('Add-on "' . $transaction->addon->name . '" sudah aktif untuk undangan ' . $transaction->invitation->title . '.')
+            ->body('Add-on "'.$transaction->addon->name.'" sudah aktif untuk undangan '.$transaction->invitation->title.'.')
             ->success()
             ->send();
     }

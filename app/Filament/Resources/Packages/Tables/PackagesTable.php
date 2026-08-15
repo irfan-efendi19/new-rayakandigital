@@ -30,7 +30,7 @@ class PackagesTable
                     ->sortable(),
                 TextColumn::make('active_period_days')
                     ->label('Masa Aktif')
-                    ->formatStateUsing(fn ($state) => $state === 0 ? 'Seumur Hidup' : $state . ' Hari')
+                    ->formatStateUsing(fn ($state) => $state === 0 ? 'Seumur Hidup' : $state.' Hari')
                     ->sortable(),
                 IconColumn::make('is_visible')
                     ->label('Tampil')

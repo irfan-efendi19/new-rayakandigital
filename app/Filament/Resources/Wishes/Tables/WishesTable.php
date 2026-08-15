@@ -5,7 +5,10 @@ namespace App\Filament\Resources\Wishes\Tables;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\PaginationMode;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
 class WishesTable
@@ -14,24 +17,24 @@ class WishesTable
     {
         return $table
             ->columns([
-                \Filament\Tables\Columns\TextColumn::make('invitation.title')
+                TextColumn::make('invitation.title')
                     ->searchable()
                     ->sortable(),
-                \Filament\Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
-                \Filament\Tables\Columns\TextColumn::make('message')
+                TextColumn::make('message')
                     ->limit(50)
                     ->searchable(),
-                \Filament\Tables\Columns\IconColumn::make('is_hidden')
+                IconColumn::make('is_hidden')
                     ->boolean()
                     ->sortable(),
-                \Filament\Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable(),
             ])
             ->filters([
-                \Filament\Tables\Filters\SelectFilter::make('is_hidden')
+                SelectFilter::make('is_hidden')
                     ->label('Visibilitas')
                     ->options([
                         true => 'Tersembunyi',

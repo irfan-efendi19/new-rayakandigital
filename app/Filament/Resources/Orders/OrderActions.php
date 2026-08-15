@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Orders;
 
 use App\Models\Order;
+use App\Models\Package;
 use App\Models\Subscription;
 use App\Services\WhatsAppNotificationService;
 use Filament\Notifications\Notification;
@@ -22,7 +23,7 @@ class OrderActions
                 'payment_status' => 'success',
                 'verified_by' => auth()->id(),
             ]);
-            $durationDays = config('midtrans.duration_days.' . $tier);
+            $durationDays = config('midtrans.duration_days.'.$tier);
 
             $existingSubscription = Subscription::where('user_id', $user->id)
                 ->where('payment_status', 'settlement')
@@ -52,7 +53,7 @@ class OrderActions
             if ($order->invitation_id) {
                 $invitation = $order->invitation;
                 if ($invitation) {
-                    $package = \App\Models\Package::where('package_code', $tier)->first();
+                    $package = Package::where('package_code', $tier)->first();
                     $invitation->tier = $tier;
                     $invitation->pricing_tier_id = $package?->id;
                     $invitation->expires_at = $durationDays ? now()->addDays($durationDays) : null;
@@ -68,7 +69,7 @@ class OrderActions
 
             Notification::make()
                 ->title('Gagal mengaktifkan pesanan!')
-                ->body('Terjadi kesalahan: ' . $e->getMessage())
+                ->body('Terjadi kesalahan: '.$e->getMessage())
                 ->danger()
                 ->send();
 
@@ -84,7 +85,7 @@ class OrderActions
 
         Notification::make()
             ->title('Pesanan berhasil diaktifkan!')
-            ->body('Paket ' . ucfirst($tier) . ' untuk ' . $user->name . ' telah aktif.')
+            ->body('Paket '.ucfirst($tier).' untuk '.$user->name.' telah aktif.')
             ->success()
             ->send();
     }

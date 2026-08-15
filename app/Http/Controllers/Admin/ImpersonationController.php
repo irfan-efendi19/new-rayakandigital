@@ -39,7 +39,7 @@ class ImpersonationController extends Controller
         Cache::forget('admin_user_ids');
 
         return redirect()->route('dashboard')
-            ->with('success', 'Anda sedang mengintip dasbor sebagai ' . $user->name . '.');
+            ->with('success', 'Anda sedang mengintip dasbor sebagai '.$user->name.'.');
     }
 
     public function leave(Request $request)

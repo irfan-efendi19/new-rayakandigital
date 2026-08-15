@@ -5,7 +5,10 @@ namespace App\Filament\Resources\Users\Tables;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\PaginationMode;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
 class UsersTable
@@ -14,35 +17,35 @@ class UsersTable
     {
         return $table
             ->columns([
-                \Filament\Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
-                \Filament\Tables\Columns\TextColumn::make('email')
+                TextColumn::make('email')
                     ->searchable()
                     ->sortable(),
-                \Filament\Tables\Columns\TextColumn::make('role')
+                TextColumn::make('role')
                     ->badge()
                     ->colors([
                         'primary' => 'admin',
                         'gray' => 'user',
                     ])
                     ->sortable(),
-                \Filament\Tables\Columns\IconColumn::make('is_banned')
+                IconColumn::make('is_banned')
                     ->boolean()
                     ->sortable(),
-                \Filament\Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                \Filament\Tables\Filters\SelectFilter::make('role')
+                SelectFilter::make('role')
                     ->label('Role')
                     ->options([
                         'user' => 'Standard User',
                         'admin' => 'Administrator',
                     ]),
-                \Filament\Tables\Filters\SelectFilter::make('is_banned')
+                SelectFilter::make('is_banned')
                     ->label('Status Banned')
                     ->options([
                         true => 'Banned',

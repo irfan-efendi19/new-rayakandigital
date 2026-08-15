@@ -41,9 +41,8 @@ test('admin updating invitation creates an audit trail log', function () {
 
     Log::shouldReceive('info')
         ->once()
-        ->withArgs(fn ($message) => 
-            str_contains($message, 'Admin (ID: ' . $admin->id) &&
-            str_contains($message, 'updated Invitation (ID: ' . $invitation->id) &&
+        ->withArgs(fn ($message) => str_contains($message, 'Admin (ID: '.$admin->id) &&
+            str_contains($message, 'updated Invitation (ID: '.$invitation->id) &&
             str_contains($message, 'title')
         );
 
@@ -61,9 +60,8 @@ test('admin deleting invitation creates an audit trail log', function () {
 
     Log::shouldReceive('info')
         ->once()
-        ->withArgs(fn ($message) => 
-            str_contains($message, 'Admin (ID: ' . $admin->id) &&
-            str_contains($message, 'deleted Invitation (ID: ' . $invitation->id)
+        ->withArgs(fn ($message) => str_contains($message, 'Admin (ID: '.$admin->id) &&
+            str_contains($message, 'deleted Invitation (ID: '.$invitation->id)
         );
 
     $this->actingAs($admin);

@@ -4,8 +4,8 @@ namespace App\Filament\Resources\Themes\Pages;
 
 use App\Filament\Resources\Themes\ThemeResource;
 use App\Services\ThemeUploaderService;
-use Filament\Resources\Pages\CreateRecord;
 use Filament\Notifications\Notification;
+use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Validation\ValidationException;
 
 class CreateTheme extends CreateRecord
@@ -16,7 +16,7 @@ class CreateTheme extends CreateRecord
     {
         $zipFilePath = $data['zip_file'] ?? null;
 
-        if (!$zipFilePath) {
+        if (! $zipFilePath) {
             throw ValidationException::withMessages([
                 'zip_file' => 'A ZIP file is required.',
             ]);
@@ -25,10 +25,10 @@ class CreateTheme extends CreateRecord
         try {
             $uploader = app(ThemeUploaderService::class);
             $viewPath = $uploader->deploy($zipFilePath, $data['name']);
-            
+
             $data['view_path'] = $viewPath;
             unset($data['zip_file']); // Don't try to save this to DB
-            
+
             return $data;
         } catch (\Exception $e) {
             Notification::make()

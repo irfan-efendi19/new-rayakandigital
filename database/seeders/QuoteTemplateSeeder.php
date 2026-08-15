@@ -42,7 +42,7 @@ class QuoteTemplateSeeder extends Seeder
             ],
             [
                 'label' => 'Al-Mumtahanah 10',
-                'content' => "Sesungguhnya aku menikahi engkau dengan mas kawin yang telah aku berikan.",
+                'content' => 'Sesungguhnya aku menikahi engkau dengan mas kawin yang telah aku berikan.',
                 'source' => 'QS. Al-Mumtahanah: 10',
                 'sort_order' => 6,
             ],

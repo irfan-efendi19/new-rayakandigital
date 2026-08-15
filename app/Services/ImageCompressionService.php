@@ -22,7 +22,7 @@ class ImageCompressionService
 
     public function __construct()
     {
-        $this->manager = new ImageManager(new Driver());
+        $this->manager = new ImageManager(new Driver);
     }
 
     public function compress(UploadedFile $file, string $directory, string $disk = 'public'): string
@@ -34,8 +34,8 @@ class ImageCompressionService
         }
 
         $quality = self::INITIAL_QUALITY;
-        $filename = uniqid() . '.webp';
-        $tempPath = sys_get_temp_dir() . '/' . $filename;
+        $filename = uniqid().'.webp';
+        $tempPath = sys_get_temp_dir().'/'.$filename;
 
         do {
             $encoded = $image->encode(new WebpEncoder($quality));

@@ -37,7 +37,7 @@ class ActivateDokuOrder extends Command
 
         // Update Order
         $order->update(['payment_status' => 'success']);
-        $this->line("✓ Order status → success");
+        $this->line('✓ Order status → success');
 
         // Update Subscription
         $subscription = Subscription::where('midtrans_order_id', $orderId)->first();
@@ -64,7 +64,7 @@ class ActivateDokuOrder extends Command
                 }
             }
         } else {
-            $this->warn("Subscription tidak ditemukan untuk order ini.");
+            $this->warn('Subscription tidak ditemukan untuk order ini.');
         }
 
         $this->newLine();

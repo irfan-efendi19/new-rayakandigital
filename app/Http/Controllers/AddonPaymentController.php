@@ -17,18 +17,18 @@ class AddonPaymentController extends Controller
 
             if ($transaction && $transaction->payment_status === 'settlement') {
                 return redirect()->route('dashboard.invitations.addons.index', $transaction->invitation)
-                    ->with('success', 'Pembayaran berhasil! Add-on "' . $transaction->addon->name . '" sudah aktif.');
+                    ->with('success', 'Pembayaran berhasil! Add-on "'.$transaction->addon->name.'" sudah aktif.');
             }
 
             if ($transaction && $transaction->payment_status === 'pending') {
-                if (!$midtransService->isSimulationMode()) {
+                if (! $midtransService->isSimulationMode()) {
                     $midtransService->checkAddonTransactionStatus($referenceOrderId);
                     $transaction->refresh();
                 }
 
                 if ($transaction->payment_status === 'settlement') {
                     return redirect()->route('dashboard.invitations.addons.index', $transaction->invitation)
-                        ->with('success', 'Pembayaran berhasil! Add-on "' . $transaction->addon->name . '" sudah aktif.');
+                        ->with('success', 'Pembayaran berhasil! Add-on "'.$transaction->addon->name.'" sudah aktif.');
                 }
 
                 if ($transaction->payment_status === 'pending' && $transaction->payment_method === 'manual_bank') {
@@ -49,7 +49,7 @@ class AddonPaymentController extends Controller
 
             if ($transaction && in_array($transaction->payment_status, ['deny', 'expire', 'cancel'])) {
                 return redirect()->route('dashboard.invitations.addons.index', $transaction->invitation)
-                    ->with('error', 'Pembayaran ' . $transaction->payment_status . '. Silakan coba beli add-on kembali.');
+                    ->with('error', 'Pembayaran '.$transaction->payment_status.'. Silakan coba beli add-on kembali.');
             }
         }
 

@@ -24,11 +24,11 @@ class GalleryController extends Controller
         $maxPhotos = $invitation->maxGalleryPhotos();
 
         if (count($currentPhotos) + count($request->file('photos')) > $maxPhotos) {
-            return back()->with('error', 'Batas maksimal foto untuk paket Anda adalah ' . $maxPhotos . ' foto.');
+            return back()->with('error', 'Batas maksimal foto untuk paket Anda adalah '.$maxPhotos.' foto.');
         }
 
         foreach ($request->file('photos') as $photo) {
-            $path = $compressor->compress($photo, 'gallery/' . $invitation->id);
+            $path = $compressor->compress($photo, 'gallery/'.$invitation->id);
             $currentPhotos[] = $path;
         }
 

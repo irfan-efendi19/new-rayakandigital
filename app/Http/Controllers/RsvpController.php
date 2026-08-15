@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Invitation;
-use App\Models\Wish;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
@@ -23,7 +22,7 @@ class RsvpController extends Controller
 
             if ($validated['pax'] > $maxPaxPerGuest) {
                 throw ValidationException::withMessages([
-                    'pax' => 'Jumlah rombongan maksimal ' . $maxPaxPerGuest . ' orang per tamu.',
+                    'pax' => 'Jumlah rombongan maksimal '.$maxPaxPerGuest.' orang per tamu.',
                 ]);
             }
 
@@ -40,7 +39,7 @@ class RsvpController extends Controller
 
                 if ($validated['pax'] > $remaining) {
                     throw ValidationException::withMessages([
-                        'pax' => 'Sisa kuota hanya ' . $remaining . ' orang. Silakan kurangi jumlah rombongan.',
+                        'pax' => 'Sisa kuota hanya '.$remaining.' orang. Silakan kurangi jumlah rombongan.',
                     ]);
                 }
             }
@@ -54,7 +53,7 @@ class RsvpController extends Controller
             $invitation->rsvps()->create($validated);
         }
 
-        if (!empty($validated['message'])) {
+        if (! empty($validated['message'])) {
             $invitation->wishes()->create([
                 'guest_name' => $validated['guest_name'],
                 'message' => $validated['message'],

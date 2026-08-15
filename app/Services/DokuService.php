@@ -49,10 +49,10 @@ class DokuService
         $cfg = $this->methodConfig ?? null;
 
         if ($cfg) {
-            return !empty($cfg->doku_client_id) && !empty($cfg->doku_secret_key);
+            return ! empty($cfg->doku_client_id) && ! empty($cfg->doku_secret_key);
         }
 
-        return !empty(config('doku.client_id')) && !empty(config('doku.secret_key'));
+        return ! empty(config('doku.client_id')) && ! empty(config('doku.secret_key'));
     }
 
     /**
@@ -177,16 +177,17 @@ class DokuService
         ]);
 
         $isValid = $this->verifySignature($request);
-        if (!$isValid) {
+        if (! $isValid) {
             Log::error('DOKU Signature Verification Failed', [
                 'headers' => $request->headers->all(),
                 'body' => $request->getContent(),
             ]);
+
             return null;
         }
 
         $payload = $request->all();
-        if (empty($payload) || !isset($payload['order'])) {
+        if (empty($payload) || ! isset($payload['order'])) {
             $decoded = json_decode($request->getContent(), true);
             if (json_last_error() === JSON_ERROR_NONE) {
                 $payload = $decoded;
@@ -195,11 +196,12 @@ class DokuService
 
         $orderId = $payload['order']['invoice_number'] ?? null;
 
-        if (!$orderId) {
+        if (! $orderId) {
             Log::error('DOKU Webhook: invoice_number not found in payload', [
                 'payload' => $payload,
                 'raw_body' => $request->getContent(),
             ]);
+
             return null;
         }
 
@@ -248,11 +250,12 @@ class DokuService
         }
 
         $order = Order::where('order_id', $orderId)->first();
-        if (!$order) {
+        if (! $order) {
             Log::error('DOKU Webhook: Order not found', [
                 'order_id' => $orderId,
                 'transaction_status' => $transactionStatus,
             ]);
+
             return null;
         }
 
@@ -304,15 +307,15 @@ class DokuService
         $body = json_encode($payload);
         $digest = base64_encode(hash('sha256', $body, true));
 
-        $signatureString = 'Client-Id:' . $this->clientId . "\n" .
-            'Request-Id:' . $requestId . "\n" .
-            'Request-Timestamp:' . $timestamp . "\n" .
-            'Request-Target:' . $targetPath . "\n" .
-            'Digest:' . $digest;
+        $signatureString = 'Client-Id:'.$this->clientId."\n".
+            'Request-Id:'.$requestId."\n".
+            'Request-Timestamp:'.$timestamp."\n".
+            'Request-Target:'.$targetPath."\n".
+            'Digest:'.$digest;
 
         $signature = base64_encode(hash_hmac('sha256', $signatureString, $this->secretKey, true));
 
-        return 'HMACSHA256=' . $signature;
+        return 'HMACSHA256='.$signature;
     }
 
     /**
@@ -321,7 +324,7 @@ class DokuService
     protected function verifySignature(Request $request): bool
     {
         $incomingSignature = $request->header('Signature');
-        if (!$incomingSignature) {
+        if (! $incomingSignature) {
             Log::error('DOKU Webhook: Missing Signature header');
 
             return false;
@@ -342,17 +345,17 @@ class DokuService
         $body = $request->getContent();
         $digest = base64_encode(hash('sha256', $body, true));
 
-        $signatureString = 'Client-Id:' . $this->clientId . "\n" .
-            'Request-Id:' . $requestId . "\n" .
-            'Request-Timestamp:' . $timestamp . "\n" .
-            'Request-Target:' . $targetPath . "\n" .
-            'Digest:' . $digest;
+        $signatureString = 'Client-Id:'.$this->clientId."\n".
+            'Request-Id:'.$requestId."\n".
+            'Request-Timestamp:'.$timestamp."\n".
+            'Request-Target:'.$targetPath."\n".
+            'Digest:'.$digest;
 
-        $expectedSignature = 'HMACSHA256=' . base64_encode(hash_hmac('sha256', $signatureString, $this->secretKey, true));
+        $expectedSignature = 'HMACSHA256='.base64_encode(hash_hmac('sha256', $signatureString, $this->secretKey, true));
 
         $isValid = hash_equals($expectedSignature, (string) $incomingSignature);
 
-        if (!$isValid) {
+        if (! $isValid) {
             Log::error('DOKU Webhook Signature Mismatch', [
                 'expected' => $expectedSignature,
                 'received' => $incomingSignature,

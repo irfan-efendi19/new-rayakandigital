@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
+use chillerlan\QRCode\Data\QRMatrix;
 use chillerlan\QRCode\QRCode;
 use chillerlan\QRCode\QROptions;
-use chillerlan\QRCode\Data\QRMatrix;
 
 class QrWithLogoService
 {
@@ -66,7 +66,7 @@ class QrWithLogoService
 
             return [
                 'type' => 'png',
-                'data' => 'data:image/png;base64,' . base64_encode($imageData),
+                'data' => 'data:image/png;base64,'.base64_encode($imageData),
             ];
         }
 
@@ -102,7 +102,7 @@ class QrWithLogoService
 
         return [
             'type' => 'svg',
-            'data' => 'data:image/svg+xml;base64,' . base64_encode($svg),
+            'data' => 'data:image/svg+xml;base64,'.base64_encode($svg),
         ];
     }
 }

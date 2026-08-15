@@ -18,4 +18,3 @@ Route::prefix('v1')->group(function () {
     Route::post('/user/complete-onboarding', [OnboardingController::class, 'completeOnboarding'])
         ->name('api.user.complete-onboarding');
 });
-

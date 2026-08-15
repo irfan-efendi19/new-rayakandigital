@@ -19,16 +19,17 @@ class WhatsAppDiagnosticController extends Controller
 
         $lines[] = '=== GATEWAY CONFIGURATION ===';
 
-        if (!$gateway) {
+        if (! $gateway) {
             $lines[] = '❌ No active WhatsApp gateway found.';
             $lines[] = 'Go to admin → WhatsApp Gateway Settings → create one.';
+
             return $this->render($lines);
         }
 
         $lines[] = "✅ Provider: {$gateway->provider_name}";
         $lines[] = "✅ API URL:  {$gateway->api_url}";
-        $lines[] = '✅ API Token: ' . (strlen($token) > 6
-            ? substr($token, 0, 4) . '****' . substr($token, -4)
+        $lines[] = '✅ API Token: '.(strlen($token) > 6
+            ? substr($token, 0, 4).'****'.substr($token, -4)
             : '(too short)');
 
         $lines[] = '';
@@ -59,12 +60,13 @@ class WhatsAppDiagnosticController extends Controller
         $lines[] = '=== FONNTE API TEST ===';
 
         if ($gateway->provider_name !== 'fonnte') {
-            $lines[] = "⏭ Skipping — not Fonnte.";
+            $lines[] = '⏭ Skipping — not Fonnte.';
+
             return $this->render($lines);
         }
 
         $url = rtrim($gateway->api_url ?: 'https://api.fonnte.com/send', '/');
-        if (!str_contains($url, '/send')) {
+        if (! str_contains($url, '/send')) {
             $url .= '/send';
         }
 
@@ -75,7 +77,7 @@ class WhatsAppDiagnosticController extends Controller
         $lines[] = "POST {$url}";
         $lines[] = "target: {$testTarget}";
         $lines[] = "message: {$testMessage}";
-        $lines[] = "countryCode: 62";
+        $lines[] = 'countryCode: 62';
         $lines[] = '';
 
         try {
@@ -132,8 +134,12 @@ class WhatsAppDiagnosticController extends Controller
         $html .= '<pre>';
         foreach ($lines as $line) {
             $cls = '';
-            if (str_starts_with($line, '✅')) $cls = 'pass';
-            if (str_starts_with($line, '❌')) $cls = 'fail';
+            if (str_starts_with($line, '✅')) {
+                $cls = 'pass';
+            }
+            if (str_starts_with($line, '❌')) {
+                $cls = 'fail';
+            }
             $html .= $cls ? "<span class=\"{$cls}\">{$line}</span>\n" : "{$line}\n";
         }
         $html .= '</pre>';
@@ -141,13 +147,14 @@ class WhatsAppDiagnosticController extends Controller
         $html .= '<form method="GET">';
         $html .= '<h3 style="color:#f59e0b;margin-top:0">📱 Kirim Test WhatsApp</h3>';
         $html .= '<label>Nomor Target (contoh: 08123456789)</label>';
-        $html .= '<input type="text" name="test_target" value="' . htmlspecialchars($lastTarget) . '" placeholder="08123456789">';
+        $html .= '<input type="text" name="test_target" value="'.htmlspecialchars($lastTarget).'" placeholder="08123456789">';
         $html .= '<label>Pesan</label>';
-        $html .= '<textarea name="test_message" rows="3">' . htmlspecialchars($lastMessage) . '</textarea>';
+        $html .= '<textarea name="test_message" rows="3">'.htmlspecialchars($lastMessage).'</textarea>';
         $html .= '<button type="submit">📤 Kirim Test</button>';
         $html .= '</form>';
 
         $html .= '</body></html>';
+
         return response($html);
     }
 }

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Invitation;
 use App\Models\AddonTransaction;
+use App\Models\Invitation;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class InvoiceController extends Controller
@@ -21,7 +21,7 @@ class InvoiceController extends Controller
 
         $invoiceNumber = $latestTransaction
             ? $latestTransaction->reference_order_id
-            : 'RD-' . date('Ymd') . '-' . $invitation->id;
+            : 'RD-'.date('Ymd').'-'.$invitation->id;
 
         $packagePrice = $invitation->package_price;
         $addonTotal = $invitation->addons->sum('pivot.purchased_price');
@@ -29,18 +29,18 @@ class InvoiceController extends Controller
 
         $data = [
             'invoice_number' => $invoiceNumber,
-            'issue_date'     => now()->translatedFormat('d F Y'),
-            'invitation'     => $invitation,
-            'user'           => $invitation->user,
-            'package_price'  => $packagePrice,
-            'addons'         => $invitation->addons,
-            'grand_total'    => $grandTotal,
+            'issue_date' => now()->translatedFormat('d F Y'),
+            'invitation' => $invitation,
+            'user' => $invitation->user,
+            'package_price' => $packagePrice,
+            'addons' => $invitation->addons,
+            'grand_total' => $grandTotal,
         ];
 
         $pdf = Pdf::loadView('dashboard.billing.invoice_pdf', $data)
             ->setPaper('a4', 'portrait')
             ->setWarnings(false);
 
-        return $pdf->download('Invoice-' . $invoiceNumber . '-' . $invitation->slug . '.pdf');
+        return $pdf->download('Invoice-'.$invoiceNumber.'-'.$invitation->slug.'.pdf');
     }
 }
