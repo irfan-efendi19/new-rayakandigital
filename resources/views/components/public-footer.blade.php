@@ -9,21 +9,29 @@
                 Platform pembuatan undangan digital terdepan di Indonesia. Mudah, elegan, dan penuh fitur modern.
             </p>
             <div class="flex gap-2.5">
-                <a href="https://www.instagram.com/rayakan_digital/" target="_blank" aria-label="Instagram"
+                <a href="https://www.instagram.com/rayakandigital.id/" target="_blank" aria-label="Instagram"
                     class="w-9 h-9 rounded-full bg-footer-pill dark:bg-secondary-800 flex items-center justify-center text-footer-muted dark:text-neutral-400 hover:bg-primary hover:text-white transition-all duration-200 hover:-translate-y-0.5">
                     <i class="fa-brands fa-instagram text-sm"></i>
                 </a>
-                <a href="https://www.facebook.com/rayakan.digital" target="_blank" aria-label="Facebook"
+                <a href="https://www.facebook.com/rayakandigital.id" target="_blank" aria-label="Facebook"
                     class="w-9 h-9 rounded-full bg-footer-pill dark:bg-secondary-800 flex items-center justify-center text-footer-muted dark:text-neutral-400 hover:bg-primary hover:text-white transition-all duration-200 hover:-translate-y-0.5">
                     <i class="fa-brands fa-facebook text-sm"></i>
+                </a>
+                <a href="https://www.threads.com/@rayakandigital.id" target="_blank" aria-label="TikTok"
+                    class="w-9 h-9 rounded-full bg-footer-pill dark:bg-secondary-800 flex items-center justify-center text-footer-muted dark:text-neutral-400 hover:bg-primary hover:text-white transition-all duration-200 hover:-translate-y-0.5">
+                    <i class="fa-brands fa-threads"></i>
+                </a>
+                <a href="https://x.com/rayakandigital" target="_blank" aria-label="TikTok"
+                    class="w-9 h-9 rounded-full bg-footer-pill dark:bg-secondary-800 flex items-center justify-center text-footer-muted dark:text-neutral-400 hover:bg-primary hover:text-white transition-all duration-200 hover:-translate-y-0.5">
+                    <i class="fa-brands fa-x-twitter"></i>
+                </a>
+                <a href="https://www.tiktok.com/@rayakandigital.id" target="_blank" aria-label="TikTok"
+                    class="w-9 h-9 rounded-full bg-footer-pill dark:bg-secondary-800 flex items-center justify-center text-footer-muted dark:text-neutral-400 hover:bg-primary hover:text-white transition-all duration-200 hover:-translate-y-0.5">
+                    <i class="fa-brands fa-tiktok text-sm"></i>
                 </a>
                 <a href="https://www.youtube.com/@rayakandigital" target="_blank" aria-label="Youtube"
                     class="w-9 h-9 rounded-full bg-footer-pill dark:bg-secondary-800 flex items-center justify-center text-footer-muted dark:text-neutral-400 hover:bg-primary hover:text-white transition-all duration-200 hover:-translate-y-0.5">
                     <i class="fa-brands fa-youtube text-sm"></i>
-                </a>
-                <a href="https://www.tiktok.com/@rayakan.digital" target="_blank" aria-label="TikTok"
-                    class="w-9 h-9 rounded-full bg-footer-pill dark:bg-secondary-800 flex items-center justify-center text-footer-muted dark:text-neutral-400 hover:bg-primary hover:text-white transition-all duration-200 hover:-translate-y-0.5">
-                    <i class="fa-brands fa-tiktok text-sm"></i>
                 </a>
             </div>
         </div>
