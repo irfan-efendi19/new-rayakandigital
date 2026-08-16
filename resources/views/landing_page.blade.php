@@ -1032,12 +1032,54 @@
                 <div class="lg:col-span-8 space-y-3 faq-item">
 
                     @foreach([
-                            ['q' => 'Bagaimana cara membuat undangan digital?', 'a' => 'Setelah melakukan pemesanan, Anda mendapatkan akses dashboard untuk mengisi data acara, foto, galeri, lokasi, dan informasi lainnya secara mandiri — tanpa perlu menunggu admin.'],
-                            ['q' => 'Apakah data undangan bisa diubah setelah dibuat?', 'a' => 'Ya. Nama mempelai, jadwal acara, foto, galeri, lokasi, dan informasi lainnya dapat diubah kapan saja melalui dashboard selama masa aktif undangan.'],
-                            ['q' => 'Apakah tersedia nama tamu otomatis?', 'a' => 'Tentu. Anda dapat membuat link khusus untuk setiap tamu sehingga nama tamu akan tampil otomatis saat undangan dibuka — terasa lebih personal.'],
-                            ['q' => 'Apakah undangan bisa dibagikan ke WhatsApp?', 'a' => 'Ya. Link undangan dapat dibagikan melalui WhatsApp, Instagram, Telegram, Facebook, email, maupun media sosial lainnya.'],
-                            ['q' => 'Apakah tersedia RSVP dan buku tamu?', 'a' => 'Ya. Tamu dapat mengisi konfirmasi kehadiran (RSVP) serta memberikan ucapan dan doa langsung melalui halaman undangan.'],
-                            ['q' => 'Apakah saya akan mendapatkan bantuan jika mengalami kesulitan?', 'a' => 'Tentu. Tim support kami siap membantu melalui WhatsApp jika Anda mengalami kendala saat membuat atau mengelola undangan.'],
+                            [
+    'q' => 'Gimana alur cara bikin undangan di Rayakan Digital?', 
+    'a' => 'Simpel banget! Pertama, kamu pilih tema favorit dari katalog premium. Kedua, daftar akun gratis dan isi detail acara. Ketiga, aktifkan paket sesuai kebutuhanmu. Terakhir, tinggal generate link personal dan sebarin deh!'
+],
+[
+    'q' => 'Apakah saya bisa liat dulu tampilan desainnya sebelum beli?', 
+    'a' => 'Bisa banget! Kamu bebas jelajahi seluruh katalog desain premium dan cek pratinjau (preview) langsungnya dulu sampai nemu yang paling cocok sebelum milih.'
+],
+[
+    'q' => 'Apakah daftar akun di Rayakan Digital itu bayar?', 
+    'a' => 'Enggak dong, daftar akun itu 100% gratis! Sekarang proses pendaftaran jauh lebih praktis karena Anda bisa daftar mudah pakai Google. Cukup dengan satu klik, Anda bisa langsung masuk, mencoba dashboard secara gratis, dan melengkapi data acara sebelum memutuskan untuk melakukan pembayaran aktivasi paket.'
+],
+[
+    'q' => 'Kapan saya harus isi info acara dan foto-foto undangan?', 
+    'a' => 'Setelah bikin akun gratis, kamu langsung dapet akses ke dashboard buat melengkapi info mempelai, jadwal acara, galeri foto, hingga preferensi undangan kamu sendiri.'
+],
+[
+    'q' => 'Kalau udah selesai bikin, datanya masih bisa diganti gak?', 
+    'a' => 'Bisa banget dong! Mau ganti jadwal, foto, lokasi Google Maps, atau typo nama mempelai, tinggal edit aja lewat dashboard kapan aja selama masa aktif undangan kamu masih jalan.'
+],
+[
+    'q' => 'Apakah saya bisa ganti tema kalau udah terlanjur milih di awal?', 
+    'a' => 'Bisa banget! Selama masa aktif undangan masih ada, kamu bebas ganti ke tema premium lainnya kapan aja lewat dashboard tanpa harus ngulang isi data dari awal.'
+],
+[
+    'q' => 'Bagaimana proses pembayaran dan aktivasi fitur undangannya?', 
+    'a' => 'Tinggal pilih paket yang pas sama kebutuhanmu, lalu bayar lewat berbagai metode pembayaran yang tersedia. Begitu transaksi selesai, semua fitur undangan kamu bakal aktif seketika tanpa nunggu lama!'
+],
+[
+    'q' => 'Gimana cara sebar undangan dan tau siapa aja yang mau dateng?', 
+    'a' => 'Kamu tinggal generate link khusus buat tiap tamu, lalu kirim via WhatsApp. Nanti kamu bisa langsung pantau konfirmasi kehadiran (RSVP) mereka secara real-time dari dashboard.'
+],
+[
+    'q' => 'Berapa banyak nama tamu yang bisa saya buatkan link khusus?', 
+    'a' => 'Tanpa batas! Kamu bebas buat link personal sebanyak yang kamu mau buat disebar ke semua keluarga, teman, dan rekan kerja.'
+],
+[
+    'q' => 'Fitur WhatsApp massal (blast) itu gimana cara pakainya?', 
+    'a' => 'Tinggal rapihin daftar nama tamu di dashboard, lalu kamu bisa sebarin pesan berisi link unik tersebut ke banyak nomor WhatsApp sekaligus tanpa perlu ketik manual satu per satu.'
+],
+[
+    'q' => 'Ada fitur RSVP sama buku tamu buat titip ucapan?', 
+    'a' => 'Pasti ada! Tamu kamu bisa langsung konfirmasi dateng atau enggak (RSVP) plus nulis ucapan manis dan doa restu secara real-time di halaman undangan kamu.'
+],
+[
+    'q' => 'Kalau bingung pas ngisi data atau aktifin paket, ada yang bantu gak?', 
+    'a' => 'Santai aja, gak usah pusing! Tim support Rayakan Digital siap gercep bantu kamu via WhatsApp kalau nemu kendala pas lagi nyusun atau ngaktifin undangan.'
+],
                         ] as $i => $item)
                         <div data-aos="fade-up" data-aos-delay="{{ ($i % 3 + 1) * 60 }}"
                             class="bg-white dark:bg-secondary-800 rounded-2xl border border-neutral-100 dark:border-secondary-700 overflow-hidden hover:border-primary-200 dark:hover:border-primary-800 transition-colors duration-200">

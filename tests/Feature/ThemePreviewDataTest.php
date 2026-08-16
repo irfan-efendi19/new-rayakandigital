@@ -379,3 +379,68 @@ test('surat cinta dan kertas buku bergaris theme preview renders successfully wi
         ->assertSee('BALAS SURAT');
 });
 
+test('majalah fashion and tabloid gosip y2k theme preview renders successfully with expected elements', function () {
+    $this->seed(ThemeSeeder::class);
+
+    $this->get(route('theme.preview', 'tabloid'))
+        ->assertSuccessful()
+        ->assertSee('VOW')
+        ->assertSee('EKSKLUSIF: Pasangan Ini Akhirnya Menikah')
+        ->assertSee('Kevin')
+        ->assertSee('Clarissa')
+        ->assertSee('SUBSCRIBE TO OUR HAPPINESS');
+
+    $this->get(route('theme.preview', 'majalah'))
+        ->assertSuccessful()
+        ->assertSee('VOW')
+        ->assertSee('EKSKLUSIF: Pasangan Ini Akhirnya Menikah')
+        ->assertSee('Kevin')
+        ->assertSee('Clarissa')
+        ->assertSee('SUBSCRIBE TO OUR HAPPINESS');
+});
+
+test('kai wedding access and boarding pass theme preview renders successfully with expected elements', function () {
+    $this->seed(ThemeSeeder::class);
+
+    $this->get(route('theme.preview', 'kai'))
+        ->assertSuccessful()
+        ->assertSee('KAI WEDDING ACCESS')
+        ->assertSee('WDD2026')
+        ->assertSee('KA 01 - CINTA EXPRESS')
+        ->assertSee('Stasiun Masa Lajang')
+        ->assertSee('Stasiun Pelaminan')
+        ->assertSee('CHECK-IN TIKET');
+
+    $this->get(route('theme.preview', 'kai-access'))
+        ->assertSuccessful()
+        ->assertSee('KAI WEDDING ACCESS')
+        ->assertSee('WDD2026')
+        ->assertSee('KA 01 - CINTA EXPRESS')
+        ->assertSee('Stasiun Masa Lajang')
+        ->assertSee('Stasiun Pelaminan')
+        ->assertSee('CHECK-IN TIKET');
+});
+
+test('crypto wedding dashboard and lct protocol theme preview renders successfully with expected elements', function () {
+    $this->seed(ThemeSeeder::class);
+
+    $this->get(route('theme.preview', 'crypto'))
+        ->assertSuccessful()
+        ->assertSee('$LCT PROTOCOL')
+        ->assertSee('$LOVE/IDR')
+        ->assertSee('Satria')
+        ->assertSee('Aurel')
+        ->assertSee('CONNECT WALLET');
+
+    $this->get(route('theme.preview', 'lct'))
+        ->assertSuccessful()
+        ->assertSee('$LCT PROTOCOL')
+        ->assertSee('$LOVE/IDR')
+        ->assertSee('Satria')
+        ->assertSee('Aurel')
+        ->assertSee('CONNECT WALLET');
+});
+
+
+
+

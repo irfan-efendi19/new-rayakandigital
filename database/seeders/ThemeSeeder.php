@@ -135,6 +135,21 @@ class ThemeSeeder extends Seeder
             ['name' => 'Surat Cinta Zaman Dulu & Kertas Bergaris', 'thumbnail_portrait' => '/images/themes/surat-cinta-thumb.svg', 'is_premium' => true, 'is_active' => true]
         );
 
+        $tabloid = Theme::updateOrCreate(
+            ['view_path' => 'themes.tabloid'],
+            ['name' => 'Majalah Fashion & Tabloid Gosip Y2K', 'thumbnail_portrait' => '/images/themes/tabloid-thumb.svg', 'is_premium' => true, 'is_active' => true]
+        );
+
+        $kai = Theme::updateOrCreate(
+            ['view_path' => 'themes.kai'],
+            ['name' => 'KAI Wedding Access & E-Boarding Pass', 'thumbnail_portrait' => '/images/themes/kai-thumb.svg', 'is_premium' => true, 'is_active' => true]
+        );
+
+        $crypto = Theme::updateOrCreate(
+            ['view_path' => 'themes.crypto'],
+            ['name' => 'Crypto Wedding Dashboard & LCT Protocol', 'thumbnail_portrait' => '/images/themes/crypto-thumb.svg', 'is_premium' => true, 'is_active' => true]
+        );
+
         $themes = [
             $elegant->id => [
                 'title' => 'Pernikahan Raisa & Hamish',
@@ -1691,6 +1706,195 @@ class ThemeSeeder extends Seeder
                         'place_name' => 'Omah Kenangan Joglo Heritage Garden',
                         'place_address' => 'Jl. Taman Siswa No. 12, Wirogunan, Mergangsan, Yogyakarta',
                         'google_maps_url' => 'https://maps.google.com/?q=-7.8052,110.3752',
+                    ],
+                ],
+            ],
+            $tabloid->id => [
+                'title' => 'EKSKLUSIF: Pasangan Ini Akhirnya Menikah Juga Setelah Bertahun-tahun Digantung! (Vow Magazine)',
+                'groom_full_name' => 'Kevin Alexander, B.A.',
+                'groom_short_name' => 'Kevin',
+                'groom_father_name' => 'Ir. Hartono Alexander',
+                'groom_mother_name' => 'Silvia Tanudjaja',
+                'bride_full_name' => 'Clarissa Valerie, M.Ds.',
+                'bride_short_name' => 'Clarissa',
+                'bride_father_name' => 'Dr. Andrew Setiawan',
+                'bride_mother_name' => 'Liana Megawati',
+                'cover_photo' => 'https://picsum.photos/seed/fashioncover/800/1200',
+                'groom_photo' => 'https://picsum.photos/seed/kevin/600/600',
+                'bride_photo' => 'https://picsum.photos/seed/clarissa/600/600',
+                'timezone' => 'Asia/Jakarta',
+                'event_date_offset_days' => 50,
+                'event_time' => '10:00',
+                'event_time_end' => '18:00',
+                'venue_name' => 'The Glass House Grand Ballroom & Sky Garden',
+                'venue_address' => 'Jl. Senopati No. 88, Kebayoran Baru, Jakarta Selatan',
+                'venue_maps_url' => 'https://maps.google.com/?q=-6.2301,106.8092',
+                'quote_content' => 'Dan di antara tanda-tanda kebesaran-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu merasa tenteram kepadanya, dan dijadikan-Nya di antaramu rasa kasih dan sayang.',
+                'quote_source' => 'QS. Ar-Rum: 21 · Editorial Note of The Year',
+                'love_story' => 'Eksklusif Cover Story: Dari rumor kencan rahasia, masa tunggu bertahun-tahun yang bikin netizen heboh, hingga kejutan cincin lamaran mewah di Paris.',
+                'stories' => [
+                    ['story_date' => 'EDISI #01 · 2019', 'story_title' => 'Tertangkap Kamera Paparazzi: Kencan Pertama! 📸', 'story_description' => 'Kevin dan Clarissa pertama kali tertangkap kamera netizen saat menghadiri peragaan busana di Jakarta. Isu cinlok pun langsung menjadi tajuk utama!'],
+                    ['story_date' => 'EDISI #02 · 2022', 'story_title' => 'Rumor Putus? Ternyata Sibuk Bangun Karir! 💼', 'story_description' => 'Sempat dikabarkan gantung tanpa kejelasan status karena kesibukan masing-masing, keduanya membuktikan bahwa cinta sejati selalu tahu jalan pulang.'],
+                    ['story_date' => 'EDISI #03 · 2025', 'story_title' => 'Breaking News: Cincin Berlian Melingkar! 💍', 'story_description' => 'Dalam makan malam romantis di bawah gemerlap Menara Eiffel, Kevin resmi berlutut dan melamar Clarissa. Respon Clarissa: "Finally, YES!"'],
+                ],
+                'gallery_photos' => [
+                    'https://picsum.photos/seed/vogue1/800/1200',
+                    'https://picsum.photos/seed/vogue2/1200/800',
+                    'https://picsum.photos/seed/vogue3/800/1200',
+                    'https://picsum.photos/seed/vogue4/1200/800',
+                ],
+                'gift_banks' => [
+                    ['bank_name' => 'Bank BCA (Wedding Registry Kevin)', 'account_number' => '5010998877', 'account_holder' => 'Kevin Alexander'],
+                    ['bank_name' => 'Bank Mandiri (Endorsement Fund Clarissa)', 'account_number' => '1370001122334', 'account_holder' => 'Clarissa Valerie'],
+                ],
+                'gift_ewallets' => [
+                    ['wallet_name' => 'GoPay VIP', 'wallet_number' => '081299887766'],
+                    ['wallet_name' => 'OVO Premiere', 'wallet_number' => '081299887755'],
+                ],
+                'events' => [
+                    [
+                        'event_title' => 'Red Carpet & Holy Matrimony (Pemberkatan / Akad)',
+                        'date_offset_days' => 0,
+                        'start_time' => '10:00',
+                        'end_time' => '12:30',
+                        'is_until_finished' => false,
+                        'place_name' => 'The Glass House Grand Ballroom',
+                        'place_address' => 'Jl. Senopati No. 88, Kebayoran Baru, Jakarta Selatan',
+                        'google_maps_url' => 'https://maps.google.com/?q=-6.2301,106.8092',
+                    ],
+                    [
+                        'event_title' => 'The Grand Gala Premiere Reception (Pesta Resepsi)',
+                        'date_offset_days' => 0,
+                        'start_time' => '14:00',
+                        'end_time' => '18:00',
+                        'is_until_finished' => false,
+                        'place_name' => 'The Glass House Grand Ballroom & Sky Garden',
+                        'place_address' => 'Jl. Senopati No. 88, Kebayoran Baru, Jakarta Selatan',
+                        'google_maps_url' => 'https://maps.google.com/?q=-6.2301,106.8092',
+                    ],
+                ],
+            ],
+            $kai->id => [
+                'title' => 'E-Boarding Pass KAI Wedding Access: Dimas & Tiara (KA 01 Cinta Express)',
+                'groom_full_name' => 'Dimas Arya Pratama, S.T.',
+                'groom_short_name' => 'Dimas',
+                'groom_father_name' => 'Bambang Pratama',
+                'groom_mother_name' => 'Sulistiyowati',
+                'bride_full_name' => 'Tiara Anindita, S.Kom.',
+                'bride_short_name' => 'Tiara',
+                'bride_father_name' => 'Ir. Hendra Kusuma',
+                'bride_mother_name' => 'Dewi Anggraini',
+                'timezone' => 'Asia/Jakarta',
+                'event_date_offset_days' => 42,
+                'event_time' => '08:00',
+                'event_time_end' => '17:00',
+                'venue_name' => 'Stasiun Pelaminan Grand Hall (Ballroom Kereta Kencana)',
+                'venue_address' => 'Jl. Stasiun Tugu No. 1, Sosromenduran, Gedong Tengen, Yogyakarta',
+                'venue_maps_url' => 'https://maps.google.com/?q=-7.7891,110.3634',
+                'quote_content' => 'Dan di antara tanda-tanda kebesaran-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu merasa tenteram kepadanya, dan dijadikan-Nya di antaramu rasa kasih dan sayang.',
+                'quote_source' => 'QS. Ar-Rum: 21 · Maklumat Perjalanan KAI',
+                'love_story' => 'Perjalanan Rel Cinta: Berangkat dari Stasiun Masa Lajang, transit di Stasiun Komitmen, dan kini resmi tiba di Stasiun Pelaminan Sehidup Semati.',
+                'stories' => [
+                    ['story_date' => 'PEMBERHENTIAN 1 · 2019', 'story_title' => 'Stasiun Keberangkatan: Gerbong Prameks Solo-Jogja 🚆', 'story_description' => 'Pertemuan tak sengaja di gerbong 3 saat berebut tempat duduk menjadi awal mula obrolan panjang di sepanjang jalur rel.'],
+                    ['story_date' => 'PEMBERHENTIAN 2 · 2022', 'story_title' => 'Stasiun Transit: Komitmen Melewati Ujian Jarak 🚉', 'story_description' => 'Tiket kereta api menjadi saksi perjuangan cinta antar kota yang tak pernah padam hingga menguatkan janji setia.'],
+                    ['story_date' => 'PEMBERHENTIAN 3 · 2025', 'story_title' => 'Stasiun Akhir: Semboyan 35 Tanda Sah Lamaran 💍', 'story_description' => 'Di peron stasiun kenangan, Dimas menyerahkan tiket masa depan dan cincin lamaran dengan kepastian seumur hidup.'],
+                ],
+                'gallery_photos' => [
+                    'https://picsum.photos/seed/train1/800/1200',
+                    'https://picsum.photos/seed/train2/1200/800',
+                    'https://picsum.photos/seed/train3/800/1200',
+                    'https://picsum.photos/seed/train4/1200/800',
+                ],
+                'gift_banks' => [
+                    ['bank_name' => 'Bank Mandiri (Kas KAI Dimas)', 'account_number' => '1370019988776', 'account_holder' => 'Dimas Arya Pratama'],
+                    ['bank_name' => 'Bank BCA (Tiket Kasih Tiara)', 'account_number' => '8030554433', 'account_holder' => 'Tiara Anindita'],
+                ],
+                'gift_ewallets' => [
+                    ['wallet_name' => 'LinkAja KAI', 'wallet_number' => '081277889900'],
+                    ['wallet_name' => 'GoPay', 'wallet_number' => '081277889911'],
+                ],
+                'events' => [
+                    [
+                        'event_title' => 'Pemberangkatan Utama: Akad Nikah (Ijab Qabul Express)',
+                        'date_offset_days' => 0,
+                        'start_time' => '08:00',
+                        'end_time' => '10:30',
+                        'is_until_finished' => false,
+                        'place_name' => 'Stasiun Pelaminan Grand Hall (Ballroom Kereta Kencana)',
+                        'place_address' => 'Jl. Stasiun Tugu No. 1, Sosromenduran, Gedong Tengen, Yogyakarta',
+                        'google_maps_url' => 'https://maps.google.com/?q=-7.7891,110.3634',
+                    ],
+                    [
+                        'event_title' => 'Kedatangan Akbar: Grand Wedding Reception',
+                        'date_offset_days' => 0,
+                        'start_time' => '11:00',
+                        'end_time' => '16:00',
+                        'is_until_finished' => false,
+                        'place_name' => 'Stasiun Pelaminan Grand Hall (Ballroom Kereta Kencana)',
+                        'place_address' => 'Jl. Stasiun Tugu No. 1, Sosromenduran, Gedong Tengen, Yogyakarta',
+                        'google_maps_url' => 'https://maps.google.com/?q=-7.7891,110.3634',
+                    ],
+                ],
+            ],
+            $crypto->id => [
+                'title' => 'Crypto Wedding Dashboard & LCT Protocol: Satria & Aurel ($LOVE All-Time High)',
+                'groom_full_name' => 'Satria Wibisono, S.Kom.',
+                'groom_short_name' => 'Satria',
+                'groom_father_name' => 'Gunawan Wibisono',
+                'groom_mother_name' => 'Ratna Juwita',
+                'bride_full_name' => 'Aurelia Natasha, B.Sc.',
+                'bride_short_name' => 'Aurel',
+                'bride_father_name' => 'Rudy Hermanto',
+                'bride_mother_name' => 'Theresia Megawati',
+                'timezone' => 'Asia/Jakarta',
+                'event_date_offset_days' => 45,
+                'event_time' => '08:00',
+                'event_time_end' => '17:00',
+                'venue_name' => 'Gedung Resepsi Pelaminan Hall Surabaya (Grand Ballroom Block #01)',
+                'venue_address' => 'Jl. Mayjen Sungkono No. 89, Dukuh Pakis, Surabaya, Jawa Timur',
+                'venue_maps_url' => 'https://maps.google.com/?q=-7.2912,112.7145',
+                'quote_content' => 'Dan di antara tanda-tanda kebesaran-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu merasa tenteram kepadanya, dan dijadikan-Nya di antaramu rasa kasih dan sayang.',
+                'quote_source' => 'QS. Ar-Rum: 21 · Smart Contract Genesis Block',
+                'love_story' => 'LCT Protocol Roadmap: Dari fase akumulasi kenalan, support line kuat saat market bear LDR, hingga breakout All-Time High menuju ikatan suci pernikahan.',
+                'stories' => [
+                    ['story_date' => 'GENESIS BLOCK · 2020', 'story_title' => 'Seed Round: Pertemuan Pertama di Hackathon Web3 💻', 'story_description' => 'Satria dan Aurel pertama kali berkolaborasi dalam satu tim developer. Dari diskusi kode smart contract hingga menjadi obrolan asmara non-stop.'],
+                    ['story_date' => 'TESTNET STAGE · 2022', 'story_title' => 'Support Line Kuat: Menghadapi Volatilitas Jarak 🛡️', 'story_description' => 'Ujian jarak dan kesibukan justru menjadi level support terkuat yang membuktikan fundamental cinta keduanya sangat solid (Unbreakable Hash).'],
+                    ['story_date' => 'MAINNET BREAKOUT · 2025', 'story_title' => 'All-Time High: Cincin Lamaran Resmi Terkunci di Blockchain! 💍', 'story_description' => 'Satria resmi mengeksekusi buy order seumur hidup dengan melamar Aurel. Transaksi cinta terkonfirmasi 100% di konsensus hati.'],
+                ],
+                'gallery_photos' => [
+                    'https://picsum.photos/seed/crypto1/800/1200',
+                    'https://picsum.photos/seed/crypto2/1200/800',
+                    'https://picsum.photos/seed/crypto3/800/1200',
+                    'https://picsum.photos/seed/crypto4/1200/800',
+                ],
+                'gift_banks' => [
+                    ['bank_name' => 'Bank BCA (Treasury Satria)', 'account_number' => '5010778899', 'account_holder' => 'Satria Wibisono'],
+                    ['bank_name' => 'Bank Mandiri (Vault Aurel)', 'account_number' => '1370008899112', 'account_holder' => 'Aurelia Natasha'],
+                ],
+                'gift_ewallets' => [
+                    ['wallet_name' => 'USDT (TRC-20 Wallet)', 'wallet_number' => 'TJ7vK2xQ8z9YmNp4RwLs5tVuBx1yZ9a8Bc'],
+                    ['wallet_name' => 'GoPay', 'wallet_number' => '081266778899'],
+                ],
+                'events' => [
+                    [
+                        'event_title' => 'Mainnet Launch Phase 1: Akad Nikah (Genesis Ijab Qabul)',
+                        'date_offset_days' => 0,
+                        'start_time' => '08:00',
+                        'end_time' => '10:30',
+                        'is_until_finished' => false,
+                        'place_name' => 'Gedung Resepsi Pelaminan Hall Surabaya',
+                        'place_address' => 'Jl. Mayjen Sungkono No. 89, Dukuh Pakis, Surabaya, Jawa Timur',
+                        'google_maps_url' => 'https://maps.google.com/?q=-7.2912,112.7145',
+                    ],
+                    [
+                        'event_title' => 'Mainnet Launch Phase 2: Grand Wedding Reception (ATH Gala)',
+                        'date_offset_days' => 0,
+                        'start_time' => '11:00',
+                        'end_time' => '17:00',
+                        'is_until_finished' => false,
+                        'place_name' => 'Gedung Resepsi Pelaminan Hall Surabaya',
+                        'place_address' => 'Jl. Mayjen Sungkono No. 89, Dukuh Pakis, Surabaya, Jawa Timur',
+                        'google_maps_url' => 'https://maps.google.com/?q=-7.2912,112.7145',
                     ],
                 ],
             ],

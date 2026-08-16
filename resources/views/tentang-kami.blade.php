@@ -204,7 +204,7 @@
                 <h2 class="font-heading text-4xl font-bold text-secondary-800 dark:text-neutral-200 leading-tight mb-2">
                     Perjalanan Kami Membantu
                 </h2>
-                <h2 class="font-heading text-4xl italic text-primary-500 dark:text-primary-400 mb-6">Ribuan Pasangan
+                <h2 class="font-heading text-4xl italic text-primary-500 dark:text-primary-400 mb-6">Pasangan
                 </h2>
 
                 <p class="text-neutral-500 text-sm leading-relaxed mb-4">
@@ -218,7 +218,7 @@
                     dari setiap momen bersejarah dalam hidup Anda.
                 </p>
 
-                <div class="flex gap-10 py-6 border-t border-b border-neutral-200 dark:border-secondary-600">
+                <!-- <div class="flex gap-10 py-6 border-t border-b border-neutral-200 dark:border-secondary-600">
                     <div>
                         <p class="text-3xl font-heading font-bold text-secondary-800 dark:text-neutral-200">5k+</p>
                         <p class="text-xs text-neutral-500 font-semibold uppercase tracking-widest mt-1">Klien Puas</p>
@@ -229,7 +229,7 @@
                         <p class="text-xs text-neutral-500 font-semibold uppercase tracking-widest mt-1">Tamu
                             Terundang</p>
                     </div>
-                </div>
+                </div> -->
             </div>
 
         </div>
@@ -242,7 +242,7 @@
                 Siap Mengabadikan Momen Bahagia Anda?
             </h2>
             <p class="text-white/80 text-sm leading-relaxed max-w-lg mx-auto mb-10">
-                Bergabunglah dengan ribuan pasangan lainnya yang telah berani ke cara modern merayakan cinta. Wujudkan
+                Bergabunglah dengan pasangan lainnya yang telah berani ke cara modern merayakan cinta. Wujudkan
                 undangan impian Anda yang paling berkesan hari ini.
             </p>
             <div class="flex flex-col sm:flex-row gap-3 justify-center">
