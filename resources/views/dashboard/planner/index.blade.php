@@ -81,7 +81,7 @@
                                     </div>
                                 @else
                                     <div class="grid grid-cols-4 gap-2 sm:gap-3"
-                                        x-data="plannerCountdown('{{ $weddingDate->format('Y-m-d') }}')">
+                                        x-data="plannerCountdown('{{ $weddingDate->format('Y-m-d') }}', '{{ $weddingTime ?? '' }}')">
                                         <template x-if="initialized">
                                             <template
                                                 x-for="unit in [
@@ -2968,9 +2968,16 @@
                 };
             }
 
-            function plannerCountdown(targetDate) {
+            function plannerCountdown(targetDate, weddingTime) {
+                let targetDateTime = targetDate;
+                if (weddingTime) {
+                    targetDateTime += 'T' + weddingTime;
+                } else {
+                    targetDateTime += 'T23:59:59';
+                }
+
                 return {
-                    target: new Date(targetDate + 'T23:59:59').getTime(),
+                    target: new Date(targetDateTime).getTime(),
                     days: 0,
                     hours: 0,
                     minutes: 0,

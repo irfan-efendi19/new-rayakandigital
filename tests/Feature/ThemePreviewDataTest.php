@@ -441,6 +441,71 @@ test('crypto wedding dashboard and lct protocol theme preview renders successful
         ->assertSee('CONNECT WALLET');
 });
 
+test('buku rapor sekolah report card theme preview renders successfully with expected elements', function () {
+    $this->seed(ThemeSeeder::class);
 
+    $this->get(route('theme.preview', 'rapor'))
+        ->assertSuccessful()
+        ->assertSee('BUKU RAPOR CINTA')
+        ->assertSee('KEMENTERIAN CINTA & ASMARA')
+        ->assertSee('Laporan Hasil Belajar Masa Lajang')
+        ->assertSee('Rangga')
+        ->assertSee('Cinta')
+        ->assertSee('DINYATAKAN LULUS MENUJU PELAMINAN');
+});
 
+test('pixel arcade pac-love theme preview renders successfully with expected elements', function () {
+    $this->seed(ThemeSeeder::class);
+
+    $this->get(route('theme.preview', 'arcade'))
+        ->assertSuccessful()
+        ->assertSee('PAC-LOVE')
+        ->assertSee('FINAL STAGE: THE WEDDING')
+        ->assertSee('THE LOVE MAZE')
+        ->assertSee('PLAYER 1: THE GROOM')
+        ->assertSee('PLAYER 2: THE BRIDE')
+        ->assertSee('Andi')
+        ->assertSee('Maya')
+        ->assertSee('PRESS START');
+});
+
+test('teka teki silang cinta the love crossword theme preview renders successfully with expected elements', function () {
+    $this->seed(ThemeSeeder::class);
+
+    $this->get(route('theme.preview', 'tts'))
+        ->assertSuccessful()
+        ->assertSee('TEKA-TEKI SILANG CINTA')
+        ->assertSee('Lengkapi kotak-kotak bersilangan ini untuk membuka akses ke pesta kami!')
+        ->assertSee('KORAN CINTA & ASMARA')
+        ->assertSee('Rangga')
+        ->assertSee('Cinta')
+        ->assertSee('H - A - D - I - R')
+        ->assertSee('Mulai Memecahkan TTS');
+});
+
+test('the eternal ring box experience theme preview renders successfully with expected elements', function () {
+    $this->seed(ThemeSeeder::class);
+
+    $this->get(route('theme.preview', 'ring_box'))
+        ->assertSuccessful()
+        ->assertSee('THE ETERNAL PROMISE')
+        ->assertSee('Sentuh untuk membuka lembaran janji suci kami')
+        ->assertSee('Buka Kotak Cincin')
+        ->assertSee('Cinta sejati bagaikan lingkaran cincin: tanpa awal, tanpa akhir, dan terikat dalam keabadian.')
+        ->assertSee('Arya')
+        ->assertSee('Maya');
+});
+
+test('the eternal date kalender abadi cinta theme preview renders successfully with expected elements', function () {
+    $this->seed(ThemeSeeder::class);
+
+    $this->get(route('theme.preview', 'eternal_date'))
+        ->assertSuccessful()
+        ->assertSee('THE ETERNAL DATE')
+        ->assertSee('Buka Lembaran Kalender')
+        ->assertSee('Hari di mana kami resmi mengucap janji sehidup semati.')
+        ->assertSee('Tandai Kalender &amp; Hadir', false)
+        ->assertSee('Dimas')
+        ->assertSee('Anindya');
+});
 
