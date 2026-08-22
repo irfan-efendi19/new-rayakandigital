@@ -215,6 +215,16 @@ class ThemeSeeder extends Seeder
             ['name' => 'Kalender Abadi Cinta (The Eternal Date)', 'thumbnail_portrait' => '/images/themes/eternal-date-thumb.svg', 'is_premium' => true, 'is_active' => true]
         );
 
+        $papan_pengumuman = Theme::updateOrCreate(
+            ['view_path' => 'themes.papan_pengumuman'],
+            ['name' => 'Papan Pengumuman Sekolah Jadul (Surat Edaran Resmi)', 'thumbnail_portrait' => '/images/themes/papan-pengumuman-thumb.svg', 'is_premium' => true, 'is_active' => true]
+        );
+
+        $eternal_flame = Theme::updateOrCreate(
+            ['view_path' => 'themes.eternal_flame'],
+            ['name' => 'Lilin Doa Pengantin: The Eternal Flame', 'thumbnail_portrait' => '/images/themes/eternal-flame-thumb.svg', 'is_premium' => true, 'is_active' => true]
+        );
+
         $themes = [
             $elegant->id => [
                 'title' => 'Pernikahan Raisa & Hamish',
@@ -2734,6 +2744,130 @@ class ThemeSeeder extends Seeder
                         'place_name' => 'Plataran Dharmawangsa',
                         'place_address' => 'Jl. Dharmawangsa Raya No. 6, Kebayoran Baru, Jakarta Selatan',
                         'google_maps_url' => 'https://maps.google.com/?q=-6.2555,106.7972',
+                    ],
+                ],
+            ],
+            $papan_pengumuman->id => [
+                'title' => 'Surat Edaran Resmi: Pernikahan Bagas & Sarah (Papan Pengumuman Sekolah)',
+                'groom_full_name' => 'Bagas Pratama, S.Kom.',
+                'groom_short_name' => 'Bagas',
+                'groom_father_name' => 'Bapak Pratama Wijaya',
+                'groom_mother_name' => 'Ibu Siti Aminah',
+                'bride_full_name' => 'Sarah Maulida, S.Pd.',
+                'bride_short_name' => 'Sarah',
+                'bride_father_name' => 'Bapak Maulana Yusuf',
+                'bride_mother_name' => 'Ibu Endang Rahayu',
+                'timezone' => 'Asia/Jakarta',
+                'event_date_offset_days' => 45,
+                'event_time' => '09:00',
+                'event_time_end' => '14:00',
+                'venue_name' => 'Aula Besar Gedung Krida Pendidikan',
+                'venue_address' => 'Jl. Pendidikan Raya No. 100, Rawamangun, Jakarta Timur',
+                'venue_maps_url' => 'https://maps.google.com/?q=-6.1924,106.8835',
+                'quote_content' => 'Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang.',
+                'quote_source' => 'QS. Ar-Rum: 21',
+                'love_story' => 'Dari masa seragam putih abu-abu, berbagi tugas piket kelas, hingga bersama-sama lulus dari masa lajang menuju ikatan suci pernikahan.',
+                'stories' => [
+                    ['story_date' => 'SEMESTER 1 · 2018', 'story_title' => 'Tukar Catatan Matematika 📚', 'story_description' => 'Awal mula perjumpaan di perpustakaan sekolah saat meminjam buku catatan rumus dan berakhir dengan saling titip salam.'],
+                    ['story_date' => 'KELAS XII · 2020', 'story_title' => 'Piket & Es Teh Kantin 🥤', 'story_description' => 'Masa-masa manis sepulang sekolah, menunggu bel pulang berbunyi dan menikmati senja di warung kantin belakang sekolah.'],
+                    ['story_date' => 'KELULUSAN · 2026', 'story_title' => 'Sidang Kelulusan Masa Lajang 💍', 'story_description' => 'Momen saat Bagas meminta restu wali murid dan menyematkan cincin tanda lulus dengan predikat Cinta Sehidup Semati.'],
+                ],
+                'gallery_photos' => [
+                    'https://picsum.photos/seed/board1/800/800',
+                    'https://picsum.photos/seed/board2/800/800',
+                    'https://picsum.photos/seed/board3/800/800',
+                    'https://picsum.photos/seed/board4/800/800',
+                ],
+                'gift_banks' => [
+                    ['bank_name' => 'Bank Mandiri (Kas Kelas Bagas)', 'account_number' => '1230008899776', 'account_holder' => 'Bagas Pratama'],
+                    ['bank_name' => 'Bank BCA (Tabungan Siswi Sarah)', 'account_number' => '8820991122', 'account_holder' => 'Sarah Maulida'],
+                ],
+                'gift_ewallets' => [
+                    ['wallet_name' => 'GoPay Kas Angkatan', 'wallet_number' => '081234567890'],
+                ],
+                'events' => [
+                    [
+                        'event_title' => 'Sidang Ijab Qabul (Akad Nikah)',
+                        'date_offset_days' => 0,
+                        'start_time' => '08:30',
+                        'end_time' => '10:30',
+                        'is_until_finished' => false,
+                        'place_name' => 'Aula Besar Gedung Krida Pendidikan',
+                        'place_address' => 'Jl. Pendidikan Raya No. 100, Rawamangun, Jakarta Timur',
+                        'google_maps_url' => 'https://maps.google.com/?q=-6.1924,106.8835',
+                    ],
+                    [
+                        'event_title' => 'Pesta Perayaan Kelulusan (Resepsi Pernikahan)',
+                        'date_offset_days' => 0,
+                        'start_time' => '11:00',
+                        'end_time' => '14:00',
+                        'is_until_finished' => false,
+                        'place_name' => 'Aula Besar Gedung Krida Pendidikan',
+                        'place_address' => 'Jl. Pendidikan Raya No. 100, Rawamangun, Jakarta Timur',
+                        'google_maps_url' => 'https://maps.google.com/?q=-6.1924,106.8835',
+                    ],
+                ],
+            ],
+            $eternal_flame->id => [
+                'title' => 'Lilin Doa Pengantin: The Eternal Flame (Baskara & Kirana)',
+                'hero_image_path' => 'https://picsum.photos/seed/flamecover/1200/1600',
+                'groom_full_name' => 'Baskara Adi Pratama',
+                'groom_short_name' => 'Baskara',
+                'groom_father_name' => 'Pratama',
+                'groom_mother_name' => 'Wulandari',
+                'bride_full_name' => 'Kirana Larasati Putri',
+                'bride_short_name' => 'Kirana',
+                'bride_father_name' => 'Larasati',
+                'bride_mother_name' => 'Sekar',
+                'timezone' => 'Asia/Jakarta',
+                'event_date_offset_days' => 35,
+                'event_time' => '08:30',
+                'event_time_end' => '14:00',
+                'venue_name' => 'The Sanctuary Ballroom & Chapel',
+                'venue_address' => 'Jl. Pangeran Antasari No. 99, Cilandak, Jakarta Selatan',
+                'venue_maps_url' => 'https://maps.google.com/?q=-6.2789,106.8042',
+                'quote_content' => 'Cinta bukan tentang mencari seseorang yang sempurna, tapi tentang menyatukan dua nyala api untuk menerangi jalan bersama.',
+                'quote_source' => 'The Eternal Flame of Love',
+                'love_story' => 'Dua pendar cahaya yang dipertemukan oleh semesta untuk saling melengkapi dan menyinari kehidupan bersama selamanya.',
+                'stories' => [
+                    ['story_date' => 'Pendar Pertama - 2021', 'story_title' => 'Pertemuan Dua Cahaya ✨', 'story_description' => 'Di tengah temaram sebuah kafe di penghujung tahun, dua tatapan saling bertemu dan menyalakan percikan rasa yang tak pernah padam.'],
+                    ['story_date' => 'Menjaga Api - 2024', 'story_title' => 'Komitmen & Janji Setia 🕯️', 'story_description' => 'Melewati berbagai dinamika kehidupan, kami belajar bahwa cinta adalah tentang saling menjaga nyala api tetap hangat di setiap hembusan angin.'],
+                    ['story_date' => 'Api Abadi - 2026', 'story_title' => 'Menuju Pelaminan Suci 💍', 'story_description' => 'Kini kami bersiap mengikat janji suci sehidup semati, menyatukan dua nyala api menjadi satu cahaya abadi yang menerangi masa depan.'],
+                ],
+                'gallery_photos' => [
+                    'https://picsum.photos/seed/flame1/800/800',
+                    'https://picsum.photos/seed/flame2/800/800',
+                    'https://picsum.photos/seed/flame3/800/800',
+                    'https://picsum.photos/seed/flame4/800/800',
+                ],
+                'gift_banks' => [
+                    ['bank_name' => 'Bank BCA', 'account_number' => '7720918234', 'account_holder' => 'Kirana Larasati Putri'],
+                    ['bank_name' => 'Bank Mandiri', 'account_number' => '1370019284756', 'account_holder' => 'Baskara Adi Pratama'],
+                ],
+                'gift_ewallets' => [
+                    ['wallet_name' => 'GoPay', 'wallet_number' => '081299881122'],
+                    ['wallet_name' => 'OVO', 'wallet_number' => '081299881133'],
+                ],
+                'events' => [
+                    [
+                        'event_title' => 'Akad Nikah (Sacred Blessing)',
+                        'date_offset_days' => 0,
+                        'start_time' => '08:30',
+                        'end_time' => '10:30',
+                        'is_until_finished' => false,
+                        'place_name' => 'The Sanctuary Ballroom & Chapel',
+                        'place_address' => 'Jl. Pangeran Antasari No. 99, Cilandak, Jakarta Selatan',
+                        'google_maps_url' => 'https://maps.google.com/?q=-6.2789,106.8042',
+                    ],
+                    [
+                        'event_title' => 'Resepsi Pernikahan (The Eternal Celebration)',
+                        'date_offset_days' => 0,
+                        'start_time' => '11:00',
+                        'end_time' => '14:00',
+                        'is_until_finished' => false,
+                        'place_name' => 'The Sanctuary Ballroom & Chapel',
+                        'place_address' => 'Jl. Pangeran Antasari No. 99, Cilandak, Jakarta Selatan',
+                        'google_maps_url' => 'https://maps.google.com/?q=-6.2789,106.8042',
                     ],
                 ],
             ],

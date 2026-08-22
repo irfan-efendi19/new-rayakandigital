@@ -426,19 +426,19 @@ test('crypto wedding dashboard and lct protocol theme preview renders successful
 
     $this->get(route('theme.preview', 'crypto'))
         ->assertSuccessful()
-        ->assertSee('$LCT PROTOCOL')
-        ->assertSee('$LOVE/IDR')
+        ->assertSee('LCT-Wedding-Protocol-v2')
+        ->assertSee('$LOVE')
         ->assertSee('Satria')
         ->assertSee('Aurel')
-        ->assertSee('CONNECT WALLET');
+        ->assertSee('Sign &amp; Connect', false);
 
     $this->get(route('theme.preview', 'lct'))
         ->assertSuccessful()
-        ->assertSee('$LCT PROTOCOL')
-        ->assertSee('$LOVE/IDR')
+        ->assertSee('LCT-Wedding-Protocol-v2')
+        ->assertSee('$LOVE')
         ->assertSee('Satria')
         ->assertSee('Aurel')
-        ->assertSee('CONNECT WALLET');
+        ->assertSee('Sign &amp; Connect', false);
 });
 
 test('buku rapor sekolah report card theme preview renders successfully with expected elements', function () {
@@ -504,8 +504,20 @@ test('the eternal date kalender abadi cinta theme preview renders successfully w
         ->assertSee('THE ETERNAL DATE')
         ->assertSee('Buka Lembaran Kalender')
         ->assertSee('Hari di mana kami resmi mengucap janji sehidup semati.')
-        ->assertSee('Tandai Kalender &amp; Hadir', false)
+        ->assertSee('Lembar RSVP tidak aktif dalam mode pratinjau tema.')
         ->assertSee('Dimas')
         ->assertSee('Anindya');
 });
 
+test('papan pengumuman surat edaran resmi theme preview renders successfully with expected elements', function () {
+    $this->seed(ThemeSeeder::class);
+
+    $this->get(route('theme.preview', 'papan-pengumuman'))
+        ->assertSuccessful()
+        ->assertSee('SEKOLAH TINGGI CINTA SEHIDUP SEMATI')
+        ->assertSee('SURAT EDARAN RESMI')
+        ->assertSee('Libur Permanen dari Masa Lajang')
+        ->assertSee('LULUS &amp; SAH', false)
+        ->assertSee('Bagas')
+        ->assertSee('Sarah');
+});
