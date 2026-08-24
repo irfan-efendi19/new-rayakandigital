@@ -56,6 +56,27 @@ document.addEventListener('alpine:init', () => {
         }
     }));
 
+    Alpine.data('themePicker', () => ({
+        selectedTheme: '',
+        activeCategory: '__all__',
+        init() {
+            this.selectedTheme = this.$el.dataset.selectedTheme || '';
+            this.activeCategory = this.$el.dataset.initialCategory || '__all__';
+        },
+        selectTheme(theme) {
+            this.selectedTheme = theme;
+        },
+        setCategory(category) {
+            this.activeCategory = category;
+            this.$nextTick(() => {
+                this.$refs.themeList?.scrollTo({ left: 0, behavior: 'smooth' });
+            });
+        },
+        showsCategory(category) {
+            return this.activeCategory === '__all__' || this.activeCategory === category;
+        },
+    }));
+
     Alpine.data('checkout', () => ({
         processing: false,
         handleSubmit(event) {
@@ -174,4 +195,3 @@ import './visitor-chart';
 import './slug-editor';
 import './tutorial-spotlight';
 import './flatpickr-init';
-

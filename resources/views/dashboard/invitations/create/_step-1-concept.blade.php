@@ -129,10 +129,16 @@
     </div>
 
     {{-- Theme Selection --}}
-    @php $currentTheme = old('theme', $selectedTheme); @endphp
+    @php
+        $currentTheme = old('theme', $selectedTheme);
+        $defaultCategory = data_get($themeCategories->first(), 'slug', '__all__');
+        $initialCategory = $themes->firstWhere('slug', $currentTheme)?->catalog_category_slug
+            ?? $defaultCategory;
+    @endphp
 
     @if(!$hasPredefinedTheme)
-        <div x-data="{ selectedTheme: '{{ $currentTheme }}' }" class="space-y-3 mt-6"
+        <div x-data="themePicker" data-selected-theme="{{ $currentTheme }}"
+            data-initial-category="{{ $initialCategory }}" class="space-y-3 mt-6"
             data-tour="select-theme">
             <input type="hidden" name="theme" x-model="selectedTheme" required>
 
@@ -142,22 +148,52 @@
                         Pilih Tema Undangan <span class="text-red-500">*</span>
                     </label>
                     <span class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
-                        Geser horizontal untuk melihat koleksi desain premium. Klik pada kartu
-                        gambar untuk memilih tema.
+                        Pilih kategori untuk mempersempit koleksi, lalu klik kartu tema yang Anda sukai.
+                        Pratinjau lain dimuat saat diperlukan agar halaman tetap ringan.
                     </span>
                 </div>
 
-                <div
+                <div class="flex gap-2 overflow-x-auto px-1 pb-1 scrollbar-thin" role="group"
+                    aria-label="Filter kategori tema">
+                    <button type="button" data-category="__all__" @click="setCategory($el.dataset.category)"
+                        :aria-pressed="activeCategory === '__all__'"
+                        :class="activeCategory === '__all__'
+                            ? 'border-primary-500 bg-primary-500 text-white shadow-sm'
+                            : 'border-neutral-200 bg-white text-neutral-600 hover:border-primary-300 dark:border-secondary-700 dark:bg-secondary-800 dark:text-neutral-300 dark:hover:border-primary-700'"
+                        class="flex flex-shrink-0 items-center gap-1.5 rounded-full border px-3.5 py-2 text-xs font-semibold transition-colors duration-150">
+                        Semua
+                        <span class="text-[10px] opacity-75">{{ $themes->count() }}</span>
+                    </button>
+
+                    @foreach($themeCategories as $category)
+                        <button type="button" data-category="{{ $category['slug'] }}"
+                            @click="setCategory($el.dataset.category)"
+                            :aria-pressed="activeCategory === $el.dataset.category"
+                            :class="activeCategory === $el.dataset.category
+                                ? 'border-primary-500 bg-primary-500 text-white shadow-sm'
+                                : 'border-neutral-200 bg-white text-neutral-600 hover:border-primary-300 dark:border-secondary-700 dark:bg-secondary-800 dark:text-neutral-300 dark:hover:border-primary-700'"
+                            class="flex flex-shrink-0 items-center gap-1.5 rounded-full border px-3.5 py-2 text-xs font-semibold transition-colors duration-150">
+                            {{ $category['name'] }}
+                            <span class="text-[10px] opacity-75">{{ $category['count'] }}</span>
+                        </button>
+                    @endforeach
+                </div>
+
+                <div x-ref="themeList"
                     class="flex gap-4 overflow-x-auto py-3 px-1 scrollbar-thin scrollbar-thumb-neutral-200 dark:scrollbar-thumb-neutral-700 snap-x items-stretch">
 
                     @foreach($themes as $tema)
-                        @php $themeKey = str_replace('themes.', '', $tema->view_path); @endphp
-                        <div @click="selectedTheme = '{{ $themeKey }}'" :class="{
-                                                        'border-primary-500 ring-2 ring-primary-500/20 shadow-md bg-primary-50/40 dark:bg-primary-950/30': selectedTheme === '{{ $themeKey }}',
-                                                        'border-neutral-200/90 dark:border-secondary-700 hover:border-primary-300 dark:hover:border-primary-700 bg-white dark:bg-secondary-800/90': selectedTheme !== '{{ $themeKey }}'
-                                                    }"
-                            class="theme-card w-36 sm:w-44 flex-shrink-0 border rounded-2xl p-3 cursor-pointer snap-start relative flex flex-col justify-between select-none group transition-all duration-200">
-                            <div x-show="selectedTheme === '{{ $themeKey }}'"
+                        @php $themeKey = $tema->slug; @endphp
+                        <button type="button" data-theme="{{ $themeKey }}"
+                            data-category="{{ $tema->catalog_category_slug }}"
+                            @click="selectTheme($el.dataset.theme)"
+                            x-show="showsCategory($el.dataset.category)" x-cloak
+                            :aria-pressed="selectedTheme === $el.dataset.theme" :class="{
+                                'border-primary-500 ring-2 ring-primary-500/20 shadow-md bg-primary-50/40 dark:bg-primary-950/30': selectedTheme === $el.dataset.theme,
+                                'border-neutral-200/90 dark:border-secondary-700 hover:border-primary-300 dark:hover:border-primary-700 bg-white dark:bg-secondary-800/90': selectedTheme !== $el.dataset.theme
+                            }"
+                            class="theme-card w-36 sm:w-44 flex-shrink-0 border rounded-2xl p-3 cursor-pointer snap-start relative flex flex-col justify-between select-none group text-left transition-all duration-200">
+                            <div x-show="selectedTheme === $el.parentElement.dataset.theme"
                                 class="absolute top-4 right-4 bg-primary-500 text-white rounded-full p-1 z-10 shadow-sm ring-2 ring-white dark:ring-secondary-800"
                                 x-cloak>
                                 <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24"
@@ -169,8 +205,9 @@
 
                             <div
                                 class="w-full aspect-[9/16] rounded-xl overflow-hidden bg-neutral-100 dark:bg-secondary-900 relative border border-neutral-100 dark:border-secondary-700/50">
-                                @if($tema->thumbnail_portrait)
-                                    <img src="{{ asset('storage/' . $tema->thumbnail_portrait) }}"
+                                @if($tema->thumbnail_url)
+                                    <img src="{{ $tema->thumbnail_url }}"
+                                        loading="lazy" decoding="async"
                                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                         alt="Pratinjau {{ $tema->name }}">
                                 @else
@@ -183,7 +220,7 @@
                             <div class="mt-3 space-y-1">
                                 <span
                                     class="inline-block text-[9px] font-bold uppercase tracking-wider bg-neutral-100 dark:bg-secondary-700 text-neutral-600 dark:text-neutral-300 px-2 py-0.5 rounded-md">
-                                    {{ $tema->themeCategory?->name ?? 'Umum' }}
+                                    {{ $tema->catalog_category_name }}
                                 </span>
 
                                 <h4
@@ -191,7 +228,7 @@
                                     {{ $tema->name }}
                                 </h4>
                             </div>
-                        </div>
+                        </button>
                     @endforeach
 
                 </div>

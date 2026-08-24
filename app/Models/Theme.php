@@ -42,6 +42,19 @@ class Theme extends Model
         return str_replace('themes.', '', $this->view_path ?? '');
     }
 
+    public function getThumbnailUrlAttribute(): ?string
+    {
+        if (! $this->thumbnail_portrait) {
+            return null;
+        }
+
+        $path = Str::ltrim($this->thumbnail_portrait, '/');
+
+        return Str::startsWith($path, 'images/')
+            ? asset($path)
+            : Storage::url($path);
+    }
+
     public function resolvedPreviewData(): PreviewData
     {
         $fallback = PreviewData::getPreview();

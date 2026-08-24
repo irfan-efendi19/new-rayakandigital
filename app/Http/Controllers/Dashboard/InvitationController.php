@@ -45,9 +45,50 @@ class InvitationController extends Controller
 
         $hasPredefinedTheme = $request->has('theme');
         $selectedTheme = $request->query('theme', '');
-        $themes = Theme::where('is_active', true)->with('themeCategory')->get();
+        ['themes' => $themes, 'themeCategories' => $themeCategories] = $this->themeCatalog();
 
-        return view('dashboard.invitations.create', compact('selectedTheme', 'themes', 'hasPredefinedTheme'));
+        return view('dashboard.invitations.create', compact(
+            'selectedTheme',
+            'themes',
+            'themeCategories',
+            'hasPredefinedTheme'
+        ));
+    }
+
+    private function themeCatalog(): array
+    {
+        $themes = Theme::query()
+            ->select(['id', 'theme_category_id', 'name', 'view_path', 'thumbnail_portrait'])
+            ->with('themeCategory:id,name,slug')
+            ->where('is_active', true)
+            ->orderBy('name')
+            ->get();
+
+        $themes->each(function (Theme $theme): void {
+            $theme->setAttribute(
+                'catalog_category_slug',
+                $theme->themeCategory?->slug ?? '__uncategorized__'
+            );
+            $theme->setAttribute(
+                'catalog_category_name',
+                $theme->themeCategory?->name ?? 'Tanpa Kategori'
+            );
+        });
+
+        $themeCategories = $themes
+            ->groupBy('catalog_category_slug')
+            ->map(fn ($categoryThemes, string $slug) => [
+                'slug' => $slug,
+                'name' => $categoryThemes->first()->catalog_category_name,
+                'count' => $categoryThemes->count(),
+            ])
+            ->sortBy('name', SORT_NATURAL | SORT_FLAG_CASE);
+
+        if ($uncategorizedThemes = $themeCategories->pull('__uncategorized__')) {
+            $themeCategories->put('__uncategorized__', $uncategorizedThemes);
+        }
+
+        return ['themes' => $themes, 'themeCategories' => $themeCategories->values()];
     }
 
     public function dashboard()
@@ -297,9 +338,9 @@ class InvitationController extends Controller
         Gate::authorize('update', $invitation);
         $invitation->load(['events', 'stories', 'screenGalleries']);
 
-        $themes = Theme::where('is_active', true)->with('themeCategory')->get();
+        ['themes' => $themes, 'themeCategories' => $themeCategories] = $this->themeCatalog();
 
-        return view('dashboard.invitations.edit', compact('invitation', 'themes'));
+        return view('dashboard.invitations.edit', compact('invitation', 'themes', 'themeCategories'));
     }
 
     public function qrRsvp(Invitation $invitation)

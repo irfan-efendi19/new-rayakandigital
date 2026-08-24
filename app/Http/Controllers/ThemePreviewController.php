@@ -256,6 +256,18 @@ class ThemePreviewController extends Controller
             'sinta-1' => 'jurnal_ilmiah',
             'sinta_1' => 'jurnal_ilmiah',
             'sinta-indonesia' => 'jurnal_ilmiah',
+            'linked-in' => 'linkedin',
+            'linkedin-wedding' => 'linkedin',
+            'professional-network' => 'linkedin',
+            'cv-pasangan' => 'cv_pasangan',
+            'curriculum-vitae' => 'cv_pasangan',
+            'curriculum-vitae-pasangan' => 'cv_pasangan',
+            'daftar-riwayat-hidup' => 'cv_pasangan',
+            'resume-pasangan' => 'cv_pasangan',
+            'ancient-scroll' => 'ancient_scroll',
+            'wedding-scroll' => 'ancient_scroll',
+            'gulungan-kuno' => 'ancient_scroll',
+            'prasasti-cinta' => 'ancient_scroll',
         ];
 
         $effectiveSlug = $aliases[$themeSlug] ?? $themeSlug;
