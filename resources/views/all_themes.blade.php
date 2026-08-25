@@ -288,11 +288,14 @@
                         <div class="relative aspect-[3/4] overflow-hidden bg-neutral-100 dark:bg-secondary-700">
 
                             {{-- Background image --}}
-                            @if($theme->thumbnail_portrait)
+                            @if($theme->thumbnail_url)
                                 <img
-                                    src="{{ Storage::url($theme->thumbnail_portrait) }}"
+                                    src="{{ $theme->thumbnail_url }}"
                                     alt="{{ $theme->name }}"
+                                    width="280"
+                                    height="373"
                                     loading="lazy"
+                                    decoding="async"
                                     class="card-thumb absolute inset-0 w-full h-full object-cover">
                             @else
                                 {{-- Placeholder --}}

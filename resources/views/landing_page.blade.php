@@ -547,14 +547,15 @@
                                     class="group relative rounded-2xl overflow-hidden border border-neutral-100 dark:border-secondary-700 bg-white dark:bg-secondary-800 shadow-[0_4px_20px_rgba(0,0,0,0.06)] hover:shadow-[0_20px_60px_-12px_rgba(0,0,0,0.18)] hover:-translate-y-1.5 transition-all duration-400">
 
                                     {{-- Thumbnail --}}
-                                    @if($theme->thumbnail_portrait)
-                                        <img src="{{ Storage::url($theme->thumbnail_portrait) }}" alt="{{ $theme->name }}"
+                                    @if($theme->thumbnail_url)
+                                        <img src="{{ $theme->thumbnail_url }}" alt="{{ $theme->name }}"
+                                            width="280" height="373" loading="lazy" decoding="async"
                                             class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105">
                                     @endif
 
                                     <div class="relative z-10 flex flex-col">
                                         <div class="relative aspect-[3/4]">
-                                            @if(!$theme->thumbnail_portrait)
+                                            @if(!$theme->thumbnail_url)
                                                 <div
                                                     class="absolute inset-0 bg-gradient-to-br from-secondary-50 to-primary-50/30 flex items-center justify-center">
                                                     <div class="text-center">
