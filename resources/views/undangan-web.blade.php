@@ -35,7 +35,7 @@
             <div class="orb-warm pointer-events-none absolute -right-48 bottom-0 h-[38rem] w-[38rem]" aria-hidden="true"></div>
 
             <div class="relative mx-auto grid min-h-[42rem] max-w-7xl items-center gap-14 px-6 py-16 sm:px-8 lg:grid-cols-[1.05fr_.95fr] lg:gap-8 lg:px-12 lg:py-24">
-                <div class="max-w-2xl">
+                <div class="max-w-2xl" data-aos="fade-right" data-aos-duration="700">
                     <div class="mb-6 inline-flex items-center gap-2 rounded-full border border-primary-200 bg-primary-50 px-3.5 py-2 text-xs font-bold uppercase tracking-wider text-primary-700 dark:border-primary-800 dark:bg-primary-900/30 dark:text-primary-300">
                         <span class="relative flex h-2 w-2" aria-hidden="true">
                             <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary-400 opacity-75"></span>
@@ -83,7 +83,8 @@
                     </dl>
                 </div>
 
-                <div class="relative mx-auto flex w-full max-w-xl items-center justify-center lg:justify-end">
+                <div class="relative mx-auto flex w-full max-w-xl items-center justify-center lg:justify-end"
+                    data-aos="fade-left" data-aos-delay="150" data-aos-duration="700">
                     <div class="absolute inset-x-10 top-1/2 h-64 -translate-y-1/2 rounded-full bg-primary-500/20 blur-3xl dark:bg-primary-600/15" aria-hidden="true"></div>
                     <img src="{{ asset('img/mockup.png') }}" alt="Tampilan undangan digital Rayakan Digital di perangkat seluler"
                         width="493" height="347" fetchpriority="high"
@@ -114,10 +115,12 @@
 
         <section class="border-y border-neutral-200 bg-neutral-50 dark:border-secondary-700 dark:bg-secondary-800/50" aria-label="Rangkaian acara pernikahan">
             <div class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-5 px-6 py-6 sm:px-8 lg:flex-row lg:px-12">
-                <p class="text-center text-xs font-bold uppercase tracking-[0.2em] text-neutral-400 lg:text-left">Khusus untuk rangkaian hari pernikahan</p>
+                <p class="text-center text-xs font-bold uppercase tracking-[0.2em] text-neutral-400 lg:text-left"
+                    data-aos="fade-right" data-aos-offset="40">Khusus untuk rangkaian hari pernikahan</p>
                 <div class="flex flex-wrap justify-center gap-2.5">
                     @foreach ([['book-open', 'Akad Nikah'], ['rings-wedding', 'Resepsi'], ['people-roof', 'Ngunduh Mantu'], ['champagne-glasses', 'Wedding Ceremony']] as [$icon, $label])
-                        <span class="inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-white px-4 py-2 text-xs font-semibold text-neutral-600 shadow-sm dark:border-secondary-700 dark:bg-secondary-800 dark:text-neutral-300">
+                        <span data-aos="zoom-in" data-aos-delay="{{ $loop->index * 50 }}"
+                            class="inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-white px-4 py-2 text-xs font-semibold text-neutral-600 shadow-sm dark:border-secondary-700 dark:bg-secondary-800 dark:text-neutral-300">
                             <i class="fa-solid fa-{{ $icon }} text-primary-500" aria-hidden="true"></i>
                             {{ $label }}
                         </span>
@@ -128,7 +131,7 @@
 
         <section class="bg-white py-20 dark:bg-secondary-900 sm:py-24" id="fitur">
             <div class="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
-                <div class="mx-auto max-w-2xl text-center">
+                <div class="mx-auto max-w-2xl text-center" data-aos="fade-up">
                     <span class="text-xs font-bold uppercase tracking-[0.2em] text-primary-500">Semua serba praktis</span>
                     <h2 class="mt-3 font-heading text-3xl font-bold tracking-tight text-secondary-900 dark:text-white sm:text-4xl">
                         Semua yang Anda butuhkan dalam satu undangan
@@ -139,7 +142,8 @@
                 </div>
 
                 <div class="mt-12 grid gap-5 lg:grid-cols-12">
-                    <article class="group relative overflow-hidden rounded-3xl border border-neutral-200 bg-neutral-50 p-6 dark:border-secondary-700 dark:bg-secondary-800 sm:p-8 lg:col-span-7">
+                    <article data-aos="fade-up"
+                        class="group relative overflow-hidden rounded-3xl border border-neutral-200 bg-neutral-50 p-6 dark:border-secondary-700 dark:bg-secondary-800 sm:p-8 lg:col-span-7">
                         <div class="relative z-10 max-w-md">
                             <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary-100 text-primary-600 dark:bg-primary-900/40 dark:text-primary-400">
                                 <i class="fa-regular fa-images" aria-hidden="true"></i>
@@ -157,7 +161,8 @@
                         </div>
                     </article>
 
-                    <article class="rounded-3xl bg-primary-500 p-6 text-white shadow-lg shadow-primary-500/15 sm:p-8 lg:col-span-5">
+                    <article data-aos="fade-up" data-aos-delay="100"
+                        class="rounded-3xl bg-primary-500 p-6 text-white shadow-lg shadow-primary-500/15 sm:p-8 lg:col-span-5">
                         <div class="flex items-start justify-between gap-4">
                             <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/15">
                                 <i class="fa-solid fa-envelope-open-text" aria-hidden="true"></i>
@@ -187,7 +192,8 @@
                         </div>
                     </article>
 
-                    <article class="rounded-3xl border border-neutral-200 bg-neutral-50 p-6 dark:border-secondary-700 dark:bg-secondary-800 sm:p-8 lg:col-span-4">
+                    <article data-aos="fade-up"
+                        class="rounded-3xl border border-neutral-200 bg-neutral-50 p-6 dark:border-secondary-700 dark:bg-secondary-800 sm:p-8 lg:col-span-4">
                         <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-sky-100 text-sky-600 dark:bg-sky-950 dark:text-sky-400">
                             <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
                         </span>
@@ -202,7 +208,8 @@
                         </div>
                     </article>
 
-                    <article class="rounded-3xl border border-neutral-200 bg-neutral-50 p-6 dark:border-secondary-700 dark:bg-secondary-800 sm:p-8 lg:col-span-4">
+                    <article data-aos="fade-up" data-aos-delay="100"
+                        class="rounded-3xl border border-neutral-200 bg-neutral-50 p-6 dark:border-secondary-700 dark:bg-secondary-800 sm:p-8 lg:col-span-4">
                         <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-violet-100 text-violet-600 dark:bg-violet-950 dark:text-violet-400">
                             <i class="fa-solid fa-music" aria-hidden="true"></i>
                         </span>
@@ -218,7 +225,8 @@
                         </div>
                     </article>
 
-                    <article class="rounded-3xl border border-neutral-200 bg-neutral-50 p-6 dark:border-secondary-700 dark:bg-secondary-800 sm:p-8 lg:col-span-4">
+                    <article data-aos="fade-up" data-aos-delay="200"
+                        class="rounded-3xl border border-neutral-200 bg-neutral-50 p-6 dark:border-secondary-700 dark:bg-secondary-800 sm:p-8 lg:col-span-4">
                         <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-600 dark:bg-emerald-950 dark:text-emerald-400">
                             <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
                         </span>
@@ -235,11 +243,12 @@
         <section class="border-y border-neutral-200 bg-neutral-50 py-20 dark:border-secondary-700 dark:bg-secondary-800/40 sm:py-24" id="cara-kerja">
             <div class="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
                 <div class="grid items-end gap-6 lg:grid-cols-2">
-                    <div>
+                    <div data-aos="fade-right">
                         <span class="text-xs font-bold uppercase tracking-[0.2em] text-primary-500">Mulai tanpa ribet</span>
                         <h2 class="mt-3 font-heading text-3xl font-bold text-secondary-900 dark:text-white sm:text-4xl">Tiga langkah menuju hari bahagia</h2>
                     </div>
-                    <p class="max-w-xl text-sm leading-7 text-neutral-600 dark:text-neutral-300 lg:justify-self-end">Tidak perlu coding atau menunggu desainer. Pilih tampilan, masukkan cerita Anda, lalu bagikan.</p>
+                    <p class="max-w-xl text-sm leading-7 text-neutral-600 dark:text-neutral-300 lg:justify-self-end"
+                        data-aos="fade-left" data-aos-delay="100">Tidak perlu coding atau menunggu desainer. Pilih tampilan, masukkan cerita Anda, lalu bagikan.</p>
                 </div>
 
                 <ol class="mt-12 grid gap-5 md:grid-cols-3">
@@ -247,8 +256,9 @@
                         ['01', 'Pilih tema', 'Temukan desain yang paling sesuai dengan karakter dan nuansa pernikahan Anda.', 'wand-magic-sparkles'],
                         ['02', 'Isi detail pernikahan', 'Lengkapi profil pasangan, jadwal, lokasi, galeri, musik, dan daftar tamu.', 'pen-to-square'],
                         ['03', 'Bagikan ke tamu', 'Kirim link personal melalui WhatsApp dan pantau RSVP secara real-time.', 'paper-plane'],
-                    ] as [$number, $title, $description, $icon])
-                        <li class="relative rounded-3xl border border-neutral-200 bg-white p-7 shadow-sm dark:border-secondary-700 dark:bg-secondary-800">
+                    ] as $stepIndex => [$number, $title, $description, $icon])
+                        <li data-aos="fade-up" data-aos-delay="{{ $stepIndex * 100 }}"
+                            class="relative rounded-3xl border border-neutral-200 bg-white p-7 shadow-sm dark:border-secondary-700 dark:bg-secondary-800">
                             <div class="flex items-center justify-between gap-4">
                                 <span class="font-heading text-4xl font-bold text-primary-200 dark:text-primary-900">{{ $number }}</span>
                                 <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary-50 text-primary-600 dark:bg-primary-900/30 dark:text-primary-400">
@@ -265,7 +275,7 @@
 
         <section class="bg-white py-20 dark:bg-secondary-900 sm:py-24" id="harga">
             <div class="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
-                <div class="mx-auto max-w-2xl text-center">
+                <div class="mx-auto max-w-2xl text-center" data-aos="fade-up">
                     <span class="text-xs font-bold uppercase tracking-[0.2em] text-primary-500">Harga transparan</span>
                     <h2 class="mt-3 font-heading text-3xl font-bold text-secondary-900 dark:text-white sm:text-4xl">Pilih paket sesuai kebutuhan</h2>
                     <p class="mt-4 text-sm leading-7 text-neutral-600 dark:text-neutral-300 sm:text-base">Mulai gratis, lalu tingkatkan paket saat Anda membutuhkan fitur yang lebih lengkap.</p>
@@ -282,7 +292,8 @@
                                 default => 'Pilihan fitur untuk melengkapi undangan pernikahan Anda.',
                             };
                         @endphp
-                        <article class="relative flex h-full flex-col rounded-3xl bg-white transition duration-300 hover:-translate-y-1 hover:shadow-xl dark:bg-secondary-800 motion-reduce:transform-none {{ $package->is_popular ? 'border-2 border-primary-500 shadow-xl shadow-primary-500/10' : 'border border-neutral-200 shadow-sm dark:border-secondary-700' }}">
+                        <article data-aos="zoom-in-up" data-aos-delay="{{ ($index % 4) * 100 }}"
+                            class="relative flex h-full flex-col rounded-3xl bg-white transition duration-300 hover:-translate-y-1 hover:shadow-xl dark:bg-secondary-800 motion-reduce:transform-none {{ $package->is_popular ? 'border-2 border-primary-500 shadow-xl shadow-primary-500/10' : 'border border-neutral-200 shadow-sm dark:border-secondary-700' }}">
                             @if($package->is_popular)
                                 <div class="absolute -top-3 left-1/2 -translate-x-1/2">
                                     <span class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-primary-500 px-4 py-1.5 text-[10px] font-bold uppercase tracking-wider text-white shadow-lg">
@@ -362,7 +373,8 @@
                     @endforelse
                 </div>
 
-                <p class="mt-8 flex items-center justify-center gap-2 text-center text-xs text-neutral-500 dark:text-neutral-400">
+                <p class="mt-8 flex items-center justify-center gap-2 text-center text-xs text-neutral-500 dark:text-neutral-400"
+                    data-aos="fade-up">
                     <i class="fa-solid fa-shield-halved text-emerald-500" aria-hidden="true"></i>
                     Pembayaran aman · Harga transparan · Dukungan tim Rayakan Digital
                 </p>
@@ -370,7 +382,8 @@
         </section>
 
         <section class="bg-neutral-50 px-6 py-16 dark:bg-secondary-900 sm:px-8 sm:py-20">
-            <div class="grain-bg relative mx-auto max-w-5xl overflow-hidden rounded-[2rem] bg-secondary-900 px-6 py-12 text-center text-white shadow-2xl dark:border dark:border-secondary-700 sm:px-12 sm:py-16">
+            <div class="grain-bg relative mx-auto max-w-5xl overflow-hidden rounded-[2rem] bg-secondary-900 px-6 py-12 text-center text-white shadow-2xl dark:border dark:border-secondary-700 sm:px-12 sm:py-16"
+                data-aos="zoom-in" data-aos-duration="700">
                 <div class="orb-orange pointer-events-none absolute -left-32 -top-32 h-96 w-96" aria-hidden="true"></div>
                 <div class="absolute -bottom-32 -right-20 h-72 w-72 rounded-full bg-primary-500/10 blur-3xl" aria-hidden="true"></div>
                 <div class="relative z-10">

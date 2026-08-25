@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ScreenPresets\Schemas;
 
+use App\Filament\Forms\Components\CompressedImageUpload;
 use App\Models\ScreenPreset;
 use App\Support\UniqueSlugGenerator;
 use Filament\Forms\Components\FileUpload;
@@ -63,9 +64,8 @@ class ScreenPresetForm
                     ->helperText('Biarkan kosong jika tidak ingin mengubah template. Upload ZIP baru hanya jika ingin mengganti.')
                     ->columnSpanFull(),
 
-                FileUpload::make('thumbnail_image')
+                CompressedImageUpload::make('thumbnail_image')
                     ->label('Thumbnail Preview')
-                    ->image()
                     ->disk('public')
                     ->directory('screen-presets/thumbnails')
                     ->imagePreviewHeight('200')

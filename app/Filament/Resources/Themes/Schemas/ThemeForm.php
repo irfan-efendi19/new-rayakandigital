@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Themes\Schemas;
 
+use App\Filament\Forms\Components\CompressedImageUpload;
 use App\Models\ThemeCategory;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
@@ -40,9 +41,8 @@ class ThemeForm
                     ->hidden(fn (string $operation): bool => $operation === 'create')
                     ->helperText('Auto-generated from ZIP extraction.'),
 
-                FileUpload::make('thumbnail_portrait')
+                CompressedImageUpload::make('thumbnail_portrait')
                     ->label('Thumbnail Portrait (9:16)')
-                    ->image()
                     ->imageEditor()
                     ->imageEditorAspectRatioOptions([
                         '9:16' => 'Portrait Mobile (9:16)',

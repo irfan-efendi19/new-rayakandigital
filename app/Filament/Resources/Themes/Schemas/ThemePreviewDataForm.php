@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Themes\Schemas;
 
+use App\Filament\Forms\Components\CompressedImageUpload;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Textarea;
@@ -19,9 +20,8 @@ class ThemePreviewDataForm
             ->schema([
                 Section::make('Cover & Judul Undangan')
                     ->schema([
-                        FileUpload::make('preview_hero_image_path')
+                        CompressedImageUpload::make('preview_hero_image_path')
                             ->label('Foto Hero / Cover')
-                            ->image()
                             ->imageEditor()
                             ->imageEditorAspectRatioOptions([
                                 '9:16' => 'Portrait (9:16)',
@@ -39,9 +39,8 @@ class ThemePreviewDataForm
                     ])->columns(2),
                 Section::make('Mempelai Wanita')
                     ->schema([
-                        FileUpload::make('preview_bride_photo_path')
+                        CompressedImageUpload::make('preview_bride_photo_path')
                             ->label('Foto Mempelai Wanita')
-                            ->image()
                             ->imageEditor()
                             ->imageEditorAspectRatioOptions([
                                 '1:1' => 'Square (1:1)',
@@ -69,9 +68,8 @@ class ThemePreviewDataForm
                     ])->columns(2),
                 Section::make('Mempelai Pria')
                     ->schema([
-                        FileUpload::make('preview_groom_photo_path')
+                        CompressedImageUpload::make('preview_groom_photo_path')
                             ->label('Foto Mempelai Pria')
-                            ->image()
                             ->imageEditor()
                             ->imageEditorAspectRatioOptions([
                                 '1:1' => 'Square (1:1)',
@@ -189,9 +187,8 @@ class ThemePreviewDataForm
                     ]),
                 Section::make('Galeri Foto')
                     ->schema([
-                        FileUpload::make('preview_gallery_photos')
+                        CompressedImageUpload::make('preview_gallery_photos')
                             ->label('Foto Galeri')
-                            ->image()
                             ->multiple()
                             ->disk('public')
                             ->directory('theme_previews/gallery')

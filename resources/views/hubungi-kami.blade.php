@@ -24,186 +24,260 @@
     </script>
 </head>
 
-<body class="font-sans antialiased bg-neutral-50 dark:bg-secondary-900 text-secondary-800 dark:text-neutral-200">
+<body class="bg-neutral-50 font-sans text-secondary-800 antialiased dark:bg-secondary-900 dark:text-neutral-200">
     <x-public-navbar />
-    <div class="h-16"></div>
-    <div class="py-16 md:py-24 bg-tertiary dark:bg-secondary-900">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <!-- Header Section -->
-            <div class="text-center mb-12 md:mb-16">
-                <h2 class="text-base text-primary-600 font-semibold tracking-wide uppercase">Hubungi Kami</h2>
-                <p
-                    class="mt-2 text-3xl md:text-4xl leading-8 md:leading-10 font-extrabold tracking-tight text-secondary-900 dark:text-neutral-100 font-heading">
-                    Kami Siap Membantu Anda
-                </p>
-                <p class="mt-4 max-w-2xl text-lg text-neutral-600 dark:text-neutral-300 mx-auto">
-                    Kami di sini untuk membantu Anda merayakan momen berharga. Punya pertanyaan tentang layanan kami?
-                    Tim kami siap memberikan respon hangat untuk Anda.
-                </p>
-            </div>
+    <div class="h-16" aria-hidden="true"></div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
-                <!-- Left Column - Contact Info -->
-                <div class="space-y-6">
-                    <div
-                        class="bg-white dark:bg-secondary-800 rounded-2xl shadow-soft border border-neutral-100 dark:border-secondary-700 p-6 hover:shadow-xl transition-all duration-300">
-                        <div class="flex items-start gap-4">
-                            <div
-                                class="flex-shrink-0 w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center text-primary-600">
-                                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                                </svg>
-                            </div>
-                            <div>
-                                <h3 class="font-bold text-secondary-800 dark:text-neutral-200 mb-1">Alamat Kantor</h3>
-                                <p class="text-neutral-600 dark:text-neutral-300 text-sm leading-relaxed">Dusun Nglajur
-                                    Desa Tugusumberjo Kecamatan Peterongan Kabupaten Jombang</p>
-                            </div>
-                        </div>
-                    </div>
+    <main class="overflow-hidden">
+        <section class="grain-bg relative isolate border-b border-neutral-200 bg-white dark:border-secondary-700 dark:bg-secondary-900">
+            <div class="orb-orange pointer-events-none absolute -left-40 -top-32 h-[34rem] w-[34rem]" aria-hidden="true"></div>
+            <div class="orb-warm pointer-events-none absolute -right-40 bottom-0 h-[32rem] w-[32rem]" aria-hidden="true"></div>
 
-                    <div
-                        class="bg-white dark:bg-secondary-800 rounded-2xl shadow-soft border border-neutral-100 dark:border-secondary-700 p-6 hover:shadow-xl transition-all duration-300">
-                        <div class="flex items-start gap-4">
-                            <div
-                                class="flex-shrink-0 w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center text-primary-600">
-                                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                        d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                                </svg>
-                            </div>
-                            <div>
-                                <h3 class="font-bold text-secondary-800 dark:text-neutral-200 mb-1">WhatsApp Support
-                                </h3>
-                                <p class="text-neutral-600 dark:text-neutral-300 text-sm">+62 8953 49823 366</p>
-                            </div>
-                        </div>
-                    </div>
+            <div class="relative mx-auto max-w-7xl px-6 pb-14 pt-16 text-center sm:px-8 sm:pb-16 sm:pt-20 lg:px-12">
+                <div data-aos="fade-up" class="mx-auto max-w-3xl">
+                    <span class="inline-flex items-center gap-2 rounded-full border border-primary-200 bg-primary-50 px-3.5 py-2 text-[11px] font-bold uppercase tracking-[0.18em] text-primary-700 dark:border-primary-800 dark:bg-primary-900/30 dark:text-primary-300">
+                        <span class="h-2 w-2 rounded-full bg-emerald-500" aria-hidden="true"></span>
+                        Tim kami siap membantu
+                    </span>
+                    <h1 class="mt-6 font-heading text-4xl font-bold leading-tight tracking-tight text-secondary-900 dark:text-white sm:text-5xl lg:text-6xl">
+                        Ada yang bisa kami <span class="text-primary-500">bantu?</span>
+                    </h1>
+                    <p class="mx-auto mt-5 max-w-2xl text-base leading-8 text-neutral-600 dark:text-neutral-300 sm:text-lg">
+                        Ceritakan kebutuhan atau kendala Anda. Tim Rayakan Digital akan memberikan jawaban yang jelas,
+                        hangat, dan tepat sasaran.
+                    </p>
 
-                    <div
-                        class="bg-white dark:bg-secondary-800 rounded-2xl shadow-soft border border-neutral-100 dark:border-secondary-700 p-6 hover:shadow-xl transition-all duration-300">
-                        <div class="flex items-start gap-4">
-                            <div
-                                class="flex-shrink-0 w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center text-primary-600">
-                                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                </svg>
-                            </div>
-                            <div>
-                                <h3 class="font-bold text-secondary-800 dark:text-neutral-200 mb-1">Email</h3>
-                                <p class="text-neutral-600 dark:text-neutral-300 text-sm">support@rayakandigital.id</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div
-                        class="bg-white dark:bg-secondary-800 rounded-2xl shadow-soft border border-neutral-100 dark:border-secondary-700 p-6 hover:shadow-xl transition-all duration-300">
-                        <div class="flex items-start gap-4">
-                            <div
-                                class="flex-shrink-0 w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center text-primary-600">
-                                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                            </div>
-                            <div>
-                                <h3 class="font-bold text-secondary-800 dark:text-neutral-200 mb-1">Jam Operasional</h3>
-                                <p class="text-neutral-600 dark:text-neutral-300 text-sm">Senin - Jumat: 09.00 - 18.00
-                                    WIB</p>
-                                <p class="text-neutral-600 dark:text-neutral-300 text-sm">Sabtu: 09.00 - 14.00 WIB</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div
-                        class="bg-gradient-to-r from-primary-50 to-primary-100 dark:from-secondary-700 dark:to-secondary-800 rounded-2xl p-5 border border-primary-200 dark:border-secondary-600">
-                        <div class="flex items-center gap-3">
-                            <div
-                                class="flex-shrink-0 w-10 h-10 bg-primary-600 rounded-full flex items-center justify-center text-white text-lg">
-                                <i class="fa-solid fa-bolt"></i>
-                            </div>
-                            <div>
-                                <p class="font-bold text-secondary-800 dark:text-neutral-200 text-sm">Butuh Respon
-                                    Cepat?</p>
-                                <p class="text-secondary-600 dark:text-neutral-300 text-xs">Tim Customer Service kami
-                                    biasanya merespon dalam waktu kurang dari 30 menit melalui WhatsApp.</p>
-                            </div>
-                        </div>
+                    <div class="mt-7 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-xs font-semibold text-neutral-500 dark:text-neutral-400">
+                        <span class="inline-flex items-center gap-2">
+                            <i class="fa-solid fa-bolt text-primary-500" aria-hidden="true"></i>
+                            Respons cepat
+                        </span>
+                        <span class="inline-flex items-center gap-2">
+                            <i class="fa-solid fa-comments text-primary-500" aria-hidden="true"></i>
+                            Konsultasi ramah
+                        </span>
+                        <span class="inline-flex items-center gap-2">
+                            <i class="fa-solid fa-shield-heart text-primary-500" aria-hidden="true"></i>
+                            Data tetap aman
+                        </span>
                     </div>
                 </div>
+            </div>
+        </section>
 
-                <!-- Right Column - Contact Form -->
-                <div
-                    class="bg-white dark:bg-secondary-800 rounded-2xl shadow-soft border border-neutral-100 dark:border-secondary-700 p-6 md:p-8">
-                    <h3 class="text-xl font-bold text-secondary-900 dark:text-neutral-100 mb-6 font-heading">Kirim Pesan
-                        Langsung</h3>
+        <section class="bg-neutral-50 py-16 dark:bg-secondary-900 sm:py-20">
+            <div class="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
+                <div class="grid items-start gap-8 lg:grid-cols-[0.82fr_1.18fr] lg:gap-10">
+                    <aside data-aos="fade-right"
+                        class="grain-bg relative overflow-hidden rounded-[2rem] bg-secondary-900 p-7 text-white shadow-2xl sm:p-9 lg:sticky lg:top-24">
+                        <div class="orb-orange pointer-events-none absolute -left-32 -top-32 h-80 w-80" aria-hidden="true"></div>
+                        <div class="absolute -bottom-28 -right-20 h-72 w-72 rounded-full bg-primary-500/10 blur-3xl" aria-hidden="true"></div>
 
-                    <form id="contactForm" class="space-y-5" action="{{ route('hubungi-kami.submit') }}" method="POST">
-                        @csrf
+                        <div class="relative z-10">
+                            <span class="text-[11px] font-bold uppercase tracking-[0.2em] text-primary-400">Kontak langsung</span>
+                            <h2 class="mt-3 font-heading text-3xl font-bold leading-tight">Mari bicara tentang kebutuhan Anda.</h2>
+                            <p class="mt-4 text-sm leading-7 text-neutral-300">
+                                Pilih kanal yang paling nyaman. Untuk kebutuhan mendesak, WhatsApp adalah cara tercepat
+                                untuk terhubung dengan tim kami.
+                            </p>
 
-                        <div>
-                            <label for="name"
-                                class="block text-sm font-semibold text-secondary-700 dark:text-neutral-200 mb-2">Nama
-                                Lengkap</label>
-                            <input type="text" id="name" name="name" placeholder="Masukkan nama Anda" required
-                                class="w-full px-4 py-3 border border-neutral-200 dark:border-secondary-700 rounded-xl focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all duration-200 bg-tertiary/50">
+                            <div class="mt-8 grid gap-3">
+                                <a href="https://wa.me/62895349823366?text=Halo%20Rayakan%20Digital%2C%20saya%20ingin%20bertanya%20tentang%20layanan%20Anda."
+                                    target="_blank" rel="noopener noreferrer"
+                                    class="group flex items-center gap-4 rounded-2xl border border-white/10 bg-white/5 p-4 transition duration-200 hover:-translate-y-0.5 hover:border-emerald-400/40 hover:bg-white/10 focus:outline-none focus-visible:ring-4 focus-visible:ring-emerald-400/20 motion-reduce:transform-none">
+                                    <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-500 text-lg text-white shadow-lg shadow-emerald-500/20">
+                                        <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
+                                    </span>
+                                    <span class="min-w-0 flex-1">
+                                        <span class="block text-[10px] font-bold uppercase tracking-wider text-neutral-400">WhatsApp Support</span>
+                                        <span class="mt-1 block text-sm font-bold text-white">+62 8953 49823 366</span>
+                                    </span>
+                                    <i class="fa-solid fa-arrow-up-right-from-square text-xs text-neutral-500 transition group-hover:text-emerald-400" aria-hidden="true"></i>
+                                </a>
+
+                                <a href="mailto:support@rayakandigital.id"
+                                    class="group flex items-center gap-4 rounded-2xl border border-white/10 bg-white/5 p-4 transition duration-200 hover:-translate-y-0.5 hover:border-primary-400/40 hover:bg-white/10 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary-400/20 motion-reduce:transform-none">
+                                    <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary-500 text-base text-white shadow-lg shadow-primary-500/20">
+                                        <i class="fa-regular fa-envelope" aria-hidden="true"></i>
+                                    </span>
+                                    <span class="min-w-0 flex-1">
+                                        <span class="block text-[10px] font-bold uppercase tracking-wider text-neutral-400">Email</span>
+                                        <span class="mt-1 block truncate text-sm font-bold text-white">support@rayakandigital.id</span>
+                                    </span>
+                                    <i class="fa-solid fa-arrow-right text-xs text-neutral-500 transition group-hover:text-primary-400" aria-hidden="true"></i>
+                                </a>
+                            </div>
+
+                            <dl class="mt-8 grid gap-6 border-t border-white/10 pt-8 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+                                <div class="flex gap-3">
+                                    <span class="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/5 text-primary-400">
+                                        <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+                                    </span>
+                                    <div>
+                                        <dt class="text-xs font-bold text-white">Alamat kantor</dt>
+                                        <dd class="mt-1.5 text-xs leading-6 text-neutral-400">Desa Tugusumberjo, Peterongan, Kabupaten Jombang</dd>
+                                    </div>
+                                </div>
+                                <div class="flex gap-3">
+                                    <span class="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/5 text-primary-400">
+                                        <i class="fa-regular fa-clock" aria-hidden="true"></i>
+                                    </span>
+                                    <div>
+                                        <dt class="text-xs font-bold text-white">Jam operasional</dt>
+                                        <dd class="mt-1.5 text-xs leading-6 text-neutral-400">Senin–Jumat, 09.00–18.00 WIB<br>Sabtu, 09.00–14.00 WIB</dd>
+                                    </div>
+                                </div>
+                            </dl>
+
+                            <div class="mt-8 flex items-start gap-3 rounded-2xl border border-primary-400/20 bg-primary-500/10 p-4">
+                                <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary-500 text-xs text-white">
+                                    <i class="fa-solid fa-bolt" aria-hidden="true"></i>
+                                </span>
+                                <p class="text-xs leading-6 text-neutral-300">
+                                    Pesan WhatsApp pada jam operasional biasanya mendapat respons dalam
+                                    <strong class="text-white">kurang dari 30 menit</strong>.
+                                </p>
+                            </div>
+                        </div>
+                    </aside>
+
+                    <div data-aos="fade-left" data-aos-delay="100"
+                        class="rounded-[2rem] border border-neutral-200 bg-white p-6 shadow-xl shadow-secondary-900/5 dark:border-secondary-700 dark:bg-secondary-800 sm:p-8 lg:p-10">
+                        <div class="flex flex-col gap-4 border-b border-neutral-100 pb-7 dark:border-secondary-700 sm:flex-row sm:items-start sm:justify-between">
+                            <div>
+                                <span class="text-[11px] font-bold uppercase tracking-[0.2em] text-primary-500">Formulir kontak</span>
+                                <h2 class="mt-2 font-heading text-2xl font-bold text-secondary-900 dark:text-white sm:text-3xl">Ceritakan kebutuhan Anda</h2>
+                                <p class="mt-2 max-w-xl text-sm leading-6 text-neutral-500 dark:text-neutral-400">Semakin lengkap informasinya, semakin tepat bantuan yang dapat kami berikan.</p>
+                            </div>
+                            <span class="inline-flex w-fit items-center gap-2 whitespace-nowrap rounded-full bg-emerald-50 px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400">
+                                <span class="h-1.5 w-1.5 rounded-full bg-emerald-500" aria-hidden="true"></span>
+                                Online
+                            </span>
                         </div>
 
-                        <div>
-                            <label for="email"
-                                class="block text-sm font-semibold text-secondary-700 dark:text-neutral-200 mb-2">Alamat
-                                Email</label>
-                            <input type="email" id="email" name="email" placeholder="nama@email.com" required
-                                class="w-full px-4 py-3 border border-neutral-200 dark:border-secondary-700 rounded-xl focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all duration-200 bg-tertiary/50">
-                        </div>
+                        <form id="contactForm" class="mt-7 grid gap-5" action="{{ route('hubungi-kami.submit') }}" method="POST">
+                            @csrf
 
-                        <div>
-                            <label for="subject"
-                                class="block text-sm font-semibold text-secondary-700 dark:text-neutral-200 mb-2">Subjek
-                                Pesan</label>
-                            <select id="subject" name="subject" required
-                                class="w-full px-4 py-3 border border-neutral-200 dark:border-secondary-700 rounded-xl focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all duration-200 bg-tertiary/50 text-neutral-600 dark:text-neutral-300">
-                                <option value="">Pilih subjek pertanyaan</option>
-                                <option value="general">Pertanyaan Umum</option>
-                                <option value="order">Pemesanan Undangan</option>
-                                <option value="technical">Kendala Teknis</option>
-                                <option value="partnership">Kerja Sama</option>
-                            </select>
-                        </div>
+                            <div class="grid gap-5 sm:grid-cols-2">
+                                <div class="grid gap-2">
+                                    <label for="name" class="text-xs font-bold text-secondary-800 dark:text-neutral-200">
+                                        Nama lengkap <span class="text-primary-500" aria-hidden="true">*</span>
+                                    </label>
+                                    <div class="relative">
+                                        <i class="fa-regular fa-user pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm text-neutral-400" aria-hidden="true"></i>
+                                        <input type="text" id="name" name="name" value="{{ old('name') }}"
+                                            autocomplete="name" placeholder="Nama Anda" required maxlength="255"
+                                            class="w-full rounded-xl border border-neutral-200 bg-neutral-50 py-3.5 pl-11 pr-4 text-sm text-secondary-900 placeholder:text-neutral-400 transition focus:border-primary-500 focus:bg-white focus:ring-4 focus:ring-primary-500/10 dark:border-secondary-700 dark:bg-secondary-900 dark:text-white dark:placeholder:text-neutral-500 dark:focus:border-primary-500 dark:focus:bg-secondary-900">
+                                    </div>
+                                </div>
 
-                        <div>
-                            <label for="message"
-                                class="block text-sm font-semibold text-secondary-700 dark:text-neutral-200 mb-2">Pesan
-                                Anda</label>
-                            <textarea id="message" name="message" rows="4"
-                                placeholder="Tuliskan detail pertanyaan Anda di sini..." required
-                                class="w-full px-4 py-3 border border-neutral-200 dark:border-secondary-700 rounded-xl focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all duration-200 bg-tertiary/50 resize-none"></textarea>
-                        </div>
+                                <div class="grid gap-2">
+                                    <label for="email" class="text-xs font-bold text-secondary-800 dark:text-neutral-200">
+                                        Alamat email <span class="text-primary-500" aria-hidden="true">*</span>
+                                    </label>
+                                    <div class="relative">
+                                        <i class="fa-regular fa-envelope pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm text-neutral-400" aria-hidden="true"></i>
+                                        <input type="email" id="email" name="email" value="{{ old('email') }}"
+                                            autocomplete="email" inputmode="email" placeholder="nama@email.com" required maxlength="255"
+                                            class="w-full rounded-xl border border-neutral-200 bg-neutral-50 py-3.5 pl-11 pr-4 text-sm text-secondary-900 placeholder:text-neutral-400 transition focus:border-primary-500 focus:bg-white focus:ring-4 focus:ring-primary-500/10 dark:border-secondary-700 dark:bg-secondary-900 dark:text-white dark:placeholder:text-neutral-500 dark:focus:border-primary-500 dark:focus:bg-secondary-900">
+                                    </div>
+                                </div>
+                            </div>
 
-                        <button type="submit"
-                            class="w-full py-3 px-4 bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white rounded-xl font-bold transition-all duration-300 transform hover:scale-[1.02] shadow-soft shadow-primary-500/25">
-                            Kirim Pesan
-                        </button>
-                    </form>
+                            <div class="grid gap-2">
+                                <label for="subject" class="text-xs font-bold text-secondary-800 dark:text-neutral-200">
+                                    Subjek pesan <span class="text-primary-500" aria-hidden="true">*</span>
+                                </label>
+                                <div class="relative">
+                                    <i class="fa-regular fa-message pointer-events-none absolute left-4 top-1/2 z-10 -translate-y-1/2 text-sm text-neutral-400" aria-hidden="true"></i>
+                                    <select id="subject" name="subject" required
+                                        class="w-full rounded-xl border border-neutral-200 bg-neutral-50 py-3.5 pl-11 pr-10 text-sm text-secondary-900 transition focus:border-primary-500 focus:bg-white focus:ring-4 focus:ring-primary-500/10 dark:border-secondary-700 dark:bg-secondary-900 dark:text-white dark:focus:border-primary-500 dark:focus:bg-secondary-900">
+                                        <option value="">Pilih topik yang ingin dibahas</option>
+                                        <option value="general" @selected(old('subject') === 'general')>Pertanyaan Umum</option>
+                                        <option value="order" @selected(old('subject') === 'order')>Pemesanan Undangan</option>
+                                        <option value="technical" @selected(old('subject') === 'technical')>Kendala Teknis</option>
+                                        <option value="partnership" @selected(old('subject') === 'partnership')>Kerja Sama</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="grid gap-2">
+                                <div class="flex items-center justify-between gap-4">
+                                    <label for="message" class="text-xs font-bold text-secondary-800 dark:text-neutral-200">
+                                        Pesan Anda <span class="text-primary-500" aria-hidden="true">*</span>
+                                    </label>
+                                    <span class="text-[10px] text-neutral-400">Maks. 2.000 karakter</span>
+                                </div>
+                                <textarea id="message" name="message" rows="6" maxlength="2000"
+                                    placeholder="Jelaskan pertanyaan atau kendala Anda secara singkat..." required
+                                    class="w-full resize-none rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-3.5 text-sm leading-7 text-secondary-900 placeholder:text-neutral-400 transition focus:border-primary-500 focus:bg-white focus:ring-4 focus:ring-primary-500/10 dark:border-secondary-700 dark:bg-secondary-900 dark:text-white dark:placeholder:text-neutral-500 dark:focus:border-primary-500 dark:focus:bg-secondary-900">{{ old('message') }}</textarea>
+                            </div>
+
+                            <div class="flex flex-col-reverse gap-4 pt-1 sm:flex-row sm:items-center sm:justify-between">
+                                <p class="flex items-start gap-2 text-[11px] leading-5 text-neutral-400">
+                                    <i class="fa-solid fa-lock mt-0.5 text-emerald-500" aria-hidden="true"></i>
+                                    <span>Dengan mengirim formulir, Anda menyetujui <a href="{{ route('kebijakan-privasi') }}" class="font-semibold text-neutral-600 underline decoration-neutral-300 underline-offset-2 hover:text-primary-500 dark:text-neutral-300 dark:decoration-secondary-600">kebijakan privasi</a> kami.</span>
+                                </p>
+                                <button type="submit"
+                                    class="inline-flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-xl bg-primary-500 px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-primary-500/20 transition duration-200 hover:-translate-y-0.5 hover:bg-primary-600 hover:shadow-xl focus:outline-none focus-visible:ring-4 focus-visible:ring-primary-500/25 disabled:cursor-not-allowed disabled:opacity-60 motion-reduce:transform-none">
+                                    <span data-submit-label>Kirim pesan</span>
+                                    <span data-submit-loading class="hidden items-center gap-2">
+                                        <i class="fa-solid fa-circle-notch animate-spin" aria-hidden="true"></i>
+                                        Mengirim...
+                                    </span>
+                                    <i data-submit-icon class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
+                                </button>
+                            </div>
+
+                            <p id="formStatus" class="sr-only" aria-live="polite"></p>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
+        </section>
+
+        <section class="border-y border-neutral-200 bg-white py-12 dark:border-secondary-700 dark:bg-secondary-800/40">
+            <div class="mx-auto grid max-w-6xl gap-6 px-6 text-center sm:grid-cols-3 sm:px-8">
+                @foreach ([
+                    ['30 menit', 'Rata-rata respons WhatsApp', 'clock'],
+                    ['4 kanal', 'Pilihan topik bantuan', 'layer-group'],
+                    ['100%', 'Dibantu oleh tim manusia', 'user-group'],
+                ] as $index => [$value, $label, $icon])
+                    <div data-aos="fade-up" data-aos-delay="{{ $index * 100 }}" class="flex items-center justify-center gap-4 sm:flex-col sm:gap-2">
+                        <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary-50 text-primary-500 dark:bg-primary-900/30 dark:text-primary-400">
+                            <i class="fa-solid fa-{{ $icon }}" aria-hidden="true"></i>
+                        </span>
+                        <div class="text-left sm:text-center">
+                            <p class="font-heading text-2xl font-bold text-secondary-900 dark:text-white">{{ $value }}</p>
+                            <p class="mt-1 text-xs text-neutral-500 dark:text-neutral-400">{{ $label }}</p>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </section>
+    </main>
+
     <x-public-footer />
+
     <script>
         const contactForm = document.getElementById('contactForm');
-        contactForm.addEventListener('submit', async function (e) {
-            e.preventDefault();
 
-            const submitBtn = contactForm.querySelector('button[type="submit"]');
+        contactForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const submitButton = contactForm.querySelector('button[type="submit"]');
+            const submitLabel = submitButton.querySelector('[data-submit-label]');
+            const submitLoading = submitButton.querySelector('[data-submit-loading]');
+            const submitIcon = submitButton.querySelector('[data-submit-icon]');
+            const formStatus = document.getElementById('formStatus');
             const formData = new FormData(contactForm);
 
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = 'Mengirim...';
+            submitButton.disabled = true;
+            submitLabel.classList.add('hidden');
+            submitIcon.classList.add('hidden');
+            submitLoading.classList.remove('hidden');
+            submitLoading.classList.add('inline-flex');
+            formStatus.textContent = 'Pesan sedang dikirim.';
 
             try {
                 const response = await fetch(contactForm.action, {
@@ -214,15 +288,22 @@
                     },
                 });
 
-                const data = await response.json();
+                const data = await response.json().catch(() => ({}));
 
                 if (!response.ok) {
-                    throw new Error(data.message || 'Terjadi kesalahan. Silakan coba lagi.');
+                    const validationMessage = data.errors
+                        ? Object.values(data.errors).flat()[0]
+                        : null;
+
+                    throw new Error(validationMessage || data.message || 'Terjadi kesalahan. Silakan coba lagi.');
                 }
+
+                formStatus.textContent = 'Pesan berhasil terkirim.';
 
                 Swal.fire({
                     icon: 'success',
-                    title: 'Pesan Terkirim!',
+                    title: 'Pesan terkirim!',
+                    text: 'Terima kasih. Tim kami akan segera menghubungi Anda.',
                     timer: 4000,
                     showConfirmButton: true,
                     confirmButtonColor: '#FF7A00',
@@ -230,15 +311,20 @@
 
                 contactForm.reset();
             } catch (error) {
+                formStatus.textContent = `Pesan gagal dikirim. ${error.message}`;
+
                 Swal.fire({
                     icon: 'error',
-                    title: 'Gagal Mengirim',
+                    title: 'Gagal mengirim',
                     text: error.message,
                     confirmButtonColor: '#FF7A00',
                 });
             } finally {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = 'Kirim Pesan';
+                submitButton.disabled = false;
+                submitLabel.classList.remove('hidden');
+                submitIcon.classList.remove('hidden');
+                submitLoading.classList.add('hidden');
+                submitLoading.classList.remove('inline-flex');
             }
         });
     </script>

@@ -268,6 +268,14 @@ class ThemePreviewController extends Controller
             'wedding-scroll' => 'ancient_scroll',
             'gulungan-kuno' => 'ancient_scroll',
             'prasasti-cinta' => 'ancient_scroll',
+            'attendance-clock' => 'attendance_clock',
+            'fingerprint-attendance' => 'attendance_clock',
+            'kartu-absensi' => 'attendance_clock',
+            'mesin-absensi' => 'attendance_clock',
+            'time-clock' => 'attendance_clock',
+            'orbit-wedding' => 'orbit',
+            'orbit-cinta' => 'orbit',
+            'cosmic-orbit' => 'orbit',
         ];
 
         $effectiveSlug = $aliases[$themeSlug] ?? $themeSlug;
