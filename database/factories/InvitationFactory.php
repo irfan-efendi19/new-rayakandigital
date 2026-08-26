@@ -28,6 +28,7 @@ class InvitationFactory extends Factory
             'groom_nickname' => $this->faker->firstName('male'),
             'theme' => 'elegant',
             'tier' => 'free',
+            'timezone' => Invitation::DEFAULT_TIMEZONE,
             'is_active' => true,
         ];
     }

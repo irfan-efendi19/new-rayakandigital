@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class InvitationController extends Controller
@@ -122,7 +123,7 @@ class InvitationController extends Controller
                     'groom_father_name' => 'required|string|max:255',
                     'groom_mother_name' => 'required|string|max:255',
                     'theme' => 'required|string',
-                    'timezone' => 'nullable|string|max:50',
+                    'timezone' => ['nullable', 'string', Rule::in(array_keys(Invitation::TIMEZONES))],
                     'bride_groom_order' => 'nullable|in:male_first,female_first',
                     'events' => 'nullable|array',
                     'events.*.event_title' => 'required_with:events|string|max:100',
@@ -548,7 +549,7 @@ class InvitationController extends Controller
                 'venue_parking_info' => 'nullable|string',
                 'shared_drive_url' => 'nullable|url',
                 'love_story' => 'nullable|string',
-                'timezone' => 'nullable|string|max:50',
+                'timezone' => ['nullable', 'string', Rule::in(array_keys(Invitation::TIMEZONES))],
                 'theme' => 'required|string',
                 'is_active' => 'boolean',
                 'music_url' => 'nullable|string',

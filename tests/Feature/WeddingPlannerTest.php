@@ -2,8 +2,12 @@
 
 use App\Models\Invitation;
 use App\Models\User;
+use App\Models\WeddingChecklist;
 use App\Models\WeddingPlannerItem;
 use App\Models\WeddingRundown;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Barryvdh\DomPDF\PDF as DomPdfDocument;
+use Carbon\CarbonImmutable;
 
 function createVerifiedUser(): User
 {
@@ -208,8 +212,9 @@ test('QA-WP-03: validasi rundown menolak waktu akhir sebelum waktu mulai', funct
         ->assertSessionHasErrors('time_end');
 });
 
-test('QA-WP-04: export PDF rundown & budget menghasilkan file PDF', function () {
+test('QA-WP-04: export PDF menghasilkan laporan wedding planner lengkap', function () {
     $user = createVerifiedUser();
+    $invitation = Invitation::factory()->for($user)->create();
 
     WeddingPlannerItem::create([
         'user_id' => $user->id,
@@ -227,10 +232,50 @@ test('QA-WP-04: export PDF rundown & budget menghasilkan file PDF', function () 
         'person_in_charge' => 'Penghulu',
     ]);
 
-    $this->actingAs($user)
-        ->get(route('dashboard.planner.export-pdf'))
+    $response = $this->actingAs($user)
+        ->get(route('dashboard.planner.export-pdf'));
+
+    $response
         ->assertSuccessful()
         ->assertHeader('content-type', 'application/pdf');
+
+    expect($response->headers->get('content-disposition'))
+        ->toContain('Wedding-Planner-Lengkap-'.$user->id)
+        ->and(substr($response->getContent(), 0, 4))->toBe('%PDF')
+        ->and(WeddingChecklist::whereBelongsTo($invitation)->count())->toBeGreaterThan(0);
+});
+
+test('waktu cetak wedding planner mengikuti zona waktu undangan', function () {
+    $this->travelTo(CarbonImmutable::parse('2026-08-27 00:30:00', 'UTC'));
+
+    $user = createVerifiedUser();
+    Invitation::factory()->for($user)->create([
+        'timezone' => 'Asia/Jayapura',
+    ]);
+
+    $document = Mockery::mock(DomPdfDocument::class);
+
+    Pdf::shouldReceive('loadView')
+        ->once()
+        ->withArgs(function (string $view, array $data): bool {
+            expect($view)->toBe('dashboard.planner.planner_pdf')
+                ->and($data['generatedAt'])->toBe('27 Agustus 2026, 09:30 WIT')
+                ->and($data['generatedAtFilename'])->toBe('20260827-093000');
+
+            return true;
+        })
+        ->andReturn($document);
+
+    $document->shouldReceive('setPaper')->once()->with('a4', 'portrait')->andReturnSelf();
+    $document->shouldReceive('setWarnings')->once()->with(false)->andReturnSelf();
+    $document->shouldReceive('download')
+        ->once()
+        ->with('Wedding-Planner-Lengkap-'.$user->id.'-20260827-093000.pdf')
+        ->andReturn(response('%PDF')->header('content-type', 'application/pdf'));
+
+    $this->actingAs($user)
+        ->get(route('dashboard.planner.export-pdf'))
+        ->assertSuccessful();
 });
 
 test('countdown Hari H tampil di header sesuai tanggal undangan', function () {

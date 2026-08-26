@@ -236,7 +236,7 @@
                     <div class="invoice-kicker">Dokumen Tagihan</div>
                     <div class="invoice-title">INVOICE</div>
                     <div class="invoice-number">#{{ $invoice_number }}</div>
-                    <div class="invoice-date">Diterbitkan {{ $issue_date }}</div>
+                    <div class="invoice-date">Dicetak {{ $issue_date }}</div>
                 </td>
             </tr>
         </table>

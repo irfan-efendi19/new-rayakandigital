@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Invitation;
 use App\Models\WeddingChecklist;
 use App\Models\WeddingPlannerItem;
 use App\Models\WeddingRundown;
@@ -194,32 +195,84 @@ class WeddingPlannerController extends Controller
 
     public function exportPdf(Request $request)
     {
-        $userId = $request->user()->id;
-
-        $rundowns = WeddingRundown::where('user_id', $userId)
-            ->orderBy('time_start')
-            ->get();
-
-        $budgets = WeddingPlannerItem::where('user_id', $userId)
-            ->whereIn('category', ['BUDGET', 'VENDOR'])
-            ->orderByDesc('event_date')
-            ->get();
-
-        $data = [
-            'user' => $request->user(),
-            'rundowns' => $rundowns,
-            'budgets' => $budgets,
-            'totalEstimated' => $budgets->sum('estimated_cost'),
-            'totalActual' => $budgets->sum('actual_cost'),
-            'totalPaid' => $budgets->sum('paid_amount'),
-            'generatedAt' => now()->translatedFormat('d F Y, H:i'),
-        ];
+        $data = $this->plannerReportData($request);
 
         $pdf = Pdf::loadView('dashboard.planner.planner_pdf', $data)
             ->setPaper('a4', 'portrait')
             ->setWarnings(false);
 
-        return $pdf->download('Wedding-Planner-Rundown-Budget-'.$userId.'-'.now()->format('Ymd-His').'.pdf');
+        return $pdf->download('Wedding-Planner-Lengkap-'.$request->user()->id.'-'.$data['generatedAtFilename'].'.pdf');
+    }
+
+    private function plannerReportData(Request $request): array
+    {
+        $user = $request->user();
+        WeddingPlannerItem::initializePresets($user);
+
+        $plannerItems = WeddingPlannerItem::whereBelongsTo($user)
+            ->orderBy('category')
+            ->orderBy('subcategory')
+            ->orderBy('id')
+            ->get();
+
+        $rundowns = WeddingRundown::whereBelongsTo($user)
+            ->orderBy('time_start')
+            ->get();
+
+        $invitation = $user->invitation;
+        $checklists = collect();
+
+        if ($invitation) {
+            WeddingChecklist::initializePresets($invitation);
+            $checklists = $invitation->checklists()
+                ->orderBy('category_code')
+                ->orderBy('id')
+                ->get();
+        }
+
+        $mainChecklists = $checklists->where('category_code', '!=', 'ADMINISTRATION');
+        $administrationItems = $checklists->where('category_code', 'ADMINISTRATION');
+        $budgetItems = $plannerItems->where('category', 'BUDGET');
+        $vendorItems = $plannerItems->where('category', 'VENDOR');
+        $preWeddingItems = $plannerItems->where('category', 'PRE_WEDDING');
+        $engagementItems = $plannerItems->where('category', 'ENGAGEMENT');
+        $seserahanItems = $plannerItems->where('category', 'SESERAHAN');
+
+        $totalPlanned = $budgetItems->sum('estimated_cost')
+            + $vendorItems->sum('estimated_cost')
+            + $preWeddingItems->sum('estimated_cost')
+            + $engagementItems->sum('cost_pria')
+            + $engagementItems->sum('cost_wanita')
+            + $seserahanItems->sum('estimated_cost');
+
+        $totalPaid = $budgetItems->sum('paid_amount')
+            + $vendorItems->sum('paid_amount')
+            + $preWeddingItems->sum('paid_amount');
+
+        $timezone = $invitation?->effectiveTimezone() ?? Invitation::DEFAULT_TIMEZONE;
+        $generatedAt = now()->timezone($timezone);
+
+        return [
+            'user' => $user,
+            'invitation' => $invitation,
+            'rundowns' => $rundowns,
+            'mainChecklists' => $mainChecklists,
+            'administrationItems' => $administrationItems,
+            'engagementItems' => $engagementItems,
+            'preWeddingItems' => $preWeddingItems,
+            'seserahanItems' => $seserahanItems,
+            'budgetItems' => $budgetItems,
+            'vendorItems' => $vendorItems,
+            'checklistTotal' => $mainChecklists->sum(fn (WeddingChecklist $item) => $item->checkboxCount()),
+            'checklistCompleted' => $mainChecklists->sum(fn (WeddingChecklist $item) => $item->completedCheckboxCount()),
+            'administrationTotal' => $administrationItems->sum(fn (WeddingChecklist $item) => $item->checkboxCount()),
+            'administrationCompleted' => $administrationItems->sum(fn (WeddingChecklist $item) => $item->completedCheckboxCount()),
+            'totalPlanned' => $totalPlanned,
+            'totalPaid' => $totalPaid,
+            'totalRemaining' => max(0, $totalPlanned - $totalPaid),
+            'generatedAt' => $generatedAt->translatedFormat('d F Y, H:i').' '.Invitation::TIMEZONES[$timezone],
+            'generatedAtFilename' => $generatedAt->format('Ymd-His'),
+        ];
     }
 
     private function validateItem(Request $request): array

@@ -36,6 +36,18 @@ test('QA-001: user can create their single invitation via invitation.store', fun
     expect($user->hasInvitation())->toBeTrue();
 });
 
+test('timezone undangan hanya menerima zona waktu Indonesia yang didukung', function () {
+    $user = User::factory()->create();
+
+    $this->actingAs($user)
+        ->post(route('invitation.store'), oneToOneInvitationPayload([
+            'timezone' => 'Europe/London',
+        ]))
+        ->assertSessionHasErrors('timezone');
+
+    expect($user->hasInvitation())->toBeFalse();
+});
+
 test('QA-002: user with an invitation is redirected away from the create page', function () {
     $user = User::factory()->create();
     Invitation::factory()->create(['user_id' => $user->id]);

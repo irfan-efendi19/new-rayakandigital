@@ -44,9 +44,10 @@
                         Tambah vendor
                     </button>
                     <a href="{{ route('dashboard.planner.export-pdf') }}"
-                        class="inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-sm font-semibold text-white transition hover:border-white/30 hover:bg-white/10">
+                        title="Unduh seluruh modul Wedding Planner sebagai PDF"
+                        class="inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-sm font-semibold text-white transition hover:border-white/30 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300">
                         <i class="fa-regular fa-file-pdf text-xs text-red-300" aria-hidden="true"></i>
-                        Export PDF
+                        Export semua modul
                     </a>
                 </div>
             </div>

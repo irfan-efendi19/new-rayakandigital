@@ -35,10 +35,11 @@ class InvoiceController extends Controller
         $packageName = ucfirst($invitation->currentTier());
         $addonTotal = $invitation->addons->sum('pivot.purchased_price');
         $grandTotal = $packagePrice + $addonTotal;
+        $issuedAt = now()->timezone($invitation->effectiveTimezone());
 
         $data = [
             'invoice_number' => $invoiceNumber,
-            'issue_date' => now()->translatedFormat('d F Y'),
+            'issue_date' => $issuedAt->translatedFormat('d F Y, H:i').' '.$invitation->timezoneAbbreviation(),
             'invitation' => $invitation,
             'user' => $invitation->user,
             'package_name' => $packageName,

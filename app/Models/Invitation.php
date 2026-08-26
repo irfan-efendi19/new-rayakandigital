@@ -17,6 +17,14 @@ class Invitation extends Model
     /** @use HasFactory<InvitationFactory> */
     use HasFactory;
 
+    public const DEFAULT_TIMEZONE = 'Asia/Jakarta';
+
+    public const TIMEZONES = [
+        'Asia/Jakarta' => 'WIB',
+        'Asia/Makassar' => 'WITA',
+        'Asia/Jayapura' => 'WIT',
+    ];
+
     protected static function booted(): void
     {
         static::saving(function (self $invitation) {
@@ -251,6 +259,18 @@ class Invitation extends Model
     public function isExpired(): bool
     {
         return $this->expires_at !== null && $this->expires_at->isPast();
+    }
+
+    public function effectiveTimezone(): string
+    {
+        return array_key_exists((string) $this->timezone, self::TIMEZONES)
+            ? $this->timezone
+            : self::DEFAULT_TIMEZONE;
+    }
+
+    public function timezoneAbbreviation(): string
+    {
+        return self::TIMEZONES[$this->effectiveTimezone()];
     }
 
     public function isRsvpPaxLimited(): bool
