@@ -135,8 +135,7 @@
 
         .section-title { margin-top: 3px; font-size: 16px; }
         .section-description { margin-top: 3px; color: #71717A; font-size: 8px; }
-        .page-break { page-break-before: always; }
-        .page-break-spacer { height: 28px; }
+        .page-break { page-break-before: always; padding-top: 28px; padding-bottom: 46px; }
 
         .module-table { margin-bottom: 16px; table-layout: fixed; }
         .module-table th { padding: 7px 8px; background: #27272A; color: #FFFFFF; font-size: 7px; text-align: left; text-transform: uppercase; }
@@ -300,7 +299,7 @@
     @endif
 
     <section class="page-break">
-        <div class="page-break-spacer"></div>
+
         <div class="section-header"><div class="section-kicker">Modul 01</div><div class="section-title">Checklist Persiapan</div><div class="section-description">{{ $checklistCompleted }} dari {{ $checklistTotal }} tugas selesai ({{ $checklistPercent }}%). Administrasi ditampilkan pada modul tersendiri.</div></div>
         @forelse($mainChecklists->groupBy('category_code') as $categoryCode => $items)
             <div class="group-title">{{ $items->first()->category_name }} - {{ $items->where('is_completed', true)->count() }}/{{ $items->count() }} selesai</div>
@@ -314,7 +313,7 @@
     </section>
 
     <section class="page-break">
-        <div class="page-break-spacer"></div>
+
         <div class="section-header"><div class="section-kicker">Modul 02</div><div class="section-title">Rencana Lamaran</div><div class="section-description">Pembagian biaya pihak pria dan wanita untuk setiap kebutuhan lamaran.</div></div>
         <div class="section-summary">Total Lamaran: Rp {{ number_format($engagementItems->sum('cost_pria') + $engagementItems->sum('cost_wanita'), 0, ',', '.') }}</div>
         @forelse($engagementItems->groupBy(fn ($item) => $item->subcategory ?: 'OTHER') as $groupCode => $items)
@@ -329,7 +328,7 @@
     </section>
 
     <section class="page-break">
-        <div class="page-break-spacer"></div>
+
         <div class="section-header"><div class="section-kicker">Modul 03</div><div class="section-title">Pre-Wedding</div><div class="section-description">Kebutuhan dokumentasi, anggaran, realisasi, dan progres pembayaran.</div></div>
         <div class="section-summary">Total Rencana: Rp {{ number_format($preWeddingItems->sum('estimated_cost'), 0, ',', '.') }} | Terbayar: Rp {{ number_format($preWeddingItems->sum('paid_amount'), 0, ',', '.') }}</div>
         @if($preWeddingItems->isEmpty())
@@ -343,7 +342,7 @@
     </section>
 
     <section class="page-break">
-        <div class="page-break-spacer"></div>
+
         <div class="section-header"><div class="section-kicker">Modul 04</div><div class="section-title">Seserahan</div><div class="section-description">Daftar kebutuhan seserahan yang dikelompokkan berdasarkan pihak.</div></div>
         <div class="section-summary">Total Seserahan: Rp {{ number_format($seserahanItems->sum('estimated_cost'), 0, ',', '.') }}</div>
         @forelse($seserahanItems->groupBy(fn ($item) => $item->subcategory ?: 'OTHER') as $partyCode => $items)
@@ -358,7 +357,7 @@
     </section>
 
     <section class="page-break">
-        <div class="page-break-spacer"></div>
+
         <div class="section-header"><div class="section-kicker">Modul 05</div><div class="section-title">Administrasi & Legal</div><div class="section-description">Kesiapan dokumen pihak pria dan wanita untuk keperluan pencatatan pernikahan.</div></div>
         <div class="section-summary">{{ $administrationCompleted }} dari {{ $administrationTotal }} centang dokumen siap ({{ $administrationPercent }}%).</div>
         @if($administrationItems->isEmpty())
@@ -376,7 +375,7 @@
     </section>
 
     <section class="page-break">
-        <div class="page-break-spacer"></div>
+
         <div class="section-header"><div class="section-kicker">Modul 06</div><div class="section-title">Budget & Vendor</div><div class="section-description">Ringkasan rencana biaya, realisasi, pembayaran, dan sisa kebutuhan.</div></div>
         <div class="section-summary">Total Rencana: Rp {{ number_format($budgetRows->sum('estimated_cost'), 0, ',', '.') }} | Terbayar: Rp {{ number_format($budgetRows->sum('paid_amount'), 0, ',', '.') }}</div>
         @if($budgetRows->isEmpty())
