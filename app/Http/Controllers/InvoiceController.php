@@ -5,25 +5,34 @@ namespace App\Http\Controllers;
 use App\Models\AddonTransaction;
 use App\Models\Invitation;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Gate;
 
 class InvoiceController extends Controller
 {
-    public function downloadPdf($id)
+    public function downloadPdf(Invitation $invitation)
     {
-        $invitation = Invitation::with(['user', 'addons' => function ($query) {
+        Gate::authorize('view', $invitation);
+
+        $invitation->load(['user', 'pricingTier', 'addons' => function ($query) {
             $query->wherePivot('status_active', true);
-        }])->findOrFail($id);
+        }]);
+
+        $latestOrder = $invitation->orders()
+            ->where('payment_status', 'success')
+            ->latest()
+            ->first();
 
         $latestTransaction = AddonTransaction::where('invitation_id', $invitation->id)
             ->where('payment_status', 'settlement')
             ->latest()
             ->first();
 
-        $invoiceNumber = $latestTransaction
-            ? $latestTransaction->reference_order_id
-            : 'RD-'.date('Ymd').'-'.$invitation->id;
+        $invoiceNumber = $latestOrder?->invoice_id
+            ?? $latestTransaction?->reference_order_id
+            ?? 'RD-'.$invitation->created_at->format('Ymd').'-'.str_pad((string) $invitation->id, 4, '0', STR_PAD_LEFT);
 
         $packagePrice = $invitation->package_price;
+        $packageName = ucfirst($invitation->currentTier());
         $addonTotal = $invitation->addons->sum('pivot.purchased_price');
         $grandTotal = $packagePrice + $addonTotal;
 
@@ -32,8 +41,10 @@ class InvoiceController extends Controller
             'issue_date' => now()->translatedFormat('d F Y'),
             'invitation' => $invitation,
             'user' => $invitation->user,
+            'package_name' => $packageName,
             'package_price' => $packagePrice,
             'addons' => $invitation->addons,
+            'addon_total' => $addonTotal,
             'grand_total' => $grandTotal,
         ];
 
