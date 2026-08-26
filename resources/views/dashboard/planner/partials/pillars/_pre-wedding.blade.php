@@ -1,55 +1,76 @@
 @php
     $preItems = $itemsByCategory['PRE_WEDDING'];
     $preTotalBudget = $preItems->sum('estimated_cost');
+    $preTotalActual = $preItems->sum('actual_cost');
     $preTotalPaid = $preItems->sum('paid_amount');
     $preTotalRemaining = max(0, $preTotalBudget - $preTotalPaid);
-    $prePaidPercent = $preTotalBudget > 0 ? round(($preTotalPaid / $preTotalBudget) * 100) : 0;
+    $prePaidPercent = $preTotalBudget > 0 ? min(100, max(0, round(($preTotalPaid / $preTotalBudget) * 100))) : 0;
 @endphp
-<div class="mb-4 flex items-center justify-between gap-3">
-    <div>
-        <h3 class="text-sm font-semibold text-secondary-800 dark:text-neutral-100 sm:text-base">
-            Pre-Wedding</h3>
-        <p class="mt-0.5 text-[11px] text-neutral-500 dark:text-neutral-400 sm:text-xs">
-            {{ $preItems->count() }} item persiapan
+<div class="relative mb-5 overflow-hidden rounded-[28px] border border-violet-200/70 bg-gradient-to-br from-violet-600 via-purple-600 to-indigo-700 p-5 text-white shadow-[0_20px_50px_-24px_rgba(124,58,237,0.6)] dark:border-violet-800/50 sm:p-6">
+    <div class="pointer-events-none absolute -right-12 -top-14 h-44 w-44 rounded-full bg-white/10 blur-2xl"></div>
+    <div class="relative flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+    <div class="flex items-center gap-4">
+        <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/15 ring-1 ring-white/20 backdrop-blur-sm">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 7h4l2-3h6l2 3h4v12H3V7zm9 3a3 3 0 100 6 3 3 0 000-6z" /></svg>
+        </div>
+        <div>
+        <p class="text-[10px] font-bold uppercase tracking-[0.24em] text-violet-100">Item persiapan &amp; dokumentasi</p>
+        <h3 class="mt-1 font-heading text-xl font-bold sm:text-2xl">Pre-Wedding</h3>
+        <p class="mt-1 text-xs text-violet-100/85">
+            {{ $preItems->count() }} item · total Rp {{ number_format($preTotalBudget, 0, ',', '.') }}
         </p>
+        </div>
     </div>
     <button type="button" x-data @click="setActiveTab('PRE_WEDDING'); $dispatch('open-modal', 'add-item-PRE_WEDDING')"
-        class="inline-flex items-center gap-1.5 rounded-xl bg-primary px-2.5 py-1.5 text-[11px] font-semibold text-white transition-all hover:bg-primary-600 sm:px-3 sm:text-xs">
+        class="inline-flex items-center gap-1.5 self-start rounded-xl bg-white px-3.5 py-2 text-xs font-bold text-violet-700 shadow-sm transition-all hover:-translate-y-0.5 hover:bg-violet-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-violet-600 sm:self-auto">
         <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
         </svg>
         Tambah
     </button>
+    </div>
 </div>
 
 @if($preItems->isEmpty())
-    <div
-        class="rounded-2xl border border-dashed border-neutral-200 px-5 py-10 text-center text-sm text-neutral-400 dark:border-secondary-600 dark:text-neutral-500">
-        Belum ada item persiapan. Tambahkan item untuk mulai merencanakan pre-wedding.
+    <div class="rounded-3xl border border-dashed border-violet-200 bg-violet-50/40 px-5 py-10 text-center dark:border-violet-800/50 dark:bg-violet-950/15">
+        <span class="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-violet-500 shadow-sm dark:bg-secondary-800 dark:text-violet-300">
+            <i class="fa-solid fa-camera-retro" aria-hidden="true"></i>
+        </span>
+        <p class="mt-3 text-sm font-semibold text-secondary-800 dark:text-neutral-100">Belum ada item pre-wedding</p>
+        <p class="mt-1 text-xs text-neutral-500 dark:text-neutral-400">Mulai dari fotografer, lokasi, busana, atau jadwal pemotretan.</p>
+        <button type="button" x-data @click="$dispatch('open-modal', 'add-item-PRE_WEDDING')"
+            class="mt-4 inline-flex items-center gap-2 rounded-xl bg-violet-600 px-3.5 py-2 text-xs font-bold text-white transition hover:bg-violet-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-secondary-800">
+            <i class="fa-solid fa-plus text-[10px]" aria-hidden="true"></i> Tambah item pertama
+        </button>
     </div>
 @else
     {{-- Summary Cards --}}
-    <div class="mb-5 grid grid-cols-3 gap-2 sm:gap-3">
+    <div class="mb-5 grid grid-cols-2 gap-3 sm:grid-cols-3">
         <div
-            class="rounded-2xl border border-neutral-200/70 bg-neutral-50/70 p-2.5 text-center dark:border-secondary-700/50 dark:bg-secondary-700/40 sm:p-3.5">
-            <span class="text-[10px] text-neutral-400 dark:text-neutral-500 sm:text-[11px]">Budget</span>
-            <p class="mt-0.5 text-sm font-bold text-secondary-800 dark:text-neutral-100 tabular-nums sm:text-lg">
+            class="col-span-2 rounded-2xl border border-neutral-200/70 bg-neutral-50/70 p-3.5 dark:border-secondary-700/50 dark:bg-secondary-700/40 sm:col-span-1 sm:p-4">
+            <span class="text-[10px] text-neutral-400 dark:text-neutral-500 sm:text-[11px]">Total keseluruhan <span class="opacity-70">(estimasi)</span></span>
+            <p class="mt-1 text-lg font-extrabold text-secondary-800 dark:text-neutral-100 tabular-nums sm:text-xl">
                 Rp {{ number_format($preTotalBudget, 0, ',', '.') }}</p>
         </div>
         <div
-            class="rounded-2xl border border-emerald-200/70 bg-emerald-50/70 p-2.5 text-center dark:border-emerald-800/50 dark:bg-emerald-900/20 sm:p-3.5">
-            <span class="text-[10px] text-emerald-500 dark:text-emerald-400 sm:text-[11px]">Bayar</span>
+            class="rounded-2xl border border-emerald-200/70 bg-emerald-50/70 p-3.5 dark:border-emerald-800/50 dark:bg-emerald-900/20 sm:p-4">
+            <span class="text-[10px] text-emerald-500 dark:text-emerald-400 sm:text-[11px]">Sudah terbayar</span>
             <p class="mt-0.5 text-sm font-bold text-emerald-600 dark:text-emerald-400 tabular-nums sm:text-lg">
                 Rp {{ number_format($preTotalPaid, 0, ',', '.') }}</p>
         </div>
         <div
-            class="rounded-2xl border border-amber-200/70 bg-amber-50/70 p-2.5 text-center dark:border-amber-800/50 dark:bg-amber-900/20 sm:p-3.5">
-            <span class="text-[10px] text-amber-500 dark:text-amber-400 sm:text-[11px]">Sisa</span>
+            class="rounded-2xl border border-amber-200/70 bg-amber-50/70 p-3.5 dark:border-amber-800/50 dark:bg-amber-900/20 sm:p-4">
+            <span class="text-[10px] text-amber-500 dark:text-amber-400 sm:text-[11px]">Belum terbayar</span>
             <p class="mt-0.5 text-sm font-bold text-amber-600 dark:text-amber-400 tabular-nums sm:text-lg">
                 Rp
                 {{ number_format($preTotalRemaining, 0, ',', '.') }}
             </p>
         </div>
+    </div>
+
+    <div class="mb-5 flex flex-col gap-2 rounded-2xl border border-violet-200/70 bg-violet-50/60 px-4 py-3 text-xs dark:border-violet-800/50 dark:bg-violet-900/15 sm:flex-row sm:items-center sm:justify-between">
+        <span class="font-semibold text-violet-800 dark:text-violet-200">Budget Rp {{ number_format($preTotalBudget, 0, ',', '.') }} · Realisasi Rp {{ number_format($preTotalActual, 0, ',', '.') }}</span>
+        <span class="text-violet-600/70 dark:text-violet-300/70">Rp {{ number_format($preTotalPaid, 0, ',', '.') }} total terbayar</span>
     </div>
 
     {{-- Progress Bar --}}
@@ -73,15 +94,15 @@
     </div>
 
     {{-- Items List --}}
-    <div class="space-y-2.5">
+    <div class="grid gap-3 lg:grid-cols-2">
         @foreach($preItems as $item)
             @php
-                $itemPaidPercent = $item->estimated_cost > 0 ? round(($item->paid_amount / $item->estimated_cost) * 100) : 0;
+                $itemPaidPercent = $item->estimated_cost > 0 ? min(100, max(0, round(($item->paid_amount / $item->estimated_cost) * 100))) : 0;
             @endphp
             <div
                 class="group relative flex items-stretch rounded-2xl border border-neutral-200/80 bg-neutral-50/70 shadow-sm transition-all duration-200 hover:border-violet-300 hover:bg-violet-50/30 dark:border-secondary-600/50 dark:bg-secondary-700/30 dark:hover:border-violet-700/50 dark:hover:bg-violet-900/10">
                 <div
-                    class="flex items-center justify-center w-12 shrink-0 border-r border-neutral-150 dark:border-secondary-600/50 bg-violet-50/50 dark:bg-violet-900/20 rounded-l-xl">
+                    class="flex w-12 shrink-0 items-center justify-center rounded-l-2xl border-r border-neutral-200 bg-violet-50/50 dark:border-secondary-600/50 dark:bg-violet-900/20">
                     <span
                         class="w-6 h-6 flex items-center justify-center rounded-lg text-[10px] font-bold text-white bg-violet-500">{{ $loop->iteration }}</span>
                 </div>
@@ -117,10 +138,10 @@
                                     class="text-[10px] font-semibold text-violet-600 dark:text-violet-400 tabular-nums">{{ $itemPaidPercent }}%</span>
                             </div>
                         </div>
-                        <div
-                            class="flex items-center gap-1 shrink-0 sm:opacity-0 sm:group-hover:opacity-100 sm:focus-within:opacity-100 transition-opacity duration-150">
+                        <div class="flex shrink-0 items-center gap-1">
                             <button type="button" x-data @click="$dispatch('open-modal', 'edit-item-{{ $item->id }}')"
-                                class="p-1.5 rounded-lg text-neutral-400 hover:text-primary dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors">
+                                aria-label="Edit {{ $item->title }}"
+                                class="rounded-lg p-1.5 text-neutral-400 transition-colors hover:bg-primary-50 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 dark:hover:bg-primary-900/20 dark:hover:text-primary-400">
                                 <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -131,7 +152,8 @@
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit"
-                                    class="p-1.5 rounded-lg text-neutral-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+                                    aria-label="Hapus {{ $item->title }}"
+                                    class="rounded-lg p-1.5 text-neutral-400 transition-colors hover:bg-red-50 hover:text-red-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400 dark:hover:bg-red-900/20 dark:hover:text-red-400">
                                     <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />

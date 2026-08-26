@@ -1,16 +1,36 @@
 {{-- ─── KALENDER BULANAN ─── --}}
-<div class="mb-4">
-    <h3 class="font-semibold text-secondary-800 dark:text-neutral-100">Kalender Bulanan</h3>
-    <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">Kalender referensi bulanan
-        menuju Hari H.</p>
+@php
+    $calendarItems = $itemsByCategory['CALENDAR']->sortBy('event_date');
+@endphp
+<div class="relative mb-5 overflow-hidden rounded-[28px] border border-blue-200/70 bg-gradient-to-br from-blue-600 via-blue-600 to-indigo-700 p-5 text-white shadow-[0_20px_50px_-24px_rgba(37,99,235,0.65)] dark:border-blue-800/50 sm:p-6">
+    <div class="pointer-events-none absolute -right-10 -top-12 h-40 w-40 rounded-full bg-white/10 blur-2xl"></div>
+    <div class="relative flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+        <div class="flex items-center gap-4">
+            <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/15 ring-1 ring-white/20 backdrop-blur-sm">
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 7V3m8 4V3M5 11h14M5 5h14a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2z" />
+                </svg>
+            </div>
+            <div>
+                <p class="text-[10px] font-bold uppercase tracking-[0.24em] text-blue-100">Jadwal Pernikahan</p>
+                <h3 class="mt-1 font-heading text-xl font-bold sm:text-2xl">Kalender Bulanan</h3>
+                <p class="mt-1 text-xs text-blue-100/85">Susun agenda penting menuju Hari H dalam satu tempat.</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-2 self-start rounded-2xl bg-white/10 px-3 py-2 ring-1 ring-white/15 backdrop-blur-sm sm:self-auto">
+            <span class="flex h-8 w-8 items-center justify-center rounded-xl bg-white text-sm font-bold text-blue-600">{{ $calendarItems->count() }}</span>
+            <span class="pr-1 text-xs font-semibold text-blue-50">agenda tercatat</span>
+        </div>
+    </div>
 </div>
 
 <div x-data="plannerCalendar()"
-    class="rounded-2xl border border-neutral-200/80 dark:border-secondary-700/60 overflow-hidden shadow-sm">
+    class="overflow-hidden rounded-[24px] border border-neutral-200/80 bg-white shadow-[0_18px_45px_-28px_rgba(15,23,42,0.45)] ring-1 ring-black/5 dark:border-secondary-700/60 dark:bg-secondary-800/80">
     {{-- Header --}}
     <div
-        class="flex items-center justify-between gap-3 px-5 py-4 bg-gradient-to-r from-primary-600 to-primary-700 dark:from-primary-700 dark:to-primary-800">
+        class="flex items-center justify-between gap-3 bg-gradient-to-r from-blue-600 to-indigo-600 px-5 py-4 dark:from-blue-700 dark:to-indigo-800">
         <button type="button" @click="prevMonth()"
+            aria-label="Bulan sebelumnya"
             class="inline-flex items-center justify-center w-9 h-9 rounded-xl text-white/80 hover:bg-white/20 hover:text-white transition-all">
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
@@ -22,6 +42,7 @@
             </p>
         </div>
         <button type="button" @click="nextMonth()"
+            aria-label="Bulan berikutnya"
             class="inline-flex items-center justify-center w-9 h-9 rounded-xl text-white/80 hover:bg-white/20 hover:text-white transition-all">
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
@@ -76,9 +97,6 @@
 @endif
 
 {{-- Event List --}}
-@php
-    $calendarItems = $itemsByCategory['CALENDAR']->sortBy('event_date');
-@endphp
 @if($calendarItems->isNotEmpty())
     <div class="mt-5">
         <h4 class="text-xs font-bold uppercase tracking-wider text-neutral-400 dark:text-neutral-500 mb-3">

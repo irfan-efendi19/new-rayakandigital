@@ -7,26 +7,35 @@
     $sesTotal = $sesTotalPria + $sesTotalWanita;
 @endphp
 <div x-data="{ sesFilter: 'ALL' }">
-    <div class="flex items-center justify-between gap-3 mb-4">
-        <div>
-            <h3 class="font-semibold text-secondary-800 dark:text-neutral-100 text-sm sm:text-base">
-                Seserahan</h3>
-            <p class="text-[11px] sm:text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
+    <div class="relative mb-5 overflow-hidden rounded-[28px] border border-amber-200/70 bg-gradient-to-br from-amber-500 via-orange-500 to-rose-600 p-5 text-white shadow-[0_20px_50px_-24px_rgba(245,158,11,0.62)] dark:border-amber-800/50 sm:p-6">
+        <div class="pointer-events-none absolute -right-12 -top-14 h-44 w-44 rounded-full bg-white/10 blur-2xl"></div>
+        <div class="relative flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+        <div class="flex items-center gap-4">
+            <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/15 ring-1 ring-white/20 backdrop-blur-sm">
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M20 12v8H4v-8m8 8V8m-8 4h16M7.5 8A2.5 2.5 0 1112 6c0-1.38-1.12-2.5-2.5-2.5S7 4.62 7 6c0 .82.2 1.48.5 2zm9 0A2.5 2.5 0 1012 6c0-1.38 1.12-2.5 2.5-2.5S17 4.62 17 6c0 .82-.2 1.48-.5 2z" /></svg>
+            </div>
+            <div>
+            <p class="text-[10px] font-bold uppercase tracking-[0.24em] text-amber-100">Hadiah Penuh Makna</p>
+            <h3 class="mt-1 font-heading text-xl font-bold sm:text-2xl">Seserahan</h3>
+            <p class="mt-1 text-xs text-amber-50/90">
                 {{ $sesItems->count() }} item · dibagi per pihak
             </p>
+            </div>
         </div>
         <button type="button" x-data @click="setActiveTab('SESERAHAN'); $dispatch('open-modal', 'add-item-SESERAHAN')"
-            class="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-primary hover:bg-primary-600 text-white text-[11px] sm:text-xs font-semibold transition-all">
+            class="inline-flex items-center gap-1.5 self-start rounded-xl bg-white px-3.5 py-2 text-xs font-bold text-orange-700 shadow-sm transition-all hover:-translate-y-0.5 hover:bg-amber-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-orange-500 sm:self-auto">
             <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
             </svg>
             Tambah
         </button>
+        </div>
     </div>
 
     {{-- Toggle Filter --}}
     <div class="mb-5 grid grid-cols-3 gap-1 rounded-2xl bg-neutral-100 p-1 dark:bg-secondary-700/50">
         <button type="button" @click="sesFilter = 'ALL'"
+            :aria-pressed="(sesFilter === 'ALL').toString()"
             :class="sesFilter === 'ALL' ? 'bg-white dark:bg-secondary-800 text-secondary-800 dark:text-neutral-100 shadow-sm' : 'text-neutral-500 dark:text-neutral-400 hover:text-secondary-700 dark:hover:text-neutral-300'"
             class="flex items-center justify-center gap-1 px-1.5 sm:gap-1.5 sm:px-3 py-2 min-w-0 rounded-lg text-xs font-semibold transition-all duration-200">
             <svg class="w-3.5 h-3.5 hidden sm:block flex-shrink-0" fill="none" viewBox="0 0 24 24"
@@ -39,6 +48,7 @@
                 class="flex-shrink-0 text-[10px] px-1.5 py-0.5 rounded-full bg-neutral-200 dark:bg-secondary-600 text-neutral-600 dark:text-neutral-300">{{ $sesItems->count() }}</span>
         </button>
         <button type="button" @click="sesFilter = 'PRIA'"
+            :aria-pressed="(sesFilter === 'PRIA').toString()"
             :class="sesFilter === 'PRIA' ? 'bg-blue-500 text-white shadow-sm' : 'text-neutral-500 dark:text-neutral-400 hover:text-blue-600 dark:hover:text-blue-400'"
             class="flex items-center justify-center gap-1 px-1.5 sm:gap-1.5 sm:px-3 py-2 min-w-0 rounded-lg text-xs font-semibold transition-all duration-200">
             <svg class="w-3.5 h-3.5 hidden sm:block flex-shrink-0" fill="none" viewBox="0 0 24 24"
@@ -51,6 +61,7 @@
                 :class="sesFilter === 'PRIA' ? 'bg-blue-400 text-white' : 'bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400'">{{ $sesPriaItems->count() }}</span>
         </button>
         <button type="button" @click="sesFilter = 'WANITA'"
+            :aria-pressed="(sesFilter === 'WANITA').toString()"
             :class="sesFilter === 'WANITA' ? 'bg-pink-500 text-white shadow-sm' : 'text-neutral-500 dark:text-neutral-400 hover:text-pink-600 dark:hover:text-pink-400'"
             class="flex items-center justify-center gap-1 px-1.5 sm:gap-1.5 sm:px-3 py-2 min-w-0 rounded-lg text-xs font-semibold transition-all duration-200">
             <svg class="w-3.5 h-3.5 hidden sm:block flex-shrink-0" fill="none" viewBox="0 0 24 24"
@@ -65,24 +76,25 @@
     </div>
 
     {{-- Summary Cards --}}
-    <div class="mb-5 grid grid-cols-3 gap-2 sm:gap-3">
+    <div class="mb-5 grid grid-cols-2 gap-3 sm:grid-cols-3">
         <div
-            class="rounded-2xl border border-neutral-200/70 bg-neutral-50/70 p-2.5 dark:border-secondary-700/50 dark:bg-secondary-700/40 sm:p-3.5">
-            <span class="text-[10px] text-neutral-400 dark:text-neutral-500 sm:text-[11px]">Total</span>
-            <p class="mt-0.5 text-sm font-bold text-secondary-800 dark:text-neutral-100 tabular-nums sm:text-lg">
+            class="col-span-2 rounded-2xl border border-neutral-200/70 bg-neutral-50/70 p-3.5 dark:border-secondary-700/50 dark:bg-secondary-700/40 sm:col-span-1 sm:p-4">
+            <span class="text-[10px] text-neutral-400 dark:text-neutral-500 sm:text-[11px]">Total seserahan</span>
+            <p class="mt-1 text-lg font-extrabold text-secondary-800 dark:text-neutral-100 tabular-nums sm:text-xl">
                 Rp {{ number_format($sesTotal, 0, ',', '.') }}</p>
+            <p class="mt-1 text-[10px] text-neutral-500 dark:text-neutral-400">Pria Rp {{ number_format($sesTotalPria, 0, ',', '.') }} · Wanita Rp {{ number_format($sesTotalWanita, 0, ',', '.') }}</p>
         </div>
         <div
-            class="rounded-2xl border border-blue-200/70 bg-blue-50/70 p-2.5 dark:border-blue-800/50 dark:bg-blue-900/20 sm:p-3.5">
-            <span class="text-[10px] text-blue-500 dark:text-blue-400 sm:text-[11px]">Pria</span>
+            class="rounded-2xl border border-blue-200/70 bg-blue-50/70 p-3.5 dark:border-blue-800/50 dark:bg-blue-900/20 sm:p-4">
+            <span class="text-[10px] text-blue-500 dark:text-blue-400 sm:text-[11px]">Untuk pihak pria</span>
             <p class="mt-0.5 text-sm font-bold text-blue-600 dark:text-blue-400 tabular-nums sm:text-lg">
                 Rp
                 {{ number_format($sesTotalPria, 0, ',', '.') }}
             </p>
         </div>
         <div
-            class="rounded-2xl border border-pink-200/70 bg-pink-50/70 p-2.5 dark:border-pink-800/50 dark:bg-pink-900/20 sm:p-3.5">
-            <span class="text-[10px] text-pink-500 dark:text-pink-400 sm:text-[11px]">Wanita</span>
+            class="rounded-2xl border border-pink-200/70 bg-pink-50/70 p-3.5 dark:border-pink-800/50 dark:bg-pink-900/20 sm:p-4">
+            <span class="text-[10px] text-pink-500 dark:text-pink-400 sm:text-[11px]">Untuk pihak wanita</span>
             <p class="mt-0.5 text-sm font-bold text-pink-600 dark:text-pink-400 tabular-nums sm:text-lg">
                 Rp
                 {{ number_format($sesTotalWanita, 0, ',', '.') }}
@@ -91,9 +103,16 @@
     </div>
 
     @if($sesItems->isEmpty())
-        <div
-            class="px-5 py-10 text-center text-sm text-neutral-400 dark:text-neutral-500 border border-dashed border-neutral-200 dark:border-secondary-600 rounded-xl">
-            Belum ada item seserahan. Tambahkan data untuk mulai merencanakan.
+        <div class="rounded-3xl border border-dashed border-amber-200 bg-amber-50/40 px-5 py-10 text-center dark:border-amber-800/50 dark:bg-amber-950/15">
+            <span class="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-amber-500 shadow-sm dark:bg-secondary-800 dark:text-amber-300">
+                <i class="fa-solid fa-gift" aria-hidden="true"></i>
+            </span>
+            <p class="mt-3 text-sm font-semibold text-secondary-800 dark:text-neutral-100">Belum ada item seserahan.</p>
+            <p class="mt-1 text-xs text-neutral-500 dark:text-neutral-400">Tambahkan barang lalu pilih pihak agar daftar otomatis terkelompok.</p>
+            <button type="button" x-data @click="$dispatch('open-modal', 'add-item-SESERAHAN')"
+                class="mt-4 inline-flex items-center gap-2 rounded-xl bg-amber-500 px-3.5 py-2 text-xs font-bold text-white transition hover:bg-amber-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-secondary-800">
+                <i class="fa-solid fa-plus text-[10px]" aria-hidden="true"></i> Tambah item pertama
+            </button>
         </div>
     @else
         @php
@@ -120,7 +139,7 @@
         @endphp
 
         {{-- Filtered Items --}}
-        <div class="space-y-4">
+        <div class="flex flex-col gap-4">
             @foreach(\App\Models\WeddingPlannerItem::SESERAHAN_PARTIES as $partyCode => $partyLabel)
                 <div x-show="sesFilter === 'ALL' || sesFilter === '{{ $partyCode }}'"
                     x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 scale-95"
@@ -136,7 +155,7 @@
                             <div class="flex items-center gap-2.5">
                                 <span class="w-2 h-2 rounded-full {{ $partyStyle['dot'] }}"></span>
                                 <h4 class="text-sm font-semibold text-secondary-800 dark:text-neutral-100">
-                                    {{ $partyLabel }}
+                                    Subtotal {{ $partyLabel }}
                                 </h4>
                             </div>
                             <div class="flex items-center gap-2">
@@ -154,7 +173,7 @@
                                 Belum ada item untuk {{ strtolower($partyLabel) }}.
                             </div>
                         @else
-                            <div class="p-3 space-y-2">
+                            <div class="flex flex-col gap-2 p-3">
                                 @foreach($partyItems as $item)
                                     @php
                                         $hoverBorder = $partyCode === 'PRIA' ? 'hover:border-blue-300' : 'hover:border-pink-300';
@@ -166,7 +185,7 @@
                                     <div
                                         class="group relative flex items-stretch rounded-2xl border border-neutral-200/80 bg-neutral-50/70 shadow-sm transition-all duration-200 {{ $hoverBorder }} {{ $hoverBg }} dark:border-secondary-600/50 dark:bg-secondary-700/30 {{ $darkHoverBorder }} {{ $darkHoverBg }}">
                                         <div
-                                            class="flex items-center justify-center w-12 shrink-0 border-r border-neutral-150 dark:border-secondary-600/50 {{ $bgLeft }} rounded-l-xl">
+                                            class="flex w-12 shrink-0 items-center justify-center rounded-l-2xl border-r border-neutral-200 dark:border-secondary-600/50 {{ $bgLeft }}">
                                             <span
                                                 class="w-6 h-6 flex items-center justify-center rounded-lg text-[10px] font-bold text-white {{ $partyStyle['badge'] }}">{{ $loop->iteration }}</span>
                                         </div>
@@ -188,11 +207,11 @@
                                                         {{ number_format($item->estimated_cost, 0, ',', '.') }}
                                                     </p>
                                                 </div>
-                                                <div
-                                                    class="flex items-center gap-1 shrink-0 sm:opacity-0 sm:group-hover:opacity-100 sm:focus-within:opacity-100 transition-opacity duration-150">
+                                                <div class="flex shrink-0 items-center gap-1">
                                                     <button type="button" x-data
                                                         @click="$dispatch('open-modal', 'edit-item-{{ $item->id }}')"
-                                                        class="p-1.5 rounded-lg text-neutral-400 hover:text-primary dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors">
+                                                        aria-label="Edit {{ $item->title }}"
+                                                        class="rounded-lg p-1.5 text-neutral-400 transition-colors hover:bg-primary-50 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 dark:hover:bg-primary-900/20 dark:hover:text-primary-400">
                                                         <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                                 d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -203,7 +222,8 @@
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit"
-                                                            class="p-1.5 rounded-lg text-neutral-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+                                                            aria-label="Hapus {{ $item->title }}"
+                                                            class="rounded-lg p-1.5 text-neutral-400 transition-colors hover:bg-red-50 hover:text-red-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400 dark:hover:bg-red-900/20 dark:hover:text-red-400">
                                                             <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24"
                                                                 stroke="currentColor">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -226,7 +246,7 @@
         {{-- Total Summary --}}
         <div
             class="mt-5 p-4 rounded-xl bg-amber-50 dark:bg-amber-900/20 border border-amber-200/60 dark:border-amber-700/40">
-            <div class="flex items-center justify-between">
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                     <p class="text-sm font-bold text-secondary-800 dark:text-neutral-100">Total
                         Pengeluaran</p>

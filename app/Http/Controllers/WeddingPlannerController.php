@@ -7,6 +7,7 @@ use App\Models\WeddingPlannerItem;
 use App\Models\WeddingRundown;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class WeddingPlannerController extends Controller
 {
@@ -223,9 +224,16 @@ class WeddingPlannerController extends Controller
 
     private function validateItem(Request $request): array
     {
+        $allowedSubcategories = match ($request->input('category')) {
+            'SESERAHAN' => array_keys(WeddingPlannerItem::SESERAHAN_PARTIES),
+            'BUDGET' => array_keys(WeddingPlannerItem::BUDGET_CATEGORIES),
+            'ENGAGEMENT' => array_keys(WeddingPlannerItem::ENGAGEMENT_GROUP_LABELS),
+            default => [],
+        };
+
         return $request->validate([
-            'category' => ['required', 'string', 'in:'.implode(',', WeddingPlannerItem::CATEGORIES)],
-            'subcategory' => ['nullable', 'string', 'in:PRIA,WANITA'],
+            'category' => ['required', 'string', Rule::in(WeddingPlannerItem::CATEGORIES)],
+            'subcategory' => ['nullable', 'string', Rule::in($allowedSubcategories)],
             'vendor_type' => ['nullable', 'string', 'in:'.implode(',', array_keys(WeddingPlannerItem::VENDOR_TYPES))],
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],

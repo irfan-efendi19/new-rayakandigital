@@ -28,26 +28,26 @@
     <x-public-navbar />
     <div class="h-16" aria-hidden="true"></div>
 
-    <main class="overflow-hidden">
+    <main class="overflow-x-clip">
         <section class="grain-bg relative isolate border-b border-neutral-200 bg-white dark:border-secondary-700 dark:bg-secondary-900">
             <div class="orb-orange pointer-events-none absolute -left-40 -top-32 h-[34rem] w-[34rem]" aria-hidden="true"></div>
             <div class="orb-warm pointer-events-none absolute -right-40 bottom-0 h-[32rem] w-[32rem]" aria-hidden="true"></div>
 
-            <div class="relative mx-auto max-w-7xl px-6 pb-14 pt-16 text-center sm:px-8 sm:pb-16 sm:pt-20 lg:px-12">
+            <div class="relative mx-auto max-w-7xl px-4 pb-12 pt-12 text-center sm:px-8 sm:pb-16 sm:pt-20 lg:px-12">
                 <div data-aos="fade-up" class="mx-auto max-w-3xl">
                     <span class="inline-flex items-center gap-2 rounded-full border border-primary-200 bg-primary-50 px-3.5 py-2 text-[11px] font-bold uppercase tracking-[0.18em] text-primary-700 dark:border-primary-800 dark:bg-primary-900/30 dark:text-primary-300">
                         <span class="h-2 w-2 rounded-full bg-emerald-500" aria-hidden="true"></span>
                         Tim kami siap membantu
                     </span>
-                    <h1 class="mt-6 font-heading text-4xl font-bold leading-tight tracking-tight text-secondary-900 dark:text-white sm:text-5xl lg:text-6xl">
+                    <h1 class="mt-5 font-heading text-3xl font-bold leading-tight tracking-tight text-secondary-900 dark:text-white sm:mt-6 sm:text-5xl lg:text-6xl">
                         Ada yang bisa kami <span class="text-primary-500">bantu?</span>
                     </h1>
-                    <p class="mx-auto mt-5 max-w-2xl text-base leading-8 text-neutral-600 dark:text-neutral-300 sm:text-lg">
+                    <p class="mx-auto mt-4 max-w-2xl text-sm leading-7 text-neutral-600 dark:text-neutral-300 sm:mt-5 sm:text-lg sm:leading-8">
                         Ceritakan kebutuhan atau kendala Anda. Tim Rayakan Digital akan memberikan jawaban yang jelas,
                         hangat, dan tepat sasaran.
                     </p>
 
-                    <div class="mt-7 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-xs font-semibold text-neutral-500 dark:text-neutral-400">
+                    <div class="mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-3 text-[11px] font-semibold text-neutral-500 dark:text-neutral-400 sm:mt-7 sm:gap-x-6 sm:text-xs">
                         <span class="inline-flex items-center gap-2">
                             <i class="fa-solid fa-bolt text-primary-500" aria-hidden="true"></i>
                             Respons cepat
@@ -65,26 +65,26 @@
             </div>
         </section>
 
-        <section class="bg-neutral-50 py-16 dark:bg-secondary-900 sm:py-20">
-            <div class="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
-                <div class="grid items-start gap-8 lg:grid-cols-[0.82fr_1.18fr] lg:gap-10">
+        <section class="bg-neutral-50 py-12 dark:bg-secondary-900 sm:py-20">
+            <div class="mx-auto max-w-7xl px-4 sm:px-8 lg:px-12">
+                <div class="grid items-start gap-6 sm:gap-8 lg:grid-cols-[0.82fr_1.18fr] lg:gap-10">
                     <aside data-aos="fade-right"
-                        class="grain-bg relative overflow-hidden rounded-[2rem] bg-secondary-900 p-7 text-white shadow-2xl sm:p-9 lg:sticky lg:top-24">
+                        class="grain-bg relative overflow-hidden rounded-3xl bg-secondary-900 p-5 text-white shadow-2xl sm:rounded-[2rem] sm:p-9 lg:sticky lg:top-24">
                         <div class="orb-orange pointer-events-none absolute -left-32 -top-32 h-80 w-80" aria-hidden="true"></div>
                         <div class="absolute -bottom-28 -right-20 h-72 w-72 rounded-full bg-primary-500/10 blur-3xl" aria-hidden="true"></div>
 
                         <div class="relative z-10">
                             <span class="text-[11px] font-bold uppercase tracking-[0.2em] text-primary-400">Kontak langsung</span>
-                            <h2 class="mt-3 font-heading text-3xl font-bold leading-tight">Mari bicara tentang kebutuhan Anda.</h2>
+                            <h2 class="mt-3 font-heading text-2xl font-bold leading-tight sm:text-3xl">Mari bicara tentang kebutuhan Anda.</h2>
                             <p class="mt-4 text-sm leading-7 text-neutral-300">
                                 Pilih kanal yang paling nyaman. Untuk kebutuhan mendesak, WhatsApp adalah cara tercepat
                                 untuk terhubung dengan tim kami.
                             </p>
 
-                            <div class="mt-8 grid gap-3">
+                            <div class="mt-6 grid gap-3 sm:mt-8">
                                 <a href="https://wa.me/62895349823366?text=Halo%20Rayakan%20Digital%2C%20saya%20ingin%20bertanya%20tentang%20layanan%20Anda."
                                     target="_blank" rel="noopener noreferrer"
-                                    class="group flex items-center gap-4 rounded-2xl border border-white/10 bg-white/5 p-4 transition duration-200 hover:-translate-y-0.5 hover:border-emerald-400/40 hover:bg-white/10 focus:outline-none focus-visible:ring-4 focus-visible:ring-emerald-400/20 motion-reduce:transform-none">
+                                    class="group flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 p-3.5 transition duration-200 hover:-translate-y-0.5 hover:border-emerald-400/40 hover:bg-white/10 focus:outline-none focus-visible:ring-4 focus-visible:ring-emerald-400/20 motion-reduce:transform-none sm:gap-4 sm:p-4">
                                     <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-500 text-lg text-white shadow-lg shadow-emerald-500/20">
                                         <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
                                     </span>
@@ -96,7 +96,7 @@
                                 </a>
 
                                 <a href="mailto:support@rayakandigital.id"
-                                    class="group flex items-center gap-4 rounded-2xl border border-white/10 bg-white/5 p-4 transition duration-200 hover:-translate-y-0.5 hover:border-primary-400/40 hover:bg-white/10 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary-400/20 motion-reduce:transform-none">
+                                    class="group flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 p-3.5 transition duration-200 hover:-translate-y-0.5 hover:border-primary-400/40 hover:bg-white/10 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary-400/20 motion-reduce:transform-none sm:gap-4 sm:p-4">
                                     <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary-500 text-base text-white shadow-lg shadow-primary-500/20">
                                         <i class="fa-regular fa-envelope" aria-hidden="true"></i>
                                     </span>
@@ -108,7 +108,7 @@
                                 </a>
                             </div>
 
-                            <dl class="mt-8 grid gap-6 border-t border-white/10 pt-8 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+                            <dl class="mt-6 grid gap-5 border-t border-white/10 pt-6 sm:mt-8 sm:grid-cols-2 sm:gap-6 sm:pt-8 lg:grid-cols-1 xl:grid-cols-2">
                                 <div class="flex gap-3">
                                     <span class="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/5 text-primary-400">
                                         <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
@@ -129,7 +129,7 @@
                                 </div>
                             </dl>
 
-                            <div class="mt-8 flex items-start gap-3 rounded-2xl border border-primary-400/20 bg-primary-500/10 p-4">
+                            <div class="mt-6 flex items-start gap-3 rounded-2xl border border-primary-400/20 bg-primary-500/10 p-4 sm:mt-8">
                                 <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary-500 text-xs text-white">
                                     <i class="fa-solid fa-bolt" aria-hidden="true"></i>
                                 </span>
@@ -142,8 +142,8 @@
                     </aside>
 
                     <div data-aos="fade-left" data-aos-delay="100"
-                        class="rounded-[2rem] border border-neutral-200 bg-white p-6 shadow-xl shadow-secondary-900/5 dark:border-secondary-700 dark:bg-secondary-800 sm:p-8 lg:p-10">
-                        <div class="flex flex-col gap-4 border-b border-neutral-100 pb-7 dark:border-secondary-700 sm:flex-row sm:items-start sm:justify-between">
+                        class="rounded-3xl border border-neutral-200 bg-white p-5 shadow-xl shadow-secondary-900/5 dark:border-secondary-700 dark:bg-secondary-800 sm:rounded-[2rem] sm:p-8 lg:p-10">
+                        <div class="flex flex-col gap-3 border-b border-neutral-100 pb-5 dark:border-secondary-700 sm:flex-row sm:items-start sm:justify-between sm:gap-4 sm:pb-7">
                             <div>
                                 <span class="text-[11px] font-bold uppercase tracking-[0.2em] text-primary-500">Formulir kontak</span>
                                 <h2 class="mt-2 font-heading text-2xl font-bold text-secondary-900 dark:text-white sm:text-3xl">Ceritakan kebutuhan Anda</h2>
@@ -155,10 +155,10 @@
                             </span>
                         </div>
 
-                        <form id="contactForm" class="mt-7 grid gap-5" action="{{ route('hubungi-kami.submit') }}" method="POST">
+                        <form id="contactForm" class="mt-6 grid gap-4 sm:mt-7 sm:gap-5" action="{{ route('hubungi-kami.submit') }}" method="POST">
                             @csrf
 
-                            <div class="grid gap-5 sm:grid-cols-2">
+                            <div class="grid gap-4 sm:grid-cols-2 sm:gap-5">
                                 <div class="grid gap-2">
                                     <label for="name" class="text-xs font-bold text-secondary-800 dark:text-neutral-200">
                                         Nama lengkap <span class="text-primary-500" aria-hidden="true">*</span>
@@ -192,7 +192,7 @@
                                     <i class="fa-regular fa-message pointer-events-none absolute left-4 top-1/2 z-10 -translate-y-1/2 text-sm text-neutral-400" aria-hidden="true"></i>
                                     <select id="subject" name="subject" required
                                         class="w-full rounded-xl border border-neutral-200 bg-neutral-50 py-3.5 pl-11 pr-10 text-sm text-secondary-900 transition focus:border-primary-500 focus:bg-white focus:ring-4 focus:ring-primary-500/10 dark:border-secondary-700 dark:bg-secondary-900 dark:text-white dark:focus:border-primary-500 dark:focus:bg-secondary-900">
-                                        <option value="">Pilih topik yang ingin dibahas</option>
+                                        <option value="">Pilih topik bantuan</option>
                                         <option value="general" @selected(old('subject') === 'general')>Pertanyaan Umum</option>
                                         <option value="order" @selected(old('subject') === 'order')>Pemesanan Undangan</option>
                                         <option value="technical" @selected(old('subject') === 'technical')>Kendala Teknis</option>
@@ -202,7 +202,7 @@
                             </div>
 
                             <div class="grid gap-2">
-                                <div class="flex items-center justify-between gap-4">
+                                <div class="flex flex-wrap items-center justify-between gap-2">
                                     <label for="message" class="text-xs font-bold text-secondary-800 dark:text-neutral-200">
                                         Pesan Anda <span class="text-primary-500" aria-hidden="true">*</span>
                                     </label>
@@ -219,7 +219,7 @@
                                     <span>Dengan mengirim formulir, Anda menyetujui <a href="{{ route('kebijakan-privasi') }}" class="font-semibold text-neutral-600 underline decoration-neutral-300 underline-offset-2 hover:text-primary-500 dark:text-neutral-300 dark:decoration-secondary-600">kebijakan privasi</a> kami.</span>
                                 </p>
                                 <button type="submit"
-                                    class="inline-flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-xl bg-primary-500 px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-primary-500/20 transition duration-200 hover:-translate-y-0.5 hover:bg-primary-600 hover:shadow-xl focus:outline-none focus-visible:ring-4 focus-visible:ring-primary-500/25 disabled:cursor-not-allowed disabled:opacity-60 motion-reduce:transform-none">
+                                    class="inline-flex min-h-12 w-full shrink-0 items-center justify-center gap-2 rounded-xl bg-primary-500 px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-primary-500/20 transition duration-200 hover:-translate-y-0.5 hover:bg-primary-600 hover:shadow-xl focus:outline-none focus-visible:ring-4 focus-visible:ring-primary-500/25 disabled:cursor-not-allowed disabled:opacity-60 motion-reduce:transform-none sm:w-auto">
                                     <span data-submit-label>Kirim pesan</span>
                                     <span data-submit-loading class="hidden items-center gap-2">
                                         <i class="fa-solid fa-circle-notch animate-spin" aria-hidden="true"></i>
@@ -236,8 +236,8 @@
             </div>
         </section>
 
-        <section class="border-y border-neutral-200 bg-white py-12 dark:border-secondary-700 dark:bg-secondary-800/40">
-            <div class="mx-auto grid max-w-6xl gap-6 px-6 text-center sm:grid-cols-3 sm:px-8">
+        <section class="border-y border-neutral-200 bg-white py-10 dark:border-secondary-700 dark:bg-secondary-800/40 sm:py-12">
+            <div class="mx-auto grid max-w-6xl gap-5 px-4 text-center sm:grid-cols-3 sm:gap-6 sm:px-8">
                 @foreach ([
                     ['30 menit', 'Rata-rata respons WhatsApp', 'clock'],
                     ['4 kanal', 'Pilihan topik bantuan', 'layer-group'],

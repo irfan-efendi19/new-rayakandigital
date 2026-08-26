@@ -1,114 +1,161 @@
-{{-- ─── HERO ─── --}}
-<div class="hero-mesh grain-overlay border-b border-neutral-200/60 dark:border-secondary-700/40">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-7 sm:py-8">
+@php
+    $plannerProgress = max(0, min(100, (int) $checklistProgressPercent));
+    $firstName = \Illuminate\Support\Str::before($user->name, ' ');
+@endphp
 
-        {{-- Breadcrumb --}}
-        <nav class="flex items-center gap-1.5 text-xs text-neutral-400 dark:text-neutral-500 mb-4">
-            <a href="{{ route('dashboard') }}"
-                class="hover:text-primary dark:hover:text-primary-400 transition-colors">Dashboard</a>
-            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+<section class="relative isolate overflow-hidden border-b border-secondary-700 bg-secondary-900 text-white">
+    <div class="absolute inset-0 -z-20 bg-gradient-to-br from-secondary-900 via-secondary-900 to-primary-900/50"></div>
+    <div class="absolute -left-24 top-16 -z-10 h-72 w-72 rounded-full bg-primary-500/15 blur-3xl"></div>
+    <div class="absolute -right-24 bottom-0 -z-10 h-96 w-96 rounded-full bg-primary-600/15 blur-3xl"></div>
+    <div class="absolute inset-0 -z-10 opacity-[0.06]"
+        style="background-image: radial-gradient(circle, #fff 1px, transparent 1px); background-size: 28px 28px;"></div>
+
+    <div class="mx-auto max-w-7xl px-4 pb-7 pt-6 sm:px-6 sm:pb-9 sm:pt-8 lg:px-8">
+        <nav aria-label="Breadcrumb" class="flex items-center gap-2 text-xs text-white/40">
+            <a href="{{ route('dashboard') }}" class="transition hover:text-primary-300">Dashboard</a>
+            <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
             </svg>
-            <span class="text-neutral-600 dark:text-neutral-400 font-medium">Wedding Planner</span>
+            <span class="font-medium text-white/70">Wedding Planner</span>
         </nav>
 
-        <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-            <div>
-                <h1
-                    class="font-heading text-2xl sm:text-3xl font-bold text-secondary-800 dark:text-neutral-50 leading-tight">
-                    Bikin Rencana Nikah Jadi Asyik & Tanpa Ribet
-                </h1>
-                <p class="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
-                    Kelola 8 pilar persiapan pernikahan dari H-12 bulan hingga Hari H.
-                </p>
-            </div>
-            <div class="flex flex-wrap items-center gap-2 flex-shrink-0">
-                <a href="{{ route('dashboard.planner.export-pdf') }}"
-                    class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-red-600 hover:bg-red-700 rounded-xl shadow-sm shadow-red-500/20 transition-all">
-                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
-                    Export PDF Rundown & Budget
-                </a>
-            </div>
-        </div>
-
-        {{-- ─── COUNTDOWN MENUJU HARI H (dari tanggal undangan) ─── --}}
-        @if($weddingDate)
-            @php
-                $daysLeft = (int) now()->startOfDay()->diffInDays($weddingDate->copy()->startOfDay(), false);
-                $isPast = $daysLeft < 0;
-                $weddingTime = $firstEvent?->start_time ?? $invitation?->event_time;
-            @endphp
-            <div
-                class="mt-6 rounded-3xl border border-neutral-200/80 bg-white/90 p-5 sm:p-6 text-secondary-800 shadow-[0_18px_45px_-24px_rgba(15,23,42,0.35)] backdrop-blur dark:border-secondary-700/70 dark:bg-secondary-800/90 dark:text-neutral-100 relative overflow-hidden">
-                <div
-                    class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(15,23,42,0.04),transparent_60%)] dark:bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.05),transparent_60%)]">
+        <div class="mt-6 grid items-stretch gap-6 lg:grid-cols-[1.15fr_0.85fr]">
+            <div class="flex flex-col justify-center">
+                <div class="inline-flex w-fit items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-primary-300">
+                    <span class="h-1.5 w-1.5 rounded-full bg-primary-400"></span>
+                    Ruang persiapan {{ $firstName }}
                 </div>
-                <div class="relative z-10 flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
-                    <div class="min-w-0">
-                        <p class="text-xs uppercase tracking-[0.28em] text-primary/80 dark:text-primary-300 font-semibold">
-                            Countdown Menuju
-                            Hari H</p>
-                        <h4 class="font-heading text-lg sm:text-xl font-bold mt-1 text-secondary-900 dark:text-white">
-                            {{ $weddingDate->translatedFormat('l, d F Y') }}
-                            @if($weddingTime)
-                                <span class="text-secondary-600 dark:text-neutral-300 text-sm font-medium">•
-                                    {{ \Carbon\Carbon::parse($weddingTime)->format('H:i') }}</span>
-                            @endif
-                        </h4>
-                        @if($invitation)
-                            <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5 truncate">Undangan:
-                                {{ $invitation->title }}
-                            </p>
-                        @endif
+                <h1 class="mt-5 max-w-3xl font-heading text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl">
+                    Rancang hari bahagia, <span class="text-primary-400">satu langkah setiap hari.</span>
+                </h1>
+                <p class="mt-4 max-w-2xl text-sm leading-7 text-white/55 sm:text-base">
+                    Kelola jadwal, checklist, vendor, dan anggaran pernikahan dalam satu workspace yang mudah dipantau bersama.
+                </p>
+
+                <div class="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                    <button type="button" x-data @click="$dispatch('open-modal', 'add-checklist')"
+                        class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary-500 px-4 py-3 text-sm font-bold text-white shadow-lg shadow-primary-500/20 transition hover:-translate-y-0.5 hover:bg-primary-400">
+                        <i class="fa-solid fa-plus text-xs" aria-hidden="true"></i>
+                        Tambah checklist
+                    </button>
+                    <button type="button" x-data @click="$dispatch('open-modal', 'add-vendor')"
+                        class="inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-sm font-semibold text-white transition hover:border-white/30 hover:bg-white/10">
+                        <i class="fa-solid fa-handshake text-xs text-primary-300" aria-hidden="true"></i>
+                        Tambah vendor
+                    </button>
+                    <a href="{{ route('dashboard.planner.export-pdf') }}"
+                        class="inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-sm font-semibold text-white transition hover:border-white/30 hover:bg-white/10">
+                        <i class="fa-regular fa-file-pdf text-xs text-red-300" aria-hidden="true"></i>
+                        Export PDF
+                    </a>
+                </div>
+            </div>
+
+            <div class="rounded-3xl border border-white/10 bg-white/[0.07] p-4 shadow-2xl backdrop-blur-sm sm:p-5">
+                <div class="flex items-center justify-between gap-4">
+                    <div>
+                        <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">Kesiapan pernikahan</p>
+                        <p class="mt-1 text-sm font-semibold text-white/80">Progress checklist utama</p>
                     </div>
-                    <div class="flex-shrink-0">
+                    <div class="relative flex h-16 w-16 shrink-0 items-center justify-center">
+                        <svg class="h-16 w-16 -rotate-90" viewBox="0 0 36 36" aria-hidden="true">
+                            <circle cx="18" cy="18" r="15.5" fill="none" stroke="currentColor" stroke-width="3" class="text-white/10" />
+                            <circle cx="18" cy="18" r="15.5" fill="none" stroke="currentColor" stroke-width="3"
+                                stroke-linecap="round" pathLength="100" stroke-dasharray="{{ $plannerProgress }} 100"
+                                class="text-primary-400" />
+                        </svg>
+                        <span class="absolute text-sm font-extrabold">{{ $plannerProgress }}%</span>
+                    </div>
+                </div>
+
+                <div class="mt-4 h-1.5 overflow-hidden rounded-full bg-white/10">
+                    <div class="h-full rounded-full bg-gradient-to-r from-primary-500 to-primary-300"
+                        style="width: {{ $plannerProgress }}%"></div>
+                </div>
+                <div class="mt-2 flex items-center justify-between gap-3 text-[11px] text-white/40">
+                    <span>{{ $checklistCompletedItems }} checklist selesai</span>
+                    <span>{{ $checklistTotalItems }} total</span>
+                </div>
+
+                <div class="mt-5 border-t border-white/10 pt-5">
+                    @if($weddingDate)
+                        @php
+                            $daysLeft = (int) now()->startOfDay()->diffInDays($weddingDate->copy()->startOfDay(), false);
+                            $isPast = $daysLeft < 0;
+                            $weddingTime = $firstEvent?->start_time ?? $invitation?->event_time;
+                        @endphp
+
+                        <div class="flex items-start justify-between gap-4">
+                            <div class="min-w-0">
+                                <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-primary-300">Countdown Menuju Hari H</p>
+                                <p class="mt-2 font-heading text-lg font-bold text-white">{{ $weddingDate->translatedFormat('l, d F Y') }}</p>
+                                @if($invitation)
+                                    <p class="mt-1 truncate text-[11px] text-white/40">{{ $invitation->title }}</p>
+                                @endif
+                            </div>
+                            <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary-500/15 text-primary-300">
+                                <i class="fa-solid fa-heart" aria-hidden="true"></i>
+                            </span>
+                        </div>
+
                         @if($isPast)
-                            <div
-                                class="flex items-center gap-2 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-emerald-700 dark:border-emerald-800/50 dark:bg-emerald-950/30 dark:text-emerald-300">
-                                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                </svg>
-                                <span class="text-sm font-semibold">Acara telah dilaksanakan</span>
+                            <div class="mt-4 flex items-center gap-2 rounded-xl border border-emerald-400/20 bg-emerald-400/10 px-3 py-2.5 text-xs font-semibold text-emerald-200">
+                                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                                Acara telah dilaksanakan
                             </div>
                         @else
-                            <div class="grid grid-cols-4 gap-2 sm:gap-3"
+                            <div class="mt-4 grid grid-cols-4 gap-2"
                                 x-data="plannerCountdown('{{ $weddingDate->format('Y-m-d') }}', '{{ $weddingTime ?? '' }}')">
                                 <template x-if="initialized">
-                                    <template
-                                        x-for="unit in [
-                                                                                                                                                                                                { label: 'Hari', value: days },
-                                                                                                                                                                                                { label: 'Jam', value: hours },
-                                                                                                                                                                                                { label: 'Menit', value: minutes },
-                                                                                                                                                                                                { label: 'Detik', value: seconds },
-                                                                                                                                                                                            ]"
-                                        :key="unit.label">
-                                        <div
-                                            class="rounded-2xl border border-neutral-200 bg-white/80 px-2 py-2.5 text-center shadow-sm dark:border-secondary-700 dark:bg-secondary-900/70 min-w-[64px]">
-                                            <p class="text-xl sm:text-2xl font-extrabold tabular-nums leading-none text-secondary-900 dark:text-white"
-                                                x-text="String(unit.value).padStart(2, '0')"></p>
-                                            <p class="text-[10px] uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mt-1"
-                                                x-text="unit.label"></p>
+                                    <template x-for="unit in [
+                                        { label: 'Hari', value: days },
+                                        { label: 'Jam', value: hours },
+                                        { label: 'Menit', value: minutes },
+                                        { label: 'Detik', value: seconds },
+                                    ]" :key="unit.label">
+                                        <div class="rounded-xl border border-white/10 bg-black/10 px-1 py-2.5 text-center">
+                                            <p class="text-base font-extrabold tabular-nums sm:text-lg" x-text="String(unit.value).padStart(2, '0')"></p>
+                                            <p class="mt-0.5 text-[8px] uppercase tracking-wider text-white/35" x-text="unit.label"></p>
                                         </div>
                                     </template>
                                 </template>
                                 <template x-if="!initialized">
-                                    <div
-                                        class="col-span-4 flex items-center gap-2 rounded-2xl border border-neutral-200 bg-white/80 px-4 py-3 text-sm font-semibold text-secondary-700 shadow-sm dark:border-secondary-700 dark:bg-secondary-900/70 dark:text-neutral-200">
-                                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M5 13l4 4L19 7" />
-                                        </svg>
-                                        Hari H telah tiba
-                                    </div>
+                                    <div class="col-span-4 rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 text-center text-xs font-semibold text-white/70">Hari H telah tiba</div>
                                 </template>
                             </div>
                         @endif
-                    </div>
+                    @else
+                        <div class="grid grid-cols-[44px_1fr] items-center gap-3">
+                            <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary-500/15 text-primary-300">
+                                <i class="fa-regular fa-calendar-plus" aria-hidden="true"></i>
+                            </span>
+                            <div class="min-w-0 flex-1">
+                                <p class="text-sm font-semibold">Tanggal pernikahan belum terhubung</p>
+                                <p class="mt-1 text-[11px] leading-5 text-white/40">Lengkapi undangan agar countdown dan kalender Hari H aktif otomatis.</p>
+                            </div>
+                            <a href="{{ $invitation ? route('dashboard.invitations.edit', $invitation) : route('dashboard.invitations.create') }}"
+                                class="col-start-2 w-fit rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-[10px] font-bold text-white transition hover:bg-white/10">
+                                Atur
+                            </a>
+                        </div>
+                    @endif
                 </div>
             </div>
-        @endif
+        </div>
+
+        <div class="mt-6 grid grid-cols-3 divide-x divide-white/10 rounded-2xl border border-white/10 bg-black/10 px-2 py-3 sm:px-4">
+            <div class="px-2 sm:px-4">
+                <p class="text-lg font-extrabold tabular-nums sm:text-xl">{{ $plannerItems->count() }}</p>
+                <p class="mt-0.5 text-[9px] uppercase tracking-wider text-white/35 sm:text-[10px]">Item rencana</p>
+            </div>
+            <div class="px-3 sm:px-6">
+                <p class="text-lg font-extrabold tabular-nums sm:text-xl">{{ $rundowns->count() }}</p>
+                <p class="mt-0.5 text-[9px] uppercase tracking-wider text-white/35 sm:text-[10px]">Agenda Hari H</p>
+            </div>
+            <div class="px-3 sm:px-6">
+                <p class="text-lg font-extrabold tabular-nums sm:text-xl">8</p>
+                <p class="mt-0.5 text-[9px] uppercase tracking-wider text-white/35 sm:text-[10px]">Pilar persiapan</p>
+            </div>
+        </div>
     </div>
-</div>
+</section>

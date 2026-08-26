@@ -27,26 +27,26 @@
     <x-public-navbar />
 
     <main class="overflow-x-hidden">
-        <section class="relative isolate overflow-hidden bg-secondary-900 pt-28 text-white sm:pt-32">
+        <section class="relative isolate overflow-hidden bg-secondary-900 pt-24 text-white sm:pt-32">
             <div class="absolute inset-0 -z-20 bg-gradient-to-br from-secondary-900 via-secondary-900 to-primary-900/60"></div>
             <div class="absolute -left-28 top-20 -z-10 h-72 w-72 rounded-full bg-primary-500/20 blur-3xl"></div>
             <div class="absolute -right-20 bottom-0 -z-10 h-96 w-96 rounded-full bg-primary-600/20 blur-3xl"></div>
             <div class="absolute inset-0 -z-10 opacity-[0.08]"
                 style="background-image: radial-gradient(circle, #fff 1px, transparent 1px); background-size: 30px 30px;"></div>
 
-            <div class="mx-auto grid max-w-7xl items-center gap-14 px-6 pb-20 lg:grid-cols-[0.92fr_1.08fr] lg:px-8 lg:pb-28">
+            <div class="mx-auto grid max-w-7xl items-center gap-10 px-4 pb-16 sm:gap-14 sm:px-6 sm:pb-20 lg:grid-cols-[0.92fr_1.08fr] lg:px-8 lg:pb-28">
                 <div>
-                    <div class="mb-6 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-primary-200 backdrop-blur">
+                    <div class="mb-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-2 text-[10px] font-bold uppercase tracking-[0.14em] text-primary-200 backdrop-blur sm:mb-6 sm:px-4 sm:text-xs sm:tracking-[0.18em]">
                         <span class="h-2 w-2 rounded-full bg-primary-400"></span>
                         Buku tamu pernikahan digital
                     </div>
-                    <h1 class="max-w-2xl font-heading text-4xl font-bold leading-[1.08] sm:text-5xl lg:text-6xl">
+                    <h1 class="max-w-2xl font-heading text-3xl font-bold leading-[1.12] sm:text-5xl sm:leading-[1.08] lg:text-6xl">
                         Sambut setiap tamu dengan <span class="text-primary-400">lebih berkesan.</span>
                     </h1>
-                    <p class="mt-6 max-w-xl text-base leading-8 text-white/65 sm:text-lg">
+                    <p class="mt-5 max-w-xl text-sm leading-7 text-white/65 sm:mt-6 sm:text-lg sm:leading-8">
                         Dari konfirmasi kehadiran sampai check-in di hari pernikahan, semua data tamu tersusun dalam satu alur yang cepat dan mudah dipantau.
                     </p>
-                    <div class="mt-9 flex flex-col gap-3 sm:flex-row">
+                    <div class="mt-7 flex flex-col gap-3 sm:mt-9 sm:flex-row">
                         <a href="https://wa.me/62895349823366?text=Halo%20Rayakan%20Digital!%20Saya%20tertarik%20untuk%20konsultasi%20tentang%20Buku%20Tamu%20Digital."
                             class="inline-flex items-center justify-center gap-2 rounded-full bg-primary-500 px-7 py-3.5 text-sm font-bold text-white shadow-lg shadow-primary-500/20 transition hover:-translate-y-0.5 hover:bg-primary-400">
                             Konsultasi sekarang <i class="fa-solid fa-arrow-right text-xs"></i>
@@ -56,7 +56,7 @@
                             <i class="fa-regular fa-circle-play"></i> Lihat cara kerja
                         </a>
                     </div>
-                    <div class="mt-10 flex flex-wrap gap-x-6 gap-y-3 text-sm text-white/60">
+                    <div class="mt-8 flex flex-wrap gap-x-4 gap-y-3 text-xs text-white/60 sm:mt-10 sm:gap-x-6 sm:text-sm">
                         <span class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-primary-400"></i> QR check-in</span>
                         <span class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-primary-400"></i> RSVP real-time</span>
                         <span class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-primary-400"></i> WhatsApp terintegrasi</span>
@@ -65,11 +65,11 @@
 
                 <div class="relative mx-auto w-full max-w-2xl">
                     <div class="absolute -inset-5 rounded-[2.25rem] bg-gradient-to-br from-primary-400/20 to-transparent blur-2xl"></div>
-                    <div class="relative overflow-hidden rounded-[1.75rem] border border-white/15 bg-white/[0.08] p-3 shadow-2xl backdrop-blur-xl sm:p-5">
-                        <div class="rounded-2xl bg-neutral-50 p-4 text-secondary-800 shadow-inner dark:bg-secondary-800 dark:text-neutral-100 sm:p-5">
-                            <div class="flex items-center justify-between gap-4 border-b border-neutral-200 pb-4 dark:border-secondary-700">
+                    <div class="relative overflow-hidden rounded-3xl border border-white/15 bg-white/[0.08] p-2 shadow-2xl backdrop-blur-xl sm:rounded-[1.75rem] sm:p-5">
+                        <div class="rounded-2xl bg-neutral-50 p-3 text-secondary-800 shadow-inner dark:bg-secondary-800 dark:text-neutral-100 sm:p-5">
+                            <div class="flex items-start justify-between gap-2 border-b border-neutral-200 pb-4 dark:border-secondary-700 sm:items-center sm:gap-4">
                                 <div class="flex items-center gap-3">
-                                    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-secondary-900 text-primary-400 dark:bg-secondary-700">
+                                    <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-secondary-900 text-primary-400 dark:bg-secondary-700 sm:h-10 sm:w-10">
                                         <i class="fa-solid fa-user-group"></i>
                                     </div>
                                     <div>
@@ -77,21 +77,21 @@
                                         <p class="text-[11px] text-neutral-500 dark:text-neutral-400">Sari &amp; Andi · Hari ini</p>
                                     </div>
                                 </div>
-                                <span class="flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1.5 text-[10px] font-bold text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300">
+                                <span class="flex shrink-0 items-center gap-1.5 rounded-full bg-emerald-50 px-2 py-1.5 text-[9px] font-bold text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300 sm:gap-2 sm:px-3 sm:text-[10px]">
                                     <span class="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500"></span> ONLINE
                                 </span>
                             </div>
 
-                            <div class="mt-4 grid grid-cols-[0.88fr_1.12fr] gap-4">
-                                <div class="rounded-2xl bg-secondary-900 p-5 text-center text-white dark:bg-secondary-700">
-                                    <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-white/45">Kode tamu</p>
-                                    <p class="mt-2 font-mono text-base font-bold tracking-[0.14em] sm:text-xl sm:tracking-[0.2em]">WD-0812</p>
-                                    <div class="mx-auto mt-4 grid h-20 w-20 grid-cols-5 gap-1 rounded-xl bg-white p-2 sm:h-28 sm:w-28 sm:p-3">
+                            <div class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-[0.88fr_1.12fr] sm:gap-4">
+                                <div class="grid grid-cols-[auto_1fr] items-center gap-4 rounded-2xl bg-secondary-900 p-4 text-left text-white dark:bg-secondary-700 sm:block sm:p-5 sm:text-center">
+                                    <p class="col-start-2 text-[10px] font-bold uppercase tracking-[0.2em] text-white/45 sm:block">Kode tamu</p>
+                                    <p class="col-start-2 mt-2 font-mono text-base font-bold tracking-[0.14em] sm:block sm:text-xl sm:tracking-[0.2em]">WD-0812</p>
+                                    <div class="col-start-1 row-span-3 row-start-1 grid h-20 w-20 grid-cols-5 gap-1 rounded-xl bg-white p-2 sm:mx-auto sm:mt-4 sm:h-28 sm:w-28 sm:p-3">
                                         @foreach ([1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 1, 0, 1] as $cell)
                                             <span class="rounded-[2px] {{ $cell ? 'bg-secondary-900' : 'bg-white' }}"></span>
                                         @endforeach
                                     </div>
-                                    <p class="mt-3 text-[11px] text-white/50">Arahkan kamera ke kode QR</p>
+                                    <p class="col-start-2 mt-2 text-[11px] leading-5 text-white/50 sm:block sm:mt-3">Arahkan kamera ke kode QR</p>
                                 </div>
 
                                 <div class="flex flex-col gap-3">
@@ -114,12 +114,12 @@
                                     <div class="grid grid-cols-2 gap-3">
                                         <div class="rounded-2xl border border-neutral-200 bg-white p-4 dark:border-secondary-700 dark:bg-secondary-900">
                                             <i class="fa-solid fa-chart-simple text-primary-500"></i>
-                                            <p class="mt-3 text-xl font-bold">Real-time</p>
+                                            <p class="mt-3 text-base font-bold sm:text-xl">Real-time</p>
                                             <p class="text-[10px] text-neutral-500">Data kehadiran</p>
                                         </div>
                                         <div class="rounded-2xl border border-neutral-200 bg-white p-4 dark:border-secondary-700 dark:bg-secondary-900">
                                             <i class="fa-brands fa-whatsapp text-emerald-500"></i>
-                                            <p class="mt-3 text-xl font-bold">Otomatis</p>
+                                            <p class="mt-3 text-base font-bold sm:text-xl">Otomatis</p>
                                             <p class="text-[10px] text-neutral-500">Pesan personal</p>
                                         </div>
                                     </div>
@@ -136,7 +136,7 @@
         </section>
 
         <section class="border-b border-neutral-200 bg-white dark:border-secondary-700 dark:bg-secondary-800">
-            <div class="mx-auto grid max-w-7xl grid-cols-1 divide-y divide-neutral-200 px-6 dark:divide-secondary-700 sm:grid-cols-3 sm:divide-x sm:divide-y-0 lg:px-8">
+            <div class="mx-auto grid max-w-7xl grid-cols-1 divide-y divide-neutral-200 px-4 dark:divide-secondary-700 sm:grid-cols-3 sm:divide-x sm:divide-y-0 sm:px-6 lg:px-8">
                 @foreach ([['fa-qrcode', 'Check-in praktis', 'Kode unik untuk setiap tamu'], ['fa-rotate', 'Data tersinkron', 'Pantau perubahan saat acara berlangsung'], ['fa-user-shield', 'Tamu lebih teratur', 'Kategori dan status dalam satu tampilan']] as [$icon, $title, $copy])
                     <div class="flex items-center gap-4 py-6 sm:px-6">
                         <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary-50 text-primary-600 dark:bg-primary-900/30 dark:text-primary-300"><i class="fa-solid {{ $icon }}"></i></span>
@@ -146,21 +146,21 @@
             </div>
         </section>
 
-        <section id="cara-kerja" class="bg-neutral-50 py-20 dark:bg-secondary-900 sm:py-28">
-            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <section id="cara-kerja" class="bg-neutral-50 py-16 dark:bg-secondary-900 sm:py-28">
+            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div data-aos="fade-up" class="mx-auto max-w-2xl text-center">
                     <p class="text-xs font-bold uppercase tracking-[0.22em] text-primary-600 dark:text-primary-400">Alur sederhana</p>
                     <h2 class="mt-4 font-heading text-3xl font-bold text-secondary-900 dark:text-white sm:text-5xl">Rapi sebelum, saat, dan setelah hari H.</h2>
                     <p class="mt-5 leading-7 text-neutral-500 dark:text-neutral-400">Satu sistem yang membantu tim penerima tamu bekerja lebih percaya diri tanpa tumpukan daftar kertas.</p>
                 </div>
 
-                <div class="mt-14 grid gap-5 lg:grid-cols-3">
+                <div class="mt-10 grid gap-4 sm:mt-14 sm:gap-5 lg:grid-cols-3">
                     @foreach ([
                         ['01', 'Siapkan daftar tamu', 'Kelompokkan nama, jumlah pax, dan kategori tamu agar proses penerimaan lebih terarah.', 'fa-list-check'],
                         ['02', 'Kirim undangan personal', 'Bagikan informasi acara dan kode QR melalui WhatsApp langsung kepada tamu.', 'fa-paper-plane'],
                         ['03', 'Scan dan pantau', 'Verifikasi tamu di lokasi lalu lihat pembaruan kehadiran pada dashboard.', 'fa-mobile-screen-button']
                     ] as $index => [$number, $title, $copy, $icon])
-                        <article data-aos="fade-up" data-aos-delay="{{ $index * 100 }}" class="group rounded-3xl border border-neutral-200 bg-white p-7 transition duration-300 hover:-translate-y-1 hover:border-primary-200 hover:shadow-xl dark:border-secondary-700 dark:bg-secondary-800 dark:hover:border-primary-700">
+                        <article data-aos="fade-up" data-aos-delay="{{ $index * 100 }}" class="group rounded-3xl border border-neutral-200 bg-white p-6 transition duration-300 hover:-translate-y-1 hover:border-primary-200 hover:shadow-xl dark:border-secondary-700 dark:bg-secondary-800 dark:hover:border-primary-700 sm:p-7">
                             <div class="flex items-center justify-between">
                                 <span class="text-xs font-bold tracking-[0.2em] text-neutral-400">STEP {{ $number }}</span>
                                 <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-secondary-900 text-primary-400 dark:bg-secondary-700"><i class="fa-solid {{ $icon }}"></i></span>
@@ -173,8 +173,8 @@
             </div>
         </section>
 
-        <section id="fitur" class="bg-white py-20 dark:bg-secondary-800 sm:py-28">
-            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <section id="fitur" class="bg-white py-16 dark:bg-secondary-800 sm:py-28">
+            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div data-aos="fade-up" class="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
                     <div class="max-w-2xl">
                         <p class="text-xs font-bold uppercase tracking-[0.22em] text-primary-600 dark:text-primary-400">Fitur utama</p>
@@ -183,12 +183,12 @@
                     <p class="max-w-md text-sm leading-7 text-neutral-500 dark:text-neutral-400">Setiap fitur dirancang untuk mengurangi pekerjaan manual dan menjaga pengalaman tamu tetap hangat.</p>
                 </div>
 
-                <div class="mt-14 grid gap-5 lg:grid-cols-12">
-                    <article data-aos="fade-up" class="relative overflow-hidden rounded-3xl bg-secondary-900 p-8 text-white lg:col-span-7 lg:p-10">
+                <div class="mt-10 grid gap-4 sm:mt-14 sm:gap-5 lg:grid-cols-12">
+                    <article data-aos="fade-up" class="relative overflow-hidden rounded-3xl bg-secondary-900 p-6 text-white sm:p-8 lg:col-span-7 lg:p-10">
                         <div class="absolute right-0 top-0 h-64 w-64 rounded-full bg-primary-500/20 blur-3xl"></div>
                         <div class="relative max-w-lg">
                             <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-500 text-white"><i class="fa-solid fa-gauge-high"></i></span>
-                            <h3 class="mt-8 font-heading text-3xl font-bold">Dashboard RSVP real-time</h3>
+                            <h3 class="mt-6 font-heading text-2xl font-bold sm:mt-8 sm:text-3xl">Dashboard RSVP real-time</h3>
                             <p class="mt-4 leading-7 text-white/60">Lihat tamu yang mengonfirmasi, hadir, atau berhalangan tanpa menyusun ulang data secara manual.</p>
                             <div class="mt-8 grid grid-cols-3 gap-3">
                                 @foreach ([['Konfirmasi', 'bg-primary-400'], ['Hadir', 'bg-emerald-400'], ['Berhalangan', 'bg-neutral-400']] as [$label, $color])
@@ -198,24 +198,24 @@
                         </div>
                     </article>
 
-                    <article data-aos="fade-up" data-aos-delay="100" class="rounded-3xl bg-primary-500 p-8 text-white lg:col-span-5 lg:p-10">
+                    <article data-aos="fade-up" data-aos-delay="100" class="rounded-3xl bg-primary-500 p-6 text-white sm:p-8 lg:col-span-5 lg:p-10">
                         <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/20"><i class="fa-brands fa-whatsapp text-xl"></i></span>
-                        <h3 class="mt-8 font-heading text-3xl font-bold">WhatsApp yang terasa personal</h3>
+                        <h3 class="mt-6 font-heading text-2xl font-bold sm:mt-8 sm:text-3xl">WhatsApp yang terasa personal</h3>
                         <p class="mt-4 leading-7 text-white/80">Kirim undangan, pengingat RSVP, dan ucapan terima kasih melalui alur pesan yang lebih teratur.</p>
                         <div class="mt-8 flex flex-wrap gap-2 text-xs font-semibold">
                             <span class="rounded-full bg-white/15 px-3 py-2">Undangan personal</span><span class="rounded-full bg-white/15 px-3 py-2">Pengingat</span><span class="rounded-full bg-white/15 px-3 py-2">Follow-up</span>
                         </div>
                     </article>
 
-                    <article data-aos="fade-up" class="rounded-3xl border border-neutral-200 bg-neutral-50 p-8 dark:border-secondary-700 dark:bg-secondary-900 lg:col-span-5">
+                    <article data-aos="fade-up" class="rounded-3xl border border-neutral-200 bg-neutral-50 p-6 dark:border-secondary-700 dark:bg-secondary-900 sm:p-8 lg:col-span-5">
                         <div class="flex items-center gap-4"><span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-100 text-primary-600 dark:bg-primary-900/40 dark:text-primary-300"><i class="fa-solid fa-qrcode"></i></span><h3 class="text-xl font-bold text-secondary-900 dark:text-white">QR unik per tamu</h3></div>
                         <p class="mt-5 text-sm leading-7 text-neutral-500 dark:text-neutral-400">Validasi identitas dan jumlah tamu langsung di meja penerima untuk membantu mengurangi kesalahan pencatatan.</p>
                     </article>
-                    <article data-aos="fade-up" data-aos-delay="100" class="rounded-3xl border border-neutral-200 bg-neutral-50 p-8 dark:border-secondary-700 dark:bg-secondary-900 lg:col-span-4">
+                    <article data-aos="fade-up" data-aos-delay="100" class="rounded-3xl border border-neutral-200 bg-neutral-50 p-6 dark:border-secondary-700 dark:bg-secondary-900 sm:p-8 lg:col-span-4">
                         <div class="flex items-center gap-4"><span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-100 text-primary-600 dark:bg-primary-900/40 dark:text-primary-300"><i class="fa-solid fa-tags"></i></span><h3 class="text-xl font-bold text-secondary-900 dark:text-white">Kategori fleksibel</h3></div>
                         <p class="mt-5 text-sm leading-7 text-neutral-500 dark:text-neutral-400">Kelompokkan keluarga, sahabat, kolega, atau VIP agar tim mudah memberi layanan yang sesuai.</p>
                     </article>
-                    <article data-aos="fade-up" data-aos-delay="200" class="rounded-3xl border border-neutral-200 bg-neutral-50 p-8 dark:border-secondary-700 dark:bg-secondary-900 lg:col-span-3">
+                    <article data-aos="fade-up" data-aos-delay="200" class="rounded-3xl border border-neutral-200 bg-neutral-50 p-6 dark:border-secondary-700 dark:bg-secondary-900 sm:p-8 lg:col-span-3">
                         <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-100 text-primary-600 dark:bg-primary-900/40 dark:text-primary-300"><i class="fa-solid fa-shield-halved"></i></span>
                         <h3 class="mt-6 text-xl font-bold text-secondary-900 dark:text-white">Data terpusat</h3>
                         <p class="mt-3 text-sm leading-7 text-neutral-500 dark:text-neutral-400">Informasi tamu tersimpan rapi dalam satu sistem.</p>
@@ -224,8 +224,8 @@
             </div>
         </section>
 
-        <section class="bg-neutral-50 py-20 dark:bg-secondary-900 sm:py-28">
-            <div class="mx-auto grid max-w-7xl items-center gap-14 px-6 lg:grid-cols-2 lg:px-8">
+        <section class="bg-neutral-50 py-16 dark:bg-secondary-900 sm:py-28">
+            <div class="mx-auto grid max-w-7xl items-center gap-10 px-4 sm:gap-14 sm:px-6 lg:grid-cols-2 lg:px-8">
                 <div data-aos="fade-right" class="relative mx-auto w-full max-w-md">
                     <div class="absolute -inset-6 rounded-full bg-emerald-500/10 blur-3xl"></div>
                     <div class="relative rounded-[2rem] border border-neutral-200 bg-white p-4 shadow-2xl dark:border-secondary-700 dark:bg-secondary-800">
@@ -256,13 +256,13 @@
             </div>
         </section>
 
-        <section class="bg-white px-6 py-20 dark:bg-secondary-800 sm:py-24 lg:px-8">
-            <div data-aos="zoom-in" class="relative mx-auto max-w-6xl overflow-hidden rounded-[2rem] bg-secondary-900 px-6 py-14 text-center text-white shadow-2xl sm:px-12 sm:py-16">
+        <section class="bg-white px-4 py-16 dark:bg-secondary-800 sm:px-6 sm:py-24 lg:px-8">
+            <div data-aos="zoom-in" class="relative mx-auto max-w-6xl overflow-hidden rounded-3xl bg-secondary-900 px-5 py-10 text-center text-white shadow-2xl sm:rounded-[2rem] sm:px-12 sm:py-16">
                 <div class="absolute -left-20 top-0 h-64 w-64 rounded-full bg-primary-500/25 blur-3xl"></div>
                 <div class="absolute -right-20 bottom-0 h-64 w-64 rounded-full bg-primary-600/20 blur-3xl"></div>
                 <div class="relative mx-auto max-w-3xl">
                     <p class="text-xs font-bold uppercase tracking-[0.22em] text-primary-300">Untuk hari yang istimewa</p>
-                    <h2 class="mt-4 font-heading text-3xl font-bold sm:text-5xl">Siap membuat penyambutan tamu terasa lebih modern?</h2>
+                    <h2 class="mt-4 font-heading text-2xl font-bold sm:text-5xl">Siap membuat penyambutan tamu terasa lebih modern?</h2>
                     <p class="mx-auto mt-5 max-w-xl leading-7 text-white/60">Ceritakan kebutuhan pernikahan Anda. Tim Rayakan Digital akan membantu menyiapkan alur buku tamu yang paling sesuai.</p>
                     <a href="https://wa.me/62895349823366?text=Halo%20Rayakan%20Digital!%20Saya%20tertarik%20untuk%20konsultasi%20tentang%20Buku%20Tamu%20Digital."
                         class="mt-9 inline-flex items-center justify-center gap-2 rounded-full bg-primary-500 px-8 py-4 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:bg-primary-400">

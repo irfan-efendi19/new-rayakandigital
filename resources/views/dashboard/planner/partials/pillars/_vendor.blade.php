@@ -5,12 +5,24 @@
     $pendingVendors = $totalVendors - $bookedVendors;
     $totalEstimate = (float) $allVendors->sum('estimated_cost');
 @endphp
-<div class="mb-4 flex items-center justify-between gap-3">
-    <div>
-        <h3 class="font-semibold text-secondary-800 dark:text-neutral-100">Vendor Pernikahan
-        </h3>
-        <p class="mt-0.5 text-xs text-neutral-500 dark:text-neutral-400">{{ $totalVendors }}
-            vendor terdaftar</p>
+<div class="relative mb-5 overflow-hidden rounded-[28px] border border-orange-200/70 bg-gradient-to-br from-orange-600 via-orange-600 to-red-700 p-5 text-white shadow-[0_20px_50px_-24px_rgba(234,88,12,0.62)] dark:border-orange-800/50 sm:p-6">
+    <div class="pointer-events-none absolute -right-12 -top-14 h-44 w-44 rounded-full bg-white/10 blur-2xl"></div>
+    <div class="relative flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+    <div class="flex items-center gap-4">
+        <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/15 ring-1 ring-white/20 backdrop-blur-sm">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 21h18M5 21V6l7-3 7 3v15M9 9h1m4 0h1m-6 4h1m4 0h1m-5 8v-4h4v4" /></svg>
+        </div>
+        <div>
+        <p class="text-[10px] font-bold uppercase tracking-[0.24em] text-orange-100">Partner Hari Bahagia</p>
+        <h3 class="mt-1 font-heading text-xl font-bold sm:text-2xl">Vendor Pernikahan</h3>
+        <p class="mt-1 text-xs text-orange-100/85">{{ $totalVendors }} vendor terdaftar · {{ $bookedVendors }} sudah booked</p>
+        </div>
+    </div>
+    <button type="button" x-data @click="$dispatch('open-modal', 'add-vendor')"
+        class="inline-flex items-center gap-1.5 self-start rounded-xl bg-white px-3.5 py-2 text-xs font-bold text-orange-700 shadow-sm transition-all hover:-translate-y-0.5 hover:bg-orange-50 sm:self-auto">
+        <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+        Tambah Vendor
+    </button>
     </div>
 </div>
 
@@ -117,8 +129,9 @@
                             <div class="flex shrink-0 items-center gap-2">
                                 <span class="text-[11px] font-semibold text-neutral-500 dark:text-neutral-400 tabular-nums">Rp
                                     {{ number_format($vendor->estimated_cost, 0, ',', '.') }}</span>
-                                <div class="flex items-center gap-0.5 opacity-0 transition-opacity group-hover:opacity-100">
-                                    <button type="button" x-data @click="$dispatch('open-modal', 'edit-item-{{ $vendor->id }}')"
+                <div class="flex items-center gap-0.5 transition-opacity sm:opacity-0 sm:group-hover:opacity-100 sm:focus-within:opacity-100">
+                    <button type="button" x-data @click="$dispatch('open-modal', 'edit-item-{{ $vendor->id }}')"
+                        aria-label="Edit {{ $vendor->title }}"
                                         class="rounded-lg p-1.5 text-neutral-400 transition-colors hover:bg-primary-50 hover:text-primary dark:hover:bg-primary-900/20">
                                         <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -129,7 +142,8 @@
                                         onsubmit="return confirm('Hapus vendor ini?')">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit"
+                        <button type="submit"
+                            aria-label="Hapus {{ $vendor->title }}"
                                             class="rounded-lg p-1.5 text-neutral-400 transition-colors hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-900/20">
                                             <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

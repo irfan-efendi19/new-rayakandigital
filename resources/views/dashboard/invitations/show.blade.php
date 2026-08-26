@@ -29,19 +29,20 @@
         {{-- ─────────────────────────────────────────────────────────────────────
              PAGE HERO
         ──────────────────────────────────────────────────────────────────────── --}}
-        <div class="hero-mesh grain-overlay border-b border-neutral-200/60 dark:border-secondary-700/40">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-7 sm:py-8">
+        <div class="grain-overlay relative isolate overflow-hidden border-b border-secondary-700 bg-secondary-900 bg-gradient-to-br from-secondary-900 via-secondary-900 to-primary-900/60 text-white">
+            <div class="mx-auto max-w-7xl px-4 py-7 sm:px-6 sm:py-9 lg:px-8">
 
                 {{-- Breadcrumb --}}
-                <nav class="flex items-center gap-1.5 text-xs text-neutral-400 dark:text-neutral-500 mb-4">
-                    <a href="{{ route('dashboard') }}" class="hover:text-primary dark:hover:text-primary-400 transition-colors">Dashboard</a>
+                <nav aria-label="Breadcrumb" class="mb-5 flex items-center gap-1.5 text-xs text-white/40">
+                    <a href="{{ route('dashboard') }}" class="transition-colors hover:text-primary-300">Dashboard</a>
                     <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
-                    <span class="text-neutral-600 dark:text-neutral-400 font-medium truncate max-w-[200px]">{{ $invitation->title }}</span>
+                    <span class="max-w-[200px] truncate font-medium text-white/70">{{ $invitation->title }}</span>
                 </nav>
 
-                <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+                <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(420px,0.85fr)] lg:items-center">
                     <div class="min-w-0">
-                        <div class="flex items-center gap-2.5 mb-1">
+                        <p class="mb-3 text-[10px] font-bold uppercase tracking-[0.24em] text-primary-300">Pusat kendali undangan</p>
+                        <div class="mb-2 flex flex-wrap items-center gap-2.5">
                             <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider border {{ $tierStyle }}">
                                 {{ $tierLabel }}
                             </span>
@@ -60,39 +61,40 @@
                                 </span>
                             @endif
                         </div>
-                        <h1 class="font-heading text-2xl sm:text-3xl font-bold text-secondary-800 dark:text-neutral-50 leading-tight truncate">
+                        <h1 class="font-heading text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-5xl">
                             {{ $invitation->title }}
                         </h1>
-                        <p class="text-sm text-neutral-500 dark:text-neutral-400 mt-1">{{ $invitation->couple_name }}</p>
+                        <p class="mt-2 text-sm text-white/55 sm:text-base">{{ $invitation->couple_name }}</p>
+                        <p class="mt-4 max-w-2xl text-sm leading-6 text-white/45">Pantau performa, kelola tamu, dan siapkan seluruh pengalaman undangan dari satu dashboard.</p>
                     </div>
 
 {{-- CTA Buttons --}}
-                    <div class="grid grid-cols-2 sm:flex sm:flex-row sm:flex-wrap sm:items-center gap-2 flex-shrink-0 w-full sm:w-auto sm:justify-end">
+                    <div class="grid grid-cols-2 gap-2 rounded-3xl border border-white/10 bg-white/[0.06] p-3 shadow-2xl backdrop-blur-sm sm:p-4">
                         <a href="{{ route('invitation.show', $invitation->slug) }}" target="_blank"
-                            class="inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 sm:py-2 text-xs font-semibold text-primary dark:text-primary-400 border border-primary/30 dark:border-primary-700/50 rounded-xl hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all bg-white/70 dark:bg-secondary-800/50 backdrop-blur-sm w-full sm:w-auto">
+                            class="col-span-2 inline-flex items-center justify-center gap-2 rounded-xl bg-primary-500 px-4 py-3 text-sm font-bold text-white shadow-lg shadow-primary-500/20 transition-all hover:-translate-y-0.5 hover:bg-primary-400">
                             <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
                             Lihat Website
                         </a>
                         <a href="{{ route('dashboard.invitations.edit', $invitation) }}"
-                            class="inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 sm:py-2 text-xs font-semibold text-secondary-700 dark:text-neutral-300 border border-neutral-300/80 dark:border-secondary-600 rounded-xl hover:bg-white dark:hover:bg-secondary-700 transition-all bg-white/70 dark:bg-secondary-800/50 backdrop-blur-sm w-full sm:w-auto">
+                            class="inline-flex items-center justify-center gap-1.5 rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-xs font-semibold text-white transition-all hover:border-white/30 hover:bg-white/10">
                             <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                             Edit Detail
                         </a>
                         <a href="{{ route('dashboard.invitations.invoice-pdf', $invitation) }}"
-                            class="inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 sm:py-2 text-xs font-semibold text-emerald-700 dark:text-emerald-300 border border-emerald-300/80 dark:border-emerald-700/50 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-all bg-white/70 dark:bg-secondary-800/50 backdrop-blur-sm w-full sm:w-auto">
+                            class="inline-flex items-center justify-center gap-1.5 rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-xs font-semibold text-white transition-all hover:border-emerald-300/50 hover:bg-emerald-400/10">
                             <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                             Invoice PDF
                         </a>
                          @if($invitation->canUseWhatsappGateway())
                          <a href="{{ route('dashboard.whatsapp.setting', $invitation) }}"
-                            class="inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 sm:py-2 text-xs font-semibold text-teal-700 dark:text-teal-300 border border-teal-300/80 dark:border-teal-700/50 rounded-xl hover:bg-teal-50 dark:hover:bg-teal-900/20 transition-all bg-white/70 dark:bg-secondary-800/50 backdrop-blur-sm w-full sm:w-auto">
+                            class="inline-flex items-center justify-center gap-1.5 rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-xs font-semibold text-white transition-all hover:border-teal-300/50 hover:bg-teal-400/10">
                             <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
                             Pengaturan WA
                         </a>
                         @endif
                         @if(!$isExpired && ($tierCode === 'free' || $isTrial))
                             <a href="{{ route('dashboard.checkout', ['invitation_id' => $invitation->id]) }}"
-                                class="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 sm:py-2 text-xs font-semibold text-white bg-gradient-to-r from-primary to-primary-600 rounded-xl shadow-sm shadow-primary/25 hover:shadow-md hover:shadow-primary/30 hover:-translate-y-0.5 transition-all w-full sm:w-auto">
+                                class="inline-flex items-center justify-center gap-1.5 rounded-xl border border-primary-300/30 bg-primary-500/15 px-3 py-2.5 text-xs font-semibold text-primary-200 transition-all hover:border-primary-300/60 hover:bg-primary-500/25">
                                 <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
                                 Upgrade Paket
                             </a>
@@ -101,32 +103,32 @@
                 </div>
 
                 {{-- Stat Strip --}}
-                <div class="mt-6 grid grid-cols-4 gap-px bg-neutral-200/70 dark:bg-secondary-700/50 rounded-2xl overflow-hidden border border-neutral-200/80 dark:border-secondary-700/50">
+                <div class="mt-7 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/10 sm:grid-cols-4">
                     @php
                         $showStats = [
-                            ['label' => 'Tamu',       'value' => $invitation->guests->count(),                                          'color' => 'text-secondary-800 dark:text-neutral-100'],
-                            ['label' => 'RSVP Hadir', 'value' => $invitation->rsvps->where('attendance', 'attending')->count(),         'color' => 'text-emerald-600 dark:text-emerald-400'],
-                            ['label' => 'Ucapan',     'value' => $invitation->wishes->count(),                                          'color' => 'text-primary dark:text-primary-400'],
-                            ['label' => 'Pengunjung', 'value' => $totalUniques,                                                         'color' => 'text-blue-600 dark:text-blue-400'],
+                            ['label' => 'Tamu',       'value' => $invitation->guests->count(),                                  'color' => 'text-white'],
+                            ['label' => 'RSVP Hadir', 'value' => $invitation->rsvps->where('attendance', 'attending')->count(), 'color' => 'text-emerald-300'],
+                            ['label' => 'Ucapan',     'value' => $invitation->wishes->count(),                                  'color' => 'text-primary-300'],
+                            ['label' => 'Pengunjung', 'value' => $totalUniques,                                                 'color' => 'text-blue-300'],
                         ];
                     @endphp
                     @foreach($showStats as $s)
-                        <div class="bg-white/80 dark:bg-secondary-800/70 px-3 sm:px-5 py-4 flex flex-col items-center sm:items-start text-center sm:text-left backdrop-blur-sm">
+                        <div class="flex flex-col items-center bg-secondary-900/35 px-3 py-4 text-center backdrop-blur-sm sm:items-start sm:px-5 sm:text-left">
                             <span class="stat-value text-xl sm:text-2xl font-bold {{ $s['color'] }} tabular-nums">{{ $s['value'] }}</span>
-                            <span class="text-[10px] sm:text-xs text-neutral-500 dark:text-neutral-400 font-medium mt-0.5">{{ $s['label'] }}</span>
+                            <span class="mt-0.5 text-[10px] font-medium text-white/45 sm:text-xs">{{ $s['label'] }}</span>
                         </div>
                     @endforeach
                 </div>
 
                 {{-- URL Bar --}}
-                <div class="mt-4 flex items-center gap-2.5 px-4 py-2.5 bg-white/60 dark:bg-secondary-800/40 backdrop-blur-sm rounded-xl border border-neutral-200/70 dark:border-secondary-700/50">
-                    <svg class="w-3.5 h-3.5 text-neutral-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+                <div class="mt-4 flex items-center gap-2.5 rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 backdrop-blur-sm">
+                    <svg class="h-3.5 w-3.5 flex-shrink-0 text-white/35" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
                     <a href="{{ route('invitation.show', $invitation->slug) }}" target="_blank"
-                        class="font-mono text-xs text-neutral-500 dark:text-neutral-400 hover:text-primary dark:hover:text-primary-400 transition-colors truncate">
-                        {{ parse_url(config('app.url'), PHP_URL_HOST) }}/<strong class="text-secondary-700 dark:text-neutral-300">{{ $invitation->slug }}</strong>
+                        class="truncate font-mono text-xs text-white/45 transition-colors hover:text-primary-300">
+                        {{ parse_url(config('app.url'), PHP_URL_HOST) }}/<strong class="text-white/75">{{ $invitation->slug }}</strong>
                     </a>
                     @if($invitation->slug_change_count > 0)
-                        <span class="ml-auto flex-shrink-0 text-[10px] font-medium text-neutral-400 dark:text-neutral-500">diubah {{ $invitation->slug_change_count }}×</span>
+                        <span class="ml-auto flex-shrink-0 text-[10px] font-medium text-white/35">diubah {{ $invitation->slug_change_count }}×</span>
                     @endif
                 </div>
 
@@ -262,16 +264,27 @@
             @endif
 
             {{-- ── Visitor Chart ── --}}
-            <div class="bg-white dark:bg-secondary-800 rounded-2xl border border-neutral-200/80 dark:border-secondary-700/60 overflow-hidden">
-                <div class="px-5 sm:px-6 py-4 border-b border-neutral-100 dark:border-secondary-700/60 flex items-center justify-between">
+            <section aria-labelledby="visitor-analytics-heading" class="space-y-4">
+                <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                    <div>
+                        <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-primary dark:text-primary-400">Performa undangan</p>
+                        <h2 id="visitor-analytics-heading" class="mt-1 font-heading text-xl font-bold text-secondary-800 dark:text-neutral-100 sm:text-2xl">Kenali aktivitas tamu Anda</h2>
+                    </div>
+                    <p class="max-w-xl text-xs leading-5 text-neutral-500 dark:text-neutral-400 sm:text-right">Pantau jangkauan website undangan selama 30 hari terakhir.</p>
+                </div>
+            <div class="overflow-hidden rounded-[24px] border border-neutral-200/80 bg-white shadow-[0_18px_45px_-30px_rgba(15,23,42,0.45)] ring-1 ring-black/5 dark:border-secondary-700/60 dark:bg-secondary-800/80">
+                <div class="flex flex-col gap-3 border-b border-neutral-100 px-5 py-4 dark:border-secondary-700/60 sm:flex-row sm:items-center sm:justify-between sm:px-6">
                     <div>
                         <h2 class="font-semibold text-sm text-secondary-800 dark:text-neutral-100">Statistik Pengunjung</h2>
                         <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">30 hari terakhir</p>
                     </div>
-                    <span class="text-xs font-medium text-neutral-500 dark:text-neutral-400 bg-neutral-100 dark:bg-secondary-700 px-2.5 py-1 rounded-lg">{{ $totalViews }} kunjungan</span>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="rounded-lg bg-primary-50 px-2.5 py-1 text-xs font-semibold text-primary-700 dark:bg-primary-900/30 dark:text-primary-300">{{ $totalViews }} kunjungan</span>
+                        <span class="rounded-lg bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">{{ $totalUniques }} pengunjung unik</span>
+                    </div>
                 </div>
-                <div class="p-5">
-                    <div class="relative" style="height: 220px;">
+                <div class="p-4 sm:p-6">
+                    <div class="relative h-[240px] sm:h-[280px]">
                         <canvas id="visitorChart"
                             data-labels='@json($chartLabels)'
                             data-totals='@json($chartTotals)'
@@ -280,15 +293,24 @@
                     </div>
                 </div>
             </div>
+            </section>
 
             {{-- ── Quick Links Row ── --}}
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <section aria-labelledby="invitation-command-center" class="space-y-4 pt-2">
+                <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                    <div>
+                        <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-primary dark:text-primary-400">Pusat pengelolaan</p>
+                        <h2 id="invitation-command-center" class="mt-1 font-heading text-xl font-bold text-secondary-800 dark:text-neutral-100 sm:text-2xl">Kelola seluruh kebutuhan acara</h2>
+                    </div>
+                    <p class="max-w-xl text-xs leading-5 text-neutral-500 dark:text-neutral-400 sm:text-right">Akses cepat ke data tamu, RSVP, ucapan, QR Code, dan perencanaan pernikahan.</p>
+                </div>
+            <div class="grid grid-cols-1 gap-3 sm:grid-cols-3">
 
                 {{-- Data Tamu --}}
                 @if($invitation->hasFeature('personal_link'))
                     <a href="{{ route('dashboard.invitations.guests.index', $invitation) }}"
-                        class="group flex items-center gap-4 p-4 bg-white dark:bg-secondary-800 rounded-2xl border border-neutral-200/80 dark:border-secondary-700/60 hover:border-primary-200 dark:hover:border-primary-800/40 hover:shadow-md hover:-translate-y-0.5 transition-all">
-                        <div class="w-10 h-10 rounded-xl bg-secondary-100 dark:bg-secondary-700 flex items-center justify-center text-secondary-600 dark:text-neutral-300 flex-shrink-0 group-hover:bg-secondary-200 dark:group-hover:bg-secondary-600 transition-colors">
+                        class="group flex min-h-[112px] items-center gap-4 rounded-3xl border border-neutral-200/80 bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary-200 hover:shadow-lg dark:border-secondary-700/60 dark:bg-secondary-800/80 dark:hover:border-primary-800/40">
+                        <div class="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl bg-secondary-100 text-secondary-600 transition-colors group-hover:bg-secondary-200 dark:bg-secondary-700 dark:text-neutral-300 dark:group-hover:bg-secondary-600">
                             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                         </div>
                         <div class="min-w-0">
@@ -298,7 +320,7 @@
                         <svg class="w-4 h-4 text-neutral-300 dark:text-neutral-600 ml-auto group-hover:text-primary dark:group-hover:text-primary-400 group-hover:translate-x-0.5 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                     </a>
                 @else
-                    <div class="flex items-center gap-4 p-4 bg-amber-50/50 dark:bg-amber-950/20 rounded-2xl border border-amber-200/60 dark:border-amber-800/40">
+                    <div class="flex min-h-[112px] items-center gap-4 rounded-3xl border border-amber-200/60 bg-amber-50/50 p-5 dark:border-amber-800/40 dark:bg-amber-950/20">
                         <div class="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-900/40 flex items-center justify-center text-amber-500 flex-shrink-0">
                             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                         </div>
@@ -314,8 +336,8 @@
 
                 {{-- RSVP --}}
                 <a href="{{ route('dashboard.invitations.rsvp-list', $invitation) }}"
-                    class="group flex items-center gap-4 p-4 bg-white dark:bg-secondary-800 rounded-2xl border border-neutral-200/80 dark:border-secondary-700/60 hover:border-emerald-200 dark:hover:border-emerald-800/40 hover:shadow-md hover:-translate-y-0.5 transition-all">
-                    <div class="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400 flex-shrink-0 group-hover:bg-emerald-200 dark:group-hover:bg-emerald-900/50 transition-colors">
+                    class="group flex min-h-[112px] items-center gap-4 rounded-3xl border border-neutral-200/80 bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:border-emerald-200 hover:shadow-lg dark:border-secondary-700/60 dark:bg-secondary-800/80 dark:hover:border-emerald-800/40">
+                    <div class="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-600 transition-colors group-hover:bg-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-400 dark:group-hover:bg-emerald-900/50">
                         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     </div>
                     <div class="min-w-0">
@@ -327,8 +349,8 @@
 
                 {{-- Ucapan --}}
                 <a href="{{ route('dashboard.invitations.wishes-list', $invitation) }}"
-                    class="group flex items-center gap-4 p-4 bg-white dark:bg-secondary-800 rounded-2xl border border-neutral-200/80 dark:border-secondary-700/60 hover:border-primary-200 dark:hover:border-primary-800/40 hover:shadow-md hover:-translate-y-0.5 transition-all">
-                    <div class="w-10 h-10 rounded-xl bg-primary-50 dark:bg-primary-900/30 flex items-center justify-center text-primary dark:text-primary-400 flex-shrink-0 group-hover:bg-primary-100 dark:group-hover:bg-primary-900/50 transition-colors">
+                    class="group flex min-h-[112px] items-center gap-4 rounded-3xl border border-neutral-200/80 bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary-200 hover:shadow-lg dark:border-secondary-700/60 dark:bg-secondary-800/80 dark:hover:border-primary-800/40">
+                    <div class="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl bg-primary-50 text-primary transition-colors group-hover:bg-primary-100 dark:bg-primary-900/30 dark:text-primary-400 dark:group-hover:bg-primary-900/50">
                         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
                     </div>
                     <div class="min-w-0">
@@ -339,24 +361,25 @@
                 </a>
             </div>
 
+            <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {{-- ── Wedding Planner Link ── --}}
             <a href="{{ route('dashboard.planner.index') }}"
-                class="group flex items-center gap-4 p-4 bg-white dark:bg-secondary-800 rounded-2xl border border-neutral-200/80 dark:border-secondary-700/60 hover:border-primary-200 dark:hover:border-primary-800/40 hover:shadow-md hover:-translate-y-0.5 transition-all">
-                <div class="w-10 h-10 rounded-xl bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center text-violet-600 dark:text-violet-400 flex-shrink-0 group-hover:bg-violet-200 dark:group-hover:bg-violet-900/50 transition-colors">
+                class="group flex min-h-[128px] items-start gap-4 rounded-3xl border border-violet-200/70 bg-gradient-to-br from-violet-50 to-white p-5 transition-all hover:-translate-y-0.5 hover:border-violet-300 hover:shadow-lg dark:border-violet-800/40 dark:from-violet-950/30 dark:to-secondary-800 dark:hover:border-violet-700/60">
+                <div class="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl bg-violet-100 text-violet-600 transition-colors group-hover:bg-violet-200 dark:bg-violet-900/30 dark:text-violet-400 dark:group-hover:bg-violet-900/50">
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3M3 11h18M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                 </div>
                 <div class="min-w-0">
                     <p class="text-sm font-semibold text-secondary-800 dark:text-neutral-100">Wedding Planner</p>
                     <p class="text-xs text-neutral-500 dark:text-neutral-400">8 pilar persiapan, budget & rundown Hari H</p>
                 </div>
-                <svg class="w-4 h-4 text-neutral-300 dark:text-neutral-600 ml-auto group-hover:text-primary dark:group-hover:text-primary-400 group-hover:translate-x-0.5 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                <svg class="ml-auto h-4 w-4 text-violet-300 transition-all group-hover:translate-x-0.5 group-hover:text-violet-500 dark:text-violet-700 dark:group-hover:text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
             </a>
 
             {{-- ── Fitur QR Code Interaktif (Pusat QR Code) ── --}}
-            <a href="{{ route('dashboard.invitations.qr-codes', $invitation) }}" class="block bg-white dark:bg-secondary-800 rounded-2xl border border-neutral-200/80 dark:border-secondary-700/60 px-5 sm:px-6 py-4 hover:border-primary/40 dark:hover:border-primary/40 hover:shadow-md transition-all duration-200 group">
+            <a href="{{ route('dashboard.invitations.qr-codes', $invitation) }}" class="group block min-h-[128px] rounded-3xl border border-blue-200/70 bg-gradient-to-br from-blue-50 to-white p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-lg dark:border-blue-800/40 dark:from-blue-950/30 dark:to-secondary-800 dark:hover:border-blue-700/60">
                 <div class="flex items-start gap-3 min-w-0">
-                    <div class="w-10 h-10 rounded-xl bg-primary-50 dark:bg-primary-900/30 flex items-center justify-center flex-shrink-0 group-hover:bg-primary-100 dark:group-hover:bg-primary-900/50 transition-colors">
-                        <svg class="w-5 h-5 text-primary dark:text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
+                    <div class="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl bg-blue-100 transition-colors group-hover:bg-blue-200 dark:bg-blue-900/30 dark:group-hover:bg-blue-900/50">
+                        <svg class="h-5 w-5 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
                     </div>
                     <div class="min-w-0 flex-1">
                         <h2 class="font-semibold text-sm text-secondary-800 dark:text-neutral-100">Pusat Kelola & Unduh QR Code</h2>
@@ -364,7 +387,7 @@
                             Unduh QR Code Website Undangan, QR Kado Digital & QRIS, QR Kirim Ucapan, serta QR RSVP Universal.
                         </p>
                     </div>
-                    <svg class="w-4 h-4 text-neutral-300 dark:text-neutral-600 ml-auto group-hover:text-primary dark:group-hover:text-primary-400 group-hover:translate-x-0.5 transition-all flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    <svg class="ml-auto mt-0.5 h-4 w-4 flex-shrink-0 text-blue-300 transition-all group-hover:translate-x-0.5 group-hover:text-blue-500 dark:text-blue-700 dark:group-hover:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                 </div>
             </a>
 
@@ -375,7 +398,7 @@
                     $paxMax     = $invitation->max_global_pax_quota;
                     $paxPercent = $paxMax > 0 ? round(($paxUsed / $paxMax) * 100) : 0;
                 @endphp
-                <div class="bg-white dark:bg-secondary-800 rounded-2xl border border-neutral-200/80 dark:border-secondary-700/60 px-5 sm:px-6 py-4">
+                <div class="min-h-[128px] rounded-3xl border border-neutral-200/80 bg-white p-5 dark:border-secondary-700/60 dark:bg-secondary-800/80">
                     <div class="flex items-center justify-between mb-3">
                         <h2 class="font-semibold text-sm text-secondary-800 dark:text-neutral-100">Kuota Pax RSVP</h2>
                         <span class="text-xs font-semibold tabular-nums text-neutral-600 dark:text-neutral-400">{{ $paxUsed }} / {{ $paxMax }} pax</span>
@@ -392,18 +415,20 @@
             @endif
 
             {{-- ── Add-On & Fitur Tambahan ── --}}
-            <a href="{{ route('dashboard.invitations.addons.index', $invitation) }}" class="block bg-white dark:bg-secondary-800 rounded-2xl border border-neutral-200/80 dark:border-secondary-700/60 px-5 sm:px-6 py-4 hover:border-primary/40 dark:hover:border-primary/40 hover:shadow-md transition-all duration-200 group">
+            <a href="{{ route('dashboard.invitations.addons.index', $invitation) }}" class="group block min-h-[128px] rounded-3xl border border-orange-200/70 bg-gradient-to-br from-orange-50 to-white p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-orange-300 hover:shadow-lg dark:border-orange-800/40 dark:from-orange-950/30 dark:to-secondary-800 dark:hover:border-orange-700/60">
                 <div class="flex items-start gap-3 min-w-0">
-                    <div class="w-10 h-10 rounded-xl bg-primary-50 dark:bg-primary-900/30 flex items-center justify-center flex-shrink-0 group-hover:bg-primary-100 dark:group-hover:bg-primary-900/50 transition-colors">
-                        <svg class="w-5 h-5 text-primary dark:text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"/></svg>
+                    <div class="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl bg-orange-100 transition-colors group-hover:bg-orange-200 dark:bg-orange-900/30 dark:group-hover:bg-orange-900/50">
+                        <svg class="h-5 w-5 text-orange-600 dark:text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"/></svg>
                     </div>
                     <div class="min-w-0 flex-1">
                         <h2 class="font-semibold text-sm text-secondary-800 dark:text-neutral-100">Add-On & Fitur Tambahan</h2>
                         <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">{{ $invitation->addons->count() }} add-on terpasang</p>
                     </div>
-                    <svg class="w-4 h-4 text-neutral-300 dark:text-neutral-600 ml-auto group-hover:text-primary dark:group-hover:text-primary-400 group-hover:translate-x-0.5 transition-all flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    <svg class="ml-auto mt-0.5 h-4 w-4 flex-shrink-0 text-orange-300 transition-all group-hover:translate-x-0.5 group-hover:text-orange-500 dark:text-orange-700 dark:group-hover:text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                 </div>
             </a>
+            </div>
+            </section>
 
             {{-- ── Gallery Upload ── --}}
             {{-- NOTE: Gallery dropzone HTML and JS are preserved exactly from original --}}

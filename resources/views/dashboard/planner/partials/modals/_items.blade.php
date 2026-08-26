@@ -171,6 +171,17 @@
                 @endif
 
                 @if($pillar['key'] === 'ENGAGEMENT')
+                    <div>
+                        <x-input-label for="add-engagement-group" value="Kategori Lamaran" />
+                        <select id="add-engagement-group" name="subcategory"
+                            class="mt-1 block w-full rounded-xl border-neutral-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 dark:border-neutral-600 dark:bg-secondary-700 dark:text-neutral-200"
+                            required>
+                            @foreach(\App\Models\WeddingPlannerItem::ENGAGEMENT_GROUP_LABELS as $code => $label)
+                                <option value="{{ $code }}">{{ $label }}</option>
+                            @endforeach
+                        </select>
+                        <p class="mt-1.5 text-[11px] text-neutral-500 dark:text-neutral-400">Kategori membuat item lebih mudah ditemukan pada filter Lamaran.</p>
+                    </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <x-input-label for="add-pria-{{ $pillar['key'] }}" value="Biaya Pria (Rp)" />
@@ -224,6 +235,7 @@
                     <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1">{{ $item->title }}</p>
                 </div>
                 <button type="button" x-on:click="show = false"
+                    aria-label="Tutup modal edit"
                     class="shrink-0 p-2 -m-2 text-neutral-400 hover:text-secondary-600 dark:hover:text-neutral-300 rounded-xl hover:bg-neutral-100 dark:hover:bg-secondary-700 transition-colors">
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -256,7 +268,30 @@
                     </div>
                 @endif
 
+                @if($item->category === 'BUDGET')
+                    <div>
+                        <x-input-label for="edit-budget-group-{{ $item->id }}" value="Kategori Anggaran" />
+                        <select id="edit-budget-group-{{ $item->id }}" name="subcategory"
+                            class="mt-1 block w-full rounded-xl border-neutral-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 dark:border-neutral-600 dark:bg-secondary-700 dark:text-neutral-200"
+                            required>
+                            @foreach(\App\Models\WeddingPlannerItem::BUDGET_CATEGORIES as $code => $config)
+                                <option value="{{ $code }}" @selected($item->subcategory === $code)>{{ $config['label'] }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                @endif
+
                 @if($item->category === 'ENGAGEMENT')
+                    <div>
+                        <x-input-label for="edit-engagement-group-{{ $item->id }}" value="Kategori Lamaran" />
+                        <select id="edit-engagement-group-{{ $item->id }}" name="subcategory"
+                            class="mt-1 block w-full rounded-xl border-neutral-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 dark:border-neutral-600 dark:bg-secondary-700 dark:text-neutral-200"
+                            required>
+                            @foreach(\App\Models\WeddingPlannerItem::ENGAGEMENT_GROUP_LABELS as $code => $label)
+                                <option value="{{ $code }}" @selected($item->subcategory === $code)>{{ $label }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <x-input-label for="edit-pria-{{ $item->id }}" value="Biaya Pria (Rp)" />
@@ -384,7 +419,7 @@
                                 data-rupiah class="mt-1 block w-full" value="{{ old('paid_amount', $item->paid_amount) }}" />
                         </div>
                     </div>
-                    @if($item->category !== 'PRE_WEDDING')
+                    @if($item->category === 'VENDOR')
                         <div>
                             <x-input-label for="edit-contact-{{ $item->id }}" value="Kontak Vendor" />
                             <x-text-input id="edit-contact-{{ $item->id }}" name="vendor_contact" class="mt-1 block w-full"

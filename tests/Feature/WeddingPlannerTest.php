@@ -607,6 +607,56 @@ test('QA-WP-07: biaya pria/wanita negatif ditolak', function () {
         ->assertSessionHasErrors('cost_pria');
 });
 
+test('QA-WP-07: kategori custom budget dan lamaran tersimpan pada grup yang dipilih', function () {
+    $user = createVerifiedUser();
+
+    $this->actingAs($user)
+        ->post(route('dashboard.planner.items.store'), [
+            'category' => 'BUDGET',
+            'subcategory' => 'VENUE',
+            'title' => 'Biaya parkir venue',
+            'estimated_cost' => 500000,
+        ])
+        ->assertRedirect(route('dashboard.planner.index'));
+
+    $this->actingAs($user)
+        ->post(route('dashboard.planner.items.store'), [
+            'category' => 'ENGAGEMENT',
+            'subcategory' => 'MAKEUP',
+            'title' => 'Retouch keluarga',
+            'cost_wanita' => 350000,
+        ])
+        ->assertRedirect(route('dashboard.planner.index'));
+
+    $this->assertDatabaseHas('wedding_planner_items', [
+        'user_id' => $user->id,
+        'category' => 'BUDGET',
+        'subcategory' => 'VENUE',
+        'title' => 'Biaya parkir venue',
+    ])->assertDatabaseHas('wedding_planner_items', [
+        'user_id' => $user->id,
+        'category' => 'ENGAGEMENT',
+        'subcategory' => 'MAKEUP',
+        'title' => 'Retouch keluarga',
+    ]);
+});
+
+test('QA-WP-07: kategori dari modul lain ditolak', function (string $category, string $subcategory) {
+    $user = createVerifiedUser();
+
+    $this->actingAs($user)
+        ->post(route('dashboard.planner.items.store'), [
+            'category' => $category,
+            'subcategory' => $subcategory,
+            'title' => 'Kategori tidak sesuai',
+        ])
+        ->assertSessionHasErrors('subcategory');
+})->with([
+    'budget tidak menerima pihak seserahan' => ['BUDGET', 'PRIA'],
+    'lamaran tidak menerima kategori budget' => ['ENGAGEMENT', 'LOGISTICS'],
+    'seserahan tidak menerima kategori lamaran' => ['SESERAHAN', 'MAKEUP'],
+]);
+
 test('QA-WP-08: preset seserahan otomatis dibuat per pihak (pria & wanita) saat pertama akses', function () {
     $user = createVerifiedUser();
 
