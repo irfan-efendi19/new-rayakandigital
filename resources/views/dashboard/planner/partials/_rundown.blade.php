@@ -81,7 +81,8 @@
                                         aria-label="Edit rundown {{ $rundown->activity_name }}">
                                         <i class="fa-solid fa-pen text-[10px]" aria-hidden="true"></i>
                                     </button>
-                                    <form action="{{ route('dashboard.planner.rundowns.destroy', $rundown) }}" method="POST" onsubmit="return confirm('Hapus rundown ini?')">
+                                    <form action="{{ route('dashboard.planner.rundowns.destroy', $rundown) }}" method="POST"
+                                        onsubmit="return confirmSwal(event, 'Hapus rundown ini?');">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit"

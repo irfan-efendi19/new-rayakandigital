@@ -140,7 +140,7 @@
                             </svg>
                         </button>
                         <form action="{{ route('dashboard.planner.items.destroy', $event) }}" method="POST" class="inline"
-                            onsubmit="event.stopPropagation(); return confirm('Hapus event ini?')">
+                            onsubmit="event.stopPropagation(); return confirmSwal(event, 'Hapus agenda ini?');">
                             @csrf
                             @method('DELETE')
                             <button type="submit"

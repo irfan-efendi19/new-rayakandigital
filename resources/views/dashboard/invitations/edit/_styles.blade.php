@@ -26,7 +26,7 @@
             to   { opacity: 1; transform: translateY(0)  scale(1);    }
         }
 
-        #crop-preview-ring {
+        .crop-preview-ring {
             overflow: hidden;
             border-radius: 9999px;
             border: 3px solid rgba(var(--color-primary-400), 1);

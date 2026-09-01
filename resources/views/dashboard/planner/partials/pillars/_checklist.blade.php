@@ -133,7 +133,8 @@
                                                 Edit
                                             </button>
                                             <form action="{{ route('dashboard.planner.checklists.destroy', $item) }}" method="POST"
-                                                class="inline" onsubmit="return confirm('Hapus checklist custom ini?')">
+                                                class="inline"
+                                                onsubmit="return confirmSwal(event, 'Hapus checklist custom ini?');">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit"

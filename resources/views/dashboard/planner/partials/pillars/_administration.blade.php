@@ -49,7 +49,11 @@
         <article class="rounded-2xl border border-blue-200/70 bg-blue-50/70 p-3.5 dark:border-blue-800/50 dark:bg-blue-950/20 sm:p-4">
             <div class="flex items-center justify-between gap-3">
                 <span class="text-[10px] font-bold uppercase tracking-wider text-blue-600 dark:text-blue-300">Dokumen pihak pria</span>
-                <i class="fa-solid fa-mars text-blue-400" aria-hidden="true"></i>
+                <svg class="h-4 w-4 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" aria-hidden="true">
+                    <circle cx="10" cy="14" r="5" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5 19 5m-4 0h4v4" />
+                </svg>
             </div>
             <p class="mt-2 text-lg font-extrabold tabular-nums text-blue-700 dark:text-blue-200 sm:text-xl">
                 {{ $adminPriaCompleted }}<span class="text-xs font-semibold text-blue-500/70">/{{ $adminDocumentCount }}</span>
@@ -59,7 +63,11 @@
         <article class="rounded-2xl border border-pink-200/70 bg-pink-50/70 p-3.5 dark:border-pink-800/50 dark:bg-pink-950/20 sm:p-4">
             <div class="flex items-center justify-between gap-3">
                 <span class="text-[10px] font-bold uppercase tracking-wider text-pink-600 dark:text-pink-300">Dokumen pihak wanita</span>
-                <i class="fa-solid fa-venus text-pink-400" aria-hidden="true"></i>
+                <svg class="h-4 w-4 text-pink-400" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" aria-hidden="true">
+                    <circle cx="12" cy="9" r="5" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 14v7m-3-3h6" />
+                </svg>
             </div>
             <p class="mt-2 text-lg font-extrabold tabular-nums text-pink-700 dark:text-pink-200 sm:text-xl">
                 {{ $adminWanitaCompleted }}<span class="text-xs font-semibold text-pink-500/70">/{{ $adminDocumentCount }}</span>
@@ -147,11 +155,10 @@
                                         class="h-3.5 w-3.5 cursor-pointer rounded border-neutral-300 text-primary focus:ring-primary-500 dark:border-neutral-600">
                                     <span class="flex items-center gap-1 text-xs font-semibold">
                                         <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                            stroke-width="1.8">
+                                            stroke-width="2" aria-hidden="true">
+                                            <circle cx="10" cy="14" r="5" />
                                             <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M10 5a3 3 0 100 6 3 3 0 000-6zm-4 12v-1a2 2 0 012-2h4a2 2 0 012 2v1" />
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M10 15v4" />
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 17h4" />
+                                                d="M13.5 10.5 19 5m-4 0h4v4" />
                                         </svg>
                                         Pria
                                     </span>
@@ -166,11 +173,10 @@
                                         class="h-3.5 w-3.5 cursor-pointer rounded border-neutral-300 text-primary focus:ring-primary-500 dark:border-neutral-600">
                                     <span class="flex items-center gap-1 text-xs font-semibold">
                                         <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                            stroke-width="1.8">
+                                            stroke-width="2" aria-hidden="true">
+                                            <circle cx="12" cy="9" r="5" />
                                             <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M12 4a3 3 0 100 6 3 3 0 000-6zm-4 12v-1a2 2 0 012-2h4a2 2 0 012 2v1" />
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6" />
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v6" />
+                                                d="M12 14v7m-3-3h6" />
                                         </svg>
                                         Wanita
                                     </span>

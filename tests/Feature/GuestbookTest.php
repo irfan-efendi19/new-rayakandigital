@@ -172,3 +172,14 @@ test('owner can access guest ticket print page', function () {
     $response->assertSuccessful()
         ->assertViewIs('dashboard.guestbook.ticket');
 });
+
+test('owner cannot access a ticket for a guest from another invitation', function () {
+    $foreignInvitation = Invitation::factory()->create();
+    $foreignGuest = Guest::factory()->hadir()->create([
+        'invitation_id' => $foreignInvitation->id,
+    ]);
+
+    $this->actingAs($this->user)
+        ->get(route('dashboard.invitations.guestbook.ticket', [$this->invitation, $foreignGuest]))
+        ->assertNotFound();
+});

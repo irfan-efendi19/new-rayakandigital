@@ -128,7 +128,7 @@
     <div class="h-28 sm:h-24"></div>
 
     {{-- Crop Modal --}}
-    @include('dashboard.invitations.edit._crop-modal')
+    <x-invitations.crop-modal />
 
     {{-- Scripts --}}
     @include('dashboard.invitations.edit._scripts')

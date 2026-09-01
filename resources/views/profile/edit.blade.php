@@ -93,9 +93,11 @@
                 @include('profile.partials.update-profile-information-form')
             </div>
 
-            <div class="bg-white dark:bg-secondary-800 rounded-2xl shadow-soft border border-neutral-100 dark:border-secondary-700/60 p-6 md:p-8">
-                @include('profile.partials.update-password-form')
-            </div>
+            @if (is_null($user->google_id))
+                <div class="bg-white dark:bg-secondary-800 rounded-2xl shadow-soft border border-neutral-100 dark:border-secondary-700/60 p-6 md:p-8">
+                    @include('profile.partials.update-password-form')
+                </div>
+            @endif
 
             <div class="bg-white dark:bg-secondary-800 rounded-2xl shadow-soft border border-red-100 dark:border-red-800/50 p-6 md:p-8">
                 @include('profile.partials.delete-user-form')

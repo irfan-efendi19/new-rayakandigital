@@ -51,10 +51,10 @@
             :aria-pressed="(sesFilter === 'PRIA').toString()"
             :class="sesFilter === 'PRIA' ? 'bg-blue-500 text-white shadow-sm' : 'text-neutral-500 dark:text-neutral-400 hover:text-blue-600 dark:hover:text-blue-400'"
             class="flex items-center justify-center gap-1 px-1.5 sm:gap-1.5 sm:px-3 py-2 min-w-0 rounded-lg text-xs font-semibold transition-all duration-200">
-            <svg class="w-3.5 h-3.5 hidden sm:block flex-shrink-0" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            <svg class="hidden h-3.5 w-3.5 flex-shrink-0 sm:block" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <circle cx="10" cy="14" r="5" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5 19 5m-4 0h4v4" />
             </svg>
             <span class="truncate">Pria</span>
             <span class="flex-shrink-0 text-[10px] px-1.5 py-0.5 rounded-full min-w-[18px] text-center"
@@ -64,10 +64,10 @@
             :aria-pressed="(sesFilter === 'WANITA').toString()"
             :class="sesFilter === 'WANITA' ? 'bg-pink-500 text-white shadow-sm' : 'text-neutral-500 dark:text-neutral-400 hover:text-pink-600 dark:hover:text-pink-400'"
             class="flex items-center justify-center gap-1 px-1.5 sm:gap-1.5 sm:px-3 py-2 min-w-0 rounded-lg text-xs font-semibold transition-all duration-200">
-            <svg class="w-3.5 h-3.5 hidden sm:block flex-shrink-0" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            <svg class="hidden h-3.5 w-3.5 flex-shrink-0 sm:block" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <circle cx="12" cy="9" r="5" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 14v7m-3-3h6" />
             </svg>
             <span class="truncate">Wanita</span>
             <span class="flex-shrink-0 text-[10px] px-1.5 py-0.5 rounded-full min-w-[18px] text-center"
@@ -218,7 +218,7 @@
                                                         </svg>
                                                     </button>
                                                     <form action="{{ route('dashboard.planner.items.destroy', $item) }}" method="POST"
-                                                        onsubmit="return confirm('Hapus item ini?')">
+                                                        onsubmit="return confirmSwal(event, 'Hapus item seserahan ini?');">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit"

@@ -124,6 +124,27 @@ class ThemePreviewController extends Controller
             'coffee-shop' => 'daily_brew',
             'coffee_shop' => 'daily_brew',
             'kopi' => 'daily_brew',
+            'deluxe-01' => 'deluxe_01',
+            'deluxe_01' => 'deluxe_01',
+            'deluxe01' => 'deluxe_01',
+            'deluxe-02' => 'deluxe_02',
+            'deluxe_02' => 'deluxe_02',
+            'deluxe02' => 'deluxe_02',
+            'deluxe-03' => 'deluxe_03',
+            'deluxe_03' => 'deluxe_03',
+            'deluxe03' => 'deluxe_03',
+            'deluxe-04' => 'deluxe_04',
+            'deluxe_04' => 'deluxe_04',
+            'deluxe04' => 'deluxe_04',
+            'deluxe-05' => 'deluxe_05',
+            'deluxe_05' => 'deluxe_05',
+            'deluxe05' => 'deluxe_05',
+            'deluxe-editorial' => 'deluxe_01',
+            'deluxe_editorial' => 'deluxe_01',
+            'editorial-wedding' => 'deluxe_01',
+            'editorial_wedding' => 'deluxe_01',
+            'luxury-editorial' => 'deluxe_01',
+            'luxury_editorial' => 'deluxe_01',
             'ljk-exam' => 'ljk_exam',
             'ljk_exam' => 'ljk_exam',
             'ujian-sekolah' => 'ljk_exam',
@@ -276,6 +297,80 @@ class ThemePreviewController extends Controller
             'orbit-wedding' => 'orbit',
             'orbit-cinta' => 'orbit',
             'cosmic-orbit' => 'orbit',
+            'google-doc' => 'google_docs',
+            'google-docs' => 'google_docs',
+            'google_docs' => 'google_docs',
+            'shared-document' => 'google_docs',
+            'shared_document' => 'google_docs',
+            'dokumen-bersama' => 'google_docs',
+            'dokumen_bersama' => 'google_docs',
+            'buku_islami_3d' => 'buku_islami_3d',
+            'buku-islami-3d' => 'buku_islami_3d',
+            'buku_islami' => 'buku_islami_3d',
+            'buku-islami' => 'buku_islami_3d',
+            'buku-3d-islami' => 'buku_islami_3d',
+            'buku_3d_islami' => 'buku_islami_3d',
+            'islamic-3d' => 'buku_islami_3d',
+            'islamic_3d' => 'buku_islami_3d',
+            'islamic-book' => 'buku_islami_3d',
+            'islamic_book' => 'buku_islami_3d',
+            'uno' => 'uno',
+            'kartu-uno' => 'uno',
+            'kartu_uno' => 'uno',
+            'uno-wedding' => 'uno',
+            'uno_wedding' => 'uno',
+            'uno-game' => 'uno',
+            'uno_game' => 'uno',
+            'uno-card' => 'uno',
+            'uno_card' => 'uno',
+            'wild-card' => 'uno',
+            'wild_card' => 'uno',
+            'tetris' => 'tetris',
+            'game-tetris' => 'tetris',
+            'game_tetris' => 'tetris',
+            'tetris-wedding' => 'tetris',
+            'tetris_wedding' => 'tetris',
+            'tetris-arcade' => 'tetris',
+            'tetris_arcade' => 'tetris',
+            'tetromino' => 'tetris',
+            'perfect-clear' => 'tetris',
+            'perfect_clear' => 'tetris',
+            'periodic-table' => 'periodic_table',
+            'periodic_table' => 'periodic_table',
+            'tabel-periodik' => 'periodic_table',
+            'tabel_periodik' => 'periodic_table',
+            'tabel-periodik-kimia' => 'periodic_table',
+            'tabel_periodik_kimia' => 'periodic_table',
+            'kimia' => 'periodic_table',
+            'chemistry' => 'periodic_table',
+            'periodic' => 'periodic_table',
+            'unsur-kimia' => 'periodic_table',
+            'unsur_kimia' => 'periodic_table',
+            'laboratorium' => 'periodic_table',
+            'sticker-doodle' => 'sticker_doodle',
+            'sticker_doodle' => 'sticker_doodle',
+            'sticker-doodling' => 'sticker_doodle',
+            'sticker_doodling' => 'sticker_doodle',
+            'photobooth-doodle' => 'sticker_doodle',
+            'photobooth_doodle' => 'sticker_doodle',
+            'photobooth' => 'sticker_doodle',
+            'photobooth-wedding' => 'sticker_doodle',
+            'scrapbook-doodle' => 'sticker_doodle',
+            'scrapbook' => 'sticker_doodle',
+            'doodle-aesthetic' => 'sticker_doodle',
+            'polaroid-doodle' => 'sticker_doodle',
+            'photobox-strip' => 'photobox_strip',
+            'photobox_strip' => 'photobox_strip',
+            'photobox' => 'photobox_strip',
+            'photo-strip' => 'photobox_strip',
+            'photo_strip' => 'photobox_strip',
+            'photostrip' => 'photobox_strip',
+            'retro-photobox' => 'photobox_strip',
+            'photobox-klasik' => 'photobox_strip',
+            'photobox_klasik' => 'photobox_strip',
+            'gen-z-photobox' => 'photobox_strip',
+            'photobooth-strip' => 'photobox_strip',
+            'photobooth_strip' => 'photobox_strip',
         ];
 
         $effectiveSlug = $aliases[$themeSlug] ?? $themeSlug;
@@ -289,7 +384,17 @@ class ThemePreviewController extends Controller
                     ->orWhere('view_path', 'themes.'.$themeSlugDash);
             })
             ->where('is_active', true)
-            ->firstOrFail();
+            ->first();
+
+        if (! $theme && view()->exists('themes.'.$effectiveSlug)) {
+            $theme = new Theme([
+                'name' => ucwords(str_replace('_', ' ', $effectiveSlug)),
+                'view_path' => 'themes.'.$effectiveSlug,
+                'is_active' => true,
+            ]);
+        } elseif (! $theme) {
+            abort(404);
+        }
 
         $preview = $theme->resolvedPreviewData();
 
@@ -316,7 +421,7 @@ class ThemePreviewController extends Controller
             'venue_address' => $preview->venue_address,
             'venue_maps_url' => $preview->venue_maps_url,
             'love_story' => $preview->love_story,
-            'theme' => $themeSlug,
+            'theme' => $effectiveSlug,
             'tier' => 'gold',
             'is_active' => true,
             'slug' => 'preview',
@@ -364,8 +469,10 @@ class ThemePreviewController extends Controller
         }
         $invitation->setRelation('stories', new Collection($dummyStories));
 
+        $guestName = request()->query('to') ?: 'Nama Tamu';
+
         $guest = new Guest([
-            'name' => 'Nama Tamu',
+            'name' => $guestName,
             'qr_code_token' => 'preview-demo-'.str_replace([' ', '.'], '', microtime()),
         ]);
 

@@ -26,6 +26,6 @@
     {{-- Spacer for fixed bottom bar (if needed) --}}
     <div class="h-16"></div>
 
-    @include('dashboard.invitations.create._crop-modal')
+    <x-invitations.crop-modal />
     @include('dashboard.invitations.create._scripts')
 </x-app-layout>

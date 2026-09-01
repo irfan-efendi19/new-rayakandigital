@@ -139,7 +139,7 @@
                                         </svg>
                                     </button>
                                     <form action="{{ route('dashboard.planner.items.destroy', $vendor) }}" method="POST"
-                                        onsubmit="return confirm('Hapus vendor ini?')">
+                                        onsubmit="return confirmSwal(event, 'Hapus vendor ini?');">
                                         @csrf
                                         @method('DELETE')
                         <button type="submit"

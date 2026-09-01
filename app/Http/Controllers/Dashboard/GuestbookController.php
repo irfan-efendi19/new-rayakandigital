@@ -24,6 +24,9 @@ class GuestbookController extends Controller
             'hadir' => $invitation->guests()->where('attendance_status', 'hadir')->count(),
             'pending' => $invitation->guests()->where('attendance_status', 'pending')->count(),
         ];
+        $stats['percentage'] = $stats['total'] > 0
+            ? (int) round(($stats['hadir'] / $stats['total']) * 100)
+            : 0;
 
         $recentCheckins = $invitation->guests()
             ->where('attendance_status', 'hadir')
@@ -101,6 +104,8 @@ class GuestbookController extends Controller
         if (! $invitation->hasFeature('qr_checkin')) {
             abort(403, 'Fitur QR Check-In hanya tersedia untuk paket Platinum.');
         }
+
+        $guest = $invitation->guests()->findOrFail($guest->getKey());
 
         $checkinOrder = $invitation->guests()
             ->where('attendance_status', 'hadir')

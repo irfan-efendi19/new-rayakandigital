@@ -198,6 +198,13 @@
                     } catch (error) {
                         this.items[id][key] = previous;
                         checkbox.checked = previous;
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal memperbarui',
+                            text: 'Status checklist belum tersimpan. Silakan coba lagi.',
+                            confirmButtonText: 'Tutup',
+                        });
                     }
                 },
             };

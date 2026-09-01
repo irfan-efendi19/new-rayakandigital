@@ -1,7 +1,9 @@
 import Alpine from 'alpinejs';
 import Collapse from '@alpinejs/collapse';
+import { registerGuestList } from './guest-list';
 window.Alpine = Alpine;
 Alpine.plugin(Collapse);
+registerGuestList(Alpine);
 
 document.addEventListener('alpine:init', () => {
     Alpine.store('darkMode', {

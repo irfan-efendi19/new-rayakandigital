@@ -47,16 +47,30 @@
                     </div>
                     </div>
 
-            <p class="mb-6 text-sm text-neutral-600 dark:text-neutral-400 bg-neutral-50 dark:bg-secondary-700 rounded-xl p-4">
-                {{ __('Setelah akun Anda dihapus, semua sumber daya dan data akan dihapus secara permanen. Silakan masukkan kata sandi Anda untuk mengonfirmasi bahwa Anda ingin menghapus akun secara permanen.') }}
-            </p>
+            @if (filled($user->google_id))
+                <p class="mb-6 text-sm text-neutral-600 dark:text-neutral-400 bg-neutral-50 dark:bg-secondary-700 rounded-xl p-4">
+                    {{ __('Setelah akun Anda dihapus, semua sumber daya dan data akan dihapus secara permanen. Karena Anda masuk dengan Google, ketik alamat email akun Anda untuk mengonfirmasi penghapusan.') }}
+                </p>
 
-            <div class="mb-6">
-                <x-input-label for="password" value="{{ __('Kata Sandi') }}" class="sr-only" />
-                <x-text-input id="password" name="password" type="password" class="mt-1 block w-full"
-                    placeholder="{{ __('Masukkan kata sandi Anda untuk konfirmasi') }}" />
-                <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-2" />
-            </div>
+                <div class="mb-6">
+                    <x-input-label for="email_confirmation" :value="__('Konfirmasi Email')" />
+                    <x-text-input id="email_confirmation" name="email_confirmation" type="email"
+                        class="mt-1.5 block w-full" :value="old('email_confirmation')"
+                        placeholder="{{ $user->email }}" autocomplete="off" />
+                    <x-input-error :messages="$errors->userDeletion->get('email_confirmation')" class="mt-2" />
+                </div>
+            @else
+                <p class="mb-6 text-sm text-neutral-600 dark:text-neutral-400 bg-neutral-50 dark:bg-secondary-700 rounded-xl p-4">
+                    {{ __('Setelah akun Anda dihapus, semua sumber daya dan data akan dihapus secara permanen. Silakan masukkan kata sandi Anda untuk mengonfirmasi bahwa Anda ingin menghapus akun secara permanen.') }}
+                </p>
+
+                <div class="mb-6">
+                    <x-input-label for="password" value="{{ __('Kata Sandi') }}" class="sr-only" />
+                    <x-text-input id="password" name="password" type="password" class="mt-1 block w-full"
+                        placeholder="{{ __('Masukkan kata sandi Anda untuk konfirmasi') }}" />
+                    <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-2" />
+                </div>
+            @endif
 
             <div class="flex justify-end gap-3">
                 <x-secondary-button x-on:click="$dispatch('close')">

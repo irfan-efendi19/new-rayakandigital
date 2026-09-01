@@ -1,9 +1,10 @@
 <x-app-layout>
     @php
-        $guestCount = method_exists($guests, 'total') ? $guests->total() : $guests->count();
-        $hadirCount = $invitation->guests()->where('attendance_status', 'hadir')->count();
-        $absenCount = $invitation->guests()->where('attendance_status', 'absen')->count();
-        $pendingCount = $invitation->guests()->whereNull('attendance_status')->count();
+        $guestCount = (int) $guestStats->total;
+        $hadirCount = (int) $guestStats->hadir;
+        $absenCount = (int) $guestStats->absen;
+        $pendingCount = (int) $guestStats->pending;
+        $displayedCount = $guests->count();
     @endphp
 
     <div class="min-h-screen">
@@ -21,53 +22,46 @@
                     <span class="text-neutral-600 dark:text-neutral-400 font-medium">Tamu Undangan</span>
                 </nav>
 
-                <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+                <div class="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
                     <div>
                         <h1 class="font-heading text-2xl sm:text-3xl font-bold text-secondary-800 dark:text-neutral-50 leading-tight">
                             Tamu Undangan
                         </h1>
-                        <p class="text-sm text-neutral-500 dark:text-neutral-400 mt-1">Kelola daftar tamu dan kirim undangan WhatsApp.</p>
+                        <p class="mt-1 max-w-xl text-sm leading-relaxed text-neutral-500 dark:text-neutral-400">Kelola daftar tamu, link personal, status kehadiran, dan pengiriman WhatsApp dalam satu tempat.</p>
                     </div>
-                    <div class="flex flex-wrap items-center gap-2 flex-shrink-0">
+                    <div class="flex flex-wrap items-center gap-2 lg:justify-end">
+                        <a href="{{ route('dashboard.invitations.guests.create', $invitation) }}"
+                           class="inline-flex min-h-[40px] items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-primary to-primary-600 px-4 py-2 text-sm font-semibold text-white shadow-sm shadow-primary/20 transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/20 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-secondary-900">
+                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                            </svg>
+                            Tambah Tamu
+                        </a>
                         @if($invitation->hasFeature('qr_checkin'))
                             <a href="{{ route('dashboard.invitations.guestbook', $invitation) }}"
-                               class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-primary dark:text-primary-400 border border-primary/30 dark:border-primary-700/50 rounded-xl hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all bg-white/70 dark:bg-secondary-800/50 backdrop-blur-sm">
+                               class="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl border border-primary/30 bg-white/70 px-3.5 py-2 text-xs font-semibold text-primary backdrop-blur-sm transition-colors hover:bg-primary-50 dark:border-primary-700/50 dark:bg-secondary-800/50 dark:text-primary-400 dark:hover:bg-primary-900/20">
                                 <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
                                 </svg>
-                                Buku Tamu (Scanner)
+                                Scanner Tamu
                             </a>
                         @endif
-                        <a href="{{ route('dashboard.whatsapp.setting', $invitation) }}"
-                           class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-teal-700 dark:text-teal-300 border border-teal-300/80 dark:border-teal-700/50 rounded-xl hover:bg-teal-50 dark:hover:bg-teal-900/20 transition-all bg-white/70 dark:bg-secondary-800/50 backdrop-blur-sm">
-                            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-                            </svg>
-                            Pengirim WA
-                        </a>
-                        <a href="{{ route('dashboard.invitations.whatsapp.logs', $invitation) }}"
-                           class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-emerald-700 dark:text-emerald-300 border border-emerald-300/80 dark:border-emerald-700/50 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-all bg-white/70 dark:bg-secondary-800/50 backdrop-blur-sm">
-                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                            </svg>
-                            Log WA
-                        </a>
-                        <a href="{{ route('dashboard.invitations.show', $invitation) }}"
-                           class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-secondary-700 dark:text-neutral-300 border border-neutral-300/80 dark:border-secondary-600 rounded-xl hover:bg-white dark:hover:bg-secondary-700 transition-all bg-white/70 dark:bg-secondary-800/50 backdrop-blur-sm">
-                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                            </svg>
-                            Kembali
-                        </a>
+                        <details class="group relative">
+                            <summary class="inline-flex min-h-[40px] cursor-pointer list-none items-center gap-2 rounded-xl border border-neutral-300/80 bg-white/70 px-3.5 py-2 text-xs font-semibold text-secondary-700 backdrop-blur-sm transition-colors hover:bg-white [&::-webkit-details-marker]:hidden dark:border-secondary-600 dark:bg-secondary-800/50 dark:text-neutral-300 dark:hover:bg-secondary-700">
+                                Lainnya
+                                <svg class="h-3.5 w-3.5 transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                            </summary>
+                            <div class="absolute right-0 z-30 mt-2 w-56 overflow-hidden rounded-xl border border-neutral-200 bg-white p-1.5 shadow-xl dark:border-secondary-700 dark:bg-secondary-800">
+                                <a href="{{ route('dashboard.whatsapp.setting', $invitation) }}" class="flex items-center gap-2 rounded-lg px-3 py-2.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 dark:text-neutral-200 dark:hover:bg-secondary-700">Atur Pengirim WA</a>
+                                <a href="{{ route('dashboard.invitations.whatsapp.logs', $invitation) }}" class="flex items-center gap-2 rounded-lg px-3 py-2.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 dark:text-neutral-200 dark:hover:bg-secondary-700">Riwayat Pengiriman</a>
+                                <a href="{{ route('dashboard.invitations.show', $invitation) }}" class="flex items-center gap-2 rounded-lg px-3 py-2.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 dark:text-neutral-200 dark:hover:bg-secondary-700">Kembali ke Undangan</a>
+                            </div>
+                        </details>
                     </div>
                 </div>
 
                 {{-- WA Status Bar Scoped Per Invitation --}}
-                @php
-                    $waSet = $invitation->waSetting;
-                    $waStatus = $waSet?->status ?? 'PENDING_VERIFICATION';
-                @endphp
-                <div class="mt-4 p-3.5 rounded-xl border flex items-center justify-between gap-3 text-xs
+                <div class="mt-5 flex flex-col gap-3 rounded-xl border p-3.5 text-xs sm:flex-row sm:items-center sm:justify-between
                     {{ $waStatus === 'CONNECTED' ? 'bg-emerald-50 border-emerald-200 text-emerald-800 dark:bg-emerald-900/20 dark:border-emerald-700 dark:text-emerald-300' : '' }}
                     {{ $waStatus === 'READY_TO_PAIR' ? 'bg-blue-50 border-blue-200 text-blue-800 dark:bg-blue-900/20 dark:border-blue-700 dark:text-blue-300' : '' }}
                     {{ in_array($waStatus, ['PENDING_VERIFICATION', 'PAIRING']) ? 'bg-amber-50 border-amber-200 text-amber-800 dark:bg-amber-900/20 dark:border-amber-700 dark:text-amber-300' : '' }}
@@ -79,13 +73,13 @@
                         <span>
                             <strong>WA Pengirim Undangan Ini:</strong>
                             @if($waStatus === 'CONNECTED')
-                                Terhubung ({{ $waSet->phone_number ? '+'.$waSet->phone_number : 'Valid' }})
+                                Terhubung ({{ $waSetting->phone_number ? '+'.$waSetting->phone_number : 'Valid' }})
                             @elseif($waStatus === 'READY_TO_PAIR')
                                 Siap Pairing — Silakan scan QR Code
                             @elseif($waStatus === 'PAIRING')
                                 Sedang Pairing (Menunggu Scan)
                             @elseif($waStatus === 'REJECTED')
-                                Ditolak Admin {{ $waSet->admin_notes ? '('.$waSet->admin_notes.')' : '' }}
+                                Ditolak Admin {{ $waSetting->admin_notes ? '('.$waSetting->admin_notes.')' : '' }}
                             @else
                                 Belum Terhubung / Menunggu Verifikasi Admin
                             @endif
@@ -101,13 +95,7 @@
                 </div>
 
                 {{-- WA Blast Quota Card --}}
-                @if($invitation->hasWaQuotaLimit())
-                    @php
-                        $waQuotaLimit = $invitation->waQuotaLimit();
-                        $waSent = $invitation->waSentCount();
-                        $waRemaining = $invitation->remainingWaQuota();
-                        $waUsedPct = $waQuotaLimit > 0 ? min(100, round(($waSent / $waQuotaLimit) * 100)) : 0;
-                    @endphp
+                @if($waQuota)
                     <div class="mt-3 p-3.5 rounded-xl border border-neutral-200/80 dark:border-secondary-700/60 bg-white/70 dark:bg-secondary-800/50 backdrop-blur-sm flex flex-col sm:flex-row sm:items-center gap-3">
                         <div class="flex items-center gap-2 shrink-0">
                             <span class="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/40 text-primary dark:text-primary-400 flex items-center justify-center">
@@ -117,26 +105,26 @@
                             </span>
                             <div>
                                 <p class="text-xs font-bold text-secondary-800 dark:text-neutral-100">Kuota WA Blast</p>
-                                <p class="text-[11px] text-neutral-500 dark:text-neutral-400">{{ $waSent }} dari {{ $waQuotaLimit }} pesan terpakai</p>
+                                <p class="text-[11px] text-neutral-500 dark:text-neutral-400">{{ $waQuota['sent'] }} dari {{ $waQuota['limit'] }} pesan terpakai</p>
                             </div>
                         </div>
                         <div class="flex-1">
                             <div class="h-2 rounded-full bg-neutral-200 dark:bg-secondary-700 overflow-hidden">
-                                <div class="h-full rounded-full transition-all {{ $waRemaining <= 0 ? 'bg-red-500' : ($waRemaining <= 5 ? 'bg-amber-500' : 'bg-emerald-500') }}" style="width: {{ $waUsedPct }}%"></div>
+                                <div class="h-full rounded-full transition-all {{ $waQuota['remaining'] <= 0 ? 'bg-red-500' : ($waQuota['remaining'] <= 5 ? 'bg-amber-500' : 'bg-emerald-500') }}" style="width: {{ $waQuota['used_percentage'] }}%"></div>
                             </div>
                         </div>
-                        <span class="text-xs font-bold shrink-0 {{ $waRemaining <= 0 ? 'text-red-600 dark:text-red-400' : 'text-emerald-600 dark:text-emerald-400' }}">
-                            @if($waRemaining <= 0)
+                        <span class="text-xs font-bold shrink-0 {{ $waQuota['remaining'] <= 0 ? 'text-red-600 dark:text-red-400' : 'text-emerald-600 dark:text-emerald-400' }}">
+                            @if($waQuota['remaining'] <= 0)
                                 Kuota Habis — Hubungi Admin
                             @else
-                                Sisa {{ $waRemaining }} pesan
+                                Sisa {{ $waQuota['remaining'] }} pesan
                             @endif
                         </span>
                     </div>
                 @endif
 
                 {{-- Stat Strip --}}
-                <div class="mt-6 grid grid-cols-4 gap-px bg-neutral-200/70 dark:bg-secondary-700/50 rounded-2xl overflow-hidden border border-neutral-200/80 dark:border-secondary-700/50">
+                <div class="mt-5 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-neutral-200/80 bg-neutral-200/70 dark:border-secondary-700/50 dark:bg-secondary-700/50 sm:grid-cols-4">
                     <div class="bg-white/80 dark:bg-secondary-800/70 px-3 sm:px-5 py-4 flex flex-col items-center sm:items-start text-center sm:text-left backdrop-blur-sm">
                         <span class="stat-value text-xl sm:text-2xl font-bold text-secondary-800 dark:text-neutral-100 tabular-nums">{{ $guestCount }}</span>
                         <span class="text-[10px] sm:text-xs text-neutral-500 dark:text-neutral-400 font-medium mt-0.5">Total Tamu</span>
@@ -153,15 +141,6 @@
                         <span class="stat-value text-xl sm:text-2xl font-bold text-amber-600 dark:text-amber-400 tabular-nums">{{ $pendingCount }}</span>
                         <span class="text-[10px] sm:text-xs text-neutral-500 dark:text-neutral-400 font-medium mt-0.5">Pending</span>
                     </div>
-                </div>
-
-                {{-- URL Bar --}}
-                <div class="mt-4 flex items-center gap-2.5 px-4 py-2.5 bg-white/60 dark:bg-secondary-800/40 backdrop-blur-sm rounded-xl border border-neutral-200/70 dark:border-secondary-700/50">
-                    <svg class="w-3.5 h-3.5 text-neutral-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
-                    <span class="font-mono text-xs text-neutral-500 dark:text-neutral-400 truncate">
-                        {{ parse_url(config('app.url'), PHP_URL_HOST) }}/<strong class="text-secondary-700 dark:text-neutral-300">{{ $invitation->slug }}</strong>/<strong class="text-primary dark:text-primary-400">guest-link</strong>
-                    </span>
-                    <span class="ml-auto flex-shrink-0 text-[10px] font-medium text-neutral-400 dark:text-neutral-500">Link personal per tamu</span>
                 </div>
 
             </div>
@@ -187,72 +166,49 @@
             @endif
 
             {{-- WhatsApp Template Editor --}}
-            @php
-                $waTemplateEnabled = $invitation->wa_template_enabled ? 'true' : 'false';
-                $waMessageTemplate = $invitation->wa_message_template ?? '';
-            @endphp
             <script>
                 window.__WA_TEMPLATE_DATA = {
                     presets: @json($presets ?? []),
-                    templateText: @js($waMessageTemplate),
+                    templateText: @js($invitation->wa_message_template ?? ''),
+                    templateEnabled: @js((bool) $invitation->wa_template_enabled),
                 };
             </script>
             <div
-                x-data="{
-                    templateText: window.__WA_TEMPLATE_DATA.templateText || '',
-                    templateEnabled: {{ $waTemplateEnabled }},
-                    openPresetModal: false,
-                    presets: window.__WA_TEMPLATE_DATA.presets || [],
-                    insertVariable(varText) {
-                        const el = this.$refs.messageField;
-                        const start = el.selectionStart;
-                        const end = el.selectionEnd;
-                        this.templateText = this.templateText.substring(0, start) + varText + this.templateText.substring(end);
-                        this.$nextTick(() => {
-                            el.focus();
-                            el.setSelectionRange(start + varText.length, start + varText.length);
-                        });
-                    },
-                    selectPreset(presetText) {
-                        if (this.templateText.trim().length > 0) {
-                            Swal.fire({
-                                title: 'Ganti Template?',
-                                text: 'Memilih template ini akan menghapus teks draf yang sudah Anda tulis. Apakah Anda yakin?',
-                                icon: 'warning',
-                                showCancelButton: true,
-                                confirmButtonColor: '#d33',
-                                cancelButtonColor: '#3085d6',
-                                confirmButtonText: 'Ya, ganti!',
-                                cancelButtonText: 'Batal',
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    this.templateText = presetText;
-                                    this.openPresetModal = false;
-                                }
-                            });
-                        } else {
-                            this.templateText = presetText;
-                            this.openPresetModal = false;
-                        }
-                    }
-                }"
-                class="bg-white dark:bg-secondary-800 rounded-2xl border border-neutral-200/80 dark:border-secondary-700/60 overflow-hidden"
+                x-data="waTemplateEditor"
+                id="message-template"
+                class="scroll-mt-6 overflow-hidden rounded-2xl border border-neutral-200/80 bg-white dark:border-secondary-700/60 dark:bg-secondary-800"
             >
-                <div class="px-5 sm:px-6 py-4 border-b border-neutral-100 dark:border-secondary-700/60 flex items-center justify-between">
-                    <div>
-                        <h2 class="font-semibold text-sm text-secondary-800 dark:text-neutral-100">Template Pesan WhatsApp</h2>
-                        <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">Atur pesan yang akan dikirim ke tamu undangan.</p>
+                <div class="flex flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+                    <div class="flex items-center gap-3">
+                        <span class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400">
+                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 4v-4z" /></svg>
+                        </span>
+                        <div>
+                            <h2 class="text-sm font-semibold text-secondary-800 dark:text-neutral-100">Template Pesan WhatsApp</h2>
+                            <p class="mt-0.5 text-xs text-neutral-500 dark:text-neutral-400">Opsional · Sesuaikan pesan sebelum dikirim ke tamu.</p>
+                        </div>
                     </div>
-                    <label class="inline-flex items-center gap-2 cursor-pointer select-none">
-                        <span class="text-xs text-neutral-600 dark:text-neutral-400">Custom Template</span>
-                        <input type="checkbox" x-model="templateEnabled"
-                            class="rounded-lg border-neutral-300 dark:border-secondary-600 dark:bg-secondary-900 text-primary focus:ring-primary-500 shadow-sm">
-                    </label>
+                    <button type="button" @click="expanded = !expanded" :aria-expanded="expanded"
+                        class="inline-flex items-center justify-center gap-2 rounded-xl border border-neutral-200 px-3.5 py-2 text-xs font-semibold text-neutral-700 transition-colors hover:bg-neutral-50 dark:border-secondary-600 dark:text-neutral-200 dark:hover:bg-secondary-700">
+                        <span x-text="expanded ? 'Tutup pengaturan' : 'Atur template'"></span>
+                        <svg class="h-3.5 w-3.5 transition-transform" :class="expanded && 'rotate-180'" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                    </button>
                 </div>
-                <div class="p-5 sm:p-6">
+                <div x-show="expanded" x-collapse class="border-t border-neutral-100 p-5 dark:border-secondary-700/60 sm:p-6">
                     <form id="wa_template_form" action="{{ route('dashboard.invitations.whatsapp.template', $invitation) }}" method="POST">
                         @csrf
                         <input type="hidden" name="wa_template_enabled" :value="templateEnabled ? '1' : '0'">
+                        <div class="mb-4 flex items-center justify-between gap-3 rounded-xl border border-neutral-100 bg-neutral-50 p-3 dark:border-secondary-700 dark:bg-secondary-900/50">
+                            <div>
+                                <p class="text-xs font-semibold text-secondary-700 dark:text-neutral-200">Gunakan template kustom</p>
+                                <p class="mt-0.5 text-[11px] text-neutral-500 dark:text-neutral-400">Otomatis aktif saat memilih template contoh.</p>
+                            </div>
+                            <label class="inline-flex cursor-pointer items-center gap-2 select-none">
+                                <span class="sr-only">Aktifkan template kustom</span>
+                                <input type="checkbox" x-model="templateEnabled"
+                                    class="rounded-lg border-neutral-300 text-primary shadow-sm focus:ring-primary-500 dark:border-secondary-600 dark:bg-secondary-900">
+                            </label>
+                        </div>
                         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
                             <div class="flex flex-col">
                                 <label for="whatsapp_template" class="text-xs font-bold text-secondary-700 dark:text-neutral-300 uppercase tracking-wider">
@@ -336,7 +292,7 @@
                                                     @click="selectPreset(preset.text)"
                                                     class="text-[10px] font-bold bg-primary text-white px-3 py-1 rounded-lg hover:bg-primary-600 transition-all cursor-pointer shadow-sm"
                                                 >
-                                                    Use Template
+                                                    Gunakan
                                                 </button>
                                             </div>
                                             <pre class="mt-2 text-[11px] text-neutral-500 dark:text-neutral-400 font-sans leading-relaxed whitespace-pre-line bg-white dark:bg-secondary-800 p-3 rounded-xl border border-neutral-100 dark:border-secondary-700 select-all" x-text="preset.text"></pre>
@@ -366,21 +322,27 @@
 
             {{-- Import Card --}}
             @if($invitation->hasFeature('guest_import'))
-            <div class="bg-white dark:bg-secondary-800 rounded-2xl border border-neutral-200/80 dark:border-secondary-700/60 overflow-hidden">
-                <div class="px-5 sm:px-6 py-4 border-b border-neutral-100 dark:border-secondary-700/60 flex items-center justify-between">
-                    <div>
-                        <h2 class="font-semibold text-sm text-secondary-800 dark:text-neutral-100">Import Tamu Massal (Excel)</h2>
-                        <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">Import daftar tamu dari file Excel atau CSV.</p>
+            <details id="import-guests" class="group scroll-mt-6 overflow-hidden rounded-2xl border border-neutral-200/80 bg-white dark:border-secondary-700/60 dark:bg-secondary-800">
+                <summary class="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 [&::-webkit-details-marker]:hidden sm:px-6">
+                    <div class="flex items-center gap-3">
+                        <span class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
+                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 13l3-3m0 0l3 3m-3-3v12" /></svg>
+                        </span>
+                        <div>
+                            <h2 class="text-sm font-semibold text-secondary-800 dark:text-neutral-100">Import Tamu Massal</h2>
+                            <p class="mt-0.5 text-xs text-neutral-500 dark:text-neutral-400">Opsional · Tambahkan banyak tamu dari Excel atau CSV.</p>
+                        </div>
                     </div>
-                    <a href="{{ asset('template-import-tamu.xlsx') }}"
-                       class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-emerald-700 dark:text-emerald-300 border border-emerald-300/80 dark:border-emerald-700/50 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-all bg-white/70 dark:bg-secondary-800/50 backdrop-blur-sm">
-                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
-                        Download Template
-                    </a>
-                </div>
+                    <svg class="h-4 w-4 flex-shrink-0 text-neutral-400 transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                </summary>
                 <div class="p-5 sm:p-6">
+                    <div class="mb-4 flex justify-end">
+                        <a href="{{ asset('template-import-tamu.xlsx') }}"
+                           class="inline-flex items-center gap-1.5 rounded-xl border border-emerald-300/80 bg-white px-3.5 py-2 text-xs font-semibold text-emerald-700 transition-colors hover:bg-emerald-50 dark:border-emerald-700/50 dark:bg-secondary-800 dark:text-emerald-300 dark:hover:bg-emerald-900/20">
+                            <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                            Unduh Template
+                        </a>
+                    </div>
                     <form action="{{ route('dashboard.invitations.guests.import', $invitation) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="flex flex-col md:flex-row items-end gap-4">
@@ -403,45 +365,38 @@
                         </p>
                     </form>
                 </div>
-            </div>
+            </details>
             @endif
 
             {{-- Guest List --}}
-            <div class="bg-white dark:bg-secondary-800 rounded-2xl border border-neutral-200/80 dark:border-secondary-700/60 overflow-hidden">
+            <div id="guest-list" class="scroll-mt-6 overflow-hidden rounded-2xl border border-neutral-200/80 bg-white dark:border-secondary-700/60 dark:bg-secondary-800">
                 <div class="px-5 sm:px-6 py-4 border-b border-neutral-100 dark:border-secondary-700/60">
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                        <div class="flex items-center gap-2">
-                            <h2 class="font-semibold text-sm text-secondary-800 dark:text-neutral-100">Daftar Tamu</h2>
-                            <span class="inline-flex items-center justify-center min-w-[1.5rem] h-6 px-2 rounded-full bg-primary-50 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 text-xs font-bold">{{ $guestCount }}</span>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h2 class="font-semibold text-sm text-secondary-800 dark:text-neutral-100">Daftar Tamu</h2>
+                                <span class="inline-flex items-center justify-center min-w-[1.5rem] h-6 px-2 rounded-full bg-primary-50 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 text-xs font-bold">{{ $guestCount }}</span>
+                            </div>
+                            <p class="mt-1 text-xs text-neutral-500 dark:text-neutral-400">Pilih tamu untuk mengirim pesan atau melakukan aksi massal.</p>
                         </div>
                         <div class="flex flex-wrap gap-2">
-                            <button id="bulkSendBtn" disabled
-                                class="inline-flex items-center justify-center gap-1.5 bg-emerald-600 text-white px-3 py-2 rounded-xl text-sm font-medium hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                            <span id="selectedCount" class="hidden items-center rounded-xl bg-neutral-100 px-3 py-2 text-xs font-semibold text-neutral-600 dark:bg-secondary-700 dark:text-neutral-300" aria-live="polite"></span>
+                            <button id="bulkSendBtn" type="button" aria-label="Kirim WhatsApp ke tamu terpilih" disabled
+                                class="inline-flex items-center justify-center gap-1.5 rounded-xl bg-emerald-600 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-40"
                                 onclick="bulkSend()">
                                 <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                                 </svg>
-                                <span class="hidden sm:inline">Kirim WA Massal</span>
+                                <span id="bulkSendLabel" class="hidden sm:inline">Kirim WA</span>
                             </button>
-                            <button id="bulkDeleteBtn" disabled
-                                class="inline-flex items-center justify-center gap-1.5 bg-red-500 text-white px-3 py-2 rounded-xl text-sm font-medium hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                            <button id="bulkDeleteBtn" type="button" aria-label="Hapus tamu terpilih" disabled
+                                class="inline-flex items-center justify-center gap-1.5 rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm font-medium text-red-700 transition-colors hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-40 dark:border-red-800 dark:bg-red-900/30 dark:text-red-300 dark:hover:bg-red-900/50"
                                 onclick="bulkDelete()">
                                 <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                 </svg>
-                                <span class="hidden sm:inline">Hapus Dipilih</span>
+                                <span id="bulkDeleteLabel" class="hidden sm:inline">Hapus</span>
                             </button>
-                            <form action="{{ route('dashboard.invitations.guests.destroy-all', $invitation) }}" method="POST" class="inline-block" onsubmit="return confirmSwal(event, 'Yakin ingin menghapus SEMUA tamu?');">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit"
-                                    class="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-sm font-medium text-red-700 dark:text-red-300 bg-red-100 dark:bg-red-900/50 border border-red-200 dark:border-red-800 hover:bg-red-200 dark:hover:bg-red-900/70 transition-colors">
-                                    <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                    </svg>
-                                    <span class="hidden sm:inline">Hapus Semua</span>
-                                </button>
-                            </form>
                             <a href="{{ route('dashboard.invitations.guests.create', $invitation) }}"
                                class="inline-flex items-center justify-center gap-1.5 bg-gradient-to-r from-primary to-primary-600 text-white px-3 py-2 rounded-xl text-sm font-medium hover:shadow-lg transition-all">
                                 <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -449,6 +404,20 @@
                                 </svg>
                                 <span class="hidden sm:inline">Tambah Tamu</span>
                             </a>
+                            <details class="group relative">
+                                <summary aria-label="Aksi lainnya" class="inline-flex h-10 w-10 cursor-pointer list-none items-center justify-center rounded-xl border border-neutral-200 text-neutral-500 transition-colors hover:bg-neutral-50 [&::-webkit-details-marker]:hidden dark:border-secondary-600 dark:text-neutral-300 dark:hover:bg-secondary-700">
+                                    <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20"><path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zm6 0a2 2 0 11-4 0 2 2 0 014 0zm6 0a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+                                </summary>
+                                <div class="absolute right-0 z-20 mt-2 w-48 rounded-xl border border-neutral-200 bg-white p-1.5 shadow-xl dark:border-secondary-700 dark:bg-secondary-800">
+                                    <form action="{{ route('dashboard.invitations.guests.destroy-all', $invitation) }}" method="POST" onsubmit="return confirmSwal(event, 'Yakin ingin menghapus SEMUA tamu?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-left text-xs font-semibold text-red-600 transition-colors hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/30">
+                                            Hapus semua tamu
+                                        </button>
+                                    </form>
+                                </div>
+                            </details>
                         </div>
                     </div>
                 </div>
@@ -485,17 +454,21 @@
                             @endif
                         </div>
                     @else
-                        <form method="GET" class="flex flex-col sm:flex-row gap-3 mb-4">
+                        <form method="GET" class="mb-4 flex flex-col gap-3 sm:flex-row" role="search">
+                            <input type="hidden" name="sort" value="{{ request('sort', 'created_at') }}">
+                            <input type="hidden" name="direction" value="{{ request('direction', 'desc') }}">
                             <div class="relative flex-1">
+                                <label for="guest-search" class="sr-only">Cari tamu</label>
                                 <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                                 </svg>
-                                <input type="text" name="search" value="{{ request('search') }}"
+                                <input id="guest-search" type="search" name="search" value="{{ request('search') }}"
                                     placeholder="Cari nama, nomor, atau kategori..."
                                     class="block w-full pl-10 pr-3 py-2 rounded-xl border-neutral-300 dark:border-secondary-600 dark:bg-secondary-700 dark:text-neutral-200 shadow-sm focus:border-primary-500 focus:ring-primary-500 text-sm">
                             </div>
                             <div class="flex flex-wrap gap-2">
-                                <select name="per_page" onchange="this.form.submit()"
+                                <label for="guest-per-page" class="sr-only">Jumlah tamu per halaman</label>
+                                <select id="guest-per-page" name="per_page" onchange="this.form.submit()" aria-label="Jumlah tamu per halaman"
                                     class="rounded-xl border-neutral-300 dark:border-secondary-600 dark:bg-secondary-700 dark:text-neutral-200 shadow-sm focus:border-primary-500 focus:ring-primary-500 text-sm">
                                     <option value="10" {{ request('per_page') == 10 ? 'selected' : '' }}>10</option>
                                     <option value="20" {{ request('per_page', 20) == 20 ? 'selected' : '' }}>20</option>
@@ -505,7 +478,7 @@
                                 </select>
                                 <button type="submit" class="bg-gradient-to-r from-primary to-primary-600 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:shadow-lg transition-all">Cari</button>
                                 @if(request('search'))
-                                    <a href="{{ route('dashboard.invitations.guests.index', $invitation) }}"
+                                    <a href="{{ route('dashboard.invitations.guests.index', ['invitation' => $invitation, 'per_page' => request('per_page', 20)]) }}"
                                        class="inline-flex items-center px-3 py-2 rounded-xl border border-neutral-300 dark:border-secondary-600 text-neutral-600 dark:text-neutral-300 text-sm hover:bg-neutral-50 dark:hover:bg-secondary-700 transition-colors">
                                         Reset
                                     </a>
@@ -513,12 +486,29 @@
                             </div>
                         </form>
 
-                        <div class="overflow-x-auto border border-neutral-200/80 dark:border-secondary-700/60 rounded-2xl">
-                            <table class="min-w-full divide-y divide-neutral-200 dark:divide-secondary-700">
+                        <div class="mb-4 flex flex-col gap-2 text-xs text-neutral-500 dark:text-neutral-400 sm:flex-row sm:items-center sm:justify-between">
+                            <p>
+                                Menampilkan <strong class="text-secondary-700 dark:text-neutral-200">{{ $displayedCount }}</strong>
+                                @if(request('search'))
+                                    hasil untuk “<strong class="text-secondary-700 dark:text-neutral-200">{{ request('search') }}</strong>”
+                                @else
+                                    dari <strong class="text-secondary-700 dark:text-neutral-200">{{ $guestCount }}</strong> tamu
+                                @endif
+                            </p>
+                            <p class="hidden md:block">Klik baris untuk memilih tamu.</p>
+                            <label class="inline-flex cursor-pointer items-center gap-2 font-semibold text-neutral-600 dark:text-neutral-300 md:hidden">
+                                <input id="selectAllMobile" type="checkbox" class="rounded-lg border-neutral-300 text-primary shadow-sm focus:ring-primary-500 dark:border-secondary-600 dark:bg-secondary-900">
+                                Pilih semua di halaman ini
+                            </label>
+                        </div>
+
+                        <div class="overflow-x-auto rounded-2xl md:border md:border-neutral-200/80 md:dark:border-secondary-700/60">
+                            <table class="table-stacked min-w-full divide-y divide-neutral-200 dark:divide-secondary-700">
                                 <thead class="bg-neutral-50 dark:bg-secondary-900">
                                     <tr>
                                         <th scope="col" class="px-3 py-3.5 text-left">
                                             <input type="checkbox" id="selectAll"
+                                                aria-label="Pilih semua tamu di halaman ini"
                                                 class="rounded-lg border-neutral-300 dark:border-secondary-600 dark:bg-secondary-900 text-primary focus:ring-primary-500 shadow-sm">
                                         </th>
                                         <th scope="col" class="px-6 py-3.5 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
@@ -559,15 +549,16 @@
                                     @foreach($guests as $guest)
                                         @php $waStatus = $guest->wa_status; @endphp
                                         <tr class="guest-row hover:bg-neutral-50 dark:hover:bg-secondary-700/50 transition-colors cursor-pointer">
-                                            <td class="px-3 py-4 whitespace-nowrap">
+                                            <td data-label="Pilih" class="px-3 py-4 whitespace-nowrap">
                                                 <input type="checkbox" name="guest_ids[]" value="{{ $guest->id }}"
+                                                    aria-label="Pilih {{ $guest->name }}"
                                                     class="guest-checkbox rounded-lg border-neutral-300 dark:border-secondary-600 dark:bg-secondary-900 text-primary focus:ring-primary-500 shadow-sm"
                                                     data-has-phone="{{ ($guest->whatsapp_number ?? $guest->phone) ? '1' : '0' }}">
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
+                                            <td data-label="Nama" class="px-6 py-4 whitespace-nowrap">
                                                 <span class="text-sm font-semibold text-secondary-800 dark:text-neutral-200">{{ $guest->name }}</span>
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
+                                            <td data-label="Kategori" class="px-6 py-4 whitespace-nowrap">
                                                 @if($guest->guestCategory)
                                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
                                                           style="background-color: {{ $guest->guestCategory->color_code }}20; color: {{ $guest->guestCategory->color_code }}; border: 1px solid {{ $guest->guestCategory->color_code }}40;">
@@ -577,7 +568,7 @@
                                                     <span class="text-xs text-neutral-400 dark:text-neutral-500">—</span>
                                                 @endif
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
+                                            <td data-label="Acara" class="px-6 py-4 whitespace-nowrap">
                                                 @if($guest->events->isNotEmpty())
                                                     <div class="flex flex-wrap gap-1">
                                                         @foreach($guest->events as $event)
@@ -590,10 +581,10 @@
                                                     <span class="text-xs text-neutral-400 dark:text-neutral-500">Semua Acara</span>
                                                 @endif
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400 font-mono">
+                                            <td data-label="No. WhatsApp" class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400 font-mono">
                                                 {{ $guest->whatsapp_number ?? $guest->phone ?? '—' }}
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
+                                            <td data-label="Status WA" class="px-6 py-4 whitespace-nowrap">
                                                 @php
                                                     $waBadge = match($waStatus) {
                                                         'sent' => ['bg-emerald-100 dark:bg-emerald-900/50 text-emerald-800 dark:text-emerald-200', 'Terkirim'],
@@ -606,7 +597,7 @@
                                                     {{ $waBadge[1] }}
                                                 </span>
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
+                                            <td data-label="Kehadiran" class="px-6 py-4 whitespace-nowrap">
                                                 @php
                                                     $attBadge = match($guest->attendance_status) {
                                                         'hadir' => ['bg-emerald-100 dark:bg-emerald-900/50 text-emerald-800 dark:text-emerald-200', 'Hadir'],
@@ -621,12 +612,12 @@
                                                     {{ $attBadge[1] }}
                                                 </span>
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400">
+                                            <td data-label="Link Personal" class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400">
                                                 <div class="flex items-center gap-1.5">
                                                     <input type="text" readonly value="{{ $guest->personalized_link }}"
                                                         class="text-xs border-neutral-200 dark:border-secondary-600 rounded-lg shadow-sm w-36 bg-neutral-50 dark:bg-secondary-900 dark:text-neutral-300 focus:ring-0 cursor-default"
                                                         id="link-{{ $guest->id }}">
-                                                    <button onclick="copyToClipboard('link-{{ $guest->id }}')"
+                                                    <button type="button" onclick="copyToClipboard('link-{{ $guest->id }}')"
                                                         title="Copy" aria-label="Copy"
                                                         class="p-1.5 rounded-lg text-primary hover:bg-primary-50 dark:hover:bg-primary-900/30 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
                                                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -635,7 +626,7 @@
                                                     </button>
                                                 </div>
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <td data-label="Aksi" class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                                 <div class="flex items-center justify-end gap-1.5">
                                                     @if($guest->whatsapp_number ?? $guest->phone)
                                                         <form action="{{ route('dashboard.invitations.whatsapp.send-single', [$invitation, $guest]) }}" method="POST" class="inline-block">
@@ -687,129 +678,6 @@
                             @csrf
                         </form>
 
-                        <style>
-                            [x-cloak] { display: none !important; }
-                        </style>
-
-                        <script>
-                            function copyToClipboard(id) {
-                                var copyText = document.getElementById(id);
-                                copyText.select();
-                                copyText.setSelectionRange(0, 99999);
-                                navigator.clipboard.writeText(copyText.value);
-                                if (typeof Swal !== 'undefined') {
-                                    Swal.fire({ icon: 'success', title: 'Tersalin!', text: 'Link berhasil disalin!', timer: 1500, showConfirmButton: false });
-                                }
-                            }
-
-                            document.getElementById('selectAll').addEventListener('change', function() {
-                                document.querySelectorAll('.guest-checkbox').forEach(cb => cb.checked = this.checked);
-                                updateBulkButton();
-                            });
-
-                            document.querySelectorAll('.guest-checkbox').forEach(cb => {
-                                cb.addEventListener('change', updateBulkButton);
-                            });
-
-                            document.querySelectorAll('.guest-row').forEach(row => {
-                                row.addEventListener('click', function(e) {
-                                    if (e.target.closest('a') || e.target.closest('button') || e.target.closest('form')) return;
-                                    const cb = this.querySelector('.guest-checkbox');
-                                    if (cb) {
-                                        cb.checked = !cb.checked;
-                                        updateBulkButton();
-                                    }
-                                });
-                            });
-
-                            function updateBulkButton() {
-                                const checked = document.querySelectorAll('.guest-checkbox:checked').length;
-                                const sendBtn = document.getElementById('bulkSendBtn');
-                                const deleteBtn = document.getElementById('bulkDeleteBtn');
-                                sendBtn.disabled = checked === 0;
-                                deleteBtn.disabled = checked === 0;
-                                sendBtn.innerHTML = checked > 0
-                                    ? `<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg> Kirim WA Massal (${checked})`
-                                    : `<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg> Kirim WA Massal`;
-                                deleteBtn.innerHTML = checked > 0
-                                    ? `<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg> Hapus Dipilih (${checked})`
-                                    : `<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg> Hapus Dipilih`;
-                            }
-
-                            function bulkSend() {
-                                const checked = document.querySelectorAll('.guest-checkbox:checked');
-                                if (checked.length === 0) return;
-
-                                const noPhone = Array.from(checked).filter(cb => cb.dataset.hasPhone === '0');
-                                if (noPhone.length > 0) {
-                                    if (typeof Swal !== 'undefined') {
-                                        Swal.fire({
-                                            title: 'Tidak Dapat Dikirim',
-                                            text: noPhone.length + ' tamu terpilih tidak memiliki nomor WhatsApp. Hanya tamu dengan nomor HP yang bisa dikirim undangan.',
-                                            icon: 'error',
-                                            confirmButtonColor: '#FF7A00',
-                                            confirmButtonText: 'Mengerti',
-                                        });
-                                    }
-                                    return;
-                                }
-
-                                if (typeof Swal !== 'undefined') {
-                                    Swal.fire({
-                                        title: 'Konfirmasi',
-                                        text: 'Kirim WhatsApp ke ' + checked.length + ' tamu yang dipilih? Pesan akan dikirim secara bertahap.',
-                                        icon: 'question',
-                                        showCancelButton: true,
-                                        confirmButtonColor: '#FF7A00',
-                                        cancelButtonColor: '#EF4444',
-                                        confirmButtonText: 'Ya, kirim!',
-                                        cancelButtonText: 'Batal',
-                                    }).then((result) => {
-                                        if (result.isConfirmed) {
-                                            submitBulkForm('bulkSendForm', checked);
-                                        }
-                                    });
-                                } else {
-                                    submitBulkForm('bulkSendForm', checked);
-                                }
-                            }
-
-                            function bulkDelete() {
-                                const checked = document.querySelectorAll('.guest-checkbox:checked');
-                                if (checked.length === 0) return;
-
-                                if (typeof Swal !== 'undefined') {
-                                    Swal.fire({
-                                        title: 'Hapus Tamu?',
-                                        text: 'Yakin ingin menghapus ' + checked.length + ' tamu yang dipilih?',
-                                        icon: 'warning',
-                                        showCancelButton: true,
-                                        confirmButtonColor: '#EF4444',
-                                        cancelButtonColor: '#6b7280',
-                                        confirmButtonText: 'Ya, hapus!',
-                                        cancelButtonText: 'Batal',
-                                    }).then((result) => {
-                                        if (result.isConfirmed) {
-                                            submitBulkForm('bulkDeleteForm', checked);
-                                        }
-                                    });
-                                }
-                            }
-
-                            function submitBulkForm(formId, checked) {
-                                const form = document.getElementById(formId);
-                                form.querySelectorAll('.dynamic-guest-id').forEach(el => el.remove());
-                                checked.forEach(cb => {
-                                    const input = document.createElement('input');
-                                    input.type = 'hidden';
-                                    input.name = 'guest_ids[]';
-                                    input.value = cb.value;
-                                    input.className = 'dynamic-guest-id';
-                                    form.appendChild(input);
-                                });
-                                form.submit();
-                            }
-                        </script>
                     @endif
                 </div>
             </div>

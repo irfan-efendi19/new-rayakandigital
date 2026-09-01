@@ -88,7 +88,7 @@
                         Edit
                     </button>
                     <form action="{{ route('dashboard.planner.items.destroy', $item) }}" method="POST"
-                        onsubmit="return confirm('Hapus item ini?')">
+                        onsubmit="return confirmSwal(event, 'Hapus item ini?');">
                         @csrf
                         @method('DELETE')
                         <button type="submit"

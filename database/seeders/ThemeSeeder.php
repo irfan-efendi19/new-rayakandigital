@@ -200,6 +200,66 @@ class ThemeSeeder extends Seeder
             ['name' => 'The Daily Brew (Coffee & Roastery Edition)', 'thumbnail_portrait' => '/images/themes/daily-brew-thumb.svg', 'is_premium' => true, 'is_active' => true]
         );
 
+        $deluxe_01 = Theme::updateOrCreate(
+            ['view_path' => 'themes.deluxe_01'],
+            [
+                'name' => 'Deluxe 01 — Luxury Editorial',
+                'thumbnail_portrait' => '/images/themes/deluxe-01-thumb.svg',
+                'is_premium' => true,
+                'is_active' => true,
+            ],
+        );
+
+        $deluxe_02 = Theme::updateOrCreate(
+            ['view_path' => 'themes.deluxe_02'],
+            [
+                'name' => 'Deluxe 02 — Wide Editorial',
+                'thumbnail_portrait' => '/images/themes/deluxe-02-thumb.svg',
+                'is_premium' => true,
+                'is_active' => true,
+            ],
+        );
+
+        $deluxe_03 = Theme::updateOrCreate(
+            ['view_path' => 'themes.deluxe_03'],
+            [
+                'name' => 'Deluxe 03 — Art Book Editorial',
+                'thumbnail_portrait' => '/images/themes/deluxe-03-thumb.svg',
+                'is_premium' => true,
+                'is_active' => true,
+            ],
+        );
+
+        $deluxe_04 = Theme::updateOrCreate(
+            ['view_path' => 'themes.deluxe_04'],
+            [
+                'name' => 'Deluxe 04 — Gallery House Editorial',
+                'thumbnail_portrait' => '/images/themes/deluxe-04-thumb.svg',
+                'is_premium' => true,
+                'is_active' => true,
+            ],
+        );
+
+        $deluxe_05 = Theme::updateOrCreate(
+            ['view_path' => 'themes.deluxe_05'],
+            [
+                'name' => 'Deluxe 05 — Cinema Journal Editorial',
+                'thumbnail_portrait' => '/images/themes/deluxe-05-thumb.svg',
+                'is_premium' => true,
+                'is_active' => true,
+            ],
+        );
+
+        $velvet_vows = Theme::updateOrCreate(
+            ['view_path' => 'themes.velvet_vows'],
+            [
+                'name' => 'Velvet Vows — Burgundy & Gold',
+                'thumbnail_portrait' => '/images/themes/velvet-vows-thumb.svg',
+                'is_premium' => true,
+                'is_active' => true,
+            ],
+        );
+
         $ljk_exam = Theme::updateOrCreate(
             ['view_path' => 'themes.ljk_exam'],
             ['name' => 'Ujian Sekolah / Lembar Jawaban Komputer (LJK)', 'thumbnail_portrait' => '/images/themes/ljk-exam-thumb.svg', 'is_premium' => true, 'is_active' => true]
@@ -285,7 +345,90 @@ class ThemeSeeder extends Seeder
             ['name' => 'Situs Jurnal & E-Library (Journal Article Access)', 'thumbnail_portrait' => '/images/themes/jurnal-ilmiah-thumb.svg', 'is_premium' => true, 'is_active' => true]
         );
 
+        $google_docs = Theme::updateOrCreate(
+            ['view_path' => 'themes.google_docs'],
+            ['name' => 'Google Docs — Proposal Hidup Bersama', 'thumbnail_portrait' => '/images/themes/google-docs-thumb.svg', 'is_premium' => true, 'is_active' => true]
+        );
+
+        $buku_islami_3d = Theme::updateOrCreate(
+            ['view_path' => 'themes.buku_islami_3d'],
+            ['name' => 'Buku Islami 3D (Syar\'i Edition)', 'thumbnail_portrait' => '/images/themes/islamic-thumb.svg', 'is_premium' => true, 'is_active' => true]
+        );
+
+        $uno = Theme::updateOrCreate(
+            ['view_path' => 'themes.uno'],
+            ['name' => 'UNO Card Game (Wedding Edition)', 'thumbnail_portrait' => '/images/themes/uno-thumb.svg', 'is_premium' => true, 'is_active' => true]
+        );
+
+        $tetris = Theme::updateOrCreate(
+            ['view_path' => 'themes.tetris'],
+            ['name' => 'Tetris Arcade (The Perfect Fit Edition)', 'thumbnail_portrait' => '/images/themes/tetris-thumb.svg', 'is_premium' => true, 'is_active' => true]
+        );
+
+        $periodic_table = Theme::updateOrCreate(
+            ['view_path' => 'themes.periodic_table'],
+            ['name' => 'Tabel Periodik Kimia (Periodic Love Table)', 'thumbnail_portrait' => '/images/themes/periodic-table-thumb.svg', 'is_premium' => true, 'is_active' => true]
+        );
+
+        $sticker_doodle = Theme::updateOrCreate(
+            ['view_path' => 'themes.sticker_doodle'],
+            ['name' => 'Sticker & Doodling Aesthetic (Photobooth Scrapbook)', 'thumbnail_portrait' => '/images/themes/sticker-doodle-thumb.svg', 'is_premium' => true, 'is_active' => true]
+        );
+
+        $photobox_strip = Theme::updateOrCreate(
+            ['view_path' => 'themes.photobox_strip'],
+            ['name' => 'Photobox Strip Klasik (Retro & Gen Z Vibe)', 'thumbnail_portrait' => '/images/themes/photobox-strip-thumb.svg', 'is_premium' => true, 'is_active' => true]
+        );
+
         $themes = [
+            $buku_islami_3d->id => [
+                'title' => 'Walimatul \'Ursy: Rayhan & Aisyah (Undangan Buku 3D Syar\'i)',
+                'groom_full_name' => 'Muhammad Rayhan, S.T.',
+                'groom_short_name' => 'Rayhan',
+                'groom_father_name' => 'H. Abdullah Mansur',
+                'groom_mother_name' => 'Hj. Maryam',
+                'bride_full_name' => 'Siti Aisyah, S.Farm.',
+                'bride_short_name' => 'Aisyah',
+                'bride_father_name' => 'H. Ahmad Dahlan',
+                'bride_mother_name' => 'Hj. Siti Khadijah',
+                'timezone' => 'Asia/Jakarta',
+                'event_date_offset_days' => 45,
+                'event_time' => '08:00',
+                'event_time_end' => '14:00',
+                'venue_name' => 'Grand Ballroom Syariah (Masjid Agung Al-Mubarak)',
+                'venue_address' => 'Jl. Raya Kebajikan No. 99, Jakarta',
+                'venue_maps_url' => 'https://maps.google.com/?q=-6.2088,106.8456',
+                'quote_content' => 'Dan di antara tanda-tanda kebesaran-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang.',
+                'quote_source' => 'QS. Ar-Rum: 21',
+                'love_story' => 'Meniti jalan ta\'aruf yang penuh barakah hingga bersatunya dua insan dalam ikatan suci pernikahan.',
+                'bg_music_path' => 'https://cdn.pixabay.com/download/audio/2022/11/06/audio_c89b2512f4.mp3',
+                'gift_banks' => [
+                    ['bank_name' => 'Bank Syariah Indonesia (BSI)', 'account_number' => '7182930488', 'account_holder' => 'Muhammad Rayhan'],
+                    ['bank_name' => 'Bank Central Asia (BCA)', 'account_number' => '8691420911', 'account_holder' => 'Siti Aisyah'],
+                ],
+                'events' => [
+                    [
+                        'event_title' => 'Akad Nikah (Ijab Qabul Khidmat)',
+                        'date_offset_days' => 0,
+                        'start_time' => '08:00',
+                        'end_time' => '10:00',
+                        'is_until_finished' => false,
+                        'place_name' => 'Masjid Agung Al-Mubarak',
+                        'place_address' => 'Jl. Raya Kebajikan No. 99, Jakarta',
+                        'google_maps_url' => 'https://maps.google.com/?q=-6.2088,106.8456',
+                    ],
+                    [
+                        'event_title' => 'Walimatul \'Ursy (Resepsi Pernikahan)',
+                        'date_offset_days' => 0,
+                        'start_time' => '11:00',
+                        'end_time' => '14:00',
+                        'is_until_finished' => false,
+                        'place_name' => 'Grand Ballroom Syariah',
+                        'place_address' => 'Gedung Pertemuan Halal Centre Lt. 2, Jakarta',
+                        'google_maps_url' => 'https://maps.google.com/?q=-6.2088,106.8456',
+                    ],
+                ],
+            ],
             $elegant->id => [
                 'title' => 'Pernikahan Raisa & Hamish',
                 'groom_full_name' => 'Hamish Daud',
@@ -2666,6 +2809,71 @@ class ThemeSeeder extends Seeder
                     ],
                 ],
             ],
+            $deluxe_01->id => [
+                'title' => 'Deluxe Editorial Wedding: Damar & Alya',
+                'hero_image_path' => 'https://picsum.photos/seed/deluxe01cover/1200/1600',
+                'groom_full_name' => 'Damar Ardhana Putra',
+                'groom_short_name' => 'Damar',
+                'groom_father_name' => 'H. Arif Pranata',
+                'groom_mother_name' => 'Hj. Nirmala Sari',
+                'bride_full_name' => 'Alya Maheswari',
+                'bride_short_name' => 'Alya',
+                'bride_father_name' => 'H. Surya Mahendra',
+                'bride_mother_name' => 'Hj. Ratih Kusuma',
+                'bride_photo_path' => 'https://picsum.photos/seed/deluxe01bride/800/1000',
+                'groom_photo_path' => 'https://picsum.photos/seed/deluxe01groom/800/1000',
+                'timezone' => 'Asia/Jakarta',
+                'event_date_offset_days' => 60,
+                'event_time' => '08:00',
+                'event_time_end' => '14:00',
+                'venue_name' => 'The Langham Grand Ballroom Jakarta',
+                'venue_address' => 'District 8, SCBD Lot 28, Jakarta Selatan',
+                'venue_maps_url' => 'https://maps.google.com/?q=-6.2285,106.8066',
+                'quote_content' => 'Dan di antara tanda-tanda kebesaran-Nya, Dia menciptakan pasangan-pasangan untukmu agar kamu merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang.',
+                'quote_source' => 'QS. Ar-Rum: 21',
+                'love_story' => 'Sebuah pertemuan sederhana tumbuh menjadi percakapan panjang, perjalanan bersama, dan keputusan untuk menulis masa depan dalam satu cerita.',
+                'stories' => [
+                    ['story_date' => 'CHAPTER I · 2021', 'story_title' => 'The First Conversation', 'story_description' => 'Sebuah perkenalan singkat di antara teman-teman membuka percakapan yang terasa begitu akrab sejak awal.'],
+                    ['story_date' => 'CHAPTER II · 2023', 'story_title' => 'Growing Together', 'story_description' => 'Kami belajar bahwa cinta tumbuh melalui perhatian kecil, dukungan yang tenang, dan keberanian untuk bermimpi bersama.'],
+                    ['story_date' => 'CHAPTER III · 2026', 'story_title' => 'A Promise for Always', 'story_description' => 'Di hadapan keluarga, satu pertanyaan dijawab dengan keyakinan untuk berjalan berdampingan seumur hidup.'],
+                ],
+                'gallery_photos' => [
+                    'https://picsum.photos/seed/deluxe01gallery1/900/1200',
+                    'https://picsum.photos/seed/deluxe01gallery2/900/1200',
+                    'https://picsum.photos/seed/deluxe01gallery3/1200/800',
+                    'https://picsum.photos/seed/deluxe01gallery4/900/1200',
+                    'https://picsum.photos/seed/deluxe01gallery5/900/1200',
+                ],
+                'gift_banks' => [
+                    ['bank_name' => 'Bank Central Asia', 'account_number' => '1234567890', 'account_holder' => 'Alya Maheswari'],
+                    ['bank_name' => 'Bank Mandiri', 'account_number' => '9876543210', 'account_holder' => 'Damar Ardhana Putra'],
+                ],
+                'gift_ewallets' => [
+                    ['wallet_name' => 'GoPay', 'wallet_number' => '081234567890'],
+                ],
+                'events' => [
+                    [
+                        'event_title' => 'Akad Nikah',
+                        'date_offset_days' => 0,
+                        'start_time' => '08:00',
+                        'end_time' => '10:00',
+                        'is_until_finished' => false,
+                        'place_name' => 'The Langham Grand Ballroom',
+                        'place_address' => 'District 8, SCBD Lot 28, Jakarta Selatan',
+                        'google_maps_url' => 'https://maps.google.com/?q=-6.2285,106.8066',
+                    ],
+                    [
+                        'event_title' => 'Resepsi Pernikahan',
+                        'date_offset_days' => 0,
+                        'start_time' => '11:00',
+                        'end_time' => '14:00',
+                        'is_until_finished' => false,
+                        'place_name' => 'The Langham Grand Ballroom',
+                        'place_address' => 'District 8, SCBD Lot 28, Jakarta Selatan',
+                        'google_maps_url' => 'https://maps.google.com/?q=-6.2285,106.8066',
+                    ],
+                ],
+            ],
             $ljk_exam->id => [
                 'title' => 'Ujian Nasional Pernikahan (Bagas & Sarah)',
                 'groom_full_name' => 'Bagas Pratama, S.Kom.',
@@ -3652,6 +3860,67 @@ class ThemeSeeder extends Seeder
                     ],
                 ],
             ],
+            $google_docs->id => [
+                'title' => 'Proposal Kerja Sama Hidup Seumur Hidup',
+                'groom_full_name' => 'Raka Adiputra',
+                'groom_short_name' => 'Raka',
+                'groom_father_name' => 'Bpk. Hendra Adiputra',
+                'groom_mother_name' => 'Ibu Maya Lestari',
+                'bride_full_name' => 'Nadira Ayuningtyas',
+                'bride_short_name' => 'Nadira',
+                'bride_father_name' => 'Bpk. Surya Ayuningtyas',
+                'bride_mother_name' => 'Ibu Ratih Purnama',
+                'timezone' => 'Asia/Jakarta',
+                'event_date_offset_days' => 30,
+                'event_time' => '08:00',
+                'event_time_end' => '14:00',
+                'venue_name' => 'The Glass House Jakarta',
+                'venue_address' => 'Jl. Ampera Raya No. 88, Jakarta Selatan',
+                'venue_maps_url' => 'https://maps.google.com/?q=-6.2607,106.8181',
+                'quote_content' => 'Kita tidak harus sempurna untuk memulai; kita hanya perlu bersedia menyunting hidup ini bersama-sama.',
+                'quote_source' => 'Catatan kolaborator, versi 2.0',
+                'love_story' => 'Berawal dari komentar sederhana pada sebuah dokumen kerja, percakapan mereka berkembang menjadi ribuan revisi kecil yang akhirnya membawa keduanya pada satu keputusan besar: hidup bersama.',
+                'stories' => [
+                    ['story_date' => 'VERSI 0.1 — 2021', 'story_title' => 'Dokumen Pertama Dibagikan', 'story_description' => 'Raka dan Nadira bertemu sebagai dua kolaborator yang sama-sama sering menyelesaikan pekerjaan menjelang tenggat.'],
+                    ['story_date' => 'VERSI 1.0 — 2023', 'story_title' => 'Akses Ditingkatkan', 'story_description' => 'Dari rekan kerja menjadi tempat berbagi cerita, agenda, dan mimpi yang semakin sering disimpan bersama.'],
+                    ['story_date' => 'VERSI 2.0 — 2026', 'story_title' => 'Siap Dipublikasikan', 'story_description' => 'Dengan restu keluarga, keduanya menyepakati satu pembaruan besar: proyek hidup bersama untuk selamanya.'],
+                ],
+                'gallery_photos' => [
+                    'https://picsum.photos/seed/google-docs-wedding-1/1000/700',
+                    'https://picsum.photos/seed/google-docs-wedding-2/800/1000',
+                    'https://picsum.photos/seed/google-docs-wedding-3/1000/800',
+                    'https://picsum.photos/seed/google-docs-wedding-4/900/900',
+                ],
+                'gift_banks' => [
+                    ['bank_name' => 'Bank Mandiri', 'account_number' => '1370019283741', 'account_holder' => 'Raka Adiputra'],
+                    ['bank_name' => 'BCA', 'account_number' => '8820192834', 'account_holder' => 'Nadira Ayuningtyas'],
+                ],
+                'gift_ewallets' => [
+                    ['wallet_name' => 'GoPay', 'wallet_number' => '081299887766'],
+                ],
+                'events' => [
+                    [
+                        'event_title' => 'Akad Nikah — Merge Request Utama',
+                        'date_offset_days' => 0,
+                        'start_time' => '08:00',
+                        'end_time' => '10:00',
+                        'is_until_finished' => false,
+                        'place_name' => 'Masjid Al-Ikhlas Ampera',
+                        'place_address' => 'Jl. Ampera Raya No. 80, Jakarta Selatan',
+                        'google_maps_url' => 'https://maps.google.com/?q=-6.2607,106.8181',
+                    ],
+                    [
+                        'event_title' => 'Resepsi — Publish to Everyone',
+                        'date_offset_days' => 0,
+                        'start_time' => '11:00',
+                        'end_time' => '14:00',
+                        'is_until_finished' => false,
+                        'place_name' => 'The Glass House Jakarta',
+                        'place_address' => 'Jl. Ampera Raya No. 88, Jakarta Selatan',
+                        'google_maps_url' => 'https://maps.google.com/?q=-6.2607,106.8181',
+                    ],
+                ],
+            ],
             $jurnal_ilmiah->id => [
                 'title' => 'Transformasi Status Hubungan dari Teman Kuliah Menjadi Pasangan Halal',
                 'groom_full_name' => 'Fajar Ramadhan, S.T., M.Eng. (Lead Investigator)',
@@ -3714,7 +3983,361 @@ class ThemeSeeder extends Seeder
                     ],
                 ],
             ],
+            $uno->id => [
+                'title' => 'UNO! Love Edition: Rangga & Cinta (Wedding Match)',
+                'groom_full_name' => 'Rangga Pratama, S.Kom.',
+                'groom_short_name' => 'Rangga',
+                'groom_father_name' => 'Bambang Sudarsono',
+                'groom_mother_name' => 'Sri Wahyuni',
+                'bride_full_name' => 'Cinta Amanda, S.Ds.',
+                'bride_short_name' => 'Cinta',
+                'bride_father_name' => 'Agus Hermanto',
+                'bride_mother_name' => 'Dewi Lestari',
+                'timezone' => 'Asia/Jakarta',
+                'event_date_offset_days' => 45,
+                'event_time' => '08:00',
+                'event_time_end' => '15:00',
+                'venue_name' => 'Grand UNO Club Ballroom',
+                'venue_address' => 'Jl. Sudirman Boulevard No. 77, Jakarta Selatan',
+                'venue_maps_url' => 'https://maps.google.com/?q=-6.2088,106.8456',
+                'quote_content' => 'Dan di antara tanda-tanda kebesaran-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang.',
+                'quote_source' => 'QS. Ar-Rum: 21',
+                'love_story' => 'Permainan cinta yang bermula dari tumpukan kartu pertama, melewati kartu Draw +2 kebersamaan dan aksi Reverse saling menguatkan, hingga kini tinggal 1 langkah: UNO di pelaminan!',
+                'stories' => [
+                    ['story_date' => 'ROUND 1 - 2021', 'story_title' => 'FIRST DEAL: Pertemuan Pertama ☕', 'story_description' => 'Awal mula perjumpaan manis di sebuah board game cafe yang membuka tumpukan babak cinta berdua.'],
+                    ['story_date' => 'ROUND 2 - 2023', 'story_title' => 'DRAW +2: Komitmen & Menjalin Rasa 👥', 'story_description' => 'Saling melengkapi dalam suka dan duka, menyatukan dua impian menuju satu tujuan hidup.'],
+                    ['story_date' => 'ROUND 3 - 2025', 'story_title' => 'WILD CARD: Momen Lamaran 💍', 'story_description' => 'Mengikat janji suci di hadapan keluarga tercinta untuk melangkah bersama seumur hidup.'],
+                    ['story_date' => 'ROUND 4 - 2026', 'story_title' => 'WINNING HAND: Menuju Pelaminan 👑', 'story_description' => 'Kartu terakhir telah dimainkan: Hari pernikahan bahagia kami resmi dimulai!'],
+                ],
+                'gallery_photos' => [
+                    'https://picsum.photos/seed/unophoto1/800/1200',
+                    'https://picsum.photos/seed/unophoto2/800/1200',
+                    'https://picsum.photos/seed/unophoto3/800/1200',
+                    'https://picsum.photos/seed/unophoto4/800/1200',
+                ],
+                'gift_banks' => [
+                    ['bank_name' => 'Bank BCA (Kasir UNO)', 'account_number' => '7120198822', 'account_holder' => 'Rangga Pratama'],
+                    ['bank_name' => 'Bank Mandiri (Kasir UNO)', 'account_number' => '1370019283741', 'account_holder' => 'Cinta Amanda'],
+                ],
+                'gift_ewallets' => [
+                    ['wallet_name' => 'GoPay', 'wallet_number' => '081299887766'],
+                    ['wallet_name' => 'ShopeePay', 'wallet_number' => '081299887766'],
+                ],
+                'events' => [
+                    [
+                        'event_title' => 'Action Card: Akad Nikah (Holy Matrimony)',
+                        'date_offset_days' => 0,
+                        'start_time' => '08:00',
+                        'end_time' => '10:30',
+                        'is_until_finished' => false,
+                        'place_name' => 'Masjid Grand UNO',
+                        'place_address' => 'Jl. Sudirman Boulevard No. 77, Jakarta Selatan',
+                        'google_maps_url' => 'https://maps.google.com/?q=-6.2088,106.8456',
+                    ],
+                    [
+                        'event_title' => 'Special Draw +2: Grand Wedding Reception',
+                        'date_offset_days' => 0,
+                        'start_time' => '11:30',
+                        'end_time' => '15:00',
+                        'is_until_finished' => false,
+                        'place_name' => 'Grand UNO Club Ballroom',
+                        'place_address' => 'Jl. Sudirman Boulevard No. 77, Jakarta Selatan',
+                        'google_maps_url' => 'https://maps.google.com/?q=-6.2088,106.8456',
+                    ],
+                ],
+            ],
+            $tetris->id => [
+                'title' => 'TETRIS: The Perfect Fit — Dimas & Nadia (Love Edition)',
+                'groom_full_name' => 'Dimas Aditya Pratama, S.Kom.',
+                'groom_short_name' => 'Dimas',
+                'groom_father_name' => 'H. Suryanto',
+                'groom_mother_name' => 'Hj. Endang Rahayu',
+                'bride_full_name' => 'Nadia Putri Maharani, S.Ds.',
+                'bride_short_name' => 'Nadia',
+                'bride_father_name' => 'Drs. Tri Wahyudi',
+                'bride_mother_name' => 'Sri Mulyani, M.Pd.',
+                'timezone' => 'Asia/Jakarta',
+                'event_date_offset_days' => 45,
+                'event_time' => '08:30',
+                'event_time_end' => '15:30',
+                'venue_name' => 'The Arcade Grand Ballroom',
+                'venue_address' => 'Jl. Gatot Subroto Kav. 52, Jakarta Selatan',
+                'venue_maps_url' => 'https://maps.google.com/?q=-6.2305,106.8188',
+                'quote_content' => 'Dan di antara tanda-tanda kebesaran-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang.',
+                'quote_source' => 'QS. Ar-Rum: 21',
+                'love_story' => 'Dua insan dengan karakter berbeda yang saling melengkapi bagai potongan Tetris yang jatuh tepat pada tempatnya, mengunci baris demi baris komitmen hingga mencapai Perfect Clear di pelaminan.',
+                'stories' => [
+                    ['story_date' => 'LEVEL 1 - 2021', 'story_title' => 'DROP IN: Pertemuan Pertama ☕', 'story_description' => 'Awal mula perjumpaan di arcade game center yang memulai babak baru perjalanan hidup bersama.'],
+                    ['story_date' => 'LEVEL 2 - 2023', 'story_title' => 'STACKING UP: Saling Melengkapi 🧩', 'story_description' => 'Melewati berbagai tantangan dengan komunikasi erat dan komitmen saling menguatkan.'],
+                    ['story_date' => 'LEVEL 3 - 2025', 'story_title' => 'T-SPIN MOVE: Momen Lamaran 💍', 'story_description' => 'Sebuah kejutan manis bertukar cincin komitmen di hadapan keluarga besar tercinta.'],
+                    ['story_date' => 'LEVEL 4 - 2026', 'story_title' => 'PERFECT CLEAR: Menuju Pelaminan 👑', 'story_description' => 'Potongan terakhir telah terpasang sempurna: Babak pernikahan bahagia kami resmi dimulai!'],
+                ],
+                'gallery_photos' => [
+                    'https://picsum.photos/seed/tetris1/800/1200',
+                    'https://picsum.photos/seed/tetris2/800/1200',
+                    'https://picsum.photos/seed/tetris3/800/1200',
+                    'https://picsum.photos/seed/tetris4/800/1200',
+                ],
+                'gift_banks' => [
+                    ['bank_name' => 'Bank BCA (Kasir Arcade Dimas)', 'account_number' => '8820193844', 'account_holder' => 'Dimas Aditya Pratama'],
+                    ['bank_name' => 'Bank Mandiri (Kasir Arcade Nadia)', 'account_number' => '1370019928371', 'account_holder' => 'Nadia Putri Maharani'],
+                ],
+                'gift_ewallets' => [
+                    ['wallet_name' => 'GoPay', 'wallet_number' => '081299887766'],
+                    ['wallet_name' => 'ShopeePay', 'wallet_number' => '081299887766'],
+                ],
+                'events' => [
+                    [
+                        'event_title' => 'Stage 1: Akad Nikah (Holy Matrimony)',
+                        'date_offset_days' => 0,
+                        'start_time' => '08:30',
+                        'end_time' => '10:30',
+                        'is_until_finished' => false,
+                        'place_name' => 'Masjid The Arcade Grand',
+                        'place_address' => 'Jl. Gatot Subroto Kav. 52, Jakarta Selatan',
+                        'google_maps_url' => 'https://maps.google.com/?q=-6.2305,106.8188',
+                    ],
+                    [
+                        'event_title' => 'Stage 2: Grand Wedding Reception',
+                        'date_offset_days' => 0,
+                        'start_time' => '11:30',
+                        'end_time' => '15:30',
+                        'is_until_finished' => false,
+                        'place_name' => 'The Arcade Grand Ballroom',
+                        'place_address' => 'Jl. Gatot Subroto Kav. 52, Jakarta Selatan',
+                        'google_maps_url' => 'https://maps.google.com/?q=-6.2305,106.8188',
+                    ],
+                ],
+            ],
+            $periodic_table->id => [
+                'title' => 'The Periodic Love Table: Dimas & Nadia [Di + Na → DiNa]',
+                'groom_full_name' => 'Dimas Aditya Pratama, S.Si.',
+                'groom_short_name' => 'Dimas',
+                'groom_father_name' => 'Prof. Dr. H. Bambang Prakoso',
+                'groom_mother_name' => 'Hj. Ratna Sari, M.Pd.',
+                'groom_photo_path' => 'https://picsum.photos/seed/periodicgroom/600/600',
+                'bride_full_name' => 'Nadia Putri Maharani, M.Sc.',
+                'bride_short_name' => 'Nadia',
+                'bride_father_name' => 'Dr. Ir. H. Hendra Kusuma',
+                'bride_mother_name' => 'Hj. Endang Rahayu, M.Si.',
+                'bride_photo_path' => 'https://picsum.photos/seed/periodicbride/600/600',
+                'hero_image_path' => 'https://picsum.photos/seed/periodiccover/1000/1000',
+                'timezone' => 'Asia/Jakarta',
+                'event_date_offset_days' => 30,
+                'event_time' => '08:30',
+                'event_time_end' => '14:30',
+                'venue_name' => 'The Grand Chemistry Ballroom (Laboratorium Utama)',
+                'venue_address' => 'Jl. Gatot Subroto Kav. 18, Kuningan, Jakarta Selatan',
+                'venue_maps_url' => 'https://maps.google.com/?q=-6.2305,106.8188',
+                'quote_content' => 'Dan di antara tanda-tanda kebesaran-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang.',
+                'quote_source' => 'QS. Ar-Rum: 21',
+                'love_story' => 'Ketika dua unsur reaktif [Di] Dimasium dan [Na] Nadium dipertemukan dalam kesetimbangan takdir, terbentuklah formula cinta sempurna [DiNa] dengan ikatan kovalen suci abadi.',
+                'stories' => [
+                    ['story_date' => 'FASE 1 - 2021', 'story_title' => 'Tumbukan Efektif: Pertemuan Pertama 🧪', 'story_description' => 'Awal perjumpaan di laboratorium riset kimia yang memicu gaya tarik Van der Waals antar hati.'],
+                    ['story_date' => 'FASE 2 - 2023', 'story_title' => 'Katalis & Resonansi: Menjalin Hubungan ⚗️', 'story_description' => 'Titrasi rasa yang kian pekat hingga mencapai titik ekuivalen keserasian dan saling melengkapi.'],
+                    ['story_date' => 'FASE 3 - 2025', 'story_title' => 'Kompleks Teraktivasi: Momen Lamaran 💍', 'story_description' => 'Penyatuan energi cinta dalam ikatan komitmen resmi di hadapan kedua keluarga besar tercinta.'],
+                    ['story_date' => 'FASE 4 - 2026', 'story_title' => 'Kristalisasi Abadi: Menuju Pelaminan 👑', 'story_description' => 'Sintesis sempurna telah tercapai: Mengikat janji suci pernikahan bahagia seumur hidup!'],
+                ],
+                'gallery_photos' => [
+                    'https://picsum.photos/seed/periodicphoto1/800/800',
+                    'https://picsum.photos/seed/periodicphoto2/800/800',
+                    'https://picsum.photos/seed/periodicphoto3/800/800',
+                    'https://picsum.photos/seed/periodicphoto4/800/800',
+                ],
+                'gift_banks' => [
+                    ['bank_name' => 'Bank BCA (Laboratorium Dimas)', 'account_number' => '8820193844', 'account_holder' => 'Dimas Aditya Pratama'],
+                    ['bank_name' => 'Bank Mandiri (Laboratorium Nadia)', 'account_number' => '1370019928371', 'account_holder' => 'Nadia Putri Maharani'],
+                ],
+                'gift_ewallets' => [
+                    ['wallet_name' => 'GoPay', 'wallet_number' => '081299887766'],
+                    ['wallet_name' => 'ShopeePay', 'wallet_number' => '081299887766'],
+                ],
+                'events' => [
+                    [
+                        'event_title' => 'Fase 1: Sintesis Akad Nikah (Holy Matrimony)',
+                        'date_offset_days' => 0,
+                        'start_time' => '08:30',
+                        'end_time' => '10:30',
+                        'is_until_finished' => false,
+                        'place_name' => 'Masjid The Grand Chemical Tower',
+                        'place_address' => 'Jl. Gatot Subroto Kav. 18, Jakarta Selatan',
+                        'google_maps_url' => 'https://maps.google.com/?q=-6.2305,106.8188',
+                    ],
+                    [
+                        'event_title' => 'Fase 2: Resonansi Resepsi (Grand Wedding Celebration)',
+                        'date_offset_days' => 0,
+                        'start_time' => '11:30',
+                        'end_time' => '15:30',
+                        'is_until_finished' => false,
+                        'place_name' => 'The Grand Chemistry Ballroom',
+                        'place_address' => 'Jl. Gatot Subroto Kav. 18, Jakarta Selatan',
+                        'google_maps_url' => 'https://maps.google.com/?q=-6.2305,106.8188',
+                    ],
+                ],
+            ],
+            $sticker_doodle->id => [
+                'title' => 'Photobooth Scrapbook & Doodling: Dimas & Nadia ✨',
+                'groom_full_name' => 'Dimas Aditya Pratama, S.Kom.',
+                'groom_short_name' => 'Dimas',
+                'groom_father_name' => 'Bambang Prakoso',
+                'groom_mother_name' => 'Ratna Sari',
+                'groom_photo_path' => 'https://picsum.photos/seed/doodlegroom/600/600',
+                'bride_full_name' => 'Nadia Putri Maharani, S.Ds.',
+                'bride_short_name' => 'Nadia',
+                'bride_father_name' => 'Hendra Kusuma',
+                'bride_mother_name' => 'Endang Rahayu',
+                'bride_photo_path' => 'https://picsum.photos/seed/doodlebride/600/600',
+                'hero_image_path' => 'https://picsum.photos/seed/doodlecover/1000/1000',
+                'timezone' => 'Asia/Jakarta',
+                'event_date_offset_days' => 25,
+                'event_time' => '09:00',
+                'event_time_end' => '15:00',
+                'venue_name' => 'The Glass House & Scrapbook Garden',
+                'venue_address' => 'Jl. Kemang Raya No. 45, Jakarta Selatan',
+                'venue_maps_url' => 'https://maps.google.com/?q=-6.2605,106.8148',
+                'quote_content' => 'Dan di antara tanda-tanda kebesaran-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang.',
+                'quote_source' => 'QS. Ar-Rum: 21',
+                'love_story' => 'Dari sesi foto iseng di photobooth mall hingga memutuskan menempelkan kisah cinta kita selamanya di lembaran hidup bahagia yang sama.',
+                'stories' => [
+                    ['story_date' => 'CUT 1 - 2021', 'story_title' => 'First Snapshot: Awal Perkenalan 📸', 'story_description' => 'Pertemuan tidak sengaja saat mengantre di photobooth box yang berujung saling bertukar senyum.'],
+                    ['story_date' => 'CUT 2 - 2023', 'story_title' => 'Dating Era: Berbagi Cerita & Tawa 🍦', 'story_description' => 'Menghabiskan waktu menjelajahi cafe lucu, mengoleksi photostrip, dan saling melengkapi karakter.'],
+                    ['story_date' => 'CUT 3 - 2025', 'story_title' => 'The Proposal: Yes, I Do! 💍', 'story_description' => 'Sebuah kejutan manis di rooftop dengan cincin impian dan stiker cinta penuh haru bahagia.'],
+                    ['story_date' => 'CUT 4 - 2026', 'story_title' => 'Happy Wedding: Lembar Baru Selamanya 💖', 'story_description' => 'Babak pernikahan resmi kami dimulai. Terima kasih telah menjadi bagian dari scrapbook kami!'],
+                ],
+                'gallery_photos' => [
+                    'https://picsum.photos/seed/doodlephoto1/800/800',
+                    'https://picsum.photos/seed/doodlephoto2/800/800',
+                    'https://picsum.photos/seed/doodlephoto3/800/800',
+                    'https://picsum.photos/seed/doodlephoto4/800/800',
+                ],
+                'gift_banks' => [
+                    ['bank_name' => 'BCA (Scrapbook Dimas)', 'account_number' => '8820193844', 'account_holder' => 'Dimas Aditya Pratama'],
+                    ['bank_name' => 'Bank Mandiri (Scrapbook Nadia)', 'account_number' => '1370019928371', 'account_holder' => 'Nadia Putri Maharani'],
+                ],
+                'gift_ewallets' => [
+                    ['wallet_name' => 'GoPay', 'wallet_number' => '081299887766'],
+                    ['wallet_name' => 'ShopeePay', 'wallet_number' => '081299887766'],
+                ],
+                'events' => [
+                    [
+                        'event_title' => 'Akad Nikah / Holy Matrimony',
+                        'date_offset_days' => 0,
+                        'start_time' => '09:00',
+                        'end_time' => '11:00',
+                        'is_until_finished' => false,
+                        'place_name' => 'The Glass House Chapel',
+                        'place_address' => 'Jl. Kemang Raya No. 45, Jakarta Selatan',
+                        'google_maps_url' => 'https://maps.google.com/?q=-6.2605,106.8148',
+                    ],
+                    [
+                        'event_title' => 'Wedding Reception & Photobooth Party',
+                        'date_offset_days' => 0,
+                        'start_time' => '12:00',
+                        'end_time' => '16:00',
+                        'is_until_finished' => false,
+                        'place_name' => 'The Glass House Garden',
+                        'place_address' => 'Jl. Kemang Raya No. 45, Jakarta Selatan',
+                        'google_maps_url' => 'https://maps.google.com/?q=-6.2605,106.8148',
+                    ],
+                ],
+            ],
+            $photobox_strip->id => [
+                'title' => 'Classic Photobox Strip Wedding: Dimas & Nadia 📸⚡',
+                'groom_full_name' => 'Dimas Aditya Pratama, S.T.',
+                'groom_short_name' => 'Dimas',
+                'groom_father_name' => 'Bambang Prakoso',
+                'groom_mother_name' => 'Ratna Sari',
+                'groom_photo_path' => 'https://picsum.photos/seed/photoboxgroom/600/600',
+                'bride_full_name' => 'Nadia Putri Maharani, S.I.Kom.',
+                'bride_short_name' => 'Nadia',
+                'bride_father_name' => 'Hendra Kusuma',
+                'bride_mother_name' => 'Endang Rahayu',
+                'bride_photo_path' => 'https://picsum.photos/seed/photoboxbride/600/600',
+                'hero_image_path' => 'https://picsum.photos/seed/photoboxcover/1000/1000',
+                'timezone' => 'Asia/Jakarta',
+                'event_date_offset_days' => 28,
+                'event_time' => '08:30',
+                'event_time_end' => '14:30',
+                'venue_name' => 'The Photobox Studio Grand Ballroom',
+                'venue_address' => 'Jl. Senopati No. 88, Kebayoran Baru, Jakarta Selatan',
+                'venue_maps_url' => 'https://maps.google.com/?q=-6.2305,106.8188',
+                'quote_content' => 'Dan di antara tanda-tanda kebesaran-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang.',
+                'quote_source' => 'QS. Ar-Rum: 21',
+                'love_story' => 'Setiap jepretan kilat kamera photobox merekam jutaan kenangan manis kita, hingga kini saatnya mencetak strip kebahagiaan terindah dalam pernikahan abadi.',
+                'stories' => [
+                    ['story_date' => 'FRAME 1 - 2021', 'story_title' => 'First Pose: Jumpa di Photobox 📸', 'story_description' => 'Momen pertama kali berfoto bersama dengan pose canggung yang mengawali kisah manis.'],
+                    ['story_date' => 'FRAME 2 - 2023', 'story_title' => 'Favorite Moments: Koleksi Strip Kenangan ✨', 'story_description' => 'Mengumpulkan puluhan strip foto di setiap kota dan tempat yang kita kunjungi bersama.'],
+                    ['story_date' => 'FRAME 3 - 2025', 'story_title' => 'Special Shot: Momen Lamaran 💍', 'story_description' => 'Di balik tirai studio photobox, cincin lamaran tersemat manis dengan senyum penuh haru bahagia.'],
+                    ['story_date' => 'FRAME 4 - 2026', 'story_title' => 'Masterpiece: Sesi Akad & Resepsi 👑', 'story_description' => 'Strip foto terindah resmi tercetak: Memulai lembaran hidup berumah tangga selamanya!'],
+                ],
+                'gallery_photos' => [
+                    'https://picsum.photos/seed/photoboxphoto1/800/800',
+                    'https://picsum.photos/seed/photoboxphoto2/800/800',
+                    'https://picsum.photos/seed/photoboxphoto3/800/800',
+                    'https://picsum.photos/seed/photoboxphoto4/800/800',
+                ],
+                'gift_banks' => [
+                    ['bank_name' => 'BCA (Photobox Dimas)', 'account_number' => '8820193844', 'account_holder' => 'Dimas Aditya Pratama'],
+                    ['bank_name' => 'Bank Mandiri (Photobox Nadia)', 'account_number' => '1370019928371', 'account_holder' => 'Nadia Putri Maharani'],
+                ],
+                'gift_ewallets' => [
+                    ['wallet_name' => 'GoPay', 'wallet_number' => '081299887766'],
+                    ['wallet_name' => 'ShopeePay', 'wallet_number' => '081299887766'],
+                ],
+                'events' => [
+                    [
+                        'event_title' => 'Session 1: Holy Matrimony (Akad Nikah)',
+                        'date_offset_days' => 0,
+                        'start_time' => '08:30',
+                        'end_time' => '10:30',
+                        'is_until_finished' => false,
+                        'place_name' => 'Masjid The Photobox Studio Tower',
+                        'place_address' => 'Jl. Senopati No. 88, Jakarta Selatan',
+                        'google_maps_url' => 'https://maps.google.com/?q=-6.2305,106.8188',
+                    ],
+                    [
+                        'event_title' => 'Session 2: Grand Wedding Celebration & Photobox Party',
+                        'date_offset_days' => 0,
+                        'start_time' => '11:30',
+                        'end_time' => '15:30',
+                        'is_until_finished' => false,
+                        'place_name' => 'The Photobox Studio Grand Ballroom',
+                        'place_address' => 'Jl. Senopati No. 88, Jakarta Selatan',
+                        'google_maps_url' => 'https://maps.google.com/?q=-6.2305,106.8188',
+                    ],
+                ],
+            ],
         ];
+
+        $themes[$deluxe_02->id] = array_replace(
+            $themes[$deluxe_01->id],
+            ['title' => 'Deluxe 02 Wide Editorial Wedding: Damar & Alya'],
+        );
+
+        $themes[$deluxe_03->id] = array_replace(
+            $themes[$deluxe_01->id],
+            ['title' => 'Deluxe 03 Art Book Editorial Wedding: Damar & Alya'],
+        );
+
+        $themes[$deluxe_04->id] = array_replace(
+            $themes[$deluxe_01->id],
+            ['title' => 'Deluxe 04 Gallery House Editorial Wedding: Damar & Alya'],
+        );
+
+        $themes[$deluxe_05->id] = array_replace(
+            $themes[$deluxe_01->id],
+            ['title' => 'Deluxe 05 Cinema Journal Editorial Wedding: Damar & Alya'],
+        );
+
+        $themes[$velvet_vows->id] = array_replace(
+            $themes[$deluxe_01->id],
+            [
+                'title' => 'Velvet Vows Wedding: Damar & Alya',
+                'hero_image_path' => 'https://picsum.photos/seed/velvetvowscover/1200/1600',
+                'bride_photo_path' => 'https://picsum.photos/seed/velvetvowsbride/800/1000',
+                'groom_photo_path' => 'https://picsum.photos/seed/velvetvowsgroom/800/1000',
+            ],
+        );
 
         foreach ($themes as $themeId => $previewData) {
             ThemePreviewData::updateOrCreate(

@@ -7,6 +7,9 @@ document.addEventListener('DOMContentLoaded', function () {
     let currentOutputWidth = 400;
     let currentOutputHeight = 400;
     let previewRafId = null;
+    let pageScrollLocked = false;
+    let rootOverflowWasHidden = false;
+    let bodyOverflowWasHidden = false;
 
     const modal = document.getElementById('crop-modal');
     const modalTitle = document.getElementById('crop-modal-title');
@@ -19,6 +22,45 @@ document.addEventListener('DOMContentLoaded', function () {
     const zoomInBtn = document.getElementById('crop-zoom-in');
     const zoomOutBtn = document.getElementById('crop-zoom-out');
     const rotateBtn = document.getElementById('crop-rotate');
+
+    if (modal && modal.parentElement !== document.body) {
+        document.body.appendChild(modal);
+    }
+
+    function lockPageScroll() {
+        if (pageScrollLocked) return;
+
+        rootOverflowWasHidden = document.documentElement.classList.contains('overflow-hidden');
+        bodyOverflowWasHidden = document.body.classList.contains('overflow-hidden');
+        document.documentElement.classList.add('overflow-hidden');
+        document.body.classList.add('overflow-hidden');
+        pageScrollLocked = true;
+    }
+
+    function unlockPageScroll() {
+        if (!pageScrollLocked) return;
+
+        if (!rootOverflowWasHidden) document.documentElement.classList.remove('overflow-hidden');
+        if (!bodyOverflowWasHidden) document.body.classList.remove('overflow-hidden');
+        pageScrollLocked = false;
+    }
+
+    function showModalShell() {
+        if (!modal) return;
+
+        lockPageScroll();
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        modal.scrollTop = 0;
+    }
+
+    function hideModalShell() {
+        if (!modal) return;
+
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        unlockPageScroll();
+    }
 
     // All preview ring elements (desktop + mobile badge)
     function getPreviewRings() {
@@ -47,6 +89,57 @@ document.addEventListener('DOMContentLoaded', function () {
         const val = parseFloat(raw);
         if (Number.isInteger(val)) return val + ':1';
         return raw + ':1';
+    }
+
+    function fitImageToSelection(activeCropper) {
+        const image = activeCropper.getCropperImage();
+        const selection = activeCropper.getCropperSelection();
+
+        if (!image || !selection) return Promise.resolve();
+
+        return image.$ready().then(function (sourceImage) {
+            return new Promise(function (resolve) {
+                function applyFit(remainingFrames) {
+                    if (cropper !== activeCropper) {
+                        resolve();
+                        return;
+                    }
+
+                    const { x, y, width, height } = selection;
+                    if ((!width || !height) && remainingFrames > 0) {
+                        requestAnimationFrame(function () {
+                            applyFit(remainingFrames - 1);
+                        });
+                        return;
+                    }
+
+                    const scale = Math.max(
+                        width / sourceImage.naturalWidth,
+                        height / sourceImage.naturalHeight,
+                    );
+
+                    if (!Number.isFinite(scale) || scale <= 0) {
+                        resolve();
+                        return;
+                    }
+
+                    image.$setTransform(
+                        scale,
+                        0,
+                        0,
+                        scale,
+                        x + width / 2 - sourceImage.naturalWidth / 2,
+                        y + height / 2 - sourceImage.naturalHeight / 2,
+                    );
+
+                    resolve();
+                }
+
+                requestAnimationFrame(function () {
+                    applyFit(30);
+                });
+            });
+        });
     }
 
     // Render the current cropped area into all preview rings
@@ -108,8 +201,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // Clear preview rings
         getPreviewRings().forEach(function (ring) { ring.innerHTML = ''; });
 
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
+        showModalShell();
         showLoading(true, 'Memuat foto...');
 
         const reader = new FileReader();
@@ -136,7 +228,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     minContainerHeight: 240,
                     template: [
                         "<cropper-canvas background>",
-                        "<cropper-image rotatable scalable skewable translatable></cropper-image>",
+                        '<cropper-image initial-center-size="cover" rotatable scalable skewable translatable></cropper-image>',
                         "<cropper-shade theme-color=\"rgba(0, 0, 0, 0.55)\"></cropper-shade>",
                         '<cropper-selection initial-coverage="0.85" aspect-ratio="' + aspectRatio + '" movable resizable>',
                         '<cropper-grid role="grid" bordered covered></cropper-grid>',
@@ -154,8 +246,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (cropper && typeof cropper.resize === "function") {
                     cropper.resize();
                 }
-                showLoading(false);
-                startPreviewLoop();
+
+                const activeCropper = cropper;
+                fitImageToSelection(activeCropper)
+                    .catch(function () {})
+                    .finally(function () {
+                        if (cropper !== activeCropper) return;
+                        showLoading(false);
+                        startPreviewLoop();
+                    });
             };
 
             img.onerror = function () {
@@ -192,8 +291,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (previewRafId) { cancelAnimationFrame(previewRafId); previewRafId = null; }
         destroyCropper();
         showLoading(false);
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
+        hideModalShell();
 
         if (currentInput) {
             currentInput.value = '';
@@ -240,8 +338,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (previewRafId) { cancelAnimationFrame(previewRafId); previewRafId = null; }
                 destroyCropper();
                 showLoading(false);
-                modal.classList.add('hidden');
-                modal.classList.remove('flex');
+                hideModalShell();
                 currentInput = null;
                 currentPreviewId = null;
 

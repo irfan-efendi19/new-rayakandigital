@@ -25,7 +25,7 @@ class GuestController extends Controller
     {
         $this->authorizePersonalLink($invitation);
 
-        $search = $request->input('search');
+        $search = $request->string('search')->trim()->toString();
         $perPage = $request->input('per_page', 20);
 
         $perPage = in_array($perPage, [10, 20, 50, 100, 'all']) ? $perPage : 20;
@@ -36,7 +36,7 @@ class GuestController extends Controller
         $query = $invitation->guests()
             ->with(['whatsappLogs' => fn ($q) => $q->latest(), 'guestCategory', 'events', 'invitation']);
 
-        if ($search) {
+        if ($search !== '') {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
                     ->orWhere('phone', 'like', "%{$search}%")
@@ -56,14 +56,36 @@ class GuestController extends Controller
                 $direction
             );
         } else {
-            $query->latest();
+            $query->orderBy('created_at', $direction);
         }
 
         $guests = $perPage === 'all'
             ? $query->get()
-            : $query->paginate((int) $perPage);
+            : $query->paginate((int) $perPage)->withQueryString();
 
-        $categories = $invitation->guestCategories()->get();
+        $guestStats = $invitation->guests()
+            ->selectRaw('COUNT(*) as total')
+            ->selectRaw("SUM(CASE WHEN attendance_status = 'hadir' THEN 1 ELSE 0 END) as hadir")
+            ->selectRaw("SUM(CASE WHEN attendance_status = 'absen' THEN 1 ELSE 0 END) as absen")
+            ->selectRaw("SUM(CASE WHEN attendance_status IS NULL OR attendance_status = 'pending' THEN 1 ELSE 0 END) as pending")
+            ->first();
+
+        $waSetting = $invitation->waSetting;
+        $waStatus = $waSetting?->status ?? 'PENDING_VERIFICATION';
+        $waQuota = null;
+
+        if ($invitation->hasWaQuotaLimit()) {
+            $limit = $invitation->waQuotaLimit();
+            $sent = $invitation->waSentCount();
+            $remaining = max(0, $limit - $sent);
+
+            $waQuota = [
+                'limit' => $limit,
+                'sent' => $sent,
+                'remaining' => $remaining,
+                'used_percentage' => $limit > 0 ? min(100, (int) round(($sent / $limit) * 100)) : 0,
+            ];
+        }
 
         $presets = [
             [
@@ -84,7 +106,15 @@ class GuestController extends Controller
             ],
         ];
 
-        return view('dashboard.guests.index', compact('invitation', 'guests', 'presets', 'categories'));
+        return view('dashboard.guests.index', compact(
+            'invitation',
+            'guests',
+            'guestStats',
+            'presets',
+            'waSetting',
+            'waStatus',
+            'waQuota',
+        ));
     }
 
     public function create(Invitation $invitation)
