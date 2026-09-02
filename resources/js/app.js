@@ -179,6 +179,58 @@ document.addEventListener('alpine:init', () => {
             });
         },
     }));
+
+    Alpine.data('qrCodePage', () => ({
+        scrollToSection(id) {
+            const section = document.getElementById(id);
+
+            if (!section) {
+                return;
+            }
+
+            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            if (window.location.hash !== `#${id}`) {
+                window.history.pushState(null, '', `#${id}`);
+            }
+            section.scrollIntoView({
+                behavior: reduceMotion ? 'auto' : 'smooth',
+                block: 'start',
+            });
+        },
+    }));
+
+    Alpine.data('qrCodeCard', () => ({
+        copied: false,
+        copyTimer: null,
+
+        async copyLink() {
+            const url = this.$el.dataset.copyUrl;
+
+            if (!url) {
+                return;
+            }
+
+            try {
+                await navigator.clipboard.writeText(url);
+            } catch {
+                const input = document.createElement('textarea');
+                input.value = url;
+                input.style.position = 'fixed';
+                input.style.opacity = '0';
+                document.body.appendChild(input);
+                input.select();
+                document.execCommand('copy');
+                input.remove();
+            }
+
+            this.copied = true;
+            window.clearTimeout(this.copyTimer);
+            this.copyTimer = window.setTimeout(() => {
+                this.copied = false;
+            }, 1800);
+        },
+    }));
 });
 
 Alpine.start();

@@ -374,27 +374,38 @@ class InvitationController extends Controller
     {
         Gate::authorize('view', $invitation);
 
+        $invitation->loadMissing('pricingTier:id,package_code,package_name');
+
+        $currentTier = $invitation->currentTier();
+        $hasGoldAccess = in_array($currentTier, ['gold', 'platinum']);
+        $hasQrRsvp = $invitation->hasFeature('qr_rsvp_universal');
+        $hasQrCheckin = $invitation->hasFeature('qr_checkin');
+
         $qrWebsiteUrl = route('invitation.show', $invitation->slug);
         $qrWebsiteCodeData = app(QrWithLogoService::class)->generate($qrWebsiteUrl)['data'];
 
         $qrKadoUrl = route('qr-kado', $invitation->slug);
-        $qrKadoCodeData = app(QrWithLogoService::class)->generate($qrKadoUrl)['data'];
+        $qrKadoCodeData = $hasGoldAccess
+            ? app(QrWithLogoService::class)->generate($qrKadoUrl)['data']
+            : null;
 
         $qrUcapanUrl = route('qr-ucapan', $invitation->slug);
-        $qrUcapanCodeData = app(QrWithLogoService::class)->generate($qrUcapanUrl)['data'];
+        $qrUcapanCodeData = $hasGoldAccess
+            ? app(QrWithLogoService::class)->generate($qrUcapanUrl)['data']
+            : null;
 
         $qrMapsUrl = route('qr-maps', $invitation->slug);
         $qrMapsCodeData = app(QrWithLogoService::class)->generate($qrMapsUrl)['data'];
 
         $qrGalleryUrl = route('qr-shared-gallery', $invitation->slug);
-        $qrGalleryCodeData = $invitation->canUseSharedGallery()
+        $qrGalleryCodeData = $hasGoldAccess
             ? app(QrWithLogoService::class)->generate($qrGalleryUrl)['data']
             : null;
 
         $qrHubUrl = route('qr-hub', $invitation->slug);
         $qrHubCodeData = app(QrWithLogoService::class)->generate($qrHubUrl)['data'];
 
-        if ($invitation->hasFeature('qr_rsvp_universal')) {
+        if ($hasQrRsvp) {
             $rsvpUrl = url('/').'/'.$invitation->slug.'?mode=scan_qr';
             $qrRsvpCodeData = app(QrWithLogoService::class)->generate($rsvpUrl)['data'];
         } else {
@@ -410,7 +421,8 @@ class InvitationController extends Controller
             'qrMapsCodeData', 'qrMapsUrl',
             'qrGalleryCodeData', 'qrGalleryUrl',
             'qrHubCodeData', 'qrHubUrl',
-            'qrRsvpCodeData', 'rsvpUrl'
+            'qrRsvpCodeData', 'rsvpUrl',
+            'currentTier', 'hasGoldAccess', 'hasQrRsvp', 'hasQrCheckin'
         ));
     }
 

@@ -41,6 +41,43 @@ test('qr pages return 404 if invitation not found or inactive', function () {
     $this->get('/non-existent-slug/qr')->assertStatus(404);
     $this->get('/non-existent-slug/kado')->assertStatus(404);
     $this->get('/non-existent-slug/ucapan')->assertStatus(404);
+    $this->get('/non-existent-slug/rsvp')->assertNotFound();
+});
+
+test('public rsvp page stores a confirmation and optional wish', function () {
+    $invitation = Invitation::factory()->create([
+        'slug' => 'rsvp-budi-ani',
+        'bride_name' => 'Budi',
+        'groom_name' => 'Ani',
+        'is_active' => true,
+        'is_rsvp_pax_limited' => true,
+        'max_pax_per_guest' => 3,
+    ]);
+
+    $this->get('/rsvp-budi-ani/rsvp')
+        ->assertSuccessful()
+        ->assertSeeText('Bisa hadir?')
+        ->assertSeeText('Kirim Konfirmasi')
+        ->assertDontSee('🤍', false);
+
+    $this->postJson(route('rsvp.store', $invitation), [
+        'guest_name' => 'Dimas dan keluarga',
+        'attendance' => 'attending',
+        'pax' => 3,
+        'message' => 'Semoga acaranya lancar.',
+    ])->assertSuccessful()->assertJson(['success' => true]);
+
+    $this->assertDatabaseHas('rsvps', [
+        'invitation_id' => $invitation->id,
+        'guest_name' => 'Dimas dan keluarga',
+        'attendance' => 'attending',
+        'pax' => 3,
+    ]);
+    $this->assertDatabaseHas('wishes', [
+        'invitation_id' => $invitation->id,
+        'guest_name' => 'Dimas dan keluarga',
+        'message' => 'Semoga acaranya lancar.',
+    ]);
 });
 
 test('dashboard invitation show page links to dedicated qr codes page and dedicated qr codes page displays cards', function () {
