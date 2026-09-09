@@ -48,6 +48,7 @@ test('velvet vows can be previewed with its complete burgundy wedding layout', f
         ->toContain('--vv-wine: #641d2c')
         ->toContain('min-height: 100dvh')
         ->toContain('.vv-cover-photo')
+        ->toContain('.vv-hero-photo { position: absolute; inset: -5%; width: 110%; max-width: none;')
         ->toContain('.vv-cover-date')
         ->toContain('@media (min-width: 761px)')
         ->toContain('.vv-countdown')
@@ -57,10 +58,18 @@ test('velvet vows can be previewed with its complete burgundy wedding layout', f
         ->toContain('white-space: pre-line')
         ->toContain(':focus-visible')
         ->toContain('@media (max-width: 760px)')
-        ->toContain('prefers-reduced-motion');
+        ->toContain('prefers-reduced-motion')
+        ->toContain('@keyframes vv-hero-rise')
+        ->toContain('@keyframes vv-hero-breathe')
+        ->toContain('@keyframes vv-story-pulse')
+        ->toContain('@keyframes vv-lightbox-image-in')
+        ->toContain('transition-duration: .01ms !important')
+        ->toContain('.vv-motion .vv-gallery-item:nth-child(2)');
 
     expect(file_get_contents(public_path('themes/velvet_vows/assets/js/script.js')))
         ->toContain('function revealInvitation()')
+        ->toContain("body.classList.add('vv-animations-ready')")
+        ->toContain("body.classList.add('vv-entered')")
         ->toContain('navigator.share')
         ->toContain("link.setAttribute('aria-current', 'page')")
         ->toContain("body.classList.add('vv-modal-open')");

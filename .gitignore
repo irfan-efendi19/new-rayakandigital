@@ -24,3 +24,4 @@ Thumbs.db
 themes/
 resources/views/themes/
 resources/views/themes/jawa.blade.php
+/tests

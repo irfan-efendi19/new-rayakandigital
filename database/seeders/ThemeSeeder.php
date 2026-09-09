@@ -10,6 +10,11 @@ class ThemeSeeder extends Seeder
 {
     public function run(): void
     {
+        $this->call(LembarSakinahThemeSeeder::class);
+        $this->call(LembarSafiraThemeSeeder::class);
+        $this->call(InstagramStoryThemeSeeder::class);
+        $this->call(ScratchCardThemeSeeder::class);
+
         $elegant = Theme::updateOrCreate(
             ['view_path' => 'themes.elegant'],
             ['name' => 'Elegant Rose', 'thumbnail_portrait' => '/images/themes/elegant-thumb.svg', 'is_premium' => false, 'is_active' => true]
@@ -133,6 +138,11 @@ class ThemeSeeder extends Seeder
         $library_card = Theme::updateOrCreate(
             ['view_path' => 'themes.library_card'],
             ['name' => 'Kartu Perpustakaan & Buku Novel', 'thumbnail_portrait' => '/images/themes/library-card-thumb.svg', 'is_premium' => true, 'is_active' => true]
+        );
+
+        $library_catalog_card = Theme::updateOrCreate(
+            ['view_path' => 'themes.library_catalog_card'],
+            ['name' => 'Library Catalog Card (Kartu Katalog Jadul)', 'thumbnail_portrait' => '/images/themes/library-catalog-card-thumb.svg', 'is_premium' => true, 'is_active' => true]
         );
 
         $newspaper = Theme::updateOrCreate(
@@ -378,6 +388,41 @@ class ThemeSeeder extends Seeder
         $photobox_strip = Theme::updateOrCreate(
             ['view_path' => 'themes.photobox_strip'],
             ['name' => 'Photobox Strip Klasik (Retro & Gen Z Vibe)', 'thumbnail_portrait' => '/images/themes/photobox-strip-thumb.svg', 'is_premium' => true, 'is_active' => true]
+        );
+
+        $cut_paper_popup = Theme::updateOrCreate(
+            ['view_path' => 'themes.cut_paper_popup'],
+            ['name' => 'Cut-Paper Pop-Up Book', 'thumbnail_portrait' => '/images/themes/cut-paper-popup-thumb.svg', 'is_premium' => true, 'is_active' => true]
+        );
+
+        $living_diary = Theme::updateOrCreate(
+            ['view_path' => 'themes.living_diary'],
+            ['name' => 'Living Document / Diary Style (Buku Harian Kisah Cinta)', 'thumbnail_portrait' => '/images/themes/living-diary-thumb.svg', 'is_premium' => true, 'is_active' => true]
+        );
+
+        $ascii_terminal = Theme::updateOrCreate(
+            ['view_path' => 'themes.ascii_terminal'],
+            ['name' => 'ASCII / Terminal Art (CLI Wedding Edition)', 'thumbnail_portrait' => '/images/themes/ascii-terminal-thumb.svg', 'is_premium' => true, 'is_active' => true]
+        );
+
+        $achievement_unlocked = Theme::updateOrCreate(
+            ['view_path' => 'themes.achievement_unlocked'],
+            ['name' => 'Achievement Unlocked (Pixel Art Game UI)', 'thumbnail_portrait' => '/images/themes/achievement-unlocked-thumb.svg', 'is_premium' => true, 'is_active' => true]
+        );
+
+        $detective_board = Theme::updateOrCreate(
+            ['view_path' => 'themes.detective_board'],
+            ['name' => 'Thread & Pin Board (Detective Style)', 'thumbnail_portrait' => '/images/themes/detective-board-thumb.svg', 'is_premium' => true, 'is_active' => true]
+        );
+
+        $weaving_tenun = Theme::updateOrCreate(
+            ['view_path' => 'themes.weaving_tenun'],
+            ['name' => 'Weaving Tenun Nusantara (Songket & Ikat)', 'thumbnail_portrait' => '/images/themes/weaving-tenun-thumb.svg', 'is_premium' => true, 'is_active' => true]
+        );
+
+        $menu_card = Theme::updateOrCreate(
+            ['view_path' => 'themes.menu_card'],
+            ['name' => 'Menu Restoran Fine-Dining (Culinary Card Aesthetic)', 'thumbnail_portrait' => null, 'is_premium' => true, 'is_active' => true]
         );
 
         $themes = [
@@ -2016,6 +2061,68 @@ class ThemeSeeder extends Seeder
                         'end_time' => '17:00',
                         'is_until_finished' => false,
                         'place_name' => 'The Grand Victorian Library & Heritage Ballroom',
+                        'place_address' => 'Jl. Taman Suropati No. 12, Menteng, Jakarta Pusat',
+                        'google_maps_url' => 'https://maps.google.com/?q=-6.1995,106.8326',
+                    ],
+                ],
+            ],
+            $library_catalog_card->id => [
+                'title' => 'Kisah Julian & Clarissa : Dua Insan Akademisi Menemukan Rumah',
+                'groom_full_name' => 'Julian Arthur Bramantyo, M.Hum.',
+                'groom_short_name' => 'Julian',
+                'groom_father_name' => 'Prof. Dr. Ir. Arthur Bramantyo',
+                'groom_mother_name' => 'Dr. Eleanor Bramantyo, M.Pd.',
+                'bride_full_name' => 'Clarissa Roseline Danubrata, S.S., M.A.',
+                'bride_short_name' => 'Clarissa',
+                'bride_father_name' => 'Drs. Danubrata, M.Hum.',
+                'bride_mother_name' => 'Dra. Roseline Danubrata',
+                'timezone' => 'Asia/Jakarta',
+                'event_date_offset_days' => 45,
+                'event_time' => '09:00',
+                'event_time_end' => '17:00',
+                'venue_name' => 'The Heritage Central Library & Ballroom',
+                'venue_address' => 'Jl. Taman Suropati No. 12, Menteng, Jakarta Pusat',
+                'venue_maps_url' => 'https://maps.google.com/?q=-6.1995,106.8326',
+                'quote_content' => 'Di antara jutaan buku dan naskah di perpustakaan dunia, kisahmu adalah bab terindah yang ingin kubaca berulang kali tanpa akhir.',
+                'quote_source' => 'Julian & Clarissa — Catatan Tepi Koleksi 813.54',
+                'love_story' => 'Sebuah naskah perjalanan dua insan pencinta buku yang dipertemukan oleh takdir di antara rak-rak perpustakaan tua, bersemi lewat catatan tepi dan diskusi literatur, hingga diterbitkan menjadi janji suci seumur hidup.',
+                'stories' => [
+                    ['story_date' => '2019 · BAB I', 'story_title' => 'Pertemuan di Rak 813.54 📖', 'story_description' => 'Meraih buku sastra klasik yang sama di sudut perpustakaan kampus. Obrolan singkat tentang bait puisi membuka lembar naskah pertama kami.'],
+                    ['story_date' => '2022 · BAB II', 'story_title' => 'Catatan Tepi & Lembar Studi ✉️', 'story_description' => 'Saling menyelipkan catatan kecil di antara halaman buku, berdiskusi naskah ilmiah di ruang baca, dan saling menguatkan dalam menyelesaikan studi.'],
+                    ['story_date' => '2025 · BAB III', 'story_title' => 'Peluncuran Naskah Janji Suci 💍', 'story_description' => 'Julian menyodorkan sebuah kartu katalog perpustakaan bertuliskan "Kisah Julian & Clarissa : Maukah Menjadi Rekan Seumur Hidupku?" beserta cincin lamaran.'],
+                ],
+                'gallery_photos' => [
+                    'https://picsum.photos/seed/lib1/800/1200',
+                    'https://picsum.photos/seed/lib2/1200/800',
+                    'https://picsum.photos/seed/lib3/800/1200',
+                    'https://picsum.photos/seed/lib4/1200/800',
+                ],
+                'gift_banks' => [
+                    ['bank_name' => 'Bank BCA (Dana Koleksi Buku)', 'account_number' => '7110992341', 'account_holder' => 'Clarissa Roseline Danubrata'],
+                    ['bank_name' => 'Bank Mandiri (Endowment Naskah)', 'account_number' => '1420007110992', 'account_holder' => 'Julian Arthur Bramantyo'],
+                ],
+                'gift_ewallets' => [
+                    ['wallet_name' => 'GoPay', 'wallet_number' => '081299887766'],
+                    ['wallet_name' => 'OVO', 'wallet_number' => '081299887755'],
+                ],
+                'events' => [
+                    [
+                        'event_title' => 'Sesi I: Akad Nikah & Pengesahan Naskah Janji Suci',
+                        'date_offset_days' => 0,
+                        'start_time' => '09:00',
+                        'end_time' => '11:30',
+                        'is_until_finished' => false,
+                        'place_name' => 'Ruang Baca Utama The Heritage Central Library',
+                        'place_address' => 'Jl. Taman Suropati No. 12, Menteng, Jakarta Pusat',
+                        'google_maps_url' => 'https://maps.google.com/?q=-6.1995,106.8326',
+                    ],
+                    [
+                        'event_title' => 'Sesi II: Resepsi & Jamuan Temu Pembaca (Literary Gala)',
+                        'date_offset_days' => 0,
+                        'start_time' => '13:00',
+                        'end_time' => '17:00',
+                        'is_until_finished' => false,
+                        'place_name' => 'The Grand Heritage Ballroom & Library Alcove',
                         'place_address' => 'Jl. Taman Suropati No. 12, Menteng, Jakarta Pusat',
                         'google_maps_url' => 'https://maps.google.com/?q=-6.1995,106.8326',
                     ],
@@ -4307,6 +4414,72 @@ class ThemeSeeder extends Seeder
                     ],
                 ],
             ],
+            $cut_paper_popup->id => [
+                'title' => 'The Pop-Up Storybook: Dimas & Nadia (Cut-Paper Edition)',
+                'groom_full_name' => 'Dimas Aditya Pratama, S.T.',
+                'groom_short_name' => 'Dimas',
+                'groom_father_name' => 'Bambang Wijaya',
+                'groom_mother_name' => 'Sri Mulyani',
+                'groom_photo_path' => 'https://picsum.photos/seed/papergroom/600/600',
+                'bride_full_name' => 'Nadia Putri Maharani, S.I.Kom.',
+                'bride_short_name' => 'Nadia',
+                'bride_father_name' => 'Hendra Kusuma',
+                'bride_mother_name' => 'Endang Rahayu',
+                'bride_photo_path' => 'https://picsum.photos/seed/paperbride/600/600',
+                'hero_image_path' => 'https://picsum.photos/seed/papercover/1200/800',
+                'timezone' => 'Asia/Jakarta',
+                'event_date_offset_days' => 30,
+                'event_time' => '09:00',
+                'event_time_end' => '15:00',
+                'venue_name' => 'The Papercraft Glasshouse Pavillion',
+                'venue_address' => 'Jl. Taman Hutan Senja No. 17, Bandung',
+                'venue_maps_url' => 'https://maps.google.com/?q=-6.9175,107.6191',
+                'quote_content' => 'Dan di antara tanda-tanda kebesaran-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang.',
+                'quote_source' => 'QS. Ar-Rum: 21',
+                'love_story' => 'Bagaikan lembaran kertas putih yang dipotong dan dilipat dengan penuh ketelitian, kisah cinta kami dirajut dari mimpi-mimpi sederhana hingga kini mekar menjadi buku cerita abadi.',
+                'stories' => [
+                    ['story_date' => 'BAB 1 - 2021', 'story_title' => 'Pertemuan Lembaran Pertama 📜', 'story_description' => 'Jumpa pertama di toko buku kecil di sudut kota, bertukar sapa dan rekomendasi buku cerita.'],
+                    ['story_date' => 'BAB 2 - 2023', 'story_title' => 'Melipat Rencana Bersama ✨', 'story_description' => 'Mulai merajut impian dan tujuan hidup bersama, saling mendukung di setiap babak kehidupan.'],
+                    ['story_date' => 'BAB 3 - 2025', 'story_title' => 'Cincin di Balik Lipatan Kertas 💍', 'story_description' => 'Sebuah buku pop-up buatan tangan terbuka, mempersembahkan cincin lamaran dengan jawaban penuh haru: Yes!'],
+                    ['story_date' => 'BAB 4 - 2026', 'story_title' => 'Menulis Ikatan Janji Suci 👑', 'story_description' => 'Hari berbahagia resmi dibuka: Kami melangkah bersama sebagai sepasang suami istri selamanya!'],
+                ],
+                'gallery_photos' => [
+                    'https://picsum.photos/seed/paperphoto1/800/800',
+                    'https://picsum.photos/seed/paperphoto2/800/800',
+                    'https://picsum.photos/seed/paperphoto3/800/800',
+                    'https://picsum.photos/seed/paperphoto4/800/800',
+                ],
+                'gift_banks' => [
+                    ['bank_name' => 'BCA', 'account_number' => '8820193844', 'account_holder' => 'Dimas Aditya Pratama'],
+                    ['bank_name' => 'Bank Mandiri', 'account_number' => '1370019928371', 'account_holder' => 'Nadia Putri Maharani'],
+                ],
+                'gift_ewallets' => [
+                    ['wallet_name' => 'GoPay', 'wallet_number' => '081299887766'],
+                    ['wallet_name' => 'ShopeePay', 'wallet_number' => '081299887766'],
+                ],
+                'events' => [
+                    [
+                        'event_title' => 'Akad Nikah Suci (The Holy Vows)',
+                        'date_offset_days' => 0,
+                        'start_time' => '09:00',
+                        'end_time' => '11:00',
+                        'is_until_finished' => false,
+                        'place_name' => 'Masjid Raya Al-Barokah',
+                        'place_address' => 'Jl. Taman Hutan Senja No. 15, Bandung',
+                        'google_maps_url' => 'https://maps.google.com/?q=-6.9175,107.6191',
+                    ],
+                    [
+                        'event_title' => 'Resepsi & Pop-Up Storybook Celebration',
+                        'date_offset_days' => 0,
+                        'start_time' => '12:00',
+                        'end_time' => '16:00',
+                        'is_until_finished' => false,
+                        'place_name' => 'The Papercraft Glasshouse Pavillion',
+                        'place_address' => 'Jl. Taman Hutan Senja No. 17, Bandung',
+                        'google_maps_url' => 'https://maps.google.com/?q=-6.9175,107.6191',
+                    ],
+                ],
+            ],
         ];
 
         $themes[$deluxe_02->id] = array_replace(
@@ -4338,6 +4511,417 @@ class ThemeSeeder extends Seeder
                 'groom_photo_path' => 'https://picsum.photos/seed/velvetvowsgroom/800/1000',
             ],
         );
+
+        $themes[$living_diary->id] = [
+            'title' => 'Living Diary: Kisah Cinta Raka & Nadira',
+            'groom_full_name' => 'Raka Adiputra, S.T.',
+            'groom_short_name' => 'Raka',
+            'groom_father_name' => 'Bpk. Hendra Adiputra',
+            'groom_mother_name' => 'Ibu Maya Lestari',
+            'groom_photo_path' => 'https://picsum.photos/seed/diarygroom/800/800',
+            'bride_full_name' => 'Nadira Ayuningtyas, S.Ds.',
+            'bride_short_name' => 'Nadira',
+            'bride_father_name' => 'Bpk. Surya Ayuningtyas',
+            'bride_mother_name' => 'Ibu Ratih Purnama',
+            'bride_photo_path' => 'https://picsum.photos/seed/diarybride/800/800',
+            'hero_image_path' => 'https://picsum.photos/seed/diarycover/1200/800',
+            'timezone' => 'Asia/Jakarta',
+            'event_date_offset_days' => 35,
+            'event_time' => '08:00',
+            'event_time_end' => '14:00',
+            'venue_name' => 'The Glass House Garden Jakarta',
+            'venue_address' => 'Jl. Ampera Raya No. 88, Jakarta Selatan',
+            'venue_maps_url' => 'https://maps.google.com/?q=-6.2607,106.8181',
+            'quote_content' => 'Kita tidak harus sempurna untuk memulai; kita hanya perlu saling berkomitmen untuk terus menyunting dan merawat kisah ini bersama-sama.',
+            'quote_source' => 'Catatan Harian Dua Hati, Bab 1',
+            'love_story' => 'Sebuah buku harian yang bermula dari percakapan santai di kedai kopi, tumbuh menjadi komitmen seumur hidup yang dirayakan bersama orang-orang tercinta.',
+            'stories' => [
+                ['story_date' => 'BAB 1 • 2021', 'story_title' => 'Halaman Pertama Terbuka', 'story_description' => 'Pertemuan tak disengaja di sudut kedai kopi saat hujan sore hari yang berlanjut menjadi percakapan hangat berjam-jam.'],
+                ['story_date' => 'BAB 2 • 2023', 'story_title' => 'Melangkah Bersama', 'story_description' => 'Melewati berbagai dinamika kehidupan dan saling meyakinkan bahwa setiap langkah lebih indah jika dijalani berdua.'],
+                ['story_date' => 'BAB 3 • 2025', 'story_title' => 'Ikrar & Cincin Lamaran', 'story_description' => 'Di hadapan kedua keluarga besar, kami memantapkan niat suci menuju gerbang pernikahan yang berkah.'],
+            ],
+            'gallery_photos' => [
+                'https://picsum.photos/seed/diary-photo-1/900/900',
+                'https://picsum.photos/seed/diary-photo-2/900/900',
+                'https://picsum.photos/seed/diary-photo-3/900/900',
+                'https://picsum.photos/seed/diary-photo-4/900/900',
+            ],
+            'gift_banks' => [
+                ['bank_name' => 'Bank Central Asia (BCA)', 'account_number' => '8820192834', 'account_holder' => 'Nadira Ayuningtyas'],
+                ['bank_name' => 'Bank Mandiri', 'account_number' => '1370019283741', 'account_holder' => 'Raka Adiputra'],
+            ],
+            'gift_ewallets' => [
+                ['wallet_name' => 'GoPay', 'wallet_number' => '081299887766'],
+            ],
+            'events' => [
+                [
+                    'event_title' => 'Akad Nikah — Saksi Janji Suci',
+                    'date_offset_days' => 0,
+                    'start_time' => '08:00',
+                    'end_time' => '10:00',
+                    'is_until_finished' => false,
+                    'place_name' => 'Masjid Raya Al-Ikhlas',
+                    'place_address' => 'Jl. Ampera Raya No. 80, Jakarta Selatan',
+                    'google_maps_url' => 'https://maps.google.com/?q=-6.2607,106.8181',
+                ],
+                [
+                    'event_title' => 'Resepsi — Pesta Syukuran Bersama Sahabat',
+                    'date_offset_days' => 0,
+                    'start_time' => '11:00',
+                    'end_time' => '14:00',
+                    'is_until_finished' => false,
+                    'place_name' => 'The Glass House Garden Jakarta',
+                    'place_address' => 'Jl. Ampera Raya No. 88, Jakarta Selatan',
+                    'google_maps_url' => 'https://maps.google.com/?q=-6.2607,106.8181',
+                ],
+            ],
+        ];
+
+        $themes[$ascii_terminal->id] = [
+            'title' => 'Terminal & ASCII Art Wedding: Rayhan & Aisyah',
+            'groom_full_name' => 'Muhammad Rayhan, S.Kom.',
+            'groom_short_name' => 'Rayhan',
+            'groom_father_name' => 'Bpk. H. Abdullah Mansur',
+            'groom_mother_name' => 'Ibu Hj. Maryam',
+            'groom_photo_path' => 'https://picsum.photos/seed/terminalgroom/800/800',
+            'bride_full_name' => 'Siti Aisyah, S.T.',
+            'bride_short_name' => 'Aisyah',
+            'bride_father_name' => 'Bpk. H. Ahmad Dahlan',
+            'bride_mother_name' => 'Ibu Hj. Siti Khadijah',
+            'bride_photo_path' => 'https://picsum.photos/seed/terminalbride/800/800',
+            'hero_image_path' => 'https://picsum.photos/seed/terminalcover/1200/800',
+            'timezone' => 'Asia/Jakarta',
+            'event_date_offset_days' => 45,
+            'event_time' => '08:30',
+            'event_time_end' => '14:30',
+            'venue_name' => 'Open Source Cyber Hall & Ballroom',
+            'venue_address' => 'Jl. Jenderal Sudirman No. 101, Jakarta Selatan',
+            'venue_maps_url' => 'https://maps.google.com/?q=-6.2185,106.8018',
+            'quote_content' => 'Dan di antara tanda-tanda kebesaran-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang.',
+            'quote_source' => 'QS. Ar-Rum: 21',
+            'love_story' => 'Sebuah pertemuan di dunia digital yang diawali dari baris perintah kode sederhana, berkembang menjadi komitmen seumur hidup yang dirayakan bersama sahabat dan keluarga.',
+            'stories' => [
+                ['story_date' => '2020.10.15', 'story_title' => 'Initial Commit: Hello World', 'story_description' => 'Pertemuan pertama saat hackathon kolaborasi open source di Jakarta. Berawal dari commit code bersama hingga berlanjut diskusi larut malam.'],
+                ['story_date' => '2023.06.20', 'story_title' => 'Branch Merge: Becoming Partners', 'story_description' => 'Memutuskan untuk menyatukan visi hidup, saling mendukung dalam karir teknologi dan bertumbuh bersama dalam suka duka.'],
+                ['story_date' => '2025.12.31', 'story_title' => 'Tag v1.0: Proposal Accepted', 'story_description' => 'Di hadapan kedua keluarga besar, cincin lamaran tersemat dan ikrar suci disepakati menuju jenjang pelaminan.'],
+            ],
+            'gallery_photos' => [
+                'https://picsum.photos/seed/term-photo-1/900/900',
+                'https://picsum.photos/seed/term-photo-2/900/900',
+                'https://picsum.photos/seed/term-photo-3/900/900',
+                'https://picsum.photos/seed/term-photo-4/900/900',
+            ],
+            'gift_banks' => [
+                ['bank_name' => 'Bank Central Asia (BCA)', 'account_number' => '8820192834', 'account_holder' => 'Siti Aisyah'],
+                ['bank_name' => 'Bank Mandiri', 'account_number' => '1370019283741', 'account_holder' => 'Muhammad Rayhan'],
+            ],
+            'gift_ewallets' => [
+                ['wallet_name' => 'GoPay', 'wallet_number' => '081299887766'],
+            ],
+            'events' => [
+                [
+                    'event_title' => 'Akad Nikah (Ijab Qabul Ceremony)',
+                    'date_offset_days' => 0,
+                    'start_time' => '08:30',
+                    'end_time' => '10:30',
+                    'is_until_finished' => false,
+                    'place_name' => 'Masjid Agung Al-Falah',
+                    'place_address' => 'Jl. Jenderal Sudirman No. 99, Jakarta Pusat',
+                    'google_maps_url' => 'https://maps.google.com/?q=-6.2185,106.8018',
+                ],
+                [
+                    'event_title' => 'Resepsi Pernikahan (Main Gathering)',
+                    'date_offset_days' => 0,
+                    'start_time' => '11:00',
+                    'end_time' => '14:30',
+                    'is_until_finished' => false,
+                    'place_name' => 'Open Source Cyber Hall & Ballroom',
+                    'place_address' => 'Jl. Jenderal Sudirman No. 101, Jakarta Selatan',
+                    'google_maps_url' => 'https://maps.google.com/?q=-6.2185,106.8018',
+                ],
+            ],
+        ];
+
+        $themes[$achievement_unlocked->id] = [
+            'title' => 'Achievement Unlocked: Rayhan & Aisyah (Pixel Art Game UI)',
+            'groom_full_name' => 'Muhammad Rayhan, S.Kom.',
+            'groom_short_name' => 'Rayhan',
+            'groom_father_name' => 'Bpk. H. Abdullah Mansur',
+            'groom_mother_name' => 'Ibu Hj. Maryam',
+            'groom_photo_path' => 'https://picsum.photos/seed/pixelgroom/800/800',
+            'bride_full_name' => 'Siti Aisyah, S.T.',
+            'bride_short_name' => 'Aisyah',
+            'bride_father_name' => 'Bpk. H. Ahmad Dahlan',
+            'bride_mother_name' => 'Ibu Hj. Siti Khadijah',
+            'bride_photo_path' => 'https://picsum.photos/seed/pixelbride/800/800',
+            'hero_image_path' => 'https://picsum.photos/seed/pixelcover/1200/800',
+            'timezone' => 'Asia/Jakarta',
+            'event_date_offset_days' => 30,
+            'event_time' => '08:30',
+            'event_time_end' => '14:30',
+            'venue_name' => 'Pixel Guild Arena & Grand Ballroom',
+            'venue_address' => 'Jl. Gamer Sanctuary No. 88, Jakarta Selatan',
+            'venue_maps_url' => 'https://maps.google.com/?q=-6.2185,106.8018',
+            'quote_content' => 'Dan di antara tanda-tanda kebesaran-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang.',
+            'quote_source' => 'QS. Ar-Rum: 21',
+            'love_story' => 'Dua petualang yang bertemu di server dunia nyata, menyelesaikan quest demi quest bersama hingga membuka achievement tertinggi: ikatan suci pernikahan.',
+            'stories' => [
+                ['story_date' => '2021.05.10', 'story_title' => 'Chapter I: First Spawn & Co-op Invite', 'story_description' => 'Pertemuan pertama saat game tournament lokal di Jakarta. Mulai bermain bersama dalam satu party dan berbagi strategi.'],
+                ['story_date' => '2023.08.18', 'story_title' => 'Chapter II: The Dungeon of Life (Commitment)', 'story_description' => 'Memutuskan untuk menjadi partner co-op seumur hidup, saling memberikan buff motivasi di setiap tantangan hidup.'],
+                ['story_date' => '2025.11.20', 'story_title' => 'Chapter III: Legendary Ring Obtained (Proposal)', 'story_description' => 'Boss fight kehidupan berhasil ditaklukkan saat lamaran resmi diterima dengan cincin permata +99 Love.'],
+            ],
+            'gallery_photos' => [
+                'https://picsum.photos/seed/pixel-art-1/900/900',
+                'https://picsum.photos/seed/pixel-art-2/900/900',
+                'https://picsum.photos/seed/pixel-art-3/900/900',
+                'https://picsum.photos/seed/pixel-art-4/900/900',
+            ],
+            'gift_banks' => [
+                ['bank_name' => 'Bank Central Asia (BCA)', 'account_number' => '8820192834', 'account_holder' => 'Siti Aisyah'],
+                ['bank_name' => 'Bank Mandiri', 'account_number' => '1370019283741', 'account_holder' => 'Muhammad Rayhan'],
+            ],
+            'gift_ewallets' => [
+                ['wallet_name' => 'GoPay', 'wallet_number' => '081299887766'],
+            ],
+            'events' => [
+                [
+                    'event_title' => 'Main Quest 01: Akad Nikah (The Sacred Oath)',
+                    'date_offset_days' => 0,
+                    'start_time' => '08:30',
+                    'end_time' => '10:30',
+                    'is_until_finished' => false,
+                    'place_name' => 'Masjid Raya Al-Ikhlas (Safe Zone)',
+                    'place_address' => 'Jl. Gamer Sanctuary No. 80, Jakarta Selatan',
+                    'google_maps_url' => 'https://maps.google.com/?q=-6.2185,106.8018',
+                ],
+                [
+                    'event_title' => 'Main Quest 02: Resepsi Pernikahan (Grand Feast & Guild Raid)',
+                    'date_offset_days' => 0,
+                    'start_time' => '11:00',
+                    'end_time' => '14:30',
+                    'is_until_finished' => false,
+                    'place_name' => 'Pixel Guild Arena & Grand Ballroom',
+                    'place_address' => 'Jl. Gamer Sanctuary No. 88, Jakarta Selatan',
+                    'google_maps_url' => 'https://maps.google.com/?q=-6.2185,106.8018',
+                ],
+            ],
+        ];
+
+        $themes[$detective_board->id] = [
+            'title' => 'Case File #LOVE-2026: The Love Conspiracy (Rayhan & Aisyah)',
+            'groom_full_name' => 'Muhammad Rayhan, S.Kom.',
+            'groom_short_name' => 'Rayhan',
+            'groom_father_name' => 'Bpk. H. Abdullah Mansur',
+            'groom_mother_name' => 'Ibu Hj. Maryam',
+            'groom_photo_path' => 'https://picsum.photos/seed/detectivegroom/800/800',
+            'bride_full_name' => 'Siti Aisyah, S.T.',
+            'bride_short_name' => 'Aisyah',
+            'bride_father_name' => 'Bpk. H. Ahmad Dahlan',
+            'bride_mother_name' => 'Ibu Hj. Siti Khadijah',
+            'bride_photo_path' => 'https://picsum.photos/seed/detectivebride/800/800',
+            'hero_image_path' => 'https://picsum.photos/seed/detectivecover/1200/800',
+            'timezone' => 'Asia/Jakarta',
+            'event_date_offset_days' => 50,
+            'event_time' => '09:00',
+            'event_time_end' => '14:00',
+            'venue_name' => 'Grand Mystery Hall & Investigation Ballroom',
+            'venue_address' => 'Jl. Detektif Asmara No. 77, Jakarta Selatan',
+            'venue_maps_url' => 'https://maps.google.com/?q=-6.2185,106.8018',
+            'quote_content' => 'Dan di antara tanda-tanda kebesaran-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang.',
+            'quote_source' => 'QS. Ar-Rum: 21',
+            'love_story' => 'Dua insan yang semula tak saling kenal, tak sengaja bertemu di TKP kehidupan, saling berbagi bukti kasih sayang, hingga akhirnya benang merah asmara menghubungkan mereka dalam ikatan suci seumur hidup.',
+            'stories' => [
+                ['story_date' => '2021.03.14', 'story_title' => 'Temuan Bukti Pertama di TKP', 'story_description' => 'Pertemuan tak sengaja di kedai kopi favorit. Kontak mata pertama kali yang menjadi petunjuk awal konspirasi rasa.'],
+                ['story_date' => '2023.09.22', 'story_title' => 'Modus Operandi: Komitmen Bersama', 'story_description' => 'Sepakat untuk saling mendukung impian, mengurai setiap misteri kehidupan bersama dalam suka dan duka.'],
+                ['story_date' => '2025.12.25', 'story_title' => 'Penetapan Tersangka: Lamaran Diterima', 'story_description' => 'Cincin bukti komitmen disematkan di hadapan keluarga besar. Kasus pencarian belahan jiwa resmi ditutup!'],
+            ],
+            'gallery_photos' => [
+                'https://picsum.photos/seed/detective-1/900/900',
+                'https://picsum.photos/seed/detective-2/900/900',
+                'https://picsum.photos/seed/detective-3/900/900',
+                'https://picsum.photos/seed/detective-4/900/900',
+            ],
+            'gift_banks' => [
+                ['bank_name' => 'Bank Central Asia (BCA)', 'account_number' => '8820192834', 'account_holder' => 'Siti Aisyah'],
+                ['bank_name' => 'Bank Mandiri', 'account_number' => '1370019283741', 'account_holder' => 'Muhammad Rayhan'],
+            ],
+            'gift_ewallets' => [
+                ['wallet_name' => 'GoPay', 'wallet_number' => '081299887766'],
+            ],
+            'events' => [
+                [
+                    'event_title' => 'Titik Temu I: Ijab Qabul & Akad Nikah',
+                    'date_offset_days' => 0,
+                    'start_time' => '08:30',
+                    'end_time' => '10:30',
+                    'is_until_finished' => false,
+                    'place_name' => 'Masjid Agung Al-Kautsar',
+                    'place_address' => 'Jl. Detektif Asmara No. 70, Jakarta Selatan',
+                    'google_maps_url' => 'https://maps.google.com/?q=-6.2185,106.8018',
+                ],
+                [
+                    'event_title' => 'Titik Temu II: Gelar Perkara Resepsi Pernikahan',
+                    'date_offset_days' => 0,
+                    'start_time' => '11:00',
+                    'end_time' => '14:30',
+                    'is_until_finished' => false,
+                    'place_name' => 'Grand Mystery Hall & Investigation Ballroom',
+                    'place_address' => 'Jl. Detektif Asmara No. 77, Jakarta Selatan',
+                    'google_maps_url' => 'https://maps.google.com/?q=-6.2185,106.8018',
+                ],
+            ],
+        ];
+
+        $themes[$weaving_tenun->id] = [
+            'title' => 'The Sacred Weave: Rayhan & Aisyah (Pernikahan Tenun Nusantara)',
+            'groom_full_name' => 'Raden Muhammad Rayhan, S.T., M.Sc.',
+            'groom_short_name' => 'Rayhan',
+            'groom_father_name' => 'Bpk. Ir. H. Abdullah Mansur',
+            'groom_mother_name' => 'Ibu Hj. Maryam Mansur',
+            'groom_photo_path' => 'https://picsum.photos/seed/tenungroom/800/800',
+            'bride_full_name' => 'Putri Siti Aisyah, S.Ds., M.A.',
+            'bride_short_name' => 'Aisyah',
+            'bride_father_name' => 'Bpk. Drs. H. Ahmad Dahlan',
+            'bride_mother_name' => 'Ibu Hj. Siti Khadijah',
+            'bride_photo_path' => 'https://picsum.photos/seed/tenunbride/800/800',
+            'hero_image_path' => 'https://picsum.photos/seed/tenuncover/1200/800',
+            'timezone' => 'Asia/Jakarta',
+            'event_date_offset_days' => 45,
+            'event_time' => '08:30',
+            'event_time_end' => '14:30',
+            'venue_name' => 'Sasana Kencana Ballroom & Taman Songket Nusantara',
+            'venue_address' => 'Jl. Wastra Kencana No. 88, Kebayoran Baru, Jakarta Selatan',
+            'venue_maps_url' => 'https://maps.google.com/?q=-6.2382,106.7972',
+            'quote_content' => 'Ibarat dua helai benang yang terpisah di atas gedogan takdir, ditenun dengan sabar dan cinta hingga menjadi sehelai kain kencana yang kokoh, menghangatkan jiwa dan mengikat janji suci.',
+            'quote_source' => 'Filosofi Wastra Tenun Nusantara & QS. Ar-Rum: 21',
+            'love_story' => 'Dari dua rumpun tradisi nusantara yang luhur, takdir mempertemukan kami untuk saling memintal harapan, menganyam kesetiaan, dan menyatukan dua keluarga besar dalam satu simpul abadi.',
+            'stories' => [
+                ['story_date' => '2021.05.20', 'story_title' => 'Untaian Benang Pertama: Awal Perjumpaan', 'story_description' => 'Pertemuan tak sengaja di pameran seni wastra nusantara. Dari sebuah apresiasi terhadap motif tenun, percakapan hangat bermula dan membuka jalan perkenalan.'],
+                ['story_date' => '2023.11.12', 'story_title' => 'Memintal Asa & Komitmen Bersama', 'story_description' => 'Saling memahami warna dan karakter masing-masing, belajar menganyam perbedaan menjadi keselarasan yang utuh dan meneduhkan.'],
+                ['story_date' => '2025.10.05', 'story_title' => 'Simpul Kencana: Restu & Lamaran', 'story_description' => 'Di hadapan kedua orang tua dan sanak famili, kain tenun kencana disematkan sebagai perlambang kesiapan melangkah menuju gerbang pernikahan suci.'],
+            ],
+            'gallery_photos' => [
+                'https://picsum.photos/seed/tenun-g1/900/900',
+                'https://picsum.photos/seed/tenun-g2/900/900',
+                'https://picsum.photos/seed/tenun-g3/900/900',
+                'https://picsum.photos/seed/tenun-g4/900/900',
+            ],
+            'gift_banks' => [
+                ['bank_name' => 'Bank Central Asia (BCA)', 'account_number' => '8820192834', 'account_holder' => 'Siti Aisyah'],
+                ['bank_name' => 'Bank Mandiri', 'account_number' => '1370019283741', 'account_holder' => 'Muhammad Rayhan'],
+            ],
+            'gift_ewallets' => [
+                ['wallet_name' => 'GoPay', 'wallet_number' => '081299887766'],
+            ],
+            'events' => [
+                [
+                    'event_title' => 'Akad Nikah: Ijab Qabul & Upacara Penyerahan Kain Tenun',
+                    'date_offset_days' => 0,
+                    'start_time' => '08:30',
+                    'end_time' => '10:30',
+                    'is_until_finished' => false,
+                    'place_name' => 'Masjid Agung Baitul Kencana',
+                    'place_address' => 'Jl. Wastra Kencana No. 80, Kebayoran Baru, Jakarta Selatan',
+                    'google_maps_url' => 'https://maps.google.com/?q=-6.2382,106.7972',
+                ],
+                [
+                    'event_title' => 'Resepsi Pernikahan: Malam Puncak Wastra Kencana Nusantara',
+                    'date_offset_days' => 0,
+                    'start_time' => '11:00',
+                    'end_time' => '14:30',
+                    'is_until_finished' => false,
+                    'place_name' => 'Sasana Kencana Ballroom & Taman Songket',
+                    'place_address' => 'Jl. Wastra Kencana No. 88, Kebayoran Baru, Jakarta Selatan',
+                    'google_maps_url' => 'https://maps.google.com/?q=-6.2382,106.7972',
+                ],
+            ],
+        ];
+
+        $themes[$menu_card->id] = [
+            'title' => 'Menu Dégustation: Julian & Amanda (Fine Dining Wedding Edition)',
+            'hero_image_path' => 'https://picsum.photos/seed/menucardcover/1000/1000',
+            'groom_full_name' => 'Chef Julian Pratama, S.Tr.Par',
+            'groom_short_name' => 'Julian',
+            'groom_father_name' => 'Bpk. Hendra Pratama',
+            'groom_mother_name' => 'Ibu Ratna Dewi',
+            'bride_full_name' => 'Amanda Callista, B.A.',
+            'bride_short_name' => 'Amanda',
+            'bride_father_name' => 'Bpk. Bambang Wijaya',
+            'bride_mother_name' => 'Ibu Sri Rahayu',
+            'timezone' => 'Asia/Jakarta',
+            'event_date_offset_days' => 45,
+            'event_time' => '09:00',
+            'event_time_end' => '14:00',
+            'venue_name' => 'The Grand Le Jardin Restaurant & Conservatory',
+            'venue_address' => 'Jl. Senopati No. 45, Kebayoran Baru, Jakarta Selatan',
+            'venue_maps_url' => 'https://maps.google.com/?q=-6.2345,106.8123',
+            'quote_content' => 'Pertemuan pertama di meja kafe sederhana telah bermekaran menjadi perjamuan cinta seumur hidup. Cinta sejati adalah resep terindah yang diracik dengan kesabaran dan disajikan dengan ketulusan.',
+            'quote_source' => 'The Chef\'s Philosophy',
+            'love_story' => 'Perjalanan cinta kami yang bermula dari secangkir cappuccino di kafe sudut kota hingga perjamuan suci di meja pelaminan.',
+            'stories' => [
+                [
+                    'story_date' => 'Course I - 2021',
+                    'story_title' => 'Pertemuan Pertama di Sudut Bistro (First Date) ☕',
+                    'story_description' => 'Mata kami pertama kali bersitatap saat berebut meja favorit di sebuah kafe kecil di Jakarta. Secangkir kopi dan obrolan hangat mencairkan suasana hingga berjam-jam.',
+                ],
+                [
+                    'story_date' => 'Course II - 2023',
+                    'story_title' => 'Meracik Resep Komitmen Bersama 🍷',
+                    'story_description' => 'Mengarungi musim demi musim dengan memasak bersama, mencoba berbagai restoran, dan saling menguatkan mimpi untuk membangun rumah tangga impian.',
+                ],
+                [
+                    'story_date' => 'Course III - 2026',
+                    'story_title' => 'Lamaran Manis di Meja Fine-Dining 💍',
+                    'story_description' => 'Di sebuah restoran berlampu temaram, diiringi alunan jazz lembut, sebuah cincin tersemat manis di atas piring hidangan penutup yang bertuliskan: Will You Marry Me?',
+                ],
+            ],
+            'gallery_photos' => [
+                'https://picsum.photos/seed/menugallery1/800/800',
+                'https://picsum.photos/seed/menugallery2/800/800',
+                'https://picsum.photos/seed/menugallery3/800/800',
+                'https://picsum.photos/seed/menugallery4/800/800',
+            ],
+            'gift_banks' => [
+                [
+                    'bank_name' => 'Bank Central Asia (BCA)',
+                    'account_number' => '8830192837',
+                    'account_holder' => 'Julian Pratama',
+                ],
+                [
+                    'bank_name' => 'Bank Mandiri',
+                    'account_number' => '1370018829301',
+                    'account_holder' => 'Amanda Callista',
+                ],
+            ],
+            'gift_ewallets' => [
+                [
+                    'wallet_name' => 'GoPay',
+                    'wallet_number' => '081288990011',
+                ],
+            ],
+            'events' => [
+                [
+                    'event_title' => 'Course I: Akad Nikah (The Sacred Vows)',
+                    'date_offset_days' => 0,
+                    'start_time' => '09:00',
+                    'end_time' => '11:00',
+                    'is_until_finished' => false,
+                    'place_name' => 'The Conservatory Pavilion',
+                    'place_address' => 'Jl. Senopati No. 45, Kebayoran Baru, Jakarta Selatan',
+                    'google_maps_url' => 'https://maps.google.com/?q=-6.2345,106.8123',
+                ],
+                [
+                    'event_title' => 'Course II: Resepsi (Grand Celebratory Feast)',
+                    'date_offset_days' => 0,
+                    'start_time' => '11:30',
+                    'end_time' => '14:30',
+                    'is_until_finished' => false,
+                    'place_name' => 'The Grand Le Jardin Ballroom',
+                    'place_address' => 'Jl. Senopati No. 45, Kebayoran Baru, Jakarta Selatan',
+                    'google_maps_url' => 'https://maps.google.com/?q=-6.2345,106.8123',
+                ],
+            ],
+        ];
 
         foreach ($themes as $themeId => $previewData) {
             ThemePreviewData::updateOrCreate(
