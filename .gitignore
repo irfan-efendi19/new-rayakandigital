@@ -25,3 +25,11 @@ themes/
 resources/views/themes/
 resources/views/themes/jawa.blade.php
 /tests
+
+# Shared Blueprint partials are required by the hosted custom Blueprint theme.
+!resources/views/themes/
+resources/views/themes/*
+!resources/views/themes/partials/
+resources/views/themes/partials/*
+!resources/views/themes/partials/blueprint_bride_card.blade.php
+!resources/views/themes/partials/blueprint_groom_card.blade.php

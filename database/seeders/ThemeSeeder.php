@@ -14,6 +14,10 @@ class ThemeSeeder extends Seeder
         $this->call(LembarSafiraThemeSeeder::class);
         $this->call(InstagramStoryThemeSeeder::class);
         $this->call(ScratchCardThemeSeeder::class);
+        $this->call(ComicPopArtThemeSeeder::class);
+        $this->call(ChessMatchThemeSeeder::class);
+        $this->call(TopSecretDossierThemeSeeder::class);
+        $this->call(AssemblyInstructionsThemeSeeder::class);
 
         $elegant = Theme::updateOrCreate(
             ['view_path' => 'themes.elegant'],
@@ -423,6 +427,11 @@ class ThemeSeeder extends Seeder
         $menu_card = Theme::updateOrCreate(
             ['view_path' => 'themes.menu_card'],
             ['name' => 'Menu Restoran Fine-Dining (Culinary Card Aesthetic)', 'thumbnail_portrait' => null, 'is_premium' => true, 'is_active' => true]
+        );
+
+        $blueprint = Theme::updateOrCreate(
+            ['view_path' => 'themes.blueprint'],
+            ['name' => 'Cetak Biru Arsitektur (Architectural Blueprint)', 'thumbnail_portrait' => '/images/themes/blueprint-thumb.svg', 'is_premium' => true, 'is_active' => true]
         );
 
         $themes = [
@@ -4918,6 +4927,95 @@ class ThemeSeeder extends Seeder
                     'is_until_finished' => false,
                     'place_name' => 'The Grand Le Jardin Ballroom',
                     'place_address' => 'Jl. Senopati No. 45, Kebayoran Baru, Jakarta Selatan',
+                    'google_maps_url' => 'https://maps.google.com/?q=-6.2345,106.8123',
+                ],
+            ],
+        ];
+
+        $themes[$blueprint->id] = [
+            'title' => 'Cetak Biru Arsitektur: Dimas & Clara (The Architectural Blueprint)',
+            'groom_full_name' => 'Ir. Dimas Suryanegara, S.T., M.T. (Principal Structural Engineer)',
+            'groom_short_name' => 'Dimas',
+            'groom_father_name' => 'Bpk. Ir. H. Bambang Suryanegara, IAI',
+            'groom_mother_name' => 'Ibu Dra. Hj. Ratna Juwita',
+            'bride_full_name' => 'Ar. Clara Daniswara, S.Ars., M.Arch. (Lead Interior Architect)',
+            'bride_short_name' => 'Clara',
+            'bride_father_name' => 'Bpk. Prof. Dr. Hendra Daniswara, M.Sc.',
+            'bride_mother_name' => 'Ibu Dr. Maya Kartika, M.Ds.',
+            'timezone' => 'Asia/Jakarta',
+            'event_date_offset_days' => 40,
+            'event_time' => '08:30',
+            'event_time_end' => '14:30',
+            'venue_name' => 'The Grand Glass Pavilion & Conservatory',
+            'venue_address' => 'Jl. Senopati Asmara No. 45, Kebayoran Baru, Jakarta Selatan',
+            'venue_maps_url' => 'https://maps.google.com/?q=-6.2345,106.8123',
+            'quote_content' => 'Setiap struktur yang kokoh dibangun di atas pondasi ketulusan, diikat dengan pilar kesabaran, dan dirancang dengan ketelitian cinta abadi.',
+            'quote_source' => 'The Master Builder\'s Note // QS. Ar-Rum: 21',
+            'love_story' => 'Perjalanan cinta dua perencana yang bermula dari studio arsitektur kampus hingga peresmian mahligai suci di pelaminan abadi.',
+            'stories' => [
+                [
+                    'story_date' => 'REV. 01 - 2021',
+                    'story_title' => 'Pertemuan Pertama di Meja Studio Arsitektur 📐',
+                    'story_description' => 'Mata kami pertama kali bersitatap saat berebut penggaris segitiga di studio perancangan. Dari obrolan teknis seputar struktur, tercipta sketsa rasa yang tak terduga.',
+                ],
+                [
+                    'story_date' => 'REV. 02 - 2023',
+                    'story_title' => 'Memperkuat Pondasi dan Pilar Komitmen 🏛️',
+                    'story_description' => 'Melalui berbagai dinamika dan ujian beban kehidupan, kami belajar menyelaraskan perbedaan sudut pandang menjadi sebuah struktur hubungan yang kokoh dan harmonis.',
+                ],
+                [
+                    'story_date' => 'REV. 03 - 2026',
+                    'story_title' => 'Lamaran Resmi & Terbitnya Izin Membangun Rumah Tangga 💍',
+                    'story_description' => 'Di hadapan kedua keluarga besar, komitmen kami diresmikan tanpa revisi. Cetak biru kehidupan masa depan telah siap dieksekusi di pelaminan suci pernikahan.',
+                ],
+            ],
+            'gallery_photos' => [
+                'https://picsum.photos/seed/blueprintgallery1/800/800',
+                'https://picsum.photos/seed/blueprintgallery2/800/800',
+                'https://picsum.photos/seed/blueprintgallery3/800/800',
+                'https://picsum.photos/seed/blueprintgallery4/800/800',
+            ],
+            'gift_banks' => [
+                [
+                    'bank_name' => 'Bank Mandiri (Rekening Proyek Dimas)',
+                    'account_number' => '1370019283741',
+                    'account_holder' => 'Dimas Suryanegara',
+                ],
+                [
+                    'bank_name' => 'Bank BCA (Rekening Desain Clara)',
+                    'account_number' => '8820192834',
+                    'account_holder' => 'Clara Daniswara',
+                ],
+            ],
+            'gift_ewallets' => [
+                [
+                    'wallet_name' => 'GoPay',
+                    'wallet_number' => '081299887766',
+                ],
+                [
+                    'wallet_name' => 'ShopeePay',
+                    'wallet_number' => '081299887766',
+                ],
+            ],
+            'events' => [
+                [
+                    'event_title' => 'Phase 01: Groundbreaking & Akad Nikah (The Sacred Vows)',
+                    'date_offset_days' => 0,
+                    'start_time' => '08:30',
+                    'end_time' => '10:30',
+                    'is_until_finished' => false,
+                    'place_name' => 'The Sanctuary Pavilion',
+                    'place_address' => 'Jl. Senopati Asmara No. 45, Kebayoran Baru, Jakarta Selatan',
+                    'google_maps_url' => 'https://maps.google.com/?q=-6.2345,106.8123',
+                ],
+                [
+                    'event_title' => 'Phase 02: Grand Commissioning & Resepsi (Celebratory Feast)',
+                    'date_offset_days' => 0,
+                    'start_time' => '11:30',
+                    'end_time' => '14:30',
+                    'is_until_finished' => false,
+                    'place_name' => 'The Grand Conservatory Ballroom',
+                    'place_address' => 'Jl. Senopati Asmara No. 45, Kebayoran Baru, Jakarta Selatan',
                     'google_maps_url' => 'https://maps.google.com/?q=-6.2345,106.8123',
                 ],
             ],
