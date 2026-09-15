@@ -334,6 +334,15 @@
                             <td>Subtotal add-on</td>
                             <td>Rp {{ number_format($addon_total, 0, ',', '.') }}</td>
                         </tr>
+                        @if($discount_amount > 0)
+                            <tr>
+                                <td>Diskon {{ $promotion_title }}</td>
+                                <td>− Rp {{ number_format($discount_amount, 0, ',', '.') }}</td>
+                            </tr>
+                        @endif
+                        @if($unique_code > 0)
+                            <tr><td>Kode unik</td><td>Rp {{ number_format($unique_code, 0, ',', '.') }}</td></tr>
+                        @endif
                     </table>
                     <div class="total-box">
                         <table class="total-box-table">

@@ -18,6 +18,8 @@ class ThemeSeeder extends Seeder
         $this->call(ChessMatchThemeSeeder::class);
         $this->call(TopSecretDossierThemeSeeder::class);
         $this->call(AssemblyInstructionsThemeSeeder::class);
+        $this->call(CalendarReminderThemeSeeder::class);
+        $this->call(TopographicMapThemeSeeder::class);
 
         $elegant = Theme::updateOrCreate(
             ['view_path' => 'themes.elegant'],
@@ -5027,5 +5029,7 @@ class ThemeSeeder extends Seeder
                 $previewData,
             );
         }
+
+        $this->call(NotebookLabelThemeSeeder::class);
     }
 }

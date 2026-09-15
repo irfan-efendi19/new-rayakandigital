@@ -9,7 +9,9 @@ use App\Models\Package;
 use App\Models\PaymentMethodConfig;
 use App\Models\Subscription;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 use Midtrans\Config;
 use Midtrans\Snap;
 use Midtrans\Transaction;
@@ -67,12 +69,12 @@ class MidtransService
      *
      * @return array{snap_token: string, order_id: string, subscription: Subscription}
      */
-    public function createSnapToken(User $user, string $tier): array
+    public function createSnapToken(User $user, string $tier, ?Order $order = null): array
     {
-        $price = $this->getPrice($tier);
-        $orderId = 'RD-'.now()->format('Ymd').'-'.$user->id.'-'.strtoupper(Str::random(4));
+        $price = $order ? (int) $order->gross_amount : $this->getPrice($tier);
+        $orderId = $order?->order_id ?? 'RD-'.now()->format('Ymd').'-'.$user->id.'-'.strtoupper(Str::random(4));
 
-        $subscription = Subscription::create([
+        $subscription = Subscription::firstOrCreate(['midtrans_order_id' => $orderId], [
             'user_id' => $user->id,
             'tier' => $tier,
             'midtrans_order_id' => $orderId,
@@ -115,13 +117,9 @@ class MidtransService
             $snapToken = Snap::getSnapToken($params);
         } catch (\Throwable $e) {
             logger()->error('Gagal buat Snap token: '.$e->getMessage());
-
-            return [
-                'snap_token' => 'SIMULATION_TOKEN_'.$orderId,
-                'order_id' => $orderId,
-                'gross_amount' => $price,
-                'subscription' => $subscription,
-            ];
+            throw ValidationException::withMessages([
+                'payment' => 'Gateway pembayaran belum tersedia. Coba lagi; pesanan dan harga promo Anda tetap tersimpan.',
+            ]);
         }
 
         return [
@@ -196,58 +194,67 @@ class MidtransService
             return $transaction;
         }
 
-        $subscription = Subscription::where('midtrans_order_id', $orderId)->first();
+        return DB::transaction(function () use ($orderId, $transactionId, $transactionStatus, $isSettled) {
+            $order = Order::where('order_id', $orderId)->lockForUpdate()->first();
+            $subscription = Subscription::where('midtrans_order_id', $orderId)->lockForUpdate()->first();
 
-        if (! $subscription) {
-            return null;
-        }
-
-        $subscription->midtrans_transaction_id = $transactionId;
-
-        if ($isSettled) {
-            $subscription->payment_status = 'settlement';
-            $subscription->starts_at = now();
-            $durationDays = $this->getDurationDays($subscription->tier);
-            $subscription->expires_at = $durationDays ? now()->addDays($durationDays) : null;
-        } elseif ($transactionStatus === 'pending') {
-            $subscription->payment_status = 'pending';
-        } else {
-            $statusMap = [
-                'deny' => 'deny',
-                'expire' => 'expire',
-                'cancel' => 'cancel',
-            ];
-            $subscription->payment_status = $statusMap[$transactionStatus] ?? 'pending';
-        }
-
-        $subscription->save();
-
-        // Sync Order status
-        $order = Order::where('order_id', $orderId)->first();
-        if ($order) {
-            $order->payment_status = match (true) {
-                $isSettled => 'success',
-                $transactionStatus === 'pending' => 'pending',
-                default => 'expired',
-            };
-            $order->save();
-        }
-
-        // Update invitation tier and expiry on successful payment
-        if ($isSettled && $order && $order->invitation_id) {
-            $invitation = Invitation::find($order->invitation_id);
-            if ($invitation) {
-                $package = Package::where('package_code', $subscription->tier)->first();
-                $durationDays = $this->getDurationDays($subscription->tier);
-                $invitation->tier = $subscription->tier;
-                $invitation->pricing_tier_id = $package?->id;
-                $invitation->expires_at = $durationDays ? now()->addDays($durationDays) : now()->addYears(1);
-                $invitation->is_active = true;
-                $invitation->save();
+            if (! $subscription) {
+                return null;
             }
-        }
 
-        return $subscription;
+            if ($subscription->payment_status === 'settlement' || $order?->payment_status === 'success') {
+                return $subscription;
+            }
+
+            $subscription->midtrans_transaction_id = $transactionId;
+
+            if ($isSettled) {
+                $subscription->payment_status = 'settlement';
+                $subscription->starts_at = now();
+                $durationDays = $this->getDurationDays($subscription->tier);
+                $subscription->expires_at = $durationDays ? now()->addDays($durationDays) : null;
+            } elseif ($transactionStatus === 'pending') {
+                $subscription->payment_status = 'pending';
+            } else {
+                $statusMap = [
+                    'deny' => 'deny',
+                    'expire' => 'expire',
+                    'cancel' => 'cancel',
+                ];
+                $subscription->payment_status = $statusMap[$transactionStatus] ?? 'pending';
+            }
+
+            $subscription->save();
+
+            // Sync Order status
+            if ($order) {
+                $order->payment_status = match (true) {
+                    $isSettled => 'success',
+                    $transactionStatus === 'pending' => 'pending',
+                    default => 'expired',
+                };
+                $order->save();
+                if (in_array($transactionStatus, ['deny', 'expire', 'cancel'])) {
+                    app(PromotionService::class)->release($order);
+                }
+            }
+
+            // Update invitation tier and expiry on successful payment
+            if ($isSettled && $order && $order->invitation_id) {
+                $invitation = Invitation::find($order->invitation_id);
+                if ($invitation) {
+                    $package = Package::where('package_code', $subscription->tier)->first();
+                    $durationDays = $this->getDurationDays($subscription->tier);
+                    $invitation->tier = $subscription->tier;
+                    $invitation->pricing_tier_id = $package?->id;
+                    $invitation->expires_at = $durationDays ? now()->addDays($durationDays) : now()->addYears(1);
+                    $invitation->is_active = true;
+                    $invitation->save();
+                }
+            }
+
+            return $subscription;
+        }, 3);
     }
 
     /**

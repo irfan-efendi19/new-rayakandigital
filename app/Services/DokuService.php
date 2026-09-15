@@ -9,6 +9,7 @@ use App\Models\Package;
 use App\Models\PaymentMethodConfig;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -259,44 +260,59 @@ class DokuService
             return null;
         }
 
-        if ($transactionStatus === 'SUCCESS') {
-            $this->processSuccessOrder($order);
-        } elseif ($transactionStatus === 'FAILED' || $transactionStatus === 'EXPIRED') {
-            $order->update([
-                'payment_status' => strtolower($transactionStatus),
-            ]);
-        }
+        DB::transaction(function () use ($order, $transactionStatus) {
+            $order = Order::whereKey($order->id)->lockForUpdate()->firstOrFail();
+            if ($order->payment_status === 'success') {
+                return;
+            }
 
-        return $order;
+            if ($transactionStatus === 'SUCCESS') {
+                $this->processSuccessOrder($order);
+            } elseif ($transactionStatus === 'FAILED' || $transactionStatus === 'EXPIRED') {
+                $order->update([
+                    'payment_status' => strtolower($transactionStatus),
+                ]);
+                app(PromotionService::class)->release($order);
+            }
+        }, 3);
+
+        return $order->refresh();
     }
 
     public function processSuccessOrder(Order $order): void
     {
-        $order->update([
-            'payment_status' => 'success',
-        ]);
+        DB::transaction(function () use ($order) {
+            $order = Order::whereKey($order->id)->lockForUpdate()->firstOrFail();
+            if ($order->payment_status === 'success') {
+                return;
+            }
 
-        $subscription = Subscription::where('midtrans_order_id', $order->order_id)->first();
-        if ($subscription) {
-            $subscription->payment_status = 'settlement';
-            $subscription->starts_at = now();
+            $order->update([
+                'payment_status' => 'success',
+            ]);
 
-            $package = Package::where('package_code', $subscription->tier)->first();
-            $durationDays = $package?->active_period_days;
-            $subscription->expires_at = $durationDays ? now()->addDays($durationDays) : null;
-            $subscription->save();
+            $subscription = Subscription::where('midtrans_order_id', $order->order_id)->first();
+            if ($subscription) {
+                $subscription->payment_status = 'settlement';
+                $subscription->starts_at = now();
 
-            if ($order->invitation_id) {
-                $invitation = Invitation::find($order->invitation_id);
-                if ($invitation) {
-                    $invitation->tier = $subscription->tier;
-                    $invitation->pricing_tier_id = $package?->id;
-                    $invitation->expires_at = $subscription->expires_at;
-                    $invitation->is_active = true;
-                    $invitation->save();
+                $package = Package::where('package_code', $subscription->tier)->first();
+                $durationDays = $package?->active_period_days;
+                $subscription->expires_at = $durationDays ? now()->addDays($durationDays) : null;
+                $subscription->save();
+
+                if ($order->invitation_id) {
+                    $invitation = Invitation::find($order->invitation_id);
+                    if ($invitation) {
+                        $invitation->tier = $subscription->tier;
+                        $invitation->pricing_tier_id = $package?->id;
+                        $invitation->expires_at = $subscription->expires_at;
+                        $invitation->is_active = true;
+                        $invitation->save();
+                    }
                 }
             }
-        }
+        }, 3);
     }
 
     /**

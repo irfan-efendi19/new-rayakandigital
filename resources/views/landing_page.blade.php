@@ -29,10 +29,12 @@
 </head>
 
 <body
+    x-data="promotionCatalog" data-promotion-catalog="{{ json_encode($promotionCatalog) }}" data-promotion-url="{{ route('promotions.catalog') }}"
     class="font-sans antialiased bg-[#FDFCFA] dark:bg-secondary-900 text-gray-900 dark:text-neutral-100 overflow-x-hidden">
     <x-public-navbar />
 
     <div class="h-16"></div>
+    <x-promotion-banner />
 
     {{-- ═══════════════════════════════════════════════
     HERO — Asymmetric editorial split
@@ -90,7 +92,7 @@
                         Kirim otomatis via WhatsApp, check-in QR Code, lengkap dengan musik & galeri.
                     </p>
 
-                    {{-- CTA row --}}
+
                     <div class="flex flex-col sm:flex-row gap-4 mb-12">
                         <a href="{{ route('register') }}" id="hero-cta-register"
                             class="group inline-flex items-center justify-center gap-2.5 px-8 py-4 bg-primary-500 hover:bg-primary-600 text-white text-sm font-bold rounded-2xl shadow-[0_8px_32px_-8px_rgba(255,122,0,0.5)] hover:shadow-[0_12px_40px_-8px_rgba(255,122,0,0.65)] transition-all duration-300 hover:-translate-y-0.5">
@@ -526,122 +528,26 @@
 
             {{-- Scroll container --}}
             <div class="relative">
-                <button @click="$refs.scrollContainer.scrollLeft -= 320"
-                    class="absolute left-0 top-1/2 -translate-y-1/2 z-10 hidden lg:flex items-center justify-center w-10 h-10 rounded-full bg-white dark:bg-secondary-800 border border-neutral-200 dark:border-secondary-700 text-neutral-600 dark:text-neutral-300 shadow-md hover:shadow-lg hover:border-primary-300 transition-all duration-200">
+                <button type="button" @click="$refs.scrollContainer.scrollLeft -= 320"
+                    aria-label="Geser tema ke kiri"
+                    class="absolute left-0 top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-neutral-200 bg-white text-neutral-600 shadow-lg transition-all duration-200 hover:border-primary-300 hover:text-primary-600 hover:shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 lg:flex dark:border-secondary-700 dark:bg-secondary-800 dark:text-neutral-300">
                     <i class="fas fa-chevron-left text-xs"></i>
                 </button>
-                <button @click="$refs.scrollContainer.scrollLeft += 320"
-                    class="absolute right-0 top-1/2 -translate-y-1/2 z-10 hidden lg:flex items-center justify-center w-10 h-10 rounded-full bg-white dark:bg-secondary-800 border border-neutral-200 dark:border-secondary-700 text-neutral-600 dark:text-neutral-300 shadow-md hover:shadow-lg hover:border-primary-300 transition-all duration-200">
+                <button type="button" @click="$refs.scrollContainer.scrollLeft += 320"
+                    aria-label="Geser tema ke kanan"
+                    class="absolute right-0 top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-neutral-200 bg-white text-neutral-600 shadow-lg transition-all duration-200 hover:border-primary-300 hover:text-primary-600 hover:shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 lg:flex dark:border-secondary-700 dark:bg-secondary-800 dark:text-neutral-300">
                     <i class="fas fa-chevron-right text-xs"></i>
                 </button>
 
-                <div x-ref="scrollContainer" class="overflow-x-auto pt-10 pb-6 scroll-smooth"
-                    style="scrollbar-width: thin; scrollbar-color: #FFD0A3 transparent; -webkit-overflow-scrolling: touch;">
-                    <div class="flex gap-5" style="min-width: min-content;">
+                <div x-ref="scrollContainer"
+                    class="-mx-4 snap-x snap-mandatory scroll-px-4 overflow-x-auto px-4 pb-8 pt-3 scroll-smooth sm:-mx-6 sm:scroll-px-6 sm:px-6 lg:mx-0 lg:px-14">
+                    <div class="flex w-max gap-5 px-0.5">
                         @forelse($themes as $theme)
                             <div x-show="filter === 'all' || filter === '{{ $theme->theme_category_id ?? '0' }}'"
                                 x-transition:enter="transition ease-out duration-300"
                                 x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
-                                style="width: 280px; flex-shrink: 0;">
-                                <div
-                                    class="group relative rounded-2xl overflow-hidden border border-neutral-100 dark:border-secondary-700 bg-white dark:bg-secondary-800 shadow-[0_4px_20px_rgba(0,0,0,0.06)] hover:shadow-[0_20px_60px_-12px_rgba(0,0,0,0.18)] hover:-translate-y-1.5 transition-all duration-400">
-
-                                    {{-- Thumbnail --}}
-                                    @if($theme->thumbnail_url)
-                                        <img src="{{ $theme->thumbnail_url }}" alt="{{ $theme->name }}"
-                                            width="280" height="373" loading="lazy" decoding="async"
-                                            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105">
-                                    @endif
-
-                                    <div class="relative z-10 flex flex-col">
-                                        <div class="relative aspect-[3/4]">
-                                            @if(!$theme->thumbnail_url)
-                                                <div
-                                                    class="absolute inset-0 bg-gradient-to-br from-secondary-50 to-primary-50/30 flex items-center justify-center">
-                                                    <div class="text-center">
-                                                        <i class="fas fa-images text-3xl text-primary-300 mb-2"></i>
-                                                        <span class="text-xs text-neutral-400 block">{{ $theme->name }}</span>
-                                                    </div>
-                                                </div>
-                                            @else
-                                                <div class="absolute inset-0 bg-gradient-to-b from-black/20 to-transparent">
-                                                </div>
-                                            @endif
-
-                                            {{-- Badges --}}
-                                            <div class="absolute top-3 left-3 z-20">
-                                                @if($theme->is_premium)
-                                                    <span
-                                                        class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-gradient-to-r from-amber-400 to-amber-500 text-white shadow-md">
-                                                        <i class="fas fa-crown text-[9px]"></i> Premium
-                                                    </span>
-                                                @else
-                                                    <span
-                                                        class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-white/90 backdrop-blur-sm text-emerald-700 border border-emerald-200/50">
-                                                        <i class="fas fa-gem text-[9px]"></i> Gratis
-                                                    </span>
-                                                @endif
-                                            </div>
-                                            @if($theme->rating)
-                                                <div
-                                                    class="absolute top-3 right-3 z-20 inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold bg-white/90 backdrop-blur-sm text-amber-700 border border-amber-200/50">
-                                                    <i class="fas fa-star text-amber-400 text-[9px]"></i>
-                                                    {{ $theme->rating }}
-                                                </div>
-                                            @endif
-
-                                            {{-- Hover preview overlay --}}
-                                            <div class="absolute inset-0 z-10 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center"
-                                                style="background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.1) 50%, transparent 100%);">
-                                                <a href="{{ route('theme.preview', str_replace('themes.', '', $theme->view_path)) }}"
-                                                    target="_blank"
-                                                    class="flex items-center gap-2 px-4 py-2.5 rounded-xl text-white text-xs font-semibold hover:scale-105 transition-transform duration-200"
-                                                    style="background: rgba(255,255,255,0.15); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.25);">
-                                                    <i class="fas fa-eye text-xs"></i> Lihat Pratinjau
-                                                </a>
-                                            </div>
-                                        </div>
-
-                                        {{-- Accent line --}}
-                                        <div
-                                            class="h-0.5 bg-gradient-to-r from-primary-400 to-primary-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-out origin-left">
-                                        </div>
-
-                                        {{-- Card body --}}
-                                        <div class="p-4 bg-white/80 dark:bg-secondary-800/80 backdrop-blur-xl">
-                                            <h3
-                                                class="text-sm font-bold text-secondary-800 dark:text-neutral-200 group-hover:text-primary-600 transition-colors leading-snug mb-1.5">
-                                                {{ $theme->name }}
-                                            </h3>
-                                            @if($theme->category)
-                                                <span
-                                                    class="inline-flex items-center gap-1 px-2 py-0.5 bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-300 rounded text-[10px] font-medium mb-3">
-                                                    <i class="fas fa-tag text-[8px]"></i>{{ $theme->category->name }}
-                                                </span>
-                                            @endif
-
-                                            <div class="flex items-center gap-2">
-                                                @auth
-                                                    <a href="{{ route('dashboard.invitations.create', ['theme' => str_replace('themes.', '', $theme->view_path)]) }}"
-                                                        class="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-primary-500 text-white text-xs font-bold hover:bg-primary-600 transition-colors duration-200">
-                                                        <i class="fas fa-magic text-[10px]"></i> Gunakan
-                                                    </a>
-                                                @else
-                                                    <a href="{{ route('register') }}"
-                                                        class="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-primary-500 text-white text-xs font-bold hover:bg-primary-600 transition-colors duration-200">
-                                                        <i class="fas fa-magic text-[10px]"></i> Gunakan
-                                                    </a>
-                                                @endauth
-                                                <a href="{{ route('theme.preview', str_replace('themes.', '', $theme->view_path)) }}"
-                                                    target="_blank"
-                                                    class="flex items-center justify-center w-9 h-9 rounded-lg border border-neutral-200 dark:border-secondary-600 text-neutral-400 hover:border-primary-300 hover:text-primary-600 transition-all duration-200"
-                                                    title="Pratinjau">
-                                                    <i class="fas fa-eye text-xs"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                class="w-[78vw] max-w-[19rem] shrink-0 snap-start sm:w-72">
+                                <x-theme-card :theme="$theme" variant="carousel" />
                             </div>
                         @empty
                             <div class="py-16 text-center w-full min-w-[400px]">
@@ -828,21 +734,8 @@
 
                                             {{-- Price --}}
                                             <div class="mb-6">
-                                                @if($package->slashed_price && $package->slashed_price > $package->price)
-                                                    <span class="text-neutral-400 line-through text-xs">Rp
-                                                        {{ number_format($package->slashed_price, 0, ',', '.') }}</span>
-                                                @endif
-                                                <div class="flex items-baseline gap-1 mt-0.5">
-                                                    <span class="text-lg font-bold text-secondary-900 dark:text-neutral-100">Rp</span>
-                                                    <span
-                                                        class="text-4xl font-extrabold text-secondary-900 dark:text-neutral-100">{{ number_format($package->price, 0, ',', '.') }}</span>
-                                                </div>
-                                                @if($package->price > 0)
-                                                    <span class="text-xs text-neutral-400">/
-                                                        {{ $package->active_period_days === 0 ? 'Lifetime' : $package->active_period_days . ' Hari' }}</span>
-                                                @endif
+                                                <x-promotion-price :package="$package" :quote="$promotionCatalog['prices'][$package->package_code]" />
                                             </div>
-
                                             {{-- CTA --}}
                                             @auth
                                                 @if($package->package_code === 'free')
@@ -1194,3 +1087,4 @@
 </body>
 
 </html>
+

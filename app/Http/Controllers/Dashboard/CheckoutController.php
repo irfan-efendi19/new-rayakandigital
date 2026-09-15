@@ -3,231 +3,110 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CheckoutRequest;
 use App\Models\Invitation;
 use App\Models\Order;
 use App\Models\Package;
 use App\Models\PaymentMethodConfig;
-use App\Models\Subscription;
 use App\Services\DokuService;
 use App\Services\MidtransService;
 use App\Services\PaymentRoutingService;
+use App\Services\PromotionService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 class CheckoutController extends Controller
 {
-    public function index(Request $request, PaymentRoutingService $routing)
+    public function index(Request $request, PaymentRoutingService $routing, PromotionService $promotions)
     {
         $user = $request->user();
         $activeMethod = $routing->activeMethod();
-        $packages = Package::with('features')
-            ->where('is_visible', true)
-            ->where('package_code', '!=', 'free')
-            ->orderBy('sort_order')
-            ->get();
-
+        $packages = Package::with('features')->where('is_visible', true)
+            ->where('package_code', '!=', 'free')->orderBy('sort_order')->get();
         $invitationId = $request->query('invitation_id');
-        $invitation = null;
-        if ($invitationId) {
-            $invitation = $user->isAdmin()
-                ? Invitation::find($invitationId)
-                : $user->invitations()->find($invitationId);
-            abort_unless($invitation, 404);
-        }
+        $invitation = $invitationId
+            ? ($user->isAdmin() ? Invitation::find($invitationId) : $user->invitations()->find($invitationId))
+            : $user->invitations()->first();
+        abort_if($invitationId && ! $invitation, 404);
+        $currentTier = $invitation?->currentTier() ?? 'free';
+        $methodConfig = PaymentMethodConfig::getActive();
+        $clientKey = $methodConfig?->isMidtrans() && filled($methodConfig->midtrans_client_key)
+            ? $methodConfig->midtrans_client_key : config('midtrans.client_key');
+        $dokuConfigured = $routing->isDoku() && app(DokuService::class)->isDokuConfigured();
+        $promotionCatalog = $promotions->catalog($packages, $request);
 
-        $currentTier = $invitation ? $invitation->currentTier() : 'free';
-
-        $clientKey = config('midtrans.client_key');
-        try {
-            $methodConfig = PaymentMethodConfig::getActive();
-            if ($methodConfig && $methodConfig->isMidtrans() && ! empty($methodConfig->midtrans_client_key)) {
-                $clientKey = $methodConfig->midtrans_client_key;
-            }
-        } catch (\Throwable $e) {
-            // fallback
-        }
-
-        $dokuConfigured = false;
-        if ($routing->isDoku()) {
-            $dokuConfigured = app(DokuService::class)->isDokuConfigured();
-        }
-
-        return view('dashboard.checkout.index', compact('currentTier', 'packages', 'activeMethod', 'clientKey', 'invitation', 'dokuConfigured'));
+        return response()->view('dashboard.checkout.index', compact(
+            'currentTier', 'packages', 'activeMethod', 'clientKey', 'invitation', 'dokuConfigured', 'promotionCatalog',
+        ))->header('Cache-Control', 'private, no-store');
     }
 
-    public function process(Request $request, MidtransService $midtransService, PaymentRoutingService $routing)
+    public function process(CheckoutRequest $request, MidtransService $midtrans, PaymentRoutingService $routing, PromotionService $promotions)
     {
-        $validated = $request->validate([
-            'tier' => 'required|string|exists:packages,package_code',
-            'invitation_id' => 'nullable|integer|exists:invitations,id',
-        ]);
-
+        $validated = $request->validated();
         $user = $request->user();
-        $tier = $validated['tier'];
-        $isAdmin = $user->isAdmin();
+        $invitationId = $validated['invitation_id'] ?? $user->invitations()->first()?->id;
+        $invitation = $invitationId
+            ? ($user->isAdmin() ? Invitation::find($invitationId) : $user->invitations()->find($invitationId))
+            : null;
+        abort_if($invitationId && ! $invitation, 403);
 
-        $invitationId = $validated['invitation_id'] ?? (
-            $isAdmin ? Invitation::first()?->id : $user->invitations()->first()?->id
-        );
-
-        if ($invitationId) {
-            $ownsInvitation = $isAdmin
-                ? Invitation::where('id', $invitationId)->exists()
-                : $user->invitations()->where('id', $invitationId)->exists();
-            abort_if(! $ownsInvitation, 403);
+        if (! $invitation) {
+            throw ValidationException::withMessages(['invitation_id' => 'Buat undangan terlebih dahulu sebelum memilih paket.']);
         }
 
-        $invitation = $invitationId ? (
-            $isAdmin ? Invitation::find($invitationId) : $user->invitations()->find($invitationId)
-        ) : null;
-        $currentTier = $invitation ? $invitation->currentTier() : 'free';
-        $tierRank = Package::where('is_visible', true)->pluck('sort_order', 'package_code');
+        $package = Package::where('package_code', $validated['tier'])->where('is_visible', true)->firstOrFail();
+        $currentTier = $invitation->currentTier();
+        $currentRank = Package::where('package_code', $currentTier)->value('sort_order') ?? -1;
 
-        $currentRank = $tierRank[$currentTier] ?? -1;
-        $selectedRank = $tierRank[$tier] ?? -1;
-
-        if ($currentRank >= $selectedRank) {
-            return back()->with('info', 'Undangan ini sudah memiliki paket '.ucfirst($currentTier).' yang setara atau lebih tinggi.');
+        if ($currentRank >= $package->sort_order) {
+            throw ValidationException::withMessages(['tier' => 'Undangan ini sudah memiliki paket yang setara atau lebih tinggi.']);
         }
 
-        $this->cancelPendingOrders($invitationId, $midtransService);
+        $order = $promotions->createOrder($request, $package, $invitation->id, $routing->activeMethod());
+
+        if ((int) $order->gross_amount === 0) {
+            app(DokuService::class)->processSuccessOrder($order);
+            $url = route('dashboard.invitations.show', $invitation);
+
+            return $request->expectsJson() ? response()->json(['redirect_url' => $url]) : redirect($url)->with('success', 'Paket berhasil diaktifkan dengan promo.');
+        }
 
         if ($routing->isMidtrans()) {
-            return $this->processMidtrans($user, $tier, $invitationId, $midtransService);
+            return $this->processMidtrans($order, $midtrans);
         }
 
         if ($routing->isDoku()) {
-            $dokuService = app(DokuService::class);
-
-            return $this->processDoku($user, $tier, $invitationId, $dokuService, $request);
+            return $this->processDoku($order, app(DokuService::class));
         }
 
-        return $this->processManualBank($user, $tier, $invitationId, $midtransService);
-    }
-
-    protected function processMidtrans($user, $tier, $invitationId, MidtransService $midtransService)
-    {
-        $result = $midtransService->createSnapToken($user, $tier);
-
-        $order = DB::transaction(function () use ($result, $user, $tier, $invitationId, $midtransService) {
-            return Order::create([
-                'order_id' => $result['order_id'],
-                'user_id' => $user->id,
-                'invitation_id' => $invitationId,
-                'package_type' => $tier,
-                'payment_method_used' => 'midtrans',
-                'gross_amount' => $result['gross_amount'] ?? $midtransService->getPrice($tier),
-                'payment_status' => 'pending',
-                'payment_gateway_used' => $midtransService->isSimulationMode() ? null : 'midtrans',
-                'snap_token' => $result['snap_token'] ?? null,
-            ]);
-        });
-
-        if ($midtransService->isSimulationMode()) {
-            $midtransService->simulatePayment($result['order_id']);
-            $order->update(['payment_status' => 'success']);
-        }
-
-        return response()->json([
-            'snap_token' => $result['snap_token'],
-            'order_id' => $result['order_id'],
-        ]);
-    }
-
-    protected function processManualBank($user, $tier, $invitationId, MidtransService $midtransService)
-    {
-        $price = $midtransService->getPrice($tier);
-        $uniqueCode = Order::generateUniqueCode();
-
-        $order = DB::transaction(function () use ($user, $tier, $invitationId, $price, $uniqueCode) {
-            return Order::create([
-                'order_id' => 'RD-'.now()->format('Ymd').'-'.$user->id.'-'.Str::upper(Str::random(4)),
-                'user_id' => $user->id,
-                'invitation_id' => $invitationId,
-                'package_type' => $tier,
-                'payment_method_used' => 'manual_bank',
-                'gross_amount' => $price,
-                'unique_code' => $uniqueCode,
-                'payment_status' => 'pending',
-                'payment_gateway_used' => 'manual_bank',
-                'is_manual_whatsapp' => true,
-            ]);
-        });
-
-        return redirect()->route('dashboard.payment.invoice', $order)
+        return redirect()->route('dashboard.payment.invoice', ['order' => $order->order_id])
             ->with('success', 'Silakan lakukan pembayaran dan kirim bukti transfer via WhatsApp.');
     }
 
-    protected function processDoku($user, $tier, $invitationId, DokuService $dokuService, Request $request)
+    protected function processMidtrans(Order $order, MidtransService $midtrans)
     {
-        $midtransService = app(MidtransService::class);
-        $price = $midtransService->getPrice($tier);
-        $uniqueCode = Order::generateUniqueCode();
-
-        $order = DB::transaction(function () use ($user, $tier, $invitationId, $price) {
-            return Order::create([
-                'order_id' => 'RD-'.now()->format('Ymd').'-'.$user->id.'-'.Str::upper(Str::random(4)),
-                'user_id' => $user->id,
-                'invitation_id' => $invitationId,
-                'package_type' => $tier,
-                'payment_method_used' => 'doku',
-                'gross_amount' => $price,
-                'unique_code' => 0, // DOKU Checkout does not need unique code
-                'payment_status' => 'pending',
-                'payment_gateway_used' => 'doku',
-            ]);
-        });
-
-        // Also create subscription
-        Subscription::create([
-            'user_id' => $user->id,
-            'tier' => $tier,
-            'midtrans_order_id' => $order->order_id,
-            'payment_status' => 'pending',
-            'amount' => $price,
-        ]);
-
-        if ($dokuService->isDokuConfigured()) {
-
-            $checkoutUrl = $dokuService->createCheckoutUrl($order);
-
-            if ($checkoutUrl) {
-                session(['doku_pending_order' => $order->order_id]);
-
-                return redirect()->away($checkoutUrl);
-            }
+        if (! $order->snap_token) {
+            $result = $midtrans->createSnapToken($order->user, $order->package_type, $order);
+            $order->update(['snap_token' => $result['snap_token']]);
         }
 
-        // If fails to generate URL, revert to pending
-        return redirect()->route('dashboard')
-            ->with('error', 'Gagal memproses pembayaran DOKU. Silakan pastikan konfigurasi DOKU sudah benar (Client ID & Secret Key).');
+        if ($midtrans->isSimulationMode()) {
+            $midtrans->simulatePayment($order->order_id, (int) $order->gross_amount);
+        }
+
+        return response()->json(['snap_token' => $order->snap_token, 'order_id' => $order->order_id]);
     }
 
-    protected function cancelPendingOrders(?string $invitationId, MidtransService $midtransService): void
+    protected function processDoku(Order $order, DokuService $doku)
     {
-        if (! $invitationId) {
-            return;
+        $url = $order->snap_token ?: ($doku->isDokuConfigured() ? $doku->createCheckoutUrl($order) : null);
+        if ($url) {
+            session(['doku_pending_order' => $order->order_id]);
+
+            return redirect()->away($url);
         }
 
-        $oldOrders = Order::where('invitation_id', $invitationId)
-            ->whereIn('payment_status', ['pending', 'verifying'])
-            ->get();
-
-        foreach ($oldOrders as $oldOrder) {
-            if ($oldOrder->payment_method_used === 'midtrans') {
-                try {
-                    $midtransService->cancelTransaction($oldOrder->order_id);
-                } catch (\Throwable $e) {
-                    logger()->warning('Gagal cancel order lama di Midtrans: '.$e->getMessage());
-                }
-            }
-
-            $oldOrder->update(['payment_status' => 'expired']);
-
-            Subscription::where('midtrans_order_id', $oldOrder->order_id)
-                ->where('payment_status', 'pending')
-                ->update(['payment_status' => 'expire']);
-        }
+        return redirect()->route('dashboard.checkout', ['invitation_id' => $order->invitation_id])
+            ->with('error', 'Gagal memproses pembayaran DOKU. Silakan coba lagi; pesanan dan harga promo Anda tetap tersimpan.');
     }
 }

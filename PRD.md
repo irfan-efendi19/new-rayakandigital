@@ -1,1030 +1,244 @@
 # Product Requirement Document (PRD)
 
-## FEATURE SPECIFICATION: INTERACTIVE WEDDING CHECKLIST PLANNER
+## Fitur Promo & Diskon
 
-| Atribut               | Detail                                                                                            |
-| :-------------------- | :------------------------------------------------------------------------------------------------ |
-| **Status**            | Approved / Living Document                                                                        |
-| **Penulis**           | Mochammad Irfan Efendi                                                                            |
-| **Tanggal Pembuatan** | 10 Agustus 2026                                                                                   |
-| **Target Komponen**   | Checklist Dashboard, Dynamic Progress Engine, Category Grouping UI, Checklist Management          |
-| **Fokus Utama**       | **40 Preset Checklist Items, 9 Categories, Live Progress Tracking, Dynamic Checklist Management** |
-| **Parent System**     | Wedding Planner & Organizer                                                                       |
-| **Ownership Policy**  | **1 User = 1 Invitation**                                                                         |
+**Platform:** Rayakan Digital
+**Versi Dokumen:** v2.0
+**Status:** In Review
+**Target Rilis:** Q4 2026
+**Penulis PRD:** Product Management Team
+**Revisi dari:** v1.0 — Penghapusan fitur auto-apply & tombol hapus promo, pemisahan logika Promo Otomatis vs. Voucher Manual.
 
 ---
 
-# 1. DESKRIPSI & OBJECTIVE FITUR
+## 1. Ringkasan Eksekutif & Latar Belakang
 
-**Interactive Wedding Checklist Planner** merupakan fitur yang digunakan untuk membantu pengguna mengelola dan memantau seluruh tugas persiapan pernikahan melalui checklist yang terstruktur berdasarkan kategori.
+**Rayakan Digital** menyediakan platform manajemen pernikahan 8 pilar serta generator web undangan digital. Untuk memicu peningkatan konversi pembelian paket Premium/B2C, diperlukan mekanisme pemasaran berbasis _Fear of Missing Out (FOMO)_ dan _urgency pricing_.
 
-Fitur dirancang agar pengguna dapat:
+Fitur **Promo & Diskon** mengelola dua jenis kampanye diskon dengan perilaku tampilan yang berbeda:
 
-- Melihat seluruh checklist persiapan pernikahan.
-- Mengelola checklist berdasarkan kategori.
-- Menandai tugas sebagai selesai atau belum selesai.
-- Melihat progress persiapan secara langsung.
-- Menambahkan checklist custom.
-- Menghapus atau mengubah checklist custom.
-- Memantau jumlah tugas selesai dan total tugas.
-- Mengakses checklist hanya dari invitation miliknya.
-
-Fitur ini menggunakan konsep:
-
-```text
-1 User
-   ↓
-1 Invitation
-   ↓
-40 Preset Checklist Items
-   ↓
-9 Categories
-   ↓
-Dynamic Checklist Management
-   ↓
-Live Progress Tracking
-```
+| Jenis Promo | Kode Voucher | Tampilan |
+| --- | --- | --- |
+| **Promo Otomatis** | KOSONG (nullable) | Landing Page — Sticky Bar + Countdown Timer + harga terpotong otomatis |
+| **Voucher Manual** | TERISI | Checkout Page — User input kode secara manual |
 
 ---
 
-# 2. OBJECTIVE
+## 2. Tujuan Produk & Metrik Keberhasilan
 
-## 2.1 Primary Objective
-
-Menyediakan sistem checklist persiapan pernikahan yang sederhana, interaktif, dan mudah dipantau oleh calon pengantin.
-
-## 2.2 Secondary Objectives
-
-1. Mengurangi kebutuhan pengguna untuk membuat checklist dari nol.
-2. Memberikan struktur persiapan berdasarkan kategori.
-3. Memberikan gambaran kesiapan pernikahan melalui persentase progress.
-4. Memungkinkan pengguna menyesuaikan checklist dengan kebutuhan pribadi.
-5. Memastikan seluruh data checklist terisolasi berdasarkan invitation.
+- **Peningkatan Conversion Rate (CR):** Meningkatkan rasio konversi pengunjung Landing Page ke pembayar paket sebesar 25%.
+- **Meningkatkan Urgensi Pembelian:** Mengurangi rata-rata _time-to-checkout_ hingga 40% melalui Countdown Timer real-time.
+- **Fleksibilitas Promosi:** Memungkinkan tim Marketing meluncurkan kampanye diskon tanpa campur tangan developer.
 
 ---
 
-# 3. CORE FEATURES
+## 3. User Persona & Target Pengguna
 
-| No  | Fitur                    | Deskripsi                                                   |
-| :-: | :----------------------- | :---------------------------------------------------------- |
-|  1  | **Preset Checklist**     | Sistem menyediakan 40 item checklist bawaan.                |
-|  2  | **9 Categories**         | Checklist dikelompokkan ke dalam 9 kategori.                |
-|  3  | **Checkbox Toggle**      | User dapat menandai item sebagai selesai/belum selesai.     |
-|  4  | **Live Progress**        | Persentase progress dihitung berdasarkan item yang selesai. |
-|  5  | **Category Grouping**    | Item ditampilkan berdasarkan kategori.                      |
-|  6  | **Custom Item**          | User dapat menambahkan item sendiri.                        |
-|  7  | **Edit Item**            | User dapat mengubah checklist custom.                       |
-|  8  | **Delete Item**          | User dapat menghapus checklist custom.                      |
-|  9  | **Ownership Validation** | User hanya dapat mengakses checklist invitation miliknya.   |
-| 10  | **Responsive UI**        | Checklist dapat digunakan pada desktop maupun mobile.       |
+- **Calon Pengantin (End User):** Mencari penawaran paket planner/undangan digital hemat dengan kejelasan masa berlaku harga.
+- **Tim Admin / Marketing (Internal):** Membutuhkan CMS dashboard untuk mengatur skema diskon, periode timer, batas pemakaian, dan memantau performa kupon.
 
 ---
 
-# 4. PRESET CHECKLIST
+## 4. Detail Spesifikasi Fitur
 
-Sistem menyediakan **40 preset checklist items** yang terbagi ke dalam **9 kategori**.
+### 4.1. Modul Admin — Pengaturan Promo (CMS Dashboard)
 
-## 4.1 Administrasi & Legal
+#### 4.1.1. Form Input Promo
 
-**Total: 2 item**
+| Field | Tipe | Wajib | Keterangan |
+| --- | --- | --- | --- |
+| `title` | `VARCHAR(150)` | ✅ | Nama/label internal promo |
+| `code` | `VARCHAR(50) UNIQUE NULL` | ❌ **Opsional** | Kosong = Promo Otomatis. Terisi = Voucher Manual |
+| `discount_type` | `ENUM('PERCENTAGE', 'FIXED')` | ✅ | Tipe potongan harga |
+| `discount_value` | `DECIMAL(12,2)` | ✅ | Nilai diskon (persen atau nominal) |
+| `max_discount_amount` | `DECIMAL(12,2) NULL` | ❌ | Batas maksimal potongan (untuk tipe PERCENTAGE) |
+| `min_order_amount` | `DECIMAL(12,2)` | ❌ | Minimum nominal transaksi, default `0` |
+| `timer_type` | `ENUM('STATIC', 'EVERGREEN')` | ✅ | Jenis timer (hanya relevan untuk Promo Otomatis) |
+| `start_time` | `TIMESTAMP NULL` | ❌ | Tanggal & jam mulai (STATIC) |
+| `end_time` | `TIMESTAMP NULL` | ❌ | Tanggal & jam selesai (STATIC) |
+| `evergreen_duration_minutes` | `INT NULL` | ❌ | Durasi timer per sesi user (EVERGREEN) |
+| `usage_limit` | `INT NULL` | ❌ | Batas total stok pemakaian promo |
+| `is_active` | `BOOLEAN` | ✅ | Status aktif/nonaktif promo |
 
-1. Daftar pernikahan ke KUA
-2. Izin cuti menikah
+> **Catatan Field `code` (Kode Voucher):**
+> - Field ini bersifat **opsional (nullable)**. Admin tidak diwajibkan mengisi kode voucher.
+> - Jika dibiarkan **kosong** → sistem memperlakukan promo sebagai **Promo Otomatis**.
+> - Jika **diisi** → sistem memperlakukan promo sebagai **Voucher Manual**.
 
----
+#### 4.1.2. Fitur yang TIDAK Diimplementasikan
 
-## 4.2 Attire & Rias Pengantin
-
-**Total: 8 item**
-
-1. Rias pengantin
-2. Nail art
-3. Henna wedding
-4. Rias orang tua dan besan
-5. Baju pengantin akad
-6. Baju pengantin resepsi
-7. Baju orang tua dan besan
-8. Baju pendamping (pagar ayu)
-
----
-
-## 4.3 Mahar & Seserahan
-
-**Total: 5 item**
-
-1. Mahar
-2. Cincin nikah
-3. Kotak cincin
-4. Seserahan
-5. Kotak seserahan
+> ⛔ Fitur-fitur berikut **dihapus** dan tidak boleh ada di antarmuka manapun:
+> - **"Gunakan Promo Terbaik" (Auto-Apply Best Promo):** Tidak ada tombol atau logika otomatis yang memilih & menerapkan promo terbaik untuk user.
+> - **Tombol Hapus Promo:** Tidak tersedia tombol untuk menghapus/membatalkan promo yang sudah diterapkan pada sesi checkout user.
 
 ---
 
-## 4.4 Venue & Dekorasi
+### 4.2. Aturan Logika Berdasarkan Jenis Promo
 
-**Total: 2 item**
+#### 4.2.1. Promo Otomatis (`code` = NULL / KOSONG)
 
-1. Dekorasi
-2. Tenda
+**Definisi:** Diskon yang berlaku otomatis tanpa memerlukan input kode dari user.
 
----
+**Aturan Tampilan:**
 
-## 4.5 Dokumentasi & Media
+| Komponen UI | Perilaku |
+| --- | --- |
+| **Sticky Bar / Announcement Banner** | Muncul di bagian paling atas Landing Page, _sticky_ (mengikuti scroll). Menampilkan teks promo dinamis, Countdown Timer real-time `HH:MM:SS`, dan CTA ("Klaim Sekarang" / "Lihat Paket"). |
+| **Hero Section & Kartu Paket** | Harga paket menampilkan **harga coret** (harga normal) + **harga setelah diskon** secara langsung. Badge "Hemat X%" ditampilkan. Tidak ada aksi input dari user. |
+| **Countdown Timer** | Ditampilkan secara publik di Landing Page. Berjalan real-time (`HH:MM:SS`). Saat timer habis (`00:00:00`), harga kembali normal dan banner disembunyikan dengan _smooth transition_ tanpa reload. |
+| **Checkout Page** | Diskon sudah teraplikasi otomatis. Tidak ada kolom input voucher yang perlu diisi user untuk promo ini. |
 
-**Total: 5 item**
-
-1. Prewedding
-2. Fotografer
-3. Videografer
-4. Wedding Content Creator
-5. Photobooth
-
----
-
-## 4.6 Pengisi Acara & Entertainment
-
-**Total: 4 item**
-
-1. MC
-2. Tilawah
-3. Sambutan
-4. Hiburan
+**Aturan Bisnis:**
+- Hanya **satu** Promo Otomatis yang dapat aktif (`is_active = 1`) pada satu waktu.
+- Sistem menampilkan promo berdasarkan status aktif dan periode `start_time`–`end_time` yang valid.
+- Promo Otomatis **tidak muncul** sebagai item yang perlu dikonfirmasi user di Checkout (sudah teraplikasi transparan).
 
 ---
 
-## 4.7 Konsumsi & Catering
+#### 4.2.2. Voucher Manual (`code` = TERISI)
 
-**Total: 2 item**
+**Definisi:** Diskon yang hanya aktif setelah user memasukkan kode voucher secara manual.
 
-1. Catering
-2. Snack
+**Aturan Tampilan:**
 
----
+| Komponen UI | Perilaku |
+| --- | --- |
+| **Landing Page** | **Tidak menampilkan** informasi promo ini sama sekali. Tidak ada sticky bar, tidak ada countdown timer publik, tidak ada harga coret otomatis. |
+| **Checkout Page** | Terdapat kolom input **"Kode Voucher"**. User wajib mengetikkan kode yang valid secara manual. Setelah kode diverifikasi valid, tampilkan ringkasan potongan harga. |
+| **Countdown Timer** | **Tidak ada** timer publik. Penghitungan waktu berlaku voucher (jika ada) hanya bersifat validasi backend (`end_time`), tidak ditampilkan ke user. |
 
-## 4.8 Undangan & Logistik Tamu
-
-**Total: 5 item**
-
-1. Daftar tamu undangan
-2. Undangan digital
-3. Undangan cetak
-4. Buku tamu
-5. Souvenir
+**Aturan Bisnis:**
+- Satu kode voucher dapat dibatasi penggunaannya per `user_id` / `email` sesuai `usage_limit`.
+- Sistem memvalidasi: kode ada, status aktif, belum kedaluwarsa, belum melewati `usage_limit`, dan memenuhi `min_order_amount`.
+- Jika kode tidak valid, tampilkan pesan error yang spesifik (misal: "Kode tidak ditemukan", "Kode sudah kedaluwarsa", "Kode sudah mencapai batas penggunaan").
 
 ---
 
-## 4.9 Koordinasi Tim & Operasional
-
-**Total: 7 item**
-
-1. WO
-2. Rundown acara
-3. Susunan panitia
-4. Briefing vendor
-5. Briefing keluarga
-6. Bridesmaid
-7. Transport
-
----
-
-# 5. VALIDASI TOTAL PRESET ITEM
-
-```text
-Administrasi & Legal                  2
-Attire & Rias Pengantin               8
-Mahar & Seserahan                     5
-Venue & Dekorasi                      2
-Dokumentasi & Media                   5
-Pengisi Acara & Entertainment         4
-Konsumsi & Catering                   2
-Undangan & Logistik Tamu              5
-Koordinasi Tim & Operasional          7
-                                      ──
-TOTAL                                 40
-```
-
-Requirement:
-
-> Sistem **WAJIB** menghasilkan tepat **40 preset checklist items** ketika invitation baru dibuat.
-
----
-
-# 6. CHECKLIST STATUS
-
-Setiap checklist menggunakan status berikut:
-
-| Status      | Label         | Deskripsi                |
-| :---------- | :------------ | :----------------------- |
-| `PENDING`   | Belum Selesai | Item belum dikerjakan.   |
-| `COMPLETED` | Selesai       | Item telah diselesaikan. |
-
-Untuk fitur checklist sederhana, sistem cukup menggunakan dua status utama.
-
-```text
-PENDING
-   ↕
-COMPLETED
-```
-
-Ketika user melakukan toggle:
-
-```text
-☐ PENDING
-     ↓
-☑ COMPLETED
-```
-
-dan sebaliknya:
-
-```text
-☑ COMPLETED
-     ↓
-☐ PENDING
-```
-
----
-
-# 7. LIVE PROGRESS TRACKING
-
-## 7.1 Formula
-
-Progress dihitung berdasarkan:
-
-```text
-Progress Percentage =
-(COMPLETED ITEMS / TOTAL ACTIVE ITEMS) × 100
-```
-
-Contoh awal:
-
-```text
-Completed : 0
-Total     : 40
-Progress  : 0%
-```
-
-Setelah 10 item selesai:
-
-```text
-Completed : 10
-Total     : 40
-Progress  : 25%
-```
-
-Setelah seluruh item selesai:
-
-```text
-Completed : 40
-Total     : 40
-Progress  : 100%
-```
-
----
-
-# 8. PROGRESS UI
-
-Dashboard menampilkan informasi:
-
-```text
-┌──────────────────────────────────────────┐
-│ CHECKLIST WEDDING PLAN                   │
-│                                          │
-│ Yuk mulai ceklis!                       │
-│ 20/40 selesai · 9 kategori               │
-│                                          │
-│ ███████████████░░░░░░░░░░░  50%         │
-└──────────────────────────────────────────┘
-```
-
-Jika seluruh checklist selesai:
-
-```text
-┌──────────────────────────────────────────┐
-│ 🎉 Semua Ceklis Selesai!                │
-│                                          │
-│ 40/40 selesai · 9 kategori               │
-│                                          │
-│ ███████████████████████████  100%        │
-└──────────────────────────────────────────┘
-```
-
----
-
-# 9. CATEGORY GROUPING
-
-Checklist harus dikelompokkan berdasarkan kategori.
-
-Contoh:
-
-```text
-ATTIRE & RIAS PENGANTIN
-
-6 / 8 selesai
-
-☑ Rias pengantin
-☑ Nail art
-☑ Henna wedding
-☑ Rias orang tua dan besan
-☑ Baju pengantin akad
-☑ Baju pengantin resepsi
-☐ Baju orang tua dan besan
-☐ Baju pendamping (pagar ayu)
-```
-
-Setiap kategori minimal menampilkan:
-
-- Nama kategori.
-- Jumlah item.
-- Jumlah item selesai.
-- Daftar checklist.
-- Status checklist.
-- Action untuk item custom.
-
----
-
-# 10. DYNAMIC CHECKLIST MANAGEMENT
-
-User dapat menambahkan checklist tambahan selain 40 preset item.
-
-Contoh:
-
-```text
-Preset:
-- Catering
-- Dekorasi
-- Fotografer
-
-Custom:
-- Sewa mobil pengantin
-- Pesan kamar hotel keluarga
-- Cetak label souvenir
-```
-
-## 10.1 Custom Item
-
-Custom item memiliki:
-
-```text
-is_preset = false
-```
-
-Sedangkan item bawaan sistem:
-
-```text
-is_preset = true
-```
-
----
-
-# 11. CUSTOM ITEM REQUIREMENTS
-
-Ketika user menambahkan checklist custom, form minimal harus memiliki:
-
-| Field         | Required | Keterangan          |
-| :------------ | :------: | :------------------ |
-| `category`    |   Yes    | Kategori checklist. |
-| `title`       |   Yes    | Nama tugas.         |
-| `description` |    No    | Detail tambahan.    |
-| `status`      |    No    | Default `PENDING`.  |
-
-Contoh:
-
-```text
-Kategori:
-Koordinasi Tim & Operasional
-
-Nama:
-Sewa mobil pengantin
-
-Status:
-PENDING
-```
-
----
-
-# 12. DATABASE SCHEMA
-
-Karena sistem menggunakan kebijakan:
-
-> **1 User = 1 Invitation**
-
-Checklist sebaiknya **tidak langsung menggunakan `user_id`**.
-
-Ownership chain:
-
-```text
-users
-  ↓
-invitations
-  ↓
-wedding_checklists
-```
-
-## 12.1 Invitations
+## 5. Arsitektur Database & Skema Tabel
 
 ```sql
-CREATE TABLE invitations (
-    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-
-    user_id BIGINT UNSIGNED NOT NULL UNIQUE,
-
-    title VARCHAR(255) NOT NULL,
-    slug VARCHAR(255) NOT NULL UNIQUE,
-    wedding_date DATE NOT NULL,
-
-    created_at TIMESTAMP NULL,
-    updated_at TIMESTAMP NULL,
-
-    CONSTRAINT fk_invitations_user
-        FOREIGN KEY (user_id)
-        REFERENCES users(id)
-        ON DELETE CASCADE
+CREATE TABLE promotions (
+    id                         BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    title                      VARCHAR(150) NOT NULL,
+    code                       VARCHAR(50)  UNIQUE NULL,           -- NULL = Promo Otomatis | TERISI = Voucher Manual
+    discount_type              ENUM('PERCENTAGE', 'FIXED') NOT NULL DEFAULT 'PERCENTAGE',
+    discount_value             DECIMAL(12,2) NOT NULL,
+    max_discount_amount        DECIMAL(12,2) NULL,                 -- Batas potongan max (untuk PERCENTAGE)
+    min_order_amount           DECIMAL(12,2) DEFAULT 0.00,
+    timer_type                 ENUM('STATIC', 'EVERGREEN') NOT NULL DEFAULT 'STATIC',
+    start_time                 TIMESTAMP NULL,
+    end_time                   TIMESTAMP NULL,
+    evergreen_duration_minutes INT NULL,                           -- Digunakan jika timer_type = EVERGREEN
+    usage_limit                INT NULL,                           -- NULL = tidak terbatas
+    used_count                 INT DEFAULT 0,
+    is_active                  TINYINT(1) DEFAULT 1,
+    created_at                 TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at                 TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
-```
 
-Constraint:
-
-```sql
-UNIQUE (user_id)
-```
-
-memastikan:
-
-```text
-1 User = maksimal 1 Invitation
-```
-
----
-
-# 13. WEDDING CHECKLIST TABLE
-
-```sql
-CREATE TABLE wedding_checklists (
-    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-
-    invitation_id BIGINT UNSIGNED NOT NULL,
-
-    category_code VARCHAR(50) NOT NULL,
-    category_name VARCHAR(100) NOT NULL,
-
-    title VARCHAR(255) NOT NULL,
-    description TEXT NULL,
-
-    is_completed BOOLEAN NOT NULL DEFAULT FALSE,
-    is_preset BOOLEAN NOT NULL DEFAULT TRUE,
-
-    created_at TIMESTAMP NULL,
-    updated_at TIMESTAMP NULL,
-
-    CONSTRAINT fk_wedding_checklists_invitation
-        FOREIGN KEY (invitation_id)
-        REFERENCES invitations(id)
-        ON DELETE CASCADE,
-
-    INDEX idx_checklists_invitation (
-        invitation_id
-    ),
-
-    INDEX idx_checklists_category (
-        invitation_id,
-        category_code
-    )
+CREATE TABLE promotion_usages (
+    id               BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    promotion_id     BIGINT UNSIGNED NOT NULL,
+    user_id          BIGINT UNSIGNED NOT NULL,
+    order_id         BIGINT UNSIGNED NOT NULL,
+    discount_applied DECIMAL(12,2) NOT NULL,
+    created_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (promotion_id) REFERENCES promotions(id) ON DELETE CASCADE
 );
 ```
 
 ---
 
-# 14. CATEGORY CODE
+## 6. User Flow
 
-Untuk menjaga konsistensi data, sistem menggunakan `category_code`.
+### 6.1. Promo Otomatis (Kode Voucher KOSONG)
 
-| Code              | Category                      |
-| :---------------- | :---------------------------- |
-| `ADMINISTRATION`  | Administrasi & Legal          |
-| `ATTIRE_BEAUTY`   | Attire & Rias Pengantin       |
-| `MAHAR_SESERAHAN` | Mahar & Seserahan             |
-| `VENUE_DECOR`     | Venue & Dekorasi              |
-| `DOCUMENTATION`   | Dokumentasi & Media           |
-| `ENTERTAINMENT`   | Pengisi Acara & Entertainment |
-| `CATERING`        | Konsumsi & Catering           |
-| `GUEST_LOGISTICS` | Undangan & Logistik Tamu      |
-| `OPERATIONS`      | Koordinasi Tim & Operasional  |
-
-`category_name` digunakan sebagai label yang ditampilkan kepada user.
-
-`category_code` digunakan sebagai identifier internal.
-
----
-
-# 15. INITIALIZATION FLOW
-
-Ketika user berhasil membuat invitation:
-
-```text
-CREATE INVITATION
-       │
-       ▼
-VALIDATE USER OWNERSHIP
-       │
-       ▼
-CREATE 40 PRESET ITEMS
-       │
-       ▼
-SET is_preset = TRUE
-       │
-       ▼
-SET is_completed = FALSE
-       │
-       ▼
-CHECKLIST READY
+```
+Admin aktifkan promo (code = NULL)
+    │
+    ▼
+Landing Page load
+    ├─► Sticky Bar muncul + Countdown Timer berjalan real-time
+    └─► Harga paket tampil: harga coret + harga diskon + badge "Hemat X%"
+    │
+    ▼
+User klik "Lihat Paket" / "Pesan Sekarang"
+    │
+    ▼
+Halaman Checkout
+    ├─► Diskon sudah teraplikasi otomatis (transparan)
+    └─► Tidak ada kolom input voucher untuk promo ini
 ```
 
-Semua proses harus menggunakan database transaction.
+### 6.2. Voucher Manual (Kode Voucher TERISI)
 
----
-
-# 16. BACKEND CONTROLLER
-
-## 16.1 Checklist Index
-
-**`app/Http/Controllers/ChecklistController.php`**
-
-```php
-<?php
-
-namespace App\Http\Controllers;
-
-use Illuminate\Support\Facades\Auth;
-
-class ChecklistController extends Controller
-{
-    public function index()
-    {
-        $user = Auth::user();
-
-        $invitation = $user->invitation;
-
-        if (!$invitation) {
-            return redirect()
-                ->route('invitation.create');
-        }
-
-        $checklists = $invitation
-            ->checklists()
-            ->orderBy('category_code')
-            ->orderBy('id')
-            ->get();
-
-        $totalItems = $checklists->count();
-
-        $completedItems = $checklists
-            ->where('is_completed', true)
-            ->count();
-
-        $progressPercent = $totalItems > 0
-            ? round(
-                ($completedItems / $totalItems) * 100
-            )
-            : 0;
-
-        $groupedChecklists = $checklists
-            ->groupBy('category_code');
-
-        return view(
-            'dashboard.checklist.index',
-            compact(
-                'invitation',
-                'groupedChecklists',
-                'totalItems',
-                'completedItems',
-                'progressPercent'
-            )
-        );
-    }
-}
+```
+Admin buat voucher (code = "WEDDING2026")
+    │
+    ▼
+Landing Page → Tidak ada tampilan promo apapun
+    │
+    ▼
+User klik "Pesan Sekarang" → Masuk Checkout Page
+    │
+    ▼
+Kolom Input "Kode Voucher" tersedia
+    │
+    ├─► User ketik kode → Validasi backend
+    │       ├─► VALID   → Tampilkan ringkasan potongan harga
+    │       └─► INVALID → Tampilkan pesan error spesifik
+    │
+    ▼
+User lanjutkan ke pembayaran
 ```
 
 ---
 
-# 17. TOGGLE CHECKLIST
+## 7. Spesifikasi API Endpoint (Backend)
 
-Toggle harus memvalidasi bahwa item memang milik invitation user yang sedang login.
-
-```php
-public function toggle($id)
-{
-    $invitation = Auth::user()->invitation;
-
-    if (!$invitation) {
-        abort(403);
-    }
-
-    $item = $invitation
-        ->checklists()
-        ->findOrFail($id);
-
-    $item->is_completed = !$item->is_completed;
-
-    $item->save();
-
-    $totalItems = $invitation
-        ->checklists()
-        ->count();
-
-    $completedItems = $invitation
-        ->checklists()
-        ->where('is_completed', true)
-        ->count();
-
-    $progressPercent = $totalItems > 0
-        ? round(
-            ($completedItems / $totalItems) * 100
-        )
-        : 0;
-
-    return response()->json([
-        'success' => true,
-        'is_completed' => $item->is_completed,
-        'total_items' => $totalItems,
-        'completed_items' => $completedItems,
-        'progress_percent' => $progressPercent,
-    ]);
-}
-```
+| Method | Endpoint | Deskripsi |
+| --- | --- | --- |
+| `GET` | `/api/promotions/active-automatic` | Mengambil satu Promo Otomatis yang sedang aktif (untuk Landing Page). Response: data promo + sisa waktu timer dalam detik. |
+| `POST` | `/api/promotions/validate-voucher` | Validasi kode voucher manual. Request: `{ code, order_amount }`. Response: detail diskon atau pesan error. |
+| `POST` | `/api/promotions/apply` | Menerapkan promo ke order. Atomic transaction untuk mencegah _race condition_ pada `usage_limit`. |
 
 ---
 
-# 18. LIVE UPDATE REQUIREMENT
+## 8. Error Handling & Edge Cases
 
-Toggle checklist harus menggunakan AJAX/fetch sehingga:
-
-> **Tidak diperlukan full page reload.**
-
-Flow:
-
-```text
-USER CLICK CHECKBOX
-        │
-        ▼
-JAVASCRIPT FETCH
-        │
-        ▼
-PATCH / TOGGLE
-        │
-        ▼
-SERVER VALIDATION
-        │
-        ▼
-UPDATE DATABASE
-        │
-        ▼
-RETURN JSON
-        │
-        ▼
-UPDATE UI
-        │
-        ├── Checkbox
-        ├── Text Style
-        ├── Completed Count
-        └── Progress Bar
-```
-
-Response minimal:
-
-```json
-{
-    "success": true,
-    "is_completed": true,
-    "total_items": 40,
-    "completed_items": 15,
-    "progress_percent": 38
-}
-```
+| Kondisi | Penanganan |
+| --- | --- |
+| Promo Otomatis aktif lebih dari 1 | Sistem hanya menggunakan promo dengan `start_time` paling baru. Admin diberi peringatan di dashboard. |
+| Timer Promo Otomatis habis saat user di Landing Page | Frontend memperbarui tampilan secara otomatis (polling/WebSocket) tanpa reload keras. Harga kembali normal, Sticky Bar disembunyikan. |
+| Voucher Manual race condition (banyak user bersamaan) | Gunakan DB atomic transaction + row lock (`SELECT ... FOR UPDATE`) pada `used_count`. |
+| User memasukkan kode voucher di Landing Page | Tidak berlaku. Kolom input voucher **hanya tersedia** di Checkout Page. |
+| Promo Otomatis & Voucher Manual aktif bersamaan | Tidak saling konflik (beda konteks). Jika user memasukkan kode voucher saat checkout, Voucher Manual **menggantikan** Promo Otomatis. Diskon tidak boleh ditumpuk (_no stacking_). |
 
 ---
 
-# 19. FRONTEND REQUIREMENTS
+## 9. Kriteria Penerimaan (Acceptance Criteria)
 
-## 19.1 Header
+### Promo Otomatis
+- [ ] Jika promo aktif dengan `code = NULL`, Sticky Bar **wajib** muncul di Landing Page.
+- [ ] Countdown Timer berjalan real-time dan akurat di Landing Page.
+- [ ] Harga paket di Landing Page **langsung terpotong** tanpa aksi apapun dari user.
+- [ ] Saat timer habis, Sticky Bar disembunyikan dan harga kembali normal secara _smooth_ tanpa reload.
+- [ ] Di Checkout Page, diskon sudah teraplikasi otomatis tanpa kolom input.
 
-```text
-Checklist Wedding Plan
-Item persiapan per kategori.
+### Voucher Manual
+- [ ] Promo dengan `code` terisi **tidak menampilkan** apapun di Landing Page (tidak ada sticky bar, tidak ada harga coret, tidak ada countdown publik).
+- [ ] Kolom input "Kode Voucher" **hanya tersedia** di Checkout Page.
+- [ ] Sistem menampilkan pesan error yang spesifik jika kode tidak valid.
+- [ ] Sistem memvalidasi `usage_limit` dengan aman dari race condition.
 
-[ + Tambah Data ]
-```
-
-## 19.2 Progress Card
-
-Menampilkan:
-
-- Headline status.
-- Completed item.
-- Total item.
-- Total kategori.
-- Progress percentage.
-- Progress indicator.
-
-Contoh:
-
-```text
-Yuk mulai ceklis!
-
-15/40 selesai · 9 kategori
-
-██████████░░░░░░░░░░░░░░░░░░ 38%
-```
+### Admin
+- [ ] Field `code` pada form admin bersifat **opsional** (dapat dikosongkan).
+- [ ] Tidak ada tombol atau fitur "Gunakan Promo Terbaik" (auto-apply) di antarmuka manapun.
+- [ ] Tidak ada tombol "Hapus Promo" yang diterapkan pada sesi checkout user.
 
 ---
 
-# 20. CHECKLIST ITEM UI
+## 10. Dependensi & Asumsi
 
-Setiap item minimal terdiri dari:
-
-```text
-☐ Nama Checklist
-```
-
-Ketika selesai:
-
-```text
-☑ Nama Checklist
-```
-
-Text berubah menjadi:
-
-```css
-text-decoration: line-through;
-```
-
-dan menggunakan visual state yang membedakan item selesai dari item aktif.
-
----
-
-# 21. CATEGORY PROGRESS
-
-Selain progress global, setiap kategori sebaiknya memiliki progress sendiri.
-
-Contoh:
-
-```text
-Administrasi & Legal
-
-1 / 2 selesai
-
-██████████████░░░░░░ 50%
-```
-
-Formula:
-
-```text
-Category Progress =
-(Category Completed / Category Total) × 100
-```
-
----
-
-# 22. EMPTY STATE
-
-Apabila checklist belum tersedia:
-
-```text
-Belum ada checklist.
-
-Checklist persiapan pernikahan akan tersedia
-setelah invitation dibuat.
-```
-
-Apabila seluruh item selesai:
-
-```text
-🎉 Semua checklist selesai!
-
-Persiapan checklist pernikahanmu sudah mencapai 100%.
-```
-
----
-
-# 23. DELETE & EDIT REQUIREMENT
-
-## 23.1 Preset Item
-
-Preset item:
-
-- Dapat diubah statusnya.
-- Dapat memiliki perubahan data jika sistem mengizinkan.
-- Tidak boleh dihapus secara permanen dari template global.
-
-## 23.2 Custom Item
-
-Custom item:
-
-- Dapat diedit.
-- Dapat dihapus.
-- Memiliki `is_preset = false`.
-
----
-
-# 24. SECURITY REQUIREMENTS
-
-### SEC-01 — Authentication
-
-Checklist hanya dapat diakses oleh authenticated user.
-
-### SEC-02 — Invitation Ownership
-
-Checklist harus diakses melalui invitation milik user.
-
-### SEC-03 — IDOR Protection
-
-User tidak boleh mengakses checklist user lain hanya dengan mengganti ID.
-
-Tidak diperbolehkan:
-
-```php
-WeddingChecklist::findOrFail($id);
-```
-
-tanpa ownership validation.
-
-Gunakan:
-
-```php
-$invitation
-    ->checklists()
-    ->findOrFail($id);
-```
-
-### SEC-04 — User ID Protection
-
-`user_id` tidak boleh dikirim dari form.
-
-User ID harus berasal dari authenticated session.
-
-### SEC-05 — Database Constraint
-
-`invitations.user_id` harus memiliki `UNIQUE`.
-
-### SEC-06 — CSRF
-
-Semua mutation request harus menggunakan CSRF protection.
-
----
-
-# 25. PERFORMANCE REQUIREMENTS
-
-Untuk checklist normal:
-
-- Query checklist maksimal berdasarkan satu invitation.
-- Gunakan eager loading jika relasi tambahan diperlukan.
-- Progress dapat dihitung menggunakan database aggregate untuk dataset besar.
-- Toggle hanya melakukan update terhadap satu item.
-- Response AJAX harus mengembalikan data progress terbaru.
-
-Untuk 40 item, query sederhana menggunakan Eloquent Collection masih diperbolehkan.
-
----
-
-# 26. QA & TESTING MATRIX
-
-| Test ID       | Skenario Testing              | Expected Result                                        | Status |
-| :------------ | :---------------------------- | :----------------------------------------------------- | :----- |
-| **QA-CHK-01** | User baru membuat invitation  | Invitation berhasil dibuat.                            | PASS   |
-| **QA-CHK-02** | Inisialisasi checklist        | Tepat 40 preset item dibuat.                           | PASS   |
-| **QA-CHK-03** | Validasi kategori             | 40 item terbagi dalam 9 kategori.                      | PASS   |
-| **QA-CHK-04** | Initial state                 | Seluruh item memiliki `is_completed = false`.          | PASS   |
-| **QA-CHK-05** | Toggle checkbox               | Status item berubah tanpa reload halaman.              | PASS   |
-| **QA-CHK-06** | Progress update               | Progress berubah sesuai item yang selesai.             | PASS   |
-| **QA-CHK-07** | Semua item selesai            | Progress mencapai 100%.                                | PASS   |
-| **QA-CHK-08** | Tambah custom item            | Item baru berhasil dibuat dengan `is_preset = false`.  | PASS   |
-| **QA-CHK-09** | Edit custom item              | Data custom item berhasil diperbarui.                  | PASS   |
-| **QA-CHK-10** | Delete custom item            | Custom item berhasil dihapus.                          | PASS   |
-| **QA-CHK-11** | Category grouping             | Item tampil pada kategori yang benar.                  | PASS   |
-| **QA-CHK-12** | Category progress             | Progress masing-masing kategori dihitung dengan benar. | PASS   |
-| **QA-SEC-01** | Akses checklist user lain     | Sistem menolak akses.                                  | PASS   |
-| **QA-SEC-02** | Manipulasi ID checklist       | Sistem tetap memvalidasi ownership.                    | PASS   |
-| **QA-LMT-01** | User membuat invitation kedua | Sistem menolak request.                                | PASS   |
-
----
-
-# 27. ACCEPTANCE CRITERIA
-
-Fitur dianggap selesai apabila:
-
-- [x] Sistem menyediakan 40 preset checklist.
-- [x] Checklist terbagi menjadi 9 kategori.
-- [x] Semua preset memiliki `is_preset = true`.
-- [x] Semua preset awal memiliki status belum selesai.
-- [x] User dapat melakukan toggle checklist.
-- [x] Toggle tidak membutuhkan full page reload.
-- [x] Progress global diperbarui secara langsung.
-- [x] Progress kategori dapat dihitung.
-- [x] User dapat menambahkan custom checklist.
-- [x] Custom checklist memiliki `is_preset = false`.
-- [x] User dapat mengedit custom checklist.
-- [x] User dapat menghapus custom checklist.
-- [x] Checklist hanya dapat diakses oleh pemilik invitation.
-- [x] User tidak dapat mengakses checklist invitation lain.
-- [x] Sistem menggunakan relasi `User → Invitation → Checklist`.
-- [x] Sistem tetap mengikuti kebijakan **1 User = 1 Invitation**.
-- [x] Tidak terdapat penggunaan `user_id` langsung pada checklist untuk menentukan ownership.
-
----
-
-# 28. FINAL FEATURE ARCHITECTURE
-
-```text
-                         USER
-                           │
-                           │ 1 : 1
-                           ▼
-                      INVITATION
-                           │
-                           │ 1 : N
-                           ▼
-                WEDDING CHECKLIST
-                           │
-          ┌────────────────┼────────────────┐
-          │                │                │
-          ▼                ▼                ▼
-     40 PRESET        CUSTOM ITEMS      9 CATEGORIES
-          │                │                │
-          └────────────────┼────────────────┘
-                           ▼
-                  CHECKLIST STATUS
-                           │
-                           ▼
-                 LIVE PROGRESS ENGINE
-                           │
-              ┌────────────┴────────────┐
-              ▼                         ▼
-       GLOBAL PROGRESS          CATEGORY PROGRESS
-              │                         │
-              └────────────┬────────────┘
-                           ▼
-                    INTERACTIVE UI
-```
-
----
-
-# 29. FINAL BUSINESS RULE
-
-## **1 USER = 1 INVITATION**
-
-Checklist bukan dimiliki langsung oleh user.
-
-Struktur ownership yang digunakan:
-
-```text
-User
- │
- └── Invitation
-       │
-       └── Wedding Checklist
-```
-
-Dengan pendekatan ini:
-
-1. Satu user hanya memiliki satu invitation.
-2. Satu invitation memiliki banyak checklist.
-3. Checklist tidak dapat dipindahkan ke user lain.
-4. Data checklist otomatis terhapus ketika invitation dihapus.
-5. Ownership dapat divalidasi melalui relasi invitation.
-6. Sistem terlindungi dari akses checklist milik user lain.
-
----
-
-# 30. SUMMARY
-
-**Interactive Wedding Checklist Planner** menyediakan:
-
-```text
-40 PRESET ITEMS
-       │
-       ▼
-9 CATEGORIES
-       │
-       ▼
-CHECKLIST MANAGEMENT
-       │
-       ├── Toggle
-       ├── Add
-       ├── Edit
-       └── Delete
-       │
-       ▼
-LIVE PROGRESS TRACKING
-       │
-       ├── Global Progress
-       └── Category Progress
-       │
-       ▼
-OWNERSHIP PROTECTION
-       │
-       ▼
-1 USER = 1 INVITATION
-```
-
-**Status:** Approved / Living Document
-
-**Feature Scope:** Interactive Wedding Checklist Planner
+- **Dependensi:** Modul Paket (untuk harga yang akan dipotong), Modul Order/Checkout, Modul Auth (untuk identifikasi user pada `usage_limit`).
+- **Asumsi:** Satu user hanya dapat menggunakan satu promo per transaksi (_no stacking_). Voucher Manual dibagikan secara eksklusif via campaign email/WhatsApp oleh tim Marketing.

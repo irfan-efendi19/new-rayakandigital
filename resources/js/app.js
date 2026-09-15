@@ -1,9 +1,11 @@
 import Alpine from 'alpinejs';
 import Collapse from '@alpinejs/collapse';
 import { registerGuestList } from './guest-list';
+import { registerPromotions } from './promotions';
 window.Alpine = Alpine;
 Alpine.plugin(Collapse);
 registerGuestList(Alpine);
+registerPromotions(Alpine);
 
 document.addEventListener('alpine:init', () => {
     Alpine.store('darkMode', {
@@ -95,8 +97,16 @@ document.addEventListener('alpine:init', () => {
                     'Accept': 'application/json',
                 },
             })
-            .then(r => r.json())
+            .then(async r => {
+                const data = await r.json();
+                if (!r.ok) throw new Error(Object.values(data.errors || {}).flat()[0] || data.message || 'Gagal memproses pembayaran.');
+                return data;
+            })
             .then(data => {
+                if (data.redirect_url) {
+                    window.location.href = data.redirect_url;
+                    return;
+                }
                 if (data.snap_token && data.snap_token.startsWith('SIMULATION_TOKEN_')) {
                     window.location.href = '/payments/finish?order_id=' + data.order_id;
                     return;
@@ -118,8 +128,10 @@ document.addEventListener('alpine:init', () => {
                     },
                 });
             })
-            .catch(() => {
+            .catch(error => {
                 self.processing = false;
+                alert(error.message || 'Gagal memproses pembayaran. Silakan coba lagi.');
+                self.$dispatch('promotion-refresh');
             });
         },
     }));

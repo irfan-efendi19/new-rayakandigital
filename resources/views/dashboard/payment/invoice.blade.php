@@ -68,6 +68,7 @@
                     </div>
 
                     {{-- Total with Unique Code --}}
+                    <x-promotion-order-summary :order="$order" />
                     <div class="bg-gray-900 rounded-xl p-6 mb-6 text-white">
                         <div class="text-center">
                             <p class="text-sm text-gray-400 mb-1">Total yang Harus Ditransfer</p>

@@ -1123,3 +1123,65 @@ span.flatpickr-weekday:last-child {
     border-radius: 0.75rem !important;
     transition: outline 0.3s ease !important;
 }
+
+/* ─── Promotion Banner ────────────────────────────────────────── */
+.banner-gradient {
+    background: linear-gradient(135deg, #C45500 0%, #D96500 25%, #FF7A00 50%, #FF9733 75%, #FFB366 100%);
+    background-size: 200% 200%;
+    animation: gradient-shift 8s ease-in-out infinite;
+}
+
+@keyframes gradient-shift {
+    0%, 100% { background-position: 0% 50%; }
+    50%      { background-position: 100% 50%; }
+}
+
+/* Shimmer sweep across banner */
+.banner-shimmer {
+    animation: shimmer-sweep 4s ease-in-out infinite;
+    background-size: 200% 100%;
+}
+
+@keyframes shimmer-sweep {
+    0%   { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* Countdown digit wrapper — clips the flip overflow */
+.countdown-digit-wrapper {
+    display: inline-flex;
+    overflow: hidden;
+    border-radius: 0.25rem;
+    perspective: 120px;
+}
+
+/* Countdown digit boxes */
+.countdown-digit {
+    display: inline-block;
+    min-width: 1.25ch;
+    padding: 0.125rem 0.25rem;
+    text-align: center;
+}
+
+/* Flip-down animation when a digit changes */
+@keyframes digit-flip {
+    0%   { transform: translateY(-100%) rotateX(40deg); opacity: 0; }
+    40%  { transform: translateY(8%) rotateX(-4deg);    opacity: 1; }
+    70%  { transform: translateY(-3%) rotateX(2deg);    opacity: 1; }
+    100% { transform: translateY(0) rotateX(0deg);      opacity: 1; }
+}
+
+.digit-flip .countdown-digit {
+    animation: digit-flip 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Colon pulse */
+@keyframes colon-pulse {
+    0%, 100% { opacity: 0.4; }
+    50%      { opacity: 1;   }
+}
+
+.countdown-colon {
+    animation: colon-pulse 1s ease-in-out infinite;
+}
+

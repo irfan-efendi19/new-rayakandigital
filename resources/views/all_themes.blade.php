@@ -40,37 +40,6 @@
             z-index: 0;
         }
 
-        /* ── Theme card ── */
-        .theme-card {
-            transition: transform 0.35s cubic-bezier(.4,0,.2,1), box-shadow 0.35s cubic-bezier(.4,0,.2,1);
-        }
-        .theme-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 32px 64px -16px rgba(0,0,0,0.22);
-        }
-        .theme-card:hover .card-overlay {
-            opacity: 1;
-        }
-        .theme-card:hover .card-thumb {
-            transform: scale(1.05);
-        }
-        .theme-card:hover .accent-bar {
-            transform: scaleX(1);
-        }
-
-        .card-thumb {
-            transition: transform 0.6s cubic-bezier(.4,0,.2,1);
-        }
-        .card-overlay {
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        .accent-bar {
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.45s cubic-bezier(.4,0,.2,1);
-        }
-
         /* ── Hero number ── */
         .hero-number {
             font-size: clamp(7rem, 18vw, 14rem);
@@ -280,113 +249,9 @@
                 </p>
             </div>
 
-            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 lg:gap-5">
+            <div class="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
                 @forelse($themes as $theme)
-                    <div class="theme-card rounded-2xl overflow-hidden shadow-[0_2px_16px_rgba(0,0,0,0.07)] dark:shadow-[0_2px_16px_rgba(0,0,0,0.3)] border border-neutral-100 dark:border-secondary-700 bg-white dark:bg-secondary-800">
-
-                        {{-- ── Thumbnail zone ── --}}
-                        <div class="relative aspect-[3/4] overflow-hidden bg-neutral-100 dark:bg-secondary-700">
-
-                            {{-- Background image --}}
-                            @if($theme->thumbnail_url)
-                                <img
-                                    src="{{ $theme->thumbnail_url }}"
-                                    alt="{{ $theme->name }}"
-                                    width="280"
-                                    height="373"
-                                    loading="lazy"
-                                    decoding="async"
-                                    class="card-thumb absolute inset-0 w-full h-full object-cover">
-                            @else
-                                {{-- Placeholder --}}
-                                <div class="absolute inset-0 bg-gradient-to-br from-primary-50 to-tertiary dark:from-secondary-700 dark:to-secondary-800 flex items-center justify-center">
-                                    <div class="text-center">
-                                        <i class="fas fa-images text-3xl text-primary-300 dark:text-primary-600 mb-2 block"></i>
-                                        <span class="text-xs text-neutral-400 px-3 text-center leading-snug">{{ $theme->name }}</span>
-                                    </div>
-                                </div>
-                            @endif
-
-                            {{-- Dark scrim top --}}
-                            <div class="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/10 pointer-events-none"></div>
-
-                            {{-- Badges top-left --}}
-                            <div class="absolute top-2.5 left-2.5 z-10">
-                                @if($theme->is_premium)
-                                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-gradient-to-r from-amber-400 to-amber-500 text-white shadow-md">
-                                        <i class="fas fa-crown" style="font-size:8px"></i> Premium
-                                    </span>
-                                @else
-                                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-white/90 backdrop-blur-sm text-emerald-700 border border-emerald-200/60">
-                                        <i class="fas fa-gem" style="font-size:8px"></i> Gratis
-                                    </span>
-                                @endif
-                            </div>
-
-                            {{-- Rating badge top-right --}}
-                            @if($theme->rating)
-                                <div class="absolute top-2.5 right-2.5 z-10 inline-flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-semibold bg-white/90 backdrop-blur-sm text-amber-700 border border-amber-200/60 shadow-sm">
-                                    <i class="fas fa-star text-amber-400" style="font-size:8px"></i>
-                                    {{ $theme->rating }}
-                                </div>
-                            @endif
-
-                            {{-- Hover overlay — click to preview --}}
-                            <a href="{{ route('theme.preview', str_replace('themes.', '', $theme->view_path)) }}"
-                                target="_blank"
-                                class="card-overlay absolute inset-0 z-20 flex flex-col items-center justify-end pb-5"
-                                style="background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.2) 50%, transparent 100%);">
-                                <span class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-white text-xs font-bold hover:scale-105 transition-transform duration-200"
-                                    style="background: rgba(255,255,255,0.15); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.25);">
-                                    <i class="fas fa-eye text-xs"></i>
-                                    Lihat Pratinjau
-                                </span>
-                            </a>
-                        </div>
-
-                        {{-- ── Accent line on hover ── --}}
-                        <div class="accent-bar h-0.5 bg-gradient-to-r from-primary-400 to-primary-600"></div>
-
-                        {{-- ── Card body ── --}}
-                        <div class="p-4">
-                            <h3 class="font-bold text-sm text-secondary-800 dark:text-neutral-200 leading-snug mb-1.5 truncate">
-                                {{ $theme->name }}
-                            </h3>
-
-                            @if($theme->category)
-                                <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400 rounded text-[10px] font-semibold mb-3">
-                                    <i class="fas fa-tag" style="font-size:8px"></i>
-                                    {{ $theme->category->name }}
-                                </span>
-                            @else
-                                <div class="mb-3"></div>
-                            @endif
-
-                            {{-- CTA buttons --}}
-                            <div class="flex items-center gap-2">
-                                @auth
-                                    <a href="{{ route('dashboard.invitations.create', ['theme' => str_replace('themes.', '', $theme->view_path)]) }}"
-                                        class="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-primary-500 hover:bg-primary-600 text-white text-xs font-bold transition-colors duration-200 shadow-sm hover:shadow-md active:scale-95">
-                                        <i class="fas fa-magic" style="font-size:9px"></i>
-                                        Gunakan
-                                    </a>
-                                @else
-                                    <a href="{{ route('register', ['theme' => str_replace('themes.', '', $theme->view_path)]) }}"
-                                        class="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-primary-500 hover:bg-primary-600 text-white text-xs font-bold transition-colors duration-200 shadow-sm hover:shadow-md active:scale-95">
-                                        <i class="fas fa-magic" style="font-size:9px"></i>
-                                        Gunakan
-                                    </a>
-                                @endauth
-
-                                <a href="{{ route('theme.preview', str_replace('themes.', '', $theme->view_path)) }}"
-                                    target="_blank"
-                                    title="Lihat Pratinjau"
-                                    class="flex items-center justify-center w-9 h-9 rounded-xl border border-neutral-200 dark:border-secondary-600 text-neutral-400 hover:border-primary-400 hover:text-primary-500 dark:hover:border-primary-500 dark:hover:text-primary-400 transition-all duration-200 hover:bg-primary-50 dark:hover:bg-primary-900/20 active:scale-95 flex-shrink-0">
-                                    <i class="fas fa-eye text-xs"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
+                    <x-theme-card :theme="$theme" />
                 @empty
                     {{-- Empty state --}}
                     <div class="col-span-full py-24 flex flex-col items-center justify-center text-center">

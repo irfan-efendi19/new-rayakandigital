@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Package;
 use App\Models\Theme;
 use App\Models\ThemeCategory;
+use App\Services\PromotionService;
+use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    public function index()
+    public function index(Request $request, PromotionService $promotions)
     {
         $categories = ThemeCategory::withCount('themes')->get();
 
@@ -23,6 +25,9 @@ class HomeController extends Controller
             ->orderBy('sort_order')
             ->get();
 
-        return view('landing_page', compact('categories', 'themes', 'packages', 'totalThemes'));
+        $promotionCatalog = $promotions->catalog($packages, $request);
+
+        return response()->view('landing_page', compact('categories', 'themes', 'packages', 'totalThemes', 'promotionCatalog'))
+            ->header('Cache-Control', 'private, no-store');
     }
 }

@@ -53,6 +53,7 @@
 
                 <div class="p-6 md:p-8 bg-neutral-50 dark:bg-secondary-800/50">
                     <div class="max-w-md mx-auto space-y-6">
+                        <x-promotion-order-summary :order="$order" />
                         
                         <div class="text-center">
                             <p class="text-sm text-neutral-500 dark:text-neutral-400 font-medium mb-1">Total Pembayaran</p>

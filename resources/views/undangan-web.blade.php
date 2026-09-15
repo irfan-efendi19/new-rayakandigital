@@ -25,7 +25,8 @@
     </script>
 </head>
 
-<body class="bg-neutral-50 font-sans text-secondary-800 antialiased dark:bg-secondary-900 dark:text-neutral-200">
+<body class="bg-neutral-50 font-sans text-secondary-800 antialiased dark:bg-secondary-900 dark:text-neutral-200"
+    x-data="promotionCatalog" data-promotion-catalog="{{ json_encode($promotionCatalog) }}" data-promotion-url="{{ route('promotions.catalog') }}">
     <x-public-navbar />
     <div class="h-16" aria-hidden="true"></div>
 
@@ -283,22 +284,13 @@
 
                 <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:items-start">
                     @forelse($packages as $index => $package)
-                        @php
-                            $packageDescription = match ($package->package_code) {
-                                'free' => 'Cocok untuk mencoba undangan pernikahan digital dengan fitur dasar.',
-                                'silver' => 'Untuk pasangan yang menginginkan undangan pernikahan sederhana dan elegan.',
-                                'gold' => 'Paket favorit calon pengantin dengan fitur lengkap untuk hari istimewa.',
-                                'platinum' => 'Untuk rangkaian pernikahan dengan kebutuhan tamu dan fitur paling lengkap.',
-                                default => 'Pilihan fitur untuk melengkapi undangan pernikahan Anda.',
-                            };
-                        @endphp
                         <article data-aos="zoom-in-up" data-aos-delay="{{ ($index % 4) * 100 }}"
-                            class="relative flex h-full flex-col rounded-3xl bg-white transition duration-300 hover:-translate-y-1 hover:shadow-xl dark:bg-secondary-800 motion-reduce:transform-none {{ $package->is_popular ? 'border-2 border-primary-500 shadow-xl shadow-primary-500/10' : 'border border-neutral-200 shadow-sm dark:border-secondary-700' }}">
+                            class="group relative flex h-full flex-col rounded-3xl bg-white transition duration-300 hover:-translate-y-1 hover:shadow-xl dark:bg-secondary-800 motion-reduce:transform-none {{ $package->is_popular ? 'border-2 border-primary-500 shadow-xl shadow-primary-500/10' : 'border border-neutral-200 shadow-sm dark:border-secondary-700' }}">
                             @if($package->is_popular)
                                 <div class="absolute -top-3 left-1/2 -translate-x-1/2">
                                     <span class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-primary-500 px-4 py-1.5 text-[10px] font-bold uppercase tracking-wider text-white shadow-lg">
                                         <i class="fa-solid fa-star" aria-hidden="true"></i>
-                                        Paling populer
+                                        Best Seller
                                     </span>
                                 </div>
                             @endif
@@ -306,22 +298,13 @@
                             <div class="flex flex-1 flex-col p-6 {{ $package->is_popular ? 'pt-8' : '' }}">
                                 <div>
                                     <h3 class="font-heading text-xl font-bold {{ $package->is_popular ? 'text-primary-600 dark:text-primary-400' : 'text-secondary-900 dark:text-white' }}">{{ $package->package_name }}</h3>
-                                    <p class="mt-2 min-h-[4.5rem] text-xs leading-6 text-neutral-500 dark:text-neutral-400">{{ $packageDescription }}</p>
+                                    @if($package->description)
+                                        <p class="mt-2 min-h-[4.5rem] text-xs leading-6 text-neutral-500 dark:text-neutral-400">{{ $package->description }}</p>
+                                    @endif
                                 </div>
 
                                 <div class="mt-5 border-y border-neutral-100 py-5 dark:border-secondary-700">
-                                    @if($package->slashed_price && $package->slashed_price > $package->price)
-                                        <span class="block text-xs text-neutral-400 line-through">Rp {{ number_format($package->slashed_price, 0, ',', '.') }}</span>
-                                    @endif
-                                    <div class="mt-1 flex flex-wrap items-end gap-1">
-                                        <span class="pb-1 text-sm font-bold text-secondary-900 dark:text-white">Rp</span>
-                                        <span class="text-3xl font-extrabold tracking-tight text-secondary-900 dark:text-white">{{ number_format($package->price, 0, ',', '.') }}</span>
-                                    </div>
-                                    @if($package->price > 0)
-                                        <span class="mt-1 block text-[11px] text-neutral-400">{{ $package->active_period_days === 0 ? 'Aktif selamanya' : 'Aktif ' . $package->active_period_days . ' hari' }}</span>
-                                    @else
-                                        <span class="mt-1 block text-[11px] text-neutral-400">Coba tanpa biaya</span>
-                                    @endif
+                                    <x-promotion-price :package="$package" :quote="$promotionCatalog['prices'][$package->package_code]" />
                                 </div>
 
                                 <div class="mt-5 flex flex-1 flex-col">

@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Observers\OrderObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+#[ObservedBy([OrderObserver::class])]
 class Order extends Model
 {
     use HasFactory;
@@ -17,6 +20,11 @@ class Order extends Model
         'package_type',
         'payment_method_used',
         'gross_amount',
+        'original_amount',
+        'discount_amount',
+        'promotion_id',
+        'promotion_title',
+        'promotion_code',
         'unique_code',
         'payment_status',
         'payment_gateway_used',
@@ -32,6 +40,8 @@ class Order extends Model
     {
         return [
             'gross_amount' => 'decimal:2',
+            'original_amount' => 'decimal:2',
+            'discount_amount' => 'decimal:2',
             'unique_code' => 'integer',
             'is_manual_whatsapp' => 'boolean',
             'doku_expired_at' => 'datetime',
@@ -41,6 +51,11 @@ class Order extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function promotion(): BelongsTo
+    {
+        return $this->belongsTo(Promotion::class);
     }
 
     public function invitation(): BelongsTo

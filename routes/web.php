@@ -25,6 +25,7 @@ use App\Http\Controllers\InvitationRenderController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PromotionController;
 use App\Http\Controllers\QRGatewayController;
 use App\Http\Controllers\QRHubController;
 use App\Http\Controllers\RsvpController;
@@ -36,22 +37,27 @@ use App\Http\Controllers\WeddingPlannerController;
 use App\Http\Controllers\WelcomeScreenController;
 use App\Http\Controllers\WishController;
 use App\Models\Package;
+use App\Services\PromotionService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 // Landing Page & Public Preview
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/promotions/catalog', PromotionController::class)->middleware('throttle:60,1')->name('promotions.catalog');
 Route::get('/semua-tema', [ThemeController::class, 'index'])->name('themes.index');
 Route::get('/themes/{themeSlug}/preview', [ThemePreviewController::class, 'show'])->name('theme.preview');
 Route::get('/preview/{themeSlug}', fn (string $themeSlug) => redirect()->route('theme.preview', $themeSlug));
 
 // Public Pages
-Route::get('/undangan-web', function () {
+Route::get('/undangan-web', function (Request $request, PromotionService $promotions) {
     $packages = Package::with('features')
         ->where('is_visible', true)
         ->orderBy('sort_order')
         ->get();
 
-    return view('undangan-web', compact('packages'));
+    $promotionCatalog = $promotions->catalog($packages, $request);
+
+    return view('undangan-web', compact('packages', 'promotionCatalog'));
 })->name('undangan-web');
 Route::view('/buku-tamu', 'buku-tamu')->name('buku-tamu');
 Route::view('/live-streaming', 'live-streaming')->name('live-streaming');

@@ -24,7 +24,7 @@ class ThemeController extends Controller
             $query->where('theme_category_id', $request->input('category'));
         }
 
-        $themes = $query->orderBy('name')->paginate(10)->withQueryString();
+        $themes = $query->orderBy('name')->paginate(8)->withQueryString();
 
         return view('all_themes', compact('categories', 'themes'));
     }

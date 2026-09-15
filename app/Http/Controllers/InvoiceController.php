@@ -31,10 +31,12 @@ class InvoiceController extends Controller
             ?? $latestTransaction?->reference_order_id
             ?? 'RD-'.$invitation->created_at->format('Ymd').'-'.str_pad((string) $invitation->id, 4, '0', STR_PAD_LEFT);
 
-        $packagePrice = $invitation->package_price;
+        $packagePrice = (float) ($latestOrder?->original_amount ?? $latestOrder?->gross_amount ?? $invitation->package_price);
+        $discountAmount = (float) ($latestOrder?->discount_amount ?? 0);
+        $uniqueCode = $latestOrder?->unique_code ?? 0;
         $packageName = ucfirst($invitation->currentTier());
         $addonTotal = $invitation->addons->sum('pivot.purchased_price');
-        $grandTotal = $packagePrice + $addonTotal;
+        $grandTotal = $packagePrice + $addonTotal - $discountAmount + $uniqueCode;
         $issuedAt = now()->timezone($invitation->effectiveTimezone());
 
         $data = [
@@ -44,6 +46,9 @@ class InvoiceController extends Controller
             'user' => $invitation->user,
             'package_name' => $packageName,
             'package_price' => $packagePrice,
+            'discount_amount' => $discountAmount,
+            'promotion_title' => $latestOrder?->promotion_title,
+            'unique_code' => $uniqueCode,
             'addons' => $invitation->addons,
             'addon_total' => $addonTotal,
             'grand_total' => $grandTotal,
