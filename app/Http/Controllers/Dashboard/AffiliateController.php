@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AffiliateApplicationRequest;
 use App\Http\Requests\AffiliateBankRequest;
+use App\Http\Requests\AffiliateLinkAvailabilityRequest;
 use App\Http\Requests\AffiliateLinkRequest;
 use App\Http\Requests\AffiliateLinkUpdateRequest;
 use App\Http\Requests\AffiliatePayoutRequest;
@@ -12,6 +13,7 @@ use App\Models\AffiliateLink;
 use App\Models\MarketingAsset;
 use App\Services\AffiliatePayoutService;
 use App\Services\AffiliateService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -67,9 +69,33 @@ class AffiliateController extends Controller
         return back()->with('success', 'Link referral berhasil dibuat.');
     }
 
+    public function linkAvailability(AffiliateLinkAvailabilityRequest $request): JsonResponse
+    {
+        $links = AffiliateLink::query()->where('slug', $request->validated('slug'));
+
+        if ($ignoreLinkId = $request->validated('ignore_link_id')) {
+            $links->where('id', '!=', $ignoreLinkId);
+        }
+
+        $available = ! $links->exists();
+
+        return response()->json([
+            'available' => $available,
+            'message' => $available ? 'Alamat link tersedia.' : 'Alamat link sudah digunakan.',
+        ]);
+    }
+
     public function payout(AffiliatePayoutRequest $request, AffiliatePayoutService $service): RedirectResponse
     {
-        $service->request($request->user()->affiliate()->firstOrFail(), (int) $request->validated('amount'));
+        $affiliate = $request->user()->affiliate()->firstOrFail();
+
+        if ($request->boolean('withdraw_all')) {
+            $service->requestAll($affiliate);
+
+            return back()->with('success', 'Seluruh saldo siap cair berhasil diajukan. Saldo telah dicadangkan sampai diproses admin.');
+        }
+
+        $service->request($affiliate, (int) $request->validated('amount'));
 
         return back()->with('success', 'Pengajuan pencairan terkirim. Saldo telah dicadangkan sampai diproses admin.');
     }

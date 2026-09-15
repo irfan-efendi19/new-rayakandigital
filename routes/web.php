@@ -111,6 +111,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/', 'index')->name('index');
             Route::post('/', 'store')->middleware('throttle:5,1')->name('store');
             Route::put('/bank', 'bank')->middleware('throttle:10,1')->name('bank');
+            Route::get('/links/availability', 'linkAvailability')->middleware('throttle:30,1')->name('links.availability');
             Route::post('/links', 'link')->middleware('throttle:10,1')->name('links.store');
             Route::put('/links/{link}', 'updateLink')->middleware('throttle:20,1')->name('links.update');
             Route::delete('/links/{link}', 'destroyLink')->middleware('throttle:20,1')->name('links.destroy');

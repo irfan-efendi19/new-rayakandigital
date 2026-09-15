@@ -427,8 +427,30 @@
                     <svg class="ml-auto mt-0.5 h-4 w-4 flex-shrink-0 text-orange-300 transition-all group-hover:translate-x-0.5 group-hover:text-orange-500 dark:text-orange-700 dark:group-hover:text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                 </div>
             </a>
+
             </div>
             </section>
+
+            {{-- ── Program Kemitraan Reseller & Affiliate ── --}}
+            <a href="{{ route('dashboard.affiliate.index') }}" class="group relative flex min-h-[80px] w-full items-center overflow-hidden rounded-3xl border border-emerald-200/70 bg-emerald-50 px-5 py-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-emerald-300 hover:shadow-lg dark:border-emerald-800/40 dark:bg-secondary-800/80 dark:hover:border-emerald-700/60 sm:px-6">
+                {{-- Badge baru --}}
+                <span class="absolute right-4 top-3 inline-flex items-center gap-1 rounded-full bg-emerald-500 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white shadow-sm">
+                    <span class="h-1.5 w-1.5 animate-pulse rounded-full bg-white/80"></span>
+                    Baru
+                </span>
+                <div class="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl bg-emerald-100 transition-colors group-hover:bg-emerald-200 dark:bg-emerald-900/30 dark:group-hover:bg-emerald-900/50">
+                    <svg class="h-5 w-5 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                    </svg>
+                </div>
+                <div class="ml-4 min-w-0 flex-1">
+                    <h2 class="font-semibold text-sm text-secondary-800 dark:text-neutral-100">Program Kemitraan Reseller & Affiliate</h2>
+                    <p class="mt-0.5 text-xs leading-relaxed text-neutral-500 dark:text-neutral-400">
+                        Bergabunglah sebagai <strong class="font-semibold text-emerald-600 dark:text-emerald-400">Reseller</strong> atau <strong class="font-semibold text-emerald-600 dark:text-emerald-400">Affiliate</strong> dan dapatkan komisi setiap referral undangan.
+                    </p>
+                </div>
+                <svg class="ml-4 h-4 w-4 flex-shrink-0 text-emerald-300 transition-all group-hover:translate-x-0.5 group-hover:text-emerald-500 dark:text-emerald-700 dark:group-hover:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </a>
 
             {{-- ── Gallery Upload ── --}}
             {{-- NOTE: Gallery dropzone HTML and JS are preserved exactly from original --}}

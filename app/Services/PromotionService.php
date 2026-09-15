@@ -46,11 +46,15 @@ class PromotionService
                 ->where('payment_method_used', $method)->whereIn('payment_status', ['pending', 'verifying'])
                 ->when($code, fn ($query) => $query->where('promotion_code', $code))
                 ->when(! $code, fn ($query) => $query->where(function ($query) {
-                    $query->whereNull('promotion_id')->orWhereHas('promotion', fn ($query) => $query->whereNull('code'));
+                    $query->whereNull('promotion_id')->orWhereNull('promotion_code');
                 }))
                 ->latest('id')->first();
 
-            if ($existing && (! $request->filled('expected_amount') || (int) $existing->gross_amount === $request->integer('expected_amount'))) {
+            if ($existing) {
+                if ($request->filled('expected_amount') && (int) $existing->gross_amount !== $request->integer('expected_amount')) {
+                    throw ValidationException::withMessages(['promotion_code' => 'Anda memiliki pesanan dengan harga yang sudah tersimpan. Gunakan tombol Lanjutkan Pembayaran pada pesanan tersebut.']);
+                }
+
                 return $existing;
             }
 

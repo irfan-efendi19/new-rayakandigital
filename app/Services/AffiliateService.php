@@ -22,7 +22,7 @@ class AffiliateService
 
         return [
             'commission_rate' => $config?->affiliate_commission_rate ?? 10,
-            'discount_rate' => $config?->affiliate_discount_rate ?? 5,
+            'discount_rate' => $config?->affiliate_discount_rate ?? 20,
             'minimum_payout' => (int) ($config?->affiliate_minimum_payout ?? 50000),
         ];
     }

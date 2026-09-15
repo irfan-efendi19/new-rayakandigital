@@ -1,10 +1,15 @@
 @props(['package', 'quote'])
 
+@php
+    $referencePrice = max((int) $package->slashed_price, (int) $package->price);
+    $totalSavings = $referencePrice > 0 ? max(0, min(100, (int) floor(($referencePrice - $quote['amount']) * 100 / $referencePrice))) : 0;
+@endphp
+
 <div class="space-y-2">
-    <div x-cloak x-show="price(@js($package->package_code))?.promotion" x-transition.opacity class="flex flex-wrap items-center gap-2">
-        <span class="text-xs text-neutral-500 line-through" x-text="'Rp ' + money(price(@js($package->package_code))?.original_amount)">Rp {{ number_format($quote['original_amount'], 0, ',', '.') }}</span>
+    <div x-cloak x-show="{{ $referencePrice }} > (price(@js($package->package_code))?.amount ?? {{ (int) $package->price }})" x-transition.opacity class="flex flex-wrap items-center gap-2">
+        <span class="text-xs text-neutral-500 line-through">Rp {{ number_format($referencePrice, 0, ',', '.') }}</span>
         <span class="rounded-md bg-emerald-50 px-2 py-1 text-xs font-bold text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300"
-            x-text="'Hemat ' + price(@js($package->package_code))?.savings_percent + '%'"></span>
+            x-text="'Hemat ' + savingsPercent({{ $referencePrice }}, price(@js($package->package_code))?.amount ?? {{ (int) $package->price }}) + '%'">Hemat {{ $totalSavings }}%</span>
     </div>
     <div class="flex items-baseline gap-1 text-secondary-900 dark:text-neutral-100">
         <span class="text-lg font-bold">Rp</span>

@@ -18,7 +18,7 @@ class SystemConfigForm
                         TextInput::make('affiliate_commission_rate')->label('Komisi global (%)')
                             ->numeric()->minValue(0)->maxValue(100)->step(0.01)->required()->default(10),
                         TextInput::make('affiliate_discount_rate')->label('Diskon kupon mitra baru (%)')
-                            ->numeric()->minValue(0.01)->maxValue(100)->step(0.01)->required()->default(5),
+                            ->numeric()->minValue(0.01)->maxValue(100)->step(0.01)->required()->default(20),
                         TextInput::make('affiliate_minimum_payout')->label('Minimum pencairan (Rp)')
                             ->integer()->minValue(1)->required()->default(50000),
                     ]),

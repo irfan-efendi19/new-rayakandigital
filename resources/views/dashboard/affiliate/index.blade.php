@@ -614,11 +614,21 @@
                                         <x-input-label for="slug" value="Alamat link" />
                                         <div class="mt-1 flex overflow-hidden rounded-xl border border-neutral-300 bg-neutral-50 focus-within:border-primary-500 focus-within:ring-2 focus-within:ring-primary-500 dark:border-secondary-600 dark:bg-secondary-900">
                                             <span class="flex items-center whitespace-nowrap border-r border-neutral-300 bg-neutral-100 px-3 text-xs text-neutral-500 dark:border-secondary-600 dark:bg-secondary-800 dark:text-neutral-400">/r/</span>
-                                            <input id="slug" name="slug" type="text" :value="old('slug')"
+                                            <input id="slug" name="slug" type="text" value="{{ old('slug') }}"
                                                 placeholder="nama-brand-anda" minlength="3" maxlength="60" pattern="[a-z0-9]+(-[a-z0-9]+)*" required
+                                                aria-describedby="slug-availability"
+                                                data-affiliate-slug-check
+                                                data-affiliate-slug-availability-url="{{ route('dashboard.affiliate.links.availability') }}"
                                                 class="min-w-0 flex-1 border-none bg-transparent px-3 py-2 text-sm text-secondary-900 placeholder-neutral-400 focus:ring-0 dark:text-white dark:placeholder-neutral-500" />
                                         </div>
-                                        <p class="mt-1 text-[11px] sm:text-xs text-neutral-400 dark:text-neutral-500">Huruf kecil, angka, tanda hubung.</p>
+                                        <p id="slug-availability" class="mt-1 min-h-4 text-[11px] sm:text-xs" aria-live="polite">
+                                            <span data-affiliate-slug-state="default" class="text-neutral-400 dark:text-neutral-500">Huruf kecil, angka, tanda hubung.</span>
+                                            <span data-affiliate-slug-state="checking" class="hidden text-amber-600 dark:text-amber-400"><i class="fa-solid fa-spinner fa-spin mr-1"></i>Memeriksa alamat link...</span>
+                                            <span data-affiliate-slug-state="available" class="hidden text-emerald-600 dark:text-emerald-400"><i class="fa-solid fa-circle-check mr-1"></i>Alamat link tersedia.</span>
+                                            <span data-affiliate-slug-state="unavailable" class="hidden text-red-600 dark:text-red-400"><i class="fa-solid fa-circle-xmark mr-1"></i><span data-affiliate-slug-message>Alamat link sudah digunakan.</span></span>
+                                            <span data-affiliate-slug-state="invalid" class="hidden text-red-600 dark:text-red-400"><i class="fa-solid fa-circle-exclamation mr-1"></i>Gunakan minimal 3 karakter berupa huruf kecil, angka, atau tanda hubung.</span>
+                                            <span data-affiliate-slug-state="error" class="hidden text-amber-600 dark:text-amber-400"><i class="fa-solid fa-triangle-exclamation mr-1"></i><span data-affiliate-slug-message>Validasi otomatis gagal. Alamat tetap diperiksa saat disimpan.</span></span>
+                                        </p>
                                     </div>
                                     <div>
                                         <x-input-label for="destination" value="Halaman tujuan" />
@@ -720,8 +730,20 @@
                                                             <input id="edit-slug-{{ $link->id }}" name="slug" type="text"
                                                                 value="{{ old('slug', $link->slug) }}"
                                                                 minlength="3" maxlength="60" pattern="[a-z0-9]+(-[a-z0-9]+)*" required
+                                                                aria-describedby="edit-slug-availability-{{ $link->id }}"
+                                                                data-affiliate-slug-check
+                                                                data-affiliate-slug-availability-url="{{ route('dashboard.affiliate.links.availability') }}"
+                                                                data-affiliate-slug-ignore="{{ $link->id }}"
                                                                 class="min-w-0 flex-1 border-none bg-transparent px-3 py-2 text-sm text-secondary-900 focus:ring-0 dark:text-white" />
                                                         </div>
+                                                        <p id="edit-slug-availability-{{ $link->id }}" class="mt-1 min-h-4 text-[11px] sm:text-xs" aria-live="polite">
+                                                            <span data-affiliate-slug-state="default" class="text-neutral-400 dark:text-neutral-500">Alamat saat ini dapat digunakan kembali.</span>
+                                                            <span data-affiliate-slug-state="checking" class="hidden text-amber-600 dark:text-amber-400"><i class="fa-solid fa-spinner fa-spin mr-1"></i>Memeriksa alamat link...</span>
+                                                            <span data-affiliate-slug-state="available" class="hidden text-emerald-600 dark:text-emerald-400"><i class="fa-solid fa-circle-check mr-1"></i>Alamat link tersedia.</span>
+                                                            <span data-affiliate-slug-state="unavailable" class="hidden text-red-600 dark:text-red-400"><i class="fa-solid fa-circle-xmark mr-1"></i><span data-affiliate-slug-message>Alamat link sudah digunakan.</span></span>
+                                                            <span data-affiliate-slug-state="invalid" class="hidden text-red-600 dark:text-red-400"><i class="fa-solid fa-circle-exclamation mr-1"></i>Gunakan minimal 3 karakter berupa huruf kecil, angka, atau tanda hubung.</span>
+                                                            <span data-affiliate-slug-state="error" class="hidden text-amber-600 dark:text-amber-400"><i class="fa-solid fa-triangle-exclamation mr-1"></i><span data-affiliate-slug-message>Validasi otomatis gagal. Alamat tetap diperiksa saat disimpan.</span></span>
+                                                        </p>
                                                     </div>
                                                     <div>
                                                         <x-input-label for="edit-destination-{{ $link->id }}" value="Halaman tujuan" />
@@ -844,10 +866,21 @@
                                             Minimum Rp {{ number_format($settings['minimum_payout'], 0, ',', '.') }}. Diproses manual setelah persetujuan admin.
                                         </p>
                                     </div>
-                                    <x-primary-button class="justify-center py-2.5 sm:py-3 text-xs sm:text-sm" :disabled="$balance['available'] < $settings['minimum_payout']">
-                                        <i class="fa-solid fa-money-bill-transfer mr-1.5 text-xs"></i>
-                                        Ajukan pencairan
-                                    </x-primary-button>
+                                    <div class="grid gap-2 sm:grid-cols-2">
+                                        <x-primary-button class="justify-center py-2.5 sm:py-3 text-xs sm:text-sm" :disabled="$balance['available'] < $settings['minimum_payout']">
+                                            <i class="fa-solid fa-money-bill-transfer mr-1.5 text-xs"></i>
+                                            Ajukan pencairan
+                                        </x-primary-button>
+                                        <x-secondary-button type="submit" name="withdraw_all" value="1" formnovalidate
+                                            class="justify-center py-2.5 sm:py-3 text-xs sm:text-sm"
+                                            :disabled="$balance['available'] < $settings['minimum_payout']">
+                                            <i class="fa-solid fa-wallet mr-1.5 text-xs"></i>
+                                            Tarik semua saldo
+                                        </x-secondary-button>
+                                    </div>
+                                    <p class="text-center text-[11px] text-neutral-400 dark:text-neutral-500">
+                                        Tarik semua akan mengajukan Rp {{ number_format(max(0, $balance['available']), 0, ',', '.') }} berdasarkan saldo terbaru.
+                                    </p>
                                 </form>
 
                                 {{-- Change bank details --}}

@@ -14,9 +14,21 @@ class AffiliatePayoutService
 
     public function request(Affiliate $affiliate, int $amount): AffiliatePayout
     {
+        return $this->createRequest($affiliate, $amount);
+    }
+
+    public function requestAll(Affiliate $affiliate): AffiliatePayout
+    {
+        return $this->createRequest($affiliate);
+    }
+
+    private function createRequest(Affiliate $affiliate, ?int $amount = null): AffiliatePayout
+    {
         return DB::transaction(function () use ($affiliate, $amount) {
             $affiliate = Affiliate::query()->eligible()->lockForUpdate()->findOrFail($affiliate->id);
             $balance = $this->affiliates->balance($affiliate);
+            $amount ??= $balance['available'];
+
             if ($amount < $this->affiliates->settings()['minimum_payout'] || $amount > $balance['available']) {
                 throw ValidationException::withMessages(['amount' => 'Nominal harus memenuhi minimum pencairan dan tidak melebihi saldo siap cair.']);
             }

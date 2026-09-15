@@ -7,6 +7,12 @@ export function formatCountdown(seconds) {
         .map(value => String(value).padStart(2, '0')).join(':');
 }
 
+export function savingsPercent(referenceAmount, finalAmount) {
+    return referenceAmount > 0
+        ? Math.max(0, Math.min(100, Math.floor((referenceAmount - finalAmount) * 100 / referenceAmount)))
+        : 0;
+}
+
 export function expirePrice(price, serverNow) {
     if (!price.promotion || remainingSeconds(price.promotion.expires_at, serverNow) > 0) return price;
 
@@ -98,6 +104,7 @@ export function registerPromotions(Alpine) {
         },
 
         price(tier) { return this.prices[tier]; },
+        savingsPercent,
         money(amount) { return new Intl.NumberFormat('id-ID', { maximumFractionDigits: 0 }).format(amount); },
         countdown(promotion) { return promotion ? formatCountdown(remainingSeconds(promotion.expires_at, this.currentTime)) : '00:00:00'; },
         canCheckout(tier) { return !this.refreshing && !this.message && (!this.code || this.price(tier)?.promotion); },

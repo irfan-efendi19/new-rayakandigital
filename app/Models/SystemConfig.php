@@ -9,6 +9,10 @@ class SystemConfig extends Model
 {
     use HasFactory;
 
+    protected $attributes = [
+        'affiliate_discount_rate' => 20,
+    ];
+
     protected $fillable = [
         'demo_duration_days',
         'demo_grace_period_days',

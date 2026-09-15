@@ -62,6 +62,28 @@
             @endif
 
             {{-- Payment Method Info --}}
+            @if($pendingOrders->isNotEmpty())
+                <div id="pesanan-tersimpan" class="space-y-4 rounded-2xl border border-primary-200 bg-primary-50 p-5 dark:border-primary-800 dark:bg-primary-900/20">
+                    <h2 class="font-semibold">Pesanan Menunggu Pembayaran</h2>
+                    <p class="text-sm text-neutral-600 dark:text-neutral-300">Harga dan kuota promo pesanan ini sudah tersimpan. Lanjutkan pembayaran melalui tombol berikut.</p>
+                    @foreach($pendingOrders as $pendingOrder)
+                        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                            <div class="text-sm">
+                                <p class="font-semibold">{{ ucfirst($pendingOrder->package_type) }} · Rp {{ number_format($pendingOrder->gross_amount, 0, ',', '.') }}</p>
+                                <p class="text-xs text-neutral-500 dark:text-neutral-400">{{ $pendingOrder->order_id }} @if($pendingOrder->promotion_title)· {{ $pendingOrder->promotion_title }}@endif</p>
+                            </div>
+                            <form action="{{ route('dashboard.checkout.process') }}" method="POST" @if($activeMethod === 'midtrans') x-data="checkout" @submit.prevent="handleSubmit" @endif>
+                                @csrf
+                                <input type="hidden" name="tier" value="{{ $pendingOrder->package_type }}">
+                                <input type="hidden" name="invitation_id" value="{{ $pendingOrder->invitation_id }}">
+                                <input type="hidden" name="promotion_code" value="{{ $pendingOrder->promotion_code }}">
+                                <input type="hidden" name="expected_amount" value="{{ (int) $pendingOrder->gross_amount }}">
+                                <button type="submit" @if($activeMethod === 'midtrans') :disabled="processing" @endif class="rounded-xl bg-primary-600 px-4 py-3 text-sm font-semibold text-white disabled:opacity-50">Lanjutkan Pembayaran</button>
+                            </form>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
             @if($activeMethod === 'manual_bank')
             <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 px-5 py-4 rounded-2xl text-sm flex items-center gap-3">
                 <svg class="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">

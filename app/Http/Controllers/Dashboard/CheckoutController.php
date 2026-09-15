@@ -34,9 +34,12 @@ class CheckoutController extends Controller
             ? $methodConfig->midtrans_client_key : config('midtrans.client_key');
         $dokuConfigured = $routing->isDoku() && app(DokuService::class)->isDokuConfigured();
         $promotionCatalog = $promotions->catalog($packages, $request);
+        $pendingOrders = $user->orders()->where('invitation_id', $invitation?->id)
+            ->where('payment_method_used', $activeMethod)->whereIn('payment_status', ['pending', 'verifying'])
+            ->latest('id')->get();
 
         return response()->view('dashboard.checkout.index', compact(
-            'currentTier', 'packages', 'activeMethod', 'clientKey', 'invitation', 'dokuConfigured', 'promotionCatalog',
+            'currentTier', 'packages', 'activeMethod', 'clientKey', 'invitation', 'dokuConfigured', 'promotionCatalog', 'pendingOrders',
         ))->header('Cache-Control', 'private, no-store');
     }
 
