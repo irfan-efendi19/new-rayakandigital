@@ -17,11 +17,17 @@ class SystemConfig extends Model
         'bank_name',
         'bank_account_number',
         'bank_account_holder',
+        'affiliate_commission_rate',
+        'affiliate_discount_rate',
+        'affiliate_minimum_payout',
     ];
 
     protected $casts = [
         'demo_duration_days' => 'integer',
         'demo_grace_period_days' => 'integer',
         'wa_blast_quota_limit' => 'integer',
+        'affiliate_commission_rate' => 'decimal:2',
+        'affiliate_discount_rate' => 'decimal:2',
+        'affiliate_minimum_payout' => 'integer',
     ];
 }

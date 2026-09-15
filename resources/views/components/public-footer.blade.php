@@ -1,4 +1,4 @@
-<footer class="bg-footer-bg dark:bg-secondary-900 px-16 pt-14 max-w-screen-xl mx-auto rounded-2xl">
+<footer class="bg-footer-bg dark:bg-secondary-900 px-6 sm:px-10 lg:px-16 pt-14 max-w-screen-xl mx-auto rounded-3xl border border-neutral-200/60 dark:border-secondary-800 mb-8 shadow-sm">
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 pb-12">
 
@@ -59,6 +59,13 @@
                     <a href="{{ route('live-streaming') }}"
                         class="nav-link text-sm text-footer-link dark:text-neutral-300 hover:text-brand transition-colors duration-150 inline-flex items-center gap-1.5">
                         Live Streaming
+                        <span class="arrow text-xs">→</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('dashboard.affiliate.index') }}"
+                        class="nav-link text-sm text-footer-link dark:text-neutral-300 hover:text-brand transition-colors duration-150 inline-flex items-center gap-1.5">
+                        Reseller &amp; Affiliate
                         <span class="arrow text-xs">→</span>
                     </a>
                 </li>

@@ -1,7 +1,7 @@
-<nav class="fixed top-0 left-0 right-0 z-50 backdrop-blur-lg bg-white/80 dark:bg-secondary-900/80 border-b border-white/20 shadow-sm"
+<nav class="fixed top-0 left-0 right-0 z-50 backdrop-blur-lg bg-white/80 dark:bg-secondary-900/80 border-b border-neutral-200/80 dark:border-secondary-800 shadow-sm transition-colors duration-200"
     x-data="{ mobileMenuOpen: false, scrolled: false }"
     x-init="window.addEventListener('scroll', () => { scrolled = window.scrollY > 20 })"
-    :class="{ 'bg-white/95 shadow-lg': scrolled, 'bg-white/80': !scrolled }">
+    :class="{ 'bg-white/95 dark:bg-secondary-900/95 shadow-md': scrolled, 'bg-white/80 dark:bg-secondary-900/80': !scrolled }">
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
@@ -43,7 +43,7 @@
 
                     <!-- Dropdown Panel -->
                     <div
-                        class="absolute left-0 mt-2 w-[700px] bg-white dark:bg-secondary-800 rounded-xl shadow-2xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                        class="absolute left-0 mt-2 w-[700px] bg-white dark:bg-secondary-800 rounded-2xl shadow-2xl border border-neutral-200/80 dark:border-secondary-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
                         <div class="p-5">
                             <div class="grid grid-cols-3 gap-4">
 
@@ -157,9 +157,10 @@
 
                 <!-- Dark Mode Toggle -->
                 <button @click="$store.darkMode.toggle()"
-                    class="relative w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 hover:bg-orange-50 group text-gray-600 dark:text-neutral-300 hover:text-orange-600 :text-orange-400 :bg-gray-800">
-                    <i class="fas fa-sun text-lg" x-show="$store.darkMode.on" style="display: none;"></i>
-                    <i class="fas fa-moon text-lg" x-show="!$store.darkMode.on"></i>
+                    :aria-label="$store.darkMode.on ? 'Beralih ke mode terang' : 'Beralih ke mode gelap'"
+                    class="relative w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 hover:bg-orange-50 dark:hover:bg-secondary-800 group text-gray-600 dark:text-neutral-300 hover:text-orange-600 dark:hover:text-orange-400">
+                    <i class="fas fa-sun text-lg text-amber-400" x-show="$store.darkMode.on" style="display: none;"></i>
+                    <i class="fas fa-moon text-lg text-neutral-600 dark:text-neutral-300" x-show="!$store.darkMode.on"></i>
                 </button>
 
                 <!-- Hamburger Button with animation -->
@@ -188,13 +189,13 @@
         x-transition:enter-start="opacity-0 -translate-y-4" x-transition:enter-end="opacity-100 translate-y-0"
         x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0"
         x-transition:leave-end="opacity-0 -translate-y-4"
-        class="md:hidden absolute top-16 left-0 right-0 backdrop-blur-xl bg-white/95 dark:bg-secondary-900/95 border-b border-white/20 shadow-xl">
+        class="md:hidden absolute top-16 left-0 right-0 backdrop-blur-xl bg-white/95 dark:bg-secondary-900/95 border-b border-neutral-200/80 dark:border-secondary-800 shadow-xl">
 
         <div class="px-4 py-6 space-y-3 max-h-[calc(100vh-4rem)] overflow-y-auto">
             <!-- DROPDOWN LAYANAN UNTUK MOBILE -->
             <div x-data="{ open: false }" class="block">
                 <button @click="open = !open"
-                    class="w-full flex items-center justify-between px-4 py-3 text-gray-700 dark:text-neutral-200 hover:text-orange-600 hover:bg-orange-50 rounded-xl text-base font-medium transition-all duration-300">
+                    class="w-full flex items-center justify-between px-4 py-3 text-gray-700 dark:text-neutral-200 hover:text-orange-600 hover:bg-orange-50 dark:hover:bg-secondary-800 rounded-xl text-base font-medium transition-all duration-300">
                     <span>Layanan</span>
                     <i class="fas fa-chevron-down text-xs transition-transform duration-300" :class="{'rotate-180': open}"></i>
                 </button>
@@ -238,16 +239,16 @@
             </a>
         </div>
 
-        <div class="pt-4 border-t border-gray-100 pd-4">
+        <div class="pt-4 border-t border-neutral-200 dark:border-secondary-700 pb-4">
             @if (Route::has('login'))
                 @auth
                     <a href="{{ route('dashboard') }}"
-                        class="block px-4 py-3 text-gray-700 dark:text-neutral-200 hover:text-orange-600 hover:bg-orange-50 rounded-xl font-medium transition-all duration-300">
+                        class="block px-4 py-3 text-gray-700 dark:text-neutral-200 hover:text-orange-600 hover:bg-orange-50 dark:hover:bg-secondary-800 rounded-xl font-medium transition-all duration-300">
                         Dashboard
                     </a>
                 @else
                     <a href="{{ route('login') }}"
-                        class="block px-4 py-3 text-gray-700 dark:text-neutral-200 hover:text-orange-600 hover:bg-orange-50 rounded-xl font-medium transition-all duration-300">
+                        class="block px-4 py-3 text-gray-700 dark:text-neutral-200 hover:text-orange-600 hover:bg-orange-50 dark:hover:bg-secondary-800 rounded-xl font-medium transition-all duration-300">
                         Masuk
                     </a>
                     @if (Route::has('register'))

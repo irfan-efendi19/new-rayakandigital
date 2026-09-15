@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\ChecklistController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Dashboard\AddonController;
+use App\Http\Controllers\Dashboard\AffiliateController;
 use App\Http\Controllers\Dashboard\CheckoutController;
 use App\Http\Controllers\Dashboard\DokuPaymentController;
 use App\Http\Controllers\Dashboard\GalleryController;
@@ -28,6 +29,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PromotionController;
 use App\Http\Controllers\QRGatewayController;
 use App\Http\Controllers\QRHubController;
+use App\Http\Controllers\ReferralController;
 use App\Http\Controllers\RsvpController;
 use App\Http\Controllers\ScreenDisplayController;
 use App\Http\Controllers\SitemapController;
@@ -42,24 +44,21 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
-
-
-
 Route::get('/storage/{path}', function ($path) {
-    if (!Storage::disk('public')->exists($path)) {
+    if (! Storage::disk('public')->exists($path)) {
         abort(404);
     }
 
     return Storage::disk('public')->response($path);
 })->where('path', '.*');
 
-
 // Landing Page & Public Preview
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/r/{slug}', ReferralController::class)->middleware('throttle:60,1')->name('referral.visit');
 Route::get('/promotions/catalog', PromotionController::class)->middleware('throttle:60,1')->name('promotions.catalog');
 Route::get('/semua-tema', [ThemeController::class, 'index'])->name('themes.index');
 Route::get('/themes/{themeSlug}/preview', [ThemePreviewController::class, 'show'])->name('theme.preview');
-Route::get('/preview/{themeSlug}', fn(string $themeSlug) => redirect()->route('theme.preview', $themeSlug));
+Route::get('/preview/{themeSlug}', fn (string $themeSlug) => redirect()->route('theme.preview', $themeSlug));
 
 // Public Pages
 Route::get('/undangan-web', function (Request $request, PromotionService $promotions) {
@@ -108,6 +107,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('invitation.dashboard');
 
     Route::prefix('dashboard')->name('dashboard.')->group(function () {
+        Route::prefix('reseller')->name('affiliate.')->controller(AffiliateController::class)->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::post('/', 'store')->middleware('throttle:5,1')->name('store');
+            Route::put('/bank', 'bank')->middleware('throttle:10,1')->name('bank');
+            Route::post('/links', 'link')->middleware('throttle:10,1')->name('links.store');
+            Route::put('/links/{link}', 'updateLink')->middleware('throttle:20,1')->name('links.update');
+            Route::delete('/links/{link}', 'destroyLink')->middleware('throttle:20,1')->name('links.destroy');
+            Route::post('/payouts', 'payout')->middleware('throttle:5,1')->name('payouts.store');
+            Route::get('/marketing-kit/{asset}', 'download')->name('assets.download');
+        });
         // Checkout & Packages
         Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
         Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process');
@@ -235,7 +244,7 @@ Route::get('/addon-payment/finish', [AddonPaymentController::class, 'finish'])->
 // Sitemap
 Route::get('/sitemap.xml', [SitemapController::class, 'index']);
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';
 
 // Public Invitation Page & Actions (Must be at the bottom to catch /slug)
 Route::post('/invitations/{invitation}/rsvp', [RsvpController::class, 'store'])->name('rsvp.store');
@@ -253,7 +262,3 @@ Route::get('/{slug}/galeri-bersama', [QRHubController::class, 'showSharedGallery
 Route::post('/{slug}/galeri-bersama/upload', [QRHubController::class, 'uploadSharedPhoto'])->name('qr-shared-gallery.upload');
 
 Route::get('/{slug}', [InvitationRenderController::class, 'show'])->name('invitation.show');
-
-
-
-

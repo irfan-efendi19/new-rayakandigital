@@ -13,6 +13,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 
 class UserResource extends Resource
 {
@@ -27,6 +28,11 @@ class UserResource extends Resource
     protected static string|\UnitEnum|null $navigationGroup = 'Manajemen Pengguna';
 
     protected static ?int $navigationSort = 1;
+
+    public static function canDelete(Model $record): bool
+    {
+        return ! $record->hasAffiliateRecords() && parent::canDelete($record);
+    }
 
     public static function form(Schema $schema): Schema
     {

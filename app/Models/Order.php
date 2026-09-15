@@ -25,6 +25,9 @@ class Order extends Model
         'promotion_id',
         'promotion_title',
         'promotion_code',
+        'affiliate_id',
+        'affiliate_link_id',
+        'affiliate_commission_rate',
         'unique_code',
         'payment_status',
         'payment_gateway_used',
@@ -43,6 +46,7 @@ class Order extends Model
             'original_amount' => 'decimal:2',
             'discount_amount' => 'decimal:2',
             'unique_code' => 'integer',
+            'affiliate_commission_rate' => 'decimal:2',
             'is_manual_whatsapp' => 'boolean',
             'doku_expired_at' => 'datetime',
         ];

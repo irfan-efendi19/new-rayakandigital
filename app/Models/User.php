@@ -77,6 +77,17 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasMany(Order::class);
     }
 
+    public function affiliate(): HasOne
+    {
+        return $this->hasOne(Affiliate::class);
+    }
+
+    public function hasAffiliateRecords(): bool
+    {
+        return $this->affiliate()->exists()
+            || AffiliateCommission::whereIn('order_id', $this->orders()->select('id'))->exists();
+    }
+
     public function subscriptions(): HasMany
     {
         return $this->hasMany(Subscription::class);

@@ -12,6 +12,16 @@ class SystemConfigForm
     {
         return $schema
             ->components([
+                Section::make('Reseller & Affiliate')
+                    ->description('Komisi dihitung dari harga paket setelah diskon. Diskon default berlaku untuk kupon mitra yang baru dibuat.')
+                    ->schema([
+                        TextInput::make('affiliate_commission_rate')->label('Komisi global (%)')
+                            ->numeric()->minValue(0)->maxValue(100)->step(0.01)->required()->default(10),
+                        TextInput::make('affiliate_discount_rate')->label('Diskon kupon mitra baru (%)')
+                            ->numeric()->minValue(0.01)->maxValue(100)->step(0.01)->required()->default(5),
+                        TextInput::make('affiliate_minimum_payout')->label('Minimum pencairan (Rp)')
+                            ->integer()->minValue(1)->required()->default(50000),
+                    ]),
                 Section::make('Pengaturan Trial')
                     ->schema([
                         TextInput::make('demo_duration_days')

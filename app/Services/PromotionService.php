@@ -80,6 +80,7 @@ class PromotionService
                 'unique_code' => $method === 'manual_bank' && $price['amount'] > 0 ? Order::generateUniqueCode() : 0,
                 'is_manual_whatsapp' => $method === 'manual_bank',
                 'payment_status' => 'pending',
+                ...app(AffiliateService::class)->attribution($request, $price['promotion']['id'] ?? null),
             ]);
 
             if ($price['promotion']) {
@@ -130,6 +131,8 @@ class PromotionService
     private function availablePromotions(Request $request, bool $lock = false): Collection
     {
         $query = Promotion::query()->where('is_active', true)
+            ->where(fn ($query) => $query->whereNull('affiliate_id')->orWhereHas('affiliate', fn ($query) => $query
+                ->eligible()->when($request->user(), fn ($query) => $query->where('user_id', '!=', $request->user()->id))))
             ->where(fn ($query) => $query->whereNull('start_time')->orWhere('start_time', '<=', now()))
             ->where(fn ($query) => $query->whereNull('end_time')->orWhere('end_time', '>', now()))
             ->orderBy('id');

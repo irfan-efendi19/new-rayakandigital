@@ -20,6 +20,7 @@ class PromotionForm
             Section::make('Kampanye & Diskon')->columns(2)->schema([
                 TextInput::make('title')->label('Nama Promo')->required()->maxLength(150),
                 TextInput::make('code')->label('Kode Voucher')->maxLength(50)
+                    ->required(fn (?Promotion $record) => $record?->affiliate_id !== null)
                     ->regex('/^[A-Za-z0-9_-]+$/')->unique(ignoreRecord: true)
                     ->mutateStateForValidationUsing(fn ($state) => filled($state) ? mb_strtoupper(trim($state)) : null)
                     ->dehydrateStateUsing(fn ($state) => filled($state) ? mb_strtoupper(trim($state)) : null)

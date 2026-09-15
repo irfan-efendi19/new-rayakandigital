@@ -4,12 +4,24 @@ namespace App\Observers;
 
 use App\Models\Order;
 use App\Models\PromotionUsage;
+use App\Services\AffiliateService;
 use App\Services\PromotionService;
 
 class OrderObserver
 {
+    public function created(Order $order): void
+    {
+        if ($order->payment_status === 'success') {
+            app(AffiliateService::class)->syncCommission($order);
+        }
+    }
+
     public function updated(Order $order): void
     {
+        if ($order->wasChanged('payment_status')) {
+            app(AffiliateService::class)->syncCommission($order);
+        }
+
         if (! $order->promotion_id || ! $order->wasChanged('payment_status')) {
             return;
         }

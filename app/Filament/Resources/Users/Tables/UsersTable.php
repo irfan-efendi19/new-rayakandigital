@@ -59,7 +59,7 @@ class UsersTable
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                    DeleteBulkAction::make()->authorizeIndividualRecords(fn ($record) => ! $record->hasAffiliateRecords()),
                 ]),
             ]);
     }

@@ -5,12 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Package;
 use App\Models\Theme;
 use App\Models\ThemeCategory;
+use App\Services\AffiliateService;
 use App\Services\PromotionService;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    public function index(Request $request, PromotionService $promotions)
+    public function index(Request $request, PromotionService $promotions, AffiliateService $affiliateService)
     {
         $categories = ThemeCategory::withCount('themes')->get();
 
@@ -26,8 +27,9 @@ class HomeController extends Controller
             ->get();
 
         $promotionCatalog = $promotions->catalog($packages, $request);
+        $affiliateSettings = $affiliateService->settings();
 
-        return response()->view('landing_page', compact('categories', 'themes', 'packages', 'totalThemes', 'promotionCatalog'))
+        return response()->view('landing_page', compact('categories', 'themes', 'packages', 'totalThemes', 'promotionCatalog', 'affiliateSettings'))
             ->header('Cache-Control', 'private, no-store');
     }
 }

@@ -262,3 +262,4 @@ import './visitor-chart';
 import './slug-editor';
 import './tutorial-spotlight';
 import './flatpickr-init';
+import './affiliate';

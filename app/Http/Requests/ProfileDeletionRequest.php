@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Validator;
 
 class ProfileDeletionRequest extends FormRequest
 {
@@ -14,6 +15,18 @@ class ProfileDeletionRequest extends FormRequest
      * @var string
      */
     protected $errorBag = 'userDeletion';
+
+    public function after(): array
+    {
+        return [
+            function (Validator $validator): void {
+                if ($this->user()->hasAffiliateRecords()) {
+                    $field = filled($this->user()->google_id) ? 'email_confirmation' : 'password';
+                    $validator->errors()->add($field, 'Akun memiliki catatan kemitraan atau komisi. Hubungi admin untuk penutupan akun dan penyelesaian riwayat transaksi.');
+                }
+            },
+        ];
+    }
 
     /**
      * Get the validation rules that apply to the request.

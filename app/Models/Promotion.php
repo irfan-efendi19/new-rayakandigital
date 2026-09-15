@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Promotion extends Model
@@ -10,7 +11,7 @@ class Promotion extends Model
     protected $fillable = [
         'title', 'code', 'discount_type', 'discount_value', 'max_discount_amount',
         'min_order_amount', 'package_ids', 'timer_type', 'start_time', 'end_time',
-        'evergreen_duration_minutes', 'usage_limit', 'per_user_limit', 'is_active',
+        'evergreen_duration_minutes', 'usage_limit', 'per_user_limit', 'is_active', 'affiliate_id',
     ];
 
     protected $attributes = [
@@ -47,6 +48,11 @@ class Promotion extends Model
     public function usages(): HasMany
     {
         return $this->hasMany(PromotionUsage::class);
+    }
+
+    public function affiliate(): BelongsTo
+    {
+        return $this->belongsTo(Affiliate::class);
     }
 
     public function sessions(): HasMany
