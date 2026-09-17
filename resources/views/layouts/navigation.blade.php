@@ -99,7 +99,16 @@
                                         Paket & Harga
                                     </div>
                                 </x-dropdown-link>
-                                <x-dropdown-link :href="route('dashboard.affiliate.index')">Reseller &amp; Affiliate</x-dropdown-link>
+                                <x-dropdown-link :href="route('dashboard.affiliate.index')">
+                                    <div class="flex items-center gap-2.5">
+                                        <svg class="h-4 w-4 shrink-0 text-neutral-400" fill="none" viewBox="0 0 24 24"
+                                            stroke="currentColor" aria-hidden="true">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M17 20h5v-2a4 4 0 00-4-4h-1m-6 6H2v-2a4 4 0 014-4h5m4-4a4 4 0 10-8 0 4 4 0 008 0zm6 0a3 3 0 11-3-3" />
+                                        </svg>
+                                        <span>Reseller &amp; Affiliate</span>
+                                    </div>
+                                </x-dropdown-link>
                                 <x-dropdown-link :href="route('profile.edit')">
                                     <div class="flex items-center gap-2.5">
                                         <svg class="w-4 h-4 text-neutral-400" fill="none" viewBox="0 0 24 24"
@@ -248,7 +257,16 @@
                 </div>
 
                 <div class="mt-3 space-y-1">
-                    <x-responsive-nav-link :href="route('dashboard.affiliate.index')" :active="request()->routeIs('dashboard.affiliate.*')">Reseller &amp; Affiliate</x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('dashboard.affiliate.index')" :active="request()->routeIs('dashboard.affiliate.*')">
+                        <span class="flex items-center gap-2.5">
+                            <svg class="h-4 w-4 shrink-0 text-neutral-400" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17 20h5v-2a4 4 0 00-4-4h-1m-6 6H2v-2a4 4 0 014-4h5m4-4a4 4 0 10-8 0 4 4 0 008 0zm6 0a3 3 0 11-3-3" />
+                            </svg>
+                            <span>Reseller &amp; Affiliate</span>
+                        </span>
+                    </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('profile.edit')">
                         Profil Saya
                     </x-responsive-nav-link>
