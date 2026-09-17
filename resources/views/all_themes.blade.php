@@ -174,11 +174,11 @@
                                 <i class="fas fa-star text-amber-400 text-xs"></i>
                                 <span>Rating 4.9/5</span>
                             </div>
-                            <span class="w-px h-5 bg-neutral-200 dark:bg-secondary-700"></span>
-                            <div class="flex items-center gap-1.5">
+                            <!-- <span class="w-px h-5 bg-neutral-200 dark:bg-secondary-700"></span> -->
+                            <!-- <div class="flex items-center gap-1.5">
                                 <i class="fas fa-gem text-emerald-400 text-xs"></i>
                                 <span>Ada yang gratis</span>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>

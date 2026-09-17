@@ -14,7 +14,7 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-    <link rel="stylesheet" href="{{ asset('css/landingpage.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/landingpage.css') }}?v={{ filemtime(public_path('css/landingpage.css')) }}">
     <script>
         if (localStorage.getItem('dark-mode') === 'true' || (!('dark-mode' in localStorage) && window.matchMedia(
             '(prefers-color-scheme: dark)').matches)) {
@@ -35,43 +35,42 @@
             <div class="orb-orange pointer-events-none absolute -left-40 top-0 h-[34rem] w-[34rem]" aria-hidden="true"></div>
             <div class="orb-warm pointer-events-none absolute -right-48 bottom-0 h-[38rem] w-[38rem]" aria-hidden="true"></div>
 
-            <div class="relative mx-auto grid min-h-[42rem] max-w-7xl items-center gap-14 px-6 py-16 sm:px-8 lg:grid-cols-[1.05fr_.95fr] lg:gap-8 lg:px-12 lg:py-24">
+            <div class="relative mx-auto grid max-w-7xl items-center gap-12 px-5 py-12 sm:px-8 sm:py-16 lg:grid-cols-[1.05fr_.95fr] lg:gap-14 lg:px-12 lg:py-20">
                 <div class="max-w-2xl" data-aos="fade-right" data-aos-duration="700">
                     <div class="mb-6 inline-flex items-center gap-2 rounded-full border border-primary-200 bg-primary-50 px-3.5 py-2 text-xs font-bold uppercase tracking-wider text-primary-700 dark:border-primary-800 dark:bg-primary-900/30 dark:text-primary-300">
                         <span class="relative flex h-2 w-2" aria-hidden="true">
                             <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary-400 opacity-75"></span>
                             <span class="relative inline-flex h-2 w-2 rounded-full bg-primary-500"></span>
                         </span>
-                        Undangan siap dibagikan dalam 5 menit
+                        Undangan website pernikahan
                     </div>
 
-                    <h1 class="font-heading text-4xl font-bold leading-[1.08] tracking-tight text-secondary-900 dark:text-white sm:text-5xl lg:text-6xl">
-                        Undangan digital yang terasa
-                        <span class="text-primary-500">personal</span>, sejak pandangan pertama.
+                    <h1 class="font-heading text-[2.65rem] font-bold leading-[1.12] tracking-tight text-secondary-900 dark:text-white sm:text-5xl lg:text-6xl">
+                        Cerita cinta Anda,<br>
+                        <span class="font-normal italic text-primary-600 dark:text-primary-400">undangan</span> yang istimewa.
                     </h1>
 
                     <p class="mt-6 max-w-xl text-base leading-8 text-neutral-600 dark:text-neutral-300 sm:text-lg">
-                        Buat undangan pernikahan dengan tampilan elegan, RSVP real-time, dan link personal untuk setiap
-                        tamu—dari akad hingga resepsi.
+                        Awali hari bahagia dengan undangan yang terasa seperti Anda. Pilih tema favorit, ceritakan kisah Anda, dan bagikan dalam satu link.
                     </p>
 
                     <div class="mt-8 flex flex-col gap-3 sm:flex-row">
-                        <a href="{{ route('register') }}"
+                        <a href="#tema"
                             class="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-primary-500 px-7 py-3.5 text-sm font-bold text-white shadow-lg shadow-primary-500/25 transition duration-200 hover:-translate-y-0.5 hover:bg-primary-600 hover:shadow-xl focus:outline-none focus-visible:ring-4 focus-visible:ring-primary-500/30 motion-reduce:transform-none">
+                            Temukan tema Anda
+                            <i class="fa-solid fa-arrow-down text-xs" aria-hidden="true"></i>
+                        </a>
+                        <a href="{{ auth()->check() ? route('dashboard.invitations.create') : route('register') }}"
+                            class="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-neutral-300 bg-white/80 px-7 py-3.5 text-sm font-bold text-secondary-800 transition duration-200 hover:-translate-y-0.5 hover:border-primary-300 hover:text-primary-600 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary-500/20 dark:border-secondary-700 dark:bg-secondary-800/80 dark:text-neutral-100 dark:hover:border-primary-700 dark:hover:text-primary-400 motion-reduce:transform-none">
                             Buat undangan gratis
                             <i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
-                        </a>
-                        <a href="{{ route('themes.index') }}"
-                            class="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-neutral-300 bg-white/80 px-7 py-3.5 text-sm font-bold text-secondary-800 transition duration-200 hover:-translate-y-0.5 hover:border-primary-300 hover:text-primary-600 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary-500/20 dark:border-secondary-700 dark:bg-secondary-800/80 dark:text-neutral-100 dark:hover:border-primary-700 dark:hover:text-primary-400 motion-reduce:transform-none">
-                            <i class="fa-regular fa-images" aria-hidden="true"></i>
-                            Lihat koleksi tema
                         </a>
                     </div>
 
                     <dl class="mt-10 grid max-w-xl grid-cols-3 gap-3 border-t border-neutral-200 pt-6 dark:border-secondary-700">
                         <div>
-                            <dt class="text-xs leading-5 text-neutral-500 dark:text-neutral-400">Waktu pembuatan</dt>
-                            <dd class="mt-1 text-sm font-bold text-secondary-900 dark:text-white sm:text-base">± 5 menit</dd>
+                            <dt class="text-xs leading-5 text-neutral-500 dark:text-neutral-400">Koleksi desain</dt>
+                            <dd class="mt-1 text-sm font-bold text-secondary-900 dark:text-white sm:text-base">{{ $totalThemes }} tema pilihan</dd>
                         </div>
                         <div>
                             <dt class="text-xs leading-5 text-neutral-500 dark:text-neutral-400">Link tamu</dt>
@@ -84,24 +83,24 @@
                     </dl>
                 </div>
 
-                <div class="relative mx-auto flex w-full max-w-xl items-center justify-center lg:justify-end"
+                <div class="relative mx-auto flex aspect-square w-full max-w-[28rem] items-center justify-center rounded-[2.5rem] border border-primary-200/60 bg-gradient-to-br from-primary-50 via-white to-primary-100 p-5 dark:border-secondary-700 dark:from-secondary-800 dark:via-secondary-900 dark:to-primary-900/30"
                     data-aos="fade-left" data-aos-delay="150" data-aos-duration="700">
                     <div class="absolute inset-x-10 top-1/2 h-64 -translate-y-1/2 rounded-full bg-primary-500/20 blur-3xl dark:bg-primary-600/15" aria-hidden="true"></div>
                     <img src="{{ asset('img/mockup.png') }}" alt="Tampilan undangan digital Rayakan Digital di perangkat seluler"
                         width="493" height="347" fetchpriority="high"
                         class="relative z-10 w-full max-w-[31rem] drop-shadow-2xl">
 
-                    <div class="absolute -left-2 top-7 z-20 flex items-center gap-3 rounded-2xl border border-white/70 bg-white/90 px-4 py-3 shadow-xl backdrop-blur dark:border-secondary-700 dark:bg-secondary-800/90 sm:left-3 lg:-left-4">
+                    <div class="absolute left-3 top-5 z-20 flex items-center gap-3 rounded-2xl border border-white/70 bg-white/90 px-4 py-3 shadow-lg backdrop-blur dark:border-secondary-700 dark:bg-secondary-800/90 sm:-left-4 sm:top-8">
                         <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600 dark:bg-emerald-950 dark:text-emerald-400">
                             <i class="fa-solid fa-check" aria-hidden="true"></i>
                         </span>
                         <span>
-                            <span class="block text-[10px] font-semibold uppercase tracking-wider text-neutral-400">RSVP masuk</span>
-                            <span class="block text-xs font-bold text-secondary-900 dark:text-white">Rina & Keluarga · 3 tamu</span>
+                            <span class="block text-[10px] font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">Lebih mudah terhubung</span>
+                            <span class="block text-xs font-bold text-secondary-900 dark:text-white">RSVP & ucapan real-time</span>
                         </span>
                     </div>
 
-                    <div class="absolute -bottom-5 right-0 z-20 flex items-center gap-3 rounded-2xl border border-white/70 bg-white/90 px-4 py-3 shadow-xl backdrop-blur dark:border-secondary-700 dark:bg-secondary-800/90 sm:right-5 lg:-right-2">
+                    <div class="absolute bottom-5 right-3 z-20 flex items-center gap-3 rounded-2xl border border-white/70 bg-white/90 px-4 py-3 shadow-lg backdrop-blur dark:border-secondary-700 dark:bg-secondary-800/90 sm:-right-4 sm:bottom-8">
                         <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-primary-100 text-primary-600 dark:bg-primary-900/40 dark:text-primary-400">
                             <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
                         </span>
@@ -114,23 +113,25 @@
             </div>
         </section>
 
-        <section class="border-y border-neutral-200 bg-neutral-50 dark:border-secondary-700 dark:bg-secondary-800/50" aria-label="Rangkaian acara pernikahan">
-            <div class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-5 px-6 py-6 sm:px-8 lg:flex-row lg:px-12">
-                <p class="text-center text-xs font-bold uppercase tracking-[0.2em] text-neutral-400 lg:text-left"
-                    data-aos="fade-right" data-aos-offset="40">Khusus untuk rangkaian hari pernikahan</p>
-                <div class="flex flex-wrap justify-center gap-2.5">
-                    @foreach ([['book-open', 'Akad Nikah'], ['rings-wedding', 'Resepsi'], ['people-roof', 'Ngunduh Mantu'], ['champagne-glasses', 'Wedding Ceremony']] as [$icon, $label])
-                        <span data-aos="zoom-in" data-aos-delay="{{ $loop->index * 50 }}"
-                            class="inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-white px-4 py-2 text-xs font-semibold text-neutral-600 shadow-sm dark:border-secondary-700 dark:bg-secondary-800 dark:text-neutral-300">
-                            <i class="fa-solid fa-{{ $icon }} text-primary-500" aria-hidden="true"></i>
+        <nav class="border-y border-neutral-200 bg-white dark:border-secondary-700 dark:bg-secondary-800/50" aria-label="Jelajahi undangan web">
+            <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-7 gap-y-2 px-5 py-4 sm:justify-between sm:px-8 lg:px-12">
+                <span class="hidden text-xs font-medium text-neutral-500 dark:text-neutral-400 md:block">Setiap detail, untuk hari istimewa.</span>
+                <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 sm:gap-x-8">
+                    @foreach (['tema' => 'Koleksi tema', 'fitur' => 'Fitur lengkap', 'cara-kerja' => 'Cara membuat', 'harga' => 'Paket harga'] as $anchor => $label)
+                        <a href="#{{ $anchor }}" class="inline-flex min-h-11 items-center gap-2 text-xs font-semibold text-neutral-600 transition hover:text-primary-600 focus-visible:rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary-500 dark:text-neutral-300 dark:hover:text-primary-400">
                             {{ $label }}
-                        </span>
+                            @if($anchor === 'tema')
+                                <span class="rounded-full bg-primary-50 px-2 py-0.5 text-[10px] text-primary-700 dark:bg-primary-900/30 dark:text-primary-300">{{ $totalThemes }}</span>
+                            @endif
+                        </a>
                     @endforeach
                 </div>
             </div>
-        </section>
+        </nav>
 
-        <section class="bg-white py-20 dark:bg-secondary-900 sm:py-24" id="fitur">
+        <x-undangan-theme-catalog :themes="$themes" :categories="$categories" :total-themes="$totalThemes" :search="$search" :category="$category" />
+
+        <section class="scroll-mt-20 bg-white py-20 dark:bg-secondary-900 sm:py-24" id="fitur">
             <div class="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
                 <div class="mx-auto max-w-2xl text-center" data-aos="fade-up">
                     <span class="text-xs font-bold uppercase tracking-[0.2em] text-primary-500">Semua serba praktis</span>
@@ -152,14 +153,21 @@
                             <h3 class="mt-5 text-xl font-bold text-secondary-900 dark:text-white">Galeri yang menampilkan cerita Anda</h3>
                             <p class="mt-2 text-sm leading-7 text-neutral-600 dark:text-neutral-300">Susun foto dan video terbaik dalam pengalaman visual yang nyaman di setiap ukuran layar.</p>
                         </div>
-                        <div class="mt-7 grid h-52 grid-cols-3 items-end gap-3 overflow-hidden rounded-2xl bg-gradient-to-br from-primary-100 to-primary-50 p-4 dark:from-primary-950 dark:to-secondary-900">
-                            <div class="h-28 -rotate-3 rounded-2xl border-4 border-white bg-primary-200 shadow-lg dark:border-secondary-700 dark:bg-primary-900"></div>
-                            <div class="h-44 overflow-hidden rounded-2xl border-4 border-white shadow-xl transition duration-500 group-hover:-translate-y-2 dark:border-secondary-700">
-                                <img src="{{ asset('img/undangan.webp') }}" alt="" loading="lazy"
-                                    class="h-full w-full object-cover object-top">
+                        @if($galleryPhotos->isNotEmpty())
+                            <div class="mt-7 flex h-52 items-end gap-3 overflow-hidden rounded-2xl bg-gradient-to-br from-primary-100 to-primary-50 p-4 dark:from-primary-900/30 dark:to-secondary-900">
+                                @foreach($galleryPhotos as $photo)
+                                    <div @class([
+                                        'min-w-0 flex-1 overflow-hidden rounded-2xl border-4 border-white shadow-lg transition duration-500 group-hover:-translate-y-2 motion-reduce:transform-none dark:border-secondary-700',
+                                        'h-28 -rotate-3' => $loop->index === 0 && $galleryPhotos->count() > 1,
+                                        'h-44' => $loop->index === 1 || $galleryPhotos->count() === 1,
+                                        'h-32 rotate-3' => $loop->index === 2,
+                                    ])>
+                                        <img src="{{ $photo }}" alt="Foto galeri pernikahan {{ $loop->iteration }}" loading="lazy" decoding="async"
+                                            class="h-full w-full object-cover">
+                                    </div>
+                                @endforeach
                             </div>
-                            <div class="h-32 rotate-3 rounded-2xl border-4 border-white bg-primary-300 shadow-lg dark:border-secondary-700 dark:bg-primary-800"></div>
-                        </div>
+                        @endif
                     </article>
 
                     <article data-aos="fade-up" data-aos-delay="100"
@@ -218,7 +226,7 @@
                         <p class="mt-2 text-sm leading-7 text-neutral-600 dark:text-neutral-300">Bangun suasana yang tepat dengan lagu spesial Anda.</p>
                         <div class="mt-7 flex h-14 items-center gap-1.5 rounded-2xl bg-white px-4 dark:bg-secondary-900">
                             @foreach (['h-2', 'h-3.5', 'h-5', 'h-3', 'h-6', 'h-4', 'h-2.5', 'h-[18px]', 'h-3', 'h-[22px]', 'h-3.5', 'h-2'] as $heightClass)
-                                <span class="w-1.5 rounded-full bg-primary-400 {{ $heightClass }}" aria-hidden="true"></span>
+                                <span class="undangan-equalizer-bar w-1.5 rounded-full bg-primary-400 {{ $heightClass }}" aria-hidden="true"></span>
                             @endforeach
                             <span class="ml-auto flex h-9 w-9 items-center justify-center rounded-full bg-primary-500 text-xs text-white">
                                 <i class="fa-solid fa-pause" aria-hidden="true"></i>
@@ -241,7 +249,7 @@
             </div>
         </section>
 
-        <section class="border-y border-neutral-200 bg-neutral-50 py-20 dark:border-secondary-700 dark:bg-secondary-800/40 sm:py-24" id="cara-kerja">
+        <section class="scroll-mt-20 border-y border-neutral-200 bg-neutral-50 py-20 dark:border-secondary-700 dark:bg-secondary-800/40 sm:py-24" id="cara-kerja">
             <div class="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
                 <div class="grid items-end gap-6 lg:grid-cols-2">
                     <div data-aos="fade-right">
@@ -274,7 +282,7 @@
             </div>
         </section>
 
-        <section class="bg-white py-20 dark:bg-secondary-900 sm:py-24" id="harga">
+        <section class="scroll-mt-20 bg-white py-20 dark:bg-secondary-900 sm:py-24" id="harga">
             <div class="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
                 <div class="mx-auto max-w-2xl text-center" data-aos="fade-up">
                     <span class="text-xs font-bold uppercase tracking-[0.2em] text-primary-500">Harga transparan</span>

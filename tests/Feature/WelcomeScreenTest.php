@@ -48,6 +48,22 @@ beforeEach(function () {
     ]);
 });
 
+test('owner can view the welcome screen editor and retain unchecked wishes after validation', function () {
+    $this->actingAs($this->user)
+        ->withSession(['_old_input' => [
+            'selected_theme' => 'modern-dark',
+            'custom_title' => 'Selamat Datang di Pernikahan Kami',
+        ]])
+        ->get(route('dashboard.invitations.guestbook.settings', $this->invitation))
+        ->assertSuccessful()
+        ->assertSeeText('Pratinjau konten')
+        ->assertSeeText('Pilih suasana layar')
+        ->assertSee('name="screen_gallery_photos[]"', false)
+        ->assertSee('name="selected_theme"', false)
+        ->assertSee('&quot;wishes&quot;:false', false)
+        ->assertSee('value="Selamat Datang di Pernikahan Kami"', false);
+});
+
 test('owner can access welcome screen with platinum invitation', function () {
     $response = $this->actingAs($this->user)
         ->get(route('dashboard.welcome-screen.index', $this->invitation));

@@ -35,12 +35,10 @@ use App\Http\Controllers\ScreenDisplayController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\ThemeController;
 use App\Http\Controllers\ThemePreviewController;
+use App\Http\Controllers\UndanganWebController;
 use App\Http\Controllers\WeddingPlannerController;
 use App\Http\Controllers\WelcomeScreenController;
 use App\Http\Controllers\WishController;
-use App\Models\Package;
-use App\Services\PromotionService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
@@ -61,16 +59,7 @@ Route::get('/themes/{themeSlug}/preview', [ThemePreviewController::class, 'show'
 Route::get('/preview/{themeSlug}', fn (string $themeSlug) => redirect()->route('theme.preview', $themeSlug));
 
 // Public Pages
-Route::get('/undangan-web', function (Request $request, PromotionService $promotions) {
-    $packages = Package::with('features')
-        ->where('is_visible', true)
-        ->orderBy('sort_order')
-        ->get();
-
-    $promotionCatalog = $promotions->catalog($packages, $request);
-
-    return view('undangan-web', compact('packages', 'promotionCatalog'));
-})->name('undangan-web');
+Route::get('/undangan-web', UndanganWebController::class)->name('undangan-web');
 Route::view('/buku-tamu', 'buku-tamu')->name('buku-tamu');
 Route::view('/live-streaming', 'live-streaming')->name('live-streaming');
 Route::view('/syarat-ketentuan', 'syarat-ketentuan')->name('syarat-ketentuan');

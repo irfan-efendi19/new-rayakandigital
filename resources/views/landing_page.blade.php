@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <x-meta title="Rayakan Digital | Solusi Digital Acara Modern"
-        description="Rayakan Digital menyediakan undangan online, buku tamu digital, QR code, dan live streaming untuk acara modern Anda. Buat momen berkesan jadi lebih praktis!"
+    <x-meta title="Rayakan Digital | Undangan Digital Pernikahan"
+        description="Buat undangan digital pernikahan dengan tema pilihan, musik, galeri, dan RSVP. Pilih desain, lengkapi cerita Anda, lalu bagikan lewat WhatsApp bersama Rayakan Digital."
         keywords="rayakan digital, undangan digital, undangan online, undangan pernikahan, QR code tamu, buku tamu digital, live streaming acara, website undangan, acara modern, undangan web"
         image="{{ asset('img/thumnail.jpg') }}" />
 
@@ -39,7 +39,7 @@
     {{-- ═══════════════════════════════════════════════
     HERO — Asymmetric editorial split
     ═══════════════════════════════════════════════ --}}
-    <section
+    <section id="hero"
         class="relative min-h-[92vh] flex items-center overflow-hidden bg-[#FDFCFA] dark:bg-secondary-900 grain-bg">
 
         {{-- Background orbs --}}
@@ -76,14 +76,7 @@
                         class="font-heading max-sm:text-4xl text-5xl sm:text-6xl lg:text-7xl font-bold leading-[1.05] text-secondary-900 dark:text-neutral-100 mb-6">
                         Cara Mudah<br>
                         Bikin<br>
-                        <span class="changing-texts text-primary-500">
-                            <span class="changing-texts-track">
-                                <span>Undangan Digital</span>
-                                <span>Buku Tamu</span>
-                                <span>LIVE Streaming</span>
-                                <span>Undangan Digital</span>
-                            </span>
-                        </span>
+                        <span class="text-primary-500">Undangan Digital</span>
                     </h1>
 
                     <p class="text-lg text-neutral-500 dark:text-neutral-400 max-w-md leading-relaxed mb-10">
@@ -93,20 +86,29 @@
                     </p>
 
 
-                    <div class="flex flex-col sm:flex-row gap-4 mb-12">
+                    <div class="flex flex-col sm:flex-row gap-4 mb-4">
                         <a href="{{ route('register') }}" id="hero-cta-register"
                             class="group inline-flex items-center justify-center gap-2.5 px-8 py-4 bg-primary-500 hover:bg-primary-600 text-white text-sm font-bold rounded-2xl shadow-[0_8px_32px_-8px_rgba(255,122,0,0.5)] hover:shadow-[0_12px_40px_-8px_rgba(255,122,0,0.65)] transition-all duration-300 hover:-translate-y-0.5">
                             <i class="fas fa-gem"></i>
-                            <span>Mulai Gratis Sekarang</span>
+                            <span>Buat Undangan Gratis</span>
                             <i
                                 class="fas fa-arrow-right text-xs group-hover:translate-x-1 transition-transform duration-300"></i>
                         </a>
-                        <a href="{{ route('themes.index') }}" id="hero-cta-themes"
+                        <a href="#themes" id="hero-cta-themes"
                             class="inline-flex items-center justify-center gap-2.5 px-8 py-4 bg-white dark:bg-secondary-800 border border-neutral-200 dark:border-secondary-700 text-secondary-700 dark:text-neutral-300 text-sm font-semibold rounded-2xl hover:border-primary-300 hover:text-primary-600 transition-all duration-300 shadow-sm">
                             <i class="fas fa-palette text-primary-500"></i>
                             <span>Lihat Tema</span>
                         </a>
                     </div>
+
+                    <a href="#wedding-planner" id="hero-planner-hook"
+                        class="mb-10 flex max-w-md items-start gap-2.5 rounded-lg text-sm leading-relaxed text-neutral-600 transition-colors hover:text-primary-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-4 dark:text-neutral-300 dark:hover:text-primary-300 dark:focus-visible:ring-offset-secondary-900">
+                        <i class="fas fa-gift pt-1 text-primary-600 dark:text-primary-400" aria-hidden="true"></i>
+                        <span>
+                            <strong class="text-primary-700 dark:text-primary-300">Daftar undangan, dapat Wedding Planner GRATIS.</strong>
+                            <span class="block">Tetap bisa dipakai meski undangan kedaluwarsa.</span>
+                        </span>
+                    </a>
 
                     {{-- Trust strip --}}
                     <div class="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-neutral-400">
@@ -209,124 +211,186 @@
     </div>
 
     {{-- ═══════════════════════════════════════════════
-    SERVICES — Bento-style layout
+    THEME CATALOG — Horizontal scroll, editorial frame
     ═══════════════════════════════════════════════ --}}
-    <section id="services" data-aos="fade-up" class="py-24 bg-[#FDFCFA] dark:bg-secondary-900">
+    <section id="themes" x-data="{ filter: 'all' }" data-aos="fade-up"
+        class="py-24 bg-[#FDFCFA] dark:bg-secondary-900 overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
             {{-- Header --}}
-            <div class="mb-16">
-                <p class="text-xs font-bold tracking-[0.2em] text-primary-500 uppercase mb-3">Layanan Kami</p>
-                <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+                <div>
+                    <p class="text-xs font-bold tracking-[0.2em] text-primary-500 uppercase mb-3">Katalog Tema</p>
                     <h2
                         class="font-heading text-4xl md:text-5xl font-bold text-secondary-900 dark:text-neutral-100 leading-tight">
-                        Satu Platform,<br>
-                        <span class="text-primary-500">Semua Kebutuhan</span>
+                        Pilih <span class="text-primary-500">Desain</span><br>
+                        Undangan Anda
                     </h2>
-                    <p class="text-neutral-500 dark:text-neutral-400 max-w-xs text-sm leading-relaxed">
-                        Solusi digital terlengkap untuk setiap detail perayaan momen spesial Anda.
-                    </p>
+                </div>
+                <p class="text-neutral-500 dark:text-neutral-400 max-w-xs text-sm leading-relaxed">
+                    Pratinjau langsung dengan data contoh. Klik "Gunakan Tema" untuk langsung mulai.
+                </p>
+            </div>
+
+            {{-- Category Filters --}}
+            @if($categories->isNotEmpty())
+                <div class="flex flex-wrap gap-2.5 mb-8">
+                    <button @click="filter = 'all'" id="filter-all"
+                        :class="filter === 'all'
+                                ? 'bg-primary-500 text-white shadow-md shadow-primary-200/50 border-primary-500'
+                                : 'bg-white dark:bg-secondary-800 text-secondary-600 dark:text-neutral-300 border-neutral-200 dark:border-secondary-700 hover:border-primary-200'"
+                        class="px-5 py-2 rounded-full text-sm font-semibold transition-all duration-200 border">
+                        Semua
+                        <span class="ml-1 text-xs opacity-70">({{ $themes->count() }})</span>
+                    </button>
+                    @foreach($categories as $category)
+                        <button @click="filter = '{{ $category->id }}'" id="filter-cat-{{ $category->id }}"
+                            :class="filter === '{{ $category->id }}'
+                                        ? 'bg-primary-500 text-white shadow-md shadow-primary-200/50 border-primary-500'
+                                        : 'bg-white dark:bg-secondary-800 text-secondary-600 dark:text-neutral-300 border-neutral-200 dark:border-secondary-700 hover:border-primary-200'"
+                            class="px-5 py-2 rounded-full text-sm font-semibold transition-all duration-200 border">
+                            {{ $category->name }}
+                            <span class="ml-1 text-xs opacity-70">({{ $category->themes_count }})</span>
+                        </button>
+                    @endforeach
+                </div>
+            @endif
+
+            {{-- Scroll container --}}
+            <div class="relative">
+                <button type="button" @click="$refs.scrollContainer.scrollLeft -= 320"
+                    aria-label="Geser tema ke kiri"
+                    class="absolute left-0 top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-neutral-200 bg-white text-neutral-600 shadow-lg transition-all duration-200 hover:border-primary-300 hover:text-primary-600 hover:shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 lg:flex dark:border-secondary-700 dark:bg-secondary-800 dark:text-neutral-300">
+                    <i class="fas fa-chevron-left text-xs"></i>
+                </button>
+                <button type="button" @click="$refs.scrollContainer.scrollLeft += 320"
+                    aria-label="Geser tema ke kanan"
+                    class="absolute right-0 top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-neutral-200 bg-white text-neutral-600 shadow-lg transition-all duration-200 hover:border-primary-300 hover:text-primary-600 hover:shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 lg:flex dark:border-secondary-700 dark:bg-secondary-800 dark:text-neutral-300">
+                    <i class="fas fa-chevron-right text-xs"></i>
+                </button>
+
+                <div x-ref="scrollContainer"
+                    class="-mx-4 snap-x snap-mandatory scroll-px-4 overflow-x-auto px-4 pb-8 pt-3 scroll-smooth sm:-mx-6 sm:scroll-px-6 sm:px-6 lg:mx-0 lg:px-14">
+                    <div class="flex w-max gap-5 px-0.5">
+                        @forelse($themes as $theme)
+                            <div x-show="filter === 'all' || filter === '{{ $theme->theme_category_id ?? '0' }}'"
+                                x-transition:enter="transition ease-out duration-300"
+                                x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
+                                class="w-[78vw] max-w-[19rem] shrink-0 snap-start sm:w-72">
+                                <x-theme-card :theme="$theme" variant="carousel" />
+                            </div>
+                        @empty
+                            <div class="py-16 text-center w-full min-w-[400px]">
+                                <i class="fas fa-paintbrush text-3xl text-neutral-300 mb-3"></i>
+                                <p class="text-neutral-500 font-medium">Belum ada tema tersedia</p>
+                            </div>
+                        @endforelse
+                    </div>
                 </div>
             </div>
 
-            {{-- Bento grid --}}
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-
-                {{-- Card 1: Undangan Web — large --}}
-                <div data-aos="fade-up" data-aos-delay="100"
-                    class="group relative lg:col-span-2 rounded-3xl overflow-hidden bg-gradient-to-br from-primary-50 to-[#FFF4EB] dark:from-secondary-800 dark:to-secondary-800 border border-primary-100/50 dark:border-secondary-700 p-8 hover:shadow-[0_20px_60px_-12px_rgba(255,122,0,0.2)] transition-all duration-500">
-                    <div
-                        class="absolute -right-8 -bottom-8 w-48 h-48 bg-primary-500/10 rounded-full blur-2xl pointer-events-none group-hover:scale-150 transition-transform duration-700">
-                    </div>
-                    <div class="relative z-10">
-                        <div class="flex items-start justify-between mb-6">
-                            <div
-                                class="w-14 h-14 rounded-2xl bg-primary-500 text-white flex items-center justify-center shadow-lg shadow-primary-200 group-hover:scale-110 transition-transform duration-300">
-                                <i class="fas fa-envelope-open-text text-xl"></i>
-                            </div>
-                            <span
-                                class="text-[80px] font-black text-primary-100 dark:text-primary-900/30 leading-none select-none">01</span>
-                        </div>
-                        <h3 class="text-2xl font-bold text-secondary-900 dark:text-neutral-100 mb-2">Undangan Web</h3>
-                        <p class="text-neutral-500 dark:text-neutral-400 leading-relaxed mb-6 max-w-md">
-                            Undangan digital eksklusif dengan desain responsif, musik latar, galeri foto, dan countdown
-                            otomatis. Siap dalam 5 menit.
-                        </p>
-                        <a href="{{ route('undangan-web') }}" id="service-undangan-link"
-                            class="inline-flex items-center gap-2 text-primary-600 font-semibold text-sm hover:gap-3 transition-all duration-200">
-                            Selengkapnya <i class="fas fa-arrow-right text-xs"></i>
-                        </a>
-                    </div>
-                </div>
-
-                {{-- Card 2: Buku Tamu --}}
-                <div data-aos="fade-up" data-aos-delay="200"
-                    class="group relative rounded-3xl overflow-hidden bg-gradient-to-br from-emerald-50 to-teal-50/50 dark:from-secondary-800 dark:to-secondary-800 border border-emerald-100/50 dark:border-secondary-700 p-8 hover:shadow-[0_20px_60px_-12px_rgba(16,185,129,0.2)] transition-all duration-500">
-                    <div
-                        class="absolute -right-6 -bottom-6 w-36 h-36 bg-emerald-400/10 rounded-full blur-2xl pointer-events-none group-hover:scale-150 transition-transform duration-700">
-                    </div>
-                    <div class="relative z-10">
-                        <div class="flex items-start justify-between mb-6">
-                            <div
-                                class="w-14 h-14 rounded-2xl bg-emerald-500 text-white flex items-center justify-center shadow-lg shadow-emerald-200 group-hover:scale-110 transition-transform duration-300">
-                                <i class="fas fa-qrcode text-xl"></i>
-                            </div>
-                            <span
-                                class="text-[80px] font-black text-emerald-100 dark:text-emerald-900/20 leading-none select-none">02</span>
-                        </div>
-                        <h3 class="text-2xl font-bold text-secondary-900 dark:text-neutral-100 mb-2">Buku Tamu Digital
-                        </h3>
-                        <p class="text-neutral-500 dark:text-neutral-400 leading-relaxed mb-6">
-                            Check-in QR Code. Lebih cepat, terorganisir, data tersimpan otomatis.
-                        </p>
-                        <a href="{{ route('buku-tamu') }}" id="service-bukutamu-link"
-                            class="inline-flex items-center gap-2 text-emerald-600 font-semibold text-sm hover:gap-3 transition-all duration-200">
-                            Selengkapnya <i class="fas fa-arrow-right text-xs"></i>
-                        </a>
-                    </div>
-                </div>
-
-                {{-- Card 3: Live Streaming --}}
-                <div data-aos="fade-up" data-aos-delay="300"
-                    class="group relative rounded-3xl overflow-hidden bg-gradient-to-br from-purple-50 to-indigo-50/50 dark:from-secondary-800 dark:to-secondary-800 border border-purple-100/50 dark:border-secondary-700 p-8 hover:shadow-[0_20px_60px_-12px_rgba(147,51,234,0.2)] transition-all duration-500">
-                    <div
-                        class="absolute -right-6 -bottom-6 w-36 h-36 bg-purple-400/10 rounded-full blur-2xl pointer-events-none group-hover:scale-150 transition-transform duration-700">
-                    </div>
-                    <div class="relative z-10">
-                        <div class="flex items-start justify-between mb-6">
-                            <div
-                                class="w-14 h-14 rounded-2xl bg-purple-500 text-white flex items-center justify-center shadow-lg shadow-purple-200 group-hover:scale-110 transition-transform duration-300">
-                                <i class="fas fa-broadcast-tower text-xl"></i>
-                            </div>
-                            <span
-                                class="text-[80px] font-black text-purple-100 dark:text-purple-900/20 leading-none select-none">03</span>
-                        </div>
-                        <h3 class="text-2xl font-bold text-secondary-900 dark:text-neutral-100 mb-2">Live Streaming</h3>
-                        <p class="text-neutral-500 dark:text-neutral-400 leading-relaxed mb-6">
-                            Hubungkan tamu yang tidak bisa hadir melalui siaran langsung berkualitas tinggi.
-                        </p>
-                        <a href="{{ route('live-streaming') }}" id="service-streaming-link"
-                            class="inline-flex items-center gap-2 text-purple-600 font-semibold text-sm hover:gap-3 transition-all duration-200">
-                            Selengkapnya <i class="fas fa-arrow-right text-xs"></i>
-                        </a>
-                    </div>
-                </div>
-
-                {{-- Card 4: CTA --}}
-                <div data-aos="fade-up" data-aos-delay="400"
-                    class="lg:col-span-2 rounded-3xl bg-secondary-900 dark:bg-black/40 p-8 flex flex-col sm:flex-row items-center justify-between gap-6">
-                    <div>
-                        <h3 class="text-xl font-bold text-white mb-2">Siap memulai perjalanan digital?</h3>
-                        <p class="text-neutral-400 text-sm">Konsultasikan kebutuhan acara Anda — gratis.</p>
-                    </div>
-                    <a href="https://wa.me/62895349823366?text=Halo%20Rayakan%20Digital%2C%20saya%20ingin%20konsultasi%20tentang%20layanan%20undangan%20digital."
-                        id="service-cta-wa"
-                        class="flex-shrink-0 inline-flex items-center gap-2.5 px-6 py-3.5 bg-primary-500 hover:bg-primary-600 text-white text-sm font-bold rounded-2xl transition-all duration-200 shadow-lg shadow-primary-900/40 hover:shadow-primary-900/60">
-                        <i class="fab fa-whatsapp"></i>
-                        Hubungi Kami
+            @if($totalThemes > 8)
+                <div class="mt-10 text-center">
+                    <a href="{{ route('themes.index') }}" id="themes-view-all"
+                        class="inline-flex items-center gap-2 px-8 py-3.5 border-2 border-primary-200 text-primary-600 font-semibold rounded-2xl bg-white dark:bg-secondary-800 hover:bg-primary-50 hover:border-primary-400 transition-all duration-200 shadow-sm group">
+                        <i class="fas fa-th-large text-sm"></i>
+                        <span>Lihat Semua Tema ({{ $totalThemes }})</span>
+                        <i
+                            class="fas fa-arrow-right text-sm group-hover:translate-x-1 transition-transform duration-200"></i>
                     </a>
                 </div>
+            @endif
+        </div>
+    </section>
+
+    {{-- ═══════════════════════════════════════════════
+    FEATURES — Staggered bento
+    ═══════════════════════════════════════════════ --}}
+    <section id="features" data-aos="fade-up" class="py-24 bg-[#F5F3EF] dark:bg-secondary-900/60">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            {{-- Header --}}
+            <div class="mb-16 text-center">
+                <p class="text-xs font-bold tracking-[0.2em] text-primary-500 uppercase mb-3">Fitur Undangan Digital</p>
+                <h2 class="font-heading text-4xl md:text-5xl font-bold text-secondary-900 dark:text-neutral-100 mb-4">
+                    Undangan Lebih Personal,<br><span class="text-primary-500">Persiapan Lebih Praktis</span>
+                </h2>
+                <p class="text-neutral-500 dark:text-neutral-400 max-w-lg mx-auto text-sm">
+                    Bagikan cerita cinta Anda, sapa setiap tamu, dan pantau konfirmasi kehadiran dalam satu undangan digital.
+                </p>
             </div>
+
+            {{-- Feature chips grid --}}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+                @php
+                    $features = [
+                        // 1. Mengundang Tamu
+                        ['icon' => 'fa-link', 'color' => 'emerald', 'title' => 'Link Personal Tamu', 'desc' => 'Sapa tamu dengan nama. Link khusus setiap tamu lengkap dengan template WhatsApp otomatis.', 'tag' => 'Personalized greeting'],
+                        ['icon' => 'fa-whatsapp fab', 'color' => 'green', 'title' => 'Broadcast WhatsApp', 'desc' => 'Kirim pengingat otomatis ke semua tamu. Template pesan siap pakai dan bisa diedit.', 'tag' => 'Auto reminder'],
+
+                        // 2. Sebelum Acara
+                        ['icon' => 'fa-calendar-check', 'color' => 'primary', 'title' => 'Manajemen RSVP', 'desc' => 'Ketahui siapa saja yang hadir. Sistem RSVP terintegrasi dashboard dengan notifikasi real-time.', 'tag' => 'Real-time tracking'],
+                        ['icon' => 'fa-hourglass-half', 'color' => 'blue', 'title' => 'Countdown Timer', 'desc' => 'Hitung mundur menuju hari H. Buat tamu semakin antusias dan tidak lupa tanggal.', 'tag' => 'Auto countdown'],
+                        ['icon' => 'fa-map-marker-alt', 'color' => 'indigo', 'title' => 'Peta Lokasi', 'desc' => 'Google Maps langsung di undangan. Tamu buka navigasi dengan satu klik.', 'tag' => 'Google Maps'],
+
+                        // 3. Saat Acara
+                        ['icon' => 'fa-qrcode', 'color' => 'cyan', 'title' => 'QR Code Check-in', 'desc' => 'Proses registrasi tamu lebih cepat dengan QR Code unik. Kehadiran tercatat otomatis di dashboard.', 'tag' => 'Fast check-in'],
+                        ['icon' => 'fa-video', 'color' => 'orange', 'title' => 'Live Streaming', 'desc' => 'Siarkan acara secara langsung melalui YouTube atau Zoom agar keluarga dan teman tetap bisa menyaksikan.', 'tag' => 'Live event'],
+                        ['icon' => 'fa-music', 'color' => 'pink', 'title' => 'Background Music', 'desc' => 'Tambahkan musik favorit sebagai latar undangan untuk menciptakan pengalaman yang lebih berkesan.', 'tag' => 'Auto play'],
+
+                        // 4. Interaksi Tamu
+                        ['icon' => 'fa-book-open', 'color' => 'purple', 'title' => 'Buku Tamu Interaktif', 'desc' => 'Ucapan dan doa real-time di halaman undangan, dilengkapi emoji dan stiker.', 'tag' => 'Real-time messages'],
+                        ['icon' => 'fa-gift', 'color' => 'amber', 'title' => 'Digital Gift (Angpao)', 'desc' => 'Transfer bank, QRIS, atau e-wallet. Tamu bisa kirim hadiah dari mana saja.', 'tag' => 'Multi payment'],
+
+                        // 5. Setelah Acara
+                        ['icon' => 'fa-images', 'color' => 'rose', 'title' => 'Galeri Foto & Video', 'desc' => 'Unggah foto kenangan. Tamu juga bisa kirim foto mereka ke galeri bersama.', 'tag' => 'Unlimited uploads*'],
+                        ['icon' => 'fa-chart-line', 'color' => 'slate', 'title' => 'Analytics & Insight', 'desc' => 'Pantau pengunjung, RSVP, dan interaksi tamu. Data real-time di dashboard lengkap.', 'tag' => 'Real-time analytics'],
+                    ];
+
+                    $colorMap = [
+                        'primary' => ['bg' => 'bg-primary-500', 'light' => 'bg-primary-50 dark:bg-primary-900/20', 'text' => 'text-primary-500', 'tag' => 'bg-primary-100 text-primary-700 dark:bg-primary-900/30 dark:text-primary-300'],
+                        'emerald' => ['bg' => 'bg-emerald-500', 'light' => 'bg-emerald-50 dark:bg-emerald-900/20', 'text' => 'text-emerald-500', 'tag' => 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300'],
+                        'amber' => ['bg' => 'bg-amber-500', 'light' => 'bg-amber-50 dark:bg-amber-900/20', 'text' => 'text-amber-500', 'tag' => 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300'],
+                        'purple' => ['bg' => 'bg-purple-500', 'light' => 'bg-purple-50 dark:bg-purple-900/20', 'text' => 'text-purple-500', 'tag' => 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300'],
+                        'rose' => ['bg' => 'bg-rose-500', 'light' => 'bg-rose-50 dark:bg-rose-900/20', 'text' => 'text-rose-500', 'tag' => 'bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-300'],
+                        'blue' => ['bg' => 'bg-blue-500', 'light' => 'bg-blue-50 dark:bg-blue-900/20', 'text' => 'text-blue-500', 'tag' => 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'],
+                        'indigo' => ['bg' => 'bg-indigo-500', 'light' => 'bg-indigo-50 dark:bg-indigo-900/20', 'text' => 'text-indigo-500', 'tag' => 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300'],
+                        'green' => ['bg' => 'bg-green-500', 'light' => 'bg-green-50 dark:bg-green-900/20', 'text' => 'text-green-500', 'tag' => 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300'],
+                        'slate' => ['bg' => 'bg-slate-500', 'light' => 'bg-slate-50 dark:bg-slate-900/20', 'text' => 'text-slate-500', 'tag' => 'bg-slate-100 text-slate-700 dark:bg-slate-900/30 dark:text-slate-300'],
+
+                        // Warna baru
+                        'cyan' => ['bg' => 'bg-cyan-500', 'light' => 'bg-cyan-50 dark:bg-cyan-900/20', 'text' => 'text-cyan-500', 'tag' => 'bg-cyan-100 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-300'],
+                        'pink' => ['bg' => 'bg-pink-500', 'light' => 'bg-pink-50 dark:bg-pink-900/20', 'text' => 'text-pink-500', 'tag' => 'bg-pink-100 text-pink-700 dark:bg-pink-900/30 dark:text-pink-300'],
+                        'orange' => ['bg' => 'bg-orange-500', 'light' => 'bg-orange-50 dark:bg-orange-900/20', 'text' => 'text-orange-500', 'tag' => 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300'],
+                    ];
+                @endphp
+
+                @foreach($features as $i => $feat)
+                    @php $c = $colorMap[$feat['color']];
+                    $delay = ($i % 3 + 1) * 100; @endphp
+                    <div data-aos="fade-up" data-aos-delay="{{ $delay }}"
+                        class="feature-chip group bg-white dark:bg-secondary-800 rounded-2xl p-6 border border-neutral-100/70 dark:border-secondary-700 shadow-[0_2px_12px_rgba(0,0,0,0.04)]">
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="flex-shrink-0 w-11 h-11 rounded-xl {{ $c['light'] }} flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                <i
+                                    class="{{ str_contains($feat['icon'], 'fab') ? 'fab ' . str_replace(' fab', '', $feat['icon']) : 'fas ' . $feat['icon'] }} {{ $c['text'] }}"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <h3 class="font-bold text-secondary-800 dark:text-neutral-200 mb-1 text-sm">
+                                    {{ $feat['title'] }}</h3>
+                                <p class="text-neutral-500 dark:text-neutral-400 text-xs leading-relaxed mb-3">
+                                    {{ $feat['desc'] }}</p>
+                                <span
+                                    class="inline-block px-2 py-0.5 rounded text-[10px] font-bold {{ $c['tag'] }}">{{ $feat['tag'] }}</span>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+
+            <p class="text-center text-xs text-neutral-400 mt-8">*Fitur tersedia sesuai paket yang dipilih</p>
         </div>
     </section>
 
@@ -344,7 +408,7 @@
 
                 {{-- Left: Header sticky-ish --}}
                 <div data-aos="fade-right" class="lg:sticky lg:top-24">
-                    <p class="text-xs font-bold tracking-[0.2em] text-primary-500 uppercase mb-4">Workflow</p>
+                    <p class="text-xs font-bold tracking-[0.2em] text-primary-500 uppercase mb-4">Cara Membuat Undangan</p>
                     <h2 class="font-heading text-4xl md:text-5xl font-bold text-white leading-tight mb-6">
                         Dari Pilih Desain<br>
                         ke <span class="text-primary-500">Sebar Undangan</span><br>
@@ -481,203 +545,19 @@
     </section>
 
     {{-- ═══════════════════════════════════════════════
-    THEME CATALOG — Horizontal scroll, editorial frame
-    ═══════════════════════════════════════════════ --}}
-    <section id="themes" x-data="{ filter: 'all' }" data-aos="fade-up"
-        class="py-24 bg-[#FDFCFA] dark:bg-secondary-900 overflow-hidden">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-            {{-- Header --}}
-            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
-                <div>
-                    <p class="text-xs font-bold tracking-[0.2em] text-primary-500 uppercase mb-3">Katalog Tema</p>
-                    <h2
-                        class="font-heading text-4xl md:text-5xl font-bold text-secondary-900 dark:text-neutral-100 leading-tight">
-                        Pilih <span class="text-primary-500">Desain</span><br>
-                        Undangan Anda
-                    </h2>
-                </div>
-                <p class="text-neutral-500 dark:text-neutral-400 max-w-xs text-sm leading-relaxed">
-                    Pratinjau langsung dengan data contoh. Klik "Gunakan Tema" untuk langsung mulai.
-                </p>
-            </div>
-
-            {{-- Category Filters --}}
-            @if($categories->isNotEmpty())
-                <div class="flex flex-wrap gap-2.5 mb-8">
-                    <button @click="filter = 'all'" id="filter-all"
-                        :class="filter === 'all'
-                                ? 'bg-primary-500 text-white shadow-md shadow-primary-200/50 border-primary-500'
-                                : 'bg-white dark:bg-secondary-800 text-secondary-600 dark:text-neutral-300 border-neutral-200 dark:border-secondary-700 hover:border-primary-200'"
-                        class="px-5 py-2 rounded-full text-sm font-semibold transition-all duration-200 border">
-                        Semua
-                        <span class="ml-1 text-xs opacity-70">({{ $themes->count() }})</span>
-                    </button>
-                    @foreach($categories as $category)
-                        <button @click="filter = '{{ $category->id }}'" id="filter-cat-{{ $category->id }}"
-                            :class="filter === '{{ $category->id }}'
-                                        ? 'bg-primary-500 text-white shadow-md shadow-primary-200/50 border-primary-500'
-                                        : 'bg-white dark:bg-secondary-800 text-secondary-600 dark:text-neutral-300 border-neutral-200 dark:border-secondary-700 hover:border-primary-200'"
-                            class="px-5 py-2 rounded-full text-sm font-semibold transition-all duration-200 border">
-                            {{ $category->name }}
-                            <span class="ml-1 text-xs opacity-70">({{ $category->themes_count }})</span>
-                        </button>
-                    @endforeach
-                </div>
-            @endif
-
-            {{-- Scroll container --}}
-            <div class="relative">
-                <button type="button" @click="$refs.scrollContainer.scrollLeft -= 320"
-                    aria-label="Geser tema ke kiri"
-                    class="absolute left-0 top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-neutral-200 bg-white text-neutral-600 shadow-lg transition-all duration-200 hover:border-primary-300 hover:text-primary-600 hover:shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 lg:flex dark:border-secondary-700 dark:bg-secondary-800 dark:text-neutral-300">
-                    <i class="fas fa-chevron-left text-xs"></i>
-                </button>
-                <button type="button" @click="$refs.scrollContainer.scrollLeft += 320"
-                    aria-label="Geser tema ke kanan"
-                    class="absolute right-0 top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-neutral-200 bg-white text-neutral-600 shadow-lg transition-all duration-200 hover:border-primary-300 hover:text-primary-600 hover:shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 lg:flex dark:border-secondary-700 dark:bg-secondary-800 dark:text-neutral-300">
-                    <i class="fas fa-chevron-right text-xs"></i>
-                </button>
-
-                <div x-ref="scrollContainer"
-                    class="-mx-4 snap-x snap-mandatory scroll-px-4 overflow-x-auto px-4 pb-8 pt-3 scroll-smooth sm:-mx-6 sm:scroll-px-6 sm:px-6 lg:mx-0 lg:px-14">
-                    <div class="flex w-max gap-5 px-0.5">
-                        @forelse($themes as $theme)
-                            <div x-show="filter === 'all' || filter === '{{ $theme->theme_category_id ?? '0' }}'"
-                                x-transition:enter="transition ease-out duration-300"
-                                x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
-                                class="w-[78vw] max-w-[19rem] shrink-0 snap-start sm:w-72">
-                                <x-theme-card :theme="$theme" variant="carousel" />
-                            </div>
-                        @empty
-                            <div class="py-16 text-center w-full min-w-[400px]">
-                                <i class="fas fa-paintbrush text-3xl text-neutral-300 mb-3"></i>
-                                <p class="text-neutral-500 font-medium">Belum ada tema tersedia</p>
-                            </div>
-                        @endforelse
-                    </div>
-                </div>
-            </div>
-
-            @if($totalThemes > 8)
-                <div class="mt-10 text-center">
-                    <a href="{{ route('themes.index') }}" id="themes-view-all"
-                        class="inline-flex items-center gap-2 px-8 py-3.5 border-2 border-primary-200 text-primary-600 font-semibold rounded-2xl bg-white dark:bg-secondary-800 hover:bg-primary-50 hover:border-primary-400 transition-all duration-200 shadow-sm group">
-                        <i class="fas fa-th-large text-sm"></i>
-                        <span>Lihat Semua Tema ({{ $totalThemes }})</span>
-                        <i
-                            class="fas fa-arrow-right text-sm group-hover:translate-x-1 transition-transform duration-200"></i>
-                    </a>
-                </div>
-            @endif
-        </div>
-    </section>
-
-    {{-- ═══════════════════════════════════════════════
-    FEATURES — Staggered bento
-    ═══════════════════════════════════════════════ --}}
-    <section data-aos="fade-up" class="py-24 bg-[#F5F3EF] dark:bg-secondary-900/60">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-            {{-- Header --}}
-            <div class="mb-16 text-center">
-                <p class="text-xs font-bold tracking-[0.2em] text-primary-500 uppercase mb-3">Fitur Unggulan</p>
-                <h2 class="font-heading text-4xl md:text-5xl font-bold text-secondary-900 dark:text-neutral-100 mb-4">
-                    Semua Yang<br><span class="text-primary-500">Anda Butuhkan</span>
-                </h2>
-                <p class="text-neutral-500 dark:text-neutral-400 max-w-lg mx-auto text-sm">
-                    Rayakan Digital hadir dengan fitur lengkap — dari manajemen tamu hingga analitik real-time.
-                </p>
-            </div>
-
-            {{-- Feature chips grid --}}
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-
-                @php
-                    $features = [
-                        // 1. Mengundang Tamu
-                        ['icon' => 'fa-link', 'color' => 'emerald', 'title' => 'Link Personal Tamu', 'desc' => 'Sapa tamu dengan nama. Link khusus setiap tamu lengkap dengan template WhatsApp otomatis.', 'tag' => 'Personalized greeting'],
-                        ['icon' => 'fa-whatsapp fab', 'color' => 'green', 'title' => 'Broadcast WhatsApp', 'desc' => 'Kirim pengingat otomatis ke semua tamu. Template pesan siap pakai dan bisa diedit.', 'tag' => 'Auto reminder'],
-
-                        // 2. Sebelum Acara
-                        ['icon' => 'fa-calendar-check', 'color' => 'primary', 'title' => 'Manajemen RSVP', 'desc' => 'Ketahui siapa saja yang hadir. Sistem RSVP terintegrasi dashboard dengan notifikasi real-time.', 'tag' => 'Real-time tracking'],
-                        ['icon' => 'fa-hourglass-half', 'color' => 'blue', 'title' => 'Countdown Timer', 'desc' => 'Hitung mundur menuju hari H. Buat tamu semakin antusias dan tidak lupa tanggal.', 'tag' => 'Auto countdown'],
-                        ['icon' => 'fa-map-marker-alt', 'color' => 'indigo', 'title' => 'Peta Lokasi', 'desc' => 'Google Maps langsung di undangan. Tamu buka navigasi dengan satu klik.', 'tag' => 'Google Maps'],
-
-                        // 3. Saat Acara
-                        ['icon' => 'fa-qrcode', 'color' => 'cyan', 'title' => 'QR Code Check-in', 'desc' => 'Proses registrasi tamu lebih cepat dengan QR Code unik. Kehadiran tercatat otomatis di dashboard.', 'tag' => 'Fast check-in'],
-                        ['icon' => 'fa-video', 'color' => 'orange', 'title' => 'Live Streaming', 'desc' => 'Siarkan acara secara langsung melalui YouTube atau Zoom agar keluarga dan teman tetap bisa menyaksikan.', 'tag' => 'Live event'],
-                        ['icon' => 'fa-music', 'color' => 'pink', 'title' => 'Background Music', 'desc' => 'Tambahkan musik favorit sebagai latar undangan untuk menciptakan pengalaman yang lebih berkesan.', 'tag' => 'Auto play'],
-
-                        // 4. Interaksi Tamu
-                        ['icon' => 'fa-book-open', 'color' => 'purple', 'title' => 'Buku Tamu Interaktif', 'desc' => 'Ucapan dan doa real-time di halaman undangan, dilengkapi emoji dan stiker.', 'tag' => 'Real-time messages'],
-                        ['icon' => 'fa-gift', 'color' => 'amber', 'title' => 'Digital Gift (Angpao)', 'desc' => 'Transfer bank, QRIS, atau e-wallet. Tamu bisa kirim hadiah dari mana saja.', 'tag' => 'Multi payment'],
-
-                        // 5. Setelah Acara
-                        ['icon' => 'fa-images', 'color' => 'rose', 'title' => 'Galeri Foto & Video', 'desc' => 'Unggah foto kenangan. Tamu juga bisa kirim foto mereka ke galeri bersama.', 'tag' => 'Unlimited uploads*'],
-                        ['icon' => 'fa-chart-line', 'color' => 'slate', 'title' => 'Analytics & Insight', 'desc' => 'Pantau pengunjung, RSVP, dan interaksi tamu. Data real-time di dashboard lengkap.', 'tag' => 'Real-time analytics'],
-                    ];
-
-                    $colorMap = [
-                        'primary' => ['bg' => 'bg-primary-500', 'light' => 'bg-primary-50 dark:bg-primary-900/20', 'text' => 'text-primary-500', 'tag' => 'bg-primary-100 text-primary-700 dark:bg-primary-900/30 dark:text-primary-300'],
-                        'emerald' => ['bg' => 'bg-emerald-500', 'light' => 'bg-emerald-50 dark:bg-emerald-900/20', 'text' => 'text-emerald-500', 'tag' => 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300'],
-                        'amber' => ['bg' => 'bg-amber-500', 'light' => 'bg-amber-50 dark:bg-amber-900/20', 'text' => 'text-amber-500', 'tag' => 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300'],
-                        'purple' => ['bg' => 'bg-purple-500', 'light' => 'bg-purple-50 dark:bg-purple-900/20', 'text' => 'text-purple-500', 'tag' => 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300'],
-                        'rose' => ['bg' => 'bg-rose-500', 'light' => 'bg-rose-50 dark:bg-rose-900/20', 'text' => 'text-rose-500', 'tag' => 'bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-300'],
-                        'blue' => ['bg' => 'bg-blue-500', 'light' => 'bg-blue-50 dark:bg-blue-900/20', 'text' => 'text-blue-500', 'tag' => 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'],
-                        'indigo' => ['bg' => 'bg-indigo-500', 'light' => 'bg-indigo-50 dark:bg-indigo-900/20', 'text' => 'text-indigo-500', 'tag' => 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300'],
-                        'green' => ['bg' => 'bg-green-500', 'light' => 'bg-green-50 dark:bg-green-900/20', 'text' => 'text-green-500', 'tag' => 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300'],
-                        'slate' => ['bg' => 'bg-slate-500', 'light' => 'bg-slate-50 dark:bg-slate-900/20', 'text' => 'text-slate-500', 'tag' => 'bg-slate-100 text-slate-700 dark:bg-slate-900/30 dark:text-slate-300'],
-
-                        // Warna baru
-                        'cyan' => ['bg' => 'bg-cyan-500', 'light' => 'bg-cyan-50 dark:bg-cyan-900/20', 'text' => 'text-cyan-500', 'tag' => 'bg-cyan-100 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-300'],
-                        'pink' => ['bg' => 'bg-pink-500', 'light' => 'bg-pink-50 dark:bg-pink-900/20', 'text' => 'text-pink-500', 'tag' => 'bg-pink-100 text-pink-700 dark:bg-pink-900/30 dark:text-pink-300'],
-                        'orange' => ['bg' => 'bg-orange-500', 'light' => 'bg-orange-50 dark:bg-orange-900/20', 'text' => 'text-orange-500', 'tag' => 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300'],
-                    ];
-                @endphp
-
-                @foreach($features as $i => $feat)
-                    @php $c = $colorMap[$feat['color']];
-                    $delay = ($i % 3 + 1) * 100; @endphp
-                    <div data-aos="fade-up" data-aos-delay="{{ $delay }}"
-                        class="feature-chip group bg-white dark:bg-secondary-800 rounded-2xl p-6 border border-neutral-100/70 dark:border-secondary-700 shadow-[0_2px_12px_rgba(0,0,0,0.04)]">
-                        <div class="flex items-start gap-4">
-                            <div
-                                class="flex-shrink-0 w-11 h-11 rounded-xl {{ $c['light'] }} flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                                <i
-                                    class="{{ str_contains($feat['icon'], 'fab') ? 'fab ' . str_replace(' fab', '', $feat['icon']) : 'fas ' . $feat['icon'] }} {{ $c['text'] }}"></i>
-                            </div>
-                            <div class="flex-1 min-w-0">
-                                <h3 class="font-bold text-secondary-800 dark:text-neutral-200 mb-1 text-sm">
-                                    {{ $feat['title'] }}</h3>
-                                <p class="text-neutral-500 dark:text-neutral-400 text-xs leading-relaxed mb-3">
-                                    {{ $feat['desc'] }}</p>
-                                <span
-                                    class="inline-block px-2 py-0.5 rounded text-[10px] font-bold {{ $c['tag'] }}">{{ $feat['tag'] }}</span>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-
-            <p class="text-center text-xs text-neutral-400 mt-8">*Fitur tersedia sesuai paket yang dipilih</p>
-        </div>
-    </section>
-
-    {{-- ═══════════════════════════════════════════════
     PRICING & SERVICES — Tab with bold pricing
     ═══════════════════════════════════════════════ --}}
-    <section x-data="{ activeTab: 'undangan' }" data-aos="fade-up" class="py-24 bg-[#FDFCFA] dark:bg-secondary-900">
+    <section id="pricing" x-data="{ activeTab: 'undangan' }" data-aos="fade-up" class="py-24 bg-[#FDFCFA] dark:bg-secondary-900">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
             {{-- Header --}}
             <div class="mb-14 text-center">
-                <p class="text-xs font-bold tracking-[0.2em] text-primary-500 uppercase mb-3">Layanan & Harga</p>
+                <p class="text-xs font-bold tracking-[0.2em] text-primary-500 uppercase mb-3">Paket & Harga Undangan</p>
                 <h2 class="font-heading text-4xl md:text-5xl font-bold text-secondary-900 dark:text-neutral-100 mb-4">
-                    Semua Kebutuhan<br><span class="text-primary-500">Pernikahan Anda</span>
+                    Undangan Impian,<br><span class="text-primary-500">Paket Sesuai Kebutuhan</span>
                 </h2>
                 <p class="text-neutral-500 dark:text-neutral-400 max-w-md mx-auto text-sm">
-                    Undangan digital, buku tamu, hingga siaran langsung — semuanya dalam satu platform.
+                    Pilih paket undangan untuk hari istimewa Anda. Layanan buku tamu dan live streaming juga tersedia sesuai kebutuhan acara.
                 </p>
             </div>
 
@@ -899,9 +779,136 @@
     </section>
 
     {{-- ═══════════════════════════════════════════════
+    WEDDING PLANNER
+    ═══════════════════════════════════════════════ --}}
+    <x-landing-wedding-planner />
+
+    {{-- ═══════════════════════════════════════════════
+    SERVICES — Bento-style layout
+    ═══════════════════════════════════════════════ --}}
+    <section id="services" data-aos="fade-up" class="py-24 bg-[#FDFCFA] dark:bg-secondary-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            {{-- Header --}}
+            <div class="mb-16">
+                <p class="text-xs font-bold tracking-[0.2em] text-primary-500 uppercase mb-3">Layanan untuk Perayaan Anda</p>
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                    <h2
+                        class="font-heading text-4xl md:text-5xl font-bold text-secondary-900 dark:text-neutral-100 leading-tight">
+                        Dari Undangan,<br>
+                        <span class="text-primary-500">hingga Hari Perayaan</span>
+                    </h2>
+                    <p class="text-neutral-500 dark:text-neutral-400 max-w-xs text-sm leading-relaxed">
+                        Lengkapi undangan digital Anda dengan buku tamu QR Code dan live streaming untuk menyambut setiap tamu.
+                    </p>
+                </div>
+            </div>
+
+            {{-- Bento grid --}}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+
+                {{-- Card 1: Undangan Web — large --}}
+                <div data-aos="fade-up" data-aos-delay="100"
+                    class="group relative lg:col-span-2 rounded-3xl overflow-hidden bg-gradient-to-br from-primary-50 to-[#FFF4EB] dark:from-secondary-800 dark:to-secondary-800 border border-primary-100/50 dark:border-secondary-700 p-8 hover:shadow-[0_20px_60px_-12px_rgba(255,122,0,0.2)] transition-all duration-500">
+                    <div
+                        class="absolute -right-8 -bottom-8 w-48 h-48 bg-primary-500/10 rounded-full blur-2xl pointer-events-none group-hover:scale-150 transition-transform duration-700">
+                    </div>
+                    <div class="relative z-10">
+                        <div class="flex items-start justify-between mb-6">
+                            <div
+                                class="w-14 h-14 rounded-2xl bg-primary-500 text-white flex items-center justify-center shadow-lg shadow-primary-200 group-hover:scale-110 transition-transform duration-300">
+                                <i class="fas fa-envelope-open-text text-xl"></i>
+                            </div>
+                            <span
+                                class="text-[80px] font-black text-primary-100 dark:text-primary-900/30 leading-none select-none">01</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-secondary-900 dark:text-neutral-100 mb-2">Undangan Web</h3>
+                        <p class="text-neutral-500 dark:text-neutral-400 leading-relaxed mb-6 max-w-md">
+                            Undangan digital eksklusif dengan desain responsif, musik latar, galeri foto, dan countdown
+                            otomatis. Siap dalam 5 menit.
+                        </p>
+                        <a href="{{ route('undangan-web') }}" id="service-undangan-link"
+                            class="inline-flex items-center gap-2 text-primary-600 font-semibold text-sm hover:gap-3 transition-all duration-200">
+                            Selengkapnya <i class="fas fa-arrow-right text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+
+                {{-- Card 2: Buku Tamu --}}
+                <div data-aos="fade-up" data-aos-delay="200"
+                    class="group relative rounded-3xl overflow-hidden bg-gradient-to-br from-emerald-50 to-teal-50/50 dark:from-secondary-800 dark:to-secondary-800 border border-emerald-100/50 dark:border-secondary-700 p-8 hover:shadow-[0_20px_60px_-12px_rgba(16,185,129,0.2)] transition-all duration-500">
+                    <div
+                        class="absolute -right-6 -bottom-6 w-36 h-36 bg-emerald-400/10 rounded-full blur-2xl pointer-events-none group-hover:scale-150 transition-transform duration-700">
+                    </div>
+                    <div class="relative z-10">
+                        <div class="flex items-start justify-between mb-6">
+                            <div
+                                class="w-14 h-14 rounded-2xl bg-emerald-500 text-white flex items-center justify-center shadow-lg shadow-emerald-200 group-hover:scale-110 transition-transform duration-300">
+                                <i class="fas fa-qrcode text-xl"></i>
+                            </div>
+                            <span
+                                class="text-[80px] font-black text-emerald-100 dark:text-emerald-900/20 leading-none select-none">02</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-secondary-900 dark:text-neutral-100 mb-2">Buku Tamu Digital
+                        </h3>
+                        <p class="text-neutral-500 dark:text-neutral-400 leading-relaxed mb-6">
+                            Check-in QR Code. Lebih cepat, terorganisir, data tersimpan otomatis.
+                        </p>
+                        <a href="{{ route('buku-tamu') }}" id="service-bukutamu-link"
+                            class="inline-flex items-center gap-2 text-emerald-600 font-semibold text-sm hover:gap-3 transition-all duration-200">
+                            Selengkapnya <i class="fas fa-arrow-right text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+
+                {{-- Card 3: Live Streaming --}}
+                <div data-aos="fade-up" data-aos-delay="300"
+                    class="group relative rounded-3xl overflow-hidden bg-gradient-to-br from-purple-50 to-indigo-50/50 dark:from-secondary-800 dark:to-secondary-800 border border-purple-100/50 dark:border-secondary-700 p-8 hover:shadow-[0_20px_60px_-12px_rgba(147,51,234,0.2)] transition-all duration-500">
+                    <div
+                        class="absolute -right-6 -bottom-6 w-36 h-36 bg-purple-400/10 rounded-full blur-2xl pointer-events-none group-hover:scale-150 transition-transform duration-700">
+                    </div>
+                    <div class="relative z-10">
+                        <div class="flex items-start justify-between mb-6">
+                            <div
+                                class="w-14 h-14 rounded-2xl bg-purple-500 text-white flex items-center justify-center shadow-lg shadow-purple-200 group-hover:scale-110 transition-transform duration-300">
+                                <i class="fas fa-broadcast-tower text-xl"></i>
+                            </div>
+                            <span
+                                class="text-[80px] font-black text-purple-100 dark:text-purple-900/20 leading-none select-none">03</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-secondary-900 dark:text-neutral-100 mb-2">Live Streaming</h3>
+                        <p class="text-neutral-500 dark:text-neutral-400 leading-relaxed mb-6">
+                            Hubungkan tamu yang tidak bisa hadir melalui siaran langsung berkualitas tinggi.
+                        </p>
+                        <a href="{{ route('live-streaming') }}" id="service-streaming-link"
+                            class="inline-flex items-center gap-2 text-purple-600 font-semibold text-sm hover:gap-3 transition-all duration-200">
+                            Selengkapnya <i class="fas fa-arrow-right text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+
+                {{-- Card 4: CTA --}}
+                <div data-aos="fade-up" data-aos-delay="400"
+                    class="lg:col-span-2 rounded-3xl bg-secondary-900 dark:bg-black/40 p-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-2">Siap memulai perjalanan digital?</h3>
+                        <p class="text-neutral-400 text-sm">Konsultasikan kebutuhan acara Anda — gratis.</p>
+                    </div>
+                    <a href="https://wa.me/62895349823366?text=Halo%20Rayakan%20Digital%2C%20saya%20ingin%20konsultasi%20tentang%20layanan%20undangan%20digital."
+                        id="service-cta-wa"
+                        class="flex-shrink-0 inline-flex items-center gap-2.5 px-6 py-3.5 bg-primary-500 hover:bg-primary-600 text-white text-sm font-bold rounded-2xl transition-all duration-200 shadow-lg shadow-primary-900/40 hover:shadow-primary-900/60">
+                        <i class="fab fa-whatsapp"></i>
+                        Hubungi Kami
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {{-- ═══════════════════════════════════════════════
     FAQ — Split layout
     ═══════════════════════════════════════════════ --}}
-    <section data-aos="fade-up" class="py-24 bg-[#F5F3EF] dark:bg-secondary-900/60">
+    <section id="faq" data-aos="fade-up" class="py-24 bg-[#F5F3EF] dark:bg-secondary-900/60">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-16">
 
@@ -937,6 +944,14 @@
 [
     'q' => 'Apakah daftar akun di Rayakan Digital itu bayar?', 
     'a' => 'Enggak dong, daftar akun itu 100% gratis! Sekarang proses pendaftaran jauh lebih praktis karena Anda bisa daftar mudah pakai Google. Cukup dengan satu klik, Anda bisa langsung masuk, mencoba dashboard secara gratis, dan melengkapi data acara sebelum memutuskan untuk melakukan pembayaran aktivasi paket.'
+],
+[
+    'q' => 'Apakah Wedding Planner benar-benar gratis?',
+    'a' => 'Ya! Cukup daftar undangan di Rayakan Digital untuk menggunakan Wedding Planner gratis. Kamu bisa mengelola checklist, anggaran, vendor, dan jadwal tanpa perlu membeli paket undangan berbayar.'
+],
+[
+    'q' => 'Apakah Wedding Planner tetap bisa digunakan setelah undangan expired?',
+    'a' => 'Tetap bisa! Masa aktif Wedding Planner tidak mengikuti masa aktif undangan. Meski undangan sudah kedaluwarsa, kamu tetap bisa memakai planner lewat dashboard tanpa harus memperpanjang undangan.'
 ],
 [
     'q' => 'Kapan saya harus isi info acara dan foto-foto undangan?', 
@@ -1004,7 +1019,7 @@
     {{-- ═══════════════════════════════════════════════
     FINAL CTA — Bold showcase section
     ═══════════════════════════════════════════════ --}}
-    <section data-aos="fade-up" class="py-24 bg-secondary-900 text-white relative overflow-hidden">
+    <section id="get-started" data-aos="fade-up" class="py-24 bg-secondary-900 text-white relative overflow-hidden">
         {{-- Glow --}}
         <div class="absolute inset-0 pointer-events-none">
             <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px]"
@@ -1019,13 +1034,12 @@
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
             <p class="text-xs font-bold tracking-[0.2em] text-primary-400 uppercase mb-6">Mulai Sekarang</p>
             <h2 class="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-8">
-                Rayakan momen<br>
-                <span class="text-primary-500">terbaik hidupmu</span><br>
-                <span class="text-neutral-400 text-3xl sm:text-4xl md:text-5xl lg:text-6xl">dengan cara yang
-                    berbeda.</span>
+                Hari bahagia Anda,<br>
+                <span class="text-primary-500">dimulai dari</span><br>
+                <span class="text-neutral-400 text-3xl sm:text-4xl md:text-5xl lg:text-6xl">undangan yang berkesan.</span>
             </h2>
             <p class="text-neutral-400 text-lg max-w-lg mx-auto mb-12 leading-relaxed">
-                Bergabunglah dan buat undangan digital yang memorable — tidak perlu keahlian, tidak perlu waktu lama.
+                Pilih desain yang Anda suka, ceritakan momen istimewa Anda, dan bagikan kabar bahagia kepada orang-orang tersayang.
             </p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
                 <a href="{{ route('register') }}" id="final-cta-register"
@@ -1042,7 +1056,7 @@
                     Konsultasi Gratis
                 </a>
             </div>
-            <p class="mt-8 text-xs text-neutral-600">Tidak perlu kartu kredit &nbsp;·&nbsp; Support via WhatsApp</p>
+            <p class="mt-8 text-sm leading-relaxed text-neutral-300">Daftar undangan, dapat Wedding Planner gratis.<br>Tetap bisa digunakan meski masa aktif undangan berakhir.</p>
         </div>
     </section>
 

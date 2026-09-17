@@ -2,10 +2,23 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class AffiliatePayoutRequest extends AffiliateBankRequest
 {
+    protected function prepareForValidation(): void
+    {
+        if (is_string($this->input('amount'))) {
+            $rawAmount = $this->input('amount');
+            $digits = Str::of($rawAmount)->replaceMatches('/\D+/', '')->toString();
+
+            $this->merge([
+                'amount' => Str::contains($rawAmount, '-') ? '-'.$digits : $digits,
+            ]);
+        }
+    }
+
     public function rules(): array
     {
         return [

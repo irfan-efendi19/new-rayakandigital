@@ -151,6 +151,52 @@ html {
     animation: ring-pulse 2.5s ease-in-out infinite;
 }
 
+@keyframes undangan-equalizer {
+    0%,
+    100% {
+        transform: scaleY(0.4);
+    }
+    20% {
+        transform: scaleY(1.2);
+    }
+    40% {
+        transform: scaleY(0.65);
+    }
+    60% {
+        transform: scaleY(1.45);
+    }
+    80% {
+        transform: scaleY(0.8);
+    }
+}
+
+.undangan-equalizer-bar {
+    transform-origin: center;
+    animation: undangan-equalizer 1.25s ease-in-out infinite;
+}
+
+.undangan-equalizer-bar:nth-child(2n) {
+    animation-duration: 1.05s;
+    animation-delay: -0.35s;
+}
+
+.undangan-equalizer-bar:nth-child(3n) {
+    animation-duration: 1.4s;
+    animation-delay: -0.8s;
+}
+
+.undangan-equalizer-bar:nth-child(4n) {
+    animation-duration: 0.95s;
+    animation-delay: -0.55s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .undangan-equalizer-bar {
+        animation: none;
+        transform: none;
+    }
+}
+
 /* ── Custom scrollbar ── */
 ::-webkit-scrollbar {
     width: 6px;

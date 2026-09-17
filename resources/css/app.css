@@ -5,6 +5,27 @@
 @tailwind utilities;
 
 @layer components {
+    .screen-settings-input {
+        @apply mt-2 h-12 w-full rounded-xl border-neutral-200 bg-neutral-50 text-sm focus:border-primary-500 focus:ring-primary-500 dark:border-secondary-600 dark:bg-secondary-900 dark:text-white;
+    }
+    .screen-settings-help {
+        @apply mt-2 text-xs leading-6 text-neutral-500 dark:text-neutral-400;
+    }
+    .screen-settings-error {
+        @apply mt-3 text-xs leading-5 text-red-600 dark:text-red-400;
+    }
+    .screen-settings-button {
+        @apply inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-xl border border-neutral-200 bg-white px-4 py-3 text-xs font-bold text-secondary-800 transition hover:border-primary-400 hover:text-primary-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary-500 dark:border-secondary-600 dark:bg-secondary-900 dark:text-neutral-100;
+    }
+    .screen-settings-save {
+        @apply inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-primary-600 px-5 py-3 text-xs font-bold text-white shadow-sm transition hover:bg-primary-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500 disabled:cursor-wait disabled:opacity-60 sm:flex-none;
+    }
+    .screen-settings-file {
+        @apply mt-3 block w-full min-w-0 text-xs text-neutral-500 file:mr-3 file:rounded-lg file:border-0 file:bg-primary-50 file:px-4 file:py-3 file:font-semibold file:text-primary-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary-500 dark:text-neutral-400 dark:file:bg-primary-900/30 dark:file:text-primary-300;
+    }
+}
+
+@layer components {
     .qr-page {
         @apply min-h-screen bg-[#f1ede6] font-sans text-secondary-900 antialiased dark:bg-[#11100f] dark:text-neutral-100;
     }
@@ -1184,4 +1205,3 @@ span.flatpickr-weekday:last-child {
 .countdown-colon {
     animation: colon-pulse 1s ease-in-out infinite;
 }
-

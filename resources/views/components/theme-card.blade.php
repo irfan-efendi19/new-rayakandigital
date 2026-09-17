@@ -18,23 +18,25 @@
 >
     <a href="{{ $previewUrl }}" target="_blank" rel="noopener noreferrer"
         aria-label="Lihat pratinjau tema {{ $theme->name }}"
+        x-data="{ thumbnailFailed: false }"
         class="relative block aspect-[3/4] overflow-hidden bg-neutral-100 focus:outline-none dark:bg-secondary-700">
         @if($theme->thumbnail_url)
             <img src="{{ $theme->thumbnail_url }}" alt="Pratinjau tema {{ $theme->name }}" width="360" height="480"
-                loading="lazy" decoding="async"
+                loading="lazy" decoding="async" x-show="!thumbnailFailed"
+                x-init="thumbnailFailed = $el.complete && $el.naturalWidth === 0"
+                x-on:error="thumbnailFailed = true"
                 class="absolute inset-0 h-full w-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.04] motion-reduce:transform-none motion-reduce:transition-none">
-        @else
-            <div class="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-primary-50 via-white to-amber-50 dark:from-secondary-700 dark:via-secondary-800 dark:to-primary-900/20">
-                <div class="px-5 text-center">
-                    <span class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-white/80 text-primary-400 shadow-sm ring-1 ring-primary-100 dark:bg-secondary-700 dark:text-primary-500 dark:ring-primary-900/60">
-                        <i class="fas fa-images text-xl" aria-hidden="true"></i>
-                    </span>
-                    <span class="mt-3 block text-xs font-semibold leading-relaxed text-neutral-500 dark:text-neutral-400">
-                        {{ $theme->name }}
-                    </span>
-                </div>
-            </div>
         @endif
+        <div @if($theme->thumbnail_url) x-cloak x-show="thumbnailFailed" @endif class="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-primary-50 via-white to-amber-50 dark:from-secondary-700 dark:via-secondary-800 dark:to-primary-900/20">
+            <div class="px-5 text-center">
+                <span class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-white/80 text-primary-400 shadow-sm ring-1 ring-primary-100 dark:bg-secondary-700 dark:text-primary-500 dark:ring-primary-900/60">
+                    <i class="fas fa-images text-xl" aria-hidden="true"></i>
+                </span>
+                <span class="mt-3 hidden text-xs font-semibold leading-relaxed text-neutral-500 dark:text-neutral-400 sm:block">
+                    {{ $theme->name }}
+                </span>
+            </div>
+        </div>
 
         <div class="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/35 via-transparent to-black/70"></div>
 
@@ -84,7 +86,7 @@
                 </span>
             @endif
 
-            <h3 class="mt-2 truncate font-heading font-bold leading-snug text-secondary-900 transition-colors duration-200 group-hover:text-primary-600 dark:text-neutral-100 dark:group-hover:text-primary-400 {{ $isCarousel ? 'text-lg' : 'text-base' }}"
+            <h3 class="mt-2 font-heading font-bold leading-snug text-secondary-900 transition-colors duration-200 group-hover:text-primary-600 dark:text-neutral-100 dark:group-hover:text-primary-400 {{ $isCarousel ? 'text-lg' : 'text-base' }} {{ $variant === 'showcase' ? 'line-clamp-2 min-h-[2.75rem]' : 'truncate' }}"
                 title="{{ $theme->name }}">
                 {{ $theme->name }}
             </h3>

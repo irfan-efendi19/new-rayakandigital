@@ -539,10 +539,10 @@
                 </div>
 
                 {{-- ── TABS (Alpine.js) ── --}}
-                <div x-data="{ tab: 'links' }">
+                <div x-data="{ tab: 'links' }" x-cloak>
 
                     {{-- Tab nav with responsive horizontal scrolling --}}
-                    <div class="flex gap-1 overflow-x-auto rounded-2xl border border-neutral-200 bg-neutral-100 p-1 dark:border-secondary-700 dark:bg-secondary-900 scrollbar-none">
+                    <div role="tablist" aria-label="Menu reseller" class="scrollbar-hide flex gap-1 overflow-x-auto rounded-2xl border border-neutral-200 bg-neutral-100 p-1 dark:border-secondary-700 dark:bg-secondary-900">
                         @foreach([
                             ['links',      'fa-link',            'Link & Kupon'],
                             ['payout',     'fa-money-bill-wave', 'Pencairan'],
@@ -551,11 +551,15 @@
                         ] as [$id, $icon, $label])
                             <button
                                 type="button"
+                                role="tab"
+                                id="tab-{{ $id }}"
+                                :aria-selected="tab === '{{ $id }}'"
+                                aria-controls="affiliate-panel-{{ $id }}"
                                 @click="tab = '{{ $id }}'"
                                 :class="tab === '{{ $id }}'
                                     ? 'bg-white text-secondary-900 shadow-sm dark:bg-secondary-700 dark:text-white'
                                     : 'text-neutral-500 hover:text-secondary-700 dark:text-neutral-400 dark:hover:text-neutral-200'"
-                                class="flex flex-1 min-w-fit items-center justify-center gap-1.5 whitespace-nowrap rounded-xl px-3 py-2 text-xs sm:text-sm font-semibold transition-all duration-150 shrink-0 sm:shrink">
+                                class="flex min-h-10 min-w-[8.5rem] flex-1 shrink-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-xl px-3 py-2 text-xs font-semibold transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 sm:min-w-0 sm:text-sm sm:shrink">
                                 <i class="fa-solid {{ $icon }} text-xs"></i>
                                 <span>{{ $label }}</span>
                             </button>
@@ -563,12 +567,12 @@
                     </div>
 
                     {{-- ── TAB: Links & Kupon ── --}}
-                    <div x-show="tab === 'links'" x-transition:enter="transition ease-out duration-150" x-transition:enter-start="opacity-0 translate-y-1" x-transition:enter-end="opacity-100 translate-y-0">
-                        <div class="mt-4 grid gap-4 lg:grid-cols-2">
+                    <div id="affiliate-panel-links" role="tabpanel" aria-labelledby="tab-links" x-show="tab === 'links'" x-cloak x-collapse.duration.150ms>
+                        <div class="mt-4 grid items-stretch gap-4 lg:grid-cols-2">
 
                             {{-- Coupon card --}}
                             @if($affiliate->promotion)
-                                <div class="rounded-2xl border border-neutral-200 bg-white p-4 sm:p-6 dark:border-secondary-700 dark:bg-secondary-800 shadow-sm" x-data="affiliateCopy()">
+                                <div class="flex h-full flex-col rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm dark:border-secondary-700 dark:bg-secondary-800 sm:p-6" x-data="affiliateCopy()">
                                     <div class="mb-3 sm:mb-4 flex items-start sm:items-center justify-between gap-2">
                                         <div class="min-w-0 flex-1">
                                             <h3 class="font-bold text-sm sm:text-base text-secondary-900 dark:text-white">Kode Promo Unik</h3>
@@ -580,11 +584,12 @@
                                             {{ $affiliate->promotion->is_active ? 'Aktif' : 'Nonaktif' }}
                                         </span>
                                     </div>
-                                    <div class="flex gap-2">
+                                    <div class="mt-auto flex gap-2">
                                         <input id="coupon-field" type="text" readonly value="{{ $affiliate->promotion->code }}"
-                                            class="min-w-0 flex-1 rounded-xl border border-neutral-200 bg-neutral-50 px-3 py-2 font-mono text-xs sm:text-sm font-bold tracking-widest text-secondary-900 focus:border-primary-500 focus:ring-primary-500 dark:border-secondary-600 dark:bg-secondary-900 dark:text-white" />
+                                            class="min-w-0 flex-1 rounded-xl border border-neutral-200 bg-neutral-50 px-3 py-2 font-mono text-xs font-bold tracking-widest text-secondary-900 focus:border-primary-500 focus:ring-primary-500 dark:border-secondary-600 dark:bg-secondary-900 dark:text-white sm:text-sm" />
                                         <button type="button" @click="copyText('coupon-field')"
-                                            class="inline-flex shrink-0 items-center gap-1.5 rounded-xl border border-neutral-300 bg-white px-3 sm:px-4 py-2 text-xs sm:text-sm font-semibold text-neutral-700 transition hover:bg-neutral-50 dark:border-secondary-600 dark:bg-secondary-700 dark:text-neutral-200 dark:hover:bg-secondary-600">
+                                            aria-label="Salin kode promo"
+                                            class="inline-flex min-h-10 shrink-0 items-center gap-1.5 rounded-xl border border-neutral-300 bg-white px-3 text-xs font-semibold text-neutral-700 transition hover:bg-neutral-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:border-secondary-600 dark:bg-secondary-700 dark:text-neutral-200 dark:hover:bg-secondary-600 sm:px-4 sm:text-sm">
                                             <i class="fa-solid fa-copy text-xs"></i>
                                             <span x-text="copied === 'coupon-field' ? 'Tersalin!' : 'Salin'"></span>
                                         </button>
@@ -599,12 +604,12 @@
                             @endif
 
                             {{-- Create link form --}}
-                            <div class="rounded-2xl border border-neutral-200 bg-white p-4 sm:p-6 dark:border-secondary-700 dark:bg-secondary-800 shadow-sm">
+                            <div class="{{ $affiliate->promotion ? '' : 'lg:col-span-2' }} flex h-full flex-col rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm dark:border-secondary-700 dark:bg-secondary-800 sm:p-6">
                                 <h3 class="mb-3 sm:mb-4 font-bold text-sm sm:text-base text-secondary-900 dark:text-white">
                                     <i class="fa-solid fa-plus mr-1.5 text-primary-600 dark:text-primary-400 text-xs sm:text-sm"></i>
                                     Buat Link Kustom
                                 </h3>
-                                <form method="POST" action="{{ route('dashboard.affiliate.links.store') }}" class="flex flex-col gap-3">
+                                <form method="POST" action="{{ route('dashboard.affiliate.links.store') }}" class="flex flex-1 flex-col gap-3">
                                     @csrf
                                     <div>
                                         <x-input-label for="label" value="Nama kampanye" />
@@ -621,7 +626,7 @@
                                                 data-affiliate-slug-availability-url="{{ route('dashboard.affiliate.links.availability') }}"
                                                 class="min-w-0 flex-1 border-none bg-transparent px-3 py-2 text-sm text-secondary-900 placeholder-neutral-400 focus:ring-0 dark:text-white dark:placeholder-neutral-500" />
                                         </div>
-                                        <p id="slug-availability" class="mt-1 min-h-4 text-[11px] sm:text-xs" aria-live="polite">
+                                        <p id="slug-availability" class="mt-1 min-h-8 text-[11px] leading-4 sm:min-h-4 sm:text-xs" aria-live="polite">
                                             <span data-affiliate-slug-state="default" class="text-neutral-400 dark:text-neutral-500">Huruf kecil, angka, tanda hubung.</span>
                                             <span data-affiliate-slug-state="checking" class="hidden text-amber-600 dark:text-amber-400"><i class="fa-solid fa-spinner fa-spin mr-1"></i>Memeriksa alamat link...</span>
                                             <span data-affiliate-slug-state="available" class="hidden text-emerald-600 dark:text-emerald-400"><i class="fa-solid fa-circle-check mr-1"></i>Alamat link tersedia.</span>
@@ -639,7 +644,7 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    <x-primary-button class="justify-center py-2.5 text-xs sm:text-sm">
+                                    <x-primary-button class="mt-auto min-h-10 justify-center py-2.5 text-xs sm:text-sm">
                                         <i class="fa-solid fa-plus mr-1.5 text-xs"></i>
                                         Buat link referral
                                     </x-primary-button>
@@ -649,25 +654,25 @@
 
                         {{-- Links list --}}
                         @if($links && $links->count())
-                            <div class="mt-4 rounded-2xl border border-neutral-200 bg-white p-4 sm:p-6 dark:border-secondary-700 dark:bg-secondary-800 shadow-sm" x-data="affiliateCopy()">
-                                <div class="mb-3 sm:mb-4 flex flex-wrap items-center justify-between gap-1">
+                            <div class="mt-4 overflow-hidden rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm dark:border-secondary-700 dark:bg-secondary-800 sm:p-6" x-data="affiliateCopy()">
+                                <div class="mb-3 flex flex-col gap-1 sm:mb-4 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
                                     <h3 class="font-bold text-sm sm:text-base text-secondary-900 dark:text-white">Link Referral Aktif</h3>
-                                    <p class="text-[11px] sm:text-xs text-neutral-400 dark:text-neutral-500">Referral berlaku 30 hari dari kunjungan terakhir.</p>
+                                    <p class="text-[11px] sm:text-right sm:text-xs text-neutral-400 dark:text-neutral-500">Referral berlaku 30 hari dari kunjungan terakhir.</p>
                                 </div>
-                                <div class="space-y-3">
+                                <div class="flex flex-col gap-3">
                                     @foreach($links as $link)
-                                        <div class="rounded-xl border border-neutral-200 dark:border-secondary-700 bg-white dark:bg-secondary-800"
+                                        <div class="overflow-hidden rounded-xl border border-neutral-200 bg-white dark:border-secondary-700 dark:bg-secondary-800"
                                              x-data="{ editing: false, confirmDelete: false }">
                                             {{-- Link header row --}}
                                             <div class="flex flex-col gap-2.5 p-3 sm:p-4">
-                                                <div class="flex flex-wrap sm:flex-nowrap items-center justify-between gap-2">
+                                                <div class="flex flex-col gap-2 sm:flex-row sm:flex-nowrap sm:items-center sm:justify-between">
                                                     <div class="flex items-center gap-2 min-w-0 max-w-full">
                                                         <span class="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-lg bg-primary-50 dark:bg-primary-900/40">
                                                             <i class="fa-solid fa-link text-xs text-primary-600 dark:text-primary-400"></i>
                                                         </span>
-                                                        <p class="truncate text-xs sm:text-sm font-semibold text-secondary-800 dark:text-white max-w-[150px] xs:max-w-[220px] sm:max-w-md">{{ $link->label }}</p>
+                                                        <p class="max-w-[11rem] truncate text-xs font-semibold text-secondary-800 dark:text-white sm:max-w-md sm:text-sm">{{ $link->label }}</p>
                                                     </div>
-                                                    <div class="flex items-center gap-1.5 ml-auto sm:ml-0 flex-shrink-0">
+                                                    <div class="ml-auto flex w-full shrink-0 items-center justify-end gap-1.5 sm:ml-0 sm:w-auto">
                                                         <span class="rounded-full bg-neutral-100 px-2 sm:px-2.5 py-1 text-[11px] sm:text-xs font-medium text-neutral-600 dark:bg-secondary-700 dark:text-neutral-300">
                                                             <i class="fa-solid fa-mouse-pointer text-[9px] sm:text-[10px]"></i>
                                                             {{ number_format($link->clicks, 0, ',', '.') }} klik
@@ -675,7 +680,7 @@
                                                         {{-- Edit toggle --}}
                                                         <button type="button" @click="editing = !editing; confirmDelete = false"
                                                             :class="editing ? 'bg-primary-50 text-primary-700 border-primary-300 dark:bg-primary-900/50 dark:text-primary-300 dark:border-primary-700' : 'bg-white text-neutral-600 border-neutral-300 dark:bg-secondary-700 dark:text-neutral-300 dark:border-secondary-600'"
-                                                            class="inline-flex items-center gap-1 rounded-lg border px-2 sm:px-2.5 py-1 text-xs font-semibold transition hover:bg-primary-50 hover:text-primary-700 dark:hover:bg-primary-900/40 dark:hover:text-primary-300"
+                                                            class="inline-flex min-h-10 items-center gap-1 rounded-lg border px-2 text-xs font-semibold transition hover:bg-primary-50 hover:text-primary-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:hover:bg-primary-900/40 dark:hover:text-primary-300 sm:px-2.5"
                                                             title="Edit link">
                                                             <i class="fa-solid fa-pen text-[10px]"></i>
                                                             <span x-text="editing ? 'Batal' : 'Edit'"></span>
@@ -684,12 +689,12 @@
                                                         @if($links->total() > 1)
                                                             <button type="button" @click="confirmDelete = !confirmDelete; editing = false"
                                                                 :class="confirmDelete ? 'bg-red-50 text-red-700 border-red-300 dark:bg-red-950/70 dark:text-red-300 dark:border-red-800' : 'bg-white text-neutral-400 border-neutral-300 dark:bg-secondary-700 dark:text-neutral-400 dark:border-secondary-600'"
-                                                                class="inline-flex items-center justify-center rounded-lg border p-1.5 text-xs transition hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950/50 dark:hover:text-red-300"
+                                                                class="inline-flex min-h-10 min-w-10 items-center justify-center rounded-lg border p-1.5 text-xs transition hover:bg-red-50 hover:text-red-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 dark:hover:bg-red-950/50 dark:hover:text-red-300"
                                                                 title="Hapus link">
                                                                 <i class="fa-solid fa-trash-can text-[10px]"></i>
                                                             </button>
                                                         @else
-                                                            <span class="inline-flex items-center justify-center rounded-lg border border-neutral-200 p-1.5 text-xs text-neutral-300 dark:border-secondary-700 dark:text-neutral-600 cursor-not-allowed" title="Minimal 1 link harus ada">
+                                                            <span class="inline-flex min-h-10 min-w-10 cursor-not-allowed items-center justify-center rounded-lg border border-neutral-200 p-1.5 text-xs text-neutral-300 dark:border-secondary-700 dark:text-neutral-600" title="Minimal 1 link harus ada">
                                                                 <i class="fa-solid fa-trash-can text-[10px]"></i>
                                                             </span>
                                                         @endif
@@ -699,7 +704,8 @@
                                                     <input id="link-{{ $link->id }}" type="text" readonly value="{{ $link->url }}"
                                                         class="min-w-0 flex-1 rounded-xl border border-neutral-200 bg-neutral-50 px-3 py-1.5 text-xs text-secondary-800 dark:border-secondary-600 dark:bg-secondary-900 dark:text-neutral-200" />
                                                     <button type="button" @click="copyText('link-{{ $link->id }}')"
-                                                        class="inline-flex flex-shrink-0 items-center gap-1.5 rounded-xl border border-neutral-300 bg-white px-2.5 sm:px-3 py-1.5 text-xs font-semibold text-neutral-700 transition hover:bg-neutral-50 dark:border-secondary-600 dark:bg-secondary-700 dark:text-neutral-200 dark:hover:bg-secondary-600">
+                                                        aria-label="Salin link {{ $link->label }}"
+                                                        class="inline-flex min-h-10 shrink-0 items-center gap-1.5 rounded-xl border border-neutral-300 bg-white px-2.5 py-1.5 text-xs font-semibold text-neutral-700 transition hover:bg-neutral-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:border-secondary-600 dark:bg-secondary-700 dark:text-neutral-200 dark:hover:bg-secondary-600 sm:px-3">
                                                         <i class="fa-solid fa-copy text-[10px]"></i>
                                                         <span x-text="copied === 'link-{{ $link->id }}' ? 'Tersalin!' : 'Salin'"></span>
                                                     </button>
@@ -707,10 +713,7 @@
                                             </div>
 
                                             {{-- Edit form (slide-down) --}}
-                                            <div x-show="editing"
-                                                 x-transition:enter="transition ease-out duration-150"
-                                                 x-transition:enter-start="opacity-0 -translate-y-1"
-                                                 x-transition:enter-end="opacity-100 translate-y-0"
+                                            <div x-show="editing" x-cloak x-collapse.duration.150ms
                                                  class="border-t border-neutral-100 bg-neutral-50 px-3.5 sm:px-4 pb-4 pt-4 dark:border-secondary-700 dark:bg-secondary-900/60">
                                                 <p class="mb-3 text-xs font-semibold text-neutral-600 dark:text-neutral-300">
                                                     <i class="fa-solid fa-pen mr-1 text-primary-600 dark:text-primary-400"></i> Edit link referral
@@ -754,12 +757,12 @@
                                                             @endforeach
                                                         </select>
                                                     </div>
-                                                    <div class="flex flex-col-reverse sm:flex-row gap-2 pt-1">
+                                                    <div class="flex flex-col-reverse gap-2 pt-1 sm:flex-row">
                                                         <button type="button" @click="editing = false"
-                                                            class="rounded-xl border border-neutral-300 bg-white px-3 py-2 text-xs font-semibold text-neutral-600 transition hover:bg-neutral-50 dark:border-secondary-600 dark:bg-secondary-700 dark:text-neutral-300 dark:hover:bg-secondary-600">
+                                                            class="min-h-10 rounded-xl border border-neutral-300 bg-white px-3 py-2 text-xs font-semibold text-neutral-600 transition hover:bg-neutral-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:border-secondary-600 dark:bg-secondary-700 dark:text-neutral-300 dark:hover:bg-secondary-600">
                                                             Batal
                                                         </button>
-                                                        <x-primary-button class="flex-1 justify-center py-2 text-xs">
+                                                        <x-primary-button class="min-h-10 flex-1 justify-center py-2 text-xs">
                                                             <i class="fa-solid fa-floppy-disk mr-1.5 text-[10px]"></i>
                                                             Simpan perubahan
                                                         </x-primary-button>
@@ -768,10 +771,7 @@
                                             </div>
 
                                             {{-- Delete confirmation (slide-down) --}}
-                                            <div x-show="confirmDelete"
-                                                 x-transition:enter="transition ease-out duration-150"
-                                                 x-transition:enter-start="opacity-0 -translate-y-1"
-                                                 x-transition:enter-end="opacity-100 translate-y-0"
+                                            <div x-show="confirmDelete" x-cloak x-collapse.duration.150ms
                                                  class="border-t border-red-100 bg-red-50 px-3.5 sm:px-4 pb-4 pt-4 dark:border-red-900/60 dark:bg-red-950/40">
                                                 <div class="flex items-start gap-3">
                                                     <i class="fa-solid fa-triangle-exclamation mt-0.5 flex-shrink-0 text-sm text-red-600 dark:text-red-400"></i>
@@ -782,13 +782,13 @@
                                                             <form method="POST" action="{{ route('dashboard.affiliate.links.destroy', $link) }}">
                                                                 @csrf @method('DELETE')
                                                                 <button type="submit"
-                                                                    class="inline-flex items-center gap-1.5 rounded-xl bg-red-600 px-3 py-1.5 text-xs font-bold text-white transition hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-600">
+                                                                    class="inline-flex min-h-10 items-center gap-1.5 rounded-xl bg-red-600 px-3 py-1.5 text-xs font-bold text-white transition hover:bg-red-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 dark:bg-red-700 dark:hover:bg-red-600">
                                                                     <i class="fa-solid fa-trash-can text-[10px]"></i>
                                                                     Ya, hapus
                                                                 </button>
                                                             </form>
                                                             <button type="button" @click="confirmDelete = false"
-                                                                class="rounded-xl border border-red-300 bg-white px-3 py-1.5 text-xs font-semibold text-red-700 transition hover:bg-red-50 dark:border-red-800 dark:bg-secondary-800 dark:text-red-300 dark:hover:bg-secondary-700">
+                                                                class="min-h-10 rounded-xl border border-red-300 bg-white px-3 py-1.5 text-xs font-semibold text-red-700 transition hover:bg-red-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 dark:border-red-800 dark:bg-secondary-800 dark:text-red-300 dark:hover:bg-secondary-700">
                                                                 Batal
                                                             </button>
                                                         </div>
@@ -815,7 +815,7 @@
                     </div>
 
                     {{-- ── TAB: Pencairan ── --}}
-                    <div x-show="tab === 'payout'" x-transition:enter="transition ease-out duration-150" x-transition:enter-start="opacity-0 translate-y-1" x-transition:enter-end="opacity-100 translate-y-0">
+                    <div id="affiliate-panel-payout" role="tabpanel" aria-labelledby="tab-payout" x-show="tab === 'payout'" x-cloak x-collapse.duration.150ms>
                         <div class="mt-4 grid gap-4 lg:grid-cols-2">
 
                             {{-- Balance breakdown --}}
@@ -861,10 +861,19 @@
                                     @csrf
                                     <div>
                                         <x-input-label for="amount" value="Nominal penarikan (Rp)" />
-                                        <x-text-input id="amount" name="amount" type="number" :value="old('amount')" :min="$settings['minimum_payout']" :max="max(0, $balance['available'])" step="1" class="mt-1 w-full text-sm" required />
-                                        <p class="mt-1 text-[11px] sm:text-xs text-neutral-400 dark:text-neutral-500">
-                                            Minimum Rp {{ number_format($settings['minimum_payout'], 0, ',', '.') }}. Diproses manual setelah persetujuan admin.
+                                        <div class="mt-1 flex overflow-hidden rounded-xl border border-neutral-300 bg-white focus-within:border-primary-500 focus-within:ring-2 focus-within:ring-primary-500 dark:border-secondary-600 dark:bg-secondary-900">
+                                            <span class="flex items-center border-r border-neutral-300 bg-neutral-100 px-3 text-sm font-semibold text-neutral-500 dark:border-secondary-600 dark:bg-secondary-800 dark:text-neutral-400">Rp</span>
+                                            <input id="amount" name="amount" type="text" inputmode="numeric" autocomplete="off"
+                                                value="{{ old('amount') !== null && old('amount') !== '' ? number_format((int) old('amount'), 0, ',', '.') : '' }}"
+                                                data-currency-input data-currency-min="{{ $settings['minimum_payout'] }}" data-currency-max="{{ max(0, $balance['available']) }}"
+                                                aria-describedby="amount-help"
+                                                placeholder="50.000"
+                                                class="min-w-0 flex-1 border-0 bg-transparent px-3 py-2 text-sm text-secondary-900 placeholder-neutral-400 focus:ring-0 dark:bg-secondary-900 dark:text-white dark:placeholder-neutral-500" required />
+                                        </div>
+                                        <p id="amount-help" class="mt-1 text-[11px] leading-4 sm:text-xs text-neutral-400 dark:text-neutral-500">
+                                            Format Rupiah otomatis. Minimum Rp {{ number_format($settings['minimum_payout'], 0, ',', '.') }}. Diproses manual setelah persetujuan admin.
                                         </p>
+                                        <x-input-error :messages="$errors->get('amount')" class="mt-1 text-xs" />
                                     </div>
                                     <div class="grid gap-2 sm:grid-cols-2">
                                         <x-primary-button class="justify-center py-2.5 sm:py-3 text-xs sm:text-sm" :disabled="$balance['available'] < $settings['minimum_payout']">
@@ -962,7 +971,7 @@
                     </div>
 
                     {{-- ── TAB: Penjualan & Komisi ── --}}
-                    <div x-show="tab === 'sales'" x-transition:enter="transition ease-out duration-150" x-transition:enter-start="opacity-0 translate-y-1" x-transition:enter-end="opacity-100 translate-y-0">
+                    <div id="affiliate-panel-sales" role="tabpanel" aria-labelledby="tab-sales" x-show="tab === 'sales'" x-cloak x-collapse.duration.150ms>
                         <div class="mt-4 rounded-2xl border border-neutral-200 bg-white dark:border-secondary-700 dark:bg-secondary-800 shadow-sm overflow-hidden">
                             <div class="border-b border-neutral-100 px-4 sm:px-6 py-3.5 sm:py-4 dark:border-secondary-700 flex items-center justify-between">
                                 <h3 class="font-bold text-sm sm:text-base text-secondary-900 dark:text-white">Penjualan & Komisi</h3>
@@ -1019,7 +1028,7 @@
                     </div>
 
                     {{-- ── TAB: Marketing Kit ── --}}
-                    <div x-show="tab === 'marketing'" x-transition:enter="transition ease-out duration-150" x-transition:enter-start="opacity-0 translate-y-1" x-transition:enter-end="opacity-100 translate-y-0">
+                    <div id="affiliate-panel-marketing" role="tabpanel" aria-labelledby="tab-marketing" x-show="tab === 'marketing'" x-cloak x-collapse.duration.150ms>
                         <div class="mt-4">
                             <div class="mb-3 sm:mb-4">
                                 <h3 class="font-bold text-sm sm:text-base text-secondary-900 dark:text-white">Marketing Kit</h3>

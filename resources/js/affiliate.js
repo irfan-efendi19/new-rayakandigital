@@ -17,6 +17,23 @@ document.addEventListener('click', async (event) => {
     }
 });
 
+const rupiahFormatter = new Intl.NumberFormat('id-ID', {
+    maximumFractionDigits: 0,
+});
+
+document.querySelectorAll('[data-currency-input]').forEach((input) => {
+    const formatAmount = () => {
+        const digits = input.value.replace(/\D/g, '');
+        input.value = digits ? rupiahFormatter.format(Number(digits)) : '';
+    };
+
+    formatAmount();
+    input.addEventListener('input', formatAmount);
+    input.form?.addEventListener('submit', () => {
+        input.value = input.value.replace(/\D/g, '');
+    });
+});
+
 const slugChecks = new WeakMap();
 const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 

@@ -2,10 +2,12 @@ import Alpine from 'alpinejs';
 import Collapse from '@alpinejs/collapse';
 import { registerGuestList } from './guest-list';
 import { registerPromotions } from './promotions';
+import { registerWelcomeScreenSettings } from './welcome-screen-settings';
 window.Alpine = Alpine;
 Alpine.plugin(Collapse);
 registerGuestList(Alpine);
 registerPromotions(Alpine);
+registerWelcomeScreenSettings(Alpine);
 
 document.addEventListener('alpine:init', () => {
     Alpine.store('darkMode', {
