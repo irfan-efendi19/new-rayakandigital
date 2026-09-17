@@ -132,6 +132,70 @@
                     @endif
                 </div>
 
+                {{-- Wedding Countdown --}}
+                @if($weddingDate)
+                    @php
+                        $isPast = $weddingDate->copy()->startOfDay()->isPast();
+                    @endphp
+                    <div class="mt-4 rounded-3xl border border-white/10 bg-white/[0.07] p-4 shadow-2xl backdrop-blur-sm sm:p-5">
+                        <div class="flex items-center justify-between gap-4">
+                            <div>
+                                <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">Countdown Menuju Hari H</p>
+                                <p class="mt-1 font-heading text-lg font-bold text-white">{{ $weddingDate->translatedFormat('l, d F Y') }}</p>
+                                @if($invitation->title)
+                                    <p class="mt-1 truncate text-[11px] text-white/40">{{ $invitation->title }}</p>
+                                @endif
+                            </div>
+                            <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary-500/15 text-primary-300">
+                                <i class="fa-solid fa-heart" aria-hidden="true"></i>
+                            </span>
+                        </div>
+
+                        @if($isPast)
+                            <div class="mt-4 flex items-center gap-2 rounded-xl border border-emerald-400/20 bg-emerald-400/10 px-3 py-2.5 text-xs font-semibold text-emerald-200">
+                                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                                Acara telah dilaksanakan
+                            </div>
+                        @else
+                            <div class="mt-4 grid grid-cols-4 gap-2"
+                                x-data="plannerCountdown('{{ $weddingDate->format('Y-m-d') }}', '{{ $weddingTime ?? '' }}')">
+                                <template x-if="initialized">
+                                    <template x-for="(unit, idx) in [
+                                        { label: 'Hari', value: days },
+                                        { label: 'Jam', value: hours },
+                                        { label: 'Menit', value: minutes },
+                                        { label: 'Detik', value: seconds },
+                                    ]" :key="unit.label">
+                                        <div class="rounded-xl border border-white/10 bg-black/10 px-1 py-2.5 text-center">
+                                            <div class="flex items-center justify-center gap-0.5">
+                                                <template x-for="(ch, j) in String(unit.value).padStart(2, '0').split('')" :key="j">
+                                                    <span class="planner-digit-wrapper"
+                                                        x-data="{ shown: ch, prev: ch }"
+                                                        x-effect="
+                                                            if (ch !== prev) {
+                                                                $el.classList.remove('planner-digit-flip');
+                                                                void $el.offsetWidth;
+                                                                $el.classList.add('planner-digit-flip');
+                                                                prev = ch;
+                                                            }
+                                                            shown = ch;
+                                                        ">
+                                                        <span class="planner-digit" x-text="shown"></span>
+                                                    </span>
+                                                </template>
+                                            </div>
+                                            <p class="mt-0.5 text-[8px] uppercase tracking-wider text-white/35" x-text="unit.label"></p>
+                                        </div>
+                                    </template>
+                                </template>
+                                <template x-if="!initialized">
+                                    <div class="col-span-4 rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 text-center text-xs font-semibold text-white/70">Hari H telah tiba</div>
+                                </template>
+                            </div>
+                        @endif
+                    </div>
+                @endif
+
             </div>
         </div>
 
@@ -600,4 +664,55 @@
 
         </div>
     </div>
+
+    @push('scripts')
+    <script>
+        function plannerCountdown(targetDate, weddingTime) {
+            let targetDateTime = targetDate;
+            if (weddingTime) {
+                targetDateTime += 'T' + weddingTime;
+            } else {
+                targetDateTime += 'T23:59:59';
+            }
+
+            return {
+                target: new Date(targetDateTime).getTime(),
+                days: 0,
+                hours: 0,
+                minutes: 0,
+                seconds: 0,
+                initialized: false,
+                timer: null,
+
+                init() {
+                    this.update();
+                    this.timer = setInterval(() => this.update(), 1000);
+                },
+
+                update() {
+                    const diff = this.target - Date.now();
+                    if (diff <= 0) {
+                        this.initialized = false;
+                        if (this.timer) {
+                            clearInterval(this.timer);
+                        }
+                        return;
+                    }
+
+                    this.initialized = true;
+                    this.days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                    this.hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    this.minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                    this.seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                },
+
+                destroy() {
+                    if (this.timer) {
+                        clearInterval(this.timer);
+                    }
+                },
+            };
+        }
+    </script>
+    @endpush
 </x-app-layout>

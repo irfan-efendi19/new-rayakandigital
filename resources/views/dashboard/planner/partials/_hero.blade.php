@@ -108,14 +108,30 @@
                             <div class="mt-4 grid grid-cols-4 gap-2"
                                 x-data="plannerCountdown('{{ $weddingDate->format('Y-m-d') }}', '{{ $weddingTime ?? '' }}')">
                                 <template x-if="initialized">
-                                    <template x-for="unit in [
+                                    <template x-for="(unit, idx) in [
                                         { label: 'Hari', value: days },
                                         { label: 'Jam', value: hours },
                                         { label: 'Menit', value: minutes },
                                         { label: 'Detik', value: seconds },
                                     ]" :key="unit.label">
                                         <div class="rounded-xl border border-white/10 bg-black/10 px-1 py-2.5 text-center">
-                                            <p class="text-base font-extrabold tabular-nums sm:text-lg" x-text="String(unit.value).padStart(2, '0')"></p>
+                                            <div class="flex items-center justify-center gap-0.5">
+                                                <template x-for="(ch, j) in String(unit.value).padStart(2, '0').split('')" :key="j">
+                                                    <span class="planner-digit-wrapper"
+                                                        x-data="{ shown: ch, prev: ch }"
+                                                        x-effect="
+                                                            if (ch !== prev) {
+                                                                $el.classList.remove('planner-digit-flip');
+                                                                void $el.offsetWidth;
+                                                                $el.classList.add('planner-digit-flip');
+                                                                prev = ch;
+                                                            }
+                                                            shown = ch;
+                                                        ">
+                                                        <span class="planner-digit" x-text="shown"></span>
+                                                    </span>
+                                                </template>
+                                            </div>
                                             <p class="mt-0.5 text-[8px] uppercase tracking-wider text-white/35" x-text="unit.label"></p>
                                         </div>
                                     </template>

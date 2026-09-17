@@ -1205,3 +1205,35 @@ span.flatpickr-weekday:last-child {
 .countdown-colon {
     animation: colon-pulse 1s ease-in-out infinite;
 }
+
+/* Planner countdown digit wrapper */
+.planner-digit-wrapper {
+    display: inline-flex;
+    overflow: hidden;
+    border-radius: 0.25rem;
+    perspective: 120px;
+}
+
+/* Planner countdown digit */
+.planner-digit {
+    display: inline-block;
+    min-width: 1ch;
+    padding: 0.125rem 0.15rem;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+@media (min-width: 640px) {
+    .planner-digit {
+        font-size: 1.125rem;
+    }
+}
+
+/* Flip animation for planner countdown digits */
+.planner-digit-flip .planner-digit {
+    animation: digit-flip 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}

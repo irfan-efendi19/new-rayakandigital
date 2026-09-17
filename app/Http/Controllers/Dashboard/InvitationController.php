@@ -290,6 +290,10 @@ class InvitationController extends Controller
             ->latest()
             ->get();
 
+        $firstEvent = $invitation->firstEvent();
+        $weddingDate = $firstEvent?->event_date ?? $invitation->event_date;
+        $weddingTime = $firstEvent?->start_time ?? $invitation->event_time;
+
         $rsvpData = $invitation->rsvps->map(fn ($rsvp) => [
             'id' => $rsvp->id,
             'guest_name' => $rsvp->guest_name,
@@ -330,7 +334,7 @@ class InvitationController extends Controller
         ])->values();
 
         return view('dashboard.invitations.show', compact(
-            'invitation', 'chartLabels', 'chartTotals', 'chartUniques', 'totalViews', 'totalUniques', 'rsvpData', 'qrCodeData', 'rsvpUrl', 'qrStats', 'guestsData', 'pendingOrders'
+            'invitation', 'chartLabels', 'chartTotals', 'chartUniques', 'totalViews', 'totalUniques', 'rsvpData', 'qrCodeData', 'rsvpUrl', 'qrStats', 'guestsData', 'pendingOrders', 'weddingDate', 'weddingTime'
         ));
     }
 
