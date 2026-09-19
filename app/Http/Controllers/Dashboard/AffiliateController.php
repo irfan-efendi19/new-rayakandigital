@@ -10,9 +10,11 @@ use App\Http\Requests\AffiliateLinkRequest;
 use App\Http\Requests\AffiliateLinkUpdateRequest;
 use App\Http\Requests\AffiliatePayoutRequest;
 use App\Models\AffiliateLink;
+use App\Models\AffiliatePayout;
 use App\Models\MarketingAsset;
 use App\Services\AffiliatePayoutService;
 use App\Services\AffiliateService;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -98,6 +100,18 @@ class AffiliateController extends Controller
         $service->request($affiliate, (int) $request->validated('amount'));
 
         return back()->with('success', 'Pengajuan pencairan terkirim. Saldo telah dicadangkan sampai diproses admin.');
+    }
+
+    public function payoutInvoice(Request $request, AffiliatePayout $payout): Response
+    {
+        abort_if($request->user()->is_banned, 403);
+        $affiliate = $request->user()->affiliate()->whereKey($payout->affiliate_id)->firstOrFail();
+        $invoiceNumber = 'PAY-'.$payout->created_at->format('Ymd').'-'.$payout->id;
+
+        return Pdf::loadView('dashboard.affiliate.payout_invoice_pdf', compact('payout', 'affiliate', 'invoiceNumber'))
+            ->setPaper('a4', 'portrait')
+            ->download('Invoice-'.$invoiceNumber.'.pdf')
+            ->header('Cache-Control', 'private, no-store');
     }
 
     public function updateLink(AffiliateLinkUpdateRequest $request, AffiliateLink $link): RedirectResponse

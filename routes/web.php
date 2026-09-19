@@ -105,6 +105,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::put('/links/{link}', 'updateLink')->middleware('throttle:20,1')->name('links.update');
             Route::delete('/links/{link}', 'destroyLink')->middleware('throttle:20,1')->name('links.destroy');
             Route::post('/payouts', 'payout')->middleware('throttle:5,1')->name('payouts.store');
+            Route::get('/payouts/{payout}/invoice-pdf', 'payoutInvoice')->middleware('throttle:20,1')->name('payouts.invoice');
             Route::get('/marketing-kit/{asset}', 'download')->name('assets.download');
         });
         // Checkout & Packages

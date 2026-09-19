@@ -928,6 +928,7 @@
                                             <th class="px-4 sm:px-5 py-3">Rekening tujuan</th>
                                             <th class="px-4 sm:px-5 py-3">Status</th>
                                             <th class="px-4 sm:px-5 py-3">Referensi</th>
+                                            <th class="px-4 sm:px-5 py-3">Invoice</th>
                                         </tr>
                                     </thead>
                                     <tbody class="divide-y divide-neutral-100 dark:divide-secondary-700">
@@ -950,10 +951,18 @@
                                                     </span>
                                                 </td>
                                                 <td class="max-w-xs whitespace-normal px-4 sm:px-5 py-3 sm:py-3.5 text-neutral-500 dark:text-neutral-400">{{ $payout->transfer_reference ?? $payout->review_note ?? '—' }}</td>
+                                                <td class="px-4 sm:px-5 py-3 sm:py-3.5">
+                                                    <a href="{{ route('dashboard.affiliate.payouts.invoice', $payout) }}"
+                                                        aria-label="Unduh invoice PDF pencairan #{{ $payout->id }}"
+                                                        class="inline-flex min-h-10 items-center gap-2 rounded-lg border border-neutral-200 px-3 py-2 text-xs font-semibold text-secondary-900 transition-colors hover:bg-neutral-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:border-secondary-600 dark:text-white dark:hover:bg-secondary-700">
+                                                        <i class="fa-solid fa-file-pdf" aria-hidden="true"></i>
+                                                        Unduh PDF
+                                                    </a>
+                                                </td>
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="5" class="px-4 sm:px-5 py-8 sm:py-10 text-center">
+                                                <td colspan="6" class="px-4 sm:px-5 py-8 sm:py-10 text-center">
                                                     <div class="flex flex-col items-center gap-2">
                                                         <i class="fa-solid fa-inbox text-xl sm:text-2xl text-neutral-300 dark:text-neutral-600"></i>
                                                         <p class="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400">Belum ada pengajuan pencairan.</p>
