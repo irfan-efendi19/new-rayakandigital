@@ -14,7 +14,7 @@
     <x-auth-session-status class="mb-5" :status="session('status')" />
 
     {{-- Google login --}}
-    <a href="{{ route('google.redirect') }}"
+    <a href="{{ route('google.redirect', request()->only(['theme', 'theme_id'])) }}"
        class="w-full flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl border border-neutral-200 dark:border-neutral-600 bg-white dark:bg-neutral-800/50 text-sm font-semibold text-gray-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-neutral-800 hover:border-neutral-300 dark:hover:border-neutral-500 focus:outline-none focus:ring-2 focus:ring-neutral-300 dark:focus:ring-neutral-600 active:scale-[0.98] hover:scale-[1.01] transition-all duration-200 shadow-sm mb-5">
         <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24">
             <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4" />
@@ -140,7 +140,7 @@
     {{-- Register link --}}
     <p class="mt-6 text-center text-sm text-gray-500 dark:text-neutral-500">
         Belum punya akun?
-        <a href="{{ route('register') }}" class="font-semibold text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors">
+        <a href="{{ route('register', request()->only(['theme', 'theme_id'])) }}" class="font-semibold text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors">
             Daftar gratis →
         </a>
     </p>

@@ -44,9 +44,11 @@ class InvitationController extends Controller
             return redirect()->route('invitation.dashboard');
         }
 
-        $hasPredefinedTheme = $request->has('theme');
-        $selectedTheme = $request->query('theme', '');
         ['themes' => $themes, 'themeCategories' => $themeCategories] = $this->themeCatalog();
+        $requestedTheme = $themes->firstWhere('slug', $request->query('theme'));
+        $theme = $requestedTheme ?? $themes->firstWhere('id', $request->user()->theme_id);
+        $selectedTheme = $theme?->slug ?? '';
+        $hasPredefinedTheme = $requestedTheme !== null;
 
         return view('dashboard.invitations.create', compact(
             'selectedTheme',

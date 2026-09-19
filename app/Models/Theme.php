@@ -32,6 +32,15 @@ class Theme extends Model
         return $this->belongsTo(ThemeCategory::class);
     }
 
+    public static function defaultForRegistration(): ?self
+    {
+        $query = static::query()->where('is_active', true);
+
+        return (clone $query)->find(config('themes.default_theme_id'))
+            ?? (clone $query)->where('view_path', 'themes.elegant')->first()
+            ?? $query->orderBy('id')->first();
+    }
+
     public function previewData(): HasOne
     {
         return $this->hasOne(ThemePreviewData::class);

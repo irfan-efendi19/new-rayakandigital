@@ -10,12 +10,13 @@ use Filament\Panel;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password', 'role', 'is_banned', 'google_id', 'google_token', 'google_refresh_token', 'avatar'])]
+#[Fillable(['name', 'email', 'password', 'role', 'is_banned', 'google_id', 'google_token', 'google_refresh_token', 'avatar', 'theme_id'])]
 #[Hidden(['password', 'remember_token', 'google_token', 'google_refresh_token'])]
 class User extends Authenticatable implements FilamentUser
 {
@@ -34,6 +35,7 @@ class User extends Authenticatable implements FilamentUser
             'password' => 'hashed',
             'is_banned' => 'boolean',
             'is_super_admin' => 'boolean',
+            'theme_id' => 'integer',
         ];
     }
 
@@ -60,6 +62,11 @@ class User extends Authenticatable implements FilamentUser
     public function invitations(): HasMany
     {
         return $this->hasMany(Invitation::class);
+    }
+
+    public function theme(): BelongsTo
+    {
+        return $this->belongsTo(Theme::class);
     }
 
     public function invitation(): HasOne

@@ -24,6 +24,10 @@ Thumbs.db
 themes/
 resources/views/themes/
 resources/views/themes/jawa.blade.php
-/tests
-
+/tests/*
+!/tests/Feature/
+/tests/Feature/*
+!/tests/Feature/Auth/
+/tests/Feature/Auth/*
+!/tests/Feature/Auth/GoogleThemePersistenceTest.php
 

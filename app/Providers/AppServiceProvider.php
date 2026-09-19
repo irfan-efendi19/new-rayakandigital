@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Auth\GoogleProvider;
 use App\Models\Invitation;
 use App\Models\User;
 use App\Policies\InvitationPolicy;
@@ -10,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Socialite\Contracts\Factory;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,6 +24,13 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        $this->app->make(Factory::class)->extend('google', function ($app) {
+            return $app->make(Factory::class)->buildProvider(
+                GoogleProvider::class,
+                $app['config']['services.google'],
+            );
+        });
+
         Gate::policy(Invitation::class, InvitationPolicy::class);
 
         Model::preventLazyLoading(! $this->app->isProduction());
