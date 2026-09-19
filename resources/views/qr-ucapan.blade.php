@@ -6,7 +6,6 @@
     heading="Titip kata untuk mereka."
     intro="Tak perlu panjang atau sempurna. Tulis yang benar-benar ingin Anda sampaikan kepada kedua mempelai."
     :couple="$invitation->couple_name"
-    :back-url="route('invitation.show', $invitation->slug)"
     :hub-url="route('qr-hub', $invitation->slug)"
     wide
 >

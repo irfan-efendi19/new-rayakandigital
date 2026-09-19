@@ -54,10 +54,6 @@
         @apply flex-1 px-4 pt-6 sm:px-8 sm:pt-8;
     }
 
-    .qr-breadcrumb {
-        @apply mb-5 inline-flex min-h-11 items-center gap-2 rounded-lg text-xs font-semibold text-neutral-500 transition-colors hover:text-primary-700 dark:text-neutral-400 dark:hover:text-primary-400;
-    }
-
     .qr-masthead__symbol {
         @apply grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-primary-500 text-secondary-900 shadow-sm;
     }
@@ -152,8 +148,7 @@
     }
 
     .qr-brand,
-    .qr-topbar__actions,
-    .qr-back-link {
+    .qr-topbar__actions {
         @apply flex items-center;
     }
 
@@ -163,10 +158,6 @@
 
     .qr-topbar__actions {
         @apply shrink-0 gap-2;
-    }
-
-    .qr-back-link {
-        @apply min-h-11 gap-2 rounded-xl px-3 text-xs font-semibold text-neutral-600 transition-colors hover:bg-primary-50 hover:text-primary-700 dark:text-neutral-300 dark:hover:bg-secondary-800 dark:hover:text-primary-400;
     }
 
     .qr-theme-toggle {

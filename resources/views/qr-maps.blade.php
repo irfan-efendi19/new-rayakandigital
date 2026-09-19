@@ -6,7 +6,6 @@
     heading="Lokasi, waktu, dan arah."
     intro="Simpan alamatnya, cek waktu acara, lalu buka rute dari posisi Anda saat berangkat."
     :couple="$invitation->couple_name"
-    :back-url="route('invitation.show', $invitation->slug)"
     :hub-url="route('qr-hub', $invitation->slug)"
 >
     <div class="qr-content">

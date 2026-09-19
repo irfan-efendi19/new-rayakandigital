@@ -6,7 +6,6 @@
     heading="Bisa hadir?"
     intro="Jawaban Anda membantu kedua mempelai menyiapkan tempat dan jamuan dengan lebih tepat."
     :couple="$invitation->couple_name"
-    :back-url="route('invitation.show', $invitation->slug)"
     :hub-url="route('qr-hub', $invitation->slug)"
 >
     <div class="qr-content">

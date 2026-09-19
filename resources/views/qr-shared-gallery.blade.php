@@ -6,7 +6,6 @@
     heading="Satu acara, banyak sudut pandang."
     intro="Punya foto bagus, candid, atau momen yang mungkin terlewat oleh fotografer? Titipkan di album bersama."
     :couple="$invitation->couple_name"
-    :back-url="route('invitation.show', $invitation->slug)"
     :hub-url="route('qr-hub', $invitation->slug)"
     wide
 >

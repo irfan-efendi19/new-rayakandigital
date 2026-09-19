@@ -6,7 +6,6 @@
     heading="Satu pindai. Semua kebutuhan."
     intro="Pilih kebutuhan Anda tanpa perlu mencari tautan lain. Seluruh informasi acara tersusun di satu tempat."
     :couple="$invitation->couple_name"
-    :back-url="route('invitation.show', $invitation->slug)"
     :hub-url="route('qr-hub', $invitation->slug)"
     :wide="true"
 >

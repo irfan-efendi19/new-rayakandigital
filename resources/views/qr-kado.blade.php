@@ -6,7 +6,6 @@
     heading="Tanda kasih, jika Anda berkenan."
     intro="Kehadiran dan doa Anda sudah lebih dari cukup. Jika tetap ingin memberi, gunakan salah satu tujuan berikut."
     :couple="$invitation->couple_name"
-    :back-url="route('invitation.show', $invitation->slug)"
     :hub-url="route('qr-hub', $invitation->slug)"
 >
     <div class="qr-content">

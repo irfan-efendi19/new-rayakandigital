@@ -93,6 +93,14 @@
                                 </div>
                             </div>
 
+                            <a href="{{ $rsvpUrl }}" target="_blank" rel="noopener noreferrer"
+                                class="inline-flex items-center justify-center gap-2 w-full px-4 py-2.5 bg-white dark:bg-secondary-700 text-secondary-700 dark:text-neutral-200 border border-neutral-300 dark:border-secondary-600 rounded-xl text-sm font-semibold hover:border-primary-400 hover:bg-primary-50 hover:text-primary-700 dark:hover:border-primary-500 dark:hover:bg-primary-900/20 dark:hover:text-primary-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-secondary-800 transition-colors">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 3h7m0 0v7m0-7L10 14M5 7v12h12v-5" />
+                                </svg>
+                                Buka Halaman Tujuan
+                            </a>
+
                             <a href="{{ $qrCodeData }}" download="qrcode-{{ $invitation->slug }}.png"
                                 class="inline-flex items-center justify-center gap-2 w-full px-4 py-2.5 bg-gradient-to-r from-primary to-primary-600 text-white rounded-xl text-sm font-semibold shadow-sm shadow-primary/20 hover:shadow-md hover:shadow-primary/30 hover:-translate-y-0.5 active:translate-y-0 transition-all">
                                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>

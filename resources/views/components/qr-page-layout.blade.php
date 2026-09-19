@@ -5,7 +5,6 @@
     'heading',
     'intro',
     'couple',
-    'backUrl',
     'hubUrl',
     'icon' => 'grid',
     'wide' => false,
@@ -32,10 +31,6 @@
             </a>
 
             <div class="qr-topbar__actions">
-                <a href="{{ $backUrl }}" class="qr-back-link">
-                    <x-qr-icon name="envelope" />
-                    <span>Undangan</span>
-                </a>
                 <button type="button" class="qr-theme-toggle" data-theme-toggle aria-label="Aktifkan mode gelap" aria-pressed="false">
                     <svg class="qr-theme-toggle__sun" viewBox="0 0 24 24" aria-hidden="true">
                         <circle cx="12" cy="12" r="3.5" fill="none" stroke="currentColor" stroke-width="1.7" />
@@ -49,13 +44,6 @@
         </nav>
 
         <div class="qr-page__body">
-            @if (! request()->routeIs('qr-hub'))
-                <a href="{{ $hubUrl }}" class="qr-breadcrumb">
-                    <x-qr-icon name="arrow-left" />
-                    Kembali ke pusat acara
-                </a>
-            @endif
-
             <header class="qr-masthead">
                 <div class="qr-masthead__symbol" aria-hidden="true"><x-qr-icon :name="$icon" /></div>
                 <div class="qr-masthead__body">
