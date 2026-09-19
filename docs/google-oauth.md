@@ -138,14 +138,16 @@ Tombol Google ada di:
 
 ### 5. Database Migration
 
-Migration `2026_06_03_000001_add_socialite_fields_to_users_table.php` menambahkan kolom:
+Migration `2026_06_03_000001_add_socialite_fields_to_users_table.php` menambahkan kolom Google. Migration `2026_09_19_232314_widen_google_tokens_on_users_table.php` memperluas kedua kolom token menjadi `TEXT` karena token dapat melebihi 255 karakter. Struktur akhirnya:
 
 | Kolom | Tipe | Keterangan |
 |---|---|---|
 | `google_id` | string, nullable, unique | ID user dari Google |
-| `google_token` | string, nullable | Access token |
-| `google_refresh_token` | string, nullable | Refresh token |
+| `google_token` | text, nullable | Access token tanpa pemotongan |
+| `google_refresh_token` | text, nullable | Refresh token tanpa pemotongan |
 | `avatar` | string, nullable | URL foto profil Google |
+
+Jalankan `php artisan migrate` setelah deploy, kemudian mulai ulang login Google. Migration mempertahankan token yang sudah tersimpan. Rollback ke `VARCHAR(255)` ditolak jika ada token yang lebih panjang agar kredensial tidak terpotong.
 
 ---
 

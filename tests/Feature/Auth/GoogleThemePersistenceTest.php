@@ -10,6 +10,7 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Testing\TestResponse;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -23,8 +24,14 @@ beforeEach(function () {
 
     expect(Socialite::driver('google'))->toBeInstanceOf(GoogleProvider::class);
 
+    $this->accessToken = 'test-access-'.str_repeat('a', 2048);
+    $this->refreshToken = 'test-refresh-'.str_repeat('r', 1024);
     $this->googleResponses = new MockHandler([
-        new Response(200, [], json_encode(['access_token' => 'test-token', 'expires_in' => 3600])),
+        new Response(200, [], json_encode([
+            'access_token' => $this->accessToken,
+            'refresh_token' => $this->refreshToken,
+            'expires_in' => 3600,
+        ])),
         new Response(200, [], json_encode([
             'sub' => 'google-test-user',
             'name' => 'Google User',
@@ -80,6 +87,40 @@ test('theme links survive registration and login pages', function (string $page,
     ['theme', 'modern'], ['theme_id', null],
 ]);
 
+test('Google token storage supports long nullable tokens', function () {
+    $columns = collect(Schema::getColumns('users'))->keyBy('name');
+
+    foreach (['google_token', 'google_refresh_token'] as $column) {
+        expect($columns[$column]['type_name'])->toBe('text')
+            ->and($columns[$column]['nullable'])->toBeTrue();
+    }
+});
+
+test('Google token migration preserves existing credentials', function () {
+    $user = User::factory()->create([
+        'google_token' => 'existing-access-token',
+        'google_refresh_token' => null,
+    ]);
+    $migration = require database_path('migrations/2026_09_19_232314_widen_google_tokens_on_users_table.php');
+
+    $migration->down();
+    $migration->up();
+
+    $user->refresh();
+    expect($user->google_token)->toBe('existing-access-token')
+        ->and($user->google_refresh_token)->toBeNull();
+});
+
+test('Google token rollback refuses to truncate stored credentials', function (string $column) {
+    $token = 'test-'.str_repeat('t', 512);
+    $user = User::factory()->create([$column => $token]);
+    $migration = require database_path('migrations/2026_09_19_232314_widen_google_tokens_on_users_table.php');
+
+    expect(fn () => $migration->down())->toThrow(RuntimeException::class, 'Cannot shrink Google token columns');
+    expect($user->fresh()->getAttribute($column))->toBe($token)
+        ->and(Schema::getColumnType('users', $column))->toBe('text');
+})->with(['google_token', 'google_refresh_token']);
+
 test('landing page theme survives real OAuth state validation and invitation creation', function (string $key) {
     $parameters = [$key => $key === 'theme_id' ? $this->selectedTheme->id : 'modern'];
     $this->get(route('home'))->assertSuccessful()->assertSee(route('register', ['theme' => 'modern']));
@@ -95,7 +136,9 @@ test('landing page theme survives real OAuth state validation and invitation cre
     $user = User::where('email', 'google@example.com')->firstOrFail();
     $this->assertAuthenticatedAs($user);
     expect($user->theme_id)->toBe($this->selectedTheme->id)
-        ->and($user->theme->is($this->selectedTheme))->toBeTrue();
+        ->and($user->theme->is($this->selectedTheme))->toBeTrue()
+        ->and($user->google_token)->toBe($this->accessToken)
+        ->and($user->google_refresh_token)->toBe($this->refreshToken);
 
     $this->get(route('dashboard'))->assertRedirect(route('invitation.create'));
     $this->get(route('invitation.create'))->assertSuccessful()
@@ -239,7 +282,12 @@ test('existing invitations and their profile preferences are preserved', functio
 test('existing users without invitations can continue with a newly selected theme', function () {
     $user = User::factory()->create(['email' => 'google@example.com']);
     completeGoogleThemeLogin(beginGoogleThemeLogin(['theme' => 'modern']))->assertSessionHasNoErrors();
-    expect($user->fresh()->theme_id)->toBe($this->selectedTheme->id);
+    $this->assertAuthenticatedAs($user);
+    $user->refresh();
+    expect($user->theme_id)->toBe($this->selectedTheme->id)
+        ->and($user->google_id)->toBe('google-test-user')
+        ->and($user->google_token)->toBe($this->accessToken)
+        ->and($user->google_refresh_token)->toBe($this->refreshToken);
 });
 
 test('login without a new selection preserves a saved preference and intended URL', function () {
