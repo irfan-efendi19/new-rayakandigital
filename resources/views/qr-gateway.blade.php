@@ -2,20 +2,25 @@
     :title="'Konfirmasi Kehadiran — '.$invitation->couple_name"
     :description="'Konfirmasi kehadiran untuk acara '.$invitation->couple_name.'.'"
     section="RSVP"
+    icon="check"
     heading="Bisa hadir?"
     intro="Jawaban Anda membantu kedua mempelai menyiapkan tempat dan jamuan dengan lebih tepat."
     :couple="$invitation->couple_name"
     :back-url="route('invitation.show', $invitation->slug)"
+    :hub-url="route('qr-hub', $invitation->slug)"
 >
     <div class="qr-content">
         @if ($eventDate)
             <div class="qr-event-date">
-                <span class="qr-label">Tanggal acara</span>
-                <span>{{ $eventDate->translatedFormat('l, d F Y') }}</span>
+                <span class="qr-event-date__icon"><x-qr-icon name="calendar" /></span>
+                <div class="min-w-0">
+                    <p class="qr-label">Catat hari bahagianya</p>
+                    <p>{{ $eventDate->translatedFormat('l, d F Y') }}</p>
+                </div>
             </div>
         @endif
 
-        <section class="qr-section {{ $eventDate ? 'mt-10' : '' }}" aria-labelledby="rsvp-form-title">
+        <section class="qr-section qr-panel {{ $eventDate ? 'mt-6' : '' }}" aria-labelledby="rsvp-form-title">
             <div data-rsvp-form-wrap>
                 <div class="qr-section__heading">
                     <div>
@@ -89,6 +94,7 @@
             </div>
 
             <div class="hidden qr-success" data-rsvp-success aria-live="polite">
+                <span class="qr-state-icon"><x-qr-icon name="check" /></span>
                 <p class="qr-label">Konfirmasi diterima</p>
                 <h2>Terima kasih.</h2>
                 <p>Jawaban dan pesan Anda sudah tercatat untuk kedua mempelai.</p>

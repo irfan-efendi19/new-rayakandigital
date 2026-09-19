@@ -2,10 +2,12 @@
     :title="'Galeri Bersama — '.$invitation->couple_name"
     :description="'Bagikan foto yang Anda ambil di acara '.$invitation->couple_name.'.'"
     section="Galeri Momen Acara"
+    icon="camera"
     heading="Satu acara, banyak sudut pandang."
     intro="Punya foto bagus, candid, atau momen yang mungkin terlewat oleh fotografer? Titipkan di album bersama."
     :couple="$invitation->couple_name"
     :back-url="route('invitation.show', $invitation->slug)"
+    :hub-url="route('qr-hub', $invitation->slug)"
     wide
 >
     <div class="qr-content">
@@ -23,8 +25,8 @@
             </aside>
         @endif
 
-        <div class="qr-split mt-10">
-            <section aria-labelledby="upload-title">
+        <div class="qr-split {{ $officialGalleryUrl ? 'mt-6' : '' }}">
+            <section class="qr-panel" aria-labelledby="upload-title">
                 <div class="qr-section__heading">
                     <div>
                         <p class="qr-label">Kontribusi Anda</p>
@@ -33,7 +35,7 @@
                 </div>
 
                 @if (session('success'))
-                    <div class="mb-5 border-l-[3px] border-emerald-500 bg-emerald-50 px-4 py-3 text-xs text-emerald-800 dark:bg-emerald-950/20 dark:text-emerald-300" role="status">
+                    <div class="mb-5 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800 dark:border-emerald-800 dark:bg-emerald-950/20 dark:text-emerald-300" role="status">
                         {{ session('success') }}
                     </div>
                 @endif
@@ -53,6 +55,7 @@
                             accept="image/jpeg,image/png,image/webp" class="sr-only" required data-photo-input>
 
                         <span class="qr-dropzone__prompt" data-dropzone-prompt>
+                            <span class="qr-dropzone__icon"><x-qr-icon name="upload" /></span>
                             <strong>Pilih foto dari perangkat</strong>
                             <span>JPG, PNG, atau WEBP · maksimum 10 MB</span>
                         </span>
@@ -60,6 +63,7 @@
                         <span class="hidden qr-dropzone__preview" data-dropzone-preview>
                             <img src="" alt="Pratinjau foto yang dipilih" data-preview-image>
                             <p data-file-name></p>
+                            <span class="qr-dropzone__change">Ketuk untuk mengganti foto</span>
                         </span>
                     </label>
 
@@ -83,7 +87,7 @@
                     <button type="submit" class="qr-button qr-button--primary" data-gallery-submit>
                         Unggah foto
                     </button>
-                    <p class="text-[10px] leading-4 text-neutral-400 dark:text-neutral-500">
+                    <p class="text-xs leading-5 text-neutral-500 dark:text-neutral-400">
                         Unggah hanya foto yang pantas dilihat oleh kedua mempelai dan tamu lain.
                     </p>
                 </form>
@@ -95,7 +99,7 @@
                         <p class="qr-label">Dari para tamu</p>
                         <h2 id="shared-photos-title" class="qr-section-title">Foto yang sudah terkumpul</h2>
                     </div>
-                    <span class="qr-count">{{ $photos->count() }}</span>
+                    <span class="qr-count">{{ $photos->count() }} foto</span>
                 </div>
 
                 @if ($photos->isNotEmpty())
@@ -118,6 +122,7 @@
                     </div>
                 @else
                     <div class="qr-empty">
+                        <span class="qr-state-icon"><x-qr-icon name="camera" /></span>
                         <h3 class="qr-empty__title">Albumnya masih kosong.</h3>
                         <p class="qr-empty__copy">Kalau Anda punya fotonya, mulai album bersama ini.</p>
                     </div>

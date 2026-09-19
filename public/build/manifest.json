@@ -1,6 +1,6 @@
 {
   "resources/css/app.css": {
-    "file": "assets/app-BWGXd4ei.css",
+    "file": "assets/app-Y2kL3gHV.css",
     "name": "app",
     "names": [
       "app.css"
@@ -18,7 +18,7 @@
     ]
   },
   "resources/js/qr-pages.js": {
-    "file": "assets/qr-pages-DhSSXeNO.js",
+    "file": "assets/qr-pages-Lv4Vkikj.js",
     "name": "qr-pages",
     "src": "resources/js/qr-pages.js",
     "isEntry": true

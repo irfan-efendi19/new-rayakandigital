@@ -1,14 +1,27 @@
-const savedTheme = localStorage.getItem('dark-mode');
 const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+let savedTheme = null;
 
-if (savedTheme === 'true' || (savedTheme === null && prefersDark)) {
-    document.documentElement.classList.add('dark');
-}
+try {
+    savedTheme = localStorage.getItem('dark-mode');
+} catch {}
+
+document.documentElement.classList.toggle('dark', savedTheme === 'true' || (savedTheme === null && prefersDark));
 
 document.addEventListener('DOMContentLoaded', () => {
-    document.querySelector('[data-theme-toggle]')?.addEventListener('click', () => {
+    const themeToggle = document.querySelector('[data-theme-toggle]');
+    const updateThemeToggle = () => {
+        const isDark = document.documentElement.classList.contains('dark');
+        themeToggle?.setAttribute('aria-pressed', String(isDark));
+        themeToggle?.setAttribute('aria-label', isDark ? 'Aktifkan mode terang' : 'Aktifkan mode gelap');
+    };
+
+    updateThemeToggle();
+    themeToggle?.addEventListener('click', () => {
         const isDark = document.documentElement.classList.toggle('dark');
-        localStorage.setItem('dark-mode', String(isDark));
+        updateThemeToggle();
+        try {
+            localStorage.setItem('dark-mode', String(isDark));
+        } catch {}
     });
 
     document.querySelectorAll('[data-copy]').forEach((button) => {

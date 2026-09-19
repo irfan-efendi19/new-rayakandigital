@@ -2,10 +2,12 @@
     :title="$invitation->couple_name.' — Pusat Acara'"
     :description="'Akses undangan, RSVP, lokasi, kado digital, dan ucapan untuk '.$invitation->couple_name.'.'"
     section="QR Interaktif"
+    icon="grid"
     heading="Satu pindai. Semua kebutuhan."
     intro="Pilih kebutuhan Anda tanpa perlu mencari tautan lain. Seluruh informasi acara tersusun di satu tempat."
     :couple="$invitation->couple_name"
     :back-url="route('invitation.show', $invitation->slug)"
+    :hub-url="route('qr-hub', $invitation->slug)"
     :wide="true"
 >
     <div class="qr-content">
@@ -22,11 +24,11 @@
 
             <dl class="qr-hub-facts">
                 <div class="qr-hub-fact">
-                    <dt>Tanggal</dt>
+                    <dt><x-qr-icon name="calendar" /> Tanggal acara</dt>
                     <dd>{{ $eventDate ? $eventDate->translatedFormat('d M Y') : 'Segera diumumkan' }}</dd>
                 </div>
                 <div class="qr-hub-fact">
-                    <dt>Lokasi</dt>
+                    <dt><x-qr-icon name="pin" /> Lokasi</dt>
                     <dd title="{{ $venueName ?: 'Segera diumumkan' }}">{{ $venueName ?: 'Segera diumumkan' }}</dd>
                 </div>
             </dl>
@@ -209,7 +211,7 @@
 
         <aside class="qr-section" aria-labelledby="hub-tip-title">
             <div class="qr-hub-note">
-                <span class="qr-hub-note__step" aria-hidden="true">01</span>
+                <span class="qr-hub-note__step" aria-hidden="true"><x-qr-icon name="bookmark" /></span>
                 <div>
                     <h2 id="hub-tip-title" class="qr-hub-note__title">Simpan halaman ini untuk akses cepat</h2>
                     <p class="qr-hub-note__copy">Tambahkan ke layar utama ponsel atau bagikan tautannya kepada keluarga yang hadir bersama Anda.</p>

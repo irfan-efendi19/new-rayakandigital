@@ -2,15 +2,17 @@
     :title="'Ucapan & Doa — '.$invitation->couple_name"
     :description="'Sampaikan ucapan dan doa untuk '.$invitation->couple_name.'.'"
     section="Ucapan & Doa"
+    icon="heart"
     heading="Titip kata untuk mereka."
     intro="Tak perlu panjang atau sempurna. Tulis yang benar-benar ingin Anda sampaikan kepada kedua mempelai."
     :couple="$invitation->couple_name"
     :back-url="route('invitation.show', $invitation->slug)"
+    :hub-url="route('qr-hub', $invitation->slug)"
     wide
 >
     <div class="qr-content">
         <div class="qr-split">
-            <section aria-labelledby="wish-form-title">
+            <section class="qr-panel" aria-labelledby="wish-form-title">
                 <div class="qr-section__heading">
                     <div>
                         <p class="qr-label">Dari Anda</p>
@@ -44,6 +46,7 @@
                 </div>
 
                 <div class="hidden qr-success" data-wish-success aria-live="polite">
+                    <span class="qr-state-icon"><x-qr-icon name="check" /></span>
                     <h2>Sudah sampai.</h2>
                     <p>Terima kasih sudah ikut mengisi hari mereka dengan kata-kata baik.</p>
                     <button type="button" class="qr-text-link mt-5" data-wish-reset>Tulis ucapan lain</button>
@@ -56,7 +59,7 @@
                         <p class="qr-label">Dari orang-orang terdekat</p>
                         <h2 id="latest-wishes-title" class="qr-section-title">Ucapan terbaru</h2>
                     </div>
-                    <span class="qr-count">{{ $invitation->wishes->count() }}</span>
+                    <span class="qr-count">{{ $invitation->wishes->count() }} ucapan</span>
                 </div>
 
                 @if ($invitation->wishes->isNotEmpty())
@@ -75,6 +78,7 @@
                     </div>
                 @else
                     <div class="qr-empty">
+                        <span class="qr-state-icon"><x-qr-icon name="heart" /></span>
                         <h3 class="qr-empty__title">Belum ada yang menulis.</h3>
                         <p class="qr-empty__copy">Ucapan pertama sering kali menjadi yang paling diingat.</p>
                     </div>
