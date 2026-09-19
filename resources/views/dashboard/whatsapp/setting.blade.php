@@ -1,622 +1,331 @@
 <x-app-layout>
     @php
         $status = $waSetting->status ?? 'PENDING_VERIFICATION';
-        $phone  = $waSetting->phone_number ?? '';
+        $phone = $waSetting->phone_number ?? '';
+        $phoneInput = old('phone_number', str_starts_with($phone, '62') ? substr($phone, 2) : $phone);
+        $phoneDisplay = $phone ? '+'.ltrim($phone, '+') : 'Belum ditambahkan';
+
+        $statusMeta = match ($status) {
+            'CONNECTED' => [
+                'label' => 'Terhubung', 'eyebrow' => 'Gateway aktif',
+                'title' => 'WhatsApp siap mengirim undangan',
+                'description' => 'Nomor pengirim sudah terhubung dan dapat digunakan dari daftar tamu.',
+                'badge' => 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300',
+                'panel' => 'border-emerald-200/80 bg-emerald-50/70 dark:border-emerald-800/60 dark:bg-emerald-950/20',
+                'icon' => 'bg-emerald-500 text-white shadow-emerald-500/25',
+            ],
+            'READY_TO_PAIR' => [
+                'label' => 'Siap dipasangkan', 'eyebrow' => 'Nomor disetujui',
+                'title' => 'Satu langkah lagi untuk terhubung',
+                'description' => 'Tampilkan QR Code lalu pindai melalui menu Perangkat Tertaut di WhatsApp.',
+                'badge' => 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300',
+                'panel' => 'border-blue-200/80 bg-blue-50/70 dark:border-blue-800/60 dark:bg-blue-950/20',
+                'icon' => 'bg-blue-500 text-white shadow-blue-500/25',
+            ],
+            'PAIRING' => [
+                'label' => 'Menunggu pemindaian', 'eyebrow' => 'Proses pairing',
+                'title' => 'Pindai QR Code dari WhatsApp',
+                'description' => 'Biarkan halaman ini terbuka. Status akan diperbarui otomatis setelah QR dipindai.',
+                'badge' => 'bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300',
+                'panel' => 'border-violet-200/80 bg-violet-50/70 dark:border-violet-800/60 dark:bg-violet-950/20',
+                'icon' => 'bg-violet-500 text-white shadow-violet-500/25',
+            ],
+            'REJECTED' => [
+                'label' => 'Perlu diperbaiki', 'eyebrow' => 'Pengajuan ditolak',
+                'title' => 'Periksa kembali nomor WhatsApp',
+                'description' => 'Perbarui nomor pengirim sesuai catatan admin, lalu kirim ulang pengajuan.',
+                'badge' => 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300',
+                'panel' => 'border-red-200/80 bg-red-50/70 dark:border-red-800/60 dark:bg-red-950/20',
+                'icon' => 'bg-red-500 text-white shadow-red-500/25',
+            ],
+            default => [
+                'label' => empty($phone) ? 'Belum diatur' : 'Menunggu verifikasi',
+                'eyebrow' => empty($phone) ? 'Mulai aktivasi' : 'Sedang ditinjau admin',
+                'title' => empty($phone) ? 'Hubungkan nomor WhatsApp Anda' : 'Pengajuan sedang diperiksa',
+                'description' => empty($phone)
+                    ? 'Tambahkan nomor yang akan digunakan untuk mengirim pesan kepada tamu.'
+                    : 'Kami akan memberi akses pairing setelah nomor pengirim disetujui.',
+                'badge' => 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300',
+                'panel' => 'border-amber-200/80 bg-amber-50/70 dark:border-amber-800/60 dark:bg-amber-950/20',
+                'icon' => 'bg-amber-500 text-white shadow-amber-500/25',
+            ],
+        };
+
+        $hasWaQuota = $invitation->hasWaQuotaLimit();
+        $waQuotaLimit = $invitation->waQuotaLimit();
+        $waSent = $invitation->waSentCount();
+        $waRemaining = $invitation->remainingWaQuota();
+        $waUsedPct = $waQuotaLimit > 0 ? min(100, round(($waSent / $waQuotaLimit) * 100)) : 0;
+
+        $currentStep = match ($status) {
+            'CONNECTED' => 4,
+            'PAIRING', 'READY_TO_PAIR' => 3,
+            'PENDING_VERIFICATION' => empty($phone) ? 1 : 2,
+            default => 1,
+        };
+
+        $steps = [
+            ['title' => 'Nomor pengirim', 'description' => 'Tambahkan nomor aktif'],
+            ['title' => 'Verifikasi admin', 'description' => 'Tunggu persetujuan'],
+            ['title' => 'Pindai QR', 'description' => 'Tautkan perangkat'],
+            ['title' => 'Siap kirim', 'description' => 'Gateway aktif'],
+        ];
+
+        $adminWaClean = preg_replace('/[^0-9]/', '', $adminWa ?? '');
+        if ($adminWaClean && str_starts_with($adminWaClean, '0')) {
+            $adminWaClean = '62'.substr($adminWaClean, 1);
+        } elseif ($adminWaClean && ! str_starts_with($adminWaClean, '62')) {
+            $adminWaClean = '62'.$adminWaClean;
+        }
     @endphp
 
-    <div class="min-h-screen">
+    <div class="min-h-screen bg-neutral-50/70 dark:bg-secondary-900" x-data="{ showServiceInfo: false }">
+        <header class="relative overflow-hidden border-b border-neutral-200/80 bg-white dark:border-secondary-700 dark:bg-secondary-900">
+            <div class="absolute inset-0 bg-gradient-to-br from-emerald-50 via-white to-primary-50/50 dark:from-emerald-950/20 dark:via-secondary-900 dark:to-primary-900/10"></div>
+            <div class="absolute -right-16 -top-24 h-72 w-72 rounded-full bg-emerald-200/30 blur-3xl dark:bg-emerald-800/10"></div>
 
-        {{-- ─── HERO ─── --}}
-        <div class="hero-mesh grain-overlay border-b border-neutral-200/60 dark:border-secondary-700/40">
-            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-7 sm:py-8">
-
-                {{-- Breadcrumb --}}
-                <nav class="flex items-center gap-1.5 text-xs text-neutral-400 dark:text-neutral-500 mb-4">
-                    <a href="{{ route('dashboard') }}" class="hover:text-primary dark:hover:text-primary-400 transition-colors">Dashboard</a>
-                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
-                    <a href="{{ route('dashboard.invitations.show', $invitation) }}" class="hover:text-primary dark:hover:text-primary-400 transition-colors truncate max-w-[150px]">{{ $invitation->title }}</a>
-                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
-                    <span class="text-neutral-600 dark:text-neutral-400 font-medium">WA Gateway</span>
+            <div class="relative mx-auto max-w-7xl px-4 py-7 sm:px-6 sm:py-9 lg:px-8">
+                <nav aria-label="Breadcrumb" class="flex items-center gap-2 text-xs text-neutral-500 dark:text-neutral-400">
+                    <a href="{{ route('dashboard') }}" class="transition-colors hover:text-primary dark:hover:text-primary-400">Dashboard</a>
+                    <svg class="h-3 w-3 text-neutral-300 dark:text-secondary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="m9 5 7 7-7 7" /></svg>
+                    <a href="{{ route('dashboard.invitations.show', $invitation) }}" class="max-w-[160px] truncate transition-colors hover:text-primary dark:hover:text-primary-400 sm:max-w-xs">{{ $invitation->title }}</a>
+                    <svg class="h-3 w-3 text-neutral-300 dark:text-secondary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="m9 5 7 7-7 7" /></svg>
+                    <span class="font-semibold text-secondary-700 dark:text-neutral-200">WhatsApp</span>
                 </nav>
 
-                <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4" x-data="{ showFonnteInfo: false }">
-                    <div class="flex items-start gap-3">
-                        <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white shadow-lg shadow-emerald-500/20 shrink-0">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                <div class="mt-5 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+                    <div class="flex items-start gap-4">
+                        <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-lg shadow-emerald-500/20">
+                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z" />
                             </svg>
                         </div>
                         <div>
-                            <h1 class="font-heading text-2xl sm:text-3xl font-bold text-secondary-800 dark:text-neutral-50 leading-tight">
-                                WhatsApp Gateway
-                            </h1>
-                            <p class="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
-                                Pengirim pesan untuk undangan <strong class="text-secondary-700 dark:text-neutral-300">"{{ $invitation->title }}"</strong>
-                            </p>
+                            <p class="text-xs font-bold uppercase tracking-[0.2em] text-emerald-600 dark:text-emerald-400">Integrasi pesan</p>
+                            <h1 class="mt-1 font-heading text-2xl font-bold text-secondary-900 dark:text-white sm:text-3xl">WhatsApp Gateway</h1>
+                            <p class="mt-1.5 max-w-2xl text-sm leading-6 text-neutral-500 dark:text-neutral-400">Kelola nomor pengirim untuk <span class="font-semibold text-secondary-700 dark:text-neutral-200">{{ $invitation->title }}</span>.</p>
                         </div>
-                        <button type="button" @click="showFonnteInfo = true"
-                                class="mt-0.5 inline-flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200/70 dark:border-emerald-800/50 rounded-xl hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition-all cursor-pointer shrink-0">
-                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            Info Layanan
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-2">
+                        <button type="button" @click="showServiceInfo = true" class="inline-flex items-center gap-2 rounded-xl border border-neutral-200 bg-white/80 px-3.5 py-2 text-xs font-semibold text-neutral-600 shadow-sm transition hover:border-emerald-200 hover:text-emerald-700 dark:border-secondary-700 dark:bg-secondary-800/80 dark:text-neutral-300 dark:hover:border-emerald-800 dark:hover:text-emerald-400">
+                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+                            Tentang layanan
                         </button>
+                        <a href="{{ route('dashboard.invitations.guests.index', $invitation) }}" class="inline-flex items-center gap-2 rounded-xl border border-neutral-200 bg-white/80 px-3.5 py-2 text-xs font-semibold text-secondary-700 shadow-sm transition hover:bg-white dark:border-secondary-700 dark:bg-secondary-800/80 dark:text-neutral-200 dark:hover:bg-secondary-800">
+                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m10 19-7-7m0 0 7-7m-7 7h18" /></svg>
+                            Daftar tamu
+                        </a>
                     </div>
-                    <a href="{{ route('dashboard.invitations.guests.index', $invitation) }}"
-                       class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-secondary-700 dark:text-neutral-300 border border-neutral-300/80 dark:border-secondary-600 rounded-xl hover:bg-white dark:hover:bg-secondary-700 transition-all bg-white/70 dark:bg-secondary-800/50 backdrop-blur-sm shrink-0">
-                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                        </svg>
-                        Kembali
-                    </a>
+                </div>
+            </div>
+        </header>
 
-                    {{-- ── MODAL INFO LAYANAN (FONNTE) ── --}}
-                    <div x-show="showFonnteInfo" x-cloak
-                         class="fixed inset-0 z-[60] flex items-center justify-center p-4 sm:p-6"
-                         x-transition.opacity>
-                        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" @click="showFonnteInfo = false"></div>
-                        <div class="relative bg-white dark:bg-secondary-800 rounded-3xl w-full max-w-2xl max-h-[85vh] overflow-y-auto shadow-2xl"
-                             @keydown.escape.window="showFonnteInfo = false">
-                            <div class="p-6 sm:p-8">
-                                {{-- Header --}}
-                                <div class="flex items-start justify-between gap-4">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white shadow-md shadow-emerald-500/20 shrink-0">
-                                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                            </svg>
-                                        </div>
-                                        <div>
-                                            <h2 class="text-sm font-bold text-secondary-800 dark:text-neutral-100">WA Blast Ditenagai oleh Fonnte</h2>
-                                            <p class="text-[11px] text-neutral-500 dark:text-neutral-400">
-                                                Gateway WhatsApp yang sudah dipercaya ribuan bisnis di Indonesia —
-                                                <a href="https://fonnte.com/" target="_blank" rel="noopener"
-                                                   class="text-emerald-600 dark:text-emerald-400 font-semibold underline underline-offset-2 hover:no-underline inline-flex items-center gap-0.5">
-                                                    fonnte.com
-                                                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                                                    </svg>
-                                                </a>
-                                            </p>
-                                        </div>
+        <main class="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+            @if (session('success') || session('error'))
+                @php $flashSuccess = session('success'); @endphp
+                <div role="status" class="mb-6 flex items-start gap-3 rounded-2xl border p-4 {{ $flashSuccess ? 'border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-800/60 dark:bg-emerald-950/30 dark:text-emerald-300' : 'border-red-200 bg-red-50 text-red-800 dark:border-red-800/60 dark:bg-red-950/30 dark:text-red-300' }}">
+                    <svg class="mt-0.5 h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                        @if($flashSuccess)<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="m5 13 4 4L19 7" />@else<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />@endif
+                    </svg>
+                    <p class="text-sm font-medium">{{ $flashSuccess ?: session('error') }}</p>
+                </div>
+            @endif
+
+            <div x-data="waSettingManager({ status: {{ Js::from($status) }}, phone: {{ Js::from($phone) }} })" class="grid gap-6 lg:grid-cols-12 lg:items-start">
+                <div class="space-y-6 lg:col-span-8">
+                    <section class="overflow-hidden rounded-3xl border shadow-sm {{ $statusMeta['panel'] }}">
+                        <div class="p-5 sm:p-6">
+                            <div class="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
+                                <div class="flex items-start gap-4">
+                                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl shadow-lg {{ $statusMeta['icon'] }}">
+                                        @if($status === 'CONNECTED')
+                                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="m5 13 4 4L19 7" /></svg>
+                                        @elseif($status === 'READY_TO_PAIR' || $status === 'PAIRING')
+                                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.75 4.5h4.5v4.5h-4.5V4.5Zm0 10.5h4.5v4.5h-4.5V15Zm12-10.5h4.5v4.5h-4.5V4.5ZM15 15h1.5v1.5H15V15Zm3 0h2.25v5.25H15V18h3v-3Zm-6-10.5h1.5V9H12V4.5Zm0 6h4.5V12H15v3h-3v-4.5Zm6 0h2.25V13H18v-2.5ZM9.75 12h1.5v8.25h-1.5V12Zm3 4.5h1.5v3.75h-1.5V16.5Z" /></svg>
+                                        @elseif($status === 'REJECTED')
+                                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 18 6M6 6l12 12" /></svg>
+                                        @else
+                                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6l4 2m5-2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+                                        @endif
                                     </div>
-                                    <button type="button" @click="showFonnteInfo = false"
-                                            class="w-8 h-8 rounded-xl bg-neutral-100 dark:bg-secondary-700 hover:bg-neutral-200 dark:hover:bg-secondary-600 flex items-center justify-center text-neutral-500 dark:text-neutral-300 transition-colors cursor-pointer shrink-0">
-                                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                                        </svg>
+                                    <div>
+                                        <div class="flex flex-wrap items-center gap-2">
+                                            <p class="text-xs font-bold uppercase tracking-[0.16em] text-neutral-500 dark:text-neutral-400">{{ $statusMeta['eyebrow'] }}</p>
+                                            <span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-bold {{ $statusMeta['badge'] }}"><span class="h-1.5 w-1.5 rounded-full bg-current"></span>{{ $statusMeta['label'] }}</span>
+                                        </div>
+                                        <h2 class="mt-2 text-lg font-bold text-secondary-900 dark:text-white sm:text-xl">{{ $statusMeta['title'] }}</h2>
+                                        <p class="mt-1 max-w-xl text-sm leading-6 text-neutral-600 dark:text-neutral-300">{{ $statusMeta['description'] }}</p>
+                                    </div>
+                                </div>
+
+                                @if(in_array($status, ['READY_TO_PAIR', 'PAIRING', 'CONNECTED']))
+                                    <button type="button" @click="checkStatus()" :disabled="loadingStatus" class="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl border border-white/80 bg-white/70 px-3.5 py-2 text-xs font-semibold text-neutral-700 shadow-sm transition hover:bg-white disabled:cursor-wait disabled:opacity-60 dark:border-secondary-700 dark:bg-secondary-800/80 dark:text-neutral-200 dark:hover:bg-secondary-800">
+                                        <svg class="h-4 w-4" :class="{ 'animate-spin': loadingStatus }" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 0 0 4.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 0 1-15.357-2m15.357 2H15" /></svg>
+                                        <span x-text="loadingStatus ? 'Memeriksa...' : 'Periksa status'"></span>
                                     </button>
-                                </div>
-
-                                {{-- Keunggulan --}}
-                                <div class="mt-5 grid sm:grid-cols-2 gap-4">
-                                    <div class="flex items-start gap-3 p-4 rounded-xl bg-emerald-50/70 dark:bg-emerald-900/20 border border-emerald-100 dark:border-emerald-800/40">
-                                        <div class="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
-                                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                                            </svg>
-                                        </div>
-                                        <div>
-                                            <p class="text-xs font-semibold text-emerald-800 dark:text-emerald-300">Aman &amp; Terenkripsi</p>
-                                            <p class="text-[11px] text-emerald-700/80 dark:text-emerald-400/70 mt-1 leading-relaxed">Koneksi lewat QR Code seperti WhatsApp Web. Nomormu dipakai hanya untuk kirim undangan ke tamumu, tidak untuk kepentingan lain.</p>
-                                        </div>
-                                    </div>
-
-                                    <div class="flex items-start gap-3 p-4 rounded-xl bg-blue-50/70 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800/40">
-                                        <div class="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
-                                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                                            </svg>
-                                        </div>
-                                        <div>
-                                            <p class="text-xs font-semibold text-blue-800 dark:text-blue-300">Nomor Asli, Bukan Nomor Baru</p>
-                                            <p class="text-[11px] text-blue-700/80 dark:text-blue-400/70 mt-1 leading-relaxed">Tamu menerima pesan dari nomor WhatsApp yang kamu kenal, bukan dari nomor acak. Lebih personal dan terpercaya.</p>
-                                        </div>
-                                    </div>
-
-                                    <div class="flex items-start gap-3 p-4 rounded-xl bg-amber-50/70 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-800/40">
-                                        <div class="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0">
-                                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                                            </svg>
-                                        </div>
-                                        <div>
-                                            <p class="text-xs font-semibold text-amber-800 dark:text-amber-300">Diverifikasi Admin</p>
-                                            <p class="text-[11px] text-amber-700/80 dark:text-amber-400/70 mt-1 leading-relaxed">Setiap nomor melalui proses verifikasi admin demi keamanan. Kamu akan dibantu jika ada kendala.</p>
-                                        </div>
-                                    </div>
-
-                                    <div class="flex items-start gap-3 p-4 rounded-xl bg-purple-50/70 dark:bg-purple-900/20 border border-purple-100 dark:border-purple-800/40">
-                                        <div class="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-900/40 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0">
-                                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                            </svg>
-                                        </div>
-                                        <div>
-                                            <p class="text-xs font-semibold text-purple-800 dark:text-purple-300">Transparan &amp; Terpantau</p>
-                                            <p class="text-[11px] text-purple-700/80 dark:text-purple-400/70 mt-1 leading-relaxed">Semua pesan yang terkirim tercatat di halaman Log Pesan, jadi kamu bisa pantau status pengiriman ke setiap tamu.</p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {{-- Alur singkat --}}
-                                <div class="mt-4 flex items-center gap-2.5 px-4 py-3 rounded-xl bg-neutral-50 dark:bg-secondary-900/50 border border-neutral-100 dark:border-secondary-700/50">
-                                    <svg class="w-4 h-4 text-neutral-400 dark:text-neutral-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                    <p class="text-[11px] text-neutral-500 dark:text-neutral-400 leading-relaxed">
-                                        Berikutnya kamu hanya perlu: <strong class="text-neutral-700 dark:text-neutral-300">daftarkan nomor</strong> → <strong class="text-neutral-700 dark:text-neutral-300">tunggu persetujuan admin</strong> → <strong class="text-neutral-700 dark:text-neutral-300">pindai QR</strong> → WA Blast siap digunakan.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-        {{-- ─── MAIN CONTENT ─── --}}
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-7 sm:py-8 space-y-6">
-
-            {{-- Flash Messages --}}
-            @if (session('success'))
-                <div class="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-700/60 flex items-center gap-3 shadow-sm">
-                    <div class="w-8 h-8 rounded-xl bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center shrink-0">
-                        <svg class="w-4 h-4 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
-                        </svg>
-                    </div>
-                    <span class="text-sm font-medium text-emerald-800 dark:text-emerald-300">{{ session('success') }}</span>
-                </div>
-            @endif
-
-            @if (session('error'))
-                <div class="p-4 rounded-2xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700/60 flex items-center gap-3 shadow-sm">
-                    <div class="w-8 h-8 rounded-xl bg-red-100 dark:bg-red-900/40 flex items-center justify-center shrink-0">
-                        <svg class="w-4 h-4 text-red-600 dark:text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </div>
-                    <span class="text-sm font-medium text-red-800 dark:text-red-300">{{ session('error') }}</span>
-                </div>
-            @endif
-
-            {{-- ── PERINGATAN RISIKO BANNED ── --}}
-            <div class="bg-red-50/80 dark:bg-red-900/15 backdrop-blur-xl rounded-2xl p-4 sm:p-5 border border-red-200/80 dark:border-red-800/50 shadow-sm">
-                <div class="flex items-start gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-red-100 dark:bg-red-900/40 flex items-center justify-center text-red-600 dark:text-red-400 shrink-0 mt-0.5">
-                        <svg class="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                        </svg>
-                    </div>
-                    <div class="flex-1">
-                        <p class="text-sm font-bold text-red-800 dark:text-red-300">Peringatan: Ada Risiko Terkena Banned WhatsApp</p>
-                        <p class="text-xs text-red-700/90 dark:text-red-400/80 mt-1 leading-relaxed">
-                            Layanan ini menghubungkan nomor WhatsApp pribadi melalui QR Code. Mengirim pesan dalam jumlah besar sekaligus ke banyak nomor — terutama yang belum pernah berinteraksi denganmu — <strong>berisiko membuat nomormu diblokir (banned) oleh WhatsApp</strong>.
-                        </p>
-                        <p class="text-xs text-red-700/90 dark:text-red-400/80 mt-2 leading-relaxed">
-                            <span class="font-semibold text-red-800 dark:text-red-300">Tips:</span>
-                            hindari blast ke nomor yang tidak kamu kenal atau tidak mengundangmu.
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <div x-data="waSettingManager({
-                status: '{{ $status }}',
-                phone: '{{ $phone }}'
-            })" class="space-y-6">
-
-                 {{-- ── STATUS BANNER ── --}}
-                 @if($status === 'PENDING_VERIFICATION' && !empty($phone))
-                    <div class="p-4 rounded-2xl bg-amber-50/80 dark:bg-amber-900/20 border border-amber-200/80 dark:border-amber-700/50 shadow-sm">
-                        <div class="flex items-start gap-3">
-                            <div class="w-8 h-8 rounded-xl bg-amber-100 dark:bg-amber-900/40 flex items-center justify-center shrink-0 mt-0.5">
-                                <svg class="w-4 h-4 text-amber-600 dark:text-amber-400 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                            </div>
-                            <div class="flex-1">
-                                <p class="font-semibold text-amber-800 dark:text-amber-300 text-sm">Nomor Sedang Ditinjau Admin</p>
-                                <p class="text-amber-700 dark:text-amber-400/80 text-xs mt-0.5">Nomor WhatsApp yang kamu daftarkan masih diperiksa oleh admin. Biasanya proses ini selesai dalam 1×24 jam.</p>
-                            </div>
-                        </div>
-                        @if(!empty($adminWa))
-                            @php
-                                $adminWaClean = preg_replace('/[^0-9]/', '', $adminWa);
-                                if (str_starts_with($adminWaClean, '0')) {
-                                    $adminWaClean = '62' . substr($adminWaClean, 1);
-                                } elseif (!str_starts_with($adminWaClean, '62')) {
-                                    $adminWaClean = '62' . $adminWaClean;
-                                }
-                            @endphp
-                            <div class="mt-3 pt-3 border-t border-amber-200/60 dark:border-amber-700/30">
-                                <a href="https://wa.me/{{ $adminWaClean }}?text={{ urlencode('Halo Admin Rayakan Digital, saya sudah mengajukan nomor WhatsApp pengirim untuk undangan "'.$invitation->title.'". Mohon bantuannya untuk diverifikasi. Terima kasih.') }}"
-                                   target="_blank" rel="noopener"
-                                   class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold transition-all shadow-sm shadow-emerald-500/20 hover:shadow-md hover:shadow-emerald-500/30 active:translate-y-0">
-                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                                    Hubungi Admin via WhatsApp
-                                </a>
-                            </div>
-                        @endif
-                    </div>
-                @elseif($status === 'REJECTED')
-                    <div class="p-4 rounded-2xl bg-red-50/80 dark:bg-red-900/20 border border-red-200/80 dark:border-red-700/50 flex items-start gap-3 shadow-sm">
-                        <div class="w-8 h-8 rounded-xl bg-red-100 dark:bg-red-900/40 flex items-center justify-center shrink-0 mt-0.5">
-                            <svg class="w-4 h-4 text-red-600 dark:text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </div>
-                        <div>
-                            <p class="font-semibold text-red-800 dark:text-red-300 text-sm">Nomor Ditolak</p>
-                            @if($waSetting->admin_notes)
-                                <p class="text-red-700 dark:text-red-400/80 text-xs mt-0.5">Alasan: {{ $waSetting->admin_notes }}</p>
-                            @endif
-                            <p class="text-red-600 dark:text-red-400 text-xs mt-1">Ganti nomor di bawah lalu ajukan ulang.</p>
-                        </div>
-                    </div>
-                @elseif($status === 'READY_TO_PAIR')
-                    <div class="p-4 rounded-2xl bg-blue-50/80 dark:bg-blue-900/20 border border-blue-200/80 dark:border-blue-700/50 flex items-start gap-3 shadow-sm">
-                        <div class="w-8 h-8 rounded-xl bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center shrink-0 mt-0.5">
-                            <svg class="w-4 h-4 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                        </div>
-                        <div>
-                            <p class="font-semibold text-blue-800 dark:text-blue-300 text-sm">Nomor Disetujui — Siap Dihubungkan!</p>
-                            <p class="text-blue-700 dark:text-blue-400/80 text-xs mt-0.5">Nomormu sudah disetujui admin. Gulir ke bawah, klik <strong>"Tampilkan QR Code"</strong> lalu pindai dengan WhatsApp.</p>
-                        </div>
-                    </div>
-                @elseif($status === 'CONNECTED')
-                    <div class="p-4 rounded-2xl bg-emerald-50/80 dark:bg-emerald-900/20 border border-emerald-200/80 dark:border-emerald-700/50 flex items-start gap-3 shadow-sm">
-                        <div class="w-8 h-8 rounded-xl bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center shrink-0 mt-0.5">
-                            <svg class="w-4 h-4 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                        </div>
-                        <div>
-                            <p class="font-semibold text-emerald-800 dark:text-emerald-300 text-sm">WhatsApp Sudah Terhubung</p>
-                            <p class="text-emerald-700 dark:text-emerald-400/80 text-xs mt-0.5">
-                                Nomor <strong>{{ $waSetting->phone_number ? '+'.ltrim($waSetting->phone_number, '+') : '-' }}</strong> sudah aktif dan bisa dipakai kirim undangan ke tamu.
-                            </p>
-                        </div>
-                    </div>
-                @endif
-
-                {{-- ── KUOTA WA BLAST ── --}}
-                @php
-                    $hasWaQuota = $invitation->hasWaQuotaLimit();
-                    $waQuotaLimit = $invitation->waQuotaLimit();
-                    $waSent = $invitation->waSentCount();
-                    $waRemaining = $invitation->remainingWaQuota();
-                    $waUsedPct = $waQuotaLimit > 0 ? min(100, round(($waSent / $waQuotaLimit) * 100)) : 0;
-                @endphp
-                <div class="bg-white/80 dark:bg-secondary-800/80 backdrop-blur-xl rounded-2xl p-6 border border-neutral-200/80 dark:border-secondary-700/80 shadow-sm">
-                    <div class="flex items-center gap-3">
-                        <div class="w-9 h-9 rounded-xl bg-primary-100 dark:bg-primary-900/40 text-primary dark:text-primary-400 flex items-center justify-center shrink-0">
-                            <svg class="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                            </svg>
-                        </div>
-                        <div>
-                            <h2 class="text-sm font-bold text-secondary-800 dark:text-neutral-100">Kuota WA Blast</h2>
-                            <p class="text-[11px] text-neutral-500 dark:text-neutral-400">
-                                @if($hasWaQuota)
-                                    {{ $waSent }} dari {{ $waQuotaLimit }} pesan telah dipakai untuk undangan ini.
-                                @else
-                                    Kuota WA Blast undangan ini tidak terbatas.
                                 @endif
-                            </p>
-                        </div>
-                    </div>
-                    @if($hasWaQuota)
-                        <div class="mt-4">
-                            <div class="h-2.5 rounded-full bg-neutral-200 dark:bg-secondary-700 overflow-hidden">
-                                <div class="h-full rounded-full transition-all {{ $waRemaining <= 0 ? 'bg-red-500' : ($waRemaining <= 5 ? 'bg-amber-500' : 'bg-emerald-500') }}" style="width: {{ $waUsedPct }}%"></div>
                             </div>
-                            <div class="mt-2 flex items-center justify-between text-xs">
-                                <span class="font-semibold {{ $waRemaining <= 0 ? 'text-red-600 dark:text-red-400' : 'text-emerald-600 dark:text-emerald-400' }}">
-                                    @if($waRemaining <= 0)
-                                        Kuota Habis — Hubungi Admin untuk menambah kuota.
-                                    @else
-                                        Sisa kuota: {{ $waRemaining }} pesan
-                                    @endif
-                                </span>
-                                <span class="text-neutral-400 dark:text-neutral-500 tabular-nums">{{ $waUsedPct }}%</span>
-                            </div>
-                        </div>
-                    @endif
-                </div>
 
-                {{-- ── ALUR PROSES ── --}}
-                <div class="bg-white/80 dark:bg-secondary-800/80 backdrop-blur-xl rounded-2xl p-6 border border-neutral-200/80 dark:border-secondary-700/80 shadow-sm">
-                    <h2 class="text-xs font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-widest mb-5">Panduan Aktivasi</h2>
-                    @php
-                        $steps = [
-                            ['label' => 'Masukkan Nomor WA',     'icon' => 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z', 'statuses' => ['PENDING_VERIFICATION','READY_TO_PAIR','PAIRING','CONNECTED','REJECTED']],
-                            ['label' => 'Tunggu Konfirmasi Admin',  'icon' => 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z', 'statuses' => ['READY_TO_PAIR','PAIRING','CONNECTED']],
-                            ['label' => 'Pindai QR',           'icon' => 'M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z', 'statuses' => ['PAIRING','CONNECTED']],
-                            ['label' => 'Siap Digunakan',           'icon' => 'M5 13l4 4L19 7', 'statuses' => ['CONNECTED']],
-                        ];
-                        $totalSteps = count($steps);
-                    @endphp
-
-                    {{-- Mobile: vertical --}}
-                    <div class="sm:hidden space-y-0">
-                        @foreach($steps as $i => $step)
-                            @php $active = in_array($status, $step['statuses']); @endphp
-                            <div class="flex items-start gap-3">
-                                <div class="flex flex-col items-center">
-                                    <div class="w-9 h-9 rounded-full flex items-center justify-center border-2 transition-all shrink-0
-                                        {{ $active
-                                            ? 'bg-primary border-primary text-white shadow-md shadow-primary/20'
-                                            : 'border-neutral-200 dark:border-secondary-600 text-neutral-300 dark:text-neutral-600' }}">
-                                        @if($active && $status === 'CONNECTED' && $i === $totalSteps - 1)
-                                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="{{ $step['icon'] }}" /></svg>
-                                        @else
-                                            <span class="text-xs font-bold">{{ $i + 1 }}</span>
-                                        @endif
-                                    </div>
-                                    @if(!$loop->last)
-                                        <div class="w-0.5 h-6 {{ $active ? 'bg-primary/40' : 'bg-neutral-200 dark:bg-secondary-600' }}"></div>
-                                    @endif
+                            <div class="mt-5 grid gap-3 border-t border-black/5 pt-5 dark:border-white/10 sm:grid-cols-2">
+                                <div class="rounded-2xl bg-white/60 px-4 py-3 dark:bg-secondary-900/40">
+                                    <p class="text-[11px] font-semibold uppercase tracking-wider text-neutral-400 dark:text-neutral-500">Nomor pengirim</p>
+                                    <p class="mt-1 font-mono text-sm font-bold text-secondary-800 dark:text-neutral-100" x-text="phone ? '+' + phone.replace(/^\+/, '') : 'Belum ditambahkan'">{{ $phoneDisplay }}</p>
                                 </div>
-                                <p class="text-xs font-semibold pt-2 {{ $active ? 'text-primary dark:text-primary-400' : 'text-neutral-400 dark:text-neutral-500' }}">
-                                    {{ $step['label'] }}
-                                </p>
-                            </div>
-                        @endforeach
-                    </div>
-
-                    {{-- Desktop: horizontal --}}
-                    <div class="hidden sm:flex items-start">
-                        @foreach($steps as $i => $step)
-                            @php $active = in_array($status, $step['statuses']); @endphp
-                            <div class="flex-1 flex flex-col items-center text-center {{ $i < $totalSteps - 1 ? 'pr-2' : '' }}">
-                                <div class="flex items-center w-full">
-                                    {{-- Left connector --}}
-                                    @if($i > 0)
-                                        <div class="flex-1 h-0.5 {{ $active ? 'bg-primary/40' : 'bg-neutral-200 dark:bg-secondary-600' }}"></div>
-                                    @else
-                                        <div class="flex-1"></div>
-                                    @endif
-
-                                    {{-- Circle --}}
-                                    <div class="w-9 h-9 rounded-full flex items-center justify-center border-2 transition-all shrink-0
-                                        {{ $active
-                                            ? 'bg-primary border-primary text-white shadow-md shadow-primary/20'
-                                            : 'border-neutral-200 dark:border-secondary-600 text-neutral-300 dark:text-neutral-600' }}">
-                                        @if($active && $status === 'CONNECTED' && $i === $totalSteps - 1)
-                                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="{{ $step['icon'] }}" /></svg>
-                                        @else
-                                            <span class="text-xs font-bold">{{ $i + 1 }}</span>
-                                        @endif
-                                    </div>
-
-                                    {{-- Right connector --}}
-                                    @if($i < $totalSteps - 1)
-                                        <div class="flex-1 h-0.5 {{ $active ? 'bg-primary/40' : 'bg-neutral-200 dark:bg-secondary-600' }}"></div>
-                                    @else
-                                        <div class="flex-1"></div>
-                                    @endif
+                                <div class="rounded-2xl bg-white/60 px-4 py-3 dark:bg-secondary-900/40">
+                                    <p class="text-[11px] font-semibold uppercase tracking-wider text-neutral-400 dark:text-neutral-500">Undangan</p>
+                                    <p class="mt-1 truncate text-sm font-bold text-secondary-800 dark:text-neutral-100">{{ $invitation->title }}</p>
                                 </div>
-                                <p class="text-[11px] font-semibold mt-2.5 {{ $active ? 'text-primary dark:text-primary-400' : 'text-neutral-400 dark:text-neutral-500' }}">
-                                    {{ $step['label'] }}
-                                </p>
                             </div>
-                        @endforeach
-                    </div>
-                </div>
 
-                {{-- ── STEP 1: INPUT NOMOR HP ── --}}
-                <div class="bg-white/80 dark:bg-secondary-800/80 backdrop-blur-xl rounded-2xl border border-neutral-200/80 dark:border-secondary-700/80 shadow-sm overflow-hidden">
-                    {{-- Header --}}
-                    <div class="px-6 py-4 border-b border-neutral-100 dark:border-secondary-700/60 flex items-center gap-3">
-                        <span class="w-7 h-7 rounded-lg bg-primary-100 dark:bg-primary-900/50 text-primary dark:text-primary-400 text-xs font-extrabold flex items-center justify-center">1</span>
-                        <div>
-                            <h2 class="text-sm font-bold text-secondary-800 dark:text-neutral-100">Nomor WhatsApp Pengirim</h2>
-                            <p class="text-[11px] text-neutral-500 dark:text-neutral-400">Nomor ini yang akan dipakai untuk kirim pesen ke tamu undangan</p>
+                            @if($status === 'REJECTED' && $waSetting->admin_notes)
+                                <div class="mt-4 rounded-2xl border border-red-200/80 bg-white/60 p-4 text-sm text-red-700 dark:border-red-800/50 dark:bg-secondary-900/40 dark:text-red-300"><span class="font-bold">Catatan admin:</span> {{ $waSetting->admin_notes }}</div>
+                            @endif
                         </div>
-                    </div>
+                    </section>
 
-                    {{-- Body --}}
-                    <div class="px-6 py-5">
-                        <form method="POST" action="{{ route('dashboard.whatsapp.setting.update-phone', $invitation) }}" class="space-y-4">
+                    <section aria-labelledby="activation-heading" class="rounded-3xl border border-neutral-200 bg-white p-5 shadow-sm dark:border-secondary-700 dark:bg-secondary-800 sm:p-6">
+                        <div class="flex items-center justify-between gap-4">
+                            <div><p class="text-xs font-bold uppercase tracking-[0.18em] text-primary dark:text-primary-400">Progres aktivasi</p><h2 id="activation-heading" class="mt-1 text-lg font-bold text-secondary-900 dark:text-white">Empat langkah hingga siap kirim</h2></div>
+                            <span class="rounded-full bg-neutral-100 px-3 py-1 text-xs font-bold text-neutral-500 dark:bg-secondary-700 dark:text-neutral-300">{{ min($currentStep, 4) }}/4</span>
+                        </div>
+                        <ol class="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+                            @foreach($steps as $index => $step)
+                                @php
+                                    $stepNumber = $index + 1;
+                                    $stepDone = $status === 'CONNECTED' || $stepNumber < $currentStep;
+                                    $stepActive = $stepNumber === $currentStep && $status !== 'CONNECTED';
+                                @endphp
+                                <li class="relative rounded-2xl border p-3.5 {{ $stepActive ? 'border-primary-300 bg-primary-50 dark:border-primary-700/70 dark:bg-primary-900/25' : ($stepDone ? 'border-emerald-200 bg-emerald-50/60 dark:border-emerald-800/50 dark:bg-emerald-950/20' : 'border-neutral-200 bg-neutral-50 dark:border-secondary-700 dark:bg-secondary-900/50') }}">
+                                    <div class="flex h-7 w-7 items-center justify-center rounded-lg text-xs font-extrabold {{ $stepActive ? 'bg-primary text-white' : ($stepDone ? 'bg-emerald-500 text-white' : 'bg-neutral-200 text-neutral-500 dark:bg-secondary-700 dark:text-neutral-400') }}">
+                                        @if($stepDone)<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="m5 13 4 4L19 7" /></svg>@else{{ $stepNumber }}@endif
+                                    </div>
+                                    <p class="mt-3 text-xs font-bold text-secondary-800 dark:text-neutral-100">{{ $step['title'] }}</p>
+                                    <p class="mt-1 text-[11px] leading-4 text-neutral-500 dark:text-neutral-400">{{ $step['description'] }}</p>
+                                </li>
+                            @endforeach
+                        </ol>
+                    </section>
+
+                    <section aria-labelledby="phone-heading" class="overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-sm dark:border-secondary-700 dark:bg-secondary-800">
+                        <div class="flex items-start gap-3 border-b border-neutral-100 px-5 py-4 dark:border-secondary-700 sm:px-6">
+                            <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary-50 text-primary dark:bg-primary-900/30 dark:text-primary-400">
+                                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102A1.125 1.125 0 0 0 5.872 2.25H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" /></svg>
+                            </div>
+                            <div><h2 id="phone-heading" class="text-sm font-bold text-secondary-900 dark:text-white">Nomor WhatsApp pengirim</h2><p class="mt-0.5 text-xs leading-5 text-neutral-500 dark:text-neutral-400">Gunakan nomor aktif yang dapat membuka menu Perangkat Tertaut.</p></div>
+                        </div>
+
+                        <form method="POST" action="{{ route('dashboard.whatsapp.setting.update-phone', $invitation) }}" class="p-5 sm:p-6">
                             @csrf
-                            <div>
-                                    <label for="phone_number" class="block text-xs font-semibold text-neutral-600 dark:text-neutral-400 mb-2">
-                                        Nomor WhatsApp Kamu <span class="text-red-500">*</span>
-                                    </label>
-                                <div class="flex gap-2">
-                                    <div class="flex items-center px-3.5 rounded-xl border border-neutral-200 dark:border-secondary-600 bg-neutral-50 dark:bg-secondary-900/50 text-neutral-500 dark:text-neutral-400 text-sm font-mono select-none shrink-0">
-                                        62
-                                    </div>
-                                    <input type="text" id="phone_number" name="phone_number"
-                                           value="{{ old('phone_number', $waSetting->phone_number) }}"
-                                           placeholder="81234567890"
-                                           required
-                                           class="flex-1 min-w-0 px-4 py-2.5 rounded-xl border border-neutral-200 dark:border-secondary-600 bg-white dark:bg-secondary-900 text-neutral-800 dark:text-neutral-100 text-sm focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all font-mono placeholder:text-neutral-300 dark:placeholder:text-neutral-600" />
-                                </div>
-                                <p class="text-[11px] text-neutral-400 dark:text-neutral-500 mt-2 leading-relaxed">
-                                    Bisa pakai format: <code class="bg-neutral-100 dark:bg-secondary-700/80 px-1.5 py-0.5 rounded-md text-[10px]">0812xxx</code>,
-                                    <code class="bg-neutral-100 dark:bg-secondary-700/80 px-1.5 py-0.5 rounded-md text-[10px]">812xxx</code>, atau
-                                    <code class="bg-neutral-100 dark:bg-secondary-700/80 px-1.5 py-0.5 rounded-md text-[10px]">62812xxx</code>
-                                    — nanti dibenerin otomatis.
-                                </p>
-                                @error('phone_number')
-                                    <p class="text-xs text-red-500 dark:text-red-400 mt-2 flex items-center gap-1.5">
-                                        <svg class="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                                        </svg>
-                                        {{ $message }}
-                                    </p>
-                                @enderror
+                            <label for="phone_number" class="text-xs font-bold text-secondary-700 dark:text-neutral-200">Nomor WhatsApp</label>
+                            <div class="mt-2 flex rounded-2xl border border-neutral-300 bg-white transition focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10 dark:border-secondary-600 dark:bg-secondary-900 dark:focus-within:border-primary-500">
+                                <span class="inline-flex items-center gap-2 border-r border-neutral-200 px-4 text-sm font-bold text-neutral-600 dark:border-secondary-700 dark:text-neutral-300"><span class="text-base" aria-hidden="true">🇮🇩</span> +62</span>
+                                <input id="phone_number" name="phone_number" type="tel" inputmode="numeric" autocomplete="tel" value="{{ $phoneInput }}" placeholder="812 3456 7890" required aria-describedby="phone-help" class="min-w-0 flex-1 rounded-r-2xl border-0 bg-transparent px-4 py-3.5 font-mono text-sm text-secondary-900 placeholder:text-neutral-300 focus:ring-0 dark:text-white dark:placeholder:text-secondary-600" />
                             </div>
-                            <div class="flex justify-end pt-1">
-                                <button type="submit" id="btn-simpan-nomor"
-                                        class="px-5 py-2.5 rounded-xl bg-primary hover:bg-primary-600 text-white font-semibold text-sm transition-all shadow-sm hover:shadow-md hover:shadow-primary/20 active:translate-y-0">
-                                        Simpan & Minta Persetujuan
+                            <div id="phone-help" class="mt-2.5 flex items-start gap-2 text-xs leading-5 text-neutral-500 dark:text-neutral-400">
+                                <svg class="mt-0.5 h-4 w-4 shrink-0 text-neutral-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+                                <p>Cukup masukkan nomor setelah +62. Contoh: <span class="font-mono font-semibold text-neutral-700 dark:text-neutral-300">81234567890</span>.</p>
+                            </div>
+                            @error('phone_number')
+                                <p class="mt-2 flex items-center gap-1.5 text-xs font-medium text-red-600 dark:text-red-400"><svg class="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" /></svg>{{ $message }}</p>
+                            @enderror
+                            <div class="mt-5 flex flex-col-reverse gap-3 border-t border-neutral-100 pt-5 dark:border-secondary-700 sm:flex-row sm:items-center sm:justify-between">
+                                <p class="text-xs leading-5 text-neutral-400 dark:text-neutral-500">Mengganti nomor akan memulai ulang proses verifikasi.</p>
+                                <button id="btn-simpan-nomor" type="submit" class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-primary-600 hover:shadow-md focus:outline-none focus:ring-4 focus:ring-primary/20">
+                                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.25" d="M4.5 12.75 10.5 18l9-13.5" /></svg>{{ empty($phone) ? 'Ajukan nomor' : 'Simpan perubahan' }}
                                 </button>
                             </div>
                         </form>
-                    </div>
-                </div>
+                    </section>
 
-                {{-- ── STEP 2: QR CODE ── --}}
-                @if(in_array($status, ['READY_TO_PAIR', 'PAIRING', 'CONNECTED']))
-                    <div class="bg-white/80 dark:bg-secondary-800/80 backdrop-blur-xl rounded-2xl border border-neutral-200/80 dark:border-secondary-700/80 shadow-sm overflow-hidden">
-                        {{-- Header --}}
-                        <div class="px-6 py-4 border-b border-neutral-100 dark:border-secondary-700/60 flex items-center gap-3">
-                            <span class="w-7 h-7 rounded-lg bg-primary-100 dark:bg-primary-900/50 text-primary dark:text-primary-400 text-xs font-extrabold flex items-center justify-center">2</span>
-                            <div>
-                                <h2 class="text-sm font-bold text-secondary-800 dark:text-neutral-100">Hubungkan WhatsApp</h2>
-                                <p class="text-[11px] text-neutral-500 dark:text-neutral-400">Tampilkan QR lalu pindai pakai WhatsApp kamu</p>
+                    @if(in_array($status, ['READY_TO_PAIR', 'PAIRING', 'CONNECTED']))
+                        <section aria-labelledby="pairing-heading" class="overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-sm dark:border-secondary-700 dark:bg-secondary-800">
+                            <div class="flex items-start gap-3 border-b border-neutral-100 px-5 py-4 dark:border-secondary-700 sm:px-6">
+                                <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400">
+                                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.75 4.5h4.5v4.5h-4.5V4.5Zm0 10.5h4.5v4.5h-4.5V15Zm12-10.5h4.5v4.5h-4.5V4.5Z" /></svg>
+                                </div>
+                                <div><h2 id="pairing-heading" class="text-sm font-bold text-secondary-900 dark:text-white">Hubungkan perangkat</h2><p class="mt-0.5 text-xs leading-5 text-neutral-500 dark:text-neutral-400">Pindai QR Code menggunakan WhatsApp pada nomor pengirim.</p></div>
                             </div>
-                        </div>
-
-                        {{-- Body --}}
-                        <div class="px-6 py-6">
-                            <div class="flex flex-col items-center text-center gap-5">
+                            <div class="flex min-h-[260px] flex-col items-center justify-center p-6 text-center sm:p-8" aria-live="polite">
                                 @if($status === 'CONNECTED')
-                                    {{-- Connected State --}}
-                                    <div class="w-20 h-20 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
-                                        <svg class="w-10 h-10 text-emerald-500 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <p class="font-semibold text-emerald-700 dark:text-emerald-400 text-sm">WhatsApp Sudah Terhubung!</p>
-                                        <p class="text-neutral-500 dark:text-neutral-400 text-xs mt-1">Nomormu sudah aktif dan siap kirim undangan ke tamu.</p>
-                                    </div>
-                                    <button @click="checkStatus()" :disabled="loadingStatus"
-                                            class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-neutral-200 dark:border-secondary-600 text-sm font-medium text-neutral-600 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-secondary-700/50 transition-colors disabled:opacity-50">
-                                        <svg class="w-4 h-4" :class="{'animate-spin': loadingStatus}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                                        </svg>
-                                        Cek Ulang Status
-                                    </button>
-
+                                    <div class="flex h-20 w-20 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 ring-8 ring-emerald-50 dark:bg-emerald-900/40 dark:text-emerald-300 dark:ring-emerald-950/30"><svg class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="m5 13 4 4L19 7" /></svg></div>
+                                    <h3 class="mt-5 text-lg font-bold text-secondary-900 dark:text-white">Perangkat sudah terhubung</h3>
+                                    <p class="mt-1 max-w-sm text-sm leading-6 text-neutral-500 dark:text-neutral-400">Kembali ke daftar tamu untuk mulai mengirim undangan melalui WhatsApp.</p>
+                                    <a href="{{ route('dashboard.invitations.guests.index', $invitation) }}" class="mt-5 inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-emerald-700">Buka daftar tamu<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7" /></svg></a>
                                 @else
-                                    {{-- Not Connected: Show QR Button --}}
                                     <template x-if="!qrUrl && !loadingQr">
-                                        <div class="space-y-4">
-                                            <div class="w-20 h-20 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
-                                                <svg class="w-10 h-10 text-emerald-500 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
-                                                </svg>
-                                            </div>
-                                            <div>
-                                                <p class="font-semibold text-secondary-800 dark:text-neutral-100 text-sm">Siap Memindai?</p>
-                                                <p class="text-neutral-500 dark:text-neutral-400 text-xs mt-1 max-w-xs mx-auto">
-                                                    Klik tombol di bawah untuk generate QR Code, lalu buka WhatsApp → Perangkat Tertaut → Tautkan Perangkat.
-                                                </p>
-                                            </div>
-                                            <button @click="connectWa()" id="btn-tampilkan-qr"
-                                                    class="px-8 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-sm transition-all shadow-lg shadow-emerald-500/25 hover:shadow-xl hover:shadow-emerald-500/30 hover:-translate-y-0.5 active:translate-y-0 flex items-center gap-2.5">
-                                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-                                                </svg>
-                                                Tampilkan QR Code
-                                            </button>
+                                        <div class="flex flex-col items-center">
+                                            <div class="flex h-20 w-20 items-center justify-center rounded-3xl bg-emerald-50 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400"><svg class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.75 4.5h4.5v4.5h-4.5V4.5Zm0 10.5h4.5v4.5h-4.5V15Zm12-10.5h4.5v4.5h-4.5V4.5ZM15 15h1.5v1.5H15V15Zm3 0h2.25v5.25H15V18h3v-3Zm-6-10.5h1.5V9H12V4.5Zm0 6h4.5V12H15v3h-3v-4.5Zm6 0h2.25V13H18v-2.5ZM9.75 12h1.5v8.25h-1.5V12Zm3 4.5h1.5v3.75h-1.5V16.5Z" /></svg></div>
+                                            <h3 class="mt-5 text-lg font-bold text-secondary-900 dark:text-white">Siapkan WhatsApp Anda</h3>
+                                            <p class="mt-1 max-w-md text-sm leading-6 text-neutral-500 dark:text-neutral-400">Buka WhatsApp → Perangkat Tertaut → Tautkan Perangkat, lalu tampilkan QR Code.</p>
+                                            <button id="btn-tampilkan-qr" type="button" @click="connectWa()" class="mt-5 inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-emerald-500/20 transition hover:-translate-y-0.5 hover:bg-emerald-700 hover:shadow-xl"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.75 4.5h4.5v4.5h-4.5V4.5Zm0 10.5h4.5v4.5h-4.5V15Zm12-10.5h4.5v4.5h-4.5V4.5Z" /></svg>Tampilkan QR Code</button>
                                         </div>
                                     </template>
-
-                                    {{-- Loading QR --}}
-                                    <template x-if="loadingQr">
-                                        <div class="py-10 flex flex-col items-center gap-4">
-                                            <div class="relative">
-                                                <div class="w-12 h-12 border-4 border-emerald-200 dark:border-emerald-800 rounded-full"></div>
-                                                <div class="w-12 h-12 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin absolute inset-0"></div>
-                                            </div>
-                                            <div class="text-center">
-                                                <p class="text-sm font-medium text-secondary-800 dark:text-neutral-200">Meminta QR Code...</p>
-                                                <p class="text-xs text-neutral-400 dark:text-neutral-500 mt-1">Menghubungkan ke server Fonnte</p>
-                                            </div>
-                                        </div>
-                                    </template>
-
-                                    {{-- QR Code Displayed --}}
+                                    <template x-if="loadingQr"><div class="flex flex-col items-center"><div class="h-12 w-12 animate-spin rounded-full border-4 border-emerald-100 border-t-emerald-500 dark:border-emerald-900 dark:border-t-emerald-400"></div><p class="mt-4 text-sm font-bold text-secondary-800 dark:text-neutral-100">Menyiapkan QR Code...</p><p class="mt-1 text-xs text-neutral-500 dark:text-neutral-400">Proses ini biasanya hanya beberapa detik.</p></div></template>
                                     <template x-if="qrUrl">
-                                        <div class="space-y-5 flex flex-col items-center">
-                                            <div class="relative">
-                                                <div class="p-4 bg-white rounded-2xl border-2 border-emerald-200 dark:border-emerald-700/50 shadow-xl shadow-emerald-500/10">
-                                                    <img :src="qrUrl" alt="WhatsApp QR Code" class="w-56 h-56 sm:w-64 sm:h-64 object-contain" />
-                                                </div>
-                                                <div class="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center shadow-md">
-                                                    <svg class="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                                                    </svg>
-                                                </div>
-                                            </div>
-
-                                            <div class="p-3.5 rounded-xl bg-amber-50 dark:bg-amber-900/20 border border-amber-200/80 dark:border-amber-700/50 max-w-sm">
-                                                <div class="flex items-start gap-2.5">
-                                                    <svg class="w-4 h-4 text-amber-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                    </svg>
-                                                    <p class="text-xs text-amber-800 dark:text-amber-300 leading-relaxed">
-                                                        Buka <strong>WhatsApp</strong> → <strong>Perangkat Tertaut</strong> → <strong>Tautkan Perangkat</strong> → Scan QR di atas. Status akan otomatis terupdate.
-                                                    </p>
-                                                </div>
-                                            </div>
-
-                                            <button @click="connectWa()"
-                                                    class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-neutral-200 dark:border-secondary-600 text-xs font-semibold text-neutral-600 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-secondary-700/50 transition-colors">
-                                                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                                                </svg>
-                                                Generate Ulang QR Code
-                                            </button>
-                                        </div>
+                                        <div class="flex flex-col items-center"><div class="rounded-3xl border-2 border-emerald-200 bg-white p-4 shadow-xl shadow-emerald-500/10 dark:border-emerald-800"><img :src="qrUrl" alt="QR Code untuk menghubungkan WhatsApp" class="h-56 w-56 object-contain sm:h-64 sm:w-64" /></div><p class="mt-4 max-w-md text-sm leading-6 text-neutral-600 dark:text-neutral-300">Arahkan kamera pemindai WhatsApp ke QR Code. Halaman akan memperbarui status secara otomatis.</p><button type="button" @click="connectWa()" class="mt-3 text-xs font-bold text-emerald-700 underline decoration-emerald-300 underline-offset-4 hover:text-emerald-800 dark:text-emerald-400">Buat ulang QR Code</button></div>
                                     </template>
-
-                                    {{-- QR Error --}}
                                     <template x-if="qrError">
-                                        <div class="w-full max-w-sm p-4 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700/50">
-                                            <div class="flex items-start gap-2.5">
-                                                <svg class="w-4 h-4 text-red-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                                                </svg>
-                                                <div>
-                                                    <p class="text-xs font-semibold text-red-800 dark:text-red-300">Gagal Memuat QR Code</p>
-                                                    <p class="text-xs text-red-600 dark:text-red-400/80 mt-1" x-text="qrError"></p>
-                                                    <button @click="qrError = null; connectWa()"
-                                                            class="mt-2 text-xs font-semibold text-red-700 dark:text-red-400 underline underline-offset-2 hover:no-underline">
-                                                        Coba Lagi
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <div class="mt-5 flex w-full max-w-md items-start gap-3 rounded-2xl border border-red-200 bg-red-50 p-4 text-left dark:border-red-800/60 dark:bg-red-950/30"><svg class="mt-0.5 h-5 w-5 shrink-0 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" /></svg><div><p class="text-sm font-bold text-red-800 dark:text-red-300">QR Code belum dapat dimuat</p><p class="mt-1 text-xs leading-5 text-red-700 dark:text-red-400" x-text="qrError"></p><button type="button" @click="qrError = null; connectWa()" class="mt-2 text-xs font-bold text-red-700 underline underline-offset-2 dark:text-red-400">Coba lagi</button></div></div>
                                     </template>
                                 @endif
                             </div>
-                        </div>
-                    </div>
-                @endif
+                        </section>
+                    @endif
+                </div>
 
-                {{-- ── DISCONNECT ── --}}
-                @if(in_array($status, ['CONNECTED', 'PAIRING', 'READY_TO_PAIR']))
-                    <div class="flex justify-end">
-                        <form method="POST" action="{{ route('dashboard.whatsapp.setting.disconnect', $invitation) }}"
-                              onsubmit="return confirm('Yakin ingin memutus koneksi WhatsApp? Anda perlu melakukan pairing ulang.');">
+                <aside class="space-y-6 lg:sticky lg:top-6 lg:col-span-4">
+                    <section aria-labelledby="quota-heading" class="rounded-3xl border border-neutral-200 bg-white p-5 shadow-sm dark:border-secondary-700 dark:bg-secondary-800 sm:p-6">
+                        <div class="flex items-start justify-between gap-4"><div><p class="text-xs font-bold uppercase tracking-[0.18em] text-primary dark:text-primary-400">Pemakaian</p><h2 id="quota-heading" class="mt-1 text-base font-bold text-secondary-900 dark:text-white">Kuota WA Blast</h2></div><div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary-50 text-primary dark:bg-primary-900/30 dark:text-primary-400"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7Z" /></svg></div></div>
+                        @if($hasWaQuota)
+                            <div class="mt-5 flex items-end gap-2"><span class="text-3xl font-extrabold tracking-tight text-secondary-900 dark:text-white">{{ $waRemaining }}</span><span class="pb-1 text-sm text-neutral-500 dark:text-neutral-400">pesan tersisa</span></div>
+                            <div class="mt-4 h-2 overflow-hidden rounded-full bg-neutral-100 dark:bg-secondary-700"><div class="h-full rounded-full {{ $waRemaining <= 0 ? 'bg-red-500' : ($waRemaining <= 5 ? 'bg-amber-500' : 'bg-emerald-500') }}" style="width: {{ $waUsedPct }}%"></div></div>
+                            <div class="mt-2 flex justify-between text-xs text-neutral-500 dark:text-neutral-400"><span>{{ $waSent }} terpakai</span><span>{{ $waQuotaLimit }} total</span></div>
+                        @else
+                            <div class="mt-5 rounded-2xl bg-emerald-50 p-4 dark:bg-emerald-950/30"><p class="text-2xl font-extrabold text-emerald-700 dark:text-emerald-300">Tanpa batas</p><p class="mt-1 text-xs leading-5 text-emerald-700/80 dark:text-emerald-400">Paket undangan ini tidak memiliki batas kuota WhatsApp.</p></div>
+                        @endif
+                    </section>
+
+                    <section aria-labelledby="safe-heading" class="rounded-3xl border border-amber-200/80 bg-amber-50/70 p-5 dark:border-amber-800/50 dark:bg-amber-950/20 sm:p-6">
+                        <div class="flex items-start gap-3"><div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-amber-100 text-amber-600 dark:bg-amber-900/50 dark:text-amber-300"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" /></svg></div><div><h2 id="safe-heading" class="text-sm font-bold text-amber-900 dark:text-amber-200">Kirim pesan secara bertahap</h2><p class="mt-1 text-xs leading-5 text-amber-800/80 dark:text-amber-300/80">Pengiriman massal ke nomor yang belum mengenal Anda dapat meningkatkan risiko pembatasan dari WhatsApp.</p></div></div>
+                        <ul class="mt-4 space-y-2.5 border-t border-amber-200/70 pt-4 text-xs leading-5 text-amber-900/80 dark:border-amber-800/50 dark:text-amber-200/80"><li class="flex gap-2"><svg class="mt-1 h-3.5 w-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="m5 13 4 4L19 7" /></svg><span>Kirim hanya kepada tamu yang Anda kenal.</span></li><li class="flex gap-2"><svg class="mt-1 h-3.5 w-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="m5 13 4 4L19 7" /></svg><span>Gunakan jeda dan hindari jumlah besar sekaligus.</span></li></ul>
+                    </section>
+
+                    @if($adminWaClean)
+                        <section class="rounded-3xl border border-neutral-200 bg-white p-5 shadow-sm dark:border-secondary-700 dark:bg-secondary-800">
+                            <div class="flex items-start gap-3"><div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.625 12h-.75m4.5 0h-.75m4.5 0h-.75m-7.5 4.5h8.25a2.25 2.25 0 0 0 2.25-2.25v-4.5a2.25 2.25 0 0 0-2.25-2.25H7.5a2.25 2.25 0 0 0-2.25 2.25v4.5A2.25 2.25 0 0 0 7.5 16.5Zm-3.75 3.75 3.188-3.188" /></svg></div><div><h2 class="text-sm font-bold text-secondary-900 dark:text-white">Butuh bantuan verifikasi?</h2><p class="mt-1 text-xs leading-5 text-neutral-500 dark:text-neutral-400">Tim kami dapat membantu memeriksa pengajuan nomor Anda.</p></div></div>
+                            <a href="https://wa.me/{{ $adminWaClean }}?text={{ urlencode('Halo Admin Rayakan Digital, saya ingin meminta bantuan untuk pengaturan WhatsApp pada undangan "'.$invitation->title.'". Terima kasih.') }}" target="_blank" rel="noopener" class="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-2.5 text-xs font-bold text-emerald-700 transition hover:bg-emerald-100 dark:border-emerald-800 dark:bg-emerald-950/30 dark:text-emerald-300 dark:hover:bg-emerald-900/40">Hubungi admin<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.5 4.5H19.5V10.5M19.5 4.5 10.5 13.5M10.5 6.75H6.75A2.25 2.25 0 0 0 4.5 9v8.25a2.25 2.25 0 0 0 2.25 2.25H15a2.25 2.25 0 0 0 2.25-2.25V13.5" /></svg></a>
+                        </section>
+                    @endif
+
+                    @if(in_array($status, ['CONNECTED', 'PAIRING', 'READY_TO_PAIR']))
+                        <form method="POST" action="{{ route('dashboard.whatsapp.setting.disconnect', $invitation) }}" onsubmit="return confirm('Yakin ingin memutus koneksi WhatsApp? Anda perlu melakukan pairing ulang.');" class="rounded-3xl border border-neutral-200 bg-white p-5 shadow-sm dark:border-secondary-700 dark:bg-secondary-800">
                             @csrf
-                            <button type="submit"
-                                    class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-red-200 dark:border-red-800/50 text-red-600 dark:text-red-400 text-xs font-semibold hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
-                                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
-                                </svg>
-                                Putuskan Koneksi
-                            </button>
+                            <p class="text-sm font-bold text-secondary-900 dark:text-white">Kelola koneksi</p><p class="mt-1 text-xs leading-5 text-neutral-500 dark:text-neutral-400">Putuskan perangkat jika ingin mengganti sesi WhatsApp.</p>
+                            <button type="submit" class="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-red-200 px-4 py-2.5 text-xs font-bold text-red-600 transition hover:bg-red-50 dark:border-red-800/60 dark:text-red-400 dark:hover:bg-red-950/30"><svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1 5.636 5.636m12.728 12.728L5.636 5.636" /></svg>Putuskan koneksi</button>
                         </form>
-                    </div>
-                @endif
+                    @endif
+                </aside>
+            </div>
+        </main>
 
+        <div x-show="showServiceInfo" x-cloak x-transition.opacity class="fixed inset-0 z-[70] flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="service-info-title" @keydown.escape.window="showServiceInfo = false">
+            <button type="button" class="absolute inset-0 bg-secondary-950/60 backdrop-blur-sm" aria-label="Tutup informasi layanan" @click="showServiceInfo = false"></button>
+            <div x-show="showServiceInfo" x-transition class="relative w-full max-w-xl overflow-hidden rounded-3xl bg-white shadow-2xl dark:bg-secondary-800">
+                <div class="flex items-start justify-between gap-4 border-b border-neutral-100 p-5 dark:border-secondary-700 sm:p-6">
+                    <div class="flex items-start gap-3"><div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-600 dark:bg-emerald-900/40 dark:text-emerald-300"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 12 2 2 4-4m5.618-4.016A11.955 11.955 0 0 1 12 2.944a11.955 11.955 0 0 1-8.618 3.04A12.02 12.02 0 0 0 3 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016Z" /></svg></div><div><h2 id="service-info-title" class="text-base font-bold text-secondary-900 dark:text-white">Tentang WhatsApp Gateway</h2><p class="mt-1 text-xs leading-5 text-neutral-500 dark:text-neutral-400">Koneksi pesan Rayakan Digital ditenagai oleh Fonnte.</p></div></div>
+                    <button type="button" @click="showServiceInfo = false" class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-neutral-100 text-neutral-500 transition hover:bg-neutral-200 dark:bg-secondary-700 dark:text-neutral-300 dark:hover:bg-secondary-600" aria-label="Tutup"><svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18 18 6M6 6l12 12" /></svg></button>
+                </div>
+                <div class="grid gap-3 p-5 sm:grid-cols-2 sm:p-6">
+                    @foreach([['Aman ditautkan', 'Koneksi menggunakan QR Code seperti WhatsApp Web.'], ['Nomor Anda sendiri', 'Pesan diterima tamu dari nomor yang sudah mereka kenal.'], ['Diverifikasi admin', 'Setiap nomor diperiksa sebelum akses pairing dibuka.'], ['Riwayat tercatat', 'Status pengiriman dapat dipantau dari log WhatsApp.']] as [$title, $description])
+                        <div class="rounded-2xl border border-neutral-200 bg-neutral-50 p-4 dark:border-secondary-700 dark:bg-secondary-900/50"><div class="flex items-center gap-2 text-sm font-bold text-secondary-800 dark:text-neutral-100"><svg class="h-4 w-4 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="m5 13 4 4L19 7" /></svg>{{ $title }}</div><p class="mt-2 text-xs leading-5 text-neutral-500 dark:text-neutral-400">{{ $description }}</p></div>
+                    @endforeach
+                </div>
+                <div class="border-t border-neutral-100 px-5 py-4 text-xs text-neutral-500 dark:border-secondary-700 dark:text-neutral-400 sm:px-6">Pelajari penyedia layanan di <a href="https://fonnte.com/" target="_blank" rel="noopener" class="font-bold text-emerald-600 underline underline-offset-2 dark:text-emerald-400">fonnte.com</a>.</div>
             </div>
         </div>
     </div>
 
-    {{-- Alpine Script --}}
     <script>
         document.addEventListener('alpine:init', () => {
             Alpine.data('waSettingManager', (config) => ({
@@ -629,27 +338,28 @@
                 pollTimer: null,
 
                 init() {
-                    if (['PAIRING', 'READY_TO_PAIR'].includes(this.status)) {
-                        this.checkStatus();
-                    }
+                    if (['PAIRING', 'READY_TO_PAIR'].includes(this.status)) this.checkStatus();
+                },
+
+                destroy() {
+                    if (this.pollTimer) clearInterval(this.pollTimer);
                 },
 
                 async checkStatus() {
                     this.loadingStatus = true;
                     try {
-                        const res = await fetch("{{ route('dashboard.whatsapp.setting.check-status', $invitation) }}");
-                        const data = await res.json();
+                        const response = await fetch("{{ route('dashboard.whatsapp.setting.check-status', $invitation) }}", { headers: { 'Accept': 'application/json' } });
+                        const data = await response.json();
+                        if (!response.ok) throw new Error(data.error || 'Status perangkat belum dapat diperiksa.');
                         this.status = data.status || this.status;
-                        if (data.phone_number) {
-                            this.phone = data.phone_number;
-                        }
+                        if (data.phone_number) this.phone = data.phone_number;
                         if (this.status === 'CONNECTED') {
                             this.qrUrl = null;
                             if (this.pollTimer) clearInterval(this.pollTimer);
                             window.location.reload();
                         }
-                    } catch (e) {
-                        console.error('Status check error:', e);
+                    } catch (error) {
+                        console.error('WhatsApp status check failed:', error);
                     } finally {
                         this.loadingStatus = false;
                     }
@@ -659,28 +369,17 @@
                     this.loadingQr = true;
                     this.qrError = null;
                     try {
-                        const res = await fetch("{{ route('dashboard.whatsapp.setting.get-qr', $invitation) }}", {
+                        const response = await fetch("{{ route('dashboard.whatsapp.setting.get-qr', $invitation) }}", {
                             method: 'POST',
-                            headers: {
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                                'Accept': 'application/json',
-                                'Content-Type': 'application/json',
-                            },
+                            headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json', 'Content-Type': 'application/json' },
                         });
-                        const data = await res.json();
-                        if (data.success && data.url) {
-                            let url = data.url;
-                            if (url && !url.startsWith('http') && !url.startsWith('data:image')) {
-                                url = 'data:image/png;base64,' + url;
-                            }
-                            this.qrUrl = url;
-                            this.status = 'PAIRING';
-                            this.startPolling();
-                        } else {
-                            this.qrError = data.message || 'Gagal mendapatkan QR Code dari Fonnte.';
-                        }
-                    } catch (e) {
-                        this.qrError = 'Terjadi kesalahan jaringan saat meminta QR Code.';
+                        const data = await response.json();
+                        if (!response.ok || !data.success || !data.url) throw new Error(data.message || 'QR Code belum dapat dibuat.');
+                        this.qrUrl = data.url.startsWith('http') || data.url.startsWith('data:image') ? data.url : `data:image/png;base64,${data.url}`;
+                        this.status = 'PAIRING';
+                        this.startPolling();
+                    } catch (error) {
+                        this.qrError = error.message || 'Terjadi gangguan jaringan saat meminta QR Code.';
                     } finally {
                         this.loadingQr = false;
                     }
@@ -688,9 +387,7 @@
 
                 startPolling() {
                     if (this.pollTimer) clearInterval(this.pollTimer);
-                    this.pollTimer = setInterval(async () => {
-                        await this.checkStatus();
-                    }, 4000);
+                    this.pollTimer = setInterval(() => this.checkStatus(), 4000);
                 },
             }));
         });
