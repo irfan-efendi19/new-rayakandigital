@@ -67,7 +67,9 @@ Kartu tema pada landing page dan katalog mengirim slug melalui `/register?theme=
 
 `App\Auth\GoogleProvider` menambahkan `theme_id` dan nonce acak ke payload `state` terenkripsi. Socialite menyimpan keseluruhan nilai tersebut dalam sesi dan membandingkannya saat callback, kemudian mengonsumsinya satu kali. Payload hanya dibaca setelah validasi Socialite berhasil. Jangan menggunakan `with(['state' => ...])` atau `stateless()` untuk alur ini. [Dokumentasi Socialite](https://laravel.com/docs/13.x/socialite#optional-parameters)
 
-Pilihan disimpan sebagai foreign key nullable `users.theme_id`. Formulir pembuatan undangan menggunakan preferensi tersimpan saat URL tidak membawa pilihan tema aktif lain. Jika tema aktif berhasil dimuat dari URL atau profil, pemilih tema disembunyikan dan slug dikirim melalui input tersembunyi. Jika belum ada tema aktif yang valid, pemilih tema tetap ditampilkan. Ketika formulir disimpan, slug tetap masuk ke `invitations.theme`, sesuai struktur undangan yang sudah ada. Pengguna dapat melanjutkan onboarding setelah membuka kembali dashboard tanpa memilih ulang tema.
+Pilihan disimpan sebagai foreign key nullable `users.theme_id`. Penanda `users.has_selected_theme` bernilai true hanya jika pilihan tema aktif dari pengguna disimpan; pemberian tema bawaan tidak mengaktifkan penanda ini. Formulir pembuatan undangan menyembunyikan pemilih hanya untuk pilihan aktif dari URL atau pilihan aktif tersimpan dengan penanda tersebut. Slug tetap dikirim melalui input tersembunyi. Jika pengguna belum memilih, tema bawaan boleh terpilih otomatis tetapi pemilih tema tetap ditampilkan. Tema yang hilang atau tidak aktif juga menampilkan pemilih kembali. Ketika formulir disimpan, slug tetap masuk ke `invitations.theme`.
+
+Akun lama yang belum memiliki penanda pilihan tetap menampilkan pemilih. Migration mempertahankan `theme_id` mereka dan tidak mengasumsikan bahwa tema tersebut dipilih sendiri oleh pengguna.
 
 Urutan tema bawaan untuk pengguna Google baru:
 
@@ -82,7 +84,7 @@ Login Google yang dibatalkan, gagal, memakai `state` berubah, kehilangan sesi, a
 
 ### Migrasi dan pengujian
 
-Jalankan `php artisan migrate` saat menerapkan perubahan untuk menambahkan `users.theme_id`. Opsional, isi `DEFAULT_THEME_ID` dengan ID tema aktif lalu perbarui cache konfigurasi sesuai prosedur deployment.
+Jalankan `php artisan migrate` saat menerapkan perubahan untuk menambahkan `users.theme_id` dan `users.has_selected_theme`. Opsional, isi `DEFAULT_THEME_ID` dengan ID tema aktif lalu perbarui cache konfigurasi sesuai prosedur deployment.
 
 Pengujian regresi: `php artisan test --compact tests/Feature/Auth/GoogleThemePersistenceTest.php`. Tes menggunakan provider aplikasi dengan validasi state asli, respons HTTP Google tiruan, dan database SQLite di memori.
 

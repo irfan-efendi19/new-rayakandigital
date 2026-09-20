@@ -136,6 +136,7 @@ test('landing page theme survives real OAuth state validation and invitation cre
     $user = User::where('email', 'google@example.com')->firstOrFail();
     $this->assertAuthenticatedAs($user);
     expect($user->theme_id)->toBe($this->selectedTheme->id)
+        ->and($user->has_selected_theme)->toBeTrue()
         ->and($user->theme->is($this->selectedTheme))->toBeTrue()
         ->and($user->google_token)->toBe($this->accessToken)
         ->and($user->google_refresh_token)->toBe($this->refreshToken);
@@ -161,13 +162,41 @@ test('missing or unavailable themes use the configured default', function (array
     config(['themes.default_theme_id' => $this->selectedTheme->id]);
     completeGoogleThemeLogin(beginGoogleThemeLogin($parameters))->assertSessionHasNoErrors();
 
-    expect(User::sole()->theme_id)->toBe($this->selectedTheme->id);
+    expect(User::sole()->theme_id)->toBe($this->selectedTheme->id)
+        ->and(User::sole()->has_selected_theme)->toBeFalse();
+
+    $this->get(route('invitation.create'))->assertSuccessful()
+        ->assertViewHas('selectedTheme', 'modern')
+        ->assertViewHas('hasPredefinedTheme', false)
+        ->assertSee('x-data="themePicker"', false)
+        ->assertSee('aria-label="Filter kategori tema"', false);
 })->with([
     'no selection' => [[]],
     'empty selection' => [['theme_id' => '']],
     'unknown id' => [['theme_id' => 999999]],
     'unknown slug' => [['theme' => 'missing']],
 ]);
+
+test('explicitly choosing the default theme hides the picker', function () {
+    config(['themes.default_theme_id' => $this->defaultTheme->id]);
+    completeGoogleThemeLogin(beginGoogleThemeLogin(['theme' => 'elegant']))->assertSessionHasNoErrors();
+
+    expect(User::sole()->has_selected_theme)->toBeTrue();
+    $this->get(route('invitation.create'))->assertSuccessful()
+        ->assertViewHas('hasPredefinedTheme', true)
+        ->assertSee('name="theme" value="elegant"', false)
+        ->assertDontSee('x-data="themePicker"', false);
+});
+
+test('a saved theme without an explicit selection marker keeps the picker visible', function () {
+    $user = User::factory()->create(['theme_id' => $this->selectedTheme->id]);
+
+    expect($user->fresh()->has_selected_theme)->toBeFalse();
+    $this->actingAs($user)->get(route('invitation.create'))->assertSuccessful()
+        ->assertViewHas('selectedTheme', 'modern')
+        ->assertViewHas('hasPredefinedTheme', false)
+        ->assertSee('x-data="themePicker"', false);
+});
 
 test('default falls back to an active theme or an empty catalog', function (string $availability) {
     config(['themes.default_theme_id' => 999999]);
@@ -195,7 +224,11 @@ test('theme availability is rechecked after returning from Google', function (st
     }
 
     completeGoogleThemeLogin($state)->assertSessionHasNoErrors();
-    expect(User::sole()->theme_id)->toBe($this->defaultTheme->id);
+    expect(User::sole()->theme_id)->toBe($this->defaultTheme->id)
+        ->and(User::sole()->has_selected_theme)->toBeFalse();
+    $this->get(route('invitation.create'))->assertSuccessful()
+        ->assertViewHas('hasPredefinedTheme', false)
+        ->assertSee('x-data="themePicker"', false);
 })->with(['deleted', 'inactive']);
 
 test('malformed theme parameters fail validation before OAuth', function (array $parameters, string $field) {
@@ -287,18 +320,24 @@ test('existing users without invitations can continue with a newly selected them
     $this->assertAuthenticatedAs($user);
     $user->refresh();
     expect($user->theme_id)->toBe($this->selectedTheme->id)
+        ->and($user->has_selected_theme)->toBeTrue()
         ->and($user->google_id)->toBe('google-test-user')
         ->and($user->google_token)->toBe($this->accessToken)
         ->and($user->google_refresh_token)->toBe($this->refreshToken);
 });
 
 test('login without a new selection preserves a saved preference and intended URL', function () {
-    $user = User::factory()->create(['email' => 'google@example.com', 'theme_id' => $this->selectedTheme->id]);
+    $user = User::factory()->create([
+        'email' => 'google@example.com', 'theme_id' => $this->selectedTheme->id, 'has_selected_theme' => true,
+    ]);
     $this->withSession(['url.intended' => route('profile.edit')]);
     completeGoogleThemeLogin(beginGoogleThemeLogin())->assertRedirect(route('profile.edit'));
-    expect($user->fresh()->theme_id)->toBe($this->selectedTheme->id);
+    expect($user->fresh()->theme_id)->toBe($this->selectedTheme->id)
+        ->and($user->fresh()->has_selected_theme)->toBeTrue();
 
-    $this->get(route('invitation.create'))->assertViewHas('selectedTheme', 'modern');
+    $this->get(route('invitation.create'))->assertViewHas('selectedTheme', 'modern')
+        ->assertViewHas('hasPredefinedTheme', true)
+        ->assertDontSee('x-data="themePicker"', false);
 });
 
 test('an explicit active theme overrides the saved preference in the creation form', function () {
@@ -311,7 +350,7 @@ test('an explicit active theme overrides the saved preference in the creation fo
 });
 
 test('an inactive saved theme does not leave a hidden invalid selection', function () {
-    $user = User::factory()->create(['theme_id' => $this->selectedTheme->id]);
+    $user = User::factory()->create(['theme_id' => $this->selectedTheme->id, 'has_selected_theme' => true]);
     $this->selectedTheme->update(['is_active' => false]);
     $this->actingAs($user)->get(route('invitation.create'))
         ->assertSuccessful()->assertViewHas('selectedTheme', '')->assertViewHas('hasPredefinedTheme', false)

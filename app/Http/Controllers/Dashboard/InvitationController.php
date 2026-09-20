@@ -48,7 +48,8 @@ class InvitationController extends Controller
         $requestedTheme = $themes->firstWhere('slug', $request->query('theme'));
         $theme = $requestedTheme ?? $themes->firstWhere('id', $request->user()->theme_id);
         $selectedTheme = $theme?->slug ?? '';
-        $hasPredefinedTheme = $theme !== null;
+        $hasPredefinedTheme = $requestedTheme !== null
+            || ($theme !== null && $request->user()->has_selected_theme);
 
         return view('dashboard.invitations.create', compact(
             'selectedTheme',

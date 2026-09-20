@@ -16,12 +16,16 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password', 'role', 'is_banned', 'google_id', 'google_token', 'google_refresh_token', 'avatar', 'theme_id'])]
+#[Fillable(['name', 'email', 'password', 'role', 'is_banned', 'google_id', 'google_token', 'google_refresh_token', 'avatar', 'theme_id', 'has_selected_theme'])]
 #[Hidden(['password', 'remember_token', 'google_token', 'google_refresh_token'])]
 class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
+
+    protected $attributes = [
+        'has_selected_theme' => false,
+    ];
 
     public function canAccessPanel(Panel $panel): bool
     {
@@ -36,6 +40,7 @@ class User extends Authenticatable implements FilamentUser
             'is_banned' => 'boolean',
             'is_super_admin' => 'boolean',
             'theme_id' => 'integer',
+            'has_selected_theme' => 'boolean',
         ];
     }
 

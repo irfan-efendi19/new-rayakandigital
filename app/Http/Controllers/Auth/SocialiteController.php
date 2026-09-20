@@ -54,7 +54,7 @@ class SocialiteController extends Controller
             }
 
             if (! $user->hasInvitation() && $theme) {
-                $user->update(['theme_id' => $theme->id]);
+                $user->update(['theme_id' => $theme->id, 'has_selected_theme' => true]);
             }
         } else {
             $user = User::create([
@@ -66,6 +66,7 @@ class SocialiteController extends Controller
                 'avatar' => $googleUser->getAvatar(),
                 'password' => Hash::make(Str::random(32)),
                 'theme_id' => ($theme ?? Theme::defaultForRegistration())?->id,
+                'has_selected_theme' => $theme !== null,
             ]);
         }
 
