@@ -67,7 +67,7 @@ Kartu tema pada landing page dan katalog mengirim slug melalui `/register?theme=
 
 `App\Auth\GoogleProvider` menambahkan `theme_id` dan nonce acak ke payload `state` terenkripsi. Socialite menyimpan keseluruhan nilai tersebut dalam sesi dan membandingkannya saat callback, kemudian mengonsumsinya satu kali. Payload hanya dibaca setelah validasi Socialite berhasil. Jangan menggunakan `with(['state' => ...])` atau `stateless()` untuk alur ini. [Dokumentasi Socialite](https://laravel.com/docs/13.x/socialite#optional-parameters)
 
-Pilihan disimpan sebagai foreign key nullable `users.theme_id`. Formulir pembuatan undangan menggunakan preferensi tersimpan saat URL tidak membawa pilihan tema aktif lain. Ketika formulir disimpan, slug tetap masuk ke `invitations.theme`, sesuai struktur undangan yang sudah ada. Pengguna dapat melanjutkan onboarding setelah membuka kembali dashboard tanpa memilih ulang tema.
+Pilihan disimpan sebagai foreign key nullable `users.theme_id`. Formulir pembuatan undangan menggunakan preferensi tersimpan saat URL tidak membawa pilihan tema aktif lain. Jika tema aktif berhasil dimuat dari URL atau profil, pemilih tema disembunyikan dan slug dikirim melalui input tersembunyi. Jika belum ada tema aktif yang valid, pemilih tema tetap ditampilkan. Ketika formulir disimpan, slug tetap masuk ke `invitations.theme`, sesuai struktur undangan yang sudah ada. Pengguna dapat melanjutkan onboarding setelah membuka kembali dashboard tanpa memilih ulang tema.
 
 Urutan tema bawaan untuk pengguna Google baru:
 

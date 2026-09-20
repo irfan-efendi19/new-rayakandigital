@@ -143,8 +143,10 @@ test('landing page theme survives real OAuth state validation and invitation cre
     $this->get(route('dashboard'))->assertRedirect(route('invitation.create'));
     $this->get(route('invitation.create'))->assertSuccessful()
         ->assertViewHas('selectedTheme', 'modern')
-        ->assertViewHas('hasPredefinedTheme', false)
-        ->assertSee('data-selected-theme="modern"', false);
+        ->assertViewHas('hasPredefinedTheme', true)
+        ->assertSee('name="theme" value="modern"', false)
+        ->assertDontSee('aria-label="Filter kategori tema"', false)
+        ->assertDontSee('x-data="themePicker"', false);
 
     $this->post(route('invitation.store'), [
         'title' => 'Our Wedding', 'bride_name' => 'Bride', 'groom_name' => 'Groom',
@@ -302,14 +304,19 @@ test('login without a new selection preserves a saved preference and intended UR
 test('an explicit active theme overrides the saved preference in the creation form', function () {
     $user = User::factory()->create(['theme_id' => $this->selectedTheme->id]);
     $this->actingAs($user)->get(route('invitation.create', ['theme' => 'elegant']))
-        ->assertSuccessful()->assertViewHas('selectedTheme', 'elegant');
+        ->assertSuccessful()->assertViewHas('selectedTheme', 'elegant')
+        ->assertViewHas('hasPredefinedTheme', true)
+        ->assertSee('name="theme" value="elegant"', false)
+        ->assertDontSee('x-data="themePicker"', false);
 });
 
 test('an inactive saved theme does not leave a hidden invalid selection', function () {
     $user = User::factory()->create(['theme_id' => $this->selectedTheme->id]);
     $this->selectedTheme->update(['is_active' => false]);
     $this->actingAs($user)->get(route('invitation.create'))
-        ->assertSuccessful()->assertViewHas('selectedTheme', '')->assertViewHas('hasPredefinedTheme', false);
+        ->assertSuccessful()->assertViewHas('selectedTheme', '')->assertViewHas('hasPredefinedTheme', false)
+        ->assertSee('aria-label="Filter kategori tema"', false)
+        ->assertSee('x-data="themePicker"', false);
 });
 
 test('deleting a theme clears the profile preference without deleting the user', function () {
