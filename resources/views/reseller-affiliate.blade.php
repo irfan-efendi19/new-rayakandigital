@@ -481,7 +481,7 @@
                                     <i class="fa-solid fa-calculator text-sm" aria-hidden="true"></i>
                                 </span>
                                 <h3 class="font-heading text-xl sm:text-2xl font-bold text-secondary-900 dark:text-white">
-                                    Kalkulator Potensi Cuan &amp; Passive Income
+                                    Kalkulator Simulasi Penghasilan &amp; Potensi Cuan
                                 </h3>
                             </div>
                             <p class="mt-2 text-xs sm:text-sm text-neutral-500 dark:text-neutral-400">
@@ -631,7 +631,7 @@
                     <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2 mb-6">
                         <div>
                             <h3 class="font-heading text-xl font-bold text-secondary-900 dark:text-white">
-                                Tabel Matriks Komisi Bersih per Transaksi
+                                Tabel Matriks Komisi per Transaksi
                             </h3>
                             <p class="text-xs text-neutral-500 dark:text-neutral-400">
                                 Rincian uang tunai yang langsung masuk ke dompet Anda untuk setiap paket undangan yang lunas terjual.
