@@ -25,7 +25,7 @@ use Illuminate\Validation\ValidationException;
 class InvitationController extends Controller
 {
     const RESERVED_SLUGS = [
-        'semua-tema', 'undangan-web', 'buku-tamu', 'live-streaming',
+        'semua-tema', 'undangan-web', 'buku-tamu', 'live-streaming', 'reseller-affiliate',
         'syarat-ketentuan', 'kebijakan-privasi', 'tentang-kami', 'hubungi-kami',
         'auth', 'dashboard', 'profile', 'payments', 'invitations',
         'register', 'login', 'forgot-password', 'reset-password',

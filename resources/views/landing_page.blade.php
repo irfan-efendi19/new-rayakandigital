@@ -1060,321 +1060,155 @@
         </div>
     </section>
 
-    {{-- ═══════════════════════════════════════════════
-    PROGRAM MITRA & AFFILIATE — Section Terakhir
-    ═══════════════════════════════════════════════ --}}
-    @php
-        $affiliateSettings = $affiliateSettings ?? [
-            'commission_rate' => 20,
-            'discount_rate' => 5,
-            'minimum_payout' => 50000,
-        ];
-    @endphp
-    <section id="reseller-affiliate" data-aos="fade-up" class="py-20 sm:py-24 bg-[#FAF8F5] dark:bg-secondary-900/95 border-t border-neutral-200/80 dark:border-secondary-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            {{-- Main Container Card --}}
-            <div class="relative overflow-hidden rounded-3xl bg-white dark:bg-gradient-to-br dark:from-secondary-950 dark:via-[#1C1611] dark:to-secondary-900 text-secondary-900 dark:text-white p-6 sm:p-10 lg:p-14 shadow-xl border border-neutral-200/80 dark:border-white/10">
-                {{-- Decorative Glows --}}
-                <div class="absolute -top-32 -right-32 w-96 h-96 rounded-full bg-primary-500/10 dark:bg-primary-500/20 blur-3xl pointer-events-none"></div>
-                <div class="absolute -bottom-32 -left-32 w-96 h-96 rounded-full bg-primary-600/5 dark:bg-primary-600/15 blur-3xl pointer-events-none"></div>
+    <section id="reseller-affiliate" class="relative isolate overflow-hidden border-t border-neutral-200 bg-[#FAF8F5] py-16 dark:border-secondary-800 dark:bg-secondary-900 sm:py-20 lg:py-24">
+        {{-- Subtle background decoration --}}
+        <div class="pointer-events-none absolute -right-32 top-1/2 -translate-y-1/2 h-[28rem] w-[28rem] rounded-full bg-primary-200/30 blur-3xl dark:bg-primary-900/20" aria-hidden="true"></div>
+        <div class="pointer-events-none absolute -left-20 bottom-0 h-72 w-72 rounded-full bg-amber-100/30 blur-3xl dark:bg-amber-900/10" aria-hidden="true"></div>
 
-                <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
-                    {{-- Left Column: High-Converting Marketing Copy --}}
-                    <div class="lg:col-span-7 space-y-6">
-                        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary-50 dark:bg-primary-500/20 border border-primary-200 dark:border-primary-500/30 text-primary-700 dark:text-primary-300 text-xs font-bold uppercase tracking-widest">
-                            <i class="fas fa-coins text-primary-600 dark:text-primary-400"></i>
-                            <span>Program Kemitraan &amp; Affiliate</span>
-                        </div>
-
-                        <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight text-secondary-900 dark:text-white">
-                            Ubah Relasi Jadi Penghasilan.<br>
-                            Komisi Awal <span class="text-primary-600 dark:text-primary-500">20%</span> &amp; <span class="text-emerald-600 dark:text-emerald-400">Terus Naik</span> Sesuai Performa.
-                        </h2>
-
-                        <p class="text-neutral-600 dark:text-neutral-300 text-sm sm:text-base leading-relaxed max-w-xl">
-                            Punya klien calon pengantin setiap minggu? Jangan biarkan potensi cuan menguap begitu saja. Cukup rekomendasikan <strong>Rayakan Digital</strong> dengan kupon atau link unik Anda. Tanpa modal, tanpa repot urus teknis—komisi langsung mengalir ke saldo Anda!
-                        </p>
-
-                        {{-- Vendor Persona Tags --}}
-                        <div class="flex flex-wrap items-center gap-2 pt-1">
-                            <span class="text-xs text-neutral-500 dark:text-neutral-400 font-medium">Dirancang khusus untuk:</span>
-                            @foreach(['Wedding Organizer', 'MUA & Hairdo', 'Fotografer & Video', 'Content Creator', 'Wedding MC / Band'] as $persona)
-                                <span class="px-3 py-1 rounded-full text-xs font-semibold bg-neutral-100 dark:bg-white/10 text-neutral-700 dark:text-neutral-200 border border-neutral-200/80 dark:border-white/10 hover:border-primary-500/50 transition-colors">
-                                    {{ $persona }}
-                                </span>
-                            @endforeach
-                        </div>
-
-                        {{-- 3 Value Propositions --}}
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5 pt-2">
-                            <div class="rounded-2xl bg-neutral-50/80 dark:bg-white/5 border border-neutral-200/80 dark:border-white/10 p-4 hover:bg-neutral-100/80 dark:hover:bg-white/[0.08] transition-colors shadow-sm">
-                                <div class="w-9 h-9 rounded-xl bg-primary-100 dark:bg-primary-500/20 text-primary-600 dark:text-primary-400 flex items-center justify-center mb-2.5">
-                                    <i class="fas fa-arrow-trend-up text-sm"></i>
-                                </div>
-                                <h3 class="font-bold text-sm text-secondary-900 dark:text-white">Bagi Hasil Bertingkat</h3>
-                                <p class="text-xs text-neutral-600 dark:text-neutral-400 mt-1 leading-snug">Mulai dari <strong>20%</strong> dan otomatis naik ke tier lebih tinggi seiring pertumbuhan penjualan Anda.</p>
-                            </div>
-
-                            <div class="rounded-2xl bg-neutral-50/80 dark:bg-white/5 border border-neutral-200/80 dark:border-white/10 p-4 hover:bg-neutral-100/80 dark:hover:bg-white/[0.08] transition-colors shadow-sm">
-                                <div class="w-9 h-9 rounded-xl bg-primary-100 dark:bg-primary-500/20 text-primary-600 dark:text-primary-400 flex items-center justify-center mb-2.5">
-                                    <i class="fas fa-ticket text-sm"></i>
-                                </div>
-                                <h3 class="font-bold text-sm text-secondary-900 dark:text-white">Kupon Promo Eksklusif</h3>
-                                <p class="text-xs text-neutral-600 dark:text-neutral-400 mt-1 leading-snug">Calon pengantin dapat diskon khusus dengan kode brand Anda. Win-win untuk Anda dan klien!</p>
-                            </div>
-
-                            <div class="rounded-2xl bg-neutral-50/80 dark:bg-white/5 border border-neutral-200/80 dark:border-white/10 p-4 hover:bg-neutral-100/80 dark:hover:bg-white/[0.08] transition-colors shadow-sm">
-                                <div class="w-9 h-9 rounded-xl bg-primary-100 dark:bg-primary-500/20 text-primary-600 dark:text-primary-400 flex items-center justify-center mb-2.5">
-                                    <i class="fas fa-wallet text-sm"></i>
-                                </div>
-                                <h3 class="font-bold text-sm text-secondary-900 dark:text-white">Cair Mudah ke Rekening</h3>
-                                <p class="text-xs text-neutral-600 dark:text-neutral-400 mt-1 leading-snug">Penarikan fleksibel mulai Rp {{ number_format($affiliateSettings['minimum_payout'], 0, ',', '.') }} langsung ke BCA, Mandiri, BRI, dll.</p>
-                            </div>
-                        </div>
-
-                        {{-- Action Buttons --}}
-                        <div class="flex flex-col sm:flex-row gap-3 pt-3">
-                            <a href="{{ route('dashboard.affiliate.index') }}" id="affiliate-cta-register"
-                                class="inline-flex items-center justify-center gap-2.5 px-6 sm:px-8 py-3.5 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-bold rounded-xl shadow-lg shadow-primary-500/30 hover:shadow-primary-500/50 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 text-sm">
-                                <i class="fas fa-bolt text-xs"></i>
-                                Daftar Kemitraan — 100% Gratis
-                                <i class="fas fa-arrow-right text-xs"></i>
-                            </a>
-                            <a href="https://wa.me/62895349823366?text={{ urlencode('Halo Admin Rayakan Digital, saya ingin berdiskusi mengenai Program Reseller & Kemitraan.') }}"
-                                target="_blank" id="affiliate-cta-wa"
-                                class="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 bg-neutral-100 hover:bg-neutral-200 dark:bg-white/10 dark:hover:bg-white/20 border border-neutral-300 dark:border-white/20 text-secondary-800 dark:text-white font-semibold rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 text-sm">
-                                <i class="fab fa-whatsapp text-green-500 dark:text-green-400"></i>
-                                Tanya Peluang Kemitraan
-                            </a>
-                        </div>
+        <div class="relative mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
+            <div class="grid items-center gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16">
+                {{-- Left: High-converting Copywriting --}}
+                <div class="flex flex-col items-start gap-6" data-aos="fade-right">
+                    {{-- Eyebrow --}}
+                    <div class="inline-flex items-center gap-2.5 rounded-full border border-primary-200 bg-primary-50/80 px-3.5 py-1.5 text-[11px] font-bold uppercase tracking-wider text-primary-700 dark:border-primary-800/80 dark:bg-primary-900/30 dark:text-primary-400">
+                        <span class="relative flex h-2 w-2">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-primary-600 dark:bg-primary-400"></span>
+                        </span>
+                        Peluang Tambahan Penghasilan
                     </div>
 
-                    {{-- Right Column: Tier Progression & Earning Simulation Card --}}
-                    <div class="lg:col-span-5">
-                        <div class="rounded-3xl bg-neutral-50/80 dark:bg-white/[0.08] dark:backdrop-blur-xl border border-neutral-200/80 dark:border-white/15 p-5 sm:p-7 space-y-5 shadow-sm">
-                            {{-- Header --}}
-                            <div class="flex items-center justify-between border-b border-neutral-200/80 dark:border-white/10 pb-4">
-                                <div>
-                                    <p class="text-[11px] uppercase tracking-widest text-primary-600 dark:text-primary-400 font-bold">Skema Komisi Bertingkat</p>
-                                    <h4 class="text-base sm:text-lg font-bold text-secondary-900 dark:text-white">Jenjang Bagi Hasil Mitra</h4>
-                                </div>
-                                <span class="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-xs font-bold">
-                                    <i class="fas fa-arrow-trend-up text-[10px] mr-1"></i> Berjenjang
-                                </span>
-                            </div>
+                    <h2 class="font-heading text-3xl font-bold leading-[1.15] text-secondary-900 dark:text-white sm:text-4xl lg:text-5xl">
+                        Punya Klien atau Teman Menikah?<br>
+                        <span class="text-primary-600 dark:text-primary-400">Rekomendasikan &amp; Raih Komisi.</span>
+                    </h2>
 
-                            {{-- Tier Levels Showcase --}}
-                            <div class="space-y-3 text-xs">
-                                {{-- Starter --}}
-                                <div class="flex items-center justify-between p-3.5 rounded-2xl bg-white dark:bg-white/5 border border-neutral-200/80 dark:border-white/10 hover:border-primary-500/40 transition-colors shadow-sm">
-                                    <div class="flex items-center gap-3">
-                                        <span class="flex h-8 w-8 items-center justify-center rounded-xl bg-neutral-100 text-neutral-700 dark:bg-neutral-700/60 dark:text-neutral-300 text-xs font-bold">
-                                            1
-                                        </span>
-                                        <div>
-                                            <p class="font-bold text-secondary-900 dark:text-white text-sm">Starter Partner</p>
-                                            <p class="text-neutral-500 dark:text-neutral-400 text-[11px]">Langsung aktif untuk mitra baru</p>
-                                        </div>
-                                    </div>
-                                    <div class="text-right">
-                                        <span class="text-base font-extrabold text-primary-600 dark:text-primary-400">20%</span>
-                                        <p class="text-[10px] text-neutral-500 dark:text-neutral-400">Komisi per order</p>
-                                    </div>
-                                </div>
+                    <p class="max-w-xl text-base leading-7 text-neutral-600 dark:text-neutral-300">
+                        Bergabung gratis sebagai Mitra Reseller &amp; Affiliate Rayakan Digital. Bagikan link referral atau kupon diskon eksklusif ke calon pengantin, dan terima komisi langsung ke rekening Anda setiap ada transaksi berhasil.
+                    </p>
 
-                                {{-- Pro Tier --}}
-                                <div class="flex items-center justify-between p-3.5 rounded-2xl bg-gradient-to-r from-primary-50/80 to-white dark:from-primary-500/10 dark:to-transparent border border-primary-200 dark:border-primary-500/30 shadow-sm">
-                                    <div class="flex items-center gap-3">
-                                        <span class="flex h-8 w-8 items-center justify-center rounded-xl bg-primary-100 text-primary-700 dark:bg-primary-500/30 dark:text-primary-300 text-xs font-bold">
-                                            2
-                                        </span>
-                                        <div>
-                                            <p class="font-bold text-secondary-900 dark:text-white text-sm flex items-center gap-1.5">
-                                                Silver Partner
-                                                <span class="px-1.5 py-0.5 rounded bg-primary-100 text-primary-700 dark:bg-primary-500/30 dark:text-primary-300 text-[9px] font-bold">Populer</span>
-                                            </p>
-                                            <p class="text-neutral-500 dark:text-neutral-400 text-[11px]">Performa 10+ order / bulan</p>
-                                        </div>
-                                    </div>
-                                    <div class="text-right">
-                                        <span class="text-base font-extrabold text-primary-600 dark:text-primary-400">25%</span>
-                                        <p class="text-[10px] text-neutral-500 dark:text-neutral-400">Komisi meningkat</p>
-                                    </div>
-                                </div>
+                    {{-- Audience chips: Who is this for --}}
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="text-xs font-semibold text-neutral-500 dark:text-neutral-400">Cocok untuk:</span>
+                        <span class="rounded-lg bg-neutral-100 px-2.5 py-1 text-xs font-medium text-secondary-800 dark:bg-secondary-800 dark:text-neutral-200">Wedding Organizer</span>
+                        <span class="rounded-lg bg-neutral-100 px-2.5 py-1 text-xs font-medium text-secondary-800 dark:bg-secondary-800 dark:text-neutral-200">MUA &amp; Fotografer</span>
+                        <span class="rounded-lg bg-neutral-100 px-2.5 py-1 text-xs font-medium text-secondary-800 dark:bg-secondary-800 dark:text-neutral-200">MC &amp; Vendor</span>
+                        <span class="rounded-lg bg-neutral-100 px-2.5 py-1 text-xs font-medium text-secondary-800 dark:bg-secondary-800 dark:text-neutral-200">Creator &amp; Umum</span>
+                    </div>
 
-                                {{-- Master Tier --}}
-                                <div class="flex items-center justify-between p-3.5 rounded-2xl bg-gradient-to-r from-amber-50/80 to-white dark:from-amber-500/15 dark:to-transparent border border-amber-300 dark:border-amber-500/40 shadow-sm">
-                                    <div class="flex items-center gap-3">
-                                        <span class="flex h-8 w-8 items-center justify-center rounded-xl bg-amber-100 text-amber-800 dark:bg-amber-500/30 dark:text-amber-300 text-xs font-bold">
-                                            3
-                                        </span>
-                                        <div>
-                                            <p class="font-bold text-secondary-900 dark:text-white text-sm flex items-center gap-1.5">
-                                                Gold VIP Partner
-                                                <i class="fas fa-crown text-[10px] text-amber-500 dark:text-amber-400"></i>
-                                            </p>
-                                            <p class="text-neutral-500 dark:text-neutral-400 text-[11px]">Mitra berprestasi &amp; konsisten</p>
-                                        </div>
-                                    </div>
-                                    <div class="text-right">
-                                        <span class="text-base font-extrabold text-amber-600 dark:text-amber-400">30%+</span>
-                                        <p class="text-[10px] text-amber-700 dark:text-amber-300/80">Tier tertinggi</p>
-                                    </div>
-                                </div>
-                            </div>
+                    {{-- Action buttons --}}
+                    <div class="flex w-full flex-col gap-3 pt-2 sm:w-auto sm:flex-row sm:items-center">
+                        <a href="{{ route('reseller-affiliate') }}" id="affiliate-cta-register"
+                            class="inline-flex min-h-12 items-center justify-center gap-3 rounded-full bg-primary-600 px-8 py-3.5 text-sm font-bold text-white shadow-lg shadow-primary-500/25 transition hover:bg-primary-700 hover:shadow-primary-500/35 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-500">
+                            <span>Mulai Jadi Mitra Sekarang</span>
+                            <i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
+                        </a>
+                        <a href="{{ route('reseller-affiliate') }}#perhitungan-tier"
+                            class="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-neutral-300 px-6 py-3.5 text-sm font-semibold text-secondary-800 transition hover:border-primary-500 hover:bg-white hover:text-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-500 dark:border-secondary-700 dark:text-neutral-200 dark:hover:bg-secondary-800 dark:hover:text-primary-400">
+                            <i class="fa-solid fa-calculator text-xs text-primary-500" aria-hidden="true"></i>
+                            <span>Simulasi Penghasilan</span>
+                        </a>
+                    </div>
 
-                            {{-- Social Proof & Security Note --}}
-                            <div class="pt-2 border-t border-neutral-200/80 dark:border-white/10 space-y-2">
-                                <div class="flex items-center justify-between text-xs text-neutral-700 dark:text-neutral-300">
-                                    <span class="flex items-center gap-1.5 text-neutral-600 dark:text-neutral-400">
-                                        <i class="fas fa-shield-halved text-emerald-600 dark:text-emerald-400 text-sm"></i>
-                                        Sistem pencatatan otomatis &amp; transparan
-                                    </span>
-                                    <span class="font-bold text-secondary-900 dark:text-white">100% Pasif</span>
-                                </div>
-                                <p class="text-[11px] text-neutral-500 dark:text-neutral-400 leading-relaxed">
-                                    Tier Anda akan ditinjau secara berkala oleh tim admin. Kenaikan tier memberikan rate komisi yang lebih besar di setiap transaksi berikutnya.
-                                </p>
-                            </div>
-                        </div>
+                    {{-- Trust inline list --}}
+                    <div class="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-neutral-500 dark:text-neutral-400">
+                        <span class="flex items-center gap-1.5">
+                            <i class="fa-solid fa-check text-emerald-500" aria-hidden="true"></i>
+                            100% Gratis Daftar
+                        </span>
+                        <span class="flex items-center gap-1.5">
+                            <i class="fa-solid fa-check text-emerald-500" aria-hidden="true"></i>
+                            Pencairan Mulai Rp {{ number_format($affiliateSettings['minimum_payout'] ?? 50000, 0, ',', '.') }}
+                        </span>
+                        <span class="flex items-center gap-1.5">
+                            <i class="fa-solid fa-check text-emerald-500" aria-hidden="true"></i>
+                            Dashboard Pelaporan Otomatis
+                        </span>
                     </div>
                 </div>
 
-                {{-- ── SKEMA HASIL & SIMULASI PENDAPATAN RIIL ── --}}
-                <div class="relative z-10 mt-10 pt-8 sm:pt-10 border-t border-neutral-200/80 dark:border-white/10 space-y-6">
-                    <div class="flex flex-col md:flex-row md:items-end justify-between gap-3">
-                        <div>
-                            <span class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-primary-600 dark:text-primary-400">
-                                <i class="fas fa-calculator"></i> Transparan &amp; Nyata
+                {{-- Right: High-Converting Card / Earnings Box --}}
+                <div class="relative w-full" data-aos="fade-left">
+                    <div class="absolute inset-0 rotate-1.5 rounded-3xl bg-gradient-to-br from-primary-400/20 to-primary-600/20 blur-sm dark:from-primary-900/30 dark:to-primary-700/20" aria-hidden="true"></div>
+
+                    <div class="relative overflow-hidden rounded-3xl border border-neutral-200/90 bg-white p-6 shadow-xl shadow-secondary-900/5 dark:border-secondary-700 dark:bg-secondary-800 sm:p-8">
+                        {{-- Card Header badge --}}
+                        <div class="flex items-center justify-between border-b border-neutral-100 pb-5 dark:border-secondary-700">
+                            <div class="flex items-center gap-3">
+                                <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary-50 text-primary-600 dark:bg-primary-900/30 dark:text-primary-400">
+                                    <i class="fa-solid fa-handshake text-base" aria-hidden="true"></i>
+                                </div>
+                                <div>
+                                    <p class="text-xs font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">Program Mitra</p>
+                                    <p class="text-sm font-extrabold text-secondary-900 dark:text-white">Rayakan Partners</p>
+                                </div>
+                            </div>
+                            <span class="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-bold text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">
+                                <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                                Pendaftaran Aktif
                             </span>
-                            <h3 class="text-xl sm:text-2xl font-bold text-secondary-900 dark:text-white mt-1">
-                                Skema Hasil &amp; Simulasi Pendapatan Mitra
-                            </h3>
-                            <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 mt-1 max-w-2xl">
-                                Gambaran nyata komisi yang Anda dapatkan berdasarkan paket undangan pilihan calon pengantin dan skala klien Anda.
+                        </div>
+
+                        {{-- Main Highlight: Commission --}}
+                        <div class="py-6">
+                            <p class="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">Komisi Penghasilan</p>
+                            <div class="mt-1 flex items-baseline gap-2">
+                                <span class="font-heading text-5xl sm:text-6xl font-extrabold text-primary-600 dark:text-primary-400">Hingga 30%+</span>
+                            </div>
+                            <p class="mt-2 text-xs leading-relaxed text-neutral-500 dark:text-neutral-400">
+                                Dihitung langsung dari setiap transaksi pembelian undangan yang sukses via link atau kupon Anda.
                             </p>
                         </div>
-                        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-neutral-100 border border-neutral-200 text-xs text-neutral-700 dark:bg-white/5 dark:border-white/10 dark:text-neutral-300 self-start md:self-auto">
-                            <i class="fas fa-shield-halved text-emerald-600 dark:text-emerald-400"></i>
-                            <span>Bebas biaya admin &amp; 100% transparan</span>
-                        </div>
-                    </div>
 
-                    {{-- 3-Tier Earnings Breakdown Cards --}}
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        {{-- Skema 1: Starter --}}
-                        <div class="rounded-2xl bg-white dark:bg-white/[0.05] border border-neutral-200/80 dark:border-white/10 p-5 flex flex-col justify-between hover:border-primary-500/40 transition-colors shadow-sm">
-                            <div>
-                                <div class="flex items-center justify-between mb-3">
-                                    <span class="px-2.5 py-1 rounded-lg bg-neutral-100 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300 text-xs font-bold">
-                                        Tier 1 · Starter
-                                    </span>
-                                    <span class="text-lg font-extrabold text-primary-600 dark:text-primary-400">20% Komisi</span>
+                        {{-- Calculation Snapshot --}}
+                        <div class="rounded-2xl bg-neutral-50 p-4 ring-1 ring-neutral-100 dark:bg-secondary-900/60 dark:ring-secondary-700/60">
+                            <p class="text-[11px] font-bold uppercase tracking-wider text-neutral-600 dark:text-neutral-300">
+                                <i class="fa-solid fa-coins text-amber-500 mr-1.5" aria-hidden="true"></i>
+                                Ilustrasi Penghasilan Anda:
+                            </p>
+                            <div class="mt-3 space-y-2 text-xs">
+                                <div class="flex items-center justify-between text-neutral-600 dark:text-neutral-300">
+                                    <span>Rekomendasi 10 Undangan Gold</span>
+                                    <span class="font-bold text-secondary-900 dark:text-white">Rp 198.000 – Rp 297.000</span>
                                 </div>
-                                <p class="text-xs text-secondary-900 dark:text-neutral-200 font-semibold">Skala 5 – 10 Klien / bulan</p>
-                                <p class="text-[11px] text-neutral-500 dark:text-neutral-400 mt-0.5">Cocok untuk vendor yang baru mulai merekomendasikan.</p>
-
-                                <div class="mt-4 pt-3 border-t border-neutral-200/80 dark:border-white/10 space-y-2 text-xs">
-                                    <div class="flex justify-between text-neutral-600 dark:text-neutral-300">
-                                        <span>Paket Silver (Rp 75rb):</span>
-                                        <span class="font-bold text-secondary-900 dark:text-white">Rp 15.000 / order</span>
-                                    </div>
-                                    <div class="flex justify-between text-neutral-600 dark:text-neutral-300">
-                                        <span>Paket Gold (Rp 99rb):</span>
-                                        <span class="font-bold text-secondary-900 dark:text-white">Rp 19.800 / order</span>
-                                    </div>
-                                    <div class="flex justify-between text-neutral-600 dark:text-neutral-300">
-                                        <span>Paket Platinum (Rp 299rb):</span>
-                                        <span class="font-bold text-secondary-900 dark:text-white">Rp 59.800 / order</span>
-                                    </div>
+                                <div class="flex items-center justify-between text-neutral-600 dark:text-neutral-300">
+                                    <span>Rekomendasi 25 Undangan Gold</span>
+                                    <span class="font-bold text-emerald-600 dark:text-emerald-400">Rp 495.000 – Rp 742.500</span>
                                 </div>
-                            </div>
-
-                            <div class="mt-5 pt-3 border-t border-neutral-200/80 dark:border-white/10 bg-neutral-50 dark:bg-white/5 rounded-xl p-3 text-center">
-                                <p class="text-[10px] uppercase tracking-wider text-neutral-500 dark:text-neutral-400 font-medium">Potensi Cuan Bulanan</p>
-                                <p class="text-lg font-extrabold text-secondary-900 dark:text-white mt-0.5">Rp 200rb – Rp 600rb+</p>
-                                <p class="text-[10px] text-neutral-500 dark:text-neutral-400">Pendapatan sampingan pasif tanpa modal</p>
                             </div>
                         </div>
 
-                        {{-- Skema 2: Silver --}}
-                        <div class="relative rounded-2xl bg-gradient-to-b from-primary-50/50 via-white to-white dark:from-primary-500/15 dark:via-white/[0.06] dark:to-white/[0.04] border-2 border-primary-500/40 p-5 flex flex-col justify-between shadow-md">
-                            <span class="absolute -top-3 right-4 px-2.5 py-0.5 rounded-full bg-primary-500 text-white text-[10px] font-extrabold uppercase tracking-wider shadow-sm">
-                                Paling Populer
-                            </span>
-                            <div>
-                                <div class="flex items-center justify-between mb-3">
-                                    <span class="px-2.5 py-1 rounded-lg bg-primary-100 text-primary-700 dark:bg-primary-500/30 dark:text-primary-300 text-xs font-bold">
-                                        Tier 2 · Silver
-                                    </span>
-                                    <span class="text-lg font-extrabold text-primary-600 dark:text-primary-400">25% Komisi</span>
-                                </div>
-                                <p class="text-xs text-secondary-900 dark:text-white font-semibold">Skala 11 – 25 Klien / bulan</p>
-                                <p class="text-[11px] text-neutral-600 dark:text-neutral-300 mt-0.5">Untuk WO, MUA &amp; fotografer aktif tiap pekan.</p>
-
-                                <div class="mt-4 pt-3 border-neutral-200/80 dark:border-white/10 space-y-2 text-xs border-t">
-                                    <div class="flex justify-between text-neutral-700 dark:text-neutral-200">
-                                        <span>Paket Silver (Rp 75rb):</span>
-                                        <span class="font-bold text-secondary-900 dark:text-white">Rp 18.750 / order</span>
-                                    </div>
-                                    <div class="flex justify-between text-neutral-700 dark:text-neutral-200">
-                                        <span>Paket Gold (Rp 99rb):</span>
-                                        <span class="font-bold text-secondary-900 dark:text-white">Rp 24.750 / order</span>
-                                    </div>
-                                    <div class="flex justify-between text-neutral-700 dark:text-neutral-200">
-                                        <span>Paket Platinum (Rp 299rb):</span>
-                                        <span class="font-bold text-secondary-900 dark:text-white">Rp 74.750 / order</span>
-                                    </div>
+                        {{-- 2 Mini Key Props --}}
+                        <div class="mt-6 grid grid-cols-2 gap-3">
+                            <div class="flex items-start gap-2.5 rounded-xl border border-neutral-100 bg-white p-3 dark:border-secondary-700/60 dark:bg-secondary-900/40">
+                                <i class="fa-solid fa-ticket text-primary-500 mt-0.5 text-xs" aria-hidden="true"></i>
+                                <div>
+                                    <p class="text-[11px] font-bold text-secondary-900 dark:text-white">Kupon Diskon Klien</p>
+                                    <p class="text-[10px] text-neutral-500 dark:text-neutral-400">Klien hemat, Anda dapat komisi</p>
                                 </div>
                             </div>
-
-                            <div class="mt-5 pt-3 border-t border-primary-200 dark:border-primary-500/30 bg-primary-50 dark:bg-primary-500/10 rounded-xl p-3 text-center">
-                                <p class="text-[10px] uppercase tracking-wider text-primary-700 dark:text-primary-300 font-semibold">Potensi Cuan Bulanan</p>
-                                <p class="text-lg font-extrabold text-primary-600 dark:text-primary-400 mt-0.5">Rp 1.000.000 – Rp 2.000.000+</p>
-                                <p class="text-[10px] text-neutral-500 dark:text-neutral-400">Cukup pasang kupon di paket wedding Anda</p>
+                            <div class="flex items-start gap-2.5 rounded-xl border border-neutral-100 bg-white p-3 dark:border-secondary-700/60 dark:bg-secondary-900/40">
+                                <i class="fa-solid fa-wallet text-emerald-500 mt-0.5 text-xs" aria-hidden="true"></i>
+                                <div>
+                                    <p class="text-[11px] font-bold text-secondary-900 dark:text-white">Pencairan Mudah</p>
+                                    <p class="text-[10px] text-neutral-500 dark:text-neutral-400">Transfer bank min. Rp {{ number_format($affiliateSettings['minimum_payout'] ?? 50000, 0, ',', '.') }}</p>
+                                </div>
                             </div>
                         </div>
 
-                        {{-- Skema 3: Gold VIP --}}
-                        <div class="rounded-2xl bg-gradient-to-b from-amber-50/50 via-white to-white dark:from-amber-500/15 dark:via-white/[0.06] dark:to-white/[0.04] border border-amber-300 dark:border-amber-500/40 p-5 flex flex-col justify-between hover:border-amber-400 transition-colors shadow-sm">
-                            <div>
-                                <div class="flex items-center justify-between mb-3">
-                                    <span class="px-2.5 py-1 rounded-lg bg-amber-100 text-amber-800 dark:bg-amber-500/30 dark:text-amber-300 text-xs font-bold flex items-center gap-1">
-                                        <i class="fas fa-crown text-[10px]"></i> Tier 3 · Gold VIP
-                                    </span>
-                                    <span class="text-lg font-extrabold text-amber-600 dark:text-amber-400">30%+ Komisi</span>
-                                </div>
-                                <p class="text-xs text-secondary-900 dark:text-white font-semibold">Skala 26+ Klien / bulan</p>
-                                <p class="text-[11px] text-neutral-500 dark:text-neutral-400 mt-0.5">Untuk vendor volume tinggi, agensi &amp; creator.</p>
-
-                                <div class="mt-4 pt-3 border-t border-neutral-200/80 dark:border-white/10 space-y-2 text-xs">
-                                    <div class="flex justify-between text-neutral-600 dark:text-neutral-300">
-                                        <span>Paket Silver (Rp 75rb):</span>
-                                        <span class="font-bold text-secondary-900 dark:text-white">Rp 22.500+ / order</span>
-                                    </div>
-                                    <div class="flex justify-between text-neutral-600 dark:text-neutral-300">
-                                        <span>Paket Gold (Rp 99rb):</span>
-                                        <span class="font-bold text-secondary-900 dark:text-white">Rp 29.700+ / order</span>
-                                    </div>
-                                    <div class="flex justify-between text-neutral-600 dark:text-neutral-300">
-                                        <span>Paket Platinum (Rp 299rb):</span>
-                                        <span class="font-bold text-secondary-900 dark:text-white">Rp 89.700+ / order</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="mt-5 pt-3 border-t border-amber-200 dark:border-amber-500/30 bg-amber-50 dark:bg-amber-500/10 rounded-xl p-3 text-center">
-                                <p class="text-[10px] uppercase tracking-wider text-amber-800 dark:text-amber-300 font-semibold">Potensi Cuan Bulanan</p>
-                                <p class="text-lg font-extrabold text-amber-600 dark:text-amber-400 mt-0.5">Rp 2.500.000 – Rp 5.000.000++</p>
-                                <p class="text-[10px] text-neutral-500 dark:text-neutral-400">Prioritas payout &amp; marketing kit premium</p>
-                            </div>
+                        {{-- Bottom CTA inside Card --}}
+                        <div class="mt-6 pt-4 border-t border-neutral-100 dark:border-secondary-700">
+                            <a href="{{ route('reseller-affiliate') }}"
+                                class="flex w-full min-h-11 items-center justify-center gap-2 rounded-xl bg-secondary-900 px-5 py-3 text-xs font-bold text-white shadow transition hover:bg-secondary-800 dark:bg-primary-600 dark:hover:bg-primary-700">
+                                <span>Pelajari Syarat &amp; Skema Lengkap</span>
+                                <i class="fa-solid fa-arrow-right text-[10px]" aria-hidden="true"></i>
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-
     {{-- WhatsApp floating button --}}
     <button x-data="{ show: false }" x-init="setTimeout(() => show = true, 2000)" x-show="show"
         x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4"

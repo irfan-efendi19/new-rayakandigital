@@ -15,6 +15,7 @@ class SitemapController extends Controller
             ['loc' => '/undangan-web', 'priority' => '0.8', 'changefreq' => 'monthly'],
             ['loc' => '/buku-tamu', 'priority' => '0.8', 'changefreq' => 'monthly'],
             ['loc' => '/live-streaming', 'priority' => '0.8', 'changefreq' => 'monthly'],
+            ['loc' => '/reseller-affiliate', 'priority' => '0.8', 'changefreq' => 'monthly'],
             ['loc' => '/tentang-kami', 'priority' => '0.7', 'changefreq' => 'monthly'],
             ['loc' => '/hubungi-kami', 'priority' => '0.7', 'changefreq' => 'monthly'],
             ['loc' => '/syarat-ketentuan', 'priority' => '0.5', 'changefreq' => 'yearly'],

@@ -1,7 +1,7 @@
 import Swal from 'sweetalert2/dist/sweetalert2.js';
 
 const RESERVED_SLUGS = [
-    'semua-tema', 'undangan-web', 'buku-tamu', 'live-streaming',
+    'semua-tema', 'undangan-web', 'buku-tamu', 'live-streaming', 'reseller-affiliate',
     'syarat-ketentuan', 'kebijakan-privasi', 'tentang-kami', 'hubungi-kami',
     'auth', 'dashboard', 'profile', 'payments', 'invitations',
     'register', 'login', 'forgot-password', 'reset-password',

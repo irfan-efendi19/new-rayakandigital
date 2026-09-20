@@ -63,7 +63,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('dashboard.affiliate.index') }}"
+                    <a href="{{ route('reseller-affiliate') }}"
                         class="nav-link text-sm text-footer-link dark:text-neutral-300 hover:text-brand transition-colors duration-150 inline-flex items-center gap-1.5">
                         Reseller &amp; Affiliate
                         <span class="arrow text-xs">→</span>

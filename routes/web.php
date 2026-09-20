@@ -30,6 +30,7 @@ use App\Http\Controllers\PromotionController;
 use App\Http\Controllers\QRGatewayController;
 use App\Http\Controllers\QRHubController;
 use App\Http\Controllers\ReferralController;
+use App\Http\Controllers\ResellerAffiliateController;
 use App\Http\Controllers\RsvpController;
 use App\Http\Controllers\ScreenDisplayController;
 use App\Http\Controllers\SitemapController;
@@ -59,6 +60,7 @@ Route::get('/themes/{themeSlug}/preview', [ThemePreviewController::class, 'show'
 Route::get('/preview/{themeSlug}', fn (string $themeSlug) => redirect()->route('theme.preview', $themeSlug));
 
 // Public Pages
+Route::get('/reseller-affiliate', ResellerAffiliateController::class)->name('reseller-affiliate');
 Route::get('/undangan-web', UndanganWebController::class)->name('undangan-web');
 Route::view('/buku-tamu', 'buku-tamu')->name('buku-tamu');
 Route::view('/live-streaming', 'live-streaming')->name('live-streaming');

@@ -43,7 +43,7 @@
 
                     <!-- Dropdown Panel -->
                     <div
-                        class="absolute left-0 mt-2 w-[700px] bg-white dark:bg-secondary-800 rounded-2xl shadow-2xl border border-neutral-200/80 dark:border-secondary-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                        class="absolute left-0 mt-2 w-[700px] bg-white dark:bg-secondary-800 rounded-2xl shadow-2xl border border-neutral-200/80 dark:border-secondary-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all duration-300 z-50">
                         <div class="p-5">
                             <div class="grid grid-cols-3 gap-4">
 
@@ -108,6 +108,15 @@
                                     </p>
                                 </a>
                             </div>
+                            <a href="{{ route('reseller-affiliate') }}" @if(request()->routeIs('reseller-affiliate')) aria-current="page" @endif
+                                class="mt-4 flex items-center gap-3 rounded-xl bg-primary-50 px-4 py-3 text-primary-800 transition hover:bg-primary-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary-500 dark:bg-primary-900/20 dark:text-primary-300 dark:hover:bg-primary-900/40">
+                                <i class="fa-solid fa-handshake" aria-hidden="true"></i>
+                                <div class="flex-1">
+                                    <span class="block text-sm font-bold">Reseller &amp; Affiliate</span>
+                                    <span class="text-xs">Bertumbuh bersama lewat setiap rekomendasi.</span>
+                                </div>
+                                <i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
+                            </a>
                         </div>
                         </div>
                         </div>
@@ -164,7 +173,7 @@
                 </button>
 
                 <!-- Hamburger Button with animation -->
-                <button @click="mobileMenuOpen = !mobileMenuOpen" x-cloak
+                <button @click="mobileMenuOpen = !mobileMenuOpen" x-cloak aria-label="Menu navigasi"
                     class="md:hidden relative w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-300 hover:bg-orange-50 group"
                     :class="{ 'bg-orange-50': mobileMenuOpen }" :aria-expanded="mobileMenuOpen">
                     <div class="relative w-5 h-5">
@@ -229,6 +238,11 @@
                 </div>
             </div>
 
+            <a href="{{ route('reseller-affiliate') }}" @if(request()->routeIs('reseller-affiliate')) aria-current="page" @endif
+                class="flex items-center gap-3 rounded-xl bg-primary-50 px-4 py-3 text-base font-semibold text-primary-800 transition hover:bg-primary-100 dark:bg-primary-900/20 dark:text-primary-300 dark:hover:bg-primary-900/40">
+                <i class="fa-solid fa-handshake" aria-hidden="true"></i>
+                Reseller &amp; Affiliate
+            </a>
             <a href="{{ route('tentang-kami') }}"
                 class="block px-4 py-3 text-gray-700 dark:text-neutral-200 hover:text-orange-600 hover:bg-orange-50 rounded-xl text-base font-medium transition-all duration-300 transform hover:translate-x-2">
                 Tentang Kami
