@@ -1,8 +1,16 @@
-try {
-    const savedTheme = localStorage.getItem('dark-mode');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+(() => {
+    const root = document.documentElement;
+    let savedTheme = null;
 
-    document.documentElement.classList.toggle('dark', savedTheme === 'true' || (savedTheme === null && prefersDark));
-} catch {
-    document.documentElement.classList.toggle('dark', window.matchMedia('(prefers-color-scheme: dark)').matches);
-}
+    try {
+        savedTheme = localStorage.getItem('dark-mode');
+    } catch (_) {
+        // Private browsing or blocked storage should still respect the OS preference.
+    }
+
+    const dark = savedTheme === 'true'
+        || (savedTheme === null && window.matchMedia('(prefers-color-scheme: dark)').matches);
+
+    root.classList.toggle('dark', dark);
+    root.style.colorScheme = dark ? 'dark' : 'light';
+})();

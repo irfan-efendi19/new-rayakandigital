@@ -74,7 +74,24 @@
     <x-meta title="Program Reseller & Affiliate Undangan Digital - Komisi Hingga 30%+ | Rayakan Digital"
         description="Dapatkan penghasilan pasif tanpa modal bersama Rayakan Digital. Komisi tinggi hingga 30%+, kupon diskon {{ $discountRate }}% untuk pelanggan, dan pencairan cepat langsung ke rekening."
         keywords="reseller undangan digital, affiliate undangan pernikahan, passive income tanpa modal, komisi affiliate terbaik, mitra rayakan digital" />
-    <script src="{{ asset('js/theme-init.js') }}"></script>
+    <script>
+        (() => {
+            const root = document.documentElement;
+            let savedTheme = null;
+
+            try {
+                savedTheme = localStorage.getItem('dark-mode');
+            } catch (_) {
+                // Private browsing or blocked storage should still respect the OS preference.
+            }
+
+            const dark = savedTheme === 'true'
+                || (savedTheme === null && window.matchMedia('(prefers-color-scheme: dark)').matches);
+
+            root.classList.toggle('dark', dark);
+            root.style.colorScheme = dark ? 'dark' : 'light';
+        })();
+    </script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('css/landingpage.css') }}">

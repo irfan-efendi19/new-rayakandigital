@@ -11,18 +11,20 @@ registerWelcomeScreenSettings(Alpine);
 
 document.addEventListener('alpine:init', () => {
     Alpine.store('darkMode', {
-        on: false,
+        on: document.documentElement.classList.contains('dark'),
         toggle() {
             this.on = !this.on;
             localStorage.setItem('dark-mode', this.on);
             if (this.on) {
                 document.documentElement.classList.add('dark');
+                document.documentElement.style.colorScheme = 'dark';
             } else {
                 document.documentElement.classList.remove('dark');
+                document.documentElement.style.colorScheme = 'light';
             }
         },
         init() {
-            this.on = localStorage.getItem('dark-mode') === 'true' || (!('dark-mode' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            this.on = document.documentElement.classList.contains('dark');
         }
     });
 
