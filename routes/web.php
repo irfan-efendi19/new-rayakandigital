@@ -212,6 +212,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Welcome Screen (Layar Sapa)
         Route::get('/invitations/{invitation}/welcome-screen', [ScreenDisplayController::class, 'showLiveScreen'])->name('welcome-screen.index');
         Route::get('/invitations/{invitation}/latest-checkin', [WelcomeScreenController::class, 'getLatestCheckIn'])->name('welcome-screen.latest-checkin');
+        Route::get('/invitations/{invitation}/welcome-screen/data', [ScreenDisplayController::class, 'data'])->name('welcome-screen.data');
         Route::post('/invitations/{invitation}/welcome-screen/settings', [WelcomeScreenController::class, 'updateSettings'])->name('welcome-screen.settings.update');
         Route::delete('/invitations/{invitation}/welcome-screen/gallery/{screenGallery}', [WelcomeScreenController::class, 'deleteGalleryImage'])->name('welcome-screen.gallery.destroy');
     });

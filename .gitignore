@@ -30,4 +30,7 @@ resources/views/themes/jawa.blade.php
 !/tests/Feature/Auth/
 /tests/Feature/Auth/*
 !/tests/Feature/Auth/GoogleThemePersistenceTest.php
+!/tests/Feature/WelcomeScreenPrdTest.php
+!/tests/Feature/WelcomeScreenTest.php
+!/tests/JavaScript/
 

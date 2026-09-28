@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Layar Sapa — Pratinjau</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body data-welcome-screen data-theme="minimal-clean">
+    <div class="screen-background" data-screen-background aria-hidden="true"></div>
+    <div class="screen-shade" aria-hidden="true"></div>
+    <main class="screen-layout">
+        <section class="screen-intro" aria-label="Sambutan pernikahan">
+            <p class="screen-eyebrow">The wedding celebration</p>
+            <p class="screen-title" data-screen-title>Selamat Datang di Pernikahan</p>
+            <h1 class="screen-names" data-screen-names>Alya &amp; Raka</h1>
+            <span class="screen-divider" aria-hidden="true">✦</span>
+            <p class="screen-note">Terima kasih telah menjadi bagian dari hari bahagia kami.</p>
+        </section>
+        <section class="screen-gallery" data-screen-gallery aria-label="Galeri pernikahan" hidden></section>
+        <section class="screen-wishes" data-screen-wishes aria-label="Doa dan ucapan tamu" hidden>
+            <p class="screen-eyebrow">Doa & ucapan</p>
+            <blockquote><p data-wish-message></p><footer data-wish-name></footer></blockquote>
+        </section>
+    </main>
+    <section class="checkin-overlay" data-screen-checkin role="status" aria-live="polite" aria-atomic="true" hidden>
+        <div class="checkin-card">
+            <span class="screen-divider" aria-hidden="true">✦</span>
+            <p class="screen-eyebrow">Selamat datang</p>
+            <h2 data-guest-name></h2>
+            <p>Terima kasih telah hadir dan berbagi kebahagiaan bersama kami.</p>
+            <p class="checkin-order" data-guest-order></p>
+            <div class="checkin-progress" data-checkin-progress aria-hidden="true"></div>
+        </div>
+    </section>
+    <footer class="screen-footer">Rayakan Digital</footer>
+    <div class="screen-controls">
+        <span data-screen-status role="status"></span>
+        <button type="button" data-screen-fullscreen aria-label="Aktifkan layar penuh">Layar penuh ⛶</button>
+    </div>
+    <script type="application/json" id="welcome-screen-data">
+    {"title":"Selamat Datang di Pernikahan","names":"Alya & Raka","background":{"type":"image","url":null},"galleries":[],"show_wishes_wall":true,"wishes":[{"id":1,"name":"Keluarga & sahabat","message":"Semoga setiap langkah bersama dipenuhi cinta dan kebahagiaan."},{"id":2,"name":"Sahabat mempelai","message":"Selamat menempuh hidup baru. Bahagia selalu!"}]}
+    </script>
+    <script src="modules.js" defer></script>
+    <script src="app.js" defer></script>
+</body>
+</html>

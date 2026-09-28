@@ -84,7 +84,7 @@ class Invitation extends Model
 
         // Clear live screen cache when screen-related fields change
         static::saved(function (self $invitation) {
-            if ($invitation->wasChanged(['screen_bride_names', 'screen_background_image'])) {
+            if ($invitation->wasChanged(['screen_bride_names', 'screen_background_image', 'screen_background_video'])) {
                 Cache::forget("live_screen_output_{$invitation->id}");
             }
         });
@@ -155,6 +155,7 @@ class Invitation extends Model
         'quote_source',
         'screen_bride_names',
         'screen_background_image',
+        'screen_background_video',
         'bride_groom_order',
         'use_custom_music',
         'custom_music',

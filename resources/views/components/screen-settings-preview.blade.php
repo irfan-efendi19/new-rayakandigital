@@ -9,13 +9,14 @@
         <div class="px-4 pb-4">
             <div class="rounded-xl bg-secondary-900 p-2 shadow-inner">
                 <div class="relative flex aspect-video items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-[#392d29] via-[#1c1917] to-[#422b1e] text-center text-white">
-                    <template x-if="previewBackground"><img :src="previewBackground" alt="" class="absolute inset-0 h-full w-full object-cover"></template>
+                    <template x-if="previewBackground && previewBackgroundType === 'image'"><img :src="previewBackground" alt="" class="absolute inset-0 h-full w-full object-cover"></template>
+                    <template x-if="previewBackground && previewBackgroundType === 'video'"><video :src="previewBackground" autoplay muted loop playsinline aria-hidden="true" class="absolute inset-0 h-full w-full object-cover"></video></template>
                     <div class="absolute inset-0 bg-black/45"></div>
                     <div class="relative z-10 flex w-full flex-col items-center gap-2 px-6 pb-5">
                         <span class="text-[8px] font-semibold uppercase tracking-[0.25em] text-orange-200">The wedding of</span>
                         <p class="line-clamp-2 w-full break-words font-heading text-xl font-semibold leading-tight sm:text-2xl" x-text="names.trim() || defaultNames">{{ $invitation->couple_nickname }}</p>
                         <span class="h-px w-8 bg-orange-200/50" aria-hidden="true"></span>
-                        <p class="line-clamp-2 w-full break-words text-[10px] text-white/90" x-text="title.trim() || 'Selamat Datang'">Selamat Datang</p>
+                        <p class="line-clamp-2 w-full break-words text-[10px] text-white/90" x-text="title.trim() || 'Selamat Datang di Pernikahan'">Selamat Datang di Pernikahan</p>
                         <p class="text-xs font-semibold">Tamu Undangan</p>
                     </div>
                     <div x-show="wishes" class="absolute inset-x-0 bottom-0 border-t border-white/10 bg-black/30 px-3 py-2 text-[8px] text-white/70"><i class="fa-regular fa-heart mr-1" aria-hidden="true"></i>Semoga bahagia selalu dalam setiap langkah bersama.</div>

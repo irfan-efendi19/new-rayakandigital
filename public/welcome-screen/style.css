@@ -1,0 +1,61 @@
+:root {
+    --font-heading: Georgia, 'Times New Roman', serif;
+    --font-body: 'Segoe UI', sans-serif;
+    --bg-gradient: linear-gradient(130deg, #f9f5ed, #e9dfd0);
+    --text-primary: #3c3930;
+    --text-secondary: #736958;
+    --accent-color: #897247;
+    --border-color: #ab946155;
+    --card-bg: #fffaf0e8;
+    --card-text: #3c3930;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; min-height: 100vh; min-height: 100dvh; color: var(--text-primary); background: var(--bg-gradient); font-family: var(--font-body); }
+body[data-theme='modern-dark'] { --bg-gradient: linear-gradient(130deg, #171a20, #29251f); --text-primary: #fff3dc; --text-secondary: #d4c4ab; --accent-color: #e0be80; --card-bg: #1c1e24e8; --card-text: #fff3dc; }
+body[data-theme='rustic-floral'] { --bg-gradient: linear-gradient(130deg, #f2f5e9, #d4decb); --accent-color: #61724e; }
+.screen-background, .screen-shade { position: fixed; inset: 0; pointer-events: none; }
+.screen-background img, .screen-background video { width: 100%; height: 100%; object-fit: cover; }
+.screen-shade { background: linear-gradient(90deg, #080a08aa, #080a0840); opacity: 0; }
+body.has-background { --text-primary: #fffaf0; --text-secondary: #eee2ce; --accent-color: #efcfa0; }
+body.has-background .screen-shade { opacity: 1; }
+.screen-layout { position: relative; min-height: 100vh; min-height: 100dvh; display: grid; grid-template-columns: minmax(0, 1fr); align-content: center; align-items: center; gap: 4vh 6vw; padding: 7vh 7vw 9vh; }
+body.has-gallery .screen-layout { grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); }
+.screen-intro { text-align: center; min-width: 0; }
+.screen-eyebrow { color: var(--accent-color); text-transform: uppercase; font-size: clamp(.65rem, 1vw, 1.15rem); letter-spacing: .26em; line-height: 1.7; }
+.screen-title { color: var(--text-secondary); font-size: clamp(1rem, 1.7vw, 2rem); line-height: 1.5; overflow-wrap: anywhere; }
+.screen-names { font-family: var(--font-heading); font-weight: 400; font-size: clamp(2.5rem, 5.8vw, 7.5rem); line-height: 1.08; margin: .4em 0; overflow-wrap: anywhere; text-wrap: balance; }
+.screen-divider { color: var(--accent-color); display: block; font-size: 1.4rem; margin: 1rem 0; }
+.screen-date { letter-spacing: .15em; font-size: clamp(.8rem, 1.15vw, 1.4rem); }
+.screen-note { color: var(--text-secondary); font-size: clamp(.8rem, 1vw, 1.2rem); line-height: 1.6; }
+.screen-gallery { position: relative; width: 100%; height: 52vh; border-radius: 48% 48% 3px 3px; overflow: hidden; border: 8px solid #ffffff33; box-shadow: 0 20px 70px #241f1725; }
+.screen-gallery img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1.2s ease; }
+.screen-gallery img.is-active { opacity: 1; }
+.screen-wishes { grid-column: 1 / -1; max-width: 1000px; width: 100%; justify-self: center; text-align: center; border-top: 1px solid var(--border-color); padding-top: 1vh; }
+.screen-wishes blockquote { margin: 0; animation: wish-enter .65s ease; }
+.screen-wishes [data-wish-message] { font-family: var(--font-heading); font-size: clamp(1rem, 1.6vw, 2rem); line-height: 1.5; margin: .5em 0; overflow-wrap: anywhere; max-height: 15vh; overflow: auto; }
+.screen-wishes [data-wish-name] { font-size: clamp(.7rem, .9vw, 1.1rem); color: var(--text-secondary); }
+.checkin-overlay { position: fixed; inset: 0; z-index: 10; background: #151a17a8; backdrop-filter: blur(12px); display: grid; place-items: center; padding: 5vh 8vw; }
+.checkin-card { position: relative; overflow: hidden; width: min(100%, 1200px); max-height: 90vh; overflow-y: auto; padding: 5vh 5vw; text-align: center; background: var(--card-bg); color: var(--card-text); border: 1px solid var(--border-color); border-radius: 12px; box-shadow: 0 24px 100px #0004; animation: wish-enter .5s ease; }
+.checkin-card h2 { font-family: var(--font-heading); font-weight: 400; font-size: clamp(2.5rem, 6vw, 7rem); line-height: 1.1; margin: .4em 0; overflow-wrap: anywhere; }
+.checkin-card > p { line-height: 1.6; }
+.checkin-card .screen-eyebrow, .checkin-card .screen-divider { color: var(--card-text); }
+.checkin-order { font-size: .85rem; opacity: .65; }
+.checkin-progress { height: 3px; background: var(--accent-color); position: absolute; bottom: 0; left: 0; right: 0; transform-origin: left; animation: countdown 7s linear forwards; }
+.screen-footer { position: fixed; bottom: 2vh; left: 3vw; font-size: .7rem; letter-spacing: .1em; opacity: .6; }
+.screen-controls { position: fixed; right: 2vw; bottom: 2vh; z-index: 20; display: flex; align-items: center; gap: 1rem; font-size: .75rem; }
+.screen-controls button { border: 1px solid var(--border-color); border-radius: 30px; padding: .7em 1.2em; background: var(--card-bg); color: var(--card-text); cursor: pointer; opacity: .35; }
+.screen-controls button:hover, .screen-controls button:focus-visible { opacity: 1; }
+[data-screen-status]:not(:empty) { background: #262626e6; color: #fff; border-radius: 12px; padding: .65em 1em; }
+@keyframes wish-enter { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes countdown { to { transform: scaleX(0); } }
+@media (max-width: 640px), (orientation: portrait) {
+    body.has-gallery .screen-layout { grid-template-columns: minmax(0, 1fr); }
+    .screen-layout { gap: 3vh; padding: 6vh 7vw 12vh; }
+    .screen-gallery { height: 32vh; width: min(100%, 420px); justify-self: center; }
+    .screen-names { font-size: clamp(2.3rem, 9vw, 5rem); }
+    .screen-wishes [data-wish-message] { max-height: 20vh; }
+}
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+}

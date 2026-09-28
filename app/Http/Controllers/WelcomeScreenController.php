@@ -2,53 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ScreenCheckinsRequest;
+use App\Http\Requests\UpdateWelcomeScreenRequest;
 use App\Models\Invitation;
 use App\Models\ScreenGallery;
 use App\Models\ScreenPreset;
 use App\Services\ImageCompressionService;
+use App\Services\WelcomeScreenData;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Validation\Rule;
 
 class WelcomeScreenController extends Controller
 {
-    public function index(Invitation $invitation)
-    {
-        Gate::authorize('view', $invitation);
-
-        if (! $invitation->hasFeature('qr_checkin')) {
-            abort(403, 'Fitur QR Check-In diperlukan untuk Layar Sapa.');
-        }
-
-        // PRD §2: Preset baru menggunakan ScreenDisplayController via route /screen/{slug}.
-        // Redirect langsung agar admin dapat membuka layar proyektor.
-        $screen = $invitation->screen()->firstOrCreate([], [
-            'selected_theme' => 'minimal-clean',
-            'show_wishes_wall' => true,
-        ]);
-        $screen->load('preset');
-        $preset = $screen->preset;
-
-        if ($preset && $preset->is_active && $preset->storage_path) {
-            return redirect()->route('screen.live', ['slug' => $invitation->slug]);
-        }
-
-        // Fallback: preset lama berbasis Blade view (legacy)
-        $firstEvent = $invitation->firstEvent();
-        $screenGalleries = $invitation->screenGalleries()->get();
-        $wishes = $screen->show_wishes_wall
-            ? $invitation->wishes()->where('is_hidden', false)->latest()->get()
-            : collect();
-
-        $themeHtmlContent = $preset?->html_content;
-
-        return view('welcome-screen.index', compact('invitation', 'firstEvent', 'screenGalleries', 'screen', 'wishes', 'themeHtmlContent', 'preset'));
-    }
-
     public function settings(Invitation $invitation)
     {
         Gate::authorize('update', $invitation);
@@ -71,95 +39,45 @@ class WelcomeScreenController extends Controller
         return view('dashboard.guestbook.settings', compact('invitation', 'screenGalleries', 'screen', 'presets'));
     }
 
-    public function getLatestCheckIn(Request $request, Invitation $invitation): JsonResponse
+    public function getLatestCheckIn(ScreenCheckinsRequest $request, Invitation $invitation, WelcomeScreenData $data): JsonResponse
     {
         Gate::authorize('view', $invitation);
+        abort_unless($invitation->hasFeature('qr_checkin'), 403);
 
-        $since = $request->query('since');
-
-        $query = $invitation->guests()
-            ->where('attendance_status', 'hadir')
-            ->orderByDesc('checked_in_at')
-            ->limit(10);
-
-        if ($since) {
-            try {
-                $sinceDate = Carbon::parse($since);
-                $query->where('checked_in_at', '>', $sinceDate);
-            } catch (\Exception $e) {
-                // Ignore parsing errors
-            }
-        }
-
-        $guests = $query->get(['id', 'name', 'checked_in_at']);
-
-        // PRD 2.1.1: hindari N+1. Hitung urutan check-in sekali via window function
-        // (rank berdasarkan checked_in_at ascending) alih-alih query per tamu di dalam loop.
-        $checkinOrderMap = $invitation->guests()
-            ->where('attendance_status', 'hadir')
-            ->whereNotNull('checked_in_at')
-            ->orderBy('checked_in_at')
-            ->pluck('id')
-            ->values()
-            ->mapWithKeys(fn ($id, $index) => [$id => $index + 1]);
-
-        return response()->json([
-            'success' => true,
-            'guests' => $guests->map(function ($g) use ($checkinOrderMap) {
-                return [
-                    'id' => $g->id,
-                    'name' => $g->name,
-                    'checked_in_at' => $g->checked_in_at->toIso8601String(),
-                    'checkin_order' => $checkinOrderMap->get($g->id, 0),
-                ];
-            }),
-            'server_time' => now()->toIso8601String(),
-        ]);
+        return response()->json($data->checkins($invitation, $request->validated()))
+            ->header('Cache-Control', 'no-store');
     }
 
-    public function updateSettings(Request $request, Invitation $invitation, ImageCompressionService $compressor)
+    public function updateSettings(UpdateWelcomeScreenRequest $request, Invitation $invitation, ImageCompressionService $compressor)
     {
         Gate::authorize('update', $invitation);
 
-        $activePresetSlugs = ScreenPreset::where('is_active', true)->pluck('slug');
-
-        $validated = $request->validate([
-            'screen_bride_names' => 'nullable|string|max:255',
-
-            'screen_background_image' => 'nullable|image|max:10240',
-            'screen_gallery_photos' => 'nullable|array',
-            'screen_gallery_photos.*' => 'image|max:10240',
-            'remove_background' => 'nullable|boolean',
-            'selected_theme' => ['nullable', 'string', Rule::in($activePresetSlugs)],
-            'custom_title' => 'nullable|string|max:255',
-            'show_wishes_wall' => 'nullable',
-        ]);
-
-        $updateData = [
-            'screen_bride_names' => $validated['screen_bride_names'] ?? null,
-        ];
-
-        // Handle background image removal
-        if ($request->boolean('remove_background')) {
-            if ($invitation->screen_background_image) {
-                Storage::disk('public')->delete($invitation->screen_background_image);
-            }
-            $updateData['screen_background_image'] = null;
+        $validated = $request->validated();
+        $updateData = [];
+        if (array_key_exists('screen_bride_names', $validated)) {
+            $updateData['screen_bride_names'] = $validated['screen_bride_names'];
         }
 
-        // Handle background image upload
+        $oldBackgrounds = array_filter([$invitation->screen_background_image, $invitation->screen_background_video]);
+        if ($request->boolean('remove_background') || $request->hasFile('screen_background_image') || $request->hasFile('screen_background_video')) {
+            $updateData['screen_background_image'] = null;
+            $updateData['screen_background_video'] = null;
+        }
         if ($request->hasFile('screen_background_image')) {
-            // Delete old background if exists
-            if ($invitation->screen_background_image) {
-                Storage::disk('public')->delete($invitation->screen_background_image);
-            }
             $updateData['screen_background_image'] = $compressor->compress(
-                $request->file('screen_background_image'),
-                'screen-bg/'.$invitation->id
+                $validated['screen_background_image'], 'screen-bg/'.$invitation->id
             );
         }
+        if ($request->hasFile('screen_background_video')) {
+            $updateData['screen_background_video'] = $validated['screen_background_video']
+                ->store('screen-bg/'.$invitation->id, 'public');
+            abort_if($updateData['screen_background_video'] === false, 500, 'Video gagal disimpan.');
+        }
 
-        $invitation->update(array_merge($updateData, ['is_active' => true]));
+        $invitation->update($updateData);
+        if (array_key_exists('screen_background_image', $updateData)) {
+            Storage::disk('public')->delete($oldBackgrounds);
+        }
 
         // Update or create screen configuration
         $screenData = [];
@@ -170,7 +88,7 @@ class WelcomeScreenController extends Controller
             $screenData['custom_title'] = $validated['custom_title'];
         }
         if ($request->has('selected_theme') || $request->has('custom_title') || $request->has('show_wishes_wall')) {
-            $screenData['show_wishes_wall'] = $request->has('show_wishes_wall');
+            $screenData['show_wishes_wall'] = $request->boolean('show_wishes_wall');
         }
 
         if (! empty($screenData)) {
@@ -199,6 +117,8 @@ class WelcomeScreenController extends Controller
     public function deleteGalleryImage(Request $request, Invitation $invitation, ScreenGallery $screenGallery)
     {
         Gate::authorize('update', $invitation);
+
+        abort_unless($invitation->hasFeature('qr_checkin'), 403);
 
         if ($screenGallery->invitation_id !== $invitation->id) {
             abort(403);

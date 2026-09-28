@@ -9,6 +9,8 @@ Route::post('/payment/callback', [PaymentWebhookController::class, 'handleWebhoo
 
 // PRD: Endpoint publik untuk template Layar Sapa (tanpa autentikasi) & Spotlight Onboarding
 Route::prefix('v1')->group(function () {
+    Route::get('/screen-data/{slug}', [ScreenDisplayController::class, 'publicData'])
+        ->name('api.screen-data');
     Route::get('/screen-wishes/{slug}', [ScreenDisplayController::class, 'screenWishes'])
         ->name('api.screen-wishes');
     Route::get('/screen-galleries/{slug}', [ScreenDisplayController::class, 'screenGalleries'])

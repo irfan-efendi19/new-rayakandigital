@@ -396,5 +396,5 @@ test('welcome screen renders the parsed html content when preset uses storage_pa
         ->get(route('dashboard.welcome-screen.index', $this->invitation));
 
     $response->assertSuccessful();
-    expect($response->getContent())->toContain('Custom Title - Anya & Loid');
+    $response->assertSee('Custom Title - Anya & Loid');
 });

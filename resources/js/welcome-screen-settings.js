@@ -2,6 +2,7 @@ export function registerWelcomeScreenSettings(Alpine) {
     Alpine.data('welcomeScreenSettings', () => ({
         theme: '', title: '', names: '', defaultNames: '', wishes: true,
         presets: [], savedBackground: '', backgroundPreview: '', backgroundName: '',
+        savedBackgroundType: 'image', backgroundType: 'image', backgroundPreviewType: 'image',
         removeBackground: false, backgroundError: '', galleryError: '', galleryActionError: '',
         pendingPhotos: [], removedGalleryIds: [], savedGalleryCount: 0, deletingId: null,
         dirty: false, submitting: false,
@@ -16,6 +17,10 @@ export function registerWelcomeScreenSettings(Alpine) {
 
         get previewBackground() {
             return this.backgroundPreview || (this.removeBackground ? '' : this.savedBackground);
+        },
+
+        get previewBackgroundType() {
+            return this.backgroundPreview ? this.backgroundPreviewType : this.savedBackgroundType;
         },
 
         get galleryCount() {
@@ -33,7 +38,10 @@ export function registerWelcomeScreenSettings(Alpine) {
         selectBackground(event) {
             const file = event.target.files[0];
             if (!file) return;
-            this.backgroundError = this.imageError(file);
+            const isVideo = this.backgroundType === 'video';
+            this.backgroundError = isVideo
+                ? (!['video/mp4', 'video/webm'].includes(file.type) ? 'Gunakan video MP4 atau WebM.' : (file.size > 50 * 1024 * 1024 ? 'Video melebihi batas 50 MB.' : ''))
+                : this.imageError(file);
             if (this.backgroundPreview) URL.revokeObjectURL(this.backgroundPreview);
             this.backgroundPreview = '';
             this.backgroundName = '';
@@ -42,6 +50,7 @@ export function registerWelcomeScreenSettings(Alpine) {
                 return;
             }
             this.backgroundPreview = URL.createObjectURL(file);
+            this.backgroundPreviewType = isVideo ? 'video' : 'image';
             this.backgroundName = file.name;
             this.removeBackground = false;
             this.dirty = true;
@@ -53,6 +62,7 @@ export function registerWelcomeScreenSettings(Alpine) {
             this.backgroundName = '';
             this.backgroundError = '';
             this.$refs.backgroundInput.value = '';
+            this.$refs.backgroundVideoInput.value = '';
         },
 
         selectGallery(event) {

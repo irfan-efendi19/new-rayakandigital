@@ -8,7 +8,9 @@
         'names' => old('screen_bride_names', $invitation->screen_bride_names) ?? '',
         'defaultNames' => $invitation->couple_nickname,
         'wishes' => (bool) old('show_wishes_wall', session()->hasOldInput() ? false : ($screen->show_wishes_wall ?? true)),
-        'savedBackground' => $invitation->screen_background_image ? asset('storage/' . $invitation->screen_background_image) : '',
+        'savedBackground' => ($invitation->screen_background_video ?: $invitation->screen_background_image) ? asset('storage/' . ($invitation->screen_background_video ?: $invitation->screen_background_image)) : '',
+        'savedBackgroundType' => $invitation->screen_background_video ? 'video' : 'image',
+        'backgroundType' => $invitation->screen_background_video ? 'video' : 'image',
         'removeBackground' => (bool) old('remove_background', false),
         'savedGalleryCount' => $screenGalleries->count(),
         'dirty' => $errors->any(),
@@ -89,8 +91,8 @@
                         <div class="grid gap-5">
                             <div>
                                 <div class="flex items-center justify-between gap-3"><label for="custom_title" class="text-sm font-semibold">Judul sambutan</label><span class="text-[10px] font-medium text-neutral-400">OPSIONAL</span></div>
-                                <input id="custom_title" name="custom_title" type="text" maxlength="255" x-model="title" value="{{ $screenSettings['title'] }}" placeholder="Selamat Datang" aria-describedby="title-help" class="screen-settings-input">
-                                <p id="title-help" class="screen-settings-help">Kosongkan untuk menggunakan judul bawaan tema.</p>
+                                <input id="custom_title" name="custom_title" type="text" maxlength="255" x-model="title" value="{{ $screenSettings['title'] }}" placeholder="Selamat Datang di Pernikahan" aria-describedby="title-help" class="screen-settings-input">
+                                <p id="title-help" class="screen-settings-help">Kosongkan untuk menggunakan “Selamat Datang di Pernikahan”.</p>
                                 @error('custom_title')<p class="screen-settings-error">{{ $message }}</p>@enderror
                             </div>
                             <div>
@@ -106,25 +108,37 @@
                         </div>
                     </x-screen-settings-section>
 
-                    <x-screen-settings-section id="latar-layar" number="03" title="Latar yang melengkapi suasana" description="Gunakan foto atau desain Anda sebagai latar layar sapa.">
+                    <x-screen-settings-section id="latar-layar" number="03" title="Latar yang melengkapi suasana" description="Gunakan gambar atau video berulang yang memenuhi layar.">
+                        <label for="background_type" class="block text-sm font-semibold">Jenis latar baru</label>
+                        <select id="background_type" x-model="backgroundType" @change="clearBackground()" class="screen-settings-input mb-4">
+                            <option value="image">Gambar</option>
+                            <option value="video">Video berulang</option>
+                        </select>
                         <div x-cloak x-show="previewBackground" class="relative mb-4 overflow-hidden rounded-xl border border-neutral-200 bg-neutral-100 dark:border-secondary-600 dark:bg-secondary-900">
-                            <template x-if="previewBackground"><img :src="previewBackground" alt="Pratinjau latar belakang layar sapa" class="aspect-[21/9] w-full object-cover"></template>
-                            <span class="absolute bottom-3 left-3 rounded-full bg-black/65 px-3 py-1.5 text-[10px] font-semibold text-white" x-text="backgroundPreview ? 'Foto baru · belum disimpan' : 'Latar tersimpan'"></span>
+                            <template x-if="previewBackground && previewBackgroundType === 'image'"><img :src="previewBackground" alt="Pratinjau latar belakang layar sapa" class="aspect-[21/9] w-full object-cover"></template>
+                            <template x-if="previewBackground && previewBackgroundType === 'video'"><video :src="previewBackground" autoplay muted loop playsinline controls aria-label="Pratinjau video latar" class="aspect-[21/9] w-full object-cover"></video></template>
+                            <span class="pointer-events-none absolute top-3 left-3 rounded-full bg-black/65 px-3 py-1.5 text-[10px] font-semibold text-white" x-text="backgroundPreview ? 'Latar baru · belum disimpan' : 'Latar tersimpan'"></span>
                         </div>
-                        <div class="rounded-xl border-2 border-dashed border-neutral-200 bg-neutral-50 px-5 py-6 text-center transition hover:border-primary-400 dark:border-secondary-600 dark:bg-secondary-900">
+                        <div x-show="backgroundType === 'image'" class="rounded-xl border-2 border-dashed border-neutral-200 bg-neutral-50 px-5 py-6 text-center transition hover:border-primary-400 dark:border-secondary-600 dark:bg-secondary-900">
                             <label for="screen_background_image" class="flex cursor-pointer flex-col items-center gap-2"><span class="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-primary-600 shadow-sm dark:bg-secondary-800 dark:text-primary-400"><i class="fa-solid fa-arrow-up-from-bracket" aria-hidden="true"></i></span><span class="max-w-full break-all text-sm font-semibold" x-text="backgroundName || 'Pilih gambar latar'">Pilih gambar latar</span><span class="text-xs text-neutral-500 dark:text-neutral-400">JPG, PNG, atau WebP · maksimal 10 MB</span></label>
                             <input id="screen_background_image" name="screen_background_image" type="file" accept="image/jpeg,image/png,image/webp" x-ref="backgroundInput" @change="selectBackground($event)" class="screen-settings-file">
                         </div>
+                        <div x-cloak x-show="backgroundType === 'video'" class="rounded-xl border-2 border-dashed border-neutral-200 bg-neutral-50 px-5 py-6 dark:border-secondary-600 dark:bg-secondary-900">
+                            <label for="screen_background_video" class="block text-sm font-semibold">Pilih video latar</label>
+                            <input id="screen_background_video" name="screen_background_video" type="file" accept="video/mp4,video/webm" x-ref="backgroundVideoInput" @change="selectBackground($event)" class="screen-settings-file">
+                            <p class="screen-settings-help">MP4 atau WebM · maksimal 50 MB. Diputar otomatis, berulang, dan tanpa suara.</p>
+                        </div>
                         <p x-cloak x-show="backgroundError" x-text="backgroundError" role="alert" class="screen-settings-error"></p>
                         @error('screen_background_image')<p class="screen-settings-error">{{ $message }}</p>@enderror
-                        <button type="button" x-cloak x-show="backgroundPreview" @click="clearBackground(); dirty = true" class="mt-3 inline-flex min-h-10 items-center gap-2 text-xs font-semibold text-neutral-600 hover:text-red-600 dark:text-neutral-300"><i class="fa-solid fa-xmark" aria-hidden="true"></i>Batalkan pilihan gambar</button>
-                        @if($invitation->screen_background_image)
+                        @error('screen_background_video')<p class="screen-settings-error">{{ $message }}</p>@enderror
+                        <button type="button" x-cloak x-show="backgroundPreview" @click="clearBackground(); dirty = true" class="mt-3 inline-flex min-h-10 items-center gap-2 text-xs font-semibold text-neutral-600 hover:text-red-600 dark:text-neutral-300"><i class="fa-solid fa-xmark" aria-hidden="true"></i>Batalkan pilihan latar</button>
+                        @if($invitation->screen_background_image || $invitation->screen_background_video)
                             <label class="mt-4 flex cursor-pointer items-start gap-3 text-xs leading-6"><input type="checkbox" name="remove_background" id="remove_background" value="1" x-model="removeBackground" :disabled="!!backgroundPreview" @checked($screenSettings['removeBackground']) class="mt-1 rounded border-neutral-300 text-red-600 focus:ring-red-500 disabled:opacity-40 dark:border-secondary-600 dark:bg-secondary-900"><span><span class="font-semibold">Hapus latar tersimpan</span><span class="block text-neutral-500 dark:text-neutral-400">Latar dihapus setelah Anda menyimpan pengaturan.</span></span></label>
                         @endif
                         <p class="screen-settings-help mt-4"><i class="fa-regular fa-lightbulb mr-1 text-primary-600" aria-hidden="true"></i>Gunakan gambar lanskap agar pas di proyektor. Gambar akan dikompresi otomatis.</p>
                     </x-screen-settings-section>
 
-                    <x-screen-settings-section id="galeri-layar" number="04" title="Cerita Anda dalam slideshow" description="Foto bergantian tampil setelah 30 detik tanpa tamu check-in.">
+                    <x-screen-settings-section id="galeri-layar" number="04" title="Cerita Anda dalam slideshow" description="Foto berganti otomatis dengan transisi lembut setiap 6 detik.">
                         <div class="mb-4 flex items-center justify-between gap-3"><p class="text-sm font-semibold">Galeri layar</p><span class="rounded-full bg-neutral-100 px-3 py-1 text-xs font-semibold text-neutral-500 dark:bg-secondary-700 dark:text-neutral-300"><span x-text="galleryCount">{{ $screenGalleries->count() }}</span> foto</span></div>
                         <div class="grid grid-cols-2 gap-3 sm:grid-cols-3" x-show="savedGalleryCount > removedGalleryIds.length">
                             @foreach($screenGalleries as $gallery)
