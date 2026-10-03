@@ -46,10 +46,14 @@ class UndanganWebController extends Controller
             ->cursorPaginate(12);
 
         if ($request->ajax()) {
-            $html = view('themes.partials.catalog-items', compact('themes'))->render();
+            $view = view()->first([
+                'components.theme-catalog-items',
+                'themes._item_list',
+                'themes.partials.catalog-items',
+            ], ['themes' => $themes, 'variant' => 'showcase']);
 
             return response()->json([
-                'html' => $html,
+                'html' => $view->render(),
                 'next_cursor' => $themes->nextCursor()?->encode(),
                 'has_more' => $themes->hasMorePages(),
             ]);

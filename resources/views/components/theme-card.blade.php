@@ -5,10 +5,10 @@
 
 @php
     $isCarousel = $variant === 'carousel';
-    $previewUrl = route('theme.preview', $theme->slug);
+    $previewUrl = filled($theme->slug) ? route('theme.preview', $theme->slug) : '#';
     $useUrl = auth()->check()
-        ? route('dashboard.invitations.create', ['theme' => $theme->slug])
-        : route('register', ['theme' => $theme->slug]);
+        ? (filled($theme->slug) ? route('dashboard.invitations.create', ['theme' => $theme->slug]) : route('dashboard.invitations.create'))
+        : (filled($theme->slug) ? route('register', ['theme' => $theme->slug]) : route('register'));
 @endphp
 
 <article

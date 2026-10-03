@@ -151,6 +151,9 @@
             const res  = await fetch(buildUrl(nextCursor), {
                 headers: { 'X-Requested-With': 'XMLHttpRequest' },
             });
+            if (!res.ok) {
+                throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+            }
             const data = await res.json();
 
             grid.insertAdjacentHTML('beforeend', data.html);
