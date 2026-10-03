@@ -22,11 +22,11 @@
                 @if($category)
                     <input type="hidden" name="category" value="{{ $category }}">
                 @endif
-                <label for="theme-search" class="shrink-0 text-sm font-semibold text-secondary-900 dark:text-white">Cari tema favorit</label>
+                <label for="uw-theme-search" class="shrink-0 text-sm font-semibold text-secondary-900 dark:text-white">Cari tema favorit</label>
                 <div class="flex min-w-0 flex-1 gap-2">
                     <div class="relative min-w-0 flex-1">
                         <i class="fa-solid fa-magnifying-glass pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm text-neutral-400" aria-hidden="true"></i>
-                        <input id="theme-search" type="search" name="search" value="{{ $search }}" maxlength="100" placeholder="Cari nama tema…"
+                        <input id="uw-theme-search" type="search" name="search" value="{{ $search }}" maxlength="100" placeholder="Cari nama tema…"
                             class="h-12 w-full rounded-xl border-neutral-200 bg-neutral-50 pl-11 pr-3 text-sm text-secondary-900 placeholder:text-neutral-400 focus:border-primary-500 focus:ring-primary-500 dark:border-secondary-600 dark:bg-secondary-900 dark:text-white">
                     </div>
                     <button type="submit" class="inline-flex h-12 shrink-0 items-center justify-center rounded-xl bg-secondary-900 px-5 text-sm font-bold text-white transition hover:bg-primary-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500 dark:bg-primary-600 dark:hover:bg-primary-700">Cari</button>
@@ -51,13 +51,9 @@
 
         <div class="flex flex-wrap items-center justify-between gap-3 py-6">
             <p class="text-xs leading-6 text-neutral-500 dark:text-neutral-400" role="status">
-                @if($themes->count())
-                    Menampilkan <span class="font-semibold text-secondary-800 dark:text-neutral-200">{{ $themes->firstItem() }}–{{ $themes->lastItem() }}</span> dari <span class="font-semibold text-secondary-800 dark:text-neutral-200">{{ $themes->total() }} tema</span>
-                @else
-                    {{ $themes->total() }} tema ditemukan
-                @endif
+                Ditemukan <span class="font-semibold text-secondary-800 dark:text-neutral-200">{{ $totalThemes }} tema</span>
                 @if($search !== '')
-                    untuk <span class="break-all font-semibold text-secondary-800 dark:text-neutral-200">“{{ $search }}”</span>
+                    untuk <span class="break-all font-semibold text-secondary-800 dark:text-neutral-200">"{{ $search }}"</span>
                 @endif
             </p>
             @if($search !== '' || $category)
@@ -69,26 +65,36 @@
             @endif
         </div>
 
-        <div class="grid grid-cols-1 gap-4 min-[380px]:grid-cols-2 sm:gap-6 lg:grid-cols-4">
+        <div id="uw-theme-grid" class="grid grid-cols-1 gap-4 min-[380px]:grid-cols-2 sm:gap-6 lg:grid-cols-4">
             @forelse($themes as $theme)
                 <x-theme-card :theme="$theme" variant="showcase" />
             @empty
                 <div class="col-span-full flex flex-col items-center rounded-3xl border border-dashed border-neutral-300 bg-white/60 px-6 py-14 text-center dark:border-secondary-700 dark:bg-secondary-800/50">
                     <span class="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary-50 text-2xl text-primary-600 dark:bg-primary-900/30 dark:text-primary-400"><i class="fa-regular fa-images" aria-hidden="true"></i></span>
-                    <h3 class="mt-5 font-heading text-2xl font-bold text-secondary-900 dark:text-white">{{ $themes->currentPage() > 1 ? 'Halaman ini tidak memiliki tema' : ($search !== '' || $category ? 'Belum menemukan yang cocok?' : 'Koleksi baru sedang disiapkan') }}</h3>
-                    <p class="mt-3 max-w-md text-sm leading-7 text-neutral-500 dark:text-neutral-400">{{ $themes->currentPage() > 1 ? 'Kembali ke halaman pertama untuk menjelajahi tema yang tersedia.' : ($search !== '' || $category ? 'Coba nama tema lain atau jelajahi kembali semua kategori.' : 'Tema undangan akan tampil di sini setelah tersedia. Sementara itu, kenali fitur untuk hari istimewa Anda.') }}</p>
-                    <a href="{{ $themes->currentPage() > 1 ? $themes->url(1) : ($search !== '' || $category ? route('undangan-web') . '#tema' : '#fitur') }}" class="mt-6 inline-flex min-h-11 items-center gap-2 rounded-full bg-primary-600 px-6 py-3 text-sm font-bold text-white hover:bg-primary-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500">
-                        {{ $themes->currentPage() > 1 ? 'Kembali ke halaman pertama' : ($search !== '' || $category ? 'Lihat semua tema' : 'Jelajahi fitur') }} <i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
+                    <h3 class="mt-5 font-heading text-2xl font-bold text-secondary-900 dark:text-white">{{ $search !== '' || $category ? 'Belum menemukan yang cocok?' : 'Koleksi baru sedang disiapkan' }}</h3>
+                    <p class="mt-3 max-w-md text-sm leading-7 text-neutral-500 dark:text-neutral-400">{{ $search !== '' || $category ? 'Coba nama tema lain atau jelajahi kembali semua kategori.' : 'Tema undangan akan tampil di sini setelah tersedia. Sementara itu, kenali fitur untuk hari istimewa Anda.' }}</p>
+                    <a href="{{ $search !== '' || $category ? route('undangan-web') . '#tema' : '#fitur' }}" class="mt-6 inline-flex min-h-11 items-center gap-2 rounded-full bg-primary-600 px-6 py-3 text-sm font-bold text-white hover:bg-primary-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500">
+                        {{ $search !== '' || $category ? 'Lihat semua tema' : 'Jelajahi fitur' }} <i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
                     </a>
                 </div>
             @endforelse
         </div>
 
-        @if($themes->hasPages())
-            <div class="mt-8 border-t border-neutral-200 pt-6 dark:border-secondary-700">
-                {{ $themes->onEachSide(1)->links('vendor.pagination.undangan') }}
-            </div>
-        @endif
+        {{-- Sentinel: Intersection Observer target --}}
+        <div id="uw-scroll-sentinel" class="h-4 mt-10"></div>
+
+        {{-- Loading spinner --}}
+        <div id="uw-scroll-loading" class="mt-6 mb-4 flex flex-col items-center gap-3 hidden">
+            <span class="uw-scroll-spinner" aria-hidden="true"></span>
+            <p class="text-xs text-neutral-400">Memuat tema...</p>
+        </div>
+
+        {{-- End of catalogue message --}}
+        <div id="uw-scroll-end" class="mt-10 mb-4 flex flex-col items-center gap-2 hidden">
+            <div class="w-10 h-px bg-neutral-200 dark:bg-secondary-700"></div>
+            <p class="text-xs text-neutral-400 font-medium">Semua tema telah ditampilkan</p>
+            <div class="w-10 h-px bg-neutral-200 dark:bg-secondary-700"></div>
+        </div>
 
         <div class="mt-8 flex flex-col items-start justify-between gap-4 rounded-2xl border border-primary-200/70 bg-primary-50/80 px-5 py-5 dark:border-primary-800/50 dark:bg-primary-900/10 sm:flex-row sm:items-center sm:px-6">
             <div class="flex items-center gap-3">
@@ -102,3 +108,78 @@
         </div>
     </div>
 </section>
+
+<style>
+    @keyframes uw-spin { to { transform: rotate(360deg); } }
+    .uw-scroll-spinner {
+        width: 36px; height: 36px;
+        border: 3px solid rgba(255,122,0,0.2);
+        border-top-color: #FF7A00;
+        border-radius: 50%;
+        animation: uw-spin 0.75s linear infinite;
+        display: inline-block;
+    }
+</style>
+
+<script>
+(function () {
+    const grid     = document.getElementById('uw-theme-grid');
+    const sentinel = document.getElementById('uw-scroll-sentinel');
+    const loading  = document.getElementById('uw-scroll-loading');
+    const endMsg   = document.getElementById('uw-scroll-end');
+    const baseUrl  = '{{ route('undangan-web') }}';
+
+    const params = new URLSearchParams(window.location.search);
+    params.delete('cursor');
+
+    let nextCursor = @json($themes->nextCursor()?->encode());
+    let hasMore    = @json($themes->hasMorePages());
+    let isFetching = false;
+
+    function buildUrl(cursor) {
+        const p = new URLSearchParams(params.toString());
+        if (cursor) { p.set('cursor', cursor); }
+        return baseUrl + (p.toString() ? '?' + p.toString() : '');
+    }
+
+    async function loadMore() {
+        if (isFetching || !hasMore) { return; }
+        isFetching = true;
+        loading.classList.remove('hidden');
+
+        try {
+            const res  = await fetch(buildUrl(nextCursor), {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            });
+            const data = await res.json();
+
+            grid.insertAdjacentHTML('beforeend', data.html);
+            nextCursor = data.next_cursor;
+            hasMore    = data.has_more;
+
+            if (!hasMore) {
+                sentinel.remove();
+                observer.disconnect();
+                endMsg.classList.remove('hidden');
+            }
+        } catch (err) {
+            console.error('Infinite scroll error:', err);
+        } finally {
+            isFetching = false;
+            loading.classList.add('hidden');
+        }
+    }
+
+    const observer = new IntersectionObserver(
+        (entries) => { if (entries[0].isIntersecting) { loadMore(); } },
+        { rootMargin: '200px' }
+    );
+
+    if (hasMore) {
+        observer.observe(sentinel);
+    } else {
+        sentinel.remove();
+        endMsg.classList.remove('hidden');
+    }
+})();
+</script>

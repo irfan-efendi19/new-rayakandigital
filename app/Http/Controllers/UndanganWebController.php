@@ -10,11 +10,10 @@ use App\Services\PromotionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Illuminate\View\View;
 
 class UndanganWebController extends Controller
 {
-    public function __invoke(Request $request, PromotionService $promotions): View
+    public function __invoke(Request $request, PromotionService $promotions): mixed
     {
         $search = is_string($request->query('search'))
             ? mb_substr(trim($request->query('search')), 0, 100)
@@ -30,18 +29,31 @@ class UndanganWebController extends Controller
             ->orderBy('name')
             ->get();
 
-        $totalThemes = Theme::where('is_active', true)->count();
+        $totalThemes = Theme::query()
+            ->where('is_active', true)
+            ->when($search !== '', fn ($q) => $q->where('name', 'like', "%{$search}%"))
+            ->when($category, fn ($q) => $q->where('theme_category_id', $category))
+            ->count();
+
         $themes = Theme::query()
-            ->select(['id', 'theme_category_id', 'name', 'view_path', 'thumbnail_portrait', 'is_premium'])
+            ->select(['id', 'theme_category_id', 'name', 'view_path', 'thumbnail_portrait', 'is_premium', 'created_at'])
             ->with('themeCategory:id,name')
             ->where('is_active', true)
             ->when($search !== '', fn ($query) => $query->where('name', 'like', "%{$search}%"))
             ->when($category, fn ($query) => $query->where('theme_category_id', $category))
-            ->orderBy('name')
-            ->orderBy('id')
-            ->paginate(8)
-            ->appends(array_filter(['search' => $search, 'category' => $category], fn ($value) => $value !== '' && $value !== null))
-            ->fragment('tema');
+            ->orderByDesc('created_at')
+            ->orderByDesc('id')
+            ->cursorPaginate(12);
+
+        if ($request->ajax()) {
+            $html = view('themes.partials.catalog-items', compact('themes'))->render();
+
+            return response()->json([
+                'html' => $html,
+                'next_cursor' => $themes->nextCursor()?->encode(),
+                'has_more' => $themes->hasMorePages(),
+            ]);
+        }
 
         $packages = Package::with('features')
             ->where('is_visible', true)

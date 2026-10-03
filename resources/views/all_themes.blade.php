@@ -73,20 +73,17 @@
         }
         .float-anim { animation: float 3.5s ease-in-out infinite; }
 
-        /* ── Pagination ── */
-        .pagination-link {
-            transition: all 0.2s ease;
+        /* ── Infinite scroll spinner ── */
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
-        .pagination-link.active {
-            background-color: #FF7A00;
-            color: #fff;
-            border-color: #FF7A00;
-            box-shadow: 0 2px 8px rgba(255,122,0,0.3);
-        }
-        .pagination-link:not(.active):hover {
-            border-color: #FF7A00;
-            color: #FF7A00;
-            background-color: rgba(255,122,0,0.05);
+        .scroll-spinner {
+            width: 36px; height: 36px;
+            border: 3px solid rgba(255,122,0,0.2);
+            border-top-color: #FF7A00;
+            border-radius: 50%;
+            animation: spin 0.75s linear infinite;
+            display: inline-block;
         }
     </style>
 </head>
@@ -114,7 +111,7 @@
                     <div class="relative">
                         {{-- Giant decorative number --}}
                         <div class="absolute -top-6 -left-4 pointer-events-none select-none hidden lg:block">
-                            <span class="hero-number">{{ $themes->total() }}</span>
+                            <span class="hero-number">{{ $totalThemes }}</span>
                         </div>
 
                         <div class="relative z-10 lg:pl-2">
@@ -166,7 +163,7 @@
                         {{-- Stats row --}}
                         <div class="flex items-center gap-5 text-xs text-neutral-400">
                             <div class="flex items-center gap-1.5">
-                                <span class="font-bold text-secondary-800 dark:text-neutral-200 text-lg">{{ $themes->total() }}</span>
+                                <span class="font-bold text-secondary-800 dark:text-neutral-200 text-lg">{{ $totalThemes }}</span>
                                 <span>Tema Tersedia</span>
                             </div>
                             <span class="w-px h-5 bg-neutral-200 dark:bg-secondary-700"></span>
@@ -199,19 +196,19 @@
                     </span>
 
                     {{-- All button --}}
-                    <a href="{{ route('themes.index', array_merge(request()->except('category', 'page'))) }}"
+                    <a href="{{ route('themes.index', array_merge(request()->except('category', 'cursor'))) }}"
                         class="flex-shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-semibold border transition-all duration-200 {{ !request('category') ? 'bg-primary-500 text-white border-primary-500 shadow-md shadow-primary-200/50' : 'bg-white dark:bg-secondary-800 text-neutral-600 dark:text-neutral-400 border-neutral-200 dark:border-secondary-700 hover:border-primary-300 hover:text-primary-600' }}">
                         <i class="fas fa-th-large text-[10px]"></i>
                         Semua
                         <span class="inline-flex items-center justify-center w-5 h-5 rounded-full text-[10px] font-bold {{ !request('category') ? 'bg-white/25 text-white' : 'bg-neutral-100 dark:bg-secondary-700 text-neutral-500' }}">
-                            {{ $themes->total() }}
+                            {{ $totalThemes }}
                         </span>
                     </a>
 
                     @if($categories->isNotEmpty())
                         <div class="w-px h-5 bg-neutral-200 dark:bg-secondary-700 flex-shrink-0 mx-1"></div>
                         @foreach($categories as $category)
-                            <a href="{{ route('themes.index', array_merge(request()->except('page'), ['category' => $category->id])) }}"
+                            <a href="{{ route('themes.index', array_merge(request()->except('cursor'), ['category' => $category->id])) }}"
                                 class="flex-shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-semibold border transition-all duration-200 {{ request('category') == $category->id ? 'bg-primary-500 text-white border-primary-500 shadow-md shadow-primary-200/50' : 'bg-white dark:bg-secondary-800 text-neutral-600 dark:text-neutral-400 border-neutral-200 dark:border-secondary-700 hover:border-primary-300 hover:text-primary-600' }}">
                                 <i class="fas {{ $category->icon ?? 'fa-folder' }} text-[10px]"></i>
                                 {{ $category->name }}
@@ -233,7 +230,7 @@
             {{-- Result count --}}
             <div class="flex items-center justify-between mb-8">
                 <p class="text-xs text-neutral-400">
-                    Menampilkan <span class="font-semibold text-secondary-800 dark:text-neutral-200">{{ $themes->count() }}</span> dari <span class="font-semibold text-secondary-800 dark:text-neutral-200">{{ $themes->total() }}</span> tema
+                    Ditemukan <span class="font-semibold text-secondary-800 dark:text-neutral-200">{{ $totalThemes }}</span> tema
                     @if(request('category'))
                         @php $activeCat = $categories->firstWhere('id', request('category')); @endphp
                         @if($activeCat)
@@ -249,7 +246,7 @@
                 </p>
             </div>
 
-            <div class="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
+            <div id="theme-grid" class="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
                 @forelse($themes as $theme)
                     <x-theme-card :theme="$theme" />
                 @empty
@@ -292,63 +289,24 @@
             </div>
 
             {{-- ═══════════════════════════════════════
-                 PAGINATION
+                 INFINITE SCROLL — Sentinel & Loading State
             ═══════════════════════════════════════ --}}
-            @if($themes->hasPages())
-                <div class="mt-12 flex items-center justify-center">
-                    <nav class="flex items-center gap-1.5">
-                        {{-- Previous --}}
-                        @if($themes->onFirstPage())
-                            <span class="flex items-center justify-center w-10 h-10 rounded-xl border border-neutral-200 dark:border-secondary-700 text-neutral-300 dark:text-neutral-600 cursor-not-allowed">
-                                <i class="fas fa-chevron-left text-xs"></i>
-                            </span>
-                        @else
-                            <a href="{{ $themes->previousPageUrl() }}"
-                                class="pagination-link flex items-center justify-center w-10 h-10 rounded-xl border border-neutral-200 dark:border-secondary-700 text-neutral-500 dark:text-neutral-400 hover:border-primary-400 hover:text-primary-500 transition-all duration-200">
-                                <i class="fas fa-chevron-left text-xs"></i>
-                            </a>
-                        @endif
 
-                        {{-- Page numbers --}}
-                        @foreach($themes->getUrlRange(max(1, $themes->currentPage() - 2), min($themes->lastPage(), $themes->currentPage() + 2)) as $page => $url)
-                            <a href="{{ $url }}"
-                                class="pagination-link flex items-center justify-center w-10 h-10 rounded-xl border text-xs font-semibold transition-all duration-200 {{ $page == $themes->currentPage() ? 'active' : 'border-neutral-200 dark:border-secondary-700 text-neutral-500 dark:text-neutral-400' }}">
-                                {{ $page }}
-                            </a>
-                        @endforeach
+            {{-- Sentinel: Intersection Observer target --}}
+            <div id="scroll-sentinel" class="h-4 mt-10"></div>
 
-                        {{-- Ellipsis --}}
-                        @if($themes->currentPage() + 2 < $themes->lastPage())
-                            <span class="flex items-center justify-center w-10 h-10 text-neutral-300 dark:text-neutral-600">
-                                ...
-                            </span>
-                            <a href="{{ $themes->url($themes->lastPage()) }}"
-                                class="pagination-link flex items-center justify-center w-10 h-10 rounded-xl border border-neutral-200 dark:border-secondary-700 text-neutral-500 dark:text-neutral-400 text-xs font-semibold transition-all duration-200">
-                                {{ $themes->lastPage() }}
-                            </a>
-                        @endif
+            {{-- Loading spinner --}}
+            <div id="scroll-loading" class="mt-6 mb-4 flex flex-col items-center gap-3 hidden">
+                <span class="scroll-spinner" aria-hidden="true"></span>
+                <p class="text-xs text-neutral-400">Memuat tema...</p>
+            </div>
 
-                        {{-- Next --}}
-                        @if($themes->hasMorePages())
-                            <a href="{{ $themes->nextPageUrl() }}"
-                                class="pagination-link flex items-center justify-center w-10 h-10 rounded-xl border border-neutral-200 dark:border-secondary-700 text-neutral-500 dark:text-neutral-400 hover:border-primary-400 hover:text-primary-500 transition-all duration-200">
-                                <i class="fas fa-chevron-right text-xs"></i>
-                            </a>
-                        @else
-                            <span class="flex items-center justify-center w-10 h-10 rounded-xl border border-neutral-200 dark:border-secondary-700 text-neutral-300 dark:text-neutral-600 cursor-not-allowed">
-                                <i class="fas fa-chevron-right text-xs"></i>
-                            </span>
-                        @endif
-                    </nav>
-                </div>
-
-                {{-- Page info --}}
-                <div class="mt-4 text-center">
-                    <p class="text-xs text-neutral-400">
-                        Halaman {{ $themes->currentPage() }} dari {{ $themes->lastPage() }}
-                    </p>
-                </div>
-            @endif
+            {{-- End of catalogue message --}}
+            <div id="scroll-end" class="mt-10 mb-4 flex flex-col items-center gap-2 hidden">
+                <div class="w-10 h-px bg-neutral-200 dark:bg-secondary-700"></div>
+                <p class="text-xs text-neutral-400 font-medium">Semua tema telah ditampilkan</p>
+                <div class="w-10 h-px bg-neutral-200 dark:bg-secondary-700"></div>
+            </div>
 
         </main>
 
@@ -385,6 +343,74 @@
 
     <x-public-footer />
     <script src="{{ asset('js/landingpage.js') }}"></script>
+
+    <script>
+    (function () {
+        const grid      = document.getElementById('theme-grid');
+        const sentinel  = document.getElementById('scroll-sentinel');
+        const loading   = document.getElementById('scroll-loading');
+        const endMsg    = document.getElementById('scroll-end');
+        const baseUrl   = '{{ route('themes.index') }}';
+
+        // Build query params from current URL (carry search & category filters)
+        const params = new URLSearchParams(window.location.search);
+        params.delete('cursor'); // always start fresh on load
+
+        let nextCursor = @json($themes->nextCursor()?->encode());
+        let hasMore    = @json($themes->hasMorePages());
+        let isFetching = false;
+
+        function buildUrl(cursor) {
+            const p = new URLSearchParams(params.toString());
+            if (cursor) { p.set('cursor', cursor); }
+            return baseUrl + (p.toString() ? '?' + p.toString() : '');
+        }
+
+        async function loadMore() {
+            if (isFetching || !hasMore) { return; }
+            isFetching = true;
+
+            loading.classList.remove('hidden');
+
+            try {
+                const res  = await fetch(buildUrl(nextCursor), {
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                });
+                const data = await res.json();
+
+                grid.insertAdjacentHTML('beforeend', data.html);
+
+                nextCursor = data.next_cursor;
+                hasMore    = data.has_more;
+
+                if (!hasMore) {
+                    sentinel.remove();
+                    observer.disconnect();
+                    endMsg.classList.remove('hidden');
+                }
+            } catch (err) {
+                console.error('Infinite scroll error:', err);
+            } finally {
+                isFetching = false;
+                loading.classList.add('hidden');
+            }
+        }
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting) { loadMore(); }
+            },
+            { rootMargin: '200px' }
+        );
+
+        if (hasMore) {
+            observer.observe(sentinel);
+        } else {
+            sentinel.remove();
+            endMsg.classList.remove('hidden');
+        }
+    })();
+    </script>
 </body>
 
 </html>

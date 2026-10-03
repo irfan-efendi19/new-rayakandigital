@@ -17,6 +17,8 @@ class HomeController extends Controller
 
         $themes = Theme::with('themeCategory')
             ->where('is_active', true)
+            ->orderByDesc('created_at')
+            ->orderByDesc('id')
             ->get();
 
         $totalThemes = Theme::where('is_active', true)->count();

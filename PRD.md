@@ -1,25 +1,56 @@
-## 1. Ringkasan & Tujuan Produk
-
-Sistem Layar Sapa (*Welcome Screen Display*) adalah aplikasi berbasis *web display* interaktif yang ditampilkan pada layar besar/TV/Projector di lokasi acara pernikahan. Aplikasi ini dibuat menggunakan teknologi murni **HTML, CSS, dan JavaScript saja** tanpa membutuhkan *framework* berat atau proses *compile*.
-
-Sistem ini bersifat dinamis dengan memanggil variabel data/fitur secara *client-side* untuk menampilkan informasi sambutan, galeri foto, serta ucapan *real-time* dan notifikasi selamat datang saat tamu melakukan *check-in*.
-
----
-
-## 2. Fitur Utama (Core Features Breakdown)
-
-Aplikasi dipisah menjadi 5 modul modul panggilan data utama:
-
-| No | Nama Fitur / Komponen | Deskripsi & Spesifikasi Tampilan |
-| :--- | :--- | :--- |
-| **1** | **Judul Sambutan & Nama Pengantin** | Menampilkan teks sambutan kustom (misal: *"Selamat Datang di Pernikahan"*) serta Nama Pasangan Pengantin dengan tipografi elegan/estetis. |
-| **2** | **Kustomisasi Background Latar** | Dukungan latar belakang visual berupa **Gambar Statis** atau **Video Loops** (animasi halus/estetik) yang memenuhi layar (*fullscreen cover*). |
-| **3** | **Galeri Layar (Photo Slideshow)** | *Slider/Carousel* foto galeri pernikahan yang berganti secara otomatis dengan efek transisi *fade-in/fade-out* atau *smooth slide*. |
-| **4** | **Dinding Ucapan (Wish Wall / Guestbook Board)** | Menampilkan daftar ucapan, doa, dan nama tamu yang mengalir (*scrolling animation*) atau tampil secara bergantian di bagian layar. |
-| **5** | **Popup Selamat Datang Check-in** | Notifikasi *overlay/popup* dinamis yang muncul otomatis saat ada tamu yang berhasil *check-in* di penerima tamu (menampilkan Nama Tamu & Ucapan Selamat Datang). |
+# Generator PRD Infinite Scroll Katalog Tema
+prd_infinite_scroll = """# Product Requirement Document (PRD)
+## Fitur Infinite Scroll & Cursor Pagination Katalog Tema
+**Platform:** Rayakan Digital  
+**Versi Document:** v1.0  
+**Status:** Proposed / Ready for Dev  
+**Target Rilis:** Q4 2026  
+**Penulis PRD:** Product & Engineering Team  
 
 ---
 
-## 3. Arsitektur Teknis & Struktur File
+## 1. Ringkasan Eksekutif & Latar Belakang
 
-Sistem dibangun secara modular menggunakan file web standar agar mudah diakses langsung lewat browser:
+### 1.1. Masalah
+Halaman `/semua-tema` saat ini menggunakan navigasi halaman bernomor (*numbered pagination*). Mekanisme ini memicu *user friction* karena pengguna harus mengeklik nomor halaman secara manual, yang menyebabkan reload halaman berulang kali dan menurunkan pengalaman eksplorasi katalog tema.
+
+### 1.2. Solusi
+Mengganti sistem navigasi halaman tradisional dengan **Infinite Scroll** menggunakan **Intersection Observer API** di sisi *frontend* dan **Cursor Pagination** di sisi *backend* Laravel. Solusi ini memungkinkan tema baru dimuat secara otomatis dan *seamless* ketika pengguna mendekati bagian bawah halaman tanpa mengorbankan performa database.
+
+---
+
+## 2. Fitur Utama & Spesifikasi Teknis
+
+### 2.1. Backend (Laravel Engine)
+* **Cursor Pagination Integration:** Mengubah query `paginate()` menjadi `cursorPaginate(12)` untuk menghindari query `OFFSET` SQL yang lambat saat data membesar.
+* **AJAX Partial Rendering:** Menyediakan *response JSON* yang berisi komponen HTML partial (`themes._item_list`) beserta penanda *cursor* berikutnya (`next_cursor`) dan status ketersediaan data (`has_more`).
+
+### 2.2. Frontend (JavaScript Vanilla & Intersection Observer)
+* **Seamless Loading Trigger:** Menggunakan `Intersection Observer API` dengan `rootMargin: '200px'` untuk memicu pemuatan data sebelum pengguna menyentuh dasar halaman.
+* **Loading State & Feedback:** Menampilkan indikator animasi *spinner* saat proses pengambilan data berlangsung.
+* **End of Data Handling:** Menampilkan pesan informatif ketika seluruh katalog tema telah dimuat.
+* **Lazy Loading Media:** Penerapan atribut `loading="lazy"` pada gambar thumbnail tema untuk efisiensi konsumsi memori browser.
+
+---
+
+## 3. Spesifikasi Antarmuka & UX Flow
+
+```text
+[Pengguna Melakukan Scroll pada Katalog Tema]
+                     │
+                     ▼
+  [Intersection Observer Mendeteksi Sentinel]
+                     │
+                     ▼
+  [Tampilkan Spinner Loading di Bagian Bawah]
+                     │
+                     ▼
+  [Fetch Data via AJAX: /semua-tema?cursor=xxx]
+                     │
+       ┌─────────────┴─────────────┐
+       ▼                           ▼
+[Data Ditemukan]             [Data Habis]
+       │                           │
+       ▼                           ▼
+Append Item ke Grid        Tampilkan Pesan
+& Update Next Cursor       "Semua tema telah ditampilkan"

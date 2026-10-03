@@ -129,7 +129,6 @@
             </div>
         </nav>
 
-        <x-undangan-theme-catalog :themes="$themes" :categories="$categories" :total-themes="$totalThemes" :search="$search" :category="$category" />
 
         <section class="scroll-mt-20 bg-white py-20 dark:bg-secondary-900 sm:py-24" id="fitur">
             <div class="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
@@ -371,6 +370,9 @@
                 </p>
             </div>
         </section>
+
+
+        <x-undangan-theme-catalog :themes="$themes" :categories="$categories" :total-themes="$totalThemes" :search="$search" :category="$category" />
 
         <section class="bg-neutral-50 px-6 py-16 dark:bg-secondary-900 sm:px-8 sm:py-20">
             <div class="grain-bg relative mx-auto max-w-5xl overflow-hidden rounded-[2rem] bg-secondary-900 px-6 py-12 text-center text-white shadow-2xl dark:border dark:border-secondary-700 sm:px-12 sm:py-16"
