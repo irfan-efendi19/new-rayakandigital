@@ -152,7 +152,7 @@
                                     placeholder="Cari nama tema..."
                                     class="w-full pl-10 pr-10 py-3 rounded-2xl border border-neutral-200 dark:border-secondary-700 bg-white dark:bg-secondary-800 text-sm text-secondary-800 dark:text-neutral-200 placeholder-neutral-400 transition-all duration-200">
                                 @if(request('search'))
-                                    <a href="{{ route('themes.index', array_merge(request()->except('search', 'page'))) }}"
+                                    <a href="{{ route('themes.index', array_merge(request()->except('search', 'cursor'))) }}"
                                         class="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300">
                                         <i class="fas fa-times text-xs"></i>
                                     </a>
