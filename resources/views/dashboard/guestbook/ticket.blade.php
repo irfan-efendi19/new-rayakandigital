@@ -237,9 +237,11 @@
         <div class="ticket-body">
             <div class="guest-name">{{ $guest->name }}</div>
 
-            <div class="ticket-number">
-                #{{ str_pad($checkinOrder, 3, '0', STR_PAD_LEFT) }}
-            </div>
+            @if($checkinOrder)
+                <div class="ticket-number">
+                    #{{ str_pad($checkinOrder, 3, '0', STR_PAD_LEFT) }}
+                </div>
+            @endif
 
             @php
                 $tzLabel = match ($invitation->timezone ?? 'Asia/Jakarta') {
@@ -250,14 +252,27 @@
                 };
                 $tz = $invitation->timezone ?? 'Asia/Jakarta';
             @endphp
-            <div class="info-row">
-                <span class="label">Check-In:</span>
-                <span>{{ $guest->checked_in_at?->timezone($tz)->format('H:i') }} {{ $tzLabel }}</span>
-            </div>
-            <div class="info-row">
-                <span class="label">Tanggal:</span>
-                <span>{{ $guest->checked_in_at?->timezone($tz)->format('d/m/Y') }}</span>
-            </div>
+            @if($guest->checked_in_at)
+                <div class="info-row">
+                    <span class="label">Check-In:</span>
+                    <span>{{ $guest->checked_in_at->timezone($tz)->format('H:i') }} {{ $tzLabel }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="label">Tanggal:</span>
+                    <span>{{ $guest->checked_in_at->timezone($tz)->format('d/m/Y') }}</span>
+                </div>
+            @else
+                <div class="info-row">
+                    <span class="label">Status:</span>
+                    <span>Tiket QR Masuk</span>
+                </div>
+                @if($invitation->event_date)
+                    <div class="info-row">
+                        <span class="label">Tanggal:</span>
+                        <span>{{ \Carbon\Carbon::parse($invitation->event_date)->timezone($tz)->format('d/m/Y') }}</span>
+                    </div>
+                @endif
+            @endif
             @if($guest->whatsapp_number ?? $guest->phone)
                 <div class="info-row">
                     <span class="label">Telp:</span>
@@ -291,7 +306,9 @@
 
     <script>
         window.addEventListener('load', function () {
-            setTimeout(() => window.print(), 500);
+            @if($checkinOrder)
+                setTimeout(() => window.print(), 500);
+            @endif
         });
 
         function toggleWidth() {

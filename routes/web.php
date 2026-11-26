@@ -244,6 +244,9 @@ require __DIR__.'/auth.php';
 Route::post('/invitations/{invitation}/rsvp', [RsvpController::class, 'store'])->name('rsvp.store');
 Route::post('/invitations/{invitation}/wish', [WishController::class, 'store'])->name('wish.store');
 
+// Public Guest Ticket (QR Ticket Pass)
+Route::get('/invitations/{invitation:slug}/guestbook/{guest:slug}/ticket', [GuestbookController::class, 'ticket'])->name('guestbook.ticket');
+
 // QR Gateway RSVP Universal
 Route::get('/{slug}/rsvp', [QRGatewayController::class, 'show'])->name('qr-gateway');
 

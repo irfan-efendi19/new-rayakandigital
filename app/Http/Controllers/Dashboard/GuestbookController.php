@@ -99,7 +99,11 @@ class GuestbookController extends Controller
 
     public function ticket(Invitation $invitation, Guest $guest)
     {
-        Gate::authorize('view', $invitation);
+        if (request()->routeIs('dashboard.*')) {
+            Gate::authorize('view', $invitation);
+        } elseif (! $invitation->is_active) {
+            abort(404);
+        }
 
         if (! $invitation->hasFeature('qr_checkin')) {
             abort(403, 'Fitur QR Check-In hanya tersedia untuk paket Platinum.');
@@ -107,10 +111,12 @@ class GuestbookController extends Controller
 
         $guest = $invitation->guests()->findOrFail($guest->getKey());
 
-        $checkinOrder = $invitation->guests()
-            ->where('attendance_status', 'hadir')
-            ->where('checked_in_at', '<=', $guest->checked_in_at)
-            ->count();
+        $checkinOrder = $guest->checked_in_at
+            ? $invitation->guests()
+                ->where('attendance_status', 'hadir')
+                ->where('checked_in_at', '<=', $guest->checked_in_at)
+                ->count()
+            : null;
 
         $guest->load('events');
 

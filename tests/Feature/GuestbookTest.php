@@ -183,3 +183,74 @@ test('owner cannot access a ticket for a guest from another invitation', functio
         ->get(route('dashboard.invitations.guestbook.ticket', [$this->invitation, $foreignGuest]))
         ->assertNotFound();
 });
+
+test('public ticket route can be accessed by guest without login', function () {
+    $guest = Guest::factory()->create([
+        'invitation_id' => $this->invitation->id,
+    ]);
+
+    $response = $this->get(route('guestbook.ticket', [
+        'invitation' => $this->invitation->slug,
+        'guest' => $guest->slug,
+    ]));
+
+    $response->assertSuccessful()
+        ->assertViewIs('dashboard.guestbook.ticket')
+        ->assertSee($guest->name)
+        ->assertSee('Tiket QR Masuk');
+});
+
+test('public ticket route returns 404 for guest of another invitation', function () {
+    $foreignInvitation = Invitation::factory()->create(['tier' => 'platinum']);
+    $foreignGuest = Guest::factory()->create([
+        'invitation_id' => $foreignInvitation->id,
+    ]);
+
+    $this->get(route('guestbook.ticket', [
+        'invitation' => $this->invitation->slug,
+        'guest' => $foreignGuest->slug,
+    ]))->assertNotFound();
+});
+
+test('public ticket route returns 404 if invitation is inactive', function () {
+    $this->invitation->update(['is_active' => false]);
+    $guest = Guest::factory()->create([
+        'invitation_id' => $this->invitation->id,
+    ]);
+
+    $this->get(route('guestbook.ticket', [
+        'invitation' => $this->invitation->slug,
+        'guest' => $guest->slug,
+    ]))->assertNotFound();
+});
+
+test('public ticket route returns 403 if invitation does not have qr_checkin feature', function () {
+    $goldUser = User::factory()->create(['role' => 'user']);
+    $goldInvitation = Invitation::factory()->create([
+        'user_id' => $goldUser->id,
+        'tier' => 'gold',
+    ]);
+    $guest = Guest::factory()->create([
+        'invitation_id' => $goldInvitation->id,
+    ]);
+
+    $this->get(route('guestbook.ticket', [
+        'invitation' => $goldInvitation->slug,
+        'guest' => $guest->slug,
+    ]))->assertForbidden();
+});
+
+test('deluxe theme renders successfully with guest without RouteNotFoundException', function () {
+    $this->invitation->update(['theme' => 'deluxe_01']);
+    $guest = Guest::factory()->create([
+        'invitation_id' => $this->invitation->id,
+    ]);
+
+    $response = $this->get(route('invitation.show', [
+        'slug' => $this->invitation->slug,
+        'to' => $guest->slug,
+    ]));
+
+    $response->assertSuccessful()
+        ->assertSee($guest->name);
+});
